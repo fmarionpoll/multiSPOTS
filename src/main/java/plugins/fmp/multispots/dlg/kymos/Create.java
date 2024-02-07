@@ -20,7 +20,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import icy.util.StringUtil;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.JComboMs;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.series.BuildKymographs;
@@ -53,12 +53,12 @@ public class Create extends JPanel implements PropertyChangeListener
 	JComboMs 	intervalsUnit 			= new JComboMs();
 
 	EnumStatusComputation 	sComputation 			= EnumStatusComputation.START_COMPUTATION; 
-	private MultiCAFE2 		parent0					= null;
+	private multiSPOTS 		parent0					= null;
 	private BuildKymographs threadBuildKymo 		= null;
 
 	// -----------------------------------------------------
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);	
 		this.parent0 = parent0;

@@ -13,7 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 
 
 
@@ -44,10 +44,10 @@ public class MCCages_ extends JPanel implements PropertyChangeListener
 			int				iTAB_EDIT		= iTAB_DETECT2+1;
 			
 			
-			MultiCAFE2 		parent0			= null;
+			multiSPOTS 		parent0			= null;
 
 	
-	public void init (JPanel mainPanel, String string, MultiCAFE2 parent0) 
+	public void init (JPanel mainPanel, String string, multiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 		

@@ -18,7 +18,7 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.viewer.Viewer;
 import icy.roi.ROI2D;
 import icy.util.StringUtil;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Cage;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.kernel.roi.roi2d.ROI2DPoint;
@@ -31,7 +31,7 @@ public class Edit extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = -5257698990389571518L;
-	private MultiCAFE2 	parent0;
+	private multiSPOTS 	parent0;
 	private JButton 	findAllButton	= new JButton(new String("Find all missed points"));
 	private JButton 	findNextButton	= new JButton(new String("Find next missed point"));
 	private JButton 	validateButton 	= new JButton(new String("Validate selected ROI"));
@@ -43,7 +43,7 @@ public class Edit extends JPanel
 	
 	// ----------------------------------------------------
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

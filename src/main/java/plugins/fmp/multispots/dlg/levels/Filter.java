@@ -13,7 +13,7 @@ import icy.gui.util.GuiUtil;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageUtil;
 import icy.type.collection.array.Array1DUtil;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 
@@ -23,11 +23,11 @@ public class Filter  extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = -4413321640245046423L;	
-	private MultiCAFE2 parent0;
+	private multiSPOTS parent0;
 	private JButton 	startButton = new JButton("Start");
 	private JTextField spanText 	= new JTextField("10");
 
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);	
 		this.parent0 = parent0;

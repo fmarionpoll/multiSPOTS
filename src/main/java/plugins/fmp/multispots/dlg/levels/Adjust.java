@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 import icy.util.StringUtil;
 
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
@@ -32,7 +32,7 @@ public class Adjust extends JPanel  implements PropertyChangeListener
 	 * 
 	 */
 	private static final long serialVersionUID = 2580935598417087197L;
-	private MultiCAFE2	parent0;
+	private multiSPOTS	parent0;
 	private JCheckBox	allSeriesCheckBox = new JCheckBox("ALL series", false);
 	
 	private final String adjustString  	= "Resize levels to Kymographs";
@@ -53,7 +53,7 @@ public class Adjust extends JPanel  implements PropertyChangeListener
 	
 	
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);	
 		this.parent0 = parent0;

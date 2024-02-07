@@ -28,7 +28,7 @@ import icy.main.Icy;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Capillaries;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
@@ -55,12 +55,12 @@ public class Display extends JPanel implements ViewerListener
 			JCheckBox 	viewGulpsCheckbox 		= new JCheckBox("gulps (red)", true);
 
 
-	private MultiCAFE2 	parent0 				= null;
+	private multiSPOTS 	parent0 				= null;
 	private boolean		isActionEnabled			= true;	
 	
 
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{	
 		setLayout(capLayout);
 		this.parent0 = parent0;

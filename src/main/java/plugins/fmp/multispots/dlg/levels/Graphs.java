@@ -16,7 +16,7 @@ import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Capillaries;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
@@ -34,7 +34,7 @@ public class Graphs extends JPanel implements SequenceListener
 	private ChartLevels plotDelta 					= null;
 	private ChartLevels plotDerivative 				= null;
 	private ChartLevels plotSumgulps 				= null;
-	private MultiCAFE2 	parent0 					= null;
+	private multiSPOTS 	parent0 					= null;
 	
 	private JCheckBox 	limitsCheckbox 				= new JCheckBox("top/bottom", true);
 	private JCheckBox 	derivativeCheckbox 			= new JCheckBox("derivative", false);
@@ -44,7 +44,7 @@ public class Graphs extends JPanel implements SequenceListener
 	private JButton 	displayResultsButton 		= new JButton("Display results");
 	
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{	
 		setLayout(capLayout);
 		this.parent0 = parent0;

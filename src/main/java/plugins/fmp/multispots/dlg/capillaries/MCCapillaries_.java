@@ -15,7 +15,7 @@ import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
 import icy.gui.viewer.Viewer;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymosUtils;
 
@@ -41,10 +41,10 @@ public class MCCapillaries_ extends JPanel implements PropertyChangeListener, Ch
 	private int			ID_EDIT			= 2;
 	private int			ID_FILTER 		= 4;
 	private boolean		editSelected	= false;
-	private MultiCAFE2 	parent0 		= null;
+	private multiSPOTS 	parent0 		= null;
 
 	
-	public void init (JPanel mainPanel, String string, MultiCAFE2 parent0) 
+	public void init (JPanel mainPanel, String string, multiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 		capPopupPanel = new PopupPanel(string);

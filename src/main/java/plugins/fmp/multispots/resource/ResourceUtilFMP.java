@@ -6,7 +6,7 @@ import java.io.InputStream;
 import icy.image.ImageUtil;
 import icy.resource.ResourceUtil;
 import icy.resource.icon.IcyIcon;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 
 
 
@@ -34,7 +34,7 @@ public class ResourceUtilFMP {
 	private static Image getImage(String fileName) 
 	{
 		String name = "plugins/fmp/multispots/" + ICON_PATH + ALPHA_PATH + fileName;
-		InputStream url = MultiCAFE2.class.getClassLoader().getResourceAsStream(name);
+		InputStream url = multiSPOTS.class.getClassLoader().getResourceAsStream(name);
 		if (url == null) {
 			System.out.println("ResourceUtilFMP:getImage resource not found: at: "+ name);
 		}

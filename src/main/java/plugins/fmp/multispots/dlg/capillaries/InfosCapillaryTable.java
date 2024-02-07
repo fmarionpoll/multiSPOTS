@@ -21,7 +21,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import icy.gui.frame.IcyFrame;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.CapillaryTableModel;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
@@ -47,12 +47,12 @@ public class InfosCapillaryTable extends JPanel
 	private JButton				getNfliesButton 	= new JButton("Get n flies from cage");
 	private JButton				getCageNoButton		= new JButton("Set cage n#");
 	private JButton				noFliesButton 		= new JButton("Cages0/0: no flies");
-	private MultiCAFE2 			parent0 			= null; 
+	private multiSPOTS 			parent0 			= null; 
 	private List <Capillary> 	capillariesArrayCopy= null;
 	
 	
 	
-	public void initialize (MultiCAFE2 parent0, List <Capillary> capCopy) 
+	public void initialize (multiSPOTS parent0, List <Capillary> capCopy) 
 	{
 		this.parent0 = parent0;
 		capillariesArrayCopy = capCopy;

@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import icy.gui.util.FontUtil;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -26,9 +26,9 @@ public class LoadSaveCapillaries extends JPanel
 	
 	private JButton		openButtonCapillaries	= new JButton("Load...");
 	private JButton		saveButtonCapillaries	= new JButton("Save...");
-	private MultiCAFE2 	parent0 				= null;
+	private multiSPOTS 	parent0 				= null;
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		

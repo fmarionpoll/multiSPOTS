@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Component;
 
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -24,10 +24,10 @@ public class Edit extends JPanel
 	private static final long serialVersionUID = -7582410775062671523L;
 	
 	private JButton		editCapillariesButton	= new JButton("Edit capillaries position with time");
-	private MultiCAFE2 	parent0 				= null;
+	private multiSPOTS 	parent0 				= null;
 	private EditPositionWithTime editCapillariesTable = null;
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);	
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);
@@ -53,11 +53,11 @@ public class Edit extends JPanel
 			}});
 	}
 
-	public MultiCAFE2 getParent0() {
+	public multiSPOTS getParent0() {
 		return parent0;
 	}
 
-	public void setParent0(MultiCAFE2 parent0) {
+	public void setParent0(multiSPOTS parent0) {
 		this.parent0 = parent0;
 	}
 	

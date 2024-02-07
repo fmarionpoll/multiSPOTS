@@ -22,7 +22,7 @@ import javax.swing.event.ChangeListener;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI2D;
 import icy.type.geom.Polygon2D;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Capillaries;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
@@ -58,11 +58,11 @@ public class CreateForCapillaries extends JPanel
 	private JLabel 		flyLabel 				= new JLabel (flyString[0]);
 	private JLabel 		capLabel 				= new JLabel (capString[1]);
 
-	private MultiCAFE2 	parent0 				= null;
+	private multiSPOTS 	parent0 				= null;
 	
 	
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);	
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);

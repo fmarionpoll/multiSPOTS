@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import icy.gui.component.PopupPanel;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 
 
 
@@ -25,7 +25,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener
 	private JTabbedPane 	tabsPane 		= new JTabbedPane();
 	MCSpots_1 				buildRef 		= new MCSpots_1();
 	
-	void init (JPanel mainPanel, String string, MultiCAFE2 parent0) 
+	void init (JPanel mainPanel, String string, multiSPOTS parent0) 
 	{	
 		capPopupPanel = new PopupPanel(string);
 		JPanel capPanel = capPopupPanel.getMainPanel();

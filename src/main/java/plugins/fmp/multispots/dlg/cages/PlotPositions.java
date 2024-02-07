@@ -17,7 +17,7 @@ import javax.swing.SpinnerNumberModel;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Cage;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.XYTaSeriesArrayList;
@@ -36,7 +36,7 @@ public class PlotPositions extends JPanel implements SequenceListener
 	private ChartPositions distanceChart	= null;
 	private ChartPositions aliveChart		= null;
 	private ChartPositions sleepChart		= null;
-	private MultiCAFE2 	parent0 			= null;
+	private multiSPOTS 	parent0 			= null;
 	
 	public 	JCheckBox	moveCheckbox		= new JCheckBox("y position", true);	
 	private JCheckBox	distanceCheckbox	= new JCheckBox("distance t/t+1", false);
@@ -47,7 +47,7 @@ public class PlotPositions extends JPanel implements SequenceListener
 
 
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{	
 		setLayout(capLayout);
 		this.parent0 = parent0;

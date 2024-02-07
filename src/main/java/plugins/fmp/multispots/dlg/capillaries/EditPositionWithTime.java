@@ -29,7 +29,7 @@ import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.CapillariesWithTimeTableModel;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
@@ -56,13 +56,13 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 	private final String 		dummyname 			= "perimeter_enclosing_capillaries";
 	private ROI2DPolygon 		envelopeRoi 		= null;
 	private ROI2DPolygon 		envelopeRoi_initial	= null;
-	private MultiCAFE2 			parent0 			= null; 
+	private multiSPOTS 			parent0 			= null; 
 	
 	private CapillariesWithTimeTableModel capillariesWithTimeTablemodel = null;
 	
 		
 	
-	public void initialize (MultiCAFE2 parent0, Point pt) 
+	public void initialize (multiSPOTS parent0, Point pt) 
 	{
 		this.parent0 = parent0;
 		capillariesWithTimeTablemodel = new CapillariesWithTimeTableModel(parent0.expListCombo);

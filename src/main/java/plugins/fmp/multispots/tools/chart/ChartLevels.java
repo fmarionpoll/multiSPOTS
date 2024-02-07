@@ -32,7 +32,7 @@ import icy.gui.frame.IcyFrame;
 import icy.gui.util.GuiUtil;
 import icy.gui.viewer.Viewer;
 
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.tools.toExcel.EnumXLSExportType;
 import plugins.fmp.multispots.tools.toExcel.XLSExport;
@@ -44,7 +44,7 @@ public class ChartLevels extends IcyFrame
 {
 	public JPanel 	mainChartPanel 	= null;
 	public IcyFrame mainChartFrame 	= null;
-	private MultiCAFE2 	parent0 	= null;
+	private multiSPOTS 	parent0 	= null;
 	
 	private Point pt = new Point (0,0);
 	private boolean flagMaxMinSet = false;
@@ -60,7 +60,7 @@ public class ChartLevels extends IcyFrame
 
 	//----------------------------------------
 	
-	public void createChartPanel(MultiCAFE2 parent, String cstitle) 
+	public void createChartPanel(multiSPOTS parent, String cstitle) 
 	{
 		title = cstitle;
 		parent0 = parent;

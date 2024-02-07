@@ -21,7 +21,7 @@ import icy.main.Icy;
 import icy.gui.viewer.ViewerEvent.ViewerEventType;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -43,11 +43,11 @@ public class MCExperiment_ extends JPanel implements ViewerListener, ChangeListe
 	public 	Intervals		tabIntervals	= new Intervals();
 	public 	LoadSaveExperiment panelLoadSave = new LoadSaveExperiment();
 	
-	private MultiCAFE2 		parent0 		= null;
+	private multiSPOTS 		parent0 		= null;
 
 
 
-	public void init (JPanel mainPanel, String string, MultiCAFE2 parent0) 
+	public void init (JPanel mainPanel, String string, multiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 

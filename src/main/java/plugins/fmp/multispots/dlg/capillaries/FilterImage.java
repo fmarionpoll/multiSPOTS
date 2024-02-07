@@ -17,7 +17,7 @@ import javax.swing.SpinnerNumberModel;
 
 import icy.gui.viewer.Viewer;
 import icy.util.StringUtil;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.tools.EnumStatusComputation;
@@ -48,13 +48,13 @@ public class FilterImage extends JPanel implements PropertyChangeListener
 	private String 		detectString 			= "        run Otsu     ";
 	private JButton 	detectButton 			= new JButton(detectString);
 	
-	private MultiCAFE2 	parent0 				= null;
+	private multiSPOTS 	parent0 				= null;
 	EnumStatusComputation sComputation 			= EnumStatusComputation.START_COMPUTATION; 
 	private SequenceTransform threadBuildFiltered = null;
 	
 	// -----------------------------------------------------
 		
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

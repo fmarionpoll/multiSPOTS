@@ -26,7 +26,7 @@ import plugins.nherve.toolbox.image.mask.MaskException;
 import plugins.nherve.toolbox.image.segmentation.Segmentation;
 import plugins.nherve.toolbox.image.segmentation.SegmentationException;
 import plugins.nherve.toolbox.image.toolboxes.ColorSpaceTools;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.tools.ImageKMeans;
@@ -57,11 +57,11 @@ public class LevelsKMeans  extends JPanel
 	private JCheckBox 	cbSendMaskDirectly = new JCheckBox("To editor");
 	private Thread 		currentlyRunning;
 	
-	private MultiCAFE2 	parent0 	= null;
+	private multiSPOTS 	parent0 	= null;
 	
 	// -----------------------------------------------------
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

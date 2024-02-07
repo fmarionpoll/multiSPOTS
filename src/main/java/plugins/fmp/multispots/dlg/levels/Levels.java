@@ -23,7 +23,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.util.StringUtil;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.series.BuildSeriesOptions;
@@ -78,7 +78,7 @@ public class Levels extends JPanel implements PropertyChangeListener
 	private JCheckBox	runBackwardsCheckBox 	= new JCheckBox ("run backwards", false);
 	
 	
-	private MultiCAFE2 	parent0 				= null;
+	private multiSPOTS 	parent0 				= null;
 	private DetectLevels threadDetectLevels 	= null;
 	
 	private String SEARCHRECT = new String("search_rectangle");
@@ -86,7 +86,7 @@ public class Levels extends JPanel implements PropertyChangeListener
 	private OverlayThreshold overlayThreshold 	= null;
 	// -----------------------------------------------------
 		
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

@@ -21,7 +21,7 @@ import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.type.geom.Polyline2D;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.CapillaryLevel;
 import plugins.fmp.multispots.experiment.Experiment;
@@ -37,7 +37,7 @@ public class EditLevels  extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = 2580935598417087197L;
-	private MultiCAFE2 			parent0;
+	private multiSPOTS 			parent0;
 	private boolean[] 			isInside		= null;
 //	private ArrayList<ROI> 		listGulpsSelected = null;
 	private JComboBox<String> 	roiTypeCombo 	= new JComboBox<String> (new String[] 
@@ -48,7 +48,7 @@ public class EditLevels  extends JPanel
 	
 	
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);	
 		this.parent0 = parent0;

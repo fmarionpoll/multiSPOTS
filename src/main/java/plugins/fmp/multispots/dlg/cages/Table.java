@@ -16,7 +16,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import icy.gui.frame.IcyFrame;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.CageTableModel;
 import plugins.fmp.multispots.experiment.Cage;
 import plugins.fmp.multispots.experiment.Experiment;
@@ -33,12 +33,12 @@ public class Table extends JPanel
 	private JButton				copyButton 		= new JButton("Copy table");
 	private JButton				pasteButton 	= new JButton("Paste");
 	private JButton				duplicateAllButton = new JButton("Duplicate cell to all");
-	private MultiCAFE2 			parent0 		= null; 
+	private multiSPOTS 			parent0 		= null; 
 	private List <Cage> 		cageArrayCopy 	= null;
 	
 	// -------------------------
 	
-	public void initialize (MultiCAFE2 parent0, List <Cage> cageCopy) 
+	public void initialize (multiSPOTS parent0, List <Cage> cageCopy) 
 	{
 		this.parent0 = parent0;
 		cageArrayCopy = cageCopy;

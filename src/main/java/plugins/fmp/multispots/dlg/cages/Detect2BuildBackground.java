@@ -25,7 +25,7 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImageUtil;
 import icy.util.StringUtil;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.series.BuildSeriesOptions;
@@ -37,7 +37,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 {
 	private static final long serialVersionUID = 1L;
 
-	private MultiCAFE2 	parent0					= null;
+	private multiSPOTS 	parent0					= null;
 	
 	private String 		detectString 			= "Build background...";
 	private JButton 	startComputationButton 	= new JButton(detectString);
@@ -58,7 +58,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 	
 	// ----------------------------------------------------
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

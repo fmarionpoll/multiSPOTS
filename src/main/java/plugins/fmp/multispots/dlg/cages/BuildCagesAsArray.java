@@ -19,7 +19,7 @@ import javax.swing.SwingConstants;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI2D;
 import icy.type.geom.Polygon2D;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
@@ -46,9 +46,9 @@ public class BuildCagesAsArray extends JPanel
 	private int 	width_cage 					= 10;
 	private int 	width_interval 				= 2;
 
-	private MultiCAFE2 parent0;
+	private multiSPOTS parent0;
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

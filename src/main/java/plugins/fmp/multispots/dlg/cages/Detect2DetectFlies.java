@@ -10,7 +10,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 
 public class Detect2DetectFlies extends JPanel implements PropertyChangeListener 
 {
@@ -27,10 +27,10 @@ public class Detect2DetectFlies extends JPanel implements PropertyChangeListener
 			int				iTAB_BACKGND	= 0;
 			int 			iTAB_DETECT2	= 1;
 			
-			MultiCAFE2 		parent0			= null;
+			multiSPOTS 		parent0			= null;
 
 	
-	public void init (GridLayout capLayout, MultiCAFE2 parent0) 
+	public void init (GridLayout capLayout, multiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 		

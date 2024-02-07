@@ -23,7 +23,7 @@ import icy.gui.util.FontUtil;
 import icy.image.IcyBufferedImage;
 import icy.system.thread.ThreadUtil;
 import loci.formats.FormatException;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.ImageFileDescriptor;
@@ -38,9 +38,9 @@ public class LoadSaveKymos extends JPanel
 	private static final long serialVersionUID = -4381802490262298749L;
 	private JButton		openButtonKymos			= new JButton("Load...");
 	private JButton		saveButtonKymos			= new JButton("Save...");
-	private MultiCAFE2 	parent0 				= null;
+	private multiSPOTS 	parent0 				= null;
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

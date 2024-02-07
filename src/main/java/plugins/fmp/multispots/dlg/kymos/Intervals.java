@@ -13,7 +13,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -25,7 +25,7 @@ public class Intervals extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = -1530811745749103710L;
-	private MultiCAFE2 parent0 				= null;
+	private multiSPOTS parent0 				= null;
 	private 	JComboBox<String> binUnit 	= new JComboBox<String> (new String[] {"ms", "s", "min", "h", "day"});
 	JButton		applyButton					= new JButton("Apply");
 	JButton		getFromCamDataButton		= new JButton("Get from stack of images");
@@ -34,7 +34,7 @@ public class Intervals extends JPanel
 	JSpinner 	binColumnJSpinner			= new JSpinner(new SpinnerNumberModel(1., 1., 1000., 1.));
 	
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

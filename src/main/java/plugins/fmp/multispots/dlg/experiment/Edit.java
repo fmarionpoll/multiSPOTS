@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.ExperimentCombo;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.tools.toExcel.EnumXLSColumnHeader;
@@ -40,12 +40,12 @@ public class Edit   extends JPanel
 	private JComboBox<String>	fieldOldValuesCombo	= new JComboBox<String>();
 	private JTextField			newValueTextField 	= new JTextField (10);
 	private JButton				applyButton 		= new JButton("Apply");
-	private MultiCAFE2 			parent0 			= null;
+	private multiSPOTS 			parent0 			= null;
 			boolean 			disableChangeFile 	= false;
 			ExperimentCombo 	editExpList 		= new ExperimentCombo();
 	
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 		setLayout(capLayout);

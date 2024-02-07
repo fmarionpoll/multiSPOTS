@@ -26,7 +26,7 @@ import icy.gui.util.GuiUtil;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.type.collection.array.Array1DUtil;
-import plugins.fmp.multispots.MultiCAFE2;
+import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
@@ -38,7 +38,7 @@ public class MCSpots_1 extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = -7614659720134775871L;
-	private MultiCAFE2 	parent0 				= null;
+	private multiSPOTS 	parent0 				= null;
 	private JButton 	subtractButton 			= new JButton("Subtract first column");
 	private JButton 	buildHistogramButton 	= new JButton("Build histogram");
 	private JButton 	removeBackGroundButton 	= new JButton("Remove background");
@@ -46,7 +46,7 @@ public class MCSpots_1 extends JPanel
 	private double [][] avgY = null;
 	IcyFrame mainChartFrame = null;	
 	
-	void init(GridLayout capLayout, MultiCAFE2 parent0) 
+	void init(GridLayout capLayout, multiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;
