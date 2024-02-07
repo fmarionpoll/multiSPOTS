@@ -24,7 +24,7 @@ import plugins.fmp.multispots.workinprogress_gpu.MCSpots_;
 
 public class multiSPOTS extends PluginActionable  
 {
-	public IcyFrame 		mainFrame 		= new IcyFrame("multispots Feb 06, 2024", true, true, true, true);
+	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS Feb 07, 2024", true, true, true, true);
 	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
 	
 	public MCExperiment_ 	paneExperiment 	= new MCExperiment_();
@@ -44,7 +44,7 @@ public class multiSPOTS extends PluginActionable
 	{		
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
 		paneExperiment.init(mainPanel, "Experiments", this);
-		paneCapillaries.init(mainPanel, "Capillaries", this);
+		paneCapillaries.init(mainPanel, "Spots", this);
 		paneKymos.init(mainPanel, "Kymographs", this);
 		paneLevels.init(mainPanel, "Levels", this);
 //		paneSpots.init(mainPanel, "MEASURE SPOTS", this);
