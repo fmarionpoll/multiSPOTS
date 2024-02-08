@@ -13,12 +13,12 @@ import icy.plugin.abstract_.PluginActionable;
 import icy.preferences.GeneralPreferences;
 import plugins.fmp.multispots.dlg.JComponents.ExperimentCombo;
 import plugins.fmp.multispots.dlg.cages.MCCages_;
-import plugins.fmp.multispots.dlg.capillaries.MCCapillaries_;
+import plugins.fmp.multispots.dlg.capillaries.MCSpots_;
 import plugins.fmp.multispots.dlg.excel.MCExcel_;
 import plugins.fmp.multispots.dlg.experiment.MCExperiment_;
 import plugins.fmp.multispots.dlg.kymos.MCKymos_;
 import plugins.fmp.multispots.dlg.levels.MCLevels_;
-import plugins.fmp.multispots.workinprogress_gpu.MCSpots_;
+import plugins.fmp.multispots.workinprogress_gpu.MCSpotsExp_;
 
 
 
@@ -28,10 +28,10 @@ public class multiSPOTS extends PluginActionable
 	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
 	
 	public MCExperiment_ 	paneExperiment 	= new MCExperiment_();
-	public MCCapillaries_ 	paneCapillaries	= new MCCapillaries_();
+	public MCSpots_ 	paneCapillaries	= new MCSpots_();
 	public MCKymos_			paneKymos		= new MCKymos_();
 	public MCLevels_ 		paneLevels 		= new MCLevels_();
-	public MCSpots_			paneSpots		= new MCSpots_();
+	public MCSpotsExp_			paneSpots		= new MCSpotsExp_();
 	public MCCages_ 		paneCages 		= new MCCages_();
 	public MCExcel_			paneExcel		= new MCExcel_();
 	

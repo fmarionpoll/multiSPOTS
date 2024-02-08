@@ -21,7 +21,7 @@ import plugins.fmp.multispots.experiment.SequenceKymosUtils;
 
 
 
-public class MCCapillaries_ extends JPanel implements PropertyChangeListener, ChangeListener 
+public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeListener 
 {
 	/**
 	 * 
@@ -29,10 +29,9 @@ public class MCCapillaries_ extends JPanel implements PropertyChangeListener, Ch
 	private static final long serialVersionUID = 853047648249832145L;
 	public	PopupPanel 	capPopupPanel	= null;
 			JTabbedPane tabsPane 		= new JTabbedPane();
-	public 	CreateForCapillaries 		tabCreate 		= new CreateForCapillaries();
-	public 	CreateForSpots	tabCreateFromCages	= new CreateForSpots();
+	public 	CreateSpots	tabCreateForSpots = new CreateSpots();
 			Edit		tabEdit			= new Edit();
-	public 	LoadSaveCapillaries 	tabFile 		= new LoadSaveCapillaries();
+	public 	LoadSaveSpots tabFile  = new LoadSaveSpots();
 			Adjust 		tabAdjust 		= new Adjust();
 			FilterImage tabFilterImage  = new FilterImage();
 	public 	Infos		tabInfos		= new Infos();
@@ -55,14 +54,10 @@ public class MCCapillaries_ extends JPanel implements PropertyChangeListener, Ch
 		
 		GridLayout capLayout = new GridLayout(3, 1);
 		int order = 0;
-		tabCreate.init(capLayout, parent0);
-		tabCreate.addPropertyChangeListener(this);
-		tabsPane.addTab("Create caps", null, tabCreate, "Create lines defining capillaries");
-		order++;
 		
-		tabCreateFromCages.init(capLayout, parent0);
-		tabCreateFromCages.addPropertyChangeListener(this);
-		tabsPane.addTab("Create spots", null, tabCreateFromCages, "Create spots defining liquid drops");
+		tabCreateForSpots.init(capLayout, parent0);
+		tabCreateForSpots.addPropertyChangeListener(this);
+		tabsPane.addTab("Create spots", null, tabCreateForSpots, "Create spots defining liquid drops");
 		order++;
 		
 		ID_INFOS=order;
@@ -143,14 +138,14 @@ public class MCCapillaries_ extends JPanel implements PropertyChangeListener, Ch
 			SequenceKymosUtils.transferCamDataROIStoKymo(exp);
 			exp.capillaries.desc_old.copy(exp.capillaries.capillariesDescription);
 			tabInfos.setAllDescriptors(exp.capillaries);
-			tabCreate.setGroupingAndNumber(exp.capillaries);
+//			tabCreate.setGroupingAndNumber(exp.capillaries);
 		}
 	}
 	
 	public void getDialogCapillariesInfos(Experiment exp) 
 	{
 		tabInfos.getDescriptors(exp.capillaries);
-		tabCreate.setCapillariesGrouping(exp.capillaries);
+//		tabCreate.setCapillariesGrouping(exp.capillaries);
 	}
 
 	@Override
@@ -185,7 +180,7 @@ public class MCCapillaries_ extends JPanel implements PropertyChangeListener, Ch
 	public void transferPreviousExperimentCapillariesInfos(Experiment exp0, Experiment exp)
 	{
 		exp.capillaries.capillariesDescription.grouping = exp0.capillaries.capillariesDescription.grouping;
-		tabCreate.setGroupedBy2(exp0.capillaries.capillariesDescription.grouping == 2);
+//		tabCreate.setGroupedBy2(exp0.capillaries.capillariesDescription.grouping == 2);
 		exp.capillaries.capillariesDescription.volume = exp0.capillaries.capillariesDescription.volume;
 		tabInfos.setAllDescriptors(exp0.capillaries) ;
 	}

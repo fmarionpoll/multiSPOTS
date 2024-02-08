@@ -15,7 +15,7 @@ import plugins.fmp.multispots.multiSPOTS;
 
 
 
-public class MCSpots_ extends JPanel implements PropertyChangeListener 
+public class MCSpotsExp_ extends JPanel implements PropertyChangeListener 
 {
 	/**
 	 * 
@@ -23,7 +23,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener
 	public	PopupPanel capPopupPanel	= null;
 	private static final long serialVersionUID = -2230724185086264742L;
 	private JTabbedPane 	tabsPane 		= new JTabbedPane();
-	MCSpots_1 				buildRef 		= new MCSpots_1();
+	MCSpotsRxp_1 			buildRef 	= new MCSpotsRxp_1();
 	
 	void init (JPanel mainPanel, String string, multiSPOTS parent0) 
 	{	

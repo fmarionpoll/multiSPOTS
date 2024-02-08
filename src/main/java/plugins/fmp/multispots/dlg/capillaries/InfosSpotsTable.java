@@ -27,7 +27,7 @@ import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
-public class InfosCapillaryTable extends JPanel 
+public class InfosSpotsTable extends JPanel 
 {
 	/**
 	 * 

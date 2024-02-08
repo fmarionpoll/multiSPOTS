@@ -17,7 +17,7 @@ import plugins.fmp.multispots.experiment.Experiment;
 
 
 
-public class LoadSaveCapillaries extends JPanel 
+public class LoadSaveSpots extends JPanel 
 {
 	/**
 	 * 

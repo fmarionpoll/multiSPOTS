@@ -32,7 +32,7 @@ import plugins.fmp.multispots.experiment.SequenceKymos;
 import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
 
 
-public class MCSpots_1 extends JPanel 
+public class MCSpotsRxp_1 extends JPanel 
 {
 	/**
 	 * 

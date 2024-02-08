@@ -33,7 +33,7 @@ public class Infos extends JPanel
 	private JButton				getCapillaryLengthButton	= new JButton ("pixels 1rst capillary");
 	private JButton				editCapillariesButton		= new JButton("Edit capillaries infos...");
 	private multiSPOTS 			parent0 					= null;
-	private InfosCapillaryTable infosCapillaryTable 		= null;
+	private InfosSpotsTable infosCapillaryTable 		= null;
 	private List <Capillary> 	capillariesArrayCopy 		= new ArrayList<Capillary>();
 	
 	
@@ -76,7 +76,7 @@ public class Infos extends JPanel
 				{
 					exp.capillaries.transferDescriptionToCapillaries();
 					if (infosCapillaryTable == null)
-						infosCapillaryTable = new InfosCapillaryTable();
+						infosCapillaryTable = new InfosSpotsTable();
 					infosCapillaryTable.initialize(parent0, capillariesArrayCopy);
 				}
 			}});
