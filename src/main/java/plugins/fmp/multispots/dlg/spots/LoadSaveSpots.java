@@ -1,4 +1,4 @@
-package plugins.fmp.multispots.dlg.capillaries;
+package plugins.fmp.multispots.dlg.spots;
 
 import java.awt.FlowLayout;
 import java.awt.Font;

@@ -13,11 +13,11 @@ import icy.plugin.abstract_.PluginActionable;
 import icy.preferences.GeneralPreferences;
 import plugins.fmp.multispots.dlg.JComponents.ExperimentCombo;
 import plugins.fmp.multispots.dlg.cages.MCCages_;
-import plugins.fmp.multispots.dlg.capillaries.MCSpots_;
 import plugins.fmp.multispots.dlg.excel.MCExcel_;
 import plugins.fmp.multispots.dlg.experiment.MCExperiment_;
 import plugins.fmp.multispots.dlg.kymos.MCKymos_;
 import plugins.fmp.multispots.dlg.levels.MCLevels_;
+import plugins.fmp.multispots.dlg.spots.MCSpots_;
 import plugins.fmp.multispots.workinprogress_gpu.MCSpotsExp_;
 
 
