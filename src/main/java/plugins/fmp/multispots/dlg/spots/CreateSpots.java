@@ -39,13 +39,15 @@ public class CreateSpots extends JPanel
 	private static final long serialVersionUID = -5257698990389571518L;
 	
 	private JButton 	addPolygon2DButton 		= new JButton("(1) Display frame");
-	private JButton 	createROIsFromPolygonButton2 = new JButton("(2) Generate polylines from edited frame");
+	private JButton 	createPolygonButton = new JButton("(2) Generate polylines");
+	private JButton 	createCirclesButton = new JButton("(3) Create circles");
 	
 	
 	private JComboBox<String> cagesJCombo 		= new JComboBox<String> (new String[] {"10", "other"});
 	private JComboBox<String> orientationJCombo = new JComboBox<String> (new String[] {"0°", "90°", "180°", "270°" });
-	private JSpinner 	nCapillariesJSpinner 	= new JSpinner(new SpinnerNumberModel(2, 2, 500, 1));
+	private JSpinner 	nPointsPolylineJSpinner = new JSpinner(new SpinnerNumberModel(2, 2, 500, 1));
 	private JSpinner 	nbFliesPerCageJSpinner 	= new JSpinner(new SpinnerNumberModel(1, 0, 500, 1));
+	private JSpinner 	pixelRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(10, 1, 1000, 1));
 
 	private Polygon2D 	capillariesPolygon 		= null;
 	private JSpinner 	nRowsJSpinner 			= new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
@@ -56,7 +58,7 @@ public class CreateSpots extends JPanel
 	private String []	rowString				= new String[] {"row of", "rows of"};
 	
 	private JLabel 		flyLabel 				= new JLabel (flyString[0]);
-	private JLabel 		capLabel 				= new JLabel ("points at");
+	private JLabel 		pointsLabel				= new JLabel ("points at");
 	private JLabel 		colLabel 				= new JLabel (colString[0]);
 	private JLabel 		rowLabel 				= new JLabel (rowString[0]);
 
@@ -71,7 +73,8 @@ public class CreateSpots extends JPanel
 		
 		JPanel panel0 = new JPanel(flowLayout);
 		panel0.add(addPolygon2DButton);		
-		panel0.add(createROIsFromPolygonButton2);
+		panel0.add(createPolygonButton);
+		panel0.add(createCirclesButton);
 		
 		JPanel panel1 = new JPanel(flowLayout);
 		panel1.add(new JLabel ("Grouped as"));
@@ -91,12 +94,15 @@ public class CreateSpots extends JPanel
 		
 		JPanel panel2 = new JPanel(flowLayout);
 		panel2.add(new JLabel ("Polyline with"));
-		panel2.add(nCapillariesJSpinner);
-		nCapillariesJSpinner.setPreferredSize(new Dimension (40, 20));
-		panel2.add(capLabel);
+		panel2.add(nPointsPolylineJSpinner);
+		nPointsPolylineJSpinner.setPreferredSize(new Dimension (40, 20));
+		panel2.add(pointsLabel);
 		panel2.add(orientationJCombo);
 		orientationJCombo.setPreferredSize(new Dimension (50, 20));
-		panel2.add(new JLabel ("angle"));
+		panel2.add(new JLabel ("angle; circles"));
+		panel2.add(pixelRadiusSpinner);
+		pixelRadiusSpinner.setPreferredSize(new Dimension (40, 20));
+		panel2.add(new JLabel("pixels"));
 						
 		add(panel0);
 		add(panel1);
@@ -130,7 +136,7 @@ public class CreateSpots extends JPanel
 					create2DPolygon();
 			}});
 		
-		createROIsFromPolygonButton2.addActionListener(new ActionListener () {
+		createPolygonButton.addActionListener(new ActionListener () {
 			@Override public void actionPerformed( final ActionEvent e ) { 
 				roisGenerateFromPolygon();
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
@@ -180,7 +186,7 @@ public class CreateSpots extends JPanel
 
 	private int getNbCapillaries( ) 
 	{
-		return (int) nCapillariesJSpinner.getValue();
+		return (int) nPointsPolylineJSpinner.getValue();
 	}
 
 	

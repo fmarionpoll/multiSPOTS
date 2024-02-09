@@ -56,7 +56,7 @@ public class Blobs {
 	
 	public void getBlobsConnected () 
 	{
-		for (int iy= 0; iy < sizeY; iy++) 
+		for (int iy = 0; iy < sizeY; iy++) 
 		{
 			for (int ix = 0; ix < sizeX; ix++) 
 			{					

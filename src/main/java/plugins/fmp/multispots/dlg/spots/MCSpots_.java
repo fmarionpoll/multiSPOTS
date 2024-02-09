@@ -57,7 +57,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		
 		tabCreateForSpots.init(capLayout, parent0);
 		tabCreateForSpots.addPropertyChangeListener(this);
-		tabsPane.addTab("Create spots", null, tabCreateForSpots, "Create spots defining liquid drops");
+		tabsPane.addTab("Create", null, tabCreateForSpots, "Create spots defining liquid drops");
 		order++;
 		
 		ID_INFOS=order;
