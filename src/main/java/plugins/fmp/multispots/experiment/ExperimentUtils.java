@@ -9,19 +9,13 @@ import plugins.fmp.multispots.tools.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
 
-public class SequenceKymosUtils 
+public class ExperimentUtils 
 {
-	public static void transferCamDataROIStoKymo (Experiment exp)
+	public static void transferCamDataROIStoCapillaries (Experiment exp)
 	{
-		if (exp.seqKymos == null) 
-		{
-			System.out.println("SequenceKymosUtils:transferCamDataROIstoKymo seqkymos null - return");
-			return;
-		}
 		if (exp.capillaries == null) 
 		{
 			exp.capillaries = new Capillaries();
-			System.out.println("SequenceKymosUtils:transferCamDataROIstoKymo error: seqkymos.capillaries was null");
 		}
 		
 		// rois not in cap? add
@@ -60,7 +54,7 @@ public class SequenceKymosUtils
 		}
 	}
 	
-	public static void transferKymoCapillariesToCamData (Experiment exp) 
+	public static void transferCapillariesToCamData (Experiment exp) 
 	{
 		if (exp.capillaries == null)
 			return;

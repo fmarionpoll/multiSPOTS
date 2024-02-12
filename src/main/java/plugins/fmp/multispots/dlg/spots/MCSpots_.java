@@ -17,7 +17,7 @@ import icy.gui.component.PopupPanel;
 import icy.gui.viewer.Viewer;
 import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
-import plugins.fmp.multispots.experiment.SequenceKymosUtils;
+import plugins.fmp.multispots.experiment.ExperimentUtils;
 
 
 
@@ -135,7 +135,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	public void updateDialogs(Experiment exp) 
 	{
 		if (exp != null) {
-			SequenceKymosUtils.transferCamDataROIStoKymo(exp);
+			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 			exp.capillaries.desc_old.copy(exp.capillaries.capillariesDescription);
 			tabInfos.setAllDescriptors(exp.capillaries);
 //			tabCreate.setGroupingAndNumber(exp.capillaries);

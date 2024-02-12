@@ -75,10 +75,10 @@
 </section>
 <section name="export"/>
 </section>
-<key name="lastUpdateCheckTime" value="1707485117474"/>
+<key name="lastUpdateCheckTime" value="1707768647432"/>
 <key name="sequencePersistence" value="false"/>
 <key name="virtualMode" value="true"/>
-<key name="loaderFolder" value="\\comportement-egce.ideev.universite-paris-saclay.fr\MultiCAFE\archive\2019\Faycal\Cafeine"/>
+<key name="loaderFolder" value="C:\Users\fred\OneDrive\Documents\2024 gouttes\2024-02-09"/>
 </section>
 <section name="canvas">
 <section name="Canvas2D"/>
@@ -96,10 +96,10 @@
 </section>
 <section name="online"/>
 </section>
-<key name="id" value="129248405"/>
+<key name="id" value="155904097"/>
 <key name="os" value="win64"/>
-<key name="clientCpuNumber" value="20"/>
-<key name="clientTotalMemory" value="34078789632"/>
+<key name="clientCpuNumber" value="16"/>
+<key name="clientTotalMemory" value="67880230912"/>
 <key name="appFolder" value="C:/Users/fred/.m2/repository/org/bioimageanalysis/icy/icy-kernel/2.5.1"/>
 <section name="loader">
 <section name="entry0">
@@ -134,7 +134,7 @@
 </section>
 </section>
 <key name="version" value="2.5.1.0"/>
-<key name="lastUploadDate" value="1707485115078"/>
+<key name="lastUploadDate" value="1707770655629"/>
 <section name="frame">
 <section name="imageLoader">
 <key name="loadtype" value="0"/>
@@ -152,7 +152,7 @@
 <section name="multispots">
 <section name="multiSPOTS">
 <section name="gui">
-<key name="lastUsedPath" value="C:\Users\fred\OneDrive\Documents\2024 gouttes\2024-02-08"/>
+<key name="lastUsedPath" value="C:\Users\fred\OneDrive\Documents\2024 gouttes\2024-02-09"/>
 </section>
 </section>
 </section>
@@ -160,8 +160,8 @@
 </section>
 <section name="frame">
 <section name="main">
-<key name="XE" value="2767"/>
-<key name="YE" value="42"/>
+<key name="XE" value="3523"/>
+<key name="YE" value="63"/>
 <key name="WidthE" value="1808"/>
 <key name="HeightE" value="1046"/>
 <key name="MaximizedE" value="false"/>

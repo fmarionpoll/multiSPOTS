@@ -844,7 +844,7 @@ public class Experiment
 			return;
 		
 		if (capillaries.capillariesList.size() != nimages) 
-			SequenceKymosUtils.transferCamDataROIStoKymo(this);
+			ExperimentUtils.transferCamDataROIStoCapillaries(this);
 		
 		for (int t= 0; t < nimages; t++) 
 		{

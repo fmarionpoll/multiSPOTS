@@ -22,12 +22,13 @@ import javax.swing.event.ChangeListener;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI2D;
 import icy.type.geom.Polygon2D;
+import icy.type.geom.Polyline2D;
 import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
-import plugins.fmp.multispots.experiment.SequenceKymosUtils;
+import plugins.fmp.multispots.experiment.ExperimentUtils;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
-import plugins.kernel.roi.roi2d.ROI2DLine;
+import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 
 
@@ -38,16 +39,16 @@ public class CreateSpots extends JPanel
 	 */
 	private static final long serialVersionUID = -5257698990389571518L;
 	
-	private JButton 	addPolygon2DButton 		= new JButton("(1) Display frame");
-	private JButton 	createPolygonButton = new JButton("(2) Generate polylines");
-	private JButton 	createCirclesButton = new JButton("(3) Create circles");
+	private JButton 	displayFrameDButton 	= new JButton("(1) Display frame");
+	private JButton 	createPolylinesButton 	= new JButton("(2) Generate polylines");
+	private JButton 	createCirclesButton 	= new JButton("(3) Create circles");
 	
 	
-	private JComboBox<String> cagesJCombo 		= new JComboBox<String> (new String[] {"10", "other"});
 	private JComboBox<String> orientationJCombo = new JComboBox<String> (new String[] {"0°", "90°", "180°", "270°" });
 	private JSpinner 	nPointsPolylineJSpinner = new JSpinner(new SpinnerNumberModel(2, 2, 500, 1));
 	private JSpinner 	nbFliesPerCageJSpinner 	= new JSpinner(new SpinnerNumberModel(1, 0, 500, 1));
 	private JSpinner 	pixelRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(10, 1, 1000, 1));
+	private JSpinner 	nCagesPerRowSpinner 	= new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
 
 	private Polygon2D 	capillariesPolygon 		= null;
 	private JSpinner 	nRowsJSpinner 			= new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
@@ -72,8 +73,8 @@ public class CreateSpots extends JPanel
 		flowLayout.setVgap(0);
 		
 		JPanel panel0 = new JPanel(flowLayout);
-		panel0.add(addPolygon2DButton);		
-		panel0.add(createPolygonButton);
+		panel0.add(displayFrameDButton);		
+		panel0.add(createPolylinesButton);
 		panel0.add(createCirclesButton);
 		
 		JPanel panel1 = new JPanel(flowLayout);
@@ -85,8 +86,8 @@ public class CreateSpots extends JPanel
 		nRowsJSpinner.setPreferredSize(new Dimension (40, 20));
 		panel1.add(rowLabel);
 		
-		panel1.add(cagesJCombo);	
-		cagesJCombo.setPreferredSize(new Dimension (60, 20));
+		panel1.add(nCagesPerRowSpinner);	
+		nCagesPerRowSpinner.setPreferredSize(new Dimension (60, 20));
 		panel1.add(new JLabel ("cages and"));
 		panel1.add(nbFliesPerCageJSpinner);
 		nbFliesPerCageJSpinner.setPreferredSize(new Dimension (40, 20));
@@ -114,7 +115,7 @@ public class CreateSpots extends JPanel
 	
 	private void defineActionListeners() 
 	{
-		addPolygon2DButton.addActionListener(new ActionListener () {
+		displayFrameDButton.addActionListener(new ActionListener () {
 			@Override public void actionPerformed( final ActionEvent e ) { 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if ((exp != null) && (exp.capillaries != null)) {
@@ -136,23 +137,25 @@ public class CreateSpots extends JPanel
 					create2DPolygon();
 			}});
 		
-		createPolygonButton.addActionListener(new ActionListener () {
+		createPolylinesButton.addActionListener(new ActionListener () {
 			@Override public void actionPerformed( final ActionEvent e ) { 
 				roisGenerateFromPolygon();
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					SequenceKymosUtils.transferCamDataROIStoKymo(exp);
+					ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
-					switch(cagesJCombo.getSelectedIndex()) {
-					case 0:
-						exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage);
-						break;
-					case 1:
-						exp.capillaries.initCapillariesWith6Cages(nbFliesPerCage);
-						break;
-					default:
-						break;		
-					}
+					exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage); // TODO N??
+					firePropertyChange("CAPILLARIES_NEW", false, true);
+				}
+			}});
+		
+		createCirclesButton.addActionListener(new ActionListener () {
+			@Override public void actionPerformed( final ActionEvent e ) { 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) {
+					ExperimentUtils.transferCamDataROIStoCapillaries(exp); // TODO generate and save circles here instead of generate capillaries
+					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
+					exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage); // TODO N??
 					firePropertyChange("CAPILLARIES_NEW", false, true);
 				}
 			}});
@@ -186,7 +189,7 @@ public class CreateSpots extends JPanel
 
 	private int getNbCapillaries( ) 
 	{
-		return (int) nPointsPolylineJSpinner.getValue();
+		return (int) nCagesPerRowSpinner.getValue();
 	}
 
 	
@@ -286,7 +289,7 @@ public class CreateSpots extends JPanel
 		if (statusGroup2Mode) 
 		{	
 			double span = (nbcapillaries/2)* (width_between_capillaries + width_interval) - width_interval;
-			for (int i=0; i< nbcapillaries; i+= 2) 
+			for (int i = 0; i < nbcapillaries; i += 2) 
 			{
 				double span0 = (width_between_capillaries + width_interval)*i/2;
 				addROILine(seqCamData, "line"+i/2+"L", capillariesPolygon, span0, span);
@@ -310,16 +313,38 @@ public class CreateSpots extends JPanel
 		double x0 = roiPolygon.xpoints[0] + (roiPolygon.xpoints[3]-roiPolygon.xpoints[0]) * span0 /span;
 		double y0 = roiPolygon.ypoints[0] + (roiPolygon.ypoints[3]-roiPolygon.ypoints[0]) * span0 /span;
 		if (x0 < 0) 
-			x0= 0;
+			x0 = 0;
 		if (y0 < 0) 
 			y0=0;
 		double x1 = roiPolygon.xpoints[1] + (roiPolygon.xpoints[2]-roiPolygon.xpoints[1]) * span0 /span ;
 		double y1 = roiPolygon.ypoints[1] + (roiPolygon.ypoints[2]-roiPolygon.ypoints[1]) * span0 /span ;
-		
-		ROI2DLine roiL1 = new ROI2DLine (x0, y0, x1, y1);
+		int npoints = (int) nPointsPolylineJSpinner.getValue();
+				
+		ROI2DPolyLine roiL1 = new ROI2DPolyLine (createPolyline2D (x0, y0, x1, y1, npoints));
 		roiL1.setName(name);
 		roiL1.setReadOnly(false);
 		seqCamData.seq.addROI(roiL1, true);
+	}
+	
+	private Polyline2D createPolyline2D(double x0, double y0, double x1, double y1, int npoints) {
+		double [] xpoints = new double[npoints];
+		double [] ypoints = new double [npoints];
+		double deltax = (x1-x0)/(npoints-1);
+		double deltay = (y1-y0)/(npoints-1);
+		double x = x0;
+		double y = y0;
+		xpoints[0] = x0;
+		ypoints[0] = y0;
+		xpoints[npoints-1] = x1;
+		ypoints[npoints-1] = y1;
+		
+		for (int i = 1; i < npoints-1; i++) {
+			x += deltax;
+			y += deltay;
+			xpoints[i] = x;
+			ypoints[i] = y;
+		}
+		return new Polyline2D(xpoints, ypoints, npoints);
 	}
 
 }
