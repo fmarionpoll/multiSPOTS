@@ -46,17 +46,17 @@ public class Canvas2DWithFilters extends Canvas2D
     	toolBar.addSeparator();
         toolBar.add(imageTransformFunctionsCombo);
         
-		IcyButton previousButton = new IcyButton(ResourceUtilFMP.ICON_PREVIOUS_IMAGE);
-		previousButton.setSelected(false);
-		previousButton.setFocusable(false);
-		previousButton.setToolTipText("Select previous capillary (to the left or lower index)");
-        toolBar.add(previousButton); 
-		
-        IcyButton nextButton = new IcyButton(ResourceUtilFMP.ICON_NEXT_IMAGE);
-        nextButton.setSelected(false);
-        nextButton.setFocusable(false);
-        nextButton.setToolTipText("Select next capillary (to the right or higher index)");
-		toolBar.add(nextButton);
+//		IcyButton previousButton = new IcyButton(ResourceUtilFMP.ICON_PREVIOUS_IMAGE);
+//		previousButton.setSelected(false);
+//		previousButton.setFocusable(false);
+//		previousButton.setToolTipText("Select previous capillary (to the left or lower index)");
+//        toolBar.add(previousButton); 
+//		
+//        IcyButton nextButton = new IcyButton(ResourceUtilFMP.ICON_NEXT_IMAGE);
+//        nextButton.setSelected(false);
+//        nextButton.setFocusable(false);
+//        nextButton.setToolTipText("Select next capillary (to the right or higher index)");
+//		toolBar.add(nextButton);
 		
 		IcyIcon fitY = ResourceUtilFMP.ICON_FIT_YAXIS;
 		IcyButton fitYAxisButton = new IcyButton(fitY);
@@ -74,17 +74,17 @@ public class Canvas2DWithFilters extends Canvas2D
         
 		super.customizeToolbar(toolBar);
         
-        previousButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                setPositionT( getPositionT()-1);
-            }});
-        
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-            	setPositionT( getPositionT()+1);
-            }});
+//        previousButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent arg0) {
+//                setPositionT( getPositionT()-1);
+//            }});
+//        
+//        nextButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent arg0) {
+//            	setPositionT( getPositionT()+1);
+//            }});
         
         fitYAxisButton.addActionListener(new ActionListener() {
             @Override
