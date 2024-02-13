@@ -103,7 +103,7 @@ public class CreateSpots extends JPanel
 		panel2.add(new JLabel ("angle; circles"));
 		panel2.add(pixelRadiusSpinner);
 		pixelRadiusSpinner.setPreferredSize(new Dimension (40, 20));
-		panel2.add(new JLabel("pixels"));
+		panel2.add(new JLabel("pixel radius"));
 						
 		add(panel0);
 		add(panel1);
@@ -153,7 +153,9 @@ public class CreateSpots extends JPanel
 			@Override public void actionPerformed( final ActionEvent e ) { 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					ExperimentUtils.transferCamDataROIStoCapillaries(exp); // TODO generate and save circles here instead of generate capillaries
+					int radius = (int) pixelRadiusSpinner.getValue();
+					ExperimentUtils.transformPolygon2DROISintoCircles(exp, radius); 
+					ExperimentUtils.transferCapillariesToCamData(exp); 
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
 					exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage); // TODO N??
 					firePropertyChange("CAPILLARIES_NEW", false, true);

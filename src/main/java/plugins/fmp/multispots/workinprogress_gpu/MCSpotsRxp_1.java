@@ -29,7 +29,7 @@ import icy.type.collection.array.Array1DUtil;
 import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 
 
 public class MCSpotsRxp_1 extends JPanel 

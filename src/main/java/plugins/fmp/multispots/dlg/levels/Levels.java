@@ -28,8 +28,8 @@ import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.series.BuildSeriesOptions;
 import plugins.fmp.multispots.series.DetectLevels;
-import plugins.fmp.multispots.tools.KymosCanvas2D;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
+import plugins.fmp.multispots.tools.Canvas2DWithFilters;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multispots.tools.Overlay.OverlayThreshold;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;
 
@@ -226,7 +226,7 @@ public class Levels extends JPanel implements PropertyChangeListener
 					boolean displayCheckOverlay = false;
 					if (transformPass1DisplayButton.isSelected()) {
 						transformPass2DisplayButton.setSelected(false);
-						KymosCanvas2D canvas = getKymosCanvas(exp);
+						Canvas2DWithFilters canvas = getKymosCanvas(exp);
 						canvas.updateListOfImageTransformFunctions( transformPass1);
 						int index = transformPass1ComboBox.getSelectedIndex();
 						canvas.selectImageTransformFunction(index +1);
@@ -253,7 +253,7 @@ public class Levels extends JPanel implements PropertyChangeListener
 					boolean displayCheckOverlay = false;
 					if (transformPass2DisplayButton.isSelected()) {
 						transformPass1DisplayButton.setSelected(false);
-						KymosCanvas2D canvas = getKymosCanvas(exp);
+						Canvas2DWithFilters canvas = getKymosCanvas(exp);
 						canvas.updateListOfImageTransformFunctions( transformPass2);
 						int index = transformPass2ComboBox.getSelectedIndex();
 						canvas.selectImageTransformFunction(index +1);
@@ -465,9 +465,9 @@ public class Levels extends JPanel implements PropertyChangeListener
 		return rectangle;
 	}
 	
-	protected KymosCanvas2D getKymosCanvas(Experiment exp) 
+	protected Canvas2DWithFilters getKymosCanvas(Experiment exp) 
 	{
-		KymosCanvas2D canvas = (KymosCanvas2D) exp.seqKymos.seq.getFirstViewer().getCanvas();
+		Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqKymos.seq.getFirstViewer().getCanvas();
 		return canvas;
 	}
 	

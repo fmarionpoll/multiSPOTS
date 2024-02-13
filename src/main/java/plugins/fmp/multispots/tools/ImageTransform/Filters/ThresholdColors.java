@@ -1,13 +1,13 @@
-package plugins.fmp.multispots.tools.Image.Transforms;
+package plugins.fmp.multispots.tools.ImageTransform.Filters;
 
 import java.awt.Color;
 
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageUtil;
 import icy.type.DataType;
-import plugins.fmp.multispots.tools.Image.ImageTransformFunctionAbstract;
-import plugins.fmp.multispots.tools.Image.ImageTransformInterface;
-import plugins.fmp.multispots.tools.Image.ImageTransformOptions;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformFunctionAbstract;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multispots.tools.NHDistance.NHDistanceColor;
 import plugins.fmp.multispots.tools.NHDistance.NHDistanceColorL1;
 import plugins.fmp.multispots.tools.NHDistance.NHDistanceColorL2;

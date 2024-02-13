@@ -30,7 +30,7 @@ import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.series.FlyDetect1;
 import plugins.fmp.multispots.series.BuildSeriesOptions;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multispots.tools.Overlay.OverlayThreshold;
 
 

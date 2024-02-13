@@ -22,8 +22,8 @@ import icy.sequence.Sequence;
 import icy.util.XMLUtil;
 import plugins.fmp.multispots.tools.Directories;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
-import plugins.fmp.multispots.tools.Image.ImageTransformInterface;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multispots.tools.toExcel.EnumXLSColumnHeader;
 
 

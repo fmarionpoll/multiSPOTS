@@ -7,8 +7,8 @@ import icy.gui.frame.progress.ProgressFrame;
 import icy.image.IcyBufferedImage;
 
 import plugins.fmp.multispots.experiment.Experiment;
-import plugins.fmp.multispots.tools.Image.ImageTransformInterface;
-import plugins.fmp.multispots.tools.Image.ImageTransformOptions;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformOptions;
 
 
 

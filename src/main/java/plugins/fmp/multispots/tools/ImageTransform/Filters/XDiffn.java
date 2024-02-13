@@ -1,10 +1,10 @@
-package plugins.fmp.multispots.tools.Image.Transforms;
+package plugins.fmp.multispots.tools.ImageTransform.Filters;
 
 import icy.image.IcyBufferedImage;
 import icy.type.collection.array.Array1DUtil;
-import plugins.fmp.multispots.tools.Image.ImageTransformFunctionAbstract;
-import plugins.fmp.multispots.tools.Image.ImageTransformInterface;
-import plugins.fmp.multispots.tools.Image.ImageTransformOptions;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformFunctionAbstract;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformOptions;
 
 public class XDiffn extends ImageTransformFunctionAbstract implements ImageTransformInterface
 {

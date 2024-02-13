@@ -31,7 +31,7 @@ import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.tools.Blobs;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multispots.tools.Overlay.OverlayThreshold;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 

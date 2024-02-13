@@ -16,11 +16,11 @@ import icy.sequence.Sequence;
 import icy.resource.icon.IcyIcon;
 
 import plugins.fmp.multispots.resource.ResourceUtilFMP;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
-import plugins.fmp.multispots.tools.Image.ImageTransformInterface;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
 
 
-public class KymosCanvas2D extends Canvas2D
+public class Canvas2DWithFilters extends Canvas2D
 {
     /**
 	 * 
@@ -35,7 +35,7 @@ public class KymosCanvas2D extends Canvas2D
 	public JComboBox<ImageTransformEnums> imageTransformFunctionsCombo = new JComboBox<ImageTransformEnums> (imageTransform);
 	ImageTransformInterface transform = ImageTransformEnums.NONE.getFunction();
  
-    public KymosCanvas2D(Viewer viewer)
+    public Canvas2DWithFilters(Viewer viewer)
     {
         super(viewer);
     }

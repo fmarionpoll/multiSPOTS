@@ -34,7 +34,7 @@ import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 import plugins.fmp.multispots.tools.Directories;
-import plugins.fmp.multispots.tools.KymosCanvas2D;
+import plugins.fmp.multispots.tools.Canvas2DWithFilters;
 
 
 
@@ -213,7 +213,7 @@ public class Display extends JPanel implements ViewerListener
 			if (vList.size() == 0)
 			{
 				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);
-				KymosCanvas2D kymoCanvas2D = new KymosCanvas2D(viewerKymographs);
+				Canvas2DWithFilters kymoCanvas2D = new Canvas2DWithFilters(viewerKymographs);
 				viewerKymographs.setCanvas(kymoCanvas2D);
 //				viewerKymographs.setCanvas(KymosCanvas2DPlugin.getCanvasClassName());
 				viewerKymographs.setRepeat(false);

@@ -10,7 +10,7 @@ import icy.file.xml.XMLPersistent;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multispots.dlg.JComponents.ExperimentCombo;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 
 
 

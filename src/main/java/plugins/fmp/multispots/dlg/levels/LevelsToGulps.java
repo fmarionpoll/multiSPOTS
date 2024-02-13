@@ -23,8 +23,8 @@ import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.series.DetectGulps;
-import plugins.fmp.multispots.tools.KymosCanvas2D;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
+import plugins.fmp.multispots.tools.Canvas2DWithFilters;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multispots.series.BuildSeriesOptions;
 
 
@@ -127,7 +127,7 @@ public class LevelsToGulps extends JPanel  implements PropertyChangeListener
 				if (exp != null && exp.seqCamData != null) 
 				{
 					if (gulpTransformDisplayButton.isSelected()) {
-						KymosCanvas2D canvas = getKymosCanvas(exp);
+						Canvas2DWithFilters canvas = getKymosCanvas(exp);
 						canvas.updateListOfImageTransformFunctions( gulpTransforms);
 						int index = gulpTransformsComboBox.getSelectedIndex();
 						canvas.selectImageTransformFunction(index +1);
@@ -232,9 +232,9 @@ public class LevelsToGulps extends JPanel  implements PropertyChangeListener
 		 }
 	}
 	
-	protected KymosCanvas2D getKymosCanvas(Experiment exp) 
+	protected Canvas2DWithFilters getKymosCanvas(Experiment exp) 
 	{
-		KymosCanvas2D canvas = (KymosCanvas2D) exp.seqKymos.seq.getFirstViewer().getCanvas();
+		Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqKymos.seq.getFirstViewer().getCanvas();
 		return canvas;
 	}
 	

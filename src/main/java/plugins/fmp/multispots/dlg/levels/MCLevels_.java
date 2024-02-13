@@ -13,7 +13,7 @@ import javax.swing.JTabbedPane;
 import icy.gui.component.PopupPanel;
 
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 
 
 

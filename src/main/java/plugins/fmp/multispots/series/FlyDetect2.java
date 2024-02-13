@@ -8,9 +8,9 @@ import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageUtil;
 
 import plugins.fmp.multispots.experiment.Experiment;
-import plugins.fmp.multispots.tools.Image.ImageTransformEnums;
-import plugins.fmp.multispots.tools.Image.ImageTransformInterface;
-import plugins.fmp.multispots.tools.Image.ImageTransformOptions;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformOptions;
 
 
 

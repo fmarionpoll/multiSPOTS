@@ -12,7 +12,7 @@ import icy.type.collection.array.Array1DUtil;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
-import plugins.fmp.multispots.tools.Image.ImageTransformInterface;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
 
 
 
