@@ -23,6 +23,7 @@ import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
+import plugins.fmp.multispots.tools.Canvas2DWithFilters;
 
 
 
@@ -115,8 +116,11 @@ public class MCExperiment_ extends JPanel implements ViewerListener, ChangeListe
 		SwingUtilities.invokeLater(new Runnable() { public void run() 
 		{	
 			Viewer v = seq.getFirstViewer();
-			if (v == null) 
+			if (v == null) {
 				v = new Viewer(exp.seqCamData.seq, true);
+				Canvas2DWithFilters camCanvas2D = new Canvas2DWithFilters(v);
+				v.setCanvas(camCanvas2D);
+			}
 			
 			if (v != null) {
 				placeViewerNextToDialogBox(v, parent0.mainFrame);

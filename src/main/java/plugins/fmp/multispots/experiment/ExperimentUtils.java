@@ -126,7 +126,8 @@ public class ExperimentUtils
 		}
 		
 		// TODO remove the lines
-		
+		for (ROI2D roi:listROISCap) 
+			exp.seqCamData.seq.removeROI(roi);
 		
 	}
 	

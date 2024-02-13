@@ -215,7 +215,6 @@ public class Display extends JPanel implements ViewerListener
 				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);
 				Canvas2DWithFilters kymoCanvas2D = new Canvas2DWithFilters(viewerKymographs);
 				viewerKymographs.setCanvas(kymoCanvas2D);
-//				viewerKymographs.setCanvas(KymosCanvas2DPlugin.getCanvasClassName());
 				viewerKymographs.setRepeat(false);
 				viewerKymographs.addListener(this);
 
