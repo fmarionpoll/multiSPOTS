@@ -20,16 +20,10 @@ public class ResourceUtilFMP {
     
     public static final IcyIcon ICON_PREVIOUS_IMAGE 	= new IcyIcon(ResourceUtil.getAlphaIconAsImage("br_prev.png"));
     public static final IcyIcon ICON_NEXT_IMAGE  		= new IcyIcon(ResourceUtil.getAlphaIconAsImage("br_next.png"));
-    public static final IcyIcon ICON_FIT_YAXIS  		= getIcyIcon("fit_Y.png");
-    public static final IcyIcon ICON_FIT_XAXIS  		= getIcyIcon("fit_X.png");
+    public static final IcyIcon ICON_ADAPT_YAXIS  		= new IcyIcon(getImage("fit_Y.png"));
+    public static final IcyIcon ICON_ADAPT_XAXIS  		= new IcyIcon(getImage("fit_X.png"));
 
-    
-
-  
-    public static IcyIcon getIcyIcon(String fileName) 
-    {
-		return new IcyIcon(getImage(fileName));
-	}
+     
     
 	private static Image getImage(String fileName) 
 	{

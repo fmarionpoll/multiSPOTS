@@ -58,14 +58,14 @@ public class Canvas2DWithFilters extends Canvas2D
 //        nextButton.setToolTipText("Select next capillary (to the right or higher index)");
 //		toolBar.add(nextButton);
 		
-		IcyIcon fitY = ResourceUtilFMP.ICON_FIT_YAXIS;
+		IcyIcon fitY = ResourceUtilFMP.ICON_ADAPT_YAXIS;
 		IcyButton fitYAxisButton = new IcyButton(fitY);
 		fitYAxisButton.setSelected(false);
 		fitYAxisButton.setFocusable(false);
 		fitYAxisButton.setToolTipText("Set image scale ratio to 1:1 and fit Y axis to the window height");
 		toolBar.add(fitYAxisButton);
 		
-		IcyIcon fitX = ResourceUtilFMP.ICON_FIT_XAXIS;
+		IcyIcon fitX = ResourceUtilFMP.ICON_ADAPT_XAXIS;
 		IcyButton fitXAxisButton = new IcyButton(fitX);
 		fitXAxisButton.setSelected(false);
 		fitXAxisButton.setFocusable(false);

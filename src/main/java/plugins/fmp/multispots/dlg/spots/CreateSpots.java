@@ -131,7 +131,6 @@ public class CreateSpots extends JPanel
 					extRect.setName(dummyname);
 					exp.seqCamData.seq.addROI(extRect);
 					exp.seqCamData.seq.setSelectedROI(extRect);
-					// TODO delete kymos
 				}
 				else
 					create2DPolygon();
@@ -144,8 +143,7 @@ public class CreateSpots extends JPanel
 				if (exp != null) {
 					ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
-					exp.capillaries.initCapillariesWithNFlies(nbFliesPerCage); // TODO N??
-					firePropertyChange("CAPILLARIES_NEW", false, true);
+					exp.capillaries.initCapillariesWithNFlies(nbFliesPerCage);
 				}
 			}});
 		
@@ -157,7 +155,7 @@ public class CreateSpots extends JPanel
 					ExperimentUtils.transformPolygon2DROISintoCircles(exp, radius); 
 					ExperimentUtils.transferCapillariesToCamData(exp); 
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
-					exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage); // TODO N??
+					exp.capillaries.initCapillariesWithNFlies(nbFliesPerCage);
 					firePropertyChange("CAPILLARIES_NEW", false, true);
 				}
 			}});
@@ -305,7 +303,7 @@ public class CreateSpots extends JPanel
 			for (int i=0; i< nbcapillaries; i++) 
 			{
 				double span0 = width_between_capillaries*i;
-				addROILine(seqCamData, "line"+i, capillariesPolygon, span0, span);
+				addROILine(seqCamData, "line"+ String.format("%02d", i), capillariesPolygon, span0, span);
 			}
 		}
 	}

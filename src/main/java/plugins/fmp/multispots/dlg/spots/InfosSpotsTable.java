@@ -65,10 +65,8 @@ public class InfosSpotsTable extends JPanel
 	    TableColumnModel columnModel = tableView.getColumnModel();
 	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 	    centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-	    for (int i=0; i<capillaryTableModel.getColumnCount(); i++) {
+	    for (int i = 0 ; i < capillaryTableModel.getColumnCount(); i++) {
 	    	TableColumn col = columnModel.getColumn(i);
-	    	if (i < 4)
-	    		setFixedColumnProperties(col);
 	    	col.setCellRenderer( centerRenderer );
 	    	}
         JScrollPane scrollPane = new JScrollPane(tableView);
@@ -207,14 +205,6 @@ public class InfosSpotsTable extends JPanel
 	void close() 
 	{
 		dialogFrame.close();
-	}
-	
-	private void setFixedColumnProperties (TableColumn column) 
-	{
-        column.setResizable(false);
-        column.setPreferredWidth(50);
-        column.setMaxWidth(50);
-        column.setMinWidth(30);
 	}
 	
 	private void exchangeLR(Experiment exp) 

@@ -119,15 +119,15 @@ public class ExperimentUtils
 				double y = point.getY() - delta;
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2* radius, 2*radius);
 				ROI2DEllipse roicircle = new ROI2DEllipse(ellipse);
-				roicircle.setName(baseName + "circle"+i);
+				roicircle.setName(baseName + "circle" + String.format("%02d", i));
 				i++;
 				exp.capillaries.capillariesList.add(new Capillary((ROI2DShape)roicircle));
 			}
 		}
 		
-		// TODO remove the lines
-		for (ROI2D roi:listROISCap) 
-			exp.seqCamData.seq.removeROI(roi);
+//		// TODO remove the lines?
+//		for (ROI2D roi:listROISCap) 
+//			exp.seqCamData.seq.removeROI(roi);
 		
 	}
 	
