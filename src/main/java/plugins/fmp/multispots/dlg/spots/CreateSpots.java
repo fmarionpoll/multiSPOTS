@@ -152,8 +152,8 @@ public class CreateSpots extends JPanel
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					int radius = (int) pixelRadiusSpinner.getValue();
-					ExperimentUtils.transformPolygon2DROISintoCircles(exp, radius); 
-					ExperimentUtils.transferCapillariesToCamData(exp); 
+					ExperimentUtils.transformPolygon2DROISintoSpots(exp, radius); 
+					ExperimentUtils.transferSpotsToCamData(exp); 
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
 					exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
 					firePropertyChange("CAPILLARIES_NEW", false, true);

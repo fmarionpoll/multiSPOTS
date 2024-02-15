@@ -60,7 +60,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		tabsPane.addTab("Create", null, tabCreateForSpots, "Create spots defining liquid drops");
 		order++;
 		
-		ID_INFOS=order;
+		ID_INFOS = order;
 		tabInfos.init(capLayout, parent0);
 		tabInfos.addPropertyChangeListener(this);
 		tabsPane.addTab("Infos", null, tabInfos, "Define pixel conversion unit of images and capillaries content");
@@ -138,6 +138,9 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 			exp.capillaries.desc_old.copy(exp.capillaries.capillariesDescription);
 			tabInfos.setAllDescriptors(exp.capillaries);
+			
+			ExperimentUtils.transferCamDataROIStoSpots(exp);
+			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 //			tabCreate.setGroupingAndNumber(exp.capillaries);
 		}
 	}

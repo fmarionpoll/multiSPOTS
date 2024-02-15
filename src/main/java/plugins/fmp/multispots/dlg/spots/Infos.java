@@ -33,7 +33,7 @@ public class Infos extends JPanel
 	private JButton			editCapillariesButton	= new JButton("Edit capillaries infos...");
 	private multiSPOTS 		parent0 				= null;
 	private InfosCapillaryTable infosCapillaryTable = null;
-	private List <Capillary> 	capillariesArrayCopy = null;
+	private List <Capillary> capillariesArrayCopy 	= null;
 	
 	
 	void init(GridLayout capLayout, multiSPOTS parent0) 

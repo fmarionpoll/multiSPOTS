@@ -60,6 +60,47 @@ public class ExperimentUtils
 		}
 	}
 	
+	public static void transferCamDataROIStoSpots (Experiment exp)
+	{
+		if (exp.capillaries == null) 
+			exp.capillaries = new Capillaries();
+		
+		// rois not in cap? add
+		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("spot", exp.seqCamData.seq);
+		for (ROI2D roi:listROISCap) 
+		{
+			boolean found = false;
+			for (Spot spot: exp.spotsArray.spotsList) 
+			{
+				if (spot.getRoi()!= null && roi.getName().equals(spot.getRoiName())) 
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				exp.spotsArray.spotsList.add(new Spot((ROI2DShape)roi));
+		}
+		
+		// cap with no corresponding roi? remove
+		Iterator<Spot> iterator = exp.spotsArray.spotsList.iterator();
+		while(iterator.hasNext()) 
+		{
+			Spot cap = iterator.next();
+			boolean found = false;
+			for (ROI2D roi:listROISCap) 
+			{
+				if (roi.getName().equals(cap.getRoiName())) 
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				iterator.remove();
+		}
+	}
+	
 	public static void transferCapillariesToCamData (Experiment exp) 
 	{
 		if (exp.capillaries == null)
@@ -82,9 +123,31 @@ public class ExperimentUtils
 		}
 	}
 	
-	
-	public static void transformPolygon2DROISintoCircles(Experiment exp, int radius) 
+	public static void transferSpotsToCamData (Experiment exp) 
 	{
+		if (exp.spotsArray == null)
+			return;
+		
+		List<ROI2D> listROISSpots = ROI2DUtilities.getROIs2DContainingString ("spot", exp.seqCamData.seq);
+		// roi with no corresponding cap? add ROI
+		for (Spot cap: exp.spotsArray.spotsList) 
+		{
+			boolean found = false;
+			for (ROI2D roi:listROISSpots) {
+				if (roi.getName().equals(cap.getRoiName())) 
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				exp.seqCamData.seq.addROI(cap.getRoi());
+		}
+	}
+	
+	public static void transformPolygon2DROISintoSpots(Experiment exp, int radius) 
+	{
+		ROI2DUtilities.removeRoisContainingString(-1, "spot", exp.seqCamData.seq);
 		ROI2DUtilities.removeRoisContainingString(-1, "circle", exp.seqCamData.seq);
 		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("line", exp.seqCamData.seq);
 		if (listROISCap.size() < 1)
@@ -96,6 +159,8 @@ public class ExperimentUtils
 		for (ROI2D roi:listROISCap) 
 		{	
 			String baseName = roi.getName();
+			String substring = baseName.length() > 2 ? baseName.substring(baseName.length() - 2)+"_" : baseName+"_";
+			
 			ArrayList<Point2D> centers = new ArrayList <Point2D>();
 			if (roi instanceof ROI2DLine) {
 				Line2D line = ((ROI2DLine) roi).getLine();
@@ -119,7 +184,7 @@ public class ExperimentUtils
 				double y = point.getY() - delta;
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2* radius, 2*radius);
 				ROI2DEllipse roicircle = new ROI2DEllipse(ellipse);
-				roicircle.setName(baseName + "circle" + String.format("%02d", i));
+				roicircle.setName("spot" + substring + String.format("%02d", i));
 				i++;
 				exp.spotsArray.spotsList.add(new Spot((ROI2DShape)roicircle));
 			}
