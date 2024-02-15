@@ -1,7 +1,7 @@
 package plugins.fmp.multispots.dlg.JComponents;
 
 import javax.swing.table.AbstractTableModel;
-import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -47,14 +47,14 @@ public class CapillaryTableModel extends AbstractTableModel
     public int getRowCount() {
     	if (expList != null && expList.getSelectedIndex() >= 0 ) {
     		Experiment exp = (Experiment) expList.getSelectedItem();
-			return exp.capillaries.spotsList.size();
+			return exp.capillaries.capillariesList.size();
     	}
         return 0;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-    	Spot cap = getCapillaryAt(rowIndex);
+    	Capillary cap = getCapillaryAt(rowIndex);
     	if (cap != null) {
         	switch (columnIndex) {
             case 0: return cap.getRoiName();
@@ -80,7 +80,7 @@ public class CapillaryTableModel extends AbstractTableModel
     
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-    	Spot cap = getCapillaryAt(rowIndex);
+    	Capillary cap = getCapillaryAt(rowIndex);
     	if (cap != null) {
         	switch (columnIndex) {
             case 0: cap.setRoiName(aValue.toString()); break;
@@ -93,11 +93,11 @@ public class CapillaryTableModel extends AbstractTableModel
     	}
     }
     
-    private Spot getCapillaryAt(int rowIndex) {
-		Spot cap = null;
+    private Capillary getCapillaryAt(int rowIndex) {
+		Capillary cap = null;
     	if (expList != null && expList.getSelectedIndex() >=0 ) {
     		Experiment exp = (Experiment) expList.getSelectedItem();
-    		cap = exp.capillaries.spotsList.get(rowIndex);
+    		cap = exp.capillaries.capillariesList.get(rowIndex);
     	}
     	return cap;
 	}

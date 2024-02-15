@@ -41,7 +41,8 @@ public class Experiment
 	public SequenceCamData 	seqCamData 				= null;
 	public SequenceKymos 	seqKymos				= null;
 	public Sequence 		seqReference			= null;
-	public SpotsArray 		capillaries 			= new SpotsArray();
+	public Capillaries 		capillaries 			= new Capillaries();
+	public SpotsArray		spotsArray				= new SpotsArray();
 	public Cages			cages 					= new Cages();
 	
 	public FileTime			firstImage_FileTime;
@@ -270,7 +271,7 @@ public class Experiment
 		if (loadCapillaries) 
 		{
 			loadMCCapillaries_Only();
-			if (!capillaries.load_Measures(getKymosBinFullDirectory())) 
+			if (!capillaries.loadCapillaries_Measures(getKymosBinFullDirectory())) 
 				return false;
 		}
 
@@ -317,7 +318,7 @@ public class Experiment
 	{	
 		loadMCCapillaries_Only();
 		if (seqCamData != null && seqCamData.seq != null) 
-			capillaries.transferSpotRoiToSequence(seqCamData.seq);
+			capillaries.transferCapillaryRoiToSequence(seqCamData.seq);
 		
 		return (seqCamData != null && seqCamData.seq != null);
 	}
@@ -516,8 +517,8 @@ public class Experiment
 		if (mcCapillaryFileName == null && seqCamData != null) 
 			return xmlLoadOldCapillaries();
 		
-		boolean flag = capillaries.loadMCSpots_Descriptors(mcCapillaryFileName);
-		if (capillaries.spotsList.size() < 1)
+		boolean flag = capillaries.loadMCCapillaries_Descriptors(mcCapillaryFileName);
+		if (capillaries.capillariesList.size() < 1)
 			flag = xmlLoadOldCapillaries();
 		
 		// load MCcapillaries description of experiment
@@ -528,12 +529,12 @@ public class Experiment
 				&& field_sex.contentEquals("..")
 				&& field_strain.contentEquals("..")) 
 		{
-			field_boxID = capillaries.spotsDescription.old_boxID;
-			field_experiment = capillaries.spotsDescription.old_experiment;
-			field_comment1 = capillaries.spotsDescription.old_comment1;
-			field_comment2 = capillaries.spotsDescription.old_comment2;
-			field_sex = capillaries.spotsDescription.old_sex;
-			field_strain = capillaries.spotsDescription.old_strain;
+			field_boxID = capillaries.capillariesDescription.old_boxID;
+			field_experiment = capillaries.capillariesDescription.old_experiment;
+			field_comment1 = capillaries.capillariesDescription.old_comment1;
+			field_comment2 = capillaries.capillariesDescription.old_comment2;
+			field_sex = capillaries.capillariesDescription.old_sex;
+			field_strain = capillaries.capillariesDescription.old_strain;
 		}
 		return flag;
 	}
@@ -541,9 +542,9 @@ public class Experiment
 	public boolean loadMCCapillaries() 
 	{
 		String xmlCapillaryFileName = findFile_3Locations(capillaries.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
-		boolean flag1 = capillaries.loadMCSpots_Descriptors(xmlCapillaryFileName);
+		boolean flag1 = capillaries.loadMCCapillaries_Descriptors(xmlCapillaryFileName);
 		String kymosImagesDirectory = getKymosBinFullDirectory();
-		boolean flag2 = capillaries.load_Measures(kymosImagesDirectory);
+		boolean flag2 = capillaries.loadCapillaries_Measures(kymosImagesDirectory);
 		if (flag1 & flag2) 
 			seqKymos.loadListOfPotentialKymographsFromCapillaries(kymosImagesDirectory, capillaries);
 		return flag1 & flag2;
@@ -552,7 +553,7 @@ public class Experiment
 	private boolean xmlLoadOldCapillaries() 
 	{
 		String filename = findFile_3Locations("capillarytrack.xml", IMG_DIRECTORY, EXPT_DIRECTORY, BIN_DIRECTORY);
-		if (capillaries.xmlLoadOldSpots_Only(filename)) 
+		if (capillaries.xmlLoadOldCapillaries_Only(filename)) 
 		{
 			saveMCCapillaries_Only();
 			saveCapillariesMeasures();
@@ -602,7 +603,7 @@ public class Experiment
 		{
 			final Document doc = XMLUtil.loadDocument(filename);
 			if (doc != null) 
-				return capillaries.spotsDescription.xmlLoadCapillaryDescription(doc); 
+				return capillaries.capillariesDescription.xmlLoadCapillaryDescription(doc); 
 		}
 		return false;
 	}
@@ -613,17 +614,17 @@ public class Experiment
 	{
 		String xmlCapillaryFileName = strExperimentDirectory + File.separator + capillaries.getXMLNameToAppend();
 		transferExpDescriptorsToCapillariesDescriptors();
-		return capillaries.xmlSave_Descriptors(xmlCapillaryFileName);
+		return capillaries.xmlSaveCapillaries_Descriptors(xmlCapillaryFileName);
 	}
 		
  	public boolean loadCapillariesMeasures() 
  	{
- 		return capillaries.load_Measures(getKymosBinFullDirectory());
+ 		return capillaries.loadCapillaries_Measures(getKymosBinFullDirectory());
  	}
  	
  	public boolean saveCapillariesMeasures() 
  	{
- 		return capillaries.save_Measures(getKymosBinFullDirectory());
+ 		return capillaries.saveCapillaries_Measures(getKymosBinFullDirectory());
  	}
  	
  	public boolean loadCagesMeasures() 
@@ -829,7 +830,7 @@ public class Experiment
 		{
 			seqKymos.validateRois();
 			seqKymos.transferKymosRoisToCapillaries_Measures(capillaries);
-			flag = capillaries.save_Measures(directory);
+			flag = capillaries.saveCapillaries_Measures(directory);
 		}
 		return flag;
 	}
@@ -843,12 +844,12 @@ public class Experiment
 		if (transform == null)
 			return;
 		
-		if (capillaries.spotsList.size() != nimages) 
-			ExperimentUtils.transferCamDataROIStoCapillaries(this);
+		if (capillaries.capillariesList.size() != nimages) 
+			SequenceKymosUtils.transferCamDataROIStoKymo(this);
 		
 		for (int t= 0; t < nimages; t++) 
 		{
-			Spot cap = capillaries.spotsList.get(t);
+			Capillary cap = capillaries.capillariesList.get(t);
 			cap.kymographIndex = t;
 			IcyBufferedImage img = seqKymos.getSeqImage(t, zChannelSource);
 			IcyBufferedImage img2 = transform.getTransformedImage (img, null);
@@ -1021,10 +1022,10 @@ public class Experiment
 	
 	private boolean replaceCapillariesValuesIfEqualOld(EnumXLSColumnHeader fieldEnumCode, String oldValue, String newValue)
 	{
-		if (capillaries.spotsList.size() == 0)
+		if (capillaries.capillariesList.size() == 0)
 			loadMCCapillaries_Only();
 		boolean flag = false;
-		for (Spot cap:  capillaries.spotsList) 
+		for (Capillary cap:  capillaries.capillariesList) 
 		{
 			if (cap.getCapillaryField(fieldEnumCode) .equals(oldValue))
 			{
@@ -1098,9 +1099,9 @@ public class Experiment
 	
 	private void addCapillariesValues(EnumXLSColumnHeader fieldEnumCode, List<String> textList)
 	{
-		if (capillaries.spotsList.size() == 0)
+		if (capillaries.capillariesList.size() == 0)
 			loadMCCapillaries_Only();
-		for (Spot cap:  capillaries.spotsList) 
+		for (Capillary cap:  capillaries.capillariesList) 
 			addValue(cap.getCapillaryField(fieldEnumCode), textList);
 	}
 	
@@ -1126,12 +1127,12 @@ public class Experiment
 
 	private void transferExpDescriptorsToCapillariesDescriptors() 
 	{
-		capillaries.spotsDescription.old_boxID = field_boxID;
-		capillaries.spotsDescription.old_experiment = field_experiment;
-		capillaries.spotsDescription.old_comment1 = field_comment1;
-		capillaries.spotsDescription.old_comment2 = field_comment2;	
-		capillaries.spotsDescription.old_strain = field_strain;
-		capillaries.spotsDescription.old_sex = field_sex;
+		capillaries.capillariesDescription.old_boxID = field_boxID;
+		capillaries.capillariesDescription.old_experiment = field_experiment;
+		capillaries.capillariesDescription.old_comment1 = field_comment1;
+		capillaries.capillariesDescription.old_comment2 = field_comment2;	
+		capillaries.capillariesDescription.old_strain = field_strain;
+		capillaries.capillariesDescription.old_sex = field_sex;
 	}
 
 	private String getReferenceImageFullName() 

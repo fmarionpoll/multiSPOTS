@@ -135,9 +135,9 @@ public class ExperimentCombo extends JComboBox<Experiment>
 					if (expListBinSubDirectory == null)
 						exp.checkKymosDirectory(exp.getBinSubDirectory());
 					exp.openMeasures(loadCapillaries, loadDrosoTrack);
-					if (maxSizeOfCapillaryArrays < exp.capillaries.spotsList.size())
+					if (maxSizeOfCapillaryArrays < exp.capillaries.capillariesList.size())
 					{
-						maxSizeOfCapillaryArrays = exp.capillaries.spotsList.size();
+						maxSizeOfCapillaryArrays = exp.capillaries.capillariesList.size();
 						if (maxSizeOfCapillaryArrays % 2 != 0)
 							maxSizeOfCapillaryArrays += 1;
 					}

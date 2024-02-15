@@ -9,7 +9,7 @@ import icy.image.IcyBufferedImage;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.collection.array.Array1DUtil;
-import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
@@ -64,7 +64,7 @@ public class DetectLevels  extends BuildSeries
 		
 		for (int tKymo = tFirsKymo; tKymo <= tLastKymo; tKymo++) 
 		{
-			final Spot capi = exp.capillaries.spotsList.get(tKymo);
+			final Capillary capi = exp.capillaries.capillariesList.get(tKymo);
 			if (!options.detectR && capi.getKymographName().endsWith("2"))
 				continue;
 			if (!options.detectL && capi.getKymographName().endsWith("1"))
@@ -119,7 +119,7 @@ public class DetectLevels  extends BuildSeries
 		return true;
 	}
 	
-	private void detectPass1(IcyBufferedImage rawImage, ImageTransformInterface transformPass1, Spot capi, 
+	private void detectPass1(IcyBufferedImage rawImage, ImageTransformInterface transformPass1, Capillary capi, 
 							int imageWidth, int imageHeight, Rectangle searchRect, int jitter) 
 	{
 		IcyBufferedImage transformedImage1 = transformPass1.getTransformedImage (rawImage, null);
@@ -142,7 +142,7 @@ public class DetectLevels  extends BuildSeries
 				topSearchFrom = detectLimitOnOneColumn(ix, columnFirst, topSearchFrom, jitter, imageWidth, imageHeight, capi, transformed1DArray1, searchRect);
 	}
 	
-	private int detectLimitOnOneColumn(int ix, int istart, int topSearchFrom, int jitter, int imageWidth, int imageHeight, Spot capi, int[] transformed1DArray1, Rectangle searchRect)
+	private int detectLimitOnOneColumn(int ix, int istart, int topSearchFrom, int jitter, int imageWidth, int imageHeight, Capillary capi, int[] transformed1DArray1, Rectangle searchRect)
 	{
 		int iyTop = detectThresholdFromTop(ix, topSearchFrom, jitter, transformed1DArray1, imageWidth, imageHeight, options, searchRect);
 		int iyBottom = detectThresholdFromBottom(ix, jitter, transformed1DArray1, imageWidth, imageHeight, options, searchRect);
@@ -153,7 +153,7 @@ public class DetectLevels  extends BuildSeries
 		return iyTop;
 	}
 	
-	private void detectPass2(IcyBufferedImage rawImage, ImageTransformInterface transformPass2, Spot capi, 
+	private void detectPass2(IcyBufferedImage rawImage, ImageTransformInterface transformPass2, Capillary capi, 
 			int imageWidth, int imageHeight, Rectangle searchRect, int jitter) {
 		if (capi.ptsTop.limit == null)
 			capi.ptsTop.setTempDataFromPolylineLevel();

@@ -78,7 +78,7 @@ public class Edit extends JPanel
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null)
 		{
-			exp.capillaries.transferDescriptionToSpots();
+			exp.capillaries.transferDescriptionToCapillaries();
 			if (editCapillariesTable == null)
 				editCapillariesTable = new EditPositionWithTime();
 			editCapillariesTable.initialize(parent0, getFramePosition());

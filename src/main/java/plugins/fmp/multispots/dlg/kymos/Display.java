@@ -29,8 +29,8 @@ import icy.roi.ROI;
 import icy.sequence.Sequence;
 
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.SpotsArray;
-import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.Capillaries;
+import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 import plugins.fmp.multispots.tools.Directories;
@@ -157,11 +157,11 @@ public class Display extends JPanel implements ViewerListener
 		SwingUtilities.invokeLater(new Runnable() { public void run()
 		{	
 			kymographsCombo.removeAllItems();
-			Collections.sort(exp.capillaries.spotsList); 
-			int ncapillaries = exp.capillaries.spotsList.size();
+			Collections.sort(exp.capillaries.capillariesList); 
+			int ncapillaries = exp.capillaries.capillariesList.size();
 			for (int i=0; i< ncapillaries; i++)
 			{
-				Spot cap = exp.capillaries.spotsList.get(i);
+				Capillary cap = exp.capillaries.capillariesList.get(i);
 				kymographsCombo.addItem(cap.getRoiName());
 			}
 		}});	
@@ -335,10 +335,10 @@ public class Display extends JPanel implements ViewerListener
 	
 	private void selectCapillary(Experiment exp, int isel)
 	{
-		SpotsArray capillaries = exp.capillaries;
-		for (Spot cap : capillaries.spotsList) {
+		Capillaries capillaries = exp.capillaries;
+		for (Capillary cap : capillaries.capillariesList) {
 			cap.getRoi().setSelected(false);
-		Spot capSel = capillaries.spotsList.get(isel);
+		Capillary capSel = capillaries.capillariesList.get(isel);
 		capSel.getRoi().setSelected(true);
 		}
 	}

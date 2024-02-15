@@ -13,8 +13,8 @@ import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.collection.array.Array1DUtil;
 import icy.type.geom.Polyline2D;
-import plugins.fmp.multispots.experiment.Spot;
-import plugins.fmp.multispots.experiment.SpotArea;
+import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.CapillaryLevel;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 
@@ -77,7 +77,7 @@ public class DetectGulps extends BuildSeries
 		
 		for (int indexCapillary = firstCapillary; indexCapillary <= lastCapillary; indexCapillary++) 
 		{
-			final Spot capi = exp.capillaries.spotsList.get(indexCapillary);
+			final Capillary capi = exp.capillaries.capillariesList.get(indexCapillary);
 			capi.setGulpsOptions(options);
 			futures.add(processor.submit(new Runnable () 
 			{
@@ -85,7 +85,7 @@ public class DetectGulps extends BuildSeries
 				public void run() 
 				{
 					if (options.buildDerivative) 
-						capi.ptsDerivative = new SpotArea(
+						capi.ptsDerivative = new CapillaryLevel(
 								capi.getLast2ofCapillaryName()+"_derivative", 
 								capi.kymographIndex,
 								getDerivativeProfile(seqAnalyzed, capi, jitter));
@@ -107,15 +107,15 @@ public class DetectGulps extends BuildSeries
 		progressBar.close();
 	}	
 
-	private List<Point2D> getDerivativeProfile(Sequence seq, Spot cap, int jitter) 
+	private List<Point2D> getDerivativeProfile(Sequence seq, Capillary capi, int jitter) 
 	{	
-		Polyline2D 	polyline = cap.ptsTop.polylineLevel;
+		Polyline2D 	polyline = capi.ptsTop.polylineLevel;
 		if (polyline == null)
 			return null;
 		
 		int z = seq.getSizeZ() -1;
 		int c = 0;
-		IcyBufferedImage image = seq.getImage(cap.kymographIndex, z, c);
+		IcyBufferedImage image = seq.getImage(capi.kymographIndex, z, c);
 		List<Point2D> listOfMaxPoints = new ArrayList<>();
 		int[] kymoImageValues = Array1DUtil.arrayToIntArray(image.getDataXY(c), image.isSignedDataType());	
 		int xwidth = image.getSizeX();

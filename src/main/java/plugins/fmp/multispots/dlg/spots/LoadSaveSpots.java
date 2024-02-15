@@ -32,7 +32,7 @@ public class LoadSaveSpots extends JPanel
 	{
 		setLayout(capLayout);
 		
-		JLabel loadsaveText = new JLabel ("-> Capillaries (xml) ", SwingConstants.RIGHT);
+		JLabel loadsaveText = new JLabel ("-> Spots, polylines (xml) ", SwingConstants.RIGHT);
 		loadsaveText.setFont(FontUtil.setStyle(loadsaveText.getFont(), Font.ITALIC));
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.RIGHT);
 		flowLayout.setVgap(0);
@@ -77,7 +77,7 @@ public class LoadSaveSpots extends JPanel
 	public boolean loadCapillaries_File(Experiment exp) 
 	{	
 		boolean flag = exp.loadMCCapillaries_Only();
-		exp.capillaries.transferSpotRoiToSequence(exp.seqCamData.seq);
+		exp.capillaries.transferCapillaryRoiToSequence(exp.seqCamData.seq);
 		return flag;
 	}
 	
@@ -85,10 +85,29 @@ public class LoadSaveSpots extends JPanel
 	{
 		parent0.paneCapillaries.getDialogCapillariesInfos(exp);  // get data into desc
 		parent0.paneExperiment.getExperimentInfosFromDialog(exp);
-		exp.capillaries.transferDescriptionToSpots();
+		exp.capillaries.transferDescriptionToCapillaries();
 	
 		exp.saveMCExperiment ();
-		exp.capillaries.updateSpotsFromSequence(exp.seqCamData.seq);
+		exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
+		return exp.saveMCCapillaries_Only();
+	}
+
+	
+	public boolean loadSpotsArray_File(Experiment exp) 
+	{	
+		boolean flag = exp.loadMCCapillaries_Only();
+		exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
+		return flag;
+	}
+	
+	public boolean saveSpotsArray_file(Experiment exp) 
+	{
+		parent0.paneCapillaries.getDialogCapillariesInfos(exp);  // get data into desc
+		parent0.paneExperiment.getExperimentInfosFromDialog(exp);
+		exp.spotsArray.transferDescriptionToSpots();
+	
+		exp.saveMCExperiment ();
+		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
 		return exp.saveMCCapillaries_Only();
 	}
 

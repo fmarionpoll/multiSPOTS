@@ -24,7 +24,7 @@ import icy.image.IcyBufferedImage;
 import icy.system.thread.ThreadUtil;
 import loci.formats.FormatException;
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.ImageFileDescriptor;
 import plugins.fmp.multispots.experiment.SequenceKymos;
@@ -112,7 +112,7 @@ public class LoadSaveKymos extends JPanel
 			outputpath = f.getSelectedFile().getAbsolutePath();		
 			for (int t = 0; t < seqKymos.seq.getSizeT(); t++) 
 			{
-				Spot cap = exp.capillaries.spotsList.get(t);
+				Capillary cap = exp.capillaries.capillariesList.get(t);
 				progress.setMessage( "Save kymograph file : " + cap.getKymographName());
 				cap.filenameTIFF = outputpath + File.separator + cap.getKymographName() + ".tiff";
 				final File file = new File (cap.filenameTIFF);

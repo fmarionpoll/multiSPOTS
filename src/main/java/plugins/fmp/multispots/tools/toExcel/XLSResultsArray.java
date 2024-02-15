@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import plugins.fmp.multispots.experiment.SpotsArray;
-import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.Capillaries;
+import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.tools.Comparators;
 
 
@@ -74,7 +74,7 @@ public class XLSResultsArray
 		Collections.sort(resultsList, new Comparators.XLSResults_Name_Comparator());
 	}
 	
-	public void checkIfSameStimulusAndConcentration(Spot cap) 
+	public void checkIfSameStimulusAndConcentration(Capillary cap) 
 	{
 		if (!sameLR)
 			return;
@@ -208,21 +208,21 @@ public class XLSResultsArray
 	// ---------------------------------------------------
 	
 	public void getResults1( 
-			SpotsArray caps,  
+			Capillaries capillaries,  
 			EnumXLSExportType exportType, 
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
 			XLSExportOptions xlsExportOptions) 
 	{
 		xlsExportOptions.exportType = exportType;
-		buildDataForPass1(caps, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, false);
+		buildDataForPass1(capillaries, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, false);
 		if (xlsExportOptions.compensateEvaporation)
 			subtractEvaporation();
 		buildDataForPass2(xlsExportOptions);
 	}
 	
 	public void getResults_T0( 
-			SpotsArray caps, 
+			Capillaries caps, 
 			EnumXLSExportType exportType, 
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
@@ -235,14 +235,14 @@ public class XLSResultsArray
 		buildDataForPass2(xlsExportOptions);
 	}
 	
-	private void buildDataForPass1(SpotsArray caps,
+	private void buildDataForPass1(Capillaries capillaries,
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
 			XLSExportOptions xlsExportOptions, 
 			boolean subtractT0)
 	{
-		double scalingFactorToPhysicalUnits = caps.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
-		for (Spot cap: caps.spotsList) 
+		double scalingFactorToPhysicalUnits = capillaries.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
+		for (Capillary cap: capillaries.capillariesList) 
 		{
 			checkIfSameStimulusAndConcentration(cap);
 			XLSResults results = new XLSResults(cap.getRoiName(), cap.capNFlies, cap.capCageID, xlsExportOptions.exportType, nOutputFrames);

@@ -26,7 +26,7 @@ import icy.roi.ROI2D;
 import icy.type.DataType;
 import icy.type.geom.Polygon2D;
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.tools.Blobs;
@@ -104,8 +104,8 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 					createROIsFromSelectedPolygon(exp);
 					exp.cages.cagesFromROIs(exp.seqCamData);
 					exp.cages.setFirstAndLastCageToZeroFly();
-					if(exp.capillaries.spotsList.size() > 0)
-						exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.spotsList);
+					if(exp.capillaries.capillariesList.size() > 0)
+						exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.capillariesList);
 				}
 			}});
 		
@@ -207,7 +207,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 		blobs.fillBlanksPixelsWithinBlobs ();
 	
 		List<Integer> blobsfound = new ArrayList<Integer> ();
-		for (Spot cap : exp.capillaries.spotsList) 
+		for (Capillary cap : exp.capillaries.capillariesList) 
 		{
 			Point2D pt = cap.getCapillaryROILowestPoint();
 			if (pt != null) 

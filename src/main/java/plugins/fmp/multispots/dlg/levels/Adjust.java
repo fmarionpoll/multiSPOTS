@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import icy.util.StringUtil;
 
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 import plugins.fmp.multispots.series.AdjustMeasuresToDimensions;
@@ -140,7 +140,7 @@ public class Adjust extends JPanel  implements PropertyChangeListener
 	{
 		SequenceKymos seqKymos = exp.seqKymos;
 		int t = seqKymos.currentFrame;
-		Spot cap = exp.capillaries.spotsList.get(t);
+		Capillary cap = exp.capillaries.capillariesList.get(t);
 		cap.restoreClippedMeasures();
 		
 		seqKymos.updateROIFromCapillaryMeasure(cap, cap.ptsTop);

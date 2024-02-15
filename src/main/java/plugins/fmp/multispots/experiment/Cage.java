@@ -195,10 +195,10 @@ public class Cage
 		return pt;
 	}
 	
-	public Point2D getCenterTipCapillaries(SpotsArray capList) 
+	public Point2D getCenterTipCapillaries(Capillaries capillaries) 
 	{
 		List<Point2D> listpts = new ArrayList<Point2D>();
-		for (Spot cap: capList.spotsList) 
+		for (Capillary cap: capillaries.capillariesList) 
 		{
 			Point2D pt = cap.getCapillaryTipWithinROI2D(cageRoi2D);
 			if (pt != null)

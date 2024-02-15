@@ -102,8 +102,8 @@ public class BuildCagesAsArray extends JPanel
 					createROIsFromSelectedPolygon(exp);
 					exp.cages.cagesFromROIs(exp.seqCamData);
 					exp.cages.setFirstAndLastCageToZeroFly();
-					if(exp.capillaries.spotsList.size() > 0)
-						exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.spotsList);
+					if(exp.capillaries.capillariesList.size() > 0)
+						exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.capillariesList);
 				}
 			}});
 		
@@ -145,11 +145,11 @@ public class BuildCagesAsArray extends JPanel
 		int rectleft = rect.x + rect.width /6;
 		int rectright = rect.x + rect.width*5 /6;
 		int recttop = rect.y + rect.height *2/3; 
-		if (exp.capillaries.spotsList.size() > 0) 
+		if (exp.capillaries.capillariesList.size() > 0) 
 		{
-			Rectangle bound0 = exp.capillaries.spotsList.get(0).getRoi().getBounds();
-			int last = exp.capillaries.spotsList.size() - 1;
-			Rectangle bound1 = exp.capillaries.spotsList.get(last).getRoi().getBounds();
+			Rectangle bound0 = exp.capillaries.capillariesList.get(0).getRoi().getBounds();
+			int last = exp.capillaries.capillariesList.size() - 1;
+			Rectangle bound1 = exp.capillaries.capillariesList.get(last).getRoi().getBounds();
 			rectleft = bound0.x;
 			rectright = bound1.x + bound1.width;
 			int diff = (rectright - rectleft)*2/60;

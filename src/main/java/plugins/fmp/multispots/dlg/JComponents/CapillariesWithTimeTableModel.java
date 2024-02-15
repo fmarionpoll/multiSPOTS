@@ -3,7 +3,7 @@ package plugins.fmp.multispots.dlg.JComponents;
 import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
-import plugins.fmp.multispots.experiment.SpotsArray;
+import plugins.fmp.multispots.experiment.Capillaries;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -28,14 +28,14 @@ public class CapillariesWithTimeTableModel extends AbstractTableModel {
 	@Override
 	public int getRowCount() {
 		if (expList != null && expList.getSelectedIndex() >= 0 ) {
-    		SpotsArray capillaries = getCapillariesOfSelectedExperiment();
+    		Capillaries capillaries = getCapillariesOfSelectedExperiment();
     		intervals = capillaries.getKymoIntervalsFromCapillaries().intervals;
 			return intervals.size();
     	}
         return 0;
 	}
 	
-	private SpotsArray getCapillariesOfSelectedExperiment() {
+	private Capillaries getCapillariesOfSelectedExperiment() {
 		Experiment exp = (Experiment) expList.getSelectedItem();
 		return exp.capillaries;
 	}

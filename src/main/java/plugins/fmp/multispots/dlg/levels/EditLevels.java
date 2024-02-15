@@ -22,8 +22,8 @@ import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.type.geom.Polyline2D;
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Spot;
-import plugins.fmp.multispots.experiment.SpotArea;
+import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.CapillaryLevel;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.Level2D;
 import plugins.fmp.multispots.experiment.SequenceKymos;
@@ -108,7 +108,7 @@ public class EditLevels  extends JPanel
 		if (roiRef == null)
 			return;
 
-		Spot cap = exp.capillaries.spotsList.get(t);
+		Capillary cap = exp.capillaries.capillariesList.get(t);
 		seqKymos.transferKymosRoisToCapillaries_Measures(exp.capillaries);		
 		
 		int lastX = findLastXLeftOfRoi(cap, roiRef);
@@ -119,7 +119,7 @@ public class EditLevels  extends JPanel
 		seqKymos.updateROIFromCapillaryMeasure(cap, cap.ptsDerivative);
 	}
 	
-	int findLastXLeftOfRoi(Spot cap, ROI2D roiRef) 
+	int findLastXLeftOfRoi(Capillary cap, ROI2D roiRef) 
 	{
 		int lastX = -1;
 		Rectangle2D rectRef = roiRef.getBounds2D();
@@ -140,7 +140,7 @@ public class EditLevels  extends JPanel
 	{
 		SequenceKymos seqKymos = exp.seqKymos;
 		int t = seqKymos.currentFrame;
-		Spot cap = exp.capillaries.spotsList.get(t);
+		Capillary cap = exp.capillaries.capillariesList.get(t);
 		cap.restoreClippedMeasures();
 		
 		seqKymos.updateROIFromCapillaryMeasure(cap, cap.ptsTop);
@@ -187,7 +187,7 @@ public class EditLevels  extends JPanel
 			return;
 		
 		seqKymos.transferKymosRoisToCapillaries_Measures(exp.capillaries);
-		Spot cap = exp.capillaries.spotsList.get(t);
+		Capillary cap = exp.capillaries.capillariesList.get(t);
 		String optionSelected = (String) roiTypeCombo.getSelectedItem();
 		if (optionSelected .contains("gulp")) 
 		{
@@ -210,15 +210,15 @@ public class EditLevels  extends JPanel
 		exp.seqKymos.seq.roiChanged(roi);
 	}
 	
-	private void removeAndUpdate(SequenceKymos seqKymos, Spot cap, SpotArea caplimits, ROI2D roi) 
+	private void removeAndUpdate(SequenceKymos seqKymos, Capillary cap, CapillaryLevel ptsTop, ROI2D roi) 
 	{
-		removeMeasuresEnclosedInRoi(caplimits, roi);
-		seqKymos.updateROIFromCapillaryMeasure(cap, caplimits);
+		removeMeasuresEnclosedInRoi(ptsTop, roi);
+		seqKymos.updateROIFromCapillaryMeasure(cap, ptsTop);
 	}
 	
-	void removeMeasuresEnclosedInRoi(SpotArea caplimits, ROI2D roi) 
+	void removeMeasuresEnclosedInRoi(CapillaryLevel ptsTop, ROI2D roi) 
 	{
-		Polyline2D polyline = caplimits.polylineLevel;
+		Polyline2D polyline = ptsTop.polylineLevel;
 		int npointsOutside = polyline.npoints - getPointsWithinROI(polyline, roi);
 		if (npointsOutside > 0) 
 		{
@@ -234,11 +234,11 @@ public class EditLevels  extends JPanel
 					index++;
 				}
 			}
-			caplimits.polylineLevel = new Level2D(xpoints, ypoints, npointsOutside);	
+			ptsTop.polylineLevel = new Level2D(xpoints, ypoints, npointsOutside);	
 		} 
 		else 
 		{
-			caplimits.polylineLevel = null;
+			ptsTop.polylineLevel = null;
 		}
 	}
 	

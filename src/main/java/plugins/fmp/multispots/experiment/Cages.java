@@ -428,12 +428,12 @@ public class Cages
 		return iRoot;
 	}
 	
-	public void transferNFliesFromCapillariesToCages(List<Spot> capList) 
+	public void transferNFliesFromCapillariesToCages(ArrayList<Capillary> capillariesList) 
 	{
 		for (Cage cage: cagesList ) 
 		{
 			int cagenb = cage.getCageNumberInteger();
-			for (Spot cap: capList) 
+			for (Capillary cap: capillariesList) 
 			{
 				if (cap.capCageID != cagenb)
 					continue;
@@ -442,12 +442,12 @@ public class Cages
 		}
 	}
 		
-	public void transferNFliesFromCagesToCapillaries(List<Spot> capList) 
+	public void transferNFliesFromCagesToCapillaries(ArrayList<Capillary> capillariesList) 
 	{
 		for (Cage cage: cagesList ) 
 		{
 			int cagenb = cage.getCageNumberInteger();
-			for (Spot cap: capList) 
+			for (Capillary cap: capillariesList) 
 			{
 				if (cap.capCageID != cagenb)
 					continue;
@@ -456,9 +456,9 @@ public class Cages
 		}
 	}
 	
-	public void setCageNbFromName(List<Spot> capList) 
+	public void setCageNbFromName(ArrayList<Capillary> capillariesList) 
 	{
-		for (Spot cap: capList) 
+		for (Capillary cap: capillariesList) 
 		{
 			int cagenb = cap.getCageIndexFromRoiName();
 			cap.capCageID = cagenb;
