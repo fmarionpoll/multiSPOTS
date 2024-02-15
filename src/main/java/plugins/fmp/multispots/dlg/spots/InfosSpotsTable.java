@@ -23,7 +23,7 @@ import javax.swing.table.TableColumnModel;
 import icy.gui.frame.IcyFrame;
 import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.CapillaryTableModel;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -48,11 +48,11 @@ public class InfosSpotsTable extends JPanel
 	private JButton				getCageNoButton		= new JButton("Set cage n#");
 	private JButton				noFliesButton 		= new JButton("Cages0/0: no flies");
 	private multiSPOTS 			parent0 			= null; 
-	private List <Capillary> 	capillariesArrayCopy= null;
+	private List <Spot> 	capillariesArrayCopy= null;
 	
 	
 	
-	public void initialize (multiSPOTS parent0, List <Capillary> capCopy) 
+	public void initialize (multiSPOTS parent0, List <Spot> capCopy) 
 	{
 		this.parent0 = parent0;
 		capillariesArrayCopy = capCopy;
@@ -213,12 +213,12 @@ public class InfosSpotsTable extends JPanel
 		if (columnIndex < 0) 
 			columnIndex = 5;
 		String side0 =  exp.capillaries.capillariesList.get(0).getCapillarySide();
-		Capillary cap0 = new Capillary(); 
+		Spot cap0 = new Spot(); 
 		storeCapillaryValues(exp.capillaries.capillariesList.get(0), cap0);
-		Capillary cap1 = new Capillary();
+		Spot cap1 = new Spot();
 		storeCapillaryValues(exp.capillaries.capillariesList.get(1), cap1);
 	
-		for (Capillary cap: exp.capillaries.capillariesList) 
+		for (Spot cap: exp.capillaries.capillariesList) 
 		{
 			if ((cap.getCapillarySide().equals(side0)))
 				switchCapillaryValue(cap1, cap, columnIndex);
@@ -227,7 +227,7 @@ public class InfosSpotsTable extends JPanel
 		}
 	}
 	
-	private void storeCapillaryValues(Capillary sourceCapillary, Capillary destinationCapillary) 
+	private void storeCapillaryValues(Spot sourceCapillary, Spot destinationCapillary) 
 	{
 		destinationCapillary.capNFlies = sourceCapillary.capNFlies; 
 		destinationCapillary.capVolume = sourceCapillary.capVolume;
@@ -236,7 +236,7 @@ public class InfosSpotsTable extends JPanel
 		destinationCapillary.capSide = sourceCapillary.capSide;
 	}
 	
-	private void switchCapillaryValue(Capillary sourceCapillary, Capillary destinationCapillary, int columnIndex) 
+	private void switchCapillaryValue(Spot sourceCapillary, Spot destinationCapillary, int columnIndex) 
 	{
 		switch (columnIndex) 
     	{
@@ -252,17 +252,17 @@ public class InfosSpotsTable extends JPanel
 	private void copyInfos(Experiment exp)
 	{
 		capillariesArrayCopy.clear();
-		for (Capillary cap: exp.capillaries.capillariesList ) 
+		for (Spot cap: exp.capillaries.capillariesList ) 
 			capillariesArrayCopy.add(cap);
 		pasteButton.setEnabled(true);	
 	}
 	
 	private void pasteInfos(Experiment exp)
 	{
-		for (Capillary capFrom: capillariesArrayCopy ) 
+		for (Spot capFrom: capillariesArrayCopy ) 
 		{
 			capFrom.valid = false;
-			for (Capillary capTo: exp.capillaries.capillariesList) 
+			for (Spot capTo: exp.capillaries.capillariesList) 
 			{
 				if (!capFrom.getRoiName().equals (capTo.getRoiName()))
 					continue;
@@ -281,7 +281,7 @@ public class InfosSpotsTable extends JPanel
 		int ncapillaries =  exp.capillaries.capillariesList.size();
 		for (int i=0; i < ncapillaries; i++) 
 		{
-			Capillary cap = exp.capillaries.capillariesList.get(i);
+			Spot cap = exp.capillaries.capillariesList.get(i);
 			if (i< 2 || i >= ncapillaries-2) {
 				cap.capNFlies = 0;
 			}
@@ -300,7 +300,7 @@ public class InfosSpotsTable extends JPanel
 		if (rowIndex < 0)
 			return;
 		
-		Capillary cap0 = exp.capillaries.capillariesList.get(rowIndex);	
+		Spot cap0 = exp.capillaries.capillariesList.get(rowIndex);	
 		String side = cap0.getCapillarySide();
 		int modulo2 = 0;
 		if (side.equals("L"))
@@ -310,7 +310,7 @@ public class InfosSpotsTable extends JPanel
 		else
 			modulo2 = Integer.valueOf(cap0.getCapillarySide()) % 2;
 		
-		for (Capillary cap: exp.capillaries.capillariesList) 
+		for (Spot cap: exp.capillaries.capillariesList) 
 		{
 			if (cap.getKymographName().equals(cap0.getKymographName()))
 				continue;
@@ -348,8 +348,8 @@ public class InfosSpotsTable extends JPanel
 		if (rowIndex < 0) 
 			return;
 		
-		Capillary cap0 = exp.capillaries.capillariesList.get(rowIndex);	
-		for (Capillary cap: exp.capillaries.capillariesList) 
+		Spot cap0 = exp.capillaries.capillariesList.get(rowIndex);	
+		for (Spot cap: exp.capillaries.capillariesList) 
 		{
 			if (cap.getKymographName().equals(cap0.getKymographName()))
 				continue;
@@ -371,7 +371,7 @@ public class InfosSpotsTable extends JPanel
 		if (rowIndex < 0)
 			return;
 		
-		Capillary capFrom = exp.capillaries.capillariesList.get(rowIndex);	
+		Spot capFrom = exp.capillaries.capillariesList.get(rowIndex);	
 		int cageFrom = capFrom.capCageID; 
 		int cageTo = -1;
 				
@@ -381,7 +381,7 @@ public class InfosSpotsTable extends JPanel
 		
 		for (int i = 0; i < exp.capillaries.capillariesList.size(); i++) 
 		{
-			Capillary cap = exp.capillaries.capillariesList.get(i);
+			Spot cap = exp.capillaries.capillariesList.get(i);
 			if (cap.capCageID == cageFrom)
 				continue;
 			
@@ -395,7 +395,7 @@ public class InfosSpotsTable extends JPanel
 				continue;
 
 			int indexFrom = i - indexFirstCapillaryOfCageTo + indexFirstCapillaryOfCageFrom;
-			Capillary cap0 = exp.capillaries.capillariesList.get(indexFrom);
+			Spot cap0 = exp.capillaries.capillariesList.get(indexFrom);
 
         	switch (columnIndex) 
         	{
@@ -412,7 +412,7 @@ public class InfosSpotsTable extends JPanel
 	private int getCageNCapillaries(Experiment exp, int cageID)
 	{
 		int nCapillaries = 0;
-		for (Capillary cap: exp.capillaries.capillariesList)
+		for (Spot cap: exp.capillaries.capillariesList)
 		{
 			if (cap.capCageID == cageID)
 				nCapillaries ++;
@@ -426,7 +426,7 @@ public class InfosSpotsTable extends JPanel
 		int index = -1;
 		for (int i = 0; i < exp.capillaries.capillariesList.size(); i++) 
 		{
-			Capillary cap = exp.capillaries.capillariesList.get(i);
+			Spot cap = exp.capillaries.capillariesList.get(i);
 			if (cap.capCageID == cageID) {
 				index = i;
 				break;

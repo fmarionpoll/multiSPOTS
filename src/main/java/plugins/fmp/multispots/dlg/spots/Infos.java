@@ -15,8 +15,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Capillaries;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.SpotsArray;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -34,7 +34,7 @@ public class Infos extends JPanel
 	private JButton				editCapillariesButton		= new JButton("Edit capillaries infos...");
 	private multiSPOTS 			parent0 					= null;
 	private InfosSpotsTable infosCapillaryTable 		= null;
-	private List <Capillary> 	capillariesArrayCopy 		= new ArrayList<Capillary>();
+	private List <Spot> 	capillariesArrayCopy 		= new ArrayList<Spot>();
 	
 	
 	void init(GridLayout capLayout, multiSPOTS parent0) 
@@ -84,13 +84,13 @@ public class Infos extends JPanel
 
 	// set/ get
 	
-	void setAllDescriptors(Capillaries cap) 
+	void setAllDescriptors(SpotsArray cap) 
 	{
 		capillaryVolumeSpinner.setValue( cap.capillariesDescription.volume);
 		capillaryPixelsSpinner.setValue( cap.capillariesDescription.pixels);
 	}
 		
-	void getDescriptors(Capillaries capList) {
+	void getDescriptors(SpotsArray capList) {
 		capList.capillariesDescription.volume = (double) capillaryVolumeSpinner.getValue();
 		capList.capillariesDescription.pixels = (int) capillaryPixelsSpinner.getValue();
 	}
@@ -103,7 +103,7 @@ public class Infos extends JPanel
 			exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
 			if (exp.capillaries.capillariesList.size() > 0) 
 			{
-				Capillary cap = exp.capillaries.capillariesList.get(0);
+				Spot cap = exp.capillaries.capillariesList.get(0);
 				npixels = cap.getCapillaryROILength();
 			}
 		}

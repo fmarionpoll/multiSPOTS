@@ -13,7 +13,7 @@ import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.collection.array.Array1DUtil;
 import icy.type.geom.Polyline2D;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.CapillaryLevel;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
@@ -77,7 +77,7 @@ public class DetectGulps extends BuildSeries
 		
 		for (int indexCapillary = firstCapillary; indexCapillary <= lastCapillary; indexCapillary++) 
 		{
-			final Capillary capi = exp.capillaries.capillariesList.get(indexCapillary);
+			final Spot capi = exp.capillaries.capillariesList.get(indexCapillary);
 			capi.setGulpsOptions(options);
 			futures.add(processor.submit(new Runnable () 
 			{
@@ -107,7 +107,7 @@ public class DetectGulps extends BuildSeries
 		progressBar.close();
 	}	
 
-	private List<Point2D> getDerivativeProfile(Sequence seq, Capillary cap, int jitter) 
+	private List<Point2D> getDerivativeProfile(Sequence seq, Spot cap, int jitter) 
 	{	
 		Polyline2D 	polyline = cap.ptsTop.polylineLevel;
 		if (polyline == null)

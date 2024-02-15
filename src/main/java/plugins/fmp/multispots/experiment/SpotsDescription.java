@@ -9,7 +9,7 @@ import org.w3c.dom.Node;
 
 import icy.util.XMLUtil;
 
-public class CapillariesDescription 
+public class SpotsDescription 
 {
 	public int 		version 		= 1;
 	public double 	volume 			= 5.;
@@ -57,7 +57,7 @@ public class CapillariesDescription
 
 
 
-	public void copy (CapillariesDescription desc) 
+	public void copy (SpotsDescription desc) 
 	{
 		volume 			= desc.volume;
 		pixels 			= desc.pixels;
@@ -68,7 +68,7 @@ public class CapillariesDescription
 		concentrationL 	= desc.concentrationL;
 	}
 	
-	public boolean isChanged (CapillariesDescription desc) 
+	public boolean isChanged (SpotsDescription desc) 
 	{
 		boolean flag = false; 
 		flag |= (volume != desc.volume);

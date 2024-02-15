@@ -26,7 +26,7 @@ import icy.roi.ROI2D;
 import icy.type.DataType;
 import icy.type.geom.Polygon2D;
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.tools.Blobs;
@@ -207,7 +207,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 		blobs.fillBlanksPixelsWithinBlobs ();
 	
 		List<Integer> blobsfound = new ArrayList<Integer> ();
-		for (Capillary cap : exp.capillaries.capillariesList) 
+		for (Spot cap : exp.capillaries.capillariesList) 
 		{
 			Point2D pt = cap.getCapillaryROILowestPoint();
 			if (pt != null) 

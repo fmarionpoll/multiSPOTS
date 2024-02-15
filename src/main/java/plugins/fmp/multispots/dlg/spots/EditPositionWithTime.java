@@ -31,7 +31,7 @@ import icy.type.geom.Polygon2D;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.fmp.multispots.multiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.CapillariesWithTimeTableModel;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
 
@@ -240,7 +240,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 		int intervalT =  (int) exp.capillaries.getKymoROI2DIntervalsStartAt(selectedRow);
 		seq.removeAllROI();	
 		List<ROI2D> listRois = new ArrayList<ROI2D>();
-		for (Capillary cap: exp.capillaries.capillariesList) {
+		for (Spot cap: exp.capillaries.capillariesList) {
 			listRois.add(cap.getROI2DKymoAtIntervalT((int) intervalT).getRoi());
 		}
 		seq.addROIs(listRois, false);
@@ -260,7 +260,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 		for (ROI2D roi: listRois) {
 			if (!roi.getName().contains("line")) 
 				continue;
-			Capillary cap = exp.capillaries.getCapillaryFromRoiName(roi.getName());
+			Spot cap = exp.capillaries.getCapillaryFromRoiName(roi.getName());
 			if (cap != null) {
 				ROI2D roilocal = (ROI2D) roi.getCopy();
 				cap.getROI2DKymoAtIntervalT(intervalT).setRoi(roilocal);

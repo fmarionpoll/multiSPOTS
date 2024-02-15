@@ -102,7 +102,7 @@ public class SequenceKymos extends SequenceCamData
 		}
 	}
 	
-	public void updateROIFromCapillaryMeasure(Capillary cap, CapillaryLevel caplimits) 
+	public void updateROIFromCapillaryMeasure(Spot cap, CapillaryLevel caplimits) 
 	{
 		int t = cap.kymographIndex;
 		List<ROI2D> listRois = seq.getROI2Ds();
@@ -145,7 +145,7 @@ public class SequenceKymos extends SequenceCamData
 		Collections.sort(listRois, new Comparators.ROI2D_Name_Comparator());
 	}
 
-	public boolean transferKymosRoisToCapillaries_Measures(Capillaries capillaries) 
+	public boolean transferKymosRoisToCapillaries_Measures(SpotsArray capillaries) 
 	{
 		List<ROI> allRois = seq.getROIs();
 		if (allRois.size() < 1)
@@ -159,8 +159,8 @@ public class SequenceKymos extends SequenceCamData
 					roisAtT.add(roi);
 			}
 			if (capillaries.capillariesList.size() <= kymo) 
-				capillaries.capillariesList.add(new Capillary());
-			Capillary cap = capillaries.capillariesList.get(kymo);
+				capillaries.capillariesList.add(new Spot());
+			Spot cap = capillaries.capillariesList.get(kymo);
 			cap.filenameTIFF = getFileNameFromImageList(kymo);
 			cap.kymographIndex = kymo;
 			cap.transferROIsToMeasures(roisAtT);	
@@ -168,7 +168,7 @@ public class SequenceKymos extends SequenceCamData
 		return true;
 	}
 	
-	public void transferCapillariesMeasuresToKymos(Capillaries capillaries) 
+	public void transferCapillariesMeasuresToKymos(SpotsArray capillaries) 
 	{
 		List<ROI2D> seqRoisList = seq.getROI2Ds(false);
 		ROI2DUtilities.removeROIsMissingChar(seqRoisList, '_');
@@ -194,7 +194,7 @@ public class SequenceKymos extends SequenceCamData
 
 	// ----------------------------
 
-	public List <ImageFileDescriptor> loadListOfPotentialKymographsFromCapillaries(String dir, Capillaries capillaries) 
+	public List <ImageFileDescriptor> loadListOfPotentialKymographsFromCapillaries(String dir, SpotsArray capillaries) 
 	{
 		renameCapillary_Files(dir) ;
 		
@@ -221,7 +221,7 @@ public class SequenceKymos extends SequenceCamData
 			if (name.toLowerCase().endsWith(".tiff") 
 				|| name.toLowerCase().startsWith("line")) 
 			{
-				String destinationName = Capillary.replace_LR_with_12(name);
+				String destinationName = Spot.replace_LR_with_12(name);
 				if (!name .contains(destinationName))
 					file.renameTo (new File(directory + File.separator + destinationName));
 			}

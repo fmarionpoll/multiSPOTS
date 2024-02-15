@@ -24,7 +24,7 @@ import javax.swing.event.ChangeListener;
 
 import icy.util.StringUtil;
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.series.BuildSeriesOptions;
 import plugins.fmp.multispots.series.DetectLevels;
@@ -317,7 +317,7 @@ public class Levels extends JPanel implements PropertyChangeListener
 		threshold2Spinner.setEnabled(flag);
 	}
 	
-	void setInfosToDialog(Capillary cap) 
+	void setInfosToDialog(Spot cap) 
 	{
 		BuildSeriesOptions options = cap.limitsOptions;
 		
@@ -341,7 +341,7 @@ public class Levels extends JPanel implements PropertyChangeListener
 		fromCheckBox.setSelected(false);
 	}
 	
-	void getInfosFromDialog(Capillary cap) 
+	void getInfosFromDialog(Spot cap) 
 	{
 		BuildSeriesOptions capOptions 		= cap.limitsOptions;
 		capOptions.pass1 					= pass1CheckBox.isSelected();

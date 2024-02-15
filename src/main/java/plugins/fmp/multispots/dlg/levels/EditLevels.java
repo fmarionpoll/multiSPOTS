@@ -22,7 +22,7 @@ import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.type.geom.Polyline2D;
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.CapillaryLevel;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.Level2D;
@@ -108,7 +108,7 @@ public class EditLevels  extends JPanel
 		if (roiRef == null)
 			return;
 
-		Capillary cap = exp.capillaries.capillariesList.get(t);
+		Spot cap = exp.capillaries.capillariesList.get(t);
 		seqKymos.transferKymosRoisToCapillaries_Measures(exp.capillaries);		
 		
 		int lastX = findLastXLeftOfRoi(cap, roiRef);
@@ -119,7 +119,7 @@ public class EditLevels  extends JPanel
 		seqKymos.updateROIFromCapillaryMeasure(cap, cap.ptsDerivative);
 	}
 	
-	int findLastXLeftOfRoi(Capillary cap, ROI2D roiRef) 
+	int findLastXLeftOfRoi(Spot cap, ROI2D roiRef) 
 	{
 		int lastX = -1;
 		Rectangle2D rectRef = roiRef.getBounds2D();
@@ -140,7 +140,7 @@ public class EditLevels  extends JPanel
 	{
 		SequenceKymos seqKymos = exp.seqKymos;
 		int t = seqKymos.currentFrame;
-		Capillary cap = exp.capillaries.capillariesList.get(t);
+		Spot cap = exp.capillaries.capillariesList.get(t);
 		cap.restoreClippedMeasures();
 		
 		seqKymos.updateROIFromCapillaryMeasure(cap, cap.ptsTop);
@@ -187,7 +187,7 @@ public class EditLevels  extends JPanel
 			return;
 		
 		seqKymos.transferKymosRoisToCapillaries_Measures(exp.capillaries);
-		Capillary cap = exp.capillaries.capillariesList.get(t);
+		Spot cap = exp.capillaries.capillariesList.get(t);
 		String optionSelected = (String) roiTypeCombo.getSelectedItem();
 		if (optionSelected .contains("gulp")) 
 		{
@@ -210,7 +210,7 @@ public class EditLevels  extends JPanel
 		exp.seqKymos.seq.roiChanged(roi);
 	}
 	
-	private void removeAndUpdate(SequenceKymos seqKymos, Capillary cap, CapillaryLevel caplimits, ROI2D roi) 
+	private void removeAndUpdate(SequenceKymos seqKymos, Spot cap, CapillaryLevel caplimits, ROI2D roi) 
 	{
 		removeMeasuresEnclosedInRoi(caplimits, roi);
 		seqKymos.updateROIFromCapillaryMeasure(cap, caplimits);

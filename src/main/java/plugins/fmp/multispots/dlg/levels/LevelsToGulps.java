@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
 
 import icy.util.StringUtil;
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.series.DetectGulps;
 import plugins.fmp.multispots.tools.Canvas2DWithFilters;
@@ -202,7 +202,7 @@ public class LevelsToGulps extends JPanel  implements PropertyChangeListener
 		}
 	}
 
-	void setInfos(Capillary cap) 
+	void setInfos(Spot cap) 
 	{
 		BuildSeriesOptions options = cap.getGulpsOptions();
 		detectGulpsThresholdSpinner.setValue(options.detectGulpsThreshold_uL);

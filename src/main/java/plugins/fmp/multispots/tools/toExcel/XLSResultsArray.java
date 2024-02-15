@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import plugins.fmp.multispots.experiment.Capillaries;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.SpotsArray;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.tools.Comparators;
 
 
@@ -74,7 +74,7 @@ public class XLSResultsArray
 		Collections.sort(resultsList, new Comparators.XLSResults_Name_Comparator());
 	}
 	
-	public void checkIfSameStimulusAndConcentration(Capillary cap) 
+	public void checkIfSameStimulusAndConcentration(Spot cap) 
 	{
 		if (!sameLR)
 			return;
@@ -208,7 +208,7 @@ public class XLSResultsArray
 	// ---------------------------------------------------
 	
 	public void getResults1( 
-			Capillaries caps,  
+			SpotsArray caps,  
 			EnumXLSExportType exportType, 
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
@@ -222,7 +222,7 @@ public class XLSResultsArray
 	}
 	
 	public void getResults_T0( 
-			Capillaries caps, 
+			SpotsArray caps, 
 			EnumXLSExportType exportType, 
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
@@ -235,14 +235,14 @@ public class XLSResultsArray
 		buildDataForPass2(xlsExportOptions);
 	}
 	
-	private void buildDataForPass1(Capillaries caps,
+	private void buildDataForPass1(SpotsArray caps,
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
 			XLSExportOptions xlsExportOptions, 
 			boolean subtractT0)
 	{
 		double scalingFactorToPhysicalUnits = caps.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
-		for (Capillary cap: caps.capillariesList) 
+		for (Spot cap: caps.capillariesList) 
 		{
 			checkIfSameStimulusAndConcentration(cap);
 			XLSResults results = new XLSResults(cap.getRoiName(), cap.capNFlies, cap.capCageID, xlsExportOptions.exportType, nOutputFrames);

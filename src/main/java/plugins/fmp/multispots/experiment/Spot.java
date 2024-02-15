@@ -26,7 +26,7 @@ import plugins.fmp.multispots.tools.toExcel.EnumXLSExportType;
 
 
 
-public class Capillary implements Comparable <Capillary> 
+public class Spot implements Comparable <Spot> 
 {
 
 	private ROI2D 						roi 			= null;
@@ -86,23 +86,23 @@ public class Capillary implements Comparable <Capillary>
 	
 	// ----------------------------------------------------
 	
-	public Capillary(ROI2D roiCapillary) 
+	public Spot(ROI2D roiCapillary) 
 	{
 		this.roi = roiCapillary;
 		this.kymographName = replace_LR_with_12(roiCapillary.getName());
 	}
 	
-	Capillary(String name) 
+	Spot(String name) 
 	{
 		this.kymographName = replace_LR_with_12(name);
 	}
 	
-	public Capillary() 
+	public Spot() 
 	{
 	}
 
 	@Override
-	public int compareTo(Capillary o) 
+	public int compareTo(Spot o) 
 	{
 		if (o != null)
 			return this.kymographName.compareTo(o.kymographName);
@@ -111,7 +111,7 @@ public class Capillary implements Comparable <Capillary>
 	
 	// ------------------------------------------
 	
-	public void copy(Capillary cap) 
+	public void copy(Spot cap) 
 	{
 		kymographIndex 	= cap.kymographIndex;
 		kymographName 	= cap.kymographName;

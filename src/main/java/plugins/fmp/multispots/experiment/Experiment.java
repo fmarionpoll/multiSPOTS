@@ -41,7 +41,7 @@ public class Experiment
 	public SequenceCamData 	seqCamData 				= null;
 	public SequenceKymos 	seqKymos				= null;
 	public Sequence 		seqReference			= null;
-	public Capillaries 		capillaries 			= new Capillaries();
+	public SpotsArray 		capillaries 			= new SpotsArray();
 	public Cages			cages 					= new Cages();
 	
 	public FileTime			firstImage_FileTime;
@@ -848,7 +848,7 @@ public class Experiment
 		
 		for (int t= 0; t < nimages; t++) 
 		{
-			Capillary cap = capillaries.capillariesList.get(t);
+			Spot cap = capillaries.capillariesList.get(t);
 			cap.kymographIndex = t;
 			IcyBufferedImage img = seqKymos.getSeqImage(t, zChannelSource);
 			IcyBufferedImage img2 = transform.getTransformedImage (img, null);
@@ -1024,7 +1024,7 @@ public class Experiment
 		if (capillaries.capillariesList.size() == 0)
 			loadMCCapillaries_Only();
 		boolean flag = false;
-		for (Capillary cap:  capillaries.capillariesList) 
+		for (Spot cap:  capillaries.capillariesList) 
 		{
 			if (cap.getCapillaryField(fieldEnumCode) .equals(oldValue))
 			{
@@ -1100,7 +1100,7 @@ public class Experiment
 	{
 		if (capillaries.capillariesList.size() == 0)
 			loadMCCapillaries_Only();
-		for (Capillary cap:  capillaries.capillariesList) 
+		for (Spot cap:  capillaries.capillariesList) 
 			addValue(cap.getCapillaryField(fieldEnumCode), textList);
 	}
 	

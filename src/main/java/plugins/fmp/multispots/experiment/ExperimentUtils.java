@@ -22,14 +22,14 @@ public class ExperimentUtils
 	public static void transferCamDataROIStoCapillaries (Experiment exp)
 	{
 		if (exp.capillaries == null) 
-			exp.capillaries = new Capillaries();
+			exp.capillaries = new SpotsArray();
 		
 		// rois not in cap? add
 		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("line", exp.seqCamData.seq);
 		for (ROI2D roi:listROISCap) 
 		{
 			boolean found = false;
-			for (Capillary cap: exp.capillaries.capillariesList) 
+			for (Spot cap: exp.capillaries.capillariesList) 
 			{
 				if (cap.getRoi()!= null && roi.getName().equals(cap.getRoiName())) 
 				{
@@ -38,14 +38,14 @@ public class ExperimentUtils
 				}
 			}
 			if (!found)
-				exp.capillaries.capillariesList.add(new Capillary((ROI2DShape)roi));
+				exp.capillaries.capillariesList.add(new Spot((ROI2DShape)roi));
 		}
 		
 		// cap with no corresponding roi? remove
-		Iterator<Capillary> iterator = exp.capillaries.capillariesList.iterator();
+		Iterator<Spot> iterator = exp.capillaries.capillariesList.iterator();
 		while(iterator.hasNext()) 
 		{
-			Capillary cap = iterator.next();
+			Spot cap = iterator.next();
 			boolean found = false;
 			for (ROI2D roi:listROISCap) 
 			{
@@ -67,7 +67,7 @@ public class ExperimentUtils
 		
 		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("line", exp.seqCamData.seq);
 		// roi with no corresponding cap? add ROI
-		for (Capillary cap: exp.capillaries.capillariesList) 
+		for (Spot cap: exp.capillaries.capillariesList) 
 		{
 			boolean found = false;
 			for (ROI2D roi:listROISCap) {
@@ -91,7 +91,7 @@ public class ExperimentUtils
 			return;
 		
 		exp.capillaries.deleteAllCapillaries();
-		exp.capillaries = new Capillaries();
+		exp.capillaries = new SpotsArray();
 		
 		for (ROI2D roi:listROISCap) 
 		{	
@@ -121,7 +121,7 @@ public class ExperimentUtils
 				ROI2DEllipse roicircle = new ROI2DEllipse(ellipse);
 				roicircle.setName(baseName + "circle" + String.format("%02d", i));
 				i++;
-				exp.capillaries.capillariesList.add(new Capillary((ROI2DShape)roicircle));
+				exp.capillaries.capillariesList.add(new Spot((ROI2DShape)roicircle));
 			}
 		}
 		

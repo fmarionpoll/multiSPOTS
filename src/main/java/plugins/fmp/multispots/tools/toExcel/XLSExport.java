@@ -15,7 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import plugins.fmp.multispots.dlg.JComponents.ExperimentCombo;
 import plugins.fmp.multispots.experiment.Cage;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -83,10 +83,10 @@ public class XLSExport
 				rowmax = dumb.getValue();		
 		}
 		
-		List<Capillary> capList = exp.capillaries.capillariesList;
+		List<Spot> capList = exp.capillaries.capillariesList;
 		for (int t = 0; t < capList.size(); t++) 
 		{ 
-			Capillary cap = capList.get(t);
+			Spot cap = capList.get(t);
 			String	name = cap.getRoiName();
 			int col = getRowIndexFromKymoFileName(name);
 			if (col >= 0) 
@@ -131,9 +131,9 @@ public class XLSExport
 		return pt;
 	}
 	
-	private String desc_getChoiceTestType(List<Capillary> capList, int t)
+	private String desc_getChoiceTestType(List<Spot> capList, int t)
 	{
-		Capillary cap = capList.get(t);
+		Spot cap = capList.get(t);
 		String choiceText = "..";
 		String side = cap.getCapillarySide();
 		if (side.contains("L"))
@@ -141,7 +141,7 @@ public class XLSExport
 		else
 			t = t-1;
 		if (t >= 0 && t < capList.size()) {
-			Capillary othercap = capList.get(t);
+			Spot othercap = capList.get(t);
 			String otherSide = othercap.getCapillarySide();
 			if (!otherSide .contains(side))
 			{
@@ -155,7 +155,7 @@ public class XLSExport
 		return choiceText;
 	}
 	
-	private void outputStimAndConc_according_to_DataOption(XSSFSheet sheet, EnumXLSExportType xlsExportOption, Capillary cap, boolean transpose, int x, int y)
+	private void outputStimAndConc_according_to_DataOption(XSSFSheet sheet, EnumXLSExportType xlsExportOption, Spot cap, boolean transpose, int x, int y)
 	{
 		switch (xlsExportOption) {
 		case TOPLEVEL_LR:
@@ -380,7 +380,7 @@ public class XLSExport
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(ncapillaries);
 		for (int i = 0; i < ncapillaries; i++) 
 		{
-			Capillary cap 		= expAll.capillaries.capillariesList.get(i);
+			Spot cap 		= expAll.capillaries.capillariesList.get(i);
 			XLSResults row 		= new XLSResults (cap.getRoiName(), cap.capNFlies, cap.capCageID, xlsOption, nFrames);
 			row.stimulus 		= cap.capStimulus;
 			row.concentration 	= cap.capConcentration;

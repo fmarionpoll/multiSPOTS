@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 
 
 
@@ -182,7 +182,7 @@ public class Directories
 			String name = file.getName();
 			if (name.toLowerCase().endsWith(".tiff") && name.toLowerCase().startsWith("line")) 
 			{
-				String destinationName = Capillary.replace_LR_with_12(name);
+				String destinationName = Spot.replace_LR_with_12(name);
 				file.renameTo (new File(subDirectoryFile + File.separator + destinationName));
 				file.delete();
 			}
@@ -200,7 +200,7 @@ public class Directories
 			String name = file.getName();
 			if (name.toLowerCase().endsWith(".xml") || name.toLowerCase().startsWith("line")) 
 			{
-				String destinationName = Capillary.replace_LR_with_12(name);
+				String destinationName = Spot.replace_LR_with_12(name);
 				if (clipName) 
 					destinationName = destinationName.substring(0, 6) + ".xml";
 				file.renameTo (new File(subDirectoryFile + File.separator + destinationName));

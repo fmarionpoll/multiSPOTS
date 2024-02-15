@@ -1,7 +1,7 @@
 package plugins.fmp.multispots.dlg.JComponents;
 
 import javax.swing.table.AbstractTableModel;
-import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -54,7 +54,7 @@ public class CapillaryTableModel extends AbstractTableModel
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-    	Capillary cap = getCapillaryAt(rowIndex);
+    	Spot cap = getCapillaryAt(rowIndex);
     	if (cap != null) {
         	switch (columnIndex) {
             case 0: return cap.getRoiName();
@@ -80,7 +80,7 @@ public class CapillaryTableModel extends AbstractTableModel
     
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-    	Capillary cap = getCapillaryAt(rowIndex);
+    	Spot cap = getCapillaryAt(rowIndex);
     	if (cap != null) {
         	switch (columnIndex) {
             case 0: cap.setRoiName(aValue.toString()); break;
@@ -93,8 +93,8 @@ public class CapillaryTableModel extends AbstractTableModel
     	}
     }
     
-    private Capillary getCapillaryAt(int rowIndex) {
-		Capillary cap = null;
+    private Spot getCapillaryAt(int rowIndex) {
+		Spot cap = null;
     	if (expList != null && expList.getSelectedIndex() >=0 ) {
     		Experiment exp = (Experiment) expList.getSelectedItem();
     		cap = exp.capillaries.capillariesList.get(rowIndex);
