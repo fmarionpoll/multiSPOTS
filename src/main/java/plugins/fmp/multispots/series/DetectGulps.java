@@ -14,7 +14,7 @@ import icy.system.thread.Processor;
 import icy.type.collection.array.Array1DUtil;
 import icy.type.geom.Polyline2D;
 import plugins.fmp.multispots.experiment.Spot;
-import plugins.fmp.multispots.experiment.CapillaryLevel;
+import plugins.fmp.multispots.experiment.SpotArea;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 
@@ -85,7 +85,7 @@ public class DetectGulps extends BuildSeries
 				public void run() 
 				{
 					if (options.buildDerivative) 
-						capi.ptsDerivative = new CapillaryLevel(
+						capi.ptsDerivative = new SpotArea(
 								capi.getLast2ofCapillaryName()+"_derivative", 
 								capi.kymographIndex,
 								getDerivativeProfile(seqAnalyzed, capi, jitter));

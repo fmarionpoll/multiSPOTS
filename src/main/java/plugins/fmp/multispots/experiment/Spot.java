@@ -56,9 +56,9 @@ public class Spot implements Comparable <Spot>
 	public  final String 				ID_BOTTOMLEVEL 	= "bottomlevel";	
 	public  final String 				ID_DERIVATIVE 	= "derivative";	
 	
-	public CapillaryLevel				ptsTop  		= new CapillaryLevel(ID_TOPLEVEL); 
-	public CapillaryLevel				ptsBottom 		= new CapillaryLevel(ID_BOTTOMLEVEL); 
-	public CapillaryLevel				ptsDerivative 	= new CapillaryLevel(ID_DERIVATIVE); 
+	public SpotArea				ptsTop  		= new SpotArea(ID_TOPLEVEL); 
+	public SpotArea				ptsBottom 		= new SpotArea(ID_BOTTOMLEVEL); 
+	public SpotArea				ptsDerivative 	= new SpotArea(ID_DERIVATIVE); 
 	public CapillaryGulps 				ptsGulps 		= new CapillaryGulps(); 
 	
 	public boolean						valid			= true;
@@ -501,7 +501,7 @@ public class Spot implements Comparable <Spot>
 		return listrois;
 	}
 	
-	private void getROIFromCapillaryLevel(CapillaryLevel capLevel, List<ROI2D> listrois) 
+	private void getROIFromCapillaryLevel(SpotArea capLevel, List<ROI2D> listrois) 
 	{
 		if (capLevel.polylineLevel == null || capLevel.polylineLevel.npoints == 0)
 			return;

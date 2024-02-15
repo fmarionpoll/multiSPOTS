@@ -102,7 +102,7 @@ public class SequenceKymos extends SequenceCamData
 		}
 	}
 	
-	public void updateROIFromCapillaryMeasure(Spot cap, CapillaryLevel caplimits) 
+	public void updateROIFromCapillaryMeasure(Spot cap, SpotArea caplimits) 
 	{
 		int t = cap.kymographIndex;
 		List<ROI2D> listRois = seq.getROI2Ds();

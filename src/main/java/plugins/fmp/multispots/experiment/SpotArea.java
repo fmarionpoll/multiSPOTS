@@ -15,7 +15,7 @@ import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 
 
 
-public class CapillaryLevel 
+public class SpotArea 
 {
 	public Level2D 	polylineLevel 	= new Level2D();
 	public Level2D 	polyline_old 	= new Level2D();
@@ -33,12 +33,12 @@ public class CapillaryLevel
 	
 	// -------------------------
 	
-	CapillaryLevel(String capName) 
+	SpotArea(String capName) 
 	{
 		this.capName = capName;
 	}
 	
-	public CapillaryLevel(String name, int indexImage, List<Point2D> limit) 
+	public SpotArea(String name, int indexImage, List<Point2D> limit) 
 	{
 		this.capName = name;
 		this.capIndexKymo = indexImage;
@@ -105,7 +105,7 @@ public class CapillaryLevel
 		polylineLevel = new Level2D(pol); 
 	}
 	
-	void copy(CapillaryLevel cap) 
+	void copy(SpotArea cap) 
 	{
 		if (cap.polylineLevel != null)
 			polylineLevel = cap.polylineLevel.clone(); 
