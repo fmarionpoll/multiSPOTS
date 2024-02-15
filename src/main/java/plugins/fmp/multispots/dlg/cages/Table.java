@@ -158,7 +158,7 @@ public class Table extends JPanel
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null)
 		{
-			exp.cages.transferNFliesFromCagesToCapillaries(exp.capillaries.capillariesList);
+			exp.cages.transferNFliesFromCagesToCapillaries(exp.capillaries.spotsList);
 			parent0.paneCapillaries.tabFile.saveCapillaries_file(exp);
 		}
 	}

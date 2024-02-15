@@ -119,13 +119,13 @@ public class CreateSpots extends JPanel
 			@Override public void actionPerformed( final ActionEvent e ) { 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if ((exp != null) && (exp.capillaries != null)) {
-					Polygon2D extPolygon = exp.capillaries.get2DPolygonEnclosingCapillaries();
+					Polygon2D extPolygon = exp.capillaries.get2DPolygonEnclosingSpots();
 					if (extPolygon == null) {
 						extPolygon = getCapillariesPolygon(exp.seqCamData);
 					}
 					ROI2DPolygon extRect = new ROI2DPolygon(extPolygon);
-					exp.capillaries.deleteAllCapillaries();
-					exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
+					exp.capillaries.deleteAllSpots();
+					exp.capillaries.updateSpotsFromSequence(exp.seqCamData.seq);
 					exp.seqCamData.seq.removeAllROI();
 					final String dummyname = "perimeter_enclosing_capillaries";
 					extRect.setName(dummyname);
@@ -143,7 +143,7 @@ public class CreateSpots extends JPanel
 				if (exp != null) {
 					ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
-					exp.capillaries.initCapillariesWithNFlies(nbFliesPerCage);
+					exp.capillaries.initSpotsWithNFlies(nbFliesPerCage);
 				}
 			}});
 		
@@ -155,7 +155,7 @@ public class CreateSpots extends JPanel
 					ExperimentUtils.transformPolygon2DROISintoCircles(exp, radius); 
 					ExperimentUtils.transferCapillariesToCamData(exp); 
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
-					exp.capillaries.initCapillariesWithNFlies(nbFliesPerCage);
+					exp.capillaries.initSpotsWithNFlies(nbFliesPerCage);
 					firePropertyChange("CAPILLARIES_NEW", false, true);
 				}
 			}});

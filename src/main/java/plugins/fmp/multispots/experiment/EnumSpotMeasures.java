@@ -2,7 +2,7 @@ package plugins.fmp.multispots.experiment;
 
 
 
-public enum EnumCapillaryMeasures 
+public enum EnumSpotMeasures 
 {
 	TOPLEVEL ("TOPLEVEL", "top capillary limit"), 
 	BOTTOMLEVEL ("BOTTOMLEVEL", "bottom capillary limit"), 
@@ -13,7 +13,7 @@ public enum EnumCapillaryMeasures
 	private String label;
 	private String unit;
 	
-	EnumCapillaryMeasures (String label, String unit) 
+	EnumSpotMeasures (String label, String unit) 
 	{ 
 		this.label = label;
 		this.unit = unit;
@@ -29,9 +29,9 @@ public enum EnumCapillaryMeasures
 		return unit;
 	}
 	
-	public static EnumCapillaryMeasures findByText(String abbr)
+	public static EnumSpotMeasures findByText(String abbr)
 	{
-	    for(EnumCapillaryMeasures v : values()) 
+	    for(EnumSpotMeasures v : values()) 
 	    { 
 	    	if( v.toString().equals(abbr)) 
 	    		return v;   

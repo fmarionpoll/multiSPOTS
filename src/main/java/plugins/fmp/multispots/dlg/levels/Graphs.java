@@ -193,7 +193,7 @@ public class Graphs extends JPanel implements SequenceListener
 	{
 		boolean flag = false;
 		SpotsArray capillaries = exp.capillaries;
-		for (Spot cap: capillaries.capillariesList) 
+		for (Spot cap: capillaries.spotsList) 
 		{
 			flag = cap.isThereAnyMeasuresDone(option);
 			if (flag)

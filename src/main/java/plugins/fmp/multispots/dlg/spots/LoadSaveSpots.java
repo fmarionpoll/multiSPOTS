@@ -77,7 +77,7 @@ public class LoadSaveSpots extends JPanel
 	public boolean loadCapillaries_File(Experiment exp) 
 	{	
 		boolean flag = exp.loadMCCapillaries_Only();
-		exp.capillaries.transferCapillaryRoiToSequence(exp.seqCamData.seq);
+		exp.capillaries.transferSpotRoiToSequence(exp.seqCamData.seq);
 		return flag;
 	}
 	
@@ -85,10 +85,10 @@ public class LoadSaveSpots extends JPanel
 	{
 		parent0.paneCapillaries.getDialogCapillariesInfos(exp);  // get data into desc
 		parent0.paneExperiment.getExperimentInfosFromDialog(exp);
-		exp.capillaries.transferDescriptionToCapillaries();
+		exp.capillaries.transferDescriptionToSpots();
 	
 		exp.saveMCExperiment ();
-		exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
+		exp.capillaries.updateSpotsFromSequence(exp.seqCamData.seq);
 		return exp.saveMCCapillaries_Only();
 	}
 

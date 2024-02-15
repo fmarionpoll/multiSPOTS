@@ -858,7 +858,7 @@ public class Spot implements Comparable <Spot>
 		return sbf.toString();
 	}
 	
-	public String csvExportMeasureSectionHeader(EnumCapillaryMeasures measureType) 
+	public String csvExportMeasureSectionHeader(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		String explanation1 = "columns=,name,index, npts,..,.(xi;yi)\n";
@@ -883,7 +883,7 @@ public class Spot implements Comparable <Spot>
 		return sbf.toString();
 	}
 	
-	public String csvExportCapillaryData(EnumCapillaryMeasures measureType) 
+	public String csvExportCapillaryData(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		sbf.append(kymographPrefix+ ","+ kymographIndex +",");
@@ -926,7 +926,7 @@ public class Spot implements Comparable <Spot>
 		capSide = data[i]; 
 	}
 		
-	public void csvImportCapillaryData(EnumCapillaryMeasures measureType, String[] data) 
+	public void csvImportCapillaryData(EnumSpotMeasures measureType, String[] data) 
 	{
 		switch(measureType) {
 		case TOPLEVEL:

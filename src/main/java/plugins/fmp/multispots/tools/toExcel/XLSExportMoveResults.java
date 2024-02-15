@@ -152,7 +152,7 @@ public class XLSExportMoveResults extends XLSExport
 			int len =  1 + (int) (expi.camImageLast_ms - expi.camImageFirst_ms) / options.buildExcelStepMs;
 			if (len == 0)
 				continue;
-			double pixelsize = 32. / expi.capillaries.capillariesList.get(0).capPixels;
+			double pixelsize = 32. / expi.capillaries.spotsList.get(0).capPixels;
 			
 			List <XYTaSeriesArrayList> resultsArrayList = new ArrayList <XYTaSeriesArrayList> (expi.cages.cagesList.size());
 			for (Cage cage: expi.cages.cagesList) 

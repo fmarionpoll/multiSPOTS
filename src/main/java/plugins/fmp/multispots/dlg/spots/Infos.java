@@ -74,7 +74,7 @@ public class Infos extends JPanel
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 				{
-					exp.capillaries.transferDescriptionToCapillaries();
+					exp.capillaries.transferDescriptionToSpots();
 					if (infosCapillaryTable == null)
 						infosCapillaryTable = new InfosSpotsTable();
 					infosCapillaryTable.initialize(parent0, capillariesArrayCopy);
@@ -86,13 +86,13 @@ public class Infos extends JPanel
 	
 	void setAllDescriptors(SpotsArray cap) 
 	{
-		capillaryVolumeSpinner.setValue( cap.capillariesDescription.volume);
-		capillaryPixelsSpinner.setValue( cap.capillariesDescription.pixels);
+		capillaryVolumeSpinner.setValue( cap.spotsDescription.volume);
+		capillaryPixelsSpinner.setValue( cap.spotsDescription.pixels);
 	}
 		
 	void getDescriptors(SpotsArray capList) {
-		capList.capillariesDescription.volume = (double) capillaryVolumeSpinner.getValue();
-		capList.capillariesDescription.pixels = (int) capillaryPixelsSpinner.getValue();
+		capList.spotsDescription.volume = (double) capillaryVolumeSpinner.getValue();
+		capList.spotsDescription.pixels = (int) capillaryPixelsSpinner.getValue();
 	}
 	
 	public int getLengthFirstCapillaryROI() {
@@ -100,10 +100,10 @@ public class Infos extends JPanel
 		int npixels = 0;
 		if (exp != null)
 		{
-			exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
-			if (exp.capillaries.capillariesList.size() > 0) 
+			exp.capillaries.updateSpotsFromSequence(exp.seqCamData.seq);
+			if (exp.capillaries.spotsList.size() > 0) 
 			{
-				Spot cap = exp.capillaries.capillariesList.get(0);
+				Spot cap = exp.capillaries.spotsList.get(0);
 				npixels = cap.getCapillaryROILength();
 			}
 		}

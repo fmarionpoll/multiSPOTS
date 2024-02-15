@@ -83,7 +83,7 @@ public class XLSExport
 				rowmax = dumb.getValue();		
 		}
 		
-		List<Spot> capList = exp.capillaries.capillariesList;
+		List<Spot> capList = exp.capillaries.spotsList;
 		for (int t = 0; t < capList.size(); t++) 
 		{ 
 			Spot cap = capList.get(t);
@@ -104,8 +104,8 @@ public class XLSExport
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_STRAIN.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN));
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_SEX.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_SEX));			
 
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_VOLUME.getValue(), transpose, exp.capillaries.capillariesDescription.volume);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_PIXELS.getValue(), transpose, exp.capillaries.capillariesDescription.pixels);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_VOLUME.getValue(), transpose, exp.capillaries.spotsDescription.volume);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_PIXELS.getValue(), transpose, exp.capillaries.spotsDescription.pixels);
 			
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP.getValue(), transpose, cap.getSideDescriptor(xlsExportOption));
 			outputStimAndConc_according_to_DataOption(sheet, xlsExportOption, cap, transpose, x, y);
@@ -376,11 +376,11 @@ public class XLSExport
 		}
 
 		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms)/options.buildExcelStepMs  +1) ;
-		int ncapillaries = expAll.capillaries.capillariesList.size();
+		int ncapillaries = expAll.capillaries.spotsList.size();
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(ncapillaries);
 		for (int i = 0; i < ncapillaries; i++) 
 		{
-			Spot cap 		= expAll.capillaries.capillariesList.get(i);
+			Spot cap 		= expAll.capillaries.spotsList.get(i);
 			XLSResults row 		= new XLSResults (cap.getRoiName(), cap.capNFlies, cap.capCageID, xlsOption, nFrames);
 			row.stimulus 		= cap.capStimulus;
 			row.concentration 	= cap.capConcentration;
@@ -440,7 +440,7 @@ public class XLSExport
 			int nOutputFrames = getNOutputFrames(expi);
 			if (nOutputFrames > 1)
 			{
-				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.capillaries.capillariesList.size());
+				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.capillaries.spotsList.size());
 				options.compensateEvaporation = false;
 				switch (xlsExportType) 
 				{

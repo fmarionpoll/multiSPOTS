@@ -240,7 +240,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 		int intervalT =  (int) exp.capillaries.getKymoROI2DIntervalsStartAt(selectedRow);
 		seq.removeAllROI();	
 		List<ROI2D> listRois = new ArrayList<ROI2D>();
-		for (Spot cap: exp.capillaries.capillariesList) {
+		for (Spot cap: exp.capillaries.spotsList) {
 			listRois.add(cap.getROI2DKymoAtIntervalT((int) intervalT).getRoi());
 		}
 		seq.addROIs(listRois, false);
@@ -260,7 +260,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 		for (ROI2D roi: listRois) {
 			if (!roi.getName().contains("line")) 
 				continue;
-			Spot cap = exp.capillaries.getCapillaryFromRoiName(roi.getName());
+			Spot cap = exp.capillaries.getSpotFromRoiName(roi.getName());
 			if (cap != null) {
 				ROI2D roilocal = (ROI2D) roi.getCopy();
 				cap.getROI2DKymoAtIntervalT(intervalT).setRoi(roilocal);

@@ -157,11 +157,11 @@ public class Display extends JPanel implements ViewerListener
 		SwingUtilities.invokeLater(new Runnable() { public void run()
 		{	
 			kymographsCombo.removeAllItems();
-			Collections.sort(exp.capillaries.capillariesList); 
-			int ncapillaries = exp.capillaries.capillariesList.size();
+			Collections.sort(exp.capillaries.spotsList); 
+			int ncapillaries = exp.capillaries.spotsList.size();
 			for (int i=0; i< ncapillaries; i++)
 			{
-				Spot cap = exp.capillaries.capillariesList.get(i);
+				Spot cap = exp.capillaries.spotsList.get(i);
 				kymographsCombo.addItem(cap.getRoiName());
 			}
 		}});	
@@ -336,9 +336,9 @@ public class Display extends JPanel implements ViewerListener
 	private void selectCapillary(Experiment exp, int isel)
 	{
 		SpotsArray capillaries = exp.capillaries;
-		for (Spot cap : capillaries.capillariesList) {
+		for (Spot cap : capillaries.spotsList) {
 			cap.getRoi().setSelected(false);
-		Spot capSel = capillaries.capillariesList.get(isel);
+		Spot capSel = capillaries.spotsList.get(isel);
 		capSel.getRoi().setSelected(true);
 		}
 	}

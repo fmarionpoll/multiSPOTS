@@ -104,8 +104,8 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 					createROIsFromSelectedPolygon(exp);
 					exp.cages.cagesFromROIs(exp.seqCamData);
 					exp.cages.setFirstAndLastCageToZeroFly();
-					if(exp.capillaries.capillariesList.size() > 0)
-						exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.capillariesList);
+					if(exp.capillaries.spotsList.size() > 0)
+						exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.spotsList);
 				}
 			}});
 		
@@ -207,7 +207,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 		blobs.fillBlanksPixelsWithinBlobs ();
 	
 		List<Integer> blobsfound = new ArrayList<Integer> ();
-		for (Spot cap : exp.capillaries.capillariesList) 
+		for (Spot cap : exp.capillaries.spotsList) 
 		{
 			Point2D pt = cap.getCapillaryROILowestPoint();
 			if (pt != null) 

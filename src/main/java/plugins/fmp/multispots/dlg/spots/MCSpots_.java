@@ -136,7 +136,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	{
 		if (exp != null) {
 			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
-			exp.capillaries.desc_old.copy(exp.capillaries.capillariesDescription);
+			exp.capillaries.desc_old.copy(exp.capillaries.spotsDescription);
 			tabInfos.setAllDescriptors(exp.capillaries);
 //			tabCreate.setGroupingAndNumber(exp.capillaries);
 		}
@@ -179,9 +179,9 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	
 	public void transferPreviousExperimentCapillariesInfos(Experiment exp0, Experiment exp)
 	{
-		exp.capillaries.capillariesDescription.grouping = exp0.capillaries.capillariesDescription.grouping;
+		exp.capillaries.spotsDescription.grouping = exp0.capillaries.spotsDescription.grouping;
 //		tabCreate.setGroupedBy2(exp0.capillaries.capillariesDescription.grouping == 2);
-		exp.capillaries.capillariesDescription.volume = exp0.capillaries.capillariesDescription.volume;
+		exp.capillaries.spotsDescription.volume = exp0.capillaries.spotsDescription.volume;
 		tabInfos.setAllDescriptors(exp0.capillaries) ;
 	}
 

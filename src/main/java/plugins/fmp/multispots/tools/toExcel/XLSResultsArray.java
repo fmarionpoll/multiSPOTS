@@ -242,7 +242,7 @@ public class XLSResultsArray
 			boolean subtractT0)
 	{
 		double scalingFactorToPhysicalUnits = caps.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
-		for (Spot cap: caps.capillariesList) 
+		for (Spot cap: caps.spotsList) 
 		{
 			checkIfSameStimulusAndConcentration(cap);
 			XLSResults results = new XLSResults(cap.getRoiName(), cap.capNFlies, cap.capCageID, xlsExportOptions.exportType, nOutputFrames);
