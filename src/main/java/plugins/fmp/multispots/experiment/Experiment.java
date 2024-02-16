@@ -616,6 +616,14 @@ public class Experiment
 		transferExpDescriptorsToCapillariesDescriptors();
 		return capillaries.xmlSaveCapillaries_Descriptors(xmlCapillaryFileName);
 	}
+	
+	public boolean saveMCSpots_Only() 
+	{
+		String xmlCapillaryFileName = strExperimentDirectory + File.separator + spotsArray.getXMLNameToAppend();
+		transferExpDescriptorsToCapillariesDescriptors();
+		return spotsArray.xmlSaveSpots_Descriptors(xmlCapillaryFileName);
+	}
+
 		
  	public boolean loadCapillariesMeasures() 
  	{

@@ -29,7 +29,7 @@ public class SpotsDescription
 	public String 	stimulusL		= new String("..");
 	public String 	concentrationL	= new String("..");
 	
-	private final static String ID_CAPILLARYTRACK 	= "capillaryTrack";
+	private final static String ID_SPOTSTRACK 	= "spotsTrack";
 	private final static String ID_PARAMETERS 		= "Parameters";	
 	private final static String ID_FILE 			= "file";
 	private final static String ID_ID 				= "ID";
@@ -81,9 +81,9 @@ public class SpotsDescription
 		return flag;
 	}
 	
-	public boolean xmlSaveCapillaryDescription (Document doc) 
+	public boolean xmlSaveSpotsDescription (Document doc) 
 	{
-		Node node = XMLUtil.addElement(XMLUtil.getRootElement(doc), ID_CAPILLARYTRACK);
+		Node node = XMLUtil.addElement(XMLUtil.getRootElement(doc), ID_SPOTSTRACK);
 		if (node == null)
 			return false;
 		XMLUtil.setElementIntValue(node, "version", 2);
@@ -107,27 +107,27 @@ public class SpotsDescription
 		return true;
 	}
 	
-	public boolean xmlLoadCapillaryDescription (Document doc) 
+	public boolean xmlLoadSpotsDescription (Document doc) 
 	{
 		boolean flag = false;
-		Node node = XMLUtil.getElement(XMLUtil.getRootElement(doc), ID_CAPILLARYTRACK);
+		Node node = XMLUtil.getElement(XMLUtil.getRootElement(doc), ID_SPOTSTRACK);
 		if (node == null)
 			return flag;
 		version = XMLUtil.getElementIntValue(node, "version", 0);
 		switch (version) 
 		{
 			case 0:
-				flag = xmlLoadCapillaryDescriptionv0(node);
+				flag = xmlLoadSpotsDescriptionv0(node);
 				break;
 			case 1:
 			default:
-				flag = xmlLoadCapillaryDescriptionv1(node);
+				flag = xmlLoadCSpotsDescriptionv1(node);
 				break;
 		}
 		return flag;
 	}
 	
-	private boolean xmlLoadCapillaryDescriptionv0 (Node node) 
+	private boolean xmlLoadSpotsDescriptionv0 (Node node) 
 	{
 		Element xmlElement = XMLUtil.getElement(node, ID_PARAMETERS);
 		if (xmlElement == null) 
@@ -167,7 +167,7 @@ public class SpotsDescription
 		return true;
 	}
 	
-	private boolean xmlLoadCapillaryDescriptionv1 (Node node) 
+	private boolean xmlLoadCSpotsDescriptionv1 (Node node) 
 	{
 		Element xmlElement = XMLUtil.getElement(node, ID_PARAMETERS);
 		if (xmlElement == null) 
@@ -248,7 +248,7 @@ public class SpotsDescription
 		return sbf.toString();
 	}
 	
-	public void csvImportCapillariesDescriptionData(String[] data) {
+	public void csvImportSpotsDescriptionData(String[] data) {
 		int i= 0; 
 		grouping = Integer.valueOf(data[i]); i++;
 		volume = Double.valueOf(data[i]); i++; 

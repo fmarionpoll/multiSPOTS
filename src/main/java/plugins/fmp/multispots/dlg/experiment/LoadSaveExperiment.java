@@ -216,7 +216,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			
 			parent0.paneExperiment.updateDialogs(exp);
 			parent0.paneKymos.updateDialogs(exp);
-			parent0.paneCapillaries.updateDialogs(exp);
+			parent0.paneSpots.updateDialogs(exp);
 		}
 		else 
 		{

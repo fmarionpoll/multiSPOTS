@@ -28,10 +28,10 @@ public class multiSPOTS extends PluginActionable
 	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
 	
 	public MCExperiment_ 	paneExperiment 	= new MCExperiment_();
-	public MCSpots_ 	paneCapillaries	= new MCSpots_();
+	public MCSpots_ 		paneSpots		= new MCSpots_();
 	public MCKymos_			paneKymos		= new MCKymos_();
 	public MCLevels_ 		paneLevels 		= new MCLevels_();
-	public MCSpotsExp_			paneSpots		= new MCSpotsExp_();
+	public MCSpotsExp_		paneSpotsExp_	= new MCSpotsExp_();
 	public MCCages_ 		paneCages 		= new MCCages_();
 	public MCExcel_			paneExcel		= new MCExcel_();
 	
@@ -44,7 +44,7 @@ public class multiSPOTS extends PluginActionable
 	{		
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
 		paneExperiment.init(mainPanel, "Experiments", this);
-		paneCapillaries.init(mainPanel, "Spots", this);
+		paneSpots.init(mainPanel, "Spots", this);
 		paneKymos.init(mainPanel, "Kymographs", this);
 		paneLevels.init(mainPanel, "Levels", this);
 //		paneSpots.init(mainPanel, "MEASURE SPOTS", this);

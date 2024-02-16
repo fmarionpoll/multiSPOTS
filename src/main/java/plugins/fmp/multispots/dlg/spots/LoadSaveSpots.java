@@ -57,6 +57,7 @@ public class LoadSaveSpots extends JPanel
 				if (exp != null) 
 				{ 
 					loadCapillaries_File(exp);
+					loadSpotsArray_File(exp);
 					firePropertyChange("CAP_ROIS_OPEN", false, true);
 				}
 			}}); 
@@ -69,6 +70,7 @@ public class LoadSaveSpots extends JPanel
 				if (exp != null) 
 				{
 					saveCapillaries_file(exp);
+					saveSpotsArray_file(exp); 
 					firePropertyChange("CAP_ROIS_SAVE", false, true);
 				}
 			}});	
@@ -83,7 +85,7 @@ public class LoadSaveSpots extends JPanel
 	
 	public boolean saveCapillaries_file(Experiment exp) 
 	{
-		parent0.paneCapillaries.getDialogCapillariesInfos(exp);  // get data into desc
+		parent0.paneSpots.getDialogCapillariesInfos(exp);  // get data into desc
 		parent0.paneExperiment.getExperimentInfosFromDialog(exp);
 		exp.capillaries.transferDescriptionToCapillaries();
 	
@@ -92,7 +94,6 @@ public class LoadSaveSpots extends JPanel
 		return exp.saveMCCapillaries_Only();
 	}
 
-	
 	public boolean loadSpotsArray_File(Experiment exp) 
 	{	
 		boolean flag = exp.loadMCCapillaries_Only();
@@ -102,13 +103,13 @@ public class LoadSaveSpots extends JPanel
 	
 	public boolean saveSpotsArray_file(Experiment exp) 
 	{
-		parent0.paneCapillaries.getDialogCapillariesInfos(exp);  // get data into desc
+//		parent0.paneSpots.getDialogCapillariesInfos(exp);  // get data into desc
 		parent0.paneExperiment.getExperimentInfosFromDialog(exp);
 		exp.spotsArray.transferDescriptionToSpots();
 	
 		exp.saveMCExperiment ();
 		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
-		return exp.saveMCCapillaries_Only();
+		return exp.saveMCSpots_Only();
 	}
 
 }

@@ -137,7 +137,7 @@ public class Infos extends JPanel
 	}
 	
 	void measureFirstCapillary() {
-		int npixels = parent0.paneCapillaries.tabInfos.getLengthFirstCapillaryROI();
+		int npixels = parent0.paneSpots.tabInfos.getLengthFirstCapillaryROI();
 		if (npixels > 0) 
 			pixelsSpinner.setValue(npixels);
 	}
