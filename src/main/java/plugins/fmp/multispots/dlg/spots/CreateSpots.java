@@ -186,12 +186,6 @@ public class CreateSpots extends JPanel
 	}
 	
 	// set/ get	
-
-	private int getNbCapillaries( ) 
-	{
-		return (int) nCagesPerRowSpinner.getValue();
-	}
-
 	
 	// ---------------------------------
 	private void create2DPolygon() 
@@ -266,7 +260,7 @@ public class CreateSpots extends JPanel
 
 		try 
 		{ 
-			nbcapillaries = getNbCapillaries();
+			nbcapillaries = (int) nCagesPerRowSpinner.getValue();
 		} 
 		catch( Exception e ) 
 		{ 

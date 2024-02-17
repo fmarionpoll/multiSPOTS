@@ -16,9 +16,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
@@ -106,7 +104,7 @@ public class SpotsArray
 		for (Spot spot: spotsList) 
 		{
 			Node nodecapillary = XMLUtil.setElement(node, ID_SPOT_+i);
-			spot.saveToXML_CapillaryOnly(nodecapillary);
+			spot.saveToXML_SpotOnly(nodecapillary);
 			i++;
 		}
 		return true;
@@ -135,18 +133,7 @@ public class SpotsArray
 		if (doc != null) 
 		{
 			spotsDescription.xmlLoadSpotsDescription(doc);
-			switch (spotsDescription.version) 
-			{
-			case 1: // old xml storage structure
-				xmlLoadSpots_Only_v1(doc);
-				break;
-			case 0: // old-old xml storage structure
-				xmlLoad_v0(doc, csFileName);
-				break;
-			default:
-				xmlLoadSpots_Only_v2(doc, csFileName);
-				return false;
-			}		
+			xmlLoadSpots_Only_v2(doc, csFileName);
 			return true;
 		}
 		return false;
@@ -158,7 +145,7 @@ public class SpotsArray
 		int ncapillaries = spotsList.size();
 		for (int i = 0; i < ncapillaries; i++) 
 		{
-			String csFile = directory + File.separator + spotsList.get(i).getKymographName() + ".xml";
+			String csFile = directory + File.separator + spotsList.get(i).getRoiName() + ".xml";
 			final Document capdoc = XMLUtil.loadDocument(csFile);
 			Node node = XMLUtil.getRootElement(capdoc, true);
 			Spot spot = spotsList.get(i);
@@ -166,45 +153,6 @@ public class SpotsArray
 			flag |= spot.loadFromXML_MeasuresOnly(node);
 		}
 		return flag;
-	}
-	
-	private void xmlLoad_v0(Document doc, String csFileName) 
-	{
-		List<ROI> listOfCapillaryROIs = ROI.loadROIsFromXML(XMLUtil.getRootElement(doc));
-		spotsList.clear();
-		Path directorypath = Paths.get(csFileName).getParent();
-		String directory = directorypath + File.separator;
-		int t = 0;
-		for (ROI roiCapillary: listOfCapillaryROIs) 
-		{
-			xmlLoadIndividualSpots_v0((ROI2DShape) roiCapillary, directory, t);
-			t++;
-		}
-	}
-	
-	private void xmlLoadIndividualSpots_v0(ROI2D roiCapillary, String directory, int t) 
-	{
-		Spot spot = new Spot(roiCapillary);
-		if (!isPresent(spot))
-			spotsList.add(spot);
-		String csFile = directory + roiCapillary.getName() + ".xml";
-		spot.kymographIndex = t;
-		final Document dockymo = XMLUtil.loadDocument(csFile);
-		if (dockymo != null) 
-		{
-			NodeList nodeROISingle = dockymo.getElementsByTagName("roi");					
-			if (nodeROISingle.getLength() > 0) {	
-				List<ROI> rois = new ArrayList<ROI>();
-                for (int i=0; i< nodeROISingle.getLength(); i++) 
-                {
-                	Node element = nodeROISingle.item(i);
-                    ROI roi_i = ROI.createFromXML(element);
-                    if (roi_i != null)
-                        rois.add(roi_i);
-                }
-				spot.transferROIsToMeasures(rois);
-			}
-		}
 	}
 	
 	private boolean xmlLoadSpots_Only_v1(Document doc) 
@@ -219,18 +167,18 @@ public class SpotsArray
 		{
 			Node nodecapillary = XMLUtil.getElement(node, ID_SPOT_+i);
 			Spot spot = new Spot();
-			spot.loadFromXML_CapillaryOnly(nodecapillary);
-			if (spotsDescription.grouping == 2 && (spot.capStimulus != null && spot.capStimulus.equals(".."))) 
+			spot.loadFromXML_SpotOnly(nodecapillary);
+			if (spotsDescription.grouping == 2 && (spot.spotStimulus != null && spot.spotStimulus.equals(".."))) 
 			{
-				if (spot.getCapillarySide().equals("R")) 
+				if (spot.getSpotSide().equals("R")) 
 				{
-					spot.capStimulus = spotsDescription.stimulusR;
-					spot.capConcentration = spotsDescription.concentrationR;
+					spot.spotStimulus = spotsDescription.stimulusR;
+					spot.spotConcentration = spotsDescription.concentrationR;
 				} 
 				else 
 				{
-					spot.capStimulus = spotsDescription.stimulusL;
-					spot.capConcentration = spotsDescription.concentrationL;
+					spot.spotStimulus = spotsDescription.stimulusL;
+					spot.spotConcentration = spotsDescription.concentrationL;
 				}
 			}
 			if (!isPresent(spot))
@@ -246,10 +194,10 @@ public class SpotsArray
 		String directory = directorypath + File.separator;
 		for (Spot spot: spotsList) 
 		{
-			String csFile = directory + spot.getKymographName() + ".xml";
+			String csFile = directory + spot.getRoiName() + ".xml";
 			final Document capdoc = XMLUtil.loadDocument(csFile);
 			Node node = XMLUtil.getRootElement(capdoc, true);
-			spot.loadFromXML_CapillaryOnly(node);
+			spot.loadFromXML_SpotOnly(node);
 		}
 	}	
 
@@ -272,7 +220,7 @@ public class SpotsArray
 		boolean flag = false;
 		for (Spot spot: spotsList) 
 		{
-			if (spot.getKymographName().contentEquals(capNew.getKymographName())) 
+			if (spot.getRoiName().contentEquals(capNew.getRoiName())) 
 			{
 				flag = true;
 				break;
@@ -327,7 +275,7 @@ public class SpotsArray
 			return;
 		String	name = spot.getRoiName();
 		String letter = name.substring(name.length() - 1);
-		spot.capSide = letter;
+		spot.spotSide = letter;
 		if (letter .equals("R")) 
 		{	
 			String nameL = name.substring(0, name.length() - 1) + "L";
@@ -335,37 +283,37 @@ public class SpotsArray
 			if (cap0 != null) 
 			{
 //				spot.capNFlies = cap0.capNFlies;
-				spot.capCageID = cap0.capCageID;
+				spot.spotCageID = cap0.spotCageID;
 			}
 		}
 	}
 	
 	public Spot getSpotFromRoiName(String name) 
 	{
-		Spot capFound = null;
+		Spot spotFound = null;
 		for (Spot spot: spotsList) 
 		{
 			if (spot.getRoiName().equals(name)) 
 			{
-				capFound = spot;
+				spotFound = spot;
 				break;
 			}
 		}
-		return capFound;
+		return spotFound;
 	}
 	
 	public Spot getSpotFromKymographName(String name) 
 	{
-		Spot capFound = null;
+		Spot spotFound = null;
 		for (Spot spot: spotsList) 
 		{
-			if (spot.getKymographName().equals(name)) 
+			if (spot.getRoiName().equals(name)) 
 			{
-				capFound = spot;
+				spotFound = spot;
 				break;
 			}
 		}
-		return capFound;
+		return spotFound;
 	}
 	
 	public Spot getSpotFromRoiNamePrefix(String name) 
@@ -442,10 +390,10 @@ public class SpotsArray
 		for (int i = 0; i < capArraySize; i++)
 		{
 			Spot spot = spotsList.get(i);
-			spot.capNFlies = nflies;
+			spot.spotNFlies = nflies;
 			if (i <= 1  || i>= capArraySize-2 )
-				spot.capNFlies = 0;
-			spot.capCageID = i/2;
+				spot.spotNFlies = 0;
+			spot.spotCageID = i/2;
 		}
 	}
 	
@@ -455,21 +403,21 @@ public class SpotsArray
 		for (int i = 0; i < capArraySize; i++) 
 		{
 			Spot spot = spotsList.get(i);
-			spot.capNFlies = 1;
+			spot.spotNFlies = 1;
 			if (i <= 1 ) 
 			{
-				spot.capNFlies = 0;
-				spot.capCageID = 0;
+				spot.spotNFlies = 0;
+				spot.spotCageID = 0;
 			}
 			else if (i >= capArraySize-2 ) 
 			{
-				spot.capNFlies = 0;
-				spot.capCageID = 5;
+				spot.spotNFlies = 0;
+				spot.spotCageID = 5;
 			}
 			else 
 			{
-				spot.capNFlies = nflies;
-				spot.capCageID = 1 + (i-2)/4;
+				spot.spotNFlies = nflies;
+				spot.spotCageID = 1 + (i-2)/4;
 			}
 		}
 	}
@@ -480,7 +428,7 @@ public class SpotsArray
 		for (int i = 0; i < capArraySize; i++) 
 		{
 			Spot spot = spotsList.get(i);
-			spot.capNFlies = nflies;
+			spot.spotNFlies = nflies;
 		}
 	}
 	
@@ -635,7 +583,7 @@ public class SpotsArray
 				Spot spot = getSpotFromKymographName(data[2]);
 				if (spot == null)
 					spot = new Spot();
-				spot.csvImportCapillaryDescription(data);
+				spot.csvImportSpotDescription(data);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -684,7 +632,7 @@ public class SpotsArray
 				Spot spot = getSpotFromRoiNamePrefix(data[0]);
 				if (spot == null)
 					spot = new Spot();
-				spot.csvImportCapillaryData(measureType, data);
+				spot.csvImportSpotData(measureType, data);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -749,7 +697,7 @@ public class SpotsArray
 			
 			csvWriter.append(spotsList.get(0).csvExportMeasureSectionHeader(measureType));
 			for (Spot spot:spotsList) 
-				csvWriter.append(spot.csvExportCapillaryData(measureType));
+				csvWriter.append(spot.csvExportSpotData(measureType));
 			
 			csvWriter.append("#,#\n");
 		} catch (IOException e) {

@@ -230,21 +230,21 @@ public class InfosCapillaryTable extends JPanel
 	
 	private void storeCapillaryValues(Capillary capillary, Spot destinationCapillary) 
 	{
-		destinationCapillary.capNFlies = capillary.capNFlies; 
-		destinationCapillary.capVolume = capillary.capVolume;
-		destinationCapillary.capStimulus = capillary.capStimulus;
-		destinationCapillary.capConcentration = capillary.capConcentration;
-		destinationCapillary.capSide = capillary.capSide;
+		destinationCapillary.spotNFlies = capillary.capNFlies; 
+		destinationCapillary.spotVolume = capillary.capVolume;
+		destinationCapillary.spotStimulus = capillary.capStimulus;
+		destinationCapillary.spotConcentration = capillary.capConcentration;
+		destinationCapillary.spotSide = capillary.capSide;
 	}
 	
 	private void switchCapillaryValue(Spot sourceCapillary, Capillary cap, int columnIndex) 
 	{
 		switch (columnIndex) 
     	{
-        case 2: cap.capNFlies = sourceCapillary.capNFlies; break;
-        case 3: cap.capVolume = sourceCapillary.capVolume; break;
-        case 4: cap.capStimulus = sourceCapillary.capStimulus; break;
-        case 5: cap.capConcentration = sourceCapillary.capConcentration; break;
+        case 2: cap.capNFlies = sourceCapillary.spotNFlies; break;
+        case 3: cap.capVolume = sourceCapillary.spotVolume; break;
+        case 4: cap.capStimulus = sourceCapillary.spotStimulus; break;
+        case 5: cap.capConcentration = sourceCapillary.spotConcentration; break;
         default: break;
     	}
 		

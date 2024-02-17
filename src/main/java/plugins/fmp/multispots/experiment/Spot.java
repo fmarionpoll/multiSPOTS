@@ -31,22 +31,22 @@ public class Spot implements Comparable <Spot>
 
 	private ROI2D 						roi 			= null;
 	private ArrayList<KymoROI2D>		roisForKymo 	= new ArrayList<KymoROI2D>();
-	private String						kymographName 	= null;
+
 	public int							kymographIndex 	= -1;
 	private String						kymographPrefix	= null;
 	
 	public String 						version 		= null;
 	public String						filenameTIFF	= null;
 	
-	public ArrayList<int[]> 			cap_Integer		= null;
+	public ArrayList<int[]> 			spot_Integer	= null;
 	
-	public String 						capStimulus		= new String("..");
-	public String 						capConcentration= new String("..");
-	public String						capSide			= ".";
-	public int							capNFlies		= 1;
-	public int							capCageID		= 0;
-	public double 						capVolume 		= 5.;
-	public int 							capPixels 		= 5;
+	public String 						spotStimulus	= new String("..");
+	public String 						spotConcentration= new String("..");
+	public String						spotSide			= ".";
+	public int							spotNFlies		= 1;
+	public int							spotCageID		= 0;
+	public double 						spotVolume 		= 5.;
+	public int 							spotPixels 		= 5;
 	public boolean						descriptionOK	= false;
 	public int							versionInfos	= 0;
 	
@@ -59,7 +59,7 @@ public class Spot implements Comparable <Spot>
 	public SpotArea				ptsTop  		= new SpotArea(ID_TOPLEVEL); 
 	public SpotArea				ptsBottom 		= new SpotArea(ID_BOTTOMLEVEL); 
 	public SpotArea				ptsDerivative 	= new SpotArea(ID_DERIVATIVE); 
-	public CapillaryGulps 				ptsGulps 		= new CapillaryGulps(); 
+	public CapillaryGulps 		ptsGulps 		= new CapillaryGulps(); 
 	
 	public boolean						valid			= true;
 
@@ -79,7 +79,6 @@ public class Spot implements Comparable <Spot>
 	private final String 				ID_INTERVAL 	= "interval_";
 	
 	private final String 				ID_INDEXIMAGE 	= "indexImageMC";
-	private final String 				ID_NAME 		= "nameMC";
 	private final String 				ID_NAMETIFF 	= "filenameTIFF";
 	private final String 				ID_VERSION		= "version"; 
 	private final String 				ID_VERSIONNUM	= "1.0.0"; 
@@ -89,12 +88,10 @@ public class Spot implements Comparable <Spot>
 	public Spot(ROI2D roiCapillary) 
 	{
 		this.roi = roiCapillary;
-		this.kymographName = replace_LR_with_12(roiCapillary.getName());
 	}
 	
 	Spot(String name) 
 	{
-		this.kymographName = replace_LR_with_12(name);
 	}
 	
 	public Spot() 
@@ -105,44 +102,33 @@ public class Spot implements Comparable <Spot>
 	public int compareTo(Spot o) 
 	{
 		if (o != null)
-			return this.kymographName.compareTo(o.kymographName);
+			return (this.roi.getName()).compareTo(o.roi.getName());
 		return 1;
 	}
 	
 	// ------------------------------------------
 	
-	public void copy(Spot cap) 
+	public void copy(Spot spot) 
 	{
-		kymographIndex 	= cap.kymographIndex;
-		kymographName 	= cap.kymographName;
-		version 		= cap.version;
-		roi 			= (ROI2D) cap.roi.getCopy();
-		filenameTIFF	= cap.filenameTIFF;
+		kymographIndex 	= spot.kymographIndex;
+		version 		= spot.version;
+		roi 			= (ROI2D) spot.roi.getCopy();
+		filenameTIFF	= spot.filenameTIFF;
 		
-		capStimulus		= cap.capStimulus;
-		capConcentration= cap.capConcentration;
-		capSide			= cap.capSide;
-		capNFlies		= cap.capNFlies;
-		capCageID		= cap.capCageID;
-		capVolume 		= cap.capVolume;
-		capPixels 		= cap.capPixels;
+		spotStimulus	= spot.spotStimulus;
+		spotConcentration= spot.spotConcentration;
+		spotSide		= spot.spotSide;
+		spotNFlies		= spot.spotNFlies;
+		spotCageID		= spot.spotCageID;
+		spotVolume 		= spot.spotVolume;
+		spotPixels 		= spot.spotPixels;
 		
-		limitsOptions	= cap.limitsOptions;
+		limitsOptions	= spot.limitsOptions;
 		
-		ptsGulps.copy(cap.ptsGulps);
-		ptsTop.copy(cap.ptsTop); 
-		ptsBottom.copy(cap.ptsBottom); 
-		ptsDerivative.copy(cap.ptsDerivative); 
-	}
-	
-	public String getKymographName() 
-	{
-		return kymographName;
-	}
-	
-	public void setKymographName(String name) 
-	{
-		this.kymographName = name;
+		ptsGulps.copy(spot.ptsGulps);
+		ptsTop.copy(spot.ptsTop); 
+		ptsBottom.copy(spot.ptsBottom); 
+		ptsDerivative.copy(spot.ptsDerivative); 
 	}
 	
 	public ROI2D getRoi() 
@@ -165,7 +151,7 @@ public class Spot implements Comparable <Spot>
 		return roi.getName();
 	}
 	
-	public String getLast2ofCapillaryName() 
+	public String getLast2ofSpotName() 
 	{
 		if (roi == null)
 			return "missing";
@@ -177,7 +163,7 @@ public class Spot implements Comparable <Spot>
 		return kymographPrefix;
 	}
 	
- 	public String getCapillarySide() 
+ 	public String getSpotSide() 
 	{
 		return roi.getName().substring(roi.getName().length() -1);
 	}
@@ -195,7 +181,7 @@ public class Spot implements Comparable <Spot>
 	public int getCageIndexFromRoiName() 
 	{
 		String name = roi.getName();
-		if (!name .contains("line"))
+		if (!name .contains("spot"))
 			return -1;
 		return Integer.valueOf(name.substring(4, 5));
 	}
@@ -203,17 +189,17 @@ public class Spot implements Comparable <Spot>
 	public String getSideDescriptor(EnumXLSExportType xlsExportOption) 
 	{
 		String value = null;
-		capSide = getCapillarySide();
+		spotSide = getSpotSide();
 		switch (xlsExportOption) 
 		{
 		case DISTANCE:
 		case ISALIVE:
-			value = capSide + "(L=R)";
+			value = spotSide + "(L=R)";
 			break;
 		case SUMGULPS_LR:
 		case TOPLEVELDELTA_LR:
 		case TOPLEVEL_LR:
-			if (capSide.equals("L"))
+			if (spotSide.equals("L"))
 				value = "sum";
 			else
 				value = "PI";
@@ -221,28 +207,28 @@ public class Spot implements Comparable <Spot>
 		case XYIMAGE:
 		case XYTOPCAGE:
 		case XYTIPCAPS:
-			if (capSide .equals ("L"))
+			if (spotSide .equals ("L"))
 				value = "x";
 			else
 				value = "y";
 			break;
 		default:
-			value = capSide;
+			value = spotSide;
 			break;
 		}
 		return value;
 	}
 	
-	public String getCapillaryField(EnumXLSColumnHeader fieldEnumCode)
+	public String getSpotField(EnumXLSColumnHeader fieldEnumCode)
 	{
 		String stringValue = null;
 		switch(fieldEnumCode) 
 		{
 		case CAP_STIM:
-			stringValue = capStimulus;
+			stringValue = spotStimulus;
 			break;
 		case CAP_CONC:
-			stringValue = capConcentration;
+			stringValue = spotConcentration;
 			break;
 		default:
 			break;
@@ -250,15 +236,15 @@ public class Spot implements Comparable <Spot>
 		return stringValue;
 	}
 	
-	public void setCapillaryField(EnumXLSColumnHeader fieldEnumCode, String stringValue)
+	public void setSpotField(EnumXLSColumnHeader fieldEnumCode, String stringValue)
 	{
 		switch(fieldEnumCode) 
 		{
 		case CAP_STIM:
-			capStimulus = stringValue;
+			spotStimulus = stringValue;
 			break;
 		case CAP_CONC:
-			capConcentration = stringValue;
+			spotConcentration = stringValue;
 			break;
 		default:
 			break;
@@ -289,7 +275,7 @@ public class Spot implements Comparable <Spot>
 		return yes;
 	}
 		
-	public ArrayList<Integer> getCapillaryMeasuresForXLSPass1(EnumXLSExportType option, long seriesBinMs, long outputBinMs) 
+	public ArrayList<Integer> getSpotMeasuresForXLSPass1(EnumXLSExportType option, long seriesBinMs, long outputBinMs) 
 	{
 		ArrayList<Integer> datai = null;
 		switch (option) 
@@ -383,7 +369,7 @@ public class Spot implements Comparable <Spot>
 			lastPixel = (int) limitsOptions.searchArea.getWidth() + firstPixel;
 			
 		} 
-		int threshold = (int) ((limitsOptions.detectGulpsThreshold_uL / capVolume) * capPixels);
+		int threshold = (int) ((limitsOptions.detectGulpsThreshold_uL / spotVolume) * spotPixels);
 		ArrayList<Point2D> gulpPoints = new ArrayList<Point2D>();
 		int indexLastDetected = -1;
 		
@@ -558,7 +544,7 @@ public class Spot implements Comparable <Spot>
 	
 	// -----------------------------------------------------------------------------
 
-	public boolean loadFromXML_CapillaryOnly(Node node) 
+	public boolean loadFromXML_SpotOnly(Node node) 
 	{
 	    final Node nodeMeta = XMLUtil.getElement(node, ID_META);
 	    boolean flag = (nodeMeta != null); 
@@ -566,17 +552,16 @@ public class Spot implements Comparable <Spot>
 	    {
 	    	version 		= XMLUtil.getElementValue(nodeMeta, ID_VERSION, "0.0.0");
 	    	kymographIndex 	= XMLUtil.getElementIntValue(nodeMeta, ID_INDEXIMAGE, kymographIndex);
-	        kymographName 	= XMLUtil.getElementValue(nodeMeta, ID_NAME, kymographName);
 	        filenameTIFF 	= XMLUtil.getElementValue(nodeMeta, ID_NAMETIFF, filenameTIFF);	        
 	        descriptionOK 	= XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
-	        capNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, capNFlies);
-	        capCageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, capCageID);
-	        capVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_CAPVOLUME, Double.NaN);
-			capPixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
-			capStimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
-			capConcentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
-			capSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
+	        spotNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
+	        spotCageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
+	        spotVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_CAPVOLUME, Double.NaN);
+			spotPixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
+			spotStimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
+			spotConcentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
+			spotSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 			
 	        roi = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 	        limitsOptions.loadFromXML(nodeMeta);
@@ -610,7 +595,7 @@ public class Spot implements Comparable <Spot>
 	
 	public boolean loadFromXML_MeasuresOnly(Node node) 
 	{
-		String header = getLast2ofCapillaryName()+"_";
+		String header = getLast2ofSpotName()+"_";
 		boolean result = ptsTop.loadCapillaryLimitFromXML(node, ID_TOPLEVEL, header) > 0;
 		result |= ptsBottom.loadCapillaryLimitFromXML(node, ID_BOTTOMLEVEL, header) > 0;
 		result |= ptsDerivative.loadCapillaryLimitFromXML(node, ID_DERIVATIVE, header) > 0;
@@ -620,7 +605,7 @@ public class Spot implements Comparable <Spot>
 	
 	// -----------------------------------------------------------------------------
 
-	public boolean saveToXML_CapillaryOnly(Node node) 
+	public boolean saveToXML_SpotOnly(Node node) 
 	{
 	    final Node nodeMeta = XMLUtil.setElement(node, ID_META);
 	    if (nodeMeta == null)
@@ -629,20 +614,19 @@ public class Spot implements Comparable <Spot>
     		version = ID_VERSIONNUM;
     	XMLUtil.setElementValue(nodeMeta, ID_VERSION, version);
         XMLUtil.setElementIntValue(nodeMeta, ID_INDEXIMAGE, kymographIndex);
-        XMLUtil.setElementValue(nodeMeta, ID_NAME, kymographName);
         if (filenameTIFF != null ) {
         	String filename = Paths.get(filenameTIFF).getFileName().toString();
         	XMLUtil.setElementValue(nodeMeta, ID_NAMETIFF, filename);
         }
         XMLUtil.setElementBooleanValue(nodeMeta, ID_DESCOK, descriptionOK);
         XMLUtil.setElementIntValue(nodeMeta, ID_VERSIONINFOS, versionInfos);
-        XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, capNFlies);
-        XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, capCageID);
-		XMLUtil.setElementDoubleValue(nodeMeta, ID_CAPVOLUME, capVolume);
-		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, capPixels);
-		XMLUtil.setElementValue(nodeMeta, ID_STIML, capStimulus);
-		XMLUtil.setElementValue(nodeMeta, ID_SIDE, capSide);
-		XMLUtil.setElementValue(nodeMeta, ID_CONCL, capConcentration);
+        XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
+        XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
+		XMLUtil.setElementDoubleValue(nodeMeta, ID_CAPVOLUME, spotVolume);
+		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, spotPixels);
+		XMLUtil.setElementValue(nodeMeta, ID_STIML, spotStimulus);
+		XMLUtil.setElementValue(nodeMeta, ID_SIDE, spotSide);
+		XMLUtil.setElementValue(nodeMeta, ID_CONCL, spotConcentration);
 
 		ROI2DUtilities.saveToXML_ROI(nodeMeta, roi); 
 		
@@ -806,8 +790,8 @@ public class Spot implements Comparable <Spot>
 	
 	public void setVolumeAndPixels(double volume, int pixels) 
 	{
-		capVolume = volume;
-		capPixels = pixels;
+		spotVolume = volume;
+		spotPixels = pixels;
 		descriptionOK = true;
 	}
 	
@@ -839,20 +823,19 @@ public class Spot implements Comparable <Spot>
 	{	
 		StringBuffer sbf = new StringBuffer();
 		if (kymographPrefix == null)
-			kymographPrefix = getLast2ofCapillaryName();
+			kymographPrefix = getLast2ofSpotName();
 		
 		List<String> row = Arrays.asList(
 				kymographPrefix,
 				Integer.toString(kymographIndex), 
-				kymographName, 
 				filenameTIFF, 
-				Integer.toString(capCageID),
-				Integer.toString(capNFlies),
-				Double.toString(capVolume), 
-				Integer.toString(capPixels), 
-				capStimulus, 
-				capConcentration, 
-				capSide);
+				Integer.toString(spotCageID),
+				Integer.toString(spotNFlies),
+				Double.toString(spotVolume), 
+				Integer.toString(spotPixels), 
+				spotStimulus, 
+				spotConcentration, 
+				spotSide);
 		sbf.append(String.join(",", row));
 		sbf.append("\n");
 		return sbf.toString();
@@ -883,7 +866,7 @@ public class Spot implements Comparable <Spot>
 		return sbf.toString();
 	}
 	
-	public String csvExportCapillaryData(EnumSpotMeasures measureType) 
+	public String csvExportSpotData(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		sbf.append(kymographPrefix+ ","+ kymographIndex +",");
@@ -910,23 +893,22 @@ public class Spot implements Comparable <Spot>
 	
 	// --------------------------------------------
 	
-	public void csvImportCapillaryDescription(String[] data) 
+	public void csvImportSpotDescription(String[] data) 
 	{
 		int i = 0;
 		kymographPrefix = data[i]; i++;
 		kymographIndex = Integer.valueOf(data[i]); i++; 
-		kymographName = data[i]; i++; 
 		filenameTIFF = data[i]; i++; 
-		capCageID = Integer.valueOf(data[i]); i++;
-		capNFlies = Integer.valueOf(data[i]); i++;
-		capVolume = Double.valueOf(data[i]); i++; 
-		capPixels = Integer.valueOf(data[i]); i++; 
-		capStimulus = data[i]; i++; 
-		capConcentration = data[i]; i++; 
-		capSide = data[i]; 
+		spotCageID = Integer.valueOf(data[i]); i++;
+		spotNFlies = Integer.valueOf(data[i]); i++;
+		spotVolume = Double.valueOf(data[i]); i++; 
+		spotPixels = Integer.valueOf(data[i]); i++; 
+		spotStimulus = data[i]; i++; 
+		spotConcentration = data[i]; i++; 
+		spotSide = data[i]; 
 	}
 		
-	public void csvImportCapillaryData(EnumSpotMeasures measureType, String[] data) 
+	public void csvImportSpotData(EnumSpotMeasures measureType, String[] data) 
 	{
 		switch(measureType) {
 		case TOPLEVEL:
