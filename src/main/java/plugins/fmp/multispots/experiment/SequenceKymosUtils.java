@@ -20,7 +20,7 @@ public class SequenceKymosUtils
 		}
 		if (exp.capillaries == null) 
 		{
-			exp.capillaries = new Capillaries();
+			exp.capillaries = new CapillariesArray();
 			System.out.println("SequenceKymosUtils:transferCamDataROIstoKymo error: seqkymos.capillaries was null");
 		}
 		

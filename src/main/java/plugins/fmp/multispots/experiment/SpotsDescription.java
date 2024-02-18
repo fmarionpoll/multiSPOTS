@@ -29,7 +29,7 @@ public class SpotsDescription
 	public String 	stimulusL		= new String("..");
 	public String 	concentrationL	= new String("..");
 	
-	private final static String ID_SPOTSTRACK 	= "spotsTrack";
+	private final static String ID_SPOTTRACK 		= "spotTrack";
 	private final static String ID_PARAMETERS 		= "Parameters";	
 	private final static String ID_FILE 			= "file";
 	private final static String ID_ID 				= "ID";
@@ -83,7 +83,7 @@ public class SpotsDescription
 	
 	public boolean xmlSaveSpotsDescription (Document doc) 
 	{
-		Node node = XMLUtil.addElement(XMLUtil.getRootElement(doc), ID_SPOTSTRACK);
+		Node node = XMLUtil.addElement(XMLUtil.getRootElement(doc), ID_SPOTTRACK);
 		if (node == null)
 			return false;
 		XMLUtil.setElementIntValue(node, "version", 2);
@@ -110,7 +110,7 @@ public class SpotsDescription
 	public boolean xmlLoadSpotsDescription (Document doc) 
 	{
 		boolean flag = false;
-		Node node = XMLUtil.getElement(XMLUtil.getRootElement(doc), ID_SPOTSTRACK);
+		Node node = XMLUtil.getElement(XMLUtil.getRootElement(doc), ID_SPOTTRACK);
 		if (node == null)
 			return flag;
 		version = XMLUtil.getElementIntValue(node, "version", 0);

@@ -145,7 +145,7 @@ public class SequenceKymos extends SequenceCamData
 		Collections.sort(listRois, new Comparators.ROI2D_Name_Comparator());
 	}
 
-	public boolean transferKymosRoisToCapillaries_Measures(Capillaries capillaries) 
+	public boolean transferKymosRoisToCapillaries_Measures(CapillariesArray capillaries) 
 	{
 		List<ROI> allRois = seq.getROIs();
 		if (allRois.size() < 1)
@@ -168,7 +168,7 @@ public class SequenceKymos extends SequenceCamData
 		return true;
 	}
 	
-	public void transferCapillariesMeasuresToKymos(Capillaries capillaries) 
+	public void transferCapillariesMeasuresToKymos(CapillariesArray capillaries) 
 	{
 		List<ROI2D> seqRoisList = seq.getROI2Ds(false);
 		ROI2DUtilities.removeROIsMissingChar(seqRoisList, '_');
@@ -194,7 +194,7 @@ public class SequenceKymos extends SequenceCamData
 
 	// ----------------------------
 
-	public List <ImageFileDescriptor> loadListOfPotentialKymographsFromCapillaries(String dir, Capillaries capillaries) 
+	public List <ImageFileDescriptor> loadListOfPotentialKymographsFromCapillaries(String dir, CapillariesArray capillaries) 
 	{
 		renameCapillary_Files(dir) ;
 		

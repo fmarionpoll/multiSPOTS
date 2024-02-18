@@ -54,7 +54,7 @@ public class SpotsArray
 		}
 
 		if (!flag) {
-			flag = xmlLoad_Measures(directory);
+			flag = xmlLoad_SpotsMeasures(directory);
 		}
 		return flag;
 	}
@@ -97,14 +97,14 @@ public class SpotsArray
 		if (node == null)
 			return false;
 		XMLUtil.setElementIntValue(node, "version", 2);
-		Node nodecaps = XMLUtil.setElement(node, ID_LISTOFSPOTS);
-		XMLUtil.setElementIntValue(nodecaps, ID_NSPOTS, spotsList.size());
+		Node nodeSpotsArray = XMLUtil.setElement(node, ID_LISTOFSPOTS);
+		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NSPOTS, spotsList.size());
 		int i= 0;
 		Collections.sort(spotsList);
 		for (Spot spot: spotsList) 
 		{
-			Node nodecapillary = XMLUtil.setElement(node, ID_SPOT_+i);
-			spot.saveToXML_SpotOnly(nodecapillary);
+			Node nodeSpot = XMLUtil.setElement(node, ID_SPOT_+i);
+			spot.saveToXML_SpotOnly(nodeSpot);
 			i++;
 		}
 		return true;
@@ -139,7 +139,7 @@ public class SpotsArray
 		return false;
 	}
 	
-	private boolean xmlLoad_Measures(String directory) 
+	private boolean xmlLoad_SpotsMeasures(String directory) 
 	{
 		boolean flag = false;
 		int ncapillaries = spotsList.size();
@@ -332,18 +332,18 @@ public class SpotsArray
 
 	public void updateSpotsFromSequence(Sequence seq) 
 	{
-		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("line", seq);
-		Collections.sort(listROISCap, new Comparators.ROI2D_Name_Comparator());
+		List<ROI2D> listROISSpot = ROI2DUtilities.getROIs2DContainingString ("spot", seq);
+		Collections.sort(listROISSpot, new Comparators.ROI2D_Name_Comparator());
 		for (Spot spot: spotsList) 
 		{
 			spot.valid = false;
-			String capName = Spot.replace_LR_with_12(spot.getRoiName());
-			Iterator <ROI2D> iterator = listROISCap.iterator();
+			String spotName = Spot.replace_LR_with_12(spot.getRoiName());
+			Iterator <ROI2D> iterator = listROISSpot.iterator();
 			while(iterator.hasNext()) 
 			{ 
 				ROI2D roi = iterator.next();
 				String roiName = Spot.replace_LR_with_12(roi.getName());
-				if (roiName.equals (capName)) 
+				if (roiName.equals (spotName)) 
 				{
 					spot.setRoi((ROI2DShape) roi);
 					spot.valid = true;
@@ -362,9 +362,9 @@ public class SpotsArray
 			if (!spot.valid )
 				iterator.remove();
 		}
-		if (listROISCap.size() > 0) 
+		if (listROISSpot.size() > 0) 
 		{
-			for (ROI2D roi: listROISCap) 
+			for (ROI2D roi: listROISSpot) 
 			{
 				Spot spot = new Spot((ROI2DShape) roi);
 				if (!isPresent(spot))
@@ -377,7 +377,7 @@ public class SpotsArray
 
 	public void transferSpotRoiToSequence(Sequence seq) 
 	{
-		seq.removeAllROI();
+		ROI2DUtilities.removeRoisContainingString(-1, "spot", seq);
 		for (Spot spot: spotsList) 
 		{
 			seq.addROI(spot.getRoi());

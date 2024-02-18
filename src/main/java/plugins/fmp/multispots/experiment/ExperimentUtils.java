@@ -22,7 +22,7 @@ public class ExperimentUtils
 	public static void transferCamDataROIStoCapillaries (Experiment exp)
 	{
 		if (exp.capillaries == null) 
-			exp.capillaries = new Capillaries();
+			exp.capillaries = new CapillariesArray();
 		
 		// rois not in cap? add
 		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("line", exp.seqCamData.seq);
@@ -63,7 +63,7 @@ public class ExperimentUtils
 	public static void transferCamDataROIStoSpots (Experiment exp)
 	{
 		if (exp.capillaries == null) 
-			exp.capillaries = new Capillaries();
+			exp.capillaries = new CapillariesArray();
 		
 		// rois not in cap? add
 		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("spot", exp.seqCamData.seq);
@@ -148,7 +148,6 @@ public class ExperimentUtils
 	public static void transformPolygon2DROISintoSpots(Experiment exp, int radius) 
 	{
 		ROI2DUtilities.removeRoisContainingString(-1, "spot", exp.seqCamData.seq);
-		ROI2DUtilities.removeRoisContainingString(-1, "circle", exp.seqCamData.seq);
 		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("line", exp.seqCamData.seq);
 		if (listROISCap.size() < 1)
 			return;

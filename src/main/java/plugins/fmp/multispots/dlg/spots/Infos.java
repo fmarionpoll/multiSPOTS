@@ -14,7 +14,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Capillaries;
+import plugins.fmp.multispots.experiment.CapillariesArray;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 
@@ -83,13 +83,13 @@ public class Infos extends JPanel
 
 	// set/ get
 	
-	void setAllDescriptors(Capillaries capillaries) 
+	void setAllDescriptors(CapillariesArray capillaries) 
 	{
 		capillaryVolumeSpinner.setValue( capillaries.capillariesDescription.volume);
 		capillaryPixelsSpinner.setValue( capillaries.capillariesDescription.pixels);
 	}
 		
-	void getDescriptors(Capillaries capList) {
+	void getDescriptors(CapillariesArray capList) {
 		capList.capillariesDescription.volume = (double) capillaryVolumeSpinner.getValue();
 		capList.capillariesDescription.pixels = (int) capillaryPixelsSpinner.getValue();
 	}

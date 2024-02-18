@@ -17,7 +17,7 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Capillaries;
+import plugins.fmp.multispots.experiment.CapillariesArray;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.tools.chart.ChartLevels;
@@ -192,7 +192,7 @@ public class Graphs extends JPanel implements SequenceListener
 	private boolean isThereAnyDataToDisplay(Experiment exp, EnumXLSExportType option) 
 	{
 		boolean flag = false;
-		Capillaries capillaries = exp.capillaries;
+		CapillariesArray capillaries = exp.capillaries;
 		for (Capillary cap: capillaries.capillariesList) 
 		{
 			flag = cap.isThereAnyMeasuresDone(option);

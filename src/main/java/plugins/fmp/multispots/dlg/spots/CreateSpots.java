@@ -47,7 +47,7 @@ public class CreateSpots extends JPanel
 	private JComboBox<String> orientationJCombo = new JComboBox<String> (new String[] {"0°", "90°", "180°", "270°" });
 	private JSpinner 	nPointsPolylineJSpinner = new JSpinner(new SpinnerNumberModel(2, 2, 500, 1));
 	private JSpinner 	nbFliesPerCageJSpinner 	= new JSpinner(new SpinnerNumberModel(1, 0, 500, 1));
-	private JSpinner 	pixelRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(10, 1, 1000, 1));
+	private JSpinner 	pixelRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(30, 1, 1000, 1));
 	private JSpinner 	nCagesPerRowSpinner 	= new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
 
 	private Polygon2D 	capillariesPolygon 		= null;
@@ -156,7 +156,7 @@ public class CreateSpots extends JPanel
 					ExperimentUtils.transferSpotsToCamData(exp); 
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
 					exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
-					firePropertyChange("CAPILLARIES_NEW", false, true);
+//					firePropertyChange("CAPILLARIES_NEW", false, true);
 				}
 			}});
 		

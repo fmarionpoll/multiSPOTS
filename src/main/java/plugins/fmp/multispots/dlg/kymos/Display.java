@@ -29,7 +29,7 @@ import icy.roi.ROI;
 import icy.sequence.Sequence;
 
 import plugins.fmp.multispots.multiSPOTS;
-import plugins.fmp.multispots.experiment.Capillaries;
+import plugins.fmp.multispots.experiment.CapillariesArray;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceKymos;
@@ -335,7 +335,7 @@ public class Display extends JPanel implements ViewerListener
 	
 	private void selectCapillary(Experiment exp, int isel)
 	{
-		Capillaries capillaries = exp.capillaries;
+		CapillariesArray capillaries = exp.capillaries;
 		for (Capillary cap : capillaries.capillariesList) {
 			cap.getRoi().setSelected(false);
 		Capillary capSel = capillaries.capillariesList.get(isel);

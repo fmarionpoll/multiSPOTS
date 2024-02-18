@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import plugins.fmp.multispots.experiment.Capillaries;
+import plugins.fmp.multispots.experiment.CapillariesArray;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.tools.Comparators;
 
@@ -208,7 +208,7 @@ public class XLSResultsArray
 	// ---------------------------------------------------
 	
 	public void getResults1( 
-			Capillaries capillaries,  
+			CapillariesArray capillaries,  
 			EnumXLSExportType exportType, 
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
@@ -222,7 +222,7 @@ public class XLSResultsArray
 	}
 	
 	public void getResults_T0( 
-			Capillaries caps, 
+			CapillariesArray caps, 
 			EnumXLSExportType exportType, 
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
@@ -235,7 +235,7 @@ public class XLSResultsArray
 		buildDataForPass2(xlsExportOptions);
 	}
 	
-	private void buildDataForPass1(Capillaries capillaries,
+	private void buildDataForPass1(CapillariesArray capillaries,
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
 			XLSExportOptions xlsExportOptions, 

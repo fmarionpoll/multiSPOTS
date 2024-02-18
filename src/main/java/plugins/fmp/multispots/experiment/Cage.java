@@ -195,7 +195,7 @@ public class Cage
 		return pt;
 	}
 	
-	public Point2D getCenterTipCapillaries(Capillaries capillaries) 
+	public Point2D getCenterTipCapillaries(CapillariesArray capillaries) 
 	{
 		List<Point2D> listpts = new ArrayList<Point2D>();
 		for (Capillary cap: capillaries.capillariesList) 

@@ -41,7 +41,7 @@ public class Experiment
 	public SequenceCamData 	seqCamData 				= null;
 	public SequenceKymos 	seqKymos				= null;
 	public Sequence 		seqReference			= null;
-	public Capillaries 		capillaries 			= new Capillaries();
+	public CapillariesArray 		capillaries 			= new CapillariesArray();
 	public SpotsArray		spotsArray				= new SpotsArray();
 	public Cages			cages 					= new Cages();
 	
@@ -323,6 +323,15 @@ public class Experiment
 		return (seqCamData != null && seqCamData.seq != null);
 	}
 	
+	public boolean loadCamDataSpots()
+	{	
+		loadMCSpots_Only();
+		if (seqCamData != null && seqCamData.seq != null) 
+			spotsArray.transferSpotRoiToSequence(seqCamData.seq);
+		
+		return (seqCamData != null && seqCamData.seq != null);
+	}
+	
 	public boolean loadKymosImages() 
 	{
 		if (seqKymos != null)
@@ -539,14 +548,54 @@ public class Experiment
 		return flag;
 	}
 	
+	public boolean loadMCSpots_Only() 
+	{
+		String mcSpotsFileName = findFile_3Locations(spotsArray.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
+		if (mcSpotsFileName == null && seqCamData != null) 
+			return false;
+		
+		boolean flag = spotsArray.loadMCSpots_Descriptors(mcSpotsFileName);
+		if (spotsArray.spotsList.size() < 1)
+			flag = xmlLoadOldCapillaries();
+		
+		// load MCcapillaries description of experiment
+		if (field_boxID .contentEquals("..")
+				&& field_experiment.contentEquals("..") 
+				&& field_comment1.contentEquals("..")
+				&& field_comment2.contentEquals("..")
+				&& field_sex.contentEquals("..")
+				&& field_strain.contentEquals("..")) 
+		{
+			field_boxID = spotsArray.spotsDescription.old_boxID;
+			field_experiment = spotsArray.spotsDescription.old_experiment;
+			field_comment1 = spotsArray.spotsDescription.old_comment1;
+			field_comment2 = spotsArray.spotsDescription.old_comment2;
+			field_sex = spotsArray.spotsDescription.old_sex;
+			field_strain = spotsArray.spotsDescription.old_strain;
+		}
+		return flag;
+	}
+	
 	public boolean loadMCCapillaries() 
 	{
-		String xmlCapillaryFileName = findFile_3Locations(capillaries.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
-		boolean flag1 = capillaries.loadMCCapillaries_Descriptors(xmlCapillaryFileName);
+		String xmlCapillariesFileName = findFile_3Locations(capillaries.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
+		boolean flag1 = capillaries.loadMCCapillaries_Descriptors(xmlCapillariesFileName);
 		String kymosImagesDirectory = getKymosBinFullDirectory();
 		boolean flag2 = capillaries.loadCapillaries_Measures(kymosImagesDirectory);
 		if (flag1 & flag2) 
 			seqKymos.loadListOfPotentialKymographsFromCapillaries(kymosImagesDirectory, capillaries);
+		return flag1 & flag2;
+	}
+	
+	public boolean loadMCSpots() 
+	{
+		String xmlSpotsFileName = findFile_3Locations(spotsArray.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
+		boolean flag1 = spotsArray.loadMCSpots_Descriptors(xmlSpotsFileName);
+		boolean flag2 = true;
+//		String kymosImagesDirectory = getKymosBinFullDirectory();
+//		boolean flag2 = spotsArray.loadSpots_Measures(kymosImagesDirectory);
+//		if (flag1 & flag2) 
+//			seqKymos.loadListOfPotentialKymographsFromCapillaries(kymosImagesDirectory, capillaries);
 		return flag1 & flag2;
 	}
 	
@@ -619,9 +668,9 @@ public class Experiment
 	
 	public boolean saveMCSpots_Only() 
 	{
-		String xmlCapillaryFileName = strExperimentDirectory + File.separator + spotsArray.getXMLNameToAppend();
-		transferExpDescriptorsToCapillariesDescriptors();
-		return spotsArray.xmlSaveSpots_Descriptors(xmlCapillaryFileName);
+		String xmlSpotFileName = strExperimentDirectory + File.separator + spotsArray.getXMLNameToAppend();
+		transferExpDescriptorsToSpotsDescriptors();
+		return spotsArray.xmlSaveSpots_Descriptors(xmlSpotFileName);
 	}
 
 		
@@ -1141,6 +1190,16 @@ public class Experiment
 		capillaries.capillariesDescription.old_comment2 = field_comment2;	
 		capillaries.capillariesDescription.old_strain = field_strain;
 		capillaries.capillariesDescription.old_sex = field_sex;
+	}
+	
+	private void transferExpDescriptorsToSpotsDescriptors() 
+	{
+		spotsArray.spotsDescription.old_boxID = field_boxID;
+		spotsArray.spotsDescription.old_experiment = field_experiment;
+		spotsArray.spotsDescription.old_comment1 = field_comment1;
+		spotsArray.spotsDescription.old_comment2 = field_comment2;	
+		spotsArray.spotsDescription.old_strain = field_strain;
+		spotsArray.spotsDescription.old_sex = field_sex;
 	}
 
 	private String getReferenceImageFullName() 

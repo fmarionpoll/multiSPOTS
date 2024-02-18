@@ -96,7 +96,7 @@ public class LoadSaveSpots extends JPanel
 
 	public boolean loadSpotsArray_File(Experiment exp) 
 	{	
-		boolean flag = exp.loadMCCapillaries_Only();
+		boolean flag = exp.loadMCSpots_Only();
 		exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
 		return flag;
 	}

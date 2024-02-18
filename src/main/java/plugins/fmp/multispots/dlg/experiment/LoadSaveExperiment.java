@@ -202,7 +202,8 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		if (exp.seqCamData != null) 
 		{
 			exp.loadCamDataCapillaries();
-
+			exp.loadCamDataSpots();
+			
 			parent0.paneKymos.tabFile.loadDefaultKymos(exp);
 			
 			if (exp.seqKymos != null) {	

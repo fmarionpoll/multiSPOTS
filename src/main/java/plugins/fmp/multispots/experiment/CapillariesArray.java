@@ -29,7 +29,7 @@ import plugins.fmp.multispots.tools.toExcel.EnumXLSExportType;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
 
-public class Capillaries 
+public class CapillariesArray 
 {	
 	public CapillariesDescription 	capillariesDescription	= new CapillariesDescription();
 	public CapillariesDescription 	desc_old			= new CapillariesDescription();
@@ -254,7 +254,7 @@ public class Capillaries
 
 	// ---------------------------------
 	
-	public void copy (Capillaries cap) 
+	public void copy (CapillariesArray cap) 
 	{
 		capillariesDescription.copy(cap.capillariesDescription);
 		capillariesList.clear();
@@ -280,7 +280,7 @@ public class Capillaries
 		return flag;
 	}
 
-	public void mergeLists(Capillaries caplist)  
+	public void mergeLists(CapillariesArray caplist)  
 	{
 		for (Capillary capm : caplist.capillariesList ) 
 		{
