@@ -14,7 +14,7 @@ import javax.swing.JTabbedPane;
 
 import icy.gui.component.PopupPanel;
 import icy.system.thread.ThreadUtil;
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.Dialog;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.tools.toExcel.XLSExportCapillariesResults;
@@ -35,10 +35,10 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 	private Levels			tabLevels		= new Levels();
 	private Gulps			tabGulps		= new Gulps();
 	private Move 			tabMove  		= new Move();
-	private multiSPOTS 		parent0 = null;
+	private MultiSPOTS 		parent0 = null;
 
 	
-	public void init (JPanel mainPanel, String string, multiSPOTS parent0) 
+	public void init (JPanel mainPanel, String string, MultiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 		

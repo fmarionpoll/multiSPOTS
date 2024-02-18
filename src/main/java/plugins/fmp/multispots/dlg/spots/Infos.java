@@ -13,7 +13,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.CapillariesArray;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
@@ -31,12 +31,12 @@ public class Infos extends JPanel
 	private JSpinner 		capillaryPixelsSpinner	= new JSpinner(new SpinnerNumberModel(5, 0, 1000, 1));
 	private JButton			getCapillaryLengthButton= new JButton ("pixels 1rst capillary");
 	private JButton			editCapillariesButton	= new JButton("Edit capillaries infos...");
-	private multiSPOTS 		parent0 				= null;
+	private MultiSPOTS 		parent0 				= null;
 	private InfosCapillaryTable infosCapillaryTable = null;
 	private List <Capillary> capillariesArrayCopy 	= null;
 	
 	
-	void init(GridLayout capLayout, multiSPOTS parent0) 
+	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

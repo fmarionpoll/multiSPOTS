@@ -15,7 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.ExperimentCombo;
 import plugins.fmp.multispots.dlg.JComponents.SortedComboBoxModel;
 import plugins.fmp.multispots.experiment.Experiment;
@@ -45,12 +45,12 @@ public class Filter  extends JPanel
 	private JButton				applyButton 	= new JButton("Apply");
 	private JButton				clearButton		= new JButton("Clear");
 	
-	private multiSPOTS 			parent0 		= null;
+	private MultiSPOTS 			parent0 		= null;
 			boolean 			disableChangeFile 	= false;
 			ExperimentCombo 	filterExpList 	= new ExperimentCombo();
 	
 	
-	void init(GridLayout capLayout, multiSPOTS parent0) 
+	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 		GridBagLayout layoutThis = new GridBagLayout();

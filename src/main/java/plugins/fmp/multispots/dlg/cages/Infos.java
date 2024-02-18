@@ -16,7 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.Cage;
 import plugins.fmp.multispots.experiment.Experiment;
 
@@ -29,7 +29,7 @@ public class Infos extends JPanel
 	 */
 	private static final long serialVersionUID = -3325915033686366985L;
 	private JButton		editCagesButton		= new JButton("Edit cages infos...");
-	private multiSPOTS 	parent0 			= null;
+	private MultiSPOTS 	parent0 			= null;
 	private Table 		dialog 				= null;
 	private List <Cage> cagesArrayCopy 		= new ArrayList<Cage>();
 	
@@ -45,7 +45,7 @@ public class Infos extends JPanel
 	
   
 	
-	void init(GridLayout capLayout, multiSPOTS parent0) 
+	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

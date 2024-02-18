@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 
 import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.util.FontUtil;
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
@@ -26,9 +26,9 @@ public class LoadSaveCages extends JPanel
 	private static final long serialVersionUID = -5257698990389571518L;
 	private JButton		openCagesButton			= new JButton("Load...");
 	private JButton		saveCagesButton			= new JButton("Save...");
-	private multiSPOTS 	parent0					= null;
+	private MultiSPOTS 	parent0					= null;
 	
-	void init(GridLayout capLayout, multiSPOTS parent0) 
+	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

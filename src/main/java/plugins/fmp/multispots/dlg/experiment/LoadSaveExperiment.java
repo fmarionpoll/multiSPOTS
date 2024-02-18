@@ -25,7 +25,7 @@ import icy.sequence.SequenceListener;
 import icy.sequence.SequenceEvent.SequenceEventSourceType;
 import icy.gui.frame.progress.ProgressFrame;
 
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.dlg.JComponents.SequenceNameListRenderer;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.ExperimentDirectories;
@@ -52,11 +52,11 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	private JButton  		previousButton	= new JButton("<");
 	private JButton			nextButton		= new JButton(">");
 
-	private multiSPOTS 		parent0 		= null;
+	private MultiSPOTS 		parent0 		= null;
 	
 	
 
-	public JPanel initPanel( multiSPOTS parent0) 
+	public JPanel initPanel( MultiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 

@@ -23,7 +23,7 @@ import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI2D;
 import icy.type.geom.Polygon2D;
 import icy.type.geom.Polyline2D;
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.experiment.ExperimentUtils;
@@ -64,9 +64,9 @@ public class CreateSpots extends JPanel
 	private JLabel 		rowLabel 				= new JLabel (rowString[0]);
 
 	
-	private multiSPOTS 	parent0 				= null;
+	private MultiSPOTS 	parent0 				= null;
 	
-	void init(GridLayout capLayout, multiSPOTS parent0) 
+	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
 		setLayout(capLayout);	
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);

@@ -24,7 +24,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import icy.util.StringUtil;
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.Cage;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
@@ -42,7 +42,7 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 	 */
 	private static final long serialVersionUID = 6066671006689527651L;
 
-	private multiSPOTS 	parent0					= null;
+	private MultiSPOTS 	parent0					= null;
 	private String 		detectString 			= "Detect...";
 	private JButton 	startComputationButton 	= new JButton(detectString);
 	private JSpinner 	nFliesPresentSpinner	= new JSpinner(new SpinnerNumberModel(1, 1, 255, 1));
@@ -86,7 +86,7 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 
 	// -----------------------------------------------------
 	
-	void init(GridLayout capLayout, multiSPOTS parent0) 
+	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

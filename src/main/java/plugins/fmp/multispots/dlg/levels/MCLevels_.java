@@ -12,7 +12,7 @@ import javax.swing.JTabbedPane;
 
 import icy.gui.component.PopupPanel;
 
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 
 
@@ -33,10 +33,10 @@ public class MCLevels_ extends JPanel implements PropertyChangeListener
 			EditLevels tabEdit				= new EditLevels();
 			Adjust tabAdjust				= new Adjust();
 	public 	Graphs 	tabGraphs 				= new Graphs();
-	multiSPOTS	parent0 					= null;
+	MultiSPOTS	parent0 					= null;
 
 	
-	public void init (JPanel mainPanel, String string, multiSPOTS parent0) 
+	public void init (JPanel mainPanel, String string, MultiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 		spotsPopupPanel = new PopupPanel(string);

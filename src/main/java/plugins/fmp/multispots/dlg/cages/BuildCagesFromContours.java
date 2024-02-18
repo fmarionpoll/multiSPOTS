@@ -25,7 +25,7 @@ import icy.image.IcyBufferedImageUtil;
 import icy.roi.ROI2D;
 import icy.type.DataType;
 import icy.type.geom.Polygon2D;
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
@@ -54,11 +54,11 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 				ImageTransformEnums.GBMINUS_2R, ImageTransformEnums.RBMINUS_2G, ImageTransformEnums.RGMINUS_2B, 
 				ImageTransformEnums.H_HSB, ImageTransformEnums.S_HSB, ImageTransformEnums.B_HSB	});
 	private OverlayThreshold overlayThreshold 	= null;
-	private multiSPOTS 			parent0			= null;
+	private MultiSPOTS 			parent0			= null;
 	
 	
 	
-	void init(GridLayout capLayout, multiSPOTS parent0) 
+	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;

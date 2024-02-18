@@ -33,7 +33,7 @@ import icy.gui.frame.IcyFrame;
 import icy.gui.util.GuiUtil;
 import icy.preferences.XMLPreferences;
 
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.ExperimentDirectories;
 
@@ -54,12 +54,12 @@ public class SelectFiles1 extends JPanel
 	private JRadioButton rbFile					= new JRadioButton("file", true);
 	private JRadioButton rbDirectory			= new JRadioButton("directory");
 	private JList<String> directoriesJList		= new JList<String>(new DefaultListModel<String>());
-	private multiSPOTS 	parent0 				= null;
+	private MultiSPOTS 	parent0 				= null;
 	private LoadSaveExperiment 	parent1 				= null;
 
 	
 	
-	public void initialize (multiSPOTS parent0) 
+	public void initialize (MultiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
 		this.parent1 = parent0.paneExperiment.panelLoadSave;

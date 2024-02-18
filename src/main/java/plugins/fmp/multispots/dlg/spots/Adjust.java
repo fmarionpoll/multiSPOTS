@@ -20,7 +20,7 @@ import icy.gui.util.GuiUtil;
 import icy.image.IcyBufferedImage;
 import icy.roi.ROI2D;
 import icy.type.collection.array.Array1DUtil;
-import plugins.fmp.multispots.multiSPOTS;
+import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.tools.Line2DPlus;
@@ -37,13 +37,13 @@ public class Adjust extends JPanel
 	
 	JSpinner			jitterJSpinner	= new JSpinner(new SpinnerNumberModel(10, 0, 500, 1)); 
 	private JButton 	adjustButton 		= new JButton("Align");
-	private multiSPOTS 	parent0				= null;
+	private MultiSPOTS 	parent0				= null;
 	private Line2D		refLineUpper 		= null;
 	private Line2D  	refLineLower 		= null;
 	private ROI2DLine	roiRefLineUpper 	= new ROI2DLine ();
 	private ROI2DLine	roiRefLineLower 	= new ROI2DLine ();
 
-	void init(GridLayout capLayout, multiSPOTS parent0) 
+	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
 		setLayout(capLayout);
 		add( GuiUtil.besidesPanel(

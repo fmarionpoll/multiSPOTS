@@ -23,7 +23,7 @@ import plugins.fmp.multispots.workinprogress_gpu.MCSpotsExp_;
 
 
 
-public class multiSPOTS extends PluginActionable  
+public class MultiSPOTS extends PluginActionable  
 {
 	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS Feb 18, 2024", true, true, true, true);
 	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
@@ -68,7 +68,7 @@ public class multiSPOTS extends PluginActionable
 	{
 		Icy.main(args);
 		GeneralPreferences.setSequencePersistence(false);
-		PluginLauncher.start(PluginLoader.getPlugin(multiSPOTS.class.getName()));
+		PluginLauncher.start(PluginLoader.getPlugin(MultiSPOTS.class.getName()));
 	}
 
 }
