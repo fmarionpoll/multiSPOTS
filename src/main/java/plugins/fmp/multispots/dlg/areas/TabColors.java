@@ -27,7 +27,7 @@ import plugins.fmp.multispots.tools.EnumColorDistanceType;
 
 
 
-public class Dlg3TabColors extends JPanel implements ChangeListener {
+public class TabColors extends JPanel implements ChangeListener {
 
 	/**
 	 * 
@@ -53,9 +53,9 @@ public class Dlg3TabColors extends JPanel implements ChangeListener {
 
 
 
-	public void init(JTabbedPane tab, GridLayout capLayout, MultiSPOTS areatrack) {
+	public void init(JTabbedPane tab, GridLayout capLayout, MultiSPOTS parent0) {
 		
-		this.multiSpots = areatrack;
+		this.multiSpots = parent0;
 		JComponent panel = new JPanel(false);
 		panel.setLayout(capLayout);
 		
@@ -99,25 +99,25 @@ public class Dlg3TabColors extends JPanel implements ChangeListener {
 	private void declareActionListeners() {
 		rbRGB.addActionListener(new ActionListener () { 
 			@Override public void actionPerformed( final ActionEvent e ) { 
-				multiSpots.detectionParameters.colortransformop = EnumImageOp.NONE;
+//				multiSpots.detectionParameters.colortransformop = EnumImageOp.NONE;
 				updateThresholdOverlayParameters();
 			} } );
 		
 		rbHSV.addActionListener(new ActionListener () { 
 			@Override public void actionPerformed( final ActionEvent e ) { 
-				multiSpots.detectionParameters.colortransformop = EnumImageOp.RGB_TO_HSV;
+//				multiSpots.detectionParameters.colortransformop = EnumImageOp.RGB_TO_HSV;
 				updateThresholdOverlayParameters();
 			} } );
 		
 		rbH1H2H3.addActionListener(new ActionListener () { 
 			@Override public void actionPerformed( final ActionEvent e ) { 
-				multiSpots.detectionParameters.colortransformop = EnumImageOp.RGB_TO_H1H2H3;
+//				multiSpots.detectionParameters.colortransformop = EnumImageOp.RGB_TO_H1H2H3;
 				updateThresholdOverlayParameters();
 			} } );
 		
 		rbL1.addActionListener(new ActionListener () { 
 			@Override public void actionPerformed( final ActionEvent e ) { 
-				multiSpots.detectionParameters.colordistanceType = EnumColorDistanceType.L1;
+//				multiSpots.detectionParameters.colordistanceType = EnumColorDistanceType.L1;
 				updateThresholdOverlayParameters();
 			} } );
 		
@@ -159,8 +159,8 @@ public class Dlg3TabColors extends JPanel implements ChangeListener {
     void updateThresholdOverlayParameters() {
     	
 //		areatrack.detectionParameters.areaDetectionMode = EnumAreaDetection.COLORARRAY;
-		transferDialogToParameters(multiSpots.detectionParameters);
-		multiSpots.setOverlay(multiSpots.detectionParameters.displayOverlay);
+//		transferDialogToParameters(multiSpots.detectionParameters);
+//		multiSpots.setOverlay(multiSpots.detectionParameters.displayOverlay);
 	}
 	
 	private void pickColor() {
@@ -178,62 +178,62 @@ public class Dlg3TabColors extends JPanel implements ChangeListener {
 			pickColorButton.setBackground(Color.DARK_GRAY);
 			bActiveTrapOverlay = true;
 		}	
-		multiSpots.vSequence.setMouseTrapOverlay(bActiveTrapOverlay, pickColorButton, colorPickCombo);
+//		multiSpots.vSequence.setMouseTrapOverlay(bActiveTrapOverlay, pickColorButton, colorPickCombo);
 	}
 	
-	public void transferParametersToDialog(DetectionParameters detectionParameters) {
-		
-		isUpdatingDataFromComboAllowed = false;
-		colorPickCombo.removeAllItems();
-		int nitems = detectionParameters.colorarray.size();
-		for (int i = 0; i < nitems; i++) {
-			Color colorItem = detectionParameters.colorarray.get(i);
-			colorPickCombo.addItem(colorItem);
-		}
-		isUpdatingDataFromComboAllowed = true;
-		
-		if (detectionParameters.colordistanceType == EnumColorDistanceType.L1)
-			rbL1.setSelected(true);
-		else
-			rbL2.setSelected(true);
-		
-		switch (detectionParameters.colortransformop) {
-			case RGB_TO_HSV:
-				rbHSV.setSelected(true);
-				break;
-			case RGB_TO_H1H2H3:
-				rbH1H2H3.setSelected(true);
-				break;
-			case NONE:
-			default:
-				rbRGB.setSelected(true);
-				break;
-		}
-		
-		distanceSpinner.setValue(detectionParameters.colorthreshold);
-	}
-	
-	public void transferDialogToParameters(DetectionParameters detectionParameters) {
-		
-		detectionParameters.colorthreshold = (int) distanceSpinner.getValue();
-		
-		if (rbHSV.isSelected()) 
-			detectionParameters.colortransformop = EnumImageOp.RGB_TO_HSV;
-		else if (rbH1H2H3.isSelected())
-			detectionParameters.colortransformop = EnumImageOp.RGB_TO_H1H2H3;
-		else 
-			detectionParameters.colortransformop = EnumImageOp.COLORARRAY1;
-		
-		detectionParameters.colorarray.clear();
-		for (int i = 0; i < colorPickCombo.getItemCount(); i++) {
-			Color colorItem = colorPickCombo.getItemAt(i);
-			detectionParameters.colorarray.add(colorItem);
-		}
-		
-		if (rbL1.isSelected())
-			detectionParameters.colordistanceType = EnumColorDistanceType.L1;
-		else
-			detectionParameters.colordistanceType = EnumColorDistanceType.L2;
-	}
+//	public void transferParametersToDialog(DetectionParameters detectionParameters) {
+//		
+//		isUpdatingDataFromComboAllowed = false;
+//		colorPickCombo.removeAllItems();
+//		int nitems = detectionParameters.colorarray.size();
+//		for (int i = 0; i < nitems; i++) {
+//			Color colorItem = detectionParameters.colorarray.get(i);
+//			colorPickCombo.addItem(colorItem);
+//		}
+//		isUpdatingDataFromComboAllowed = true;
+//		
+//		if (detectionParameters.colordistanceType == EnumColorDistanceType.L1)
+//			rbL1.setSelected(true);
+//		else
+//			rbL2.setSelected(true);
+//		
+//		switch (detectionParameters.colortransformop) {
+//			case RGB_TO_HSV:
+//				rbHSV.setSelected(true);
+//				break;
+//			case RGB_TO_H1H2H3:
+//				rbH1H2H3.setSelected(true);
+//				break;
+//			case NONE:
+//			default:
+//				rbRGB.setSelected(true);
+//				break;
+//		}
+//		
+//		distanceSpinner.setValue(detectionParameters.colorthreshold);
+//	}
+//	
+//	public void transferDialogToParameters(DetectionParameters detectionParameters) {
+//		
+//		detectionParameters.colorthreshold = (int) distanceSpinner.getValue();
+//		
+//		if (rbHSV.isSelected()) 
+//			detectionParameters.colortransformop = EnumImageOp.RGB_TO_HSV;
+//		else if (rbH1H2H3.isSelected())
+//			detectionParameters.colortransformop = EnumImageOp.RGB_TO_H1H2H3;
+//		else 
+//			detectionParameters.colortransformop = EnumImageOp.COLORARRAY1;
+//		
+//		detectionParameters.colorarray.clear();
+//		for (int i = 0; i < colorPickCombo.getItemCount(); i++) {
+//			Color colorItem = colorPickCombo.getItemAt(i);
+//			detectionParameters.colorarray.add(colorItem);
+//		}
+//		
+//		if (rbL1.isSelected())
+//			detectionParameters.colordistanceType = EnumColorDistanceType.L1;
+//		else
+//			detectionParameters.colordistanceType = EnumColorDistanceType.L2;
+//	}
 
 }
