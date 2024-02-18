@@ -23,55 +23,55 @@ public class MCLevels_ extends JPanel implements PropertyChangeListener
 	 * 
 	 */
 	private static final long serialVersionUID = -7339633966002954720L;
-	public	PopupPanel capPopupPanel	= null;
-	private JTabbedPane tabsPane 		= new JTabbedPane();
-	public 	LoadSaveLevels tabFileLevels		= new LoadSaveLevels();
-			Levels 	tabDetectLevels2 	= new Levels();
+	public	PopupPanel spotsPopupPanel		= null;
+	private JTabbedPane tabsPane 			= new JTabbedPane();
+	public 	LoadSaveLevels tabFileLevels	= new LoadSaveLevels();
+			Levels 	tabDetectLevels2 		= new Levels();
 			
 			//DetectLevelsKMeans tabDetectLevelsK = new DetectLevelsKMeans();
-			LevelsToGulps tabDetectGulps = new LevelsToGulps();
-			EditLevels tabEdit			= new EditLevels();
-			Adjust tabAdjust			= new Adjust();
-	public 	Graphs 	tabGraphs 			= new Graphs();
-	multiSPOTS	parent0 		= null;
+			LevelsToGulps tabDetectGulps 	= new LevelsToGulps();
+			EditLevels tabEdit				= new EditLevels();
+			Adjust tabAdjust				= new Adjust();
+	public 	Graphs 	tabGraphs 				= new Graphs();
+	multiSPOTS	parent0 					= null;
 
 	
 	public void init (JPanel mainPanel, String string, multiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
-		capPopupPanel = new PopupPanel(string);
-		JPanel capPanel = capPopupPanel.getMainPanel();
-		capPanel.setLayout(new BorderLayout());
-		capPopupPanel.collapse();
-		mainPanel.add(capPopupPanel);
+		spotsPopupPanel = new PopupPanel(string);
+		JPanel spotsPanel = spotsPopupPanel.getMainPanel();
+		spotsPanel.setLayout(new BorderLayout());
+		spotsPopupPanel.collapse();
+		mainPanel.add(spotsPopupPanel);
 
-		GridLayout capLayout = new GridLayout(4, 1);
+		GridLayout spotsPanelLayout = new GridLayout(4, 1);
 				
-		tabDetectLevels2.init(capLayout, parent0);
+		tabDetectLevels2.init(spotsPanelLayout, parent0);
 		tabDetectLevels2.addPropertyChangeListener(this);
 		tabsPane.addTab("Levels", null, tabDetectLevels2, "Find limits of the columns of liquid");
 		
-		tabDetectGulps.init(capLayout, parent0);	
+		tabDetectGulps.init(spotsPanelLayout, parent0);	
 		tabsPane.addTab("Gulps", null, tabDetectGulps, "Detect gulps");
 		tabDetectGulps.addPropertyChangeListener(this);
 		
-		tabEdit.init(capLayout, parent0);
+		tabEdit.init(spotsPanelLayout, parent0);
 		tabEdit.addPropertyChangeListener(this);
 		tabsPane.addTab("Edit", null, tabEdit, "Edit Rois / measures");
 
-		tabGraphs.init(capLayout, parent0);
+		tabGraphs.init(spotsPanelLayout, parent0);
 		tabGraphs.addPropertyChangeListener(this);
 		tabsPane.addTab("Graphs", null, tabGraphs, "Display results as a graph");
 		
-		tabFileLevels.init(capLayout, parent0);
+		tabFileLevels.init(spotsPanelLayout, parent0);
 		tabFileLevels.addPropertyChangeListener(this);
 		tabsPane.addTab("Load/Save", null, tabFileLevels, "Load/Save kymographs");
 						
-		capPanel.add(tabsPane);
+		spotsPanel.add(tabsPane);
 		tabDetectLevels2.transformPass1ComboBox.setSelectedItem(ImageTransformEnums.RGB_DIFFS);
 		tabsPane.setSelectedIndex(0);
 		
-		capPopupPanel.addComponentListener(new ComponentAdapter() 
+		spotsPopupPanel.addComponentListener(new ComponentAdapter() 
 		{
 			@Override
 			public void componentResized(ComponentEvent e) 
