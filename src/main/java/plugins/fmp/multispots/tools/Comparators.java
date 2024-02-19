@@ -90,8 +90,8 @@ public class Comparators
 		@Override
 		public int compare(Experiment exp1, Experiment exp2)
 		{
-			return Long.compare(exp1.camImageFirst_ms + exp1.kymoFirst_ms, 
-					exp2.camImageFirst_ms + exp2.kymoFirst_ms);
+			return Long.compare(exp1.camImageFirst_ms + exp1.binFirst_ms, 
+					exp2.camImageFirst_ms + exp2.binFirst_ms);
 		}
 	}
 }

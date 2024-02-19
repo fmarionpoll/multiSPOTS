@@ -178,7 +178,7 @@ public class Create extends JPanel implements PropertyChangeListener
 		// parent0.paneExcel.tabCommonOptions.getStartMs();
 		options.t_Ms_Last 		= getEndMs();
 		// parent0.paneExcel.tabCommonOptions.getEndMs();
-		options.t_Ms_BinDuration= (long)((double) binSize.getValue() * (double) binUnit.getMsUnitValue());
+		options.binDuration_ms= (long)((double) binSize.getValue() * (double) binUnit.getMsUnitValue());
 		//parent0.paneExcel.tabCommonOptions.getBinMs();
 				
 		options.diskRadius 		= (int) diskRadiusSpinner.getValue();
@@ -186,7 +186,7 @@ public class Create extends JPanel implements PropertyChangeListener
 		options.referenceFrame  = (int) startFrameSpinner.getValue();
 		options.doCreateBinDir 	= true;
 		options.parent0Rect 	= parent0.mainFrame.getBoundsInternal();
-		options.binSubDirectory = Experiment.BIN+options.t_Ms_BinDuration/1000 ;
+		options.binSubDirectory = Experiment.BIN+options.binDuration_ms/1000 ;
 		return options;
 	}
 		

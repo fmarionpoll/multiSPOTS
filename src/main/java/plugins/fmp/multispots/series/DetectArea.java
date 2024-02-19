@@ -20,14 +20,15 @@ import icy.system.thread.Processor;
 import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
 import loci.formats.FormatException;
-import plugins.fmp.multicafe2.experiment.Capillary;
-import plugins.fmp.multicafe2.experiment.Experiment;
-import plugins.fmp.multicafe2.experiment.KymoROI2D;
-import plugins.fmp.multicafe2.experiment.SequenceCamData;
-import plugins.fmp.multicafe2.experiment.SequenceKymos;
-import plugins.fmp.multicafe2.tools.Bresenham;
-import plugins.fmp.multicafe2.tools.GaspardRigidRegistration;
-import plugins.fmp.multicafe2.tools.ROI2DUtilities;
+import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Experiment;
+import plugins.fmp.multispots.experiment.KymoROI2D;
+import plugins.fmp.multispots.experiment.SequenceCamData;
+import plugins.fmp.multispots.experiment.SequenceKymos;
+import plugins.fmp.multispots.tools.Bresenham;
+import plugins.fmp.multispots.tools.GaspardRigidRegistration;
+import plugins.fmp.multispots.tools.ROI2DUtilities;
+import plugins.nchenouard.spot.Spot;
 
 
 public class DetectArea extends BuildSeries  
@@ -35,12 +36,12 @@ public class DetectArea extends BuildSeries
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
 	ArrayList<IcyBufferedImage>	cap_bufKymoImage = null;
-	int kymoImageWidth = 0;
+	int imageWidth = 0;
 	
 	
 	void analyzeExperiment(Experiment exp) 
 	{
-		loadExperimentDataToBuildKymos(exp);
+		loadExperimentDataToMeasureAreas(exp);
 		
 		openKymoViewers(exp);
 		getTimeLimitsOfSequence(exp);
@@ -51,9 +52,9 @@ public class DetectArea extends BuildSeries
 		exp.seqKymos.closeSequence();
 	}
 	
-	private boolean loadExperimentDataToBuildKymos(Experiment exp) 
+	private boolean loadExperimentDataToMeasureAreas(Experiment exp) 
 	{
-		boolean flag = exp.loadMCCapillaries_Only();
+		boolean flag = exp.loadMCSpots_Only();
 		exp.seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 		return flag;
 	}
@@ -61,16 +62,16 @@ public class DetectArea extends BuildSeries
 	private void getTimeLimitsOfSequence(Experiment exp)
 	{
 		exp.getFileIntervalsFromSeqCamData();
-		exp.kymoBin_ms = options.t_Ms_BinDuration;
+		exp.binDuration_ms = options.binDuration_ms;
 		if (options.isFrameFixed) {
-			exp.kymoFirst_ms = options.t_Ms_First;
-			exp.kymoLast_ms = options.t_Ms_Last;
-			if (exp.kymoLast_ms + exp.camImageFirst_ms > exp.camImageLast_ms)
-				exp.kymoLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
+			exp.binFirst_ms = options.t_Ms_First;
+			exp.binLast_ms = options.t_Ms_Last;
+			if (exp.binLast_ms + exp.camImageFirst_ms > exp.camImageLast_ms)
+				exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
 		} 
 		else {
-			exp.kymoFirst_ms = 0;
-			exp.kymoLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
+			exp.binFirst_ms = 0;
+			exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
 		}
 	}
 			
@@ -82,36 +83,36 @@ public class DetectArea extends BuildSeries
 		if (directory == null)
 			return;
 		
-		ProgressFrame progressBar = new ProgressFrame("Save kymographs");
-		int nframes = exp.seqKymos.seq.getSizeT();
+		ProgressFrame progressBar = new ProgressFrame("Save measures");
+		int nframes = exp.seqCamData.seq.getSizeT();
 		int nCPUs = SystemUtil.getNumberOfCPUs();
 	    final Processor processor = new Processor(nCPUs);
-	    processor.setThreadName("buildkymo2");
+	    processor.setThreadName("buildAreaResults");
 	    processor.setPriority(Processor.NORM_PRIORITY);
         ArrayList<Future<?>> futuresArray = new ArrayList<Future<?>>(nframes);
 		futuresArray.clear();
 		
-		for (int t = 0; t < exp.seqKymos.seq.getSizeT(); t++) {
-			final int t_index = t;
-			futuresArray.add(processor.submit(new Runnable () {
-				@Override
-				public void run() {	
-					Capillary cap = exp.capillaries.capillariesList.get(t_index);
-					String filename = directory + File.separator + cap.getKymographName() + ".tiff";
-					File file = new File (filename);
-					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
-					try {
-						Saver.saveImage(image, file, true);
-					} 
-					catch (FormatException e) {
-						e.printStackTrace();
-					} 
-					catch (IOException e) {
-						e.printStackTrace();
-					}
-				}}));
-		}
-		waitFuturesCompletion(processor, futuresArray, progressBar);
+//		for (int t = 0; t < exp.seqKymos.seq.getSizeT(); t++) {
+//			final int t_index = t;
+//			futuresArray.add(processor.submit(new Runnable () {
+//				@Override
+//				public void run() {	
+//					Spot cap = exp.spotsArray.spotsList.get(t_index);
+//					String filename = directory + File.separator + cap.getKymographName() + ".tiff";
+//					File file = new File (filename);
+//					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
+//					try {
+//						Saver.saveImage(image, file, true);
+//					} 
+//					catch (FormatException e) {
+//						e.printStackTrace();
+//					} 
+//					catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//				}}));
+//		}
+//		waitFuturesCompletion(processor, futuresArray, progressBar);
 		progressBar.close();
 		exp.saveMCExperiment();
 	}
@@ -129,10 +130,10 @@ public class DetectArea extends BuildSeries
 		threadRunning = true;
 		stopFlag = false;
 		
-		final int nKymographColumns = (int) ((exp.kymoLast_ms - exp.kymoFirst_ms) / exp.kymoBin_ms +1);
+		final int nKymographColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		int iToColumn = 0; 
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
-		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.kymoFirst_ms, 0, exp.seqCamData.nTotalFrames);
+		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.binFirst_ms, 0, exp.seqCamData.nTotalFrames);
 		String vDataTitle = new String(" / " + nKymographColumns);
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
@@ -143,7 +144,7 @@ public class DetectArea extends BuildSeries
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
 		
 	    tasks.clear();
-		for (long ii_ms = exp.kymoFirst_ms ; ii_ms <= exp.kymoLast_ms; ii_ms += exp.kymoBin_ms, iToColumn++) {
+		for (long ii_ms = exp.binFirst_ms ; ii_ms <= exp.binLast_ms; ii_ms += exp.binDuration_ms, iToColumn++) {
 
 			sourceImageIndex = exp.getClosestInterval(sourceImageIndex, ii_ms);
 			final int fromSourceImageIndex = sourceImageIndex;
@@ -190,7 +191,7 @@ public class DetectArea extends BuildSeries
 				for (int[] m: mask) 
 					sum += sourceImageChannel[m[0] + m[1]*sourceImageWidth];
 				if (mask.size() > 0)
-					capImageChannel[cnt*kymoImageWidth + kymographColumn] = (int) (sum/mask.size()); 
+					capImageChannel[cnt*imageWidth + kymographColumn] = (int) (sum/mask.size()); 
 				cnt ++;
 			}
 		}
@@ -258,7 +259,7 @@ public class DetectArea extends BuildSeries
 		int sizex = seqCamData.seq.getSizeX();
 		int sizey = seqCamData.seq.getSizeY();	
 
-		kymoImageWidth = (int) ((exp.kymoLast_ms - exp.kymoFirst_ms) / exp.kymoBin_ms +1);
+		imageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		
 		int imageHeight = 0;
 		for (Capillary cap: exp.capillaries.capillariesList) {
@@ -293,12 +294,12 @@ public class DetectArea extends BuildSeries
 		if (dataType.toString().equals("undefined"))
 			dataType = DataType.UBYTE;
 
-		int len = kymoImageWidth * imageHeight;
+		int len = imageWidth * imageHeight;
 		int nbcapillaries = exp.capillaries.capillariesList.size();
 		cap_bufKymoImage = new ArrayList<IcyBufferedImage>(nbcapillaries);
 		
 		for (int i=0; i < nbcapillaries; i++) {
-			IcyBufferedImage cap_Image = new IcyBufferedImage(kymoImageWidth, imageHeight, numC, dataType);
+			IcyBufferedImage cap_Image = new IcyBufferedImage(imageWidth, imageHeight, numC, dataType);
 			cap_bufKymoImage.add(cap_Image);
 			
 			Capillary cap = exp.capillaries.capillariesList.get(i);

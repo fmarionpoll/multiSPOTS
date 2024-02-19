@@ -181,7 +181,7 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 		options.isFrameFixed 	= parent0.paneExcel.tabCommonOptions.getIsFixedFrame();
 		options.t_Ms_First 		= parent0.paneExcel.tabCommonOptions.getStartMs();
 		options.t_Ms_Last 		= parent0.paneExcel.tabCommonOptions.getEndMs();
-		options.t_Ms_BinDuration			= parent0.paneExcel.tabCommonOptions.getBinMs();
+		options.binDuration_ms			= parent0.paneExcel.tabCommonOptions.getBinMs();
 
 		return options;
 	}

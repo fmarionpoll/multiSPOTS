@@ -65,16 +65,16 @@ public class BuildKymographs extends BuildSeries
 	private void getTimeLimitsOfSequence(Experiment exp)
 	{
 		exp.getFileIntervalsFromSeqCamData();
-		exp.kymoBin_ms = options.t_Ms_BinDuration;
+		exp.binDuration_ms = options.binDuration_ms;
 		if (options.isFrameFixed) {
-			exp.kymoFirst_ms = options.t_Ms_First;
-			exp.kymoLast_ms = options.t_Ms_Last;
-			if (exp.kymoLast_ms + exp.camImageFirst_ms > exp.camImageLast_ms)
-				exp.kymoLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
+			exp.binFirst_ms = options.t_Ms_First;
+			exp.binLast_ms = options.t_Ms_Last;
+			if (exp.binLast_ms + exp.camImageFirst_ms > exp.camImageLast_ms)
+				exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
 		} 
 		else {
-			exp.kymoFirst_ms = 0;
-			exp.kymoLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
+			exp.binFirst_ms = 0;
+			exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
 		}
 	}
 			
@@ -133,10 +133,10 @@ public class BuildKymographs extends BuildSeries
 		threadRunning = true;
 		stopFlag = false;
 		
-		final int nKymographColumns = (int) ((exp.kymoLast_ms - exp.kymoFirst_ms) / exp.kymoBin_ms +1);
+		final int nKymographColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		int iToColumn = 0; 
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
-		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.kymoFirst_ms, 0, exp.seqCamData.nTotalFrames);
+		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.binFirst_ms, 0, exp.seqCamData.nTotalFrames);
 		String vDataTitle = new String(" / " + nKymographColumns);
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
@@ -147,7 +147,7 @@ public class BuildKymographs extends BuildSeries
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
 		
 	    tasks.clear();
-		for (long ii_ms = exp.kymoFirst_ms ; ii_ms <= exp.kymoLast_ms; ii_ms += exp.kymoBin_ms, iToColumn++) {
+		for (long ii_ms = exp.binFirst_ms ; ii_ms <= exp.binLast_ms; ii_ms += exp.binDuration_ms, iToColumn++) {
 
 			sourceImageIndex = exp.getClosestInterval(sourceImageIndex, ii_ms);
 			final int fromSourceImageIndex = sourceImageIndex;
@@ -263,7 +263,7 @@ public class BuildKymographs extends BuildSeries
 		int sizex = seqCamData.seq.getSizeX();
 		int sizey = seqCamData.seq.getSizeY();	
 
-		kymoImageWidth = (int) ((exp.kymoLast_ms - exp.kymoFirst_ms) / exp.kymoBin_ms +1);
+		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		
 		int imageHeight = 0;
 		for (Capillary cap: exp.capillaries.capillariesList) {

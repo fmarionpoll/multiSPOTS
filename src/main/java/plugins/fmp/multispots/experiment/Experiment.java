@@ -41,7 +41,7 @@ public class Experiment
 	public SequenceCamData 	seqCamData 				= null;
 	public SequenceKymos 	seqKymos				= null;
 	public Sequence 		seqReference			= null;
-	public CapillariesArray 		capillaries 			= new CapillariesArray();
+	public CapillariesArray capillaries 			= new CapillariesArray();
 	public SpotsArray		spotsArray				= new SpotsArray();
 	public Cages			cages 					= new Cages();
 	
@@ -55,9 +55,9 @@ public class Experiment
 	public 	long			camImageBin_ms			= -1;
 	public  long[] 			camImages_ms			= null;
 	
-	public 	long			kymoFirst_ms			= 0;
-	public 	long			kymoLast_ms				= 0;
-	public 	long			kymoBin_ms				= 60000;
+	public 	long			binFirst_ms			= 0;
+	public 	long			binLast_ms				= 0;
+	public 	long			binDuration_ms			= 60000;
 	
 	// _________________________________________________
 	
@@ -447,7 +447,7 @@ public class Experiment
 
 	public String getBinNameFromKymoFrameStep() 
 	{
-		return BIN + kymoBin_ms/1000;
+		return BIN + binDuration_ms/1000;
 	}
 	
 	public String getDirectoryToSaveResults() 
@@ -488,9 +488,9 @@ public class Experiment
 			XMLUtil.setElementLongValue(node, ID_TIMEFIRSTIMAGEMS, camImageFirst_ms);
 			XMLUtil.setElementLongValue(node, ID_TIMELASTIMAGEMS, camImageLast_ms);
 			
-			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, kymoFirst_ms); 
-			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, kymoLast_ms);
-			XMLUtil.setElementLongValue(node, ID_BINKYMOCOLMS, kymoBin_ms); 	
+			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, binFirst_ms); 
+			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, binLast_ms);
+			XMLUtil.setElementLongValue(node, ID_BINKYMOCOLMS, binDuration_ms); 	
 			
 			XMLUtil.setElementValue(node, ID_BOXID, field_boxID);
 	        XMLUtil.setElementValue(node, ID_EXPERIMENT, field_experiment);
@@ -991,7 +991,7 @@ public class Experiment
 		{
 			if (resultsPath.length() < (BIN.length() +1)) 
 			{
-				step = (int) kymoBin_ms;
+				step = (int) binDuration_ms;
 			} 
 			else 
 			{
@@ -1121,9 +1121,9 @@ public class Experiment
 			camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0)*60000;
 		}
 
-		kymoFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1); 
-		kymoLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);
-		kymoBin_ms = XMLUtil.getElementLongValue(node, ID_BINKYMOCOLMS, -1); 	
+		binFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1); 
+		binLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);
+		binDuration_ms = XMLUtil.getElementLongValue(node, ID_BINKYMOCOLMS, -1); 	
 		
 		ugly_checkOffsetValues();
 		
@@ -1145,13 +1145,13 @@ public class Experiment
 			camImageFirst_ms = 0;
 		if (camImageLast_ms < 0)
 			camImageLast_ms = 0;
-		if (kymoFirst_ms < 0)
-			kymoFirst_ms = 0; 
-		if (kymoLast_ms < 0)
-			kymoLast_ms = 0;
+		if (binFirst_ms < 0)
+			binFirst_ms = 0; 
+		if (binLast_ms < 0)
+			binLast_ms = 0;
 		
-		if (kymoBin_ms < 0)
-			kymoBin_ms = 60000;
+		if (binDuration_ms < 0)
+			binDuration_ms = 60000;
 	}
 	
 	private void addCapillariesValues(EnumXLSColumnHeader fieldEnumCode, List<String> textList)

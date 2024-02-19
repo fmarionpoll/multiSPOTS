@@ -20,7 +20,7 @@ public class BuildSeriesOptions implements XMLPersistent
 	public boolean			isFrameFixed		= false;
 	public long				t_Ms_First			= 0;
 	public long				t_Ms_Last			= 0;
-	public long				t_Ms_BinDuration	= 1;
+	public long				binDuration_ms	= 1;
 	
 	public int 				diskRadius 			= 5;
 	public boolean 			doRegistration 		= false;
@@ -39,9 +39,9 @@ public class BuildSeriesOptions implements XMLPersistent
 	public int			detectCage				= -1;
 	public	boolean		detectL					= true;
 	public	boolean		detectR					= true;
-	public 	boolean 	detectAllKymos 			= true;
-	public 	int			kymoFirst				= 0;
-	public  int			kymoLast				= 0;
+	public 	boolean 	detectAllSeries 		= true;
+	public 	int			seriesFirst				= 0;
+	public  int			seriesLast				= 0;
 	public  boolean 	runBackwards 			= false;
 	
 	public	boolean		pass1 = true;
@@ -97,7 +97,7 @@ public class BuildSeriesOptions implements XMLPersistent
 		destination.transform01 			= transform01;
 		destination.directionUp1 			= directionUp1;
 		destination.detectLevel1Threshold 	= detectLevel1Threshold;
-		destination.detectAllKymos 			= detectAllKymos;
+		destination.detectAllSeries 			= detectAllSeries;
 		
 		destination.detectGulpsThreshold_uL = detectGulpsThreshold_uL;
 		destination.transformForGulps 		= transformForGulps;
@@ -111,7 +111,7 @@ public class BuildSeriesOptions implements XMLPersistent
 		transform01 			= destination.transform01;
 		directionUp1 			= destination.directionUp1;
 		detectLevel1Threshold 	= destination.detectLevel1Threshold;
-		detectAllKymos 			= destination.detectAllKymos;
+		detectAllSeries 			= destination.detectAllSeries;
 		
 		detectGulpsThreshold_uL = destination.detectGulpsThreshold_uL;
 		transformForGulps 		= destination.transformForGulps;
@@ -146,9 +146,9 @@ public class BuildSeriesOptions implements XMLPersistent
 		{
 			detectTop = XMLUtil.getElementBooleanValue(nodeMeta, "detectTop", detectTop);
 			detectBottom = XMLUtil.getElementBooleanValue(nodeMeta, "detectBottom", detectBottom);
-			detectAllKymos = XMLUtil.getElementBooleanValue(nodeMeta, "detectAllImages", detectAllKymos);
+			detectAllSeries = XMLUtil.getElementBooleanValue(nodeMeta, "detectAllImages", detectAllSeries);
 			directionUp1 = XMLUtil.getElementBooleanValue(nodeMeta, "directionUp", directionUp1);
-			kymoFirst = XMLUtil.getElementIntValue(nodeMeta, "firstImage", kymoFirst);
+			seriesFirst = XMLUtil.getElementIntValue(nodeMeta, "firstImage", seriesFirst);
 			detectLevel1Threshold = XMLUtil.getElementIntValue(nodeMeta, "detectLevelThreshold", detectLevel1Threshold);
 			transform01 = ImageTransformEnums.findByText(XMLUtil.getElementValue(nodeMeta, "Transform", transform01.toString()));       
 			
@@ -183,9 +183,9 @@ public class BuildSeriesOptions implements XMLPersistent
 		{
 			XMLUtil.setElementBooleanValue(nodeMeta, "detectTop", detectTop);
 			XMLUtil.setElementBooleanValue(nodeMeta, "detectBottom", detectBottom);
-			XMLUtil.setElementBooleanValue(nodeMeta, "detectAllImages", detectAllKymos);
+			XMLUtil.setElementBooleanValue(nodeMeta, "detectAllImages", detectAllSeries);
 			XMLUtil.setElementBooleanValue(nodeMeta, "directionUp", directionUp1);
-			XMLUtil.setElementIntValue(nodeMeta, "firstImage", kymoFirst);
+			XMLUtil.setElementIntValue(nodeMeta, "firstImage", seriesFirst);
 			XMLUtil.setElementIntValue(nodeMeta, "detectLevelThreshold", detectLevel1Threshold);
 		    XMLUtil.setElementValue(nodeMeta, "Transform", transform01.toString()); 
 		    

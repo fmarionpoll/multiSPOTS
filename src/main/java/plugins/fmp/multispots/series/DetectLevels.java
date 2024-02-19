@@ -43,10 +43,10 @@ public class DetectLevels  extends BuildSeries
 		threadRunning = true;
 		stopFlag = false;
 		ProgressFrame progressBar = new ProgressFrame("Processing with subthreads started");
-		int tFirsKymo = options.kymoFirst;
+		int tFirsKymo = options.seriesFirst;
 		if (tFirsKymo > seqKymos.seq.getSizeT() || tFirsKymo < 0)
 			tFirsKymo = 0;
-		int tLastKymo = options.kymoLast;
+		int tLastKymo = options.seriesLast;
 		if (tLastKymo >= seqKymos.seq.getSizeT())
 			tLastKymo = seqKymos.seq.getSizeT() -1;
 		seqKymos.seq.beginUpdate();

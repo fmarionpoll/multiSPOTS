@@ -12,11 +12,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -27,7 +25,6 @@ import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.series.BuildSeriesOptions;
 import plugins.fmp.multispots.series.DetectArea;
-import plugins.fmp.multispots.series.DetectLevels;
 import plugins.fmp.multispots.tools.Canvas2DWithFilters;
 import plugins.fmp.multispots.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multispots.tools.Overlay.OverlayThreshold;
@@ -246,40 +243,25 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			options.expList.index1 = options.expList.getItemCount()-1;
 		else
 			options.expList.index1 = parent0.expListCombo.getSelectedIndex();
-		// list of kymographs
-		options.detectAllKymos = allKymosCheckBox.isSelected();
+		// list of files
+		options.detectAllSeries = allSeriesCheckBox.isSelected();
 		parent0.paneKymos.tabDisplay.indexImagesCombo = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
-		if (!allKymosCheckBox.isSelected()) 
+		if (!allSeriesCheckBox.isSelected()) 
 		{
-			options.kymoFirst = parent0.paneKymos.tabDisplay.indexImagesCombo;
-			options.kymoLast = options.kymoFirst;
+			options.seriesFirst = parent0.paneKymos.tabDisplay.indexImagesCombo;
+			options.seriesLast = options.seriesFirst;
 		}
 		else
 		{
-			options.kymoFirst = 0;
-			options.kymoLast = parent0.paneKymos.tabDisplay.kymographsCombo.getItemCount()-1;
+			options.seriesFirst = 0;
+			options.seriesLast = parent0.paneKymos.tabDisplay.kymographsCombo.getItemCount()-1;
 		}
 		// other parameters
-		options.pass1 				= pass1CheckBox.isSelected();
-		options.transform01 		= (ImageTransformEnums) transformPass1ComboBox.getSelectedItem();
+		options.transform01 		= (ImageTransformEnums) transformsComboBox.getSelectedItem();
 		options.directionUp1 		= (direction1ComboBox.getSelectedIndex() == 0);
-		options.detectLevel1Threshold= (int) threshold1Spinner.getValue();
-		
-		options.pass2 				= pass2CheckBox.isSelected();
-		options.transform02			= (ImageTransformEnums) transformPass2ComboBox.getSelectedItem();
-		options.directionUp2 		= (direction2ComboBox.getSelectedIndex() == 0);
-		options.detectLevel2Threshold= (int) threshold2Spinner.getValue();
-		
-		options.analyzePartOnly		= fromCheckBox.isSelected();
-		if (fromCheckBox.isSelected() && searchRectangleROI2D != null)
-			options.searchArea 	= getSearchAreaFromSearchRectangle(exp);
-		 
-		options.spanDiffTop			= (int) spanTopSpinner.getValue();
-		options.detectL 			= leftCheckBox.isSelected();
-		options.detectR				= rightCheckBox.isSelected();
-		options.parent0Rect 		= parent0.mainFrame.getBoundsInternal();
-		options.binSubDirectory 	= parent0.expListCombo.expListBinSubDirectory ;
-		options.runBackwards		= runBackwardsCheckBox.isSelected();
+		options.detectLevel1Threshold= (int) thresholdSpinner.getValue();
+				
+		options.analyzePartOnly		= false; //fromCheckBox.isSelected();
 		return options;
 	}
 	
@@ -292,15 +274,5 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
 		 }
 	}
-	
-//	public void transferParametersToDialog(DetectionParameters detectionParameters) {
-//		
-//		transformsComboBox.setSelectedItem(detectionParameters.simpletransformop);
-//		thresholdSpinner.setValue(detectionParameters.simplethreshold);
-//	}
-//	
-//	public void transferDialogToParameters(DetectionParameters detectionParameters) {
-//		detectionParameters.simpletransformop = (EnumImageOp) transformsComboBox.getSelectedItem();
-//		detectionParameters.simplethreshold = (int) thresholdSpinner.getValue();
-//	}
+
 }

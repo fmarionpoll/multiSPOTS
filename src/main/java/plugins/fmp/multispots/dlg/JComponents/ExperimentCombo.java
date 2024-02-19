@@ -73,7 +73,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 			else 
 			{
 				expAll.camImageFirst_ms = 0;
-				expAll.camImageLast_ms = exp0.kymoLast_ms- exp0.kymoFirst_ms;
+				expAll.camImageLast_ms = exp0.binLast_ms- exp0.binFirst_ms;
 				long firstOffset_Ms = 0;
 				long lastOffset_Ms = 0;
 				
@@ -81,15 +81,15 @@ public class ExperimentCombo extends JComboBox<Experiment>
 				{
 					Experiment exp = getItemAt(i);
 					Experiment expFirst =  exp.getFirstChainedExperiment(options.collateSeries);
-					firstOffset_Ms = expFirst.kymoFirst_ms + expFirst.camImageFirst_ms;
-					exp.chainImageFirst_ms = expFirst.camImageFirst_ms + expFirst.kymoFirst_ms;
+					firstOffset_Ms = expFirst.binFirst_ms + expFirst.camImageFirst_ms;
+					exp.chainImageFirst_ms = expFirst.camImageFirst_ms + expFirst.binFirst_ms;
 					
 					Experiment expLast =  exp.getLastChainedExperiment (options.collateSeries); 
-					if (expLast.kymoLast_ms <= 0) 
+					if (expLast.binLast_ms <= 0) 
 					{
-						expLast.kymoLast_ms = expLast.camImageLast_ms - expLast.camImageFirst_ms;
+						expLast.binLast_ms = expLast.camImageLast_ms - expLast.camImageFirst_ms;
 					}
-					lastOffset_Ms = expLast.kymoLast_ms + expLast.camImageFirst_ms;
+					lastOffset_Ms = expLast.binLast_ms + expLast.camImageFirst_ms;
 					
 					long diff = lastOffset_Ms - firstOffset_Ms;
 					if (diff < 1) 
@@ -182,7 +182,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 		{
 			Experiment expi = getItemAt(i);
 			Experiment expFirst = expi.getFirstChainedExperiment(collate);
-			expi.chainImageFirst_ms = expFirst.camImageFirst_ms + expFirst.kymoFirst_ms;
+			expi.chainImageFirst_ms = expFirst.camImageFirst_ms + expFirst.binFirst_ms;
 		}
 	}
 	

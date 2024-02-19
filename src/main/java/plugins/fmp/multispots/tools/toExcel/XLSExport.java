@@ -404,22 +404,22 @@ public class XLSExport
 	{
 		String error = "XLSExport:ExportError() ERROR in "+ expi.getExperimentDirectory() 
 		+ "\n nOutputFrames="+ nOutputFrames 
-		+ " kymoFirstCol_Ms=" + expi.kymoFirst_ms 
-		+ " kymoLastCol_Ms=" + expi.kymoLast_ms;
+		+ " kymoFirstCol_Ms=" + expi.binFirst_ms 
+		+ " kymoLastCol_Ms=" + expi.binLast_ms;
 		System.out.println(error);
 	}
 	
 	private int getNOutputFrames (Experiment expi)
 	{
-		int nOutputFrames = (int) ((expi.kymoLast_ms - expi.kymoFirst_ms) / options.buildExcelStepMs +1);
+		int nOutputFrames = (int) ((expi.binLast_ms - expi.binFirst_ms) / options.buildExcelStepMs +1);
 		if (nOutputFrames <= 1) 
 		{
 			if (expi.seqKymos.imageWidthMax == 0)
 				expi.loadKymographs();
-			expi.kymoLast_ms = expi.kymoFirst_ms + expi.seqKymos.imageWidthMax * expi.kymoBin_ms;
-			if (expi.kymoLast_ms <= 0)
+			expi.binLast_ms = expi.binFirst_ms + expi.seqKymos.imageWidthMax * expi.binDuration_ms;
+			if (expi.binLast_ms <= 0)
 				exportError(expi, -1);
-			nOutputFrames = (int) ((expi.kymoLast_ms - expi.kymoFirst_ms) / options.buildExcelStepMs +1);
+			nOutputFrames = (int) ((expi.binLast_ms - expi.binFirst_ms) / options.buildExcelStepMs +1);
 			
 			if (nOutputFrames <= 1) 
 			{
@@ -458,7 +458,7 @@ public class XLSExport
 					case AUTOCORREL_LR:
 					case CROSSCORREL:
 					case CROSSCORREL_LR:
-						resultsArrayList.getResults1(expi.capillaries, xlsExportType, nOutputFrames, exp.kymoBin_ms, options);
+						resultsArrayList.getResults1(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
 						
 					case TOPLEVEL:
@@ -468,7 +468,7 @@ public class XLSExport
 						options.compensateEvaporation = options.subtractEvaporation;
 						
 					case TOPRAW:
-						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.kymoBin_ms, options);
+						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
 	
 					default:
@@ -515,8 +515,8 @@ public class XLSExport
 		EnumXLSExportType xlsoption = resultsArrayList.getRow(0).exportType;
 		
 		long offsetChain = expi.camImageFirst_ms - expi.chainImageFirst_ms;
-		long start_Ms = expi.kymoFirst_ms + offsetChain; // TODO check when collate?
-		long end_Ms = expi.kymoLast_ms + offsetChain;
+		long start_Ms = expi.binFirst_ms + offsetChain; // TODO check when collate?
+		long end_Ms = expi.binLast_ms + offsetChain;
 		if (options.fixedIntervals) 
 		{
 			if (start_Ms < options.startAll_Ms)
@@ -647,7 +647,7 @@ public class XLSExport
 				int lastIntervalFlyAlive = expi.cages.getLastIntervalFlyAlive(cagenumber);
 				int lastMinuteAlive = (int) (lastIntervalFlyAlive * expi.camImageBin_ms 
 						+ (expi.camImageFirst_ms - expAll.camImageFirst_ms));		
-				ilastalive = (int) (lastMinuteAlive / expAll.kymoBin_ms);
+				ilastalive = (int) (lastMinuteAlive / expAll.binDuration_ms);
 			}
 			if (ilastalive > 0)
 				ilastalive += 1;

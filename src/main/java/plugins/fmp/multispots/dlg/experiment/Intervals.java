@@ -88,8 +88,8 @@ public class Intervals extends JPanel
 	private void setExptParmsFromDialog(Experiment exp) {
 		exp.camImageBin_ms = (long) (((double) binSizeJSpinner.getValue())* binUnit.getMsUnitValue());
 		double bin_ms = exp.camImageBin_ms;
-		exp.kymoFirst_ms = (long) ((double) frameFirstJSpinner.getValue() * bin_ms);
-		exp.kymoLast_ms = (long) ((double) frameLastJSpinner.getValue() * bin_ms);
+		exp.binFirst_ms = (long) ((double) frameFirstJSpinner.getValue() * bin_ms);
+		exp.binLast_ms = (long) ((double) frameLastJSpinner.getValue() * bin_ms);
 	}
 	
 	public void displayCamDataIntervals (Experiment exp) 
@@ -97,11 +97,11 @@ public class Intervals extends JPanel
 		refreshBinSize(exp);
 		
 		double bin_ms = exp.camImageBin_ms;
-		double dFirst = exp.kymoFirst_ms/bin_ms;
+		double dFirst = exp.binFirst_ms/bin_ms;
 		frameFirstJSpinner.setValue(dFirst);
-		if(exp.kymoLast_ms <= 0)
-			exp.kymoLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
-		double dLast = exp.kymoLast_ms/bin_ms;
+		if(exp.binLast_ms <= 0)
+			exp.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
+		double dLast = exp.binLast_ms/bin_ms;
 		frameLastJSpinner.setValue(dLast);
 		exp.getFileIntervalsFromSeqCamData();
 	}

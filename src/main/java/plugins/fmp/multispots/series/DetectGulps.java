@@ -58,7 +58,7 @@ public class DetectGulps extends BuildSeries
 		int firstCapillary = 0;
 		int lastCapillary = seqCapillariesKymographs.seq.getSizeT() -1;
 		if (!options.detectAllGulps) {
-			firstCapillary = options.kymoFirst;
+			firstCapillary = options.seriesFirst;
 			lastCapillary = firstCapillary;
 		}
 		seqCapillariesKymographs.seq.beginUpdate();
