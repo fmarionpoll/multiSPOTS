@@ -86,9 +86,9 @@ public class Levels extends JPanel implements PropertyChangeListener
 	private OverlayThreshold overlayThreshold 	= null;
 	// -----------------------------------------------------
 		
-	void init(GridLayout capLayout, MultiSPOTS parent0) 
+	void init(GridLayout gridLayout, MultiSPOTS parent0) 
 	{
-		setLayout(capLayout);
+		setLayout(gridLayout);
 		this.parent0 = parent0;
 		
 		FlowLayout layoutLeft = new FlowLayout(FlowLayout.LEFT); 

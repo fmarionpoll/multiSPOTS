@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -27,7 +29,7 @@ import plugins.fmp.multispots.tools.EnumColorDistanceType;
 
 
 
-public class TabColors extends JPanel implements ChangeListener {
+public class ThresholdColors extends JPanel implements PropertyChangeListener {
 
 	/**
 	 * 
@@ -53,7 +55,7 @@ public class TabColors extends JPanel implements ChangeListener {
 
 
 
-	public void init(JTabbedPane tab, GridLayout capLayout, MultiSPOTS parent0) {
+	public void init(GridLayout capLayout, MultiSPOTS parent0) {
 		
 		this.multiSpots = parent0;
 		JComponent panel = new JPanel(false);
@@ -87,12 +89,11 @@ public class TabColors extends JPanel implements ChangeListener {
 		panel2.add(rbHSV);
 		panel2.add(rbH1H2H3);
 		panel.add( panel2);
-		tab.addTab("Colors", null, panel, "Display parameters for thresholding an image with different colors and a distance");
 	
 		rbL1.setSelected(true);
 		rbRGB.setSelected(true);
 		
-		distanceSpinner.addChangeListener(this);
+//		distanceSpinner.addChangeListener(this);
 		declareActionListeners();
 	}
 	
@@ -149,13 +150,7 @@ public class TabColors extends JPanel implements ChangeListener {
 		colorPickCombo.addItemListener(new ItemChangeListener());
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		if (e.getSource() == distanceSpinner)  
-			updateThresholdOverlayParameters();
 		
-	}
-	
     void updateThresholdOverlayParameters() {
     	
 //		areatrack.detectionParameters.areaDetectionMode = EnumAreaDetection.COLORARRAY;
@@ -179,6 +174,12 @@ public class TabColors extends JPanel implements ChangeListener {
 			bActiveTrapOverlay = true;
 		}	
 //		multiSpots.vSequence.setMouseTrapOverlay(bActiveTrapOverlay, pickColorButton, colorPickCombo);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 //	public void transferParametersToDialog(DetectionParameters detectionParameters) {

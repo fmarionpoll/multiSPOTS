@@ -33,7 +33,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 			Edit		tabEdit			= new Edit();
 	public 	LoadSaveSpots tabFile  		= new LoadSaveSpots();
 			Adjust 		tabAdjust 		= new Adjust();
-//			FilterImage tabFilterImage  = new FilterImage();
+
 	public 	Infos		tabInfos		= new Infos();
 	private int 		ID_INFOS 		= 1;
 	private int 		ID_ADJUST 		= 3;
