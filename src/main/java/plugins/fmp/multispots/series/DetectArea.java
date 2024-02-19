@@ -25,10 +25,11 @@ import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.KymoROI2D;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.experiment.SequenceKymos;
+import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.tools.Bresenham;
 import plugins.fmp.multispots.tools.GaspardRigidRegistration;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
-import plugins.nchenouard.spot.Spot;
+
 
 
 public class DetectArea extends BuildSeries  
@@ -45,7 +46,7 @@ public class DetectArea extends BuildSeries
 		
 		openKymoViewers(exp);
 		getTimeLimitsOfSequence(exp);
-		if (buildKymo(exp)) 
+		if (measureAreas(exp)) 
 			saveComputation(exp);
 
 		closeKymoViewers();
@@ -83,15 +84,15 @@ public class DetectArea extends BuildSeries
 		if (directory == null)
 			return;
 		
-		ProgressFrame progressBar = new ProgressFrame("Save measures");
-		int nframes = exp.seqCamData.seq.getSizeT();
-		int nCPUs = SystemUtil.getNumberOfCPUs();
-	    final Processor processor = new Processor(nCPUs);
-	    processor.setThreadName("buildAreaResults");
-	    processor.setPriority(Processor.NORM_PRIORITY);
-        ArrayList<Future<?>> futuresArray = new ArrayList<Future<?>>(nframes);
-		futuresArray.clear();
-		
+//		ProgressFrame progressBar = new ProgressFrame("Save measures");
+//		int nframes = exp.seqCamData.seq.getSizeT();
+//		int nCPUs = SystemUtil.getNumberOfCPUs();
+//	    final Processor processor = new Processor(nCPUs);
+//	    processor.setThreadName("buildAreaResults");
+//	    processor.setPriority(Processor.NORM_PRIORITY);
+//        ArrayList<Future<?>> futuresArray = new ArrayList<Future<?>>(nframes);
+//		futuresArray.clear();
+//		
 //		for (int t = 0; t < exp.seqKymos.seq.getSizeT(); t++) {
 //			final int t_index = t;
 //			futuresArray.add(processor.submit(new Runnable () {
@@ -113,28 +114,27 @@ public class DetectArea extends BuildSeries
 //				}}));
 //		}
 //		waitFuturesCompletion(processor, futuresArray, progressBar);
-		progressBar.close();
+//		progressBar.close();
 		exp.saveMCExperiment();
 	}
 	
-	private boolean buildKymo (Experiment exp) 
+	private boolean measureAreas (Experiment exp) 
 	{
-		if (exp.capillaries.capillariesList.size() < 1) {
-			System.out.println("BuildKymographs:buildKymo Abort (1): nbcapillaries = 0");
+		if (exp.spotsArray.spotsList.size() < 1) {
+			System.out.println("DetectAreas:measureAreas Abort (1): nbspots = 0");
 			return false;
 		}
-		SequenceKymos seqKymos = exp.seqKymos;
-		seqKymos.seq = new Sequence();
-		initArraysToBuildKymographImages(exp);
+		SequenceCamData seqCamData = exp.seqCamData;
+		initArraysToMeasureAreas(exp);
 		
 		threadRunning = true;
 		stopFlag = false;
 		
-		final int nKymographColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
+		final int nColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		int iToColumn = 0; 
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
 		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.binFirst_ms, 0, exp.seqCamData.nTotalFrames);
-		String vDataTitle = new String(" / " + nKymographColumns);
+		String vDataTitle = new String(" / " + nColumns);
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
@@ -154,34 +154,34 @@ public class DetectArea extends BuildSeries
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
-					for (Capillary capi: exp.capillaries.capillariesList) 
-						analyzeImageWithCapillary(sourceImage, capi, fromSourceImageIndex, kymographColumn);
+					for (Spot spot: exp.spotsArray.spotsList) 
+						analyzeSpot(sourceImage, spot, fromSourceImageIndex, kymographColumn);
 				}}));
 			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
 //			seqData.setImage(0, 0, sourceImage); // add option??
-			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nKymographColumns);	
+			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nColumns);	
 		}
 
 		waitFuturesCompletion(processor, tasks, null);
 		progressBar1.close();
 		
-		ProgressFrame progressBar2 = new ProgressFrame("Combine results into kymograph");
-		int sizeC = seqData.getSizeC();
-		exportCapillaryIntegerArrays_to_Kymograph(exp, seqKymos.seq, sizeC);
-        progressBar2.close();
+//		ProgressFrame progressBar2 = new ProgressFrame("Combine results into kymograph");
+//		int sizeC = seqData.getSizeC();
+//		exportCapillaryIntegerArrays_to_Kymograph(exp, seqKymos.seq, sizeC);
+//        progressBar2.close();
         
 		return true;
 	}
 	
-	private void analyzeImageWithCapillary(IcyBufferedImage sourceImage, Capillary cap, int fromSourceImageIndex, int kymographColumn)
+	private void analyzeSpot(IcyBufferedImage sourceImage, Spot spot, int fromSourceImageIndex, int kymographColumn)
 	{
-		KymoROI2D capT = cap.getROI2DKymoAtIntervalT(fromSourceImageIndex);
+		KymoROI2D capT = spot.getROI2DKymoAtIntervalT(fromSourceImageIndex);
 		int sizeC = sourceImage.getSizeC();
 	  
 		for (int chan = 0; chan < sizeC; chan++) {
 			
 			int [] sourceImageChannel =  Array1DUtil.arrayToIntArray(sourceImage.getDataXY(chan), sourceImage.isSignedDataType()); 			
-			int [] capImageChannel = cap.cap_Integer.get(chan); 
+			int [] capImageChannel = spot.cap_Integer.get(chan); 
 		
 			int cnt = 0;
 			int sourceImageWidth = sourceImage.getWidth();
@@ -209,49 +209,8 @@ public class DetectArea extends BuildSeries
 		}
 		return sourceImage;
 	}
-	
-	private void exportCapillaryIntegerArrays_to_Kymograph(Experiment exp, Sequence seqKymo, final int sizeC)
-	{
-		seqKymo.beginUpdate();
-		
-		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
-	    processor.setThreadName("buildKymograph");
-	    processor.setPriority(Processor.NORM_PRIORITY);
-	    int nbcapillaries =  exp.capillaries.capillariesList.size(); 
-	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( nbcapillaries);
-		tasks.clear();
-		 
-		for (int icap = 0; icap < nbcapillaries; icap++) {
-			final Capillary cap = exp.capillaries.capillariesList.get(icap);
-			final IcyBufferedImage cap_Image = cap_bufKymoImage.get(icap);
-			final int indexCap = icap;
 			
-			tasks.add(processor.submit(new Runnable () {
-				@Override
-				public void run() {		
-					exportOneCapillaryIntegerArray_to_Kymograph(seqKymo, indexCap, cap, cap_Image, sizeC);
-				}}));
-		}
-		
-		waitFuturesCompletion(processor, tasks, null);
-		
-		seqKymo.endUpdate();
-	}
-	
-	private void exportOneCapillaryIntegerArray_to_Kymograph(Sequence seqKymo, int icap, Capillary cap, IcyBufferedImage cap_Image, int sizeC)
-	{
-		ArrayList<int[]> cap_Integer = cap.cap_Integer;
-		boolean isSignedDataType = cap_Image.isSignedDataType();
-		for (int chan = 0; chan < sizeC; chan++) {
-			int [] tabValues = cap_Integer.get(chan); ; 
-			Object destArray = cap_Image.getDataXY(chan);
-			Array1DUtil.intArrayToSafeArray(tabValues, 0, destArray, 0, -1, isSignedDataType, isSignedDataType);
-			cap_Image.setDataXY(chan, destArray);
-		}
-		seqKymo.setImage(icap, 0, cap_Image);
-	}
-		
-	private void initArraysToBuildKymographImages(Experiment exp) 
+	private void initArraysToMeasureAreas(Experiment exp) 
 	{
 		SequenceCamData seqCamData = exp.seqCamData;
 		if (seqCamData.seq == null) 
