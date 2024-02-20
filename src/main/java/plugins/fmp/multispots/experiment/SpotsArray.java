@@ -536,20 +536,11 @@ public class SpotsArray
 		    	case "DESCRIPTION":
 		    		csvLoadDescription (csvReader);
 		    		break;
-		    	case "CAPILLARIES":
+		    	case "SPOTS":
 		    		csvLoadSpotsDescription (csvReader);
 		    		break;
 		    	case "TOPLEVEL":
-		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.TOPLEVEL);
-		    		break;
-		    	case "BOTTOMLEVEL":
-		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.BOTTOMLEVEL);
-		    		break;
-		    	case "TOPDERIVATIVE":
-		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.TOPDERIVATIVE);
-		    		break;
-		    	case "GULPS": 
-		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.GULPS);
+		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.AREA_NPIXELS);
 		    		break;
 	    		default:
 	    			break;
@@ -622,7 +613,7 @@ public class SpotsArray
 				Spot spot = getSpotFromRoiNamePrefix(data[0]);
 				if (spot == null)
 					spot = new Spot();
-				spot.csvImportSpotData(measureType, data);
+				spot.csvImportData(measureType, data);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -643,7 +634,7 @@ public class SpotsArray
 			FileWriter csvWriter = new FileWriter(directory + File.separator +"SpotsMeasures.csv");
 			
 			csvSaveDescriptionSection(csvWriter);			
-			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.AREANPIXELS);
+			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.AREA_NPIXELS);
 
 			csvWriter.flush();
 			csvWriter.close();
@@ -664,9 +655,9 @@ public class SpotsArray
 			csvWriter.append("#,#\n");
 			
 			if (spotsList.size() > 0) {
-				csvWriter.append(spotsList.get(0).csvExportCapillarySubSectionHeader());
+				csvWriter.append(spotsList.get(0).csvExportSpotSubSectionHeader());
 				for (Spot spot:spotsList) 
-					csvWriter.append(spot.csvExportCapillaryDescription());
+					csvWriter.append(spot.csvExportDescription());
 				csvWriter.append("#,#\n");
 			}
 		} catch (IOException e) {

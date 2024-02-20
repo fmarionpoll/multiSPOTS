@@ -86,7 +86,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		add(panel1);
 		
 		transformsComboBox.setSelectedItem(ImageTransformEnums.RGB_DIFFS);
-		displayTransformButton.setSelected(true);
 		declareListeners();
 	}
 	

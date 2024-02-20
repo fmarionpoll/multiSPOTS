@@ -31,8 +31,8 @@ public enum EnumXLSExportType
 	ISALIVE ("_alive", "yes/no"), 
 	SLEEP ("sleep", "yes, no"),
 	
-	AREA_PIXELS("area", "n pixels"),
-	AREA_PIXELS_LR ("area_L+R", "n_pixels");
+	AREA_NPIXELS("area", "n pixels"),
+	AREA_NPIXELS_LR ("area_L+R", "n_pixels");
 	
 	private String label;
 	private String unit;

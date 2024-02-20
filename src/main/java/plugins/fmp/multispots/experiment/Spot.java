@@ -1,7 +1,6 @@
 package plugins.fmp.multispots.experiment;
 
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
+
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,10 +11,8 @@ import org.w3c.dom.Node;
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
-import icy.type.geom.Polyline2D;
 import icy.util.XMLUtil;
 
-import plugins.kernel.roi.roi2d.ROI2DLine;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 
 import plugins.fmp.multispots.series.BuildSeriesOptions;
@@ -62,7 +59,7 @@ public class Spot implements Comparable <Spot>
 	private final String 				ID_META 		= "metaMC";
 	private final String				ID_NFLIES		= "nflies";
 	private final String				ID_CAGENB		= "cage_number";
-	private final String 				ID_CAPVOLUME 	= "capillaryVolume";
+	private final String 				ID_SPOTVOLUME 	= "spotVolume";
 	private final String 				ID_CAPPIXELS 	= "capillaryPixels";
 	private final String 				ID_STIML 		= "stimulus";
 	private final String 				ID_CONCL 		= "concentration";
@@ -251,7 +248,7 @@ public class Spot implements Comparable <Spot>
 		boolean yes = false;
 		switch (option) 
 		{
-		case TOPLEVEL:
+		case AREA_NPIXELS:
 		default:
 			yes= areaNPixels.isThereAnyMeasuresDone();
 			break;
@@ -264,11 +261,8 @@ public class Spot implements Comparable <Spot>
 		ArrayList<Integer> datai = null;
 		switch (option) 
 		{
-		case TOPLEVEL:
-		case TOPRAW:
-		case TOPLEVEL_LR:
-		case TOPLEVELDELTA:
-		case TOPLEVELDELTA_LR:
+		case AREA_NPIXELS:
+		case AREA_NPIXELS_LR:
 			default:
 			datai = areaNPixels.getMeasures(seriesBinMs, outputBinMs);
 			break;
@@ -303,7 +297,7 @@ public class Spot implements Comparable <Spot>
 		int lastMeasure = 0;
 		switch (option) 
 		{
-		case TOPLEVEL:
+		case AREA_NPIXELS:
 		default:
 			lastMeasure = areaNPixels.getLastMeasure();
 			break;
@@ -316,7 +310,7 @@ public class Spot implements Comparable <Spot>
 		int lastMeasure = 0;
 		switch (option) 
 		{
-		case TOPLEVEL:
+		case AREA_NPIXELS:
 		default:
 			lastMeasure = areaNPixels.getLastDeltaMeasure();
 			break;
@@ -329,7 +323,7 @@ public class Spot implements Comparable <Spot>
 		int t0Measure = 0;
 		switch (option) 
 		{
-		case TOPLEVEL:
+		case AREA_NPIXELS:
 		default:
 			t0Measure = areaNPixels.getT0Measure();
 			break;
@@ -376,7 +370,7 @@ public class Spot implements Comparable <Spot>
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
 	        spotNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
 	        spotCageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
-	        spotVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_CAPVOLUME, Double.NaN);
+	        spotVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
 			spotPixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
 			spotStimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
 			spotConcentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
@@ -438,7 +432,7 @@ public class Spot implements Comparable <Spot>
         XMLUtil.setElementIntValue(nodeMeta, ID_VERSIONINFOS, versionInfos);
         XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
         XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
-		XMLUtil.setElementDoubleValue(nodeMeta, ID_CAPVOLUME, spotVolume);
+		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, spotVolume);
 		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, spotPixels);
 		XMLUtil.setElementValue(nodeMeta, ID_STIML, spotStimulus);
 		XMLUtil.setElementValue(nodeMeta, ID_SIDE, spotSide);
@@ -464,97 +458,6 @@ public class Spot implements Comparable <Spot>
         	}
         }
         return true;
-	}
-	
-	// -------------------------------------------
-	
-	public Point2D getCapillaryTipWithinROI2D (ROI2D roi2D) 
-	{
-		Point2D pt = null;		
-		if (roi instanceof ROI2DPolyLine) 
-		{
-			Polyline2D line = (( ROI2DPolyLine) roi).getPolyline2D();
-			int last = line.npoints - 1;
-			if (roi2D.contains(line.xpoints[0],  line.ypoints[0]))
-				pt = new Point2D.Double(line.xpoints[0],  line.ypoints[0]);
-			else if (roi2D.contains(line.xpoints[last],  line.ypoints[last])) 
-				pt = new Point2D.Double(line.xpoints[last],  line.ypoints[last]);
-		} 
-		else if (roi instanceof ROI2DLine) 
-		{
-			Line2D line = (( ROI2DLine) roi).getLine();
-			if (roi2D.contains(line.getP1()))
-				pt = line.getP1();
-			else if (roi2D.contains(line.getP2())) 
-				pt = line.getP2();
-		}
-		return pt;
-	}
-	
-	public Point2D getCapillaryROILowestPoint () 
-	{
-		Point2D pt = null;		
-		if (roi instanceof ROI2DPolyLine) 
-		{
-			Polyline2D line = ((ROI2DPolyLine) roi).getPolyline2D();
-			int last = line.npoints - 1;
-			if (line.ypoints[0] > line.ypoints[last])
-				pt = new Point2D.Double(line.xpoints[0],  line.ypoints[0]);
-			else  
-				pt = new Point2D.Double(line.xpoints[last],  line.ypoints[last]);
-		} 
-		else if (roi instanceof ROI2DLine) 
-		{
-			Line2D line = ((ROI2DLine) roi).getLine();
-			if (line.getP1().getY() > line.getP2().getY())
-				pt = line.getP1();
-			else
-				pt = line.getP2();
-		}
-		return pt;
-	}
-	
-	public Point2D getCapillaryROIFirstPoint () 
-	{
-		Point2D pt = null;		
-		if (roi instanceof ROI2DPolyLine) 
-		{
-			Polyline2D line = ((ROI2DPolyLine) roi).getPolyline2D();
-			pt = new Point2D.Double(line.xpoints[0],  line.ypoints[0]);
-		} 
-		else if (roi instanceof ROI2DLine) 
-		{
-			Line2D line = ((ROI2DLine) roi).getLine();
-			pt = line.getP1();
-		}
-		return pt;
-	}
-	
-	public Point2D getCapillaryROILastPoint () 
-	{
-		Point2D pt = null;		
-		if (roi instanceof ROI2DPolyLine) 
-		{
-			Polyline2D line = ((ROI2DPolyLine) roi).getPolyline2D();
-			int last = line.npoints - 1;
-			pt = new Point2D.Double(line.xpoints[last],  line.ypoints[last]);
-		} 
-		else if (roi instanceof ROI2DLine) 
-		{
-			Line2D line = ((ROI2DLine) roi).getLine();
-			pt = line.getP2();
-		}
-		return pt;
-	}
-	
-	public int getCapillaryROILength () 
-	{
-		Point2D pt1 = getCapillaryROIFirstPoint();
-		Point2D pt2 = getCapillaryROILastPoint();
-		double npixels = Math.sqrt(
-				(pt2.getY() - pt1.getY()) * (pt2.getY() - pt1.getY()) 
-				+ (pt2.getX() - pt1.getX()) * (pt2.getX() - pt1.getX()));
-		return (int) npixels;
 	}
 	
 	// --------------------------------------------
@@ -623,16 +526,16 @@ public class Spot implements Comparable <Spot>
 	
 	// -----------------------------------------------------------------------------
 	
-	public String csvExportCapillarySubSectionHeader() 
+	public String csvExportSpotSubSectionHeader() 
 	{
 		StringBuffer sbf = new StringBuffer();
 		
-		sbf.append("#,CAPILLARIES,describe each capillary\n");
+		sbf.append("#,SPOTS,describe each spot\n");
 		List<String> row2 = Arrays.asList(
 				"cap_prefix",
 				"kymoIndex", 
-				"kymographName", 
-				"kymoFile", 
+				"name", 
+				"--", 
 				"cap_cage",
 				"cap_nflies",
 				"cap_volume", 
@@ -645,7 +548,7 @@ public class Spot implements Comparable <Spot>
 		return sbf.toString();
 	}
 	
-	public String csvExportCapillaryDescription() 
+	public String csvExportDescription() 
 	{	
 		StringBuffer sbf = new StringBuffer();
 		if (kymographPrefix == null)
@@ -654,7 +557,7 @@ public class Spot implements Comparable <Spot>
 		List<String> row = Arrays.asList(
 				kymographPrefix,
 				Integer.toString(kymographIndex), 
-				filenameTIFF, 
+				getRoi().getName(), 
 				Integer.toString(spotCageID),
 				Integer.toString(spotNFlies),
 				Double.toString(spotVolume), 
@@ -672,8 +575,8 @@ public class Spot implements Comparable <Spot>
 		StringBuffer sbf = new StringBuffer();
 		String explanation1 = "columns=,name,index, npts,..,.(xi;yi)\n";
 		switch(measureType) {
-			case TOPLEVEL:
-				sbf.append("#,TOPLEVEL," + explanation1);
+			case AREA_NPIXELS:
+				sbf.append("#,AREA_NPIXELS," + explanation1);
 				break;
 
 			default:
@@ -689,7 +592,7 @@ public class Spot implements Comparable <Spot>
 		sbf.append(kymographPrefix+ ","+ kymographIndex +",");
 		
 		switch(measureType) {
-			case AREANPIXELS:
+			case AREA_NPIXELS:
 				areaNPixels.cvsExportDataToRow(sbf);
 				break;
 			default:
@@ -716,10 +619,10 @@ public class Spot implements Comparable <Spot>
 		spotSide = data[i]; 
 	}
 		
-	public void csvImportSpotData(EnumSpotMeasures measureType, String[] data) 
+	public void csvImportData(EnumSpotMeasures measureType, String[] data) 
 	{
 		switch(measureType) {
-		case AREANPIXELS:
+		case AREA_NPIXELS:
 			areaNPixels.csvImportDataFromRow( data, 2); 
 			break;
 		default:

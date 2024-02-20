@@ -514,7 +514,7 @@ public class XLSExport
 				options.compensateEvaporation = false;
 				switch (xlsExportType) 
 				{
-					case AREA_PIXELS:
+					case AREA_NPIXELS:
 						resultsArrayList.getResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 //						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;

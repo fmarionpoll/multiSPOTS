@@ -693,6 +693,7 @@ public class Experiment
  	{
  		return spotsArray.save_Measures(getKymosBinFullDirectory());
  	}
+ 	
  	public boolean loadCagesMeasures() 
 	{
 		return xmlReadDrosoTrack(null);

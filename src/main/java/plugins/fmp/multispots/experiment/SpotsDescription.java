@@ -207,7 +207,7 @@ public class SpotsDescription
 	
 	public String csvExportSectionHeader() {
 		StringBuffer sbf = new StringBuffer();
-		sbf.append("#,DESCRIPTION,Capillarytrack data\n");
+		sbf.append("#,DESCRIPTION, multiSPOTS data\n");
 		List<String> row2 = Arrays.asList(
 				ID_DESCGROUPING, 
 				ID_DESCVOLUMEUL, 

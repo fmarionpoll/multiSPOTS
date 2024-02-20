@@ -88,10 +88,10 @@ public class Graphs extends JPanel implements SequenceListener
 		int dy = 10; 
 		exp.seqCamData.seq.addListener(this);
 		
-		if (isThereAnyDataToDisplay(exp, EnumXLSExportType.AREA_PIXELS))  
+		if (isThereAnyDataToDisplay(exp, EnumXLSExportType.AREA_NPIXELS))  
 		{
 			plotAreaPixels = plotToChart(exp, "top + bottom levels", 
-					EnumXLSExportType.AREA_PIXELS, 
+					EnumXLSExportType.AREA_NPIXELS, 
 					plotAreaPixels, rectv);
 			rectv.translate(dx, dy);
 		}

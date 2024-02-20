@@ -43,7 +43,6 @@ public class DetectArea extends BuildSeries
 			saveComputation(exp);
 
 		closeViewers();
-		exp.seqKymos.closeSequence();
 	}
 	
 	private boolean loadExperimentDataToMeasureAreas(Experiment exp) 
@@ -77,6 +76,7 @@ public class DetectArea extends BuildSeries
 		if (directory == null)
 			return;
 		
+	
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
 			spot.areaNPixels.setPolylineLevelFromTempData(
