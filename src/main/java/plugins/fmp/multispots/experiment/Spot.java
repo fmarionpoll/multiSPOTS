@@ -1,6 +1,5 @@
 package plugins.fmp.multispots.experiment;
 
-import java.awt.Color;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.nio.file.Paths;
@@ -54,11 +53,8 @@ public class Spot implements Comparable <Spot>
 	
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
 	
-	public  final String 				ID_TOPLEVEL 	= "toplevel";	
-	public  final String 				ID_BOTTOMLEVEL 	= "bottomlevel";	
-	public  final String 				ID_DERIVATIVE 	= "derivative";	
-	
-	public SpotArea				ptsTop  		= new SpotArea(ID_TOPLEVEL); 
+	public  final String 				ID_AREAPIXELS 	= "areaNPixels";	
+	public SpotArea						areaNPixels  	= new SpotArea(ID_AREAPIXELS); 
 
 	
 	public boolean						valid			= true;
@@ -125,7 +121,7 @@ public class Spot implements Comparable <Spot>
 		
 		limitsOptions	= spot.limitsOptions;
 		
-		ptsTop.copy(spot.ptsTop); 
+		areaNPixels.copy(spot.areaNPixels); 
 	}
 	
 	public ROI2D getRoi() 
@@ -257,7 +253,7 @@ public class Spot implements Comparable <Spot>
 		{
 		case TOPLEVEL:
 		default:
-			yes= ptsTop.isThereAnyMeasuresDone();
+			yes= areaNPixels.isThereAnyMeasuresDone();
 			break;
 		}
 		return yes;
@@ -274,7 +270,7 @@ public class Spot implements Comparable <Spot>
 		case TOPLEVELDELTA:
 		case TOPLEVELDELTA_LR:
 			default:
-			datai = ptsTop.getMeasures(seriesBinMs, outputBinMs);
+			datai = areaNPixels.getMeasures(seriesBinMs, outputBinMs);
 			break;
 		}
 		return datai;
@@ -282,14 +278,14 @@ public class Spot implements Comparable <Spot>
 		
 	public void cropMeasuresToNPoints (int npoints) 
 	{
-		if (ptsTop.polylineLevel != null)
-			ptsTop.cropToNPoints(npoints);
+		if (areaNPixels.polylineLevel != null)
+			areaNPixels.cropToNPoints(npoints);
 	}
 	
 	public void restoreClippedMeasures () 
 	{
-		if (ptsTop.polylineLevel != null)
-			ptsTop.restoreNPoints();
+		if (areaNPixels.polylineLevel != null)
+			areaNPixels.restoreNPoints();
 	}
 	
 	public void setGulpsOptions (BuildSeriesOptions options) 
@@ -309,7 +305,7 @@ public class Spot implements Comparable <Spot>
 		{
 		case TOPLEVEL:
 		default:
-			lastMeasure = ptsTop.getLastMeasure();
+			lastMeasure = areaNPixels.getLastMeasure();
 			break;
 		}
 		return lastMeasure;
@@ -322,7 +318,7 @@ public class Spot implements Comparable <Spot>
 		{
 		case TOPLEVEL:
 		default:
-			lastMeasure = ptsTop.getLastDeltaMeasure();
+			lastMeasure = areaNPixels.getLastDeltaMeasure();
 			break;
 		}
 		return lastMeasure;
@@ -335,7 +331,7 @@ public class Spot implements Comparable <Spot>
 		{
 		case TOPLEVEL:
 		default:
-			t0Measure = ptsTop.getT0Measure();
+			t0Measure = areaNPixels.getT0Measure();
 			break;
 		}
 		return t0Measure;
@@ -344,7 +340,7 @@ public class Spot implements Comparable <Spot>
 	public List<ROI2D> transferMeasuresToROIs() 
 	{
 		List<ROI2D> listrois = new ArrayList<ROI2D> ();
-		getROIFromCapillaryLevel(ptsTop, listrois);
+		getROIFromCapillaryLevel(areaNPixels, listrois);
 		return listrois;
 	}
 	
@@ -357,16 +353,12 @@ public class Spot implements Comparable <Spot>
 		String name = kymographPrefix + "_" + capLevel.capName;
 		roi.setName(name);
 		roi.setT(kymographIndex);
-		if (capLevel.capName.contains(ID_DERIVATIVE)) {
-			roi.setColor(Color.yellow);
-			roi.setStroke(1);
-		}
 		listrois.add( roi);
 	}
 	
 	public void transferROIsToMeasures(List<ROI> listRois) 
 	{
-		ptsTop.transferROIsToMeasures(listRois);
+		areaNPixels.transferROIsToMeasures(listRois);
 	}
 	
 	// -----------------------------------------------------------------------------
@@ -423,7 +415,7 @@ public class Spot implements Comparable <Spot>
 	public boolean loadFromXML_MeasuresOnly(Node node) 
 	{
 		String header = getLast2ofSpotName()+"_";
-		boolean result = ptsTop.loadCapillaryLimitFromXML(node, ID_TOPLEVEL, header) > 0;
+		boolean result = areaNPixels.loadCapillaryLimitFromXML(node, ID_AREAPIXELS, header) > 0;
 		return result;
 	}
 	
@@ -621,12 +613,12 @@ public class Spot implements Comparable <Spot>
 	
 	public void adjustToImageWidth (int imageWidth) 
 	{
-		ptsTop.adjustToImageWidth(imageWidth);
+		areaNPixels.adjustToImageWidth(imageWidth);
 	}
 
 	public void cropToImageWidth (int imageWidth) 
 	{
-		ptsTop.cropToImageWidth(imageWidth);
+		areaNPixels.cropToImageWidth(imageWidth);
 	}
 	
 	// -----------------------------------------------------------------------------
@@ -698,7 +690,7 @@ public class Spot implements Comparable <Spot>
 		
 		switch(measureType) {
 			case TOPLEVEL:
-				ptsTop.cvsExportDataToRow(sbf);
+				areaNPixels.cvsExportDataToRow(sbf);
 				break;
 			default:
 				break;
@@ -728,7 +720,7 @@ public class Spot implements Comparable <Spot>
 	{
 		switch(measureType) {
 		case TOPLEVEL:
-			ptsTop.csvImportDataFromRow( data, 2); 
+			areaNPixels.csvImportDataFromRow( data, 2); 
 			break;
 		default:
 			break;

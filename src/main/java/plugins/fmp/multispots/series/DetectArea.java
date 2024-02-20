@@ -1,17 +1,12 @@
 package plugins.fmp.multispots.series;
 
-import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.IOException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Future;
 
 import javax.swing.SwingUtilities;
 
-import icy.file.Saver;
-import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.roi.BooleanMask2D;
@@ -20,17 +15,11 @@ import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
-import loci.formats.FormatException;
 
-import plugins.fmp.multispots.experiment.Capillary;
+
 import plugins.fmp.multispots.experiment.Experiment;
-import plugins.fmp.multispots.experiment.KymoROI2D;
 import plugins.fmp.multispots.experiment.SequenceCamData;
-import plugins.fmp.multispots.experiment.SequenceKymos;
 import plugins.fmp.multispots.experiment.Spot;
-import plugins.fmp.multispots.tools.Bresenham;
-import plugins.fmp.multispots.tools.GaspardRigidRegistration;
-import plugins.fmp.multispots.tools.ROI2DUtilities;
 import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multispots.tools.ImageTransform.ImageTransformOptions;
 
@@ -43,6 +32,7 @@ public class DetectArea extends BuildSeries
 	ArrayList<IcyBufferedImage>	cap_bufKymoImage = null;
 	int imageWidth = 0;
 	
+	// --------------------------------------------
 	
 	void analyzeExperiment(Experiment exp) 
 	{
@@ -148,22 +138,15 @@ public class DetectArea extends BuildSeries
 			System.out.println("DetectAreas:measureAreas Abort (1): nbspots = 0");
 			return false;
 		}
-
-		initMasks2DToMeasureAreas(exp);
-		initSpotsDataArrays(exp);
-		ImageTransformOptions transformOptions = new ImageTransformOptions();
-		transformOptions.transformOption = options.transformop;
-		getReferenceImage (exp, 0, transformOptions);
-		ImageTransformInterface transformFunction = options.transformop.getFunction();
 		
 		threadRunning = true;
 		stopFlag = false;
 		
 //		final int nColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
-		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.binFirst_ms, 0, exp.seqCamData.nTotalFrames);
+//		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.binFirst_ms, 0, exp.seqCamData.nTotalFrames);
 //		String vDataTitle = new String(" / " + nColumns);
-		ProgressFrame progressBar = new ProgressFrame("Analyze stack frame ");
+//		ProgressFrame progressBar = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildKymograph");
@@ -172,22 +155,23 @@ public class DetectArea extends BuildSeries
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
 	    tasks.clear();
 	    
-	    int t_current = 0;
-		for (long index_ms = exp.binFirst_ms ; index_ms <= exp.binLast_ms; index_ms += exp.binDuration_ms) {
-
-			final int t_previous = t_current;
-			final int t_from = (int) ((index_ms - exp.camImageFirst_ms)/exp.camImageBin_ms);
-			if (t_from >= exp.seqCamData.nTotalFrames)
-				continue;
+	    int nFrames = exp.seqCamData.nTotalFrames;
+	    initMasks2DToMeasureAreas(exp);
+		initSpotsDataArrays(exp);
+		ImageTransformOptions transformOptions = new ImageTransformOptions();
+		transformOptions.transformOption = options.transformop;
+		getReferenceImage (exp, 0, transformOptions);
+		ImageTransformInterface transformFunction = options.transformop.getFunction();
+		
+		for (int ii = 0; ii < nFrames; ii++) 
+		{
+			final int fromSourceImageIndex = ii;
 			
-			t_current = t_from;
-			String title = "Frame #"+ t_from + "/" + exp.seqCamData.nTotalFrames;
-			progressBar.setMessage(title);
+//			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.nTotalFrames;
+//			System.out.println(title);
+//			progressBar.setMessage(title);
 			
-			sourceImageIndex = exp.getClosestInterval(sourceImageIndex, index_ms);
-			final int fromSourceImageIndex = sourceImageIndex;
-//			final int kymographColumn =  iToColumn;	
-			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t_from));
+			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(ii));
 			final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 //			if (workImage == null)
 //				next;
@@ -206,9 +190,8 @@ public class DetectArea extends BuildSeries
 						try {
 							intersectionMask = maskAll2D.getIntersection(spot.spotMask2D );
 							sum = intersectionMask.getNumberOfPoints();
-							spot.ptsTop.limit[fromSourceImageIndex] = sum;		
+							spot.areaNPixels.limit[fromSourceImageIndex] = sum;		
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -219,7 +202,7 @@ public class DetectArea extends BuildSeries
 		}
 
 		waitFuturesCompletion(processor, tasks, null);
-		progressBar.close();
+//		progressBar.close();
 	       
 		return true;
 	}
@@ -248,10 +231,11 @@ public class DetectArea extends BuildSeries
 	
 	private void initSpotsDataArrays(Experiment exp)
 	{
-		int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms + 1);
+		//int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms + 1);
+		int nFrames = exp.seqCamData.nTotalFrames;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			spot.ptsTop.limit = new int [n_measures];
+			spot.areaNPixels.limit = new int [nFrames+1];
 		}
 
 	}

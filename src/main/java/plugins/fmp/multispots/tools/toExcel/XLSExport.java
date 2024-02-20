@@ -400,6 +400,15 @@ public class XLSExport
 		return getCapDataFromOneExperimentSeries(exp, exportType);
 	}
 	
+	public XLSResultsArray getSpotsDataFromOneExperiment(Experiment exp, EnumXLSExportType exportType, XLSExportOptions options) 
+	{
+		this.options = options;
+		expAll = new Experiment();
+		expAll.camImageLast_ms = exp.camImageLast_ms;
+		expAll.camImageFirst_ms = exp.camImageFirst_ms;
+		return getSpotsDataFromOneExperimentSeries(exp, exportType);
+	}
+	
 	private void exportError (Experiment expi, int nOutputFrames) 
 	{
 		String error = "XLSExport:ExportError() ERROR in "+ expi.getExperimentDirectory() 
@@ -469,6 +478,45 @@ public class XLSExport
 						
 					case TOPRAW:
 						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+						break;
+	
+					default:
+						break;
+				}
+				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);
+			}
+			expi = expi.chainToNextExperiment;
+		}
+		
+		switch (xlsExportType) 
+		{
+			case TOPLEVELDELTA:
+			case TOPLEVELDELTA_LR:
+				rowListForOneExp.subtractDeltaT(1, 1); //options.buildExcelStepMs);
+				break;
+			default:
+				break;
+		}
+		return rowListForOneExp;
+	}
+	
+	private XLSResultsArray getSpotsDataFromOneExperimentSeries(Experiment exp, EnumXLSExportType xlsExportType) 
+	{	
+		XLSResultsArray rowListForOneExp =  getDescriptorsForOneExperiment (exp, xlsExportType);
+		Experiment expi = exp.getFirstChainedExperiment(true); 
+		
+		while (expi != null) 
+		{
+			int nOutputFrames = getNOutputFrames(expi);
+			if (nOutputFrames > 1)
+			{
+				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
+				options.compensateEvaporation = false;
+				switch (xlsExportType) 
+				{
+					case AREA_PIXELS:
+						resultsArrayList.getResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+//						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
 	
 					default:

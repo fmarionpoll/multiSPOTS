@@ -29,7 +29,10 @@ public enum EnumXLSExportType
 	ELLIPSEAXES ("ellipse-axes", "mm"),
 	DISTANCE ("distance", "mm"), 
 	ISALIVE ("_alive", "yes/no"), 
-	SLEEP ("sleep", "yes, no");
+	SLEEP ("sleep", "yes, no"),
+	
+	AREA_PIXELS("area", "n pixels"),
+	AREA_PIXELS_LR ("area_L+R", "n_pixels");
 	
 	private String label;
 	private String unit;

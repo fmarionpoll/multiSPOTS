@@ -6,6 +6,8 @@ import java.util.Collections;
 
 import plugins.fmp.multispots.experiment.CapillariesArray;
 import plugins.fmp.multispots.experiment.Capillary;
+import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.SpotsArray;
 import plugins.fmp.multispots.tools.Comparators;
 
 
@@ -84,6 +86,18 @@ public class XLSResultsArray
 			conc = cap.capConcentration;
 		sameLR &= stim .equals(cap.capStimulus);
 		sameLR &= conc .equals(cap.capConcentration);
+	}
+	
+	public void checkIfSameStimulusAndConcentration(Spot spot) 
+	{
+		if (!sameLR)
+			return;
+		if (stim == null)
+			stim = spot.spotStimulus;
+		if (conc == null)
+			conc = spot.spotConcentration;
+		sameLR &= stim .equals(spot.spotStimulus);
+		sameLR &= conc .equals(spot.spotConcentration);
 	}
 	
 	public void subtractEvaporation() 
@@ -235,6 +249,18 @@ public class XLSResultsArray
 		buildDataForPass2(xlsExportOptions);
 	}
 	
+	public void getResults1( 
+			SpotsArray spotsArray,  
+			EnumXLSExportType exportType, 
+			int nOutputFrames, 
+			long kymoBinCol_Ms, 
+			XLSExportOptions xlsExportOptions) 
+	{
+		xlsExportOptions.exportType = exportType;
+		buildDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, false);
+		buildDataForPass2(xlsExportOptions);
+	}
+	
 	private void buildDataForPass1(CapillariesArray capillaries,
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
@@ -247,6 +273,28 @@ public class XLSResultsArray
 			checkIfSameStimulusAndConcentration(cap);
 			XLSResults results = new XLSResults(cap.getRoiName(), cap.capNFlies, cap.capCageID, xlsExportOptions.exportType, nOutputFrames);
 			results.dataInt = cap.getCapillaryMeasuresForXLSPass1(xlsExportOptions.exportType, kymoBinCol_Ms, xlsExportOptions.buildExcelStepMs);
+			if (subtractT0) 
+				results.subtractT0();
+			results.transferDataIntToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
+			addRow(results);
+		}
+	}
+	
+	private void buildDataForPass1(SpotsArray spotsArray,
+			int nOutputFrames, 
+			long kymoBinCol_Ms, 
+			XLSExportOptions xlsExportOptions, 
+			boolean subtractT0)
+	{
+		double scalingFactorToPhysicalUnits = spotsArray.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
+		for (Spot spot: spotsArray.spotsList) 
+		{
+			checkIfSameStimulusAndConcentration(spot);
+			XLSResults results = new XLSResults(spot.getRoiName(), 
+												spot.spotNFlies, 
+												spot.spotCageID, 
+												xlsExportOptions.exportType, nOutputFrames);
+			results.dataInt = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, kymoBinCol_Ms, xlsExportOptions.buildExcelStepMs);
 			if (subtractT0) 
 				results.subtractT0();
 			results.transferDataIntToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);

@@ -29,10 +29,15 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	private static final long serialVersionUID = 853047648249832145L;
 	public	PopupPanel 	capPopupPanel	= null;
 			JTabbedPane tabsPane 		= new JTabbedPane();
+			
 	public 	CreateSpots	tabCreateForSpots = new CreateSpots();
-			Edit		tabEdit			= new Edit();
+	ThresholdSimple simpleThreshold = new ThresholdSimple();
+	ThresholdColors colorsThreshold = new ThresholdColors();
+	public 	Graphs 		tabGraphs 		= new Graphs();
 	public 	LoadSaveSpots tabFile  		= new LoadSaveSpots();
-			Adjust 		tabAdjust 		= new Adjust();
+	
+//			Edit		tabEdit			= new Edit();
+//			Adjust 		tabAdjust 		= new Adjust();
 
 	public 	Infos		tabInfos		= new Infos();
 	private int 		ID_INFOS 		= 1;
@@ -52,31 +57,51 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		capPopupPanel.collapse();
 		mainPanel.add(capPopupPanel);
 		
-		GridLayout capLayout = new GridLayout(3, 1);
+		GridLayout gridLayout = new GridLayout(3, 1);
 		int order = 0;
 		
-		tabCreateForSpots.init(capLayout, parent0);
+		tabCreateForSpots.init(gridLayout, parent0);
 		tabCreateForSpots.addPropertyChangeListener(this);
 		tabsPane.addTab("Create", null, tabCreateForSpots, "Create spots defining liquid drops");
 		order++;
 		
-		ID_INFOS = order;
-		tabInfos.init(capLayout, parent0);
-		tabInfos.addPropertyChangeListener(this);
-		tabsPane.addTab("Infos", null, tabInfos, "Define pixel conversion unit of images and capillaries content");
+		simpleThreshold.init(gridLayout, parent0);
+		simpleThreshold.addPropertyChangeListener( this);
+		tabsPane.addTab("Simple threshold", null, simpleThreshold, "Measure area using a simple transform and threshold");
 		order++;
 		
-		ID_EDIT = order;
-		tabEdit.init(capLayout, parent0);
-		tabEdit.addPropertyChangeListener(this);
-		tabsPane.addTab("Edit", null, tabEdit, "Edit capillaries position and size");
+//		colorsThreshold.init(gridLayout, parent0);	
+//		colorsThreshold.addPropertyChangeListener( this);
+//		tabsPane.addTab("Colors threshold", null, colorsThreshold, "Measure area using colors defined by user");
+//		order++;
+		
+		tabGraphs.init(gridLayout, parent0);
+		tabGraphs.addPropertyChangeListener(this);
+		tabsPane.addTab("Graphs", null, tabGraphs, "Display results as a graph");
 		order++;
 		
-		ID_ADJUST = order;
-		tabAdjust.init(capLayout, parent0);
-		tabAdjust.addPropertyChangeListener(this);
-		tabsPane.addTab("Adjust", null, tabAdjust, "Adjust ROIS position to the capillaries");
+		tabFile.init(gridLayout, parent0);
+		tabFile.addPropertyChangeListener(this);
+		tabsPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with spots descriptors");
 		order++;
+		
+//		ID_INFOS = order;
+//		tabInfos.init(capLayout, parent0);
+//		tabInfos.addPropertyChangeListener(this);
+//		tabsPane.addTab("Infos", null, tabInfos, "Define pixel conversion unit of images and capillaries content");
+//		order++;
+//		
+//		ID_EDIT = order;
+//		tabEdit.init(capLayout, parent0);
+//		tabEdit.addPropertyChangeListener(this);
+//		tabsPane.addTab("Edit", null, tabEdit, "Edit capillaries position and size");
+//		order++;
+//		
+//		ID_ADJUST = order;
+//		tabAdjust.init(capLayout, parent0);
+//		tabAdjust.addPropertyChangeListener(this);
+//		tabsPane.addTab("Adjust", null, tabAdjust, "Adjust ROIS position to the capillaries");
+//		order++;
 		
 //		ID_FILTER = order;
 //		tabFilterImage.init(capLayout, parent0);
@@ -84,10 +109,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 //		tabsPane.addTab("Experimental", null, tabFilterImage, "Try different filters");
 //		order++;
 		
-		tabFile.init(capLayout, parent0);
-		tabFile.addPropertyChangeListener(this);
-		tabsPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with capillaries descriptors");
-		order++;
+
 		
 		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		capPanel.add(tabsPane);
@@ -154,30 +176,29 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	@Override
 	public void stateChanged(ChangeEvent e) 
 	{
-		JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
-        int selectedIndex = tabbedPane.getSelectedIndex();
-        tabAdjust.roisDisplayrefBar(selectedIndex == ID_ADJUST);
-        boolean disableCapillaries = (selectedIndex != ID_FILTER);
-        parent0.paneExperiment.tabOptions.displayROIsCategory(disableCapillaries, "line");
-        
-        parent0.paneExperiment.tabOptions.viewCapillariesCheckBox.setSelected(selectedIndex == ID_INFOS);
-        if (selectedIndex == ID_EDIT) {
-        	Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
- 			if (exp != null) {
- 				Viewer v = exp.seqCamData.seq.getFirstViewer(); 			
-	     		if (v != null) {
-	     			v.toFront();
-					v.requestFocus();
-	     		}
- 			}
- 			tabEdit.openDialog();
- 			editSelected = true;
-        }
-        else if (editSelected) {
-        	tabEdit.closeDialog();
-        	editSelected = false;
-        }
-        
+//		JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
+//        int selectedIndex = tabbedPane.getSelectedIndex();
+//        tabAdjust.roisDisplayrefBar(selectedIndex == ID_ADJUST);
+//        boolean disableCapillaries = (selectedIndex != ID_FILTER);
+//        parent0.paneExperiment.tabOptions.displayROIsCategory(disableCapillaries, "line");
+//        
+//        parent0.paneExperiment.tabOptions.viewCapillariesCheckBox.setSelected(selectedIndex == ID_INFOS);
+//        if (selectedIndex == ID_EDIT) {
+//        	Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+// 			if (exp != null) {
+// 				Viewer v = exp.seqCamData.seq.getFirstViewer(); 			
+//	     		if (v != null) {
+//	     			v.toFront();
+//					v.requestFocus();
+//	     		}
+// 			}
+// 			tabEdit.openDialog();
+// 			editSelected = true;
+//        }
+//        else if (editSelected) {
+//        	tabEdit.closeDialog();
+//        	editSelected = false;
+//        }
 	}
 	
 	public void transferPreviousExperimentCapillariesInfos(Experiment exp0, Experiment exp)
