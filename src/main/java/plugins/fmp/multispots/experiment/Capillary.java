@@ -14,6 +14,7 @@ import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.type.geom.Polyline2D;
 import icy.util.XMLUtil;
+import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.series.BuildSeriesOptions;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
 import plugins.fmp.multispots.tools.toExcel.EnumXLSColumnHeader;
@@ -755,6 +756,22 @@ public class Capillary implements Comparable <Capillary>
 				(pt2.getY() - pt1.getY()) * (pt2.getY() - pt1.getY()) 
 				+ (pt2.getX() - pt1.getX()) * (pt2.getX() - pt1.getX()));
 		return (int) npixels;
+	}
+	
+	public void adjustToImageWidth (int imageWidth) 
+	{
+		ptsTop.adjustToImageWidth(imageWidth);
+		ptsBottom.adjustToImageWidth(imageWidth);
+		ptsDerivative.adjustToImageWidth(imageWidth);
+		ptsGulps.gulps.clear(); 
+	}
+
+	public void cropToImageWidth (int imageWidth) 
+	{
+		ptsTop.cropToImageWidth(imageWidth);
+		ptsBottom.cropToImageWidth(imageWidth);
+		ptsDerivative.cropToImageWidth(imageWidth);
+		ptsGulps.gulps.clear();
 	}
 	
 	// --------------------------------------------

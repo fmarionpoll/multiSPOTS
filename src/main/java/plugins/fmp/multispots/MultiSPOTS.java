@@ -25,7 +25,7 @@ import plugins.fmp.multispots.workinprogress_gpu.MCSpotsExp_;
 
 public class MultiSPOTS extends PluginActionable  
 {
-	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS Feb 18, 2024", true, true, true, true);
+	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS Feb 20, 2024", true, true, true, true);
 	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
 	
 	public MCExperiment_ 	paneExperiment 	= new MCExperiment_();

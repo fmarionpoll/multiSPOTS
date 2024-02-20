@@ -241,23 +241,13 @@ public class SpotsArray
 	public void adjustToImageWidth (int imageWidth) 
 	{
 		for (Spot spot: spotsList) 
-		{
-			spot.ptsTop.adjustToImageWidth(imageWidth);
-			spot.ptsBottom.adjustToImageWidth(imageWidth);
-			spot.ptsDerivative.adjustToImageWidth(imageWidth);
-			spot.ptsGulps.gulps.clear(); 
-		}
+			spot.adjustToImageWidth(imageWidth);
 	}
 	
 	public void cropToImageWidth (int imageWidth) 
 	{
 		for (Spot spot: spotsList) 
-		{
-			spot.ptsTop.cropToImageWidth(imageWidth);
-			spot.ptsBottom.cropToImageWidth(imageWidth);
-			spot.ptsDerivative.cropToImageWidth(imageWidth);
-			spot.ptsGulps.gulps.clear();
-		}
+			spot.cropToImageWidth(imageWidth);
 	}
 
 	public void transferDescriptionToSpots() 

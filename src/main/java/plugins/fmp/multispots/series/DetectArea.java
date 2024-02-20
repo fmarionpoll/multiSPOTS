@@ -14,12 +14,14 @@ import icy.file.Saver;
 import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
+import icy.roi.BooleanMask2D;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
 import loci.formats.FormatException;
+
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.KymoROI2D;
@@ -29,6 +31,8 @@ import plugins.fmp.multispots.experiment.Spot;
 import plugins.fmp.multispots.tools.Bresenham;
 import plugins.fmp.multispots.tools.GaspardRigidRegistration;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
+import plugins.fmp.multispots.tools.ImageTransform.ImageTransformOptions;
 
 
 
@@ -118,210 +122,160 @@ public class DetectArea extends BuildSeries
 		exp.saveMCExperiment();
 	}
 	
+	private void getReferenceImage (Experiment exp, int t, ImageTransformOptions options) 
+	{
+		switch (options.transformOption) 
+		{
+			case SUBTRACT_TM1: 
+				options.backgroundImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+				break;
+				
+			case SUBTRACT_T0:
+			case SUBTRACT_REF:
+				if (options.backgroundImage == null)
+					options.backgroundImage = imageIORead(exp.seqCamData.getFileNameFromImageList(0));
+				break;
+				
+			case NONE:
+			default:
+				break;
+		}
+	}
+	
 	private boolean measureAreas (Experiment exp) 
 	{
 		if (exp.spotsArray.spotsList.size() < 1) {
 			System.out.println("DetectAreas:measureAreas Abort (1): nbspots = 0");
 			return false;
 		}
-		SequenceCamData seqCamData = exp.seqCamData;
-		initArraysToMeasureAreas(exp);
+
+		initMasks2DToMeasureAreas(exp);
+		initSpotsDataArrays(exp);
+		ImageTransformOptions transformOptions = new ImageTransformOptions();
+		transformOptions.transformOption = options.transformop;
+		getReferenceImage (exp, 0, transformOptions);
+		ImageTransformInterface transformFunction = options.transformop.getFunction();
 		
 		threadRunning = true;
 		stopFlag = false;
 		
-		final int nColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		int iToColumn = 0; 
+//		final int nColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
 		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.binFirst_ms, 0, exp.seqCamData.nTotalFrames);
-		String vDataTitle = new String(" / " + nColumns);
-		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
+//		String vDataTitle = new String(" / " + nColumns);
+		ProgressFrame progressBar = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildKymograph");
 	    processor.setPriority(Processor.NORM_PRIORITY);
 	    int ntasks =  exp.capillaries.capillariesList.size(); //
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
-		
 	    tasks.clear();
-		for (long ii_ms = exp.binFirst_ms ; ii_ms <= exp.binLast_ms; ii_ms += exp.binDuration_ms, iToColumn++) {
+	    
+	    int t_current = 0;
+		for (long index_ms = exp.binFirst_ms ; index_ms <= exp.binLast_ms; index_ms += exp.binDuration_ms) {
 
-			sourceImageIndex = exp.getClosestInterval(sourceImageIndex, ii_ms);
+			final int t_previous = t_current;
+			final int t_from = (int) ((index_ms - exp.camImageFirst_ms)/exp.camImageBin_ms);
+			if (t_from >= exp.seqCamData.nTotalFrames)
+				continue;
+			
+			t_current = t_from;
+			String title = "Frame #"+ t_from + "/" + exp.seqCamData.nTotalFrames;
+			progressBar.setMessage(title);
+			
+			sourceImageIndex = exp.getClosestInterval(sourceImageIndex, index_ms);
 			final int fromSourceImageIndex = sourceImageIndex;
-			final int kymographColumn =  iToColumn;	
-			final IcyBufferedImage sourceImage = loadImageFromIndex(exp, fromSourceImageIndex);
+//			final int kymographColumn =  iToColumn;	
+			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t_from));
+			final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+//			if (workImage == null)
+//				next;
 			
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
+
+					boolean[] boolMap = getBoolMap_FromBinaryInt(workImage);
+					BooleanMask2D maskAll2D = new BooleanMask2D(workImage.getBounds(), boolMap); 
+				
 					for (Spot spot: exp.spotsArray.spotsList) 
-						analyzeSpot(sourceImage, spot, fromSourceImageIndex, kymographColumn);
+					{
+						int sum = 0;
+						BooleanMask2D intersectionMask = null;
+						try {
+							intersectionMask = maskAll2D.getIntersection(spot.spotMask2D );
+							sum = intersectionMask.getNumberOfPoints();
+							spot.ptsTop.limit[fromSourceImageIndex] = sum;		
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}}));
-			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
+//			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
 //			seqData.setImage(0, 0, sourceImage); // add option??
-			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nColumns);	
+//			progressBar.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nColumns);	
 		}
 
 		waitFuturesCompletion(processor, tasks, null);
-		progressBar1.close();
-		
-//		ProgressFrame progressBar2 = new ProgressFrame("Combine results into kymograph");
-//		int sizeC = seqData.getSizeC();
-//		exportCapillaryIntegerArrays_to_Kymograph(exp, seqKymos.seq, sizeC);
-//        progressBar2.close();
-        
+		progressBar.close();
+	       
 		return true;
 	}
 	
-	private void analyzeSpot(IcyBufferedImage sourceImage, Spot spot, int fromSourceImageIndex, int kymographColumn)
+	public boolean[] getBoolMap_FromBinaryInt(IcyBufferedImage img) 
 	{
-		KymoROI2D capT = spot.getROI2DKymoAtIntervalT(fromSourceImageIndex);
-		int sizeC = sourceImage.getSizeC();
-	  
-		for (int chan = 0; chan < sizeC; chan++) {
-			
-			int [] sourceImageChannel =  Array1DUtil.arrayToIntArray(sourceImage.getDataXY(chan), sourceImage.isSignedDataType()); 			
-			int [] capImageChannel = spot.cap_Integer.get(chan); 
+		boolean[] boolMap = new boolean[ img.getSizeX() * img.getSizeY() ];
+		byte [] imageSourceDataBuffer = null;
+		DataType datatype = img.getDataType_();
 		
-			int cnt = 0;
-			int sourceImageWidth = sourceImage.getWidth();
-			for (ArrayList<int[]> mask : capT.getMasksList()) 
-			{
-				int sum = 0;
-				for (int[] m: mask) 
-					sum += sourceImageChannel[m[0] + m[1]*sourceImageWidth];
-				if (mask.size() > 0)
-					capImageChannel[cnt*imageWidth + kymographColumn] = (int) (sum/mask.size()); 
-				cnt ++;
-			}
+		if (datatype != DataType.BYTE && datatype != DataType.UBYTE) {
+			Object sourceArray = img.getDataXY(0);
+			imageSourceDataBuffer = Array1DUtil.arrayToByteArray(sourceArray);
 		}
+		else
+			imageSourceDataBuffer = img.getDataXYAsByte(0);
 		
+		for (int x = 0; x < boolMap.length; x++)  {
+			if (imageSourceDataBuffer[x] == 0)
+				boolMap[x] =  false;
+			else
+				boolMap[x] =  true;
+		}
+		return boolMap;
 	}
 	
-	private IcyBufferedImage loadImageFromIndex(Experiment exp, int indexFromFrame) 
+	private void initSpotsDataArrays(Experiment exp)
 	{
-		IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(indexFromFrame));				
-		if (options.doRegistration ) 
+		int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms + 1);
+		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			String referenceImageName = exp.seqCamData.getFileNameFromImageList(options.referenceFrame);			
-			IcyBufferedImage referenceImage = imageIORead(referenceImageName);
-			adjustImage(sourceImage, referenceImage);
+			spot.ptsTop.limit = new int [n_measures];
 		}
-		return sourceImage;
+
 	}
-			
-	private void initArraysToMeasureAreas(Experiment exp) 
+	
+	private void initMasks2DToMeasureAreas(Experiment exp) 
 	{
 		SequenceCamData seqCamData = exp.seqCamData;
 		if (seqCamData.seq == null) 
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
-		int sizex = seqCamData.seq.getSizeX();
-		int sizey = seqCamData.seq.getSizeY();	
 
 		imageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		
-		int imageHeight = 0;
-		for (Capillary cap: exp.capillaries.capillariesList) {
-			for (KymoROI2D capT : cap.getROIsForKymo()) {
-				int imageHeight_i = buildMasks(capT, sizex, sizey);
-				if (imageHeight_i > imageHeight) imageHeight = imageHeight_i;
-			}
-		}
-		buildCapInteger(exp, imageHeight);
-	}
-	
-	private int buildMasks (KymoROI2D capT, int sizex, int sizey) {
-		ArrayList<ArrayList<int[]>> masks = new ArrayList<ArrayList<int[]>>();
-		getPointsfromROIPolyLineUsingBresenham(
-				ROI2DUtilities.getCapillaryPoints(capT.getRoi()), 
-				masks, 
-				options.diskRadius, 
-				sizex, 
-				sizey);
-		capT.setMasksList(masks);	
-		return masks.size();
-	}
-	
-	private void buildCapInteger (Experiment exp, int imageHeight) 
-	{
-		SequenceCamData seqCamData = exp.seqCamData;
-		int numC = seqCamData.seq.getSizeC();
-		if (numC <= 0)
-			numC = 3;
-		
-		DataType dataType = seqCamData.seq.getDataType_();
-		if (dataType.toString().equals("undefined"))
-			dataType = DataType.UBYTE;
-
-		int len = imageWidth * imageHeight;
-		int nbcapillaries = exp.capillaries.capillariesList.size();
-		cap_bufKymoImage = new ArrayList<IcyBufferedImage>(nbcapillaries);
-		
-		for (int i=0; i < nbcapillaries; i++) {
-			IcyBufferedImage cap_Image = new IcyBufferedImage(imageWidth, imageHeight, numC, dataType);
-			cap_bufKymoImage.add(cap_Image);
-			
-			Capillary cap = exp.capillaries.capillariesList.get(i);
-			cap.cap_Integer = new ArrayList <int []>(numC);
-
-			for (int chan = 0; chan < numC; chan++) {
-				int[] tabValues = new int[len];
-				cap.cap_Integer.add(tabValues);
+		for (Spot spot: exp.spotsArray.spotsList) 
+		{
+			try {
+				spot.spotMask2D = spot.getRoi().getBooleanMask2D( 0 , 0, 1, true );
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
 	
-	private void getPointsfromROIPolyLineUsingBresenham (ArrayList<Point2D> pointsList, List<ArrayList<int[]>> masks, double diskRadius, int sizex, int sizey) 
-	{
-		ArrayList<int[]> pixels = Bresenham.getPixelsAlongLineFromROI2D (pointsList);
-		int idiskRadius = (int) diskRadius;
-		for (int[] pixel: pixels) 
-			masks.add(getAllPixelsAroundPixel(pixel, idiskRadius, sizex, sizey));
-	}
-	
-	private ArrayList<int[]> getAllPixelsAroundPixel(int[] pixel, int diskRadius, int sizex, int sizey) 
-	{
-		ArrayList<int[]> maskAroundPixel = new ArrayList<int[]>();
-		double m1 = pixel[0];
-		double m2 = pixel[1];
-		double radiusSquared = diskRadius * diskRadius;
-		int minX = clipValueToLimits(pixel[0] - diskRadius, 0, sizex-1);
-		int maxX = clipValueToLimits(pixel[0] + diskRadius, minX, sizex-1);
-		int minY = pixel[1]; // getValueWithinLimits(pixel[1] - diskRadius, 0, sizey-1);
-		int maxY = pixel[1]; // getValueWithinLimits(pixel[1] + diskRadius, minY, sizey-1);
 
-		for (int x = minX; x <= maxX; x++) {
-		    for (int y = minY; y <= maxY; y++) {
-		        double dx = x - m1;
-		        double dy = y - m2;
-		        double distanceSquared = dx * dx + dy * dy;
-		        if (distanceSquared <= radiusSquared)
-		        {
-		        	maskAroundPixel.add(new int[]{x, y});
-		        }
-		    }
-		}
-		return maskAroundPixel;
-	}
-	
-	private int clipValueToLimits(int x, int min, int max)
-	{
-		if (x < min)
-			x = min;
-		if (x > max)
-			x = max;
-		return x;
-	}
 
-	private void adjustImage(IcyBufferedImage workImage, IcyBufferedImage referenceImage) 
-	{
-		int referenceChannel = 0;
-		GaspardRigidRegistration.correctTranslation2D(workImage, referenceImage, referenceChannel);
-        boolean rotate = GaspardRigidRegistration.correctRotation2D(workImage, referenceImage, referenceChannel);
-        if (rotate) 
-        	GaspardRigidRegistration.correctTranslation2D(workImage, referenceImage, referenceChannel);
-	}
-	
 	private void closeKymoViewers() 
 	{
 		closeViewer(vData);

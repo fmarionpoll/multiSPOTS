@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.w3c.dom.Node;
 
+import icy.roi.BooleanMask2D;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.type.geom.Polyline2D;
@@ -31,6 +32,7 @@ public class Spot implements Comparable <Spot>
 
 	private ROI2D 						roi 			= null;
 	private ArrayList<KymoROI2D>		roisForKymo 	= new ArrayList<KymoROI2D>();
+	public BooleanMask2D 				spotMask2D		= null;
 
 	public int							kymographIndex 	= -1;
 	private String						kymographPrefix	= null;
@@ -57,9 +59,7 @@ public class Spot implements Comparable <Spot>
 	public  final String 				ID_DERIVATIVE 	= "derivative";	
 	
 	public SpotArea				ptsTop  		= new SpotArea(ID_TOPLEVEL); 
-	public SpotArea				ptsBottom 		= new SpotArea(ID_BOTTOMLEVEL); 
-	public SpotArea				ptsDerivative 	= new SpotArea(ID_DERIVATIVE); 
-	public CapillaryGulps 		ptsGulps 		= new CapillaryGulps(); 
+
 	
 	public boolean						valid			= true;
 
@@ -125,10 +125,7 @@ public class Spot implements Comparable <Spot>
 		
 		limitsOptions	= spot.limitsOptions;
 		
-		ptsGulps.copy(spot.ptsGulps);
 		ptsTop.copy(spot.ptsTop); 
-		ptsBottom.copy(spot.ptsBottom); 
-		ptsDerivative.copy(spot.ptsDerivative); 
 	}
 	
 	public ROI2D getRoi() 
@@ -258,15 +255,6 @@ public class Spot implements Comparable <Spot>
 		boolean yes = false;
 		switch (option) 
 		{
-		case DERIVEDVALUES:
-			yes= (ptsDerivative.isThereAnyMeasuresDone());
-			break;
-		case SUMGULPS:
-			yes= (ptsGulps.isThereAnyMeasuresDone());
-			break;
-		case BOTTOMLEVEL:
-			yes= ptsBottom.isThereAnyMeasuresDone();
-			break;
 		case TOPLEVEL:
 		default:
 			yes= ptsTop.isThereAnyMeasuresDone();
@@ -280,25 +268,6 @@ public class Spot implements Comparable <Spot>
 		ArrayList<Integer> datai = null;
 		switch (option) 
 		{
-		case DERIVEDVALUES:
-			datai = ptsDerivative.getMeasures(seriesBinMs, outputBinMs);
-			break;
-		case SUMGULPS:
-		case SUMGULPS_LR:
-		case NBGULPS:
-		case AMPLITUDEGULPS:
-		case TTOGULP:
-		case TTOGULP_LR:
-		case AUTOCORREL:
-		case AUTOCORREL_LR:
-		case CROSSCORREL:
-		case CROSSCORREL_LR:
-			if (ptsGulps != null)
-				datai = ptsGulps.getMeasuresFromGulps(option, ptsTop.getNPoints(), seriesBinMs, outputBinMs);
-			break;
-		case BOTTOMLEVEL:
-			datai = ptsBottom.getMeasures(seriesBinMs, outputBinMs);
-			break;
 		case TOPLEVEL:
 		case TOPRAW:
 		case TOPLEVEL_LR:
@@ -315,20 +284,12 @@ public class Spot implements Comparable <Spot>
 	{
 		if (ptsTop.polylineLevel != null)
 			ptsTop.cropToNPoints(npoints);
-		if (ptsBottom.polylineLevel != null)
-			ptsBottom.cropToNPoints(npoints);
-		if (ptsDerivative.polylineLevel != null)
-			ptsDerivative.cropToNPoints(npoints);
 	}
 	
 	public void restoreClippedMeasures () 
 	{
 		if (ptsTop.polylineLevel != null)
 			ptsTop.restoreNPoints();
-		if (ptsBottom.polylineLevel != null)
-			ptsBottom.restoreNPoints();
-		if (ptsDerivative.polylineLevel != null)
-			ptsDerivative.restoreNPoints();
 	}
 	
 	public void setGulpsOptions (BuildSeriesOptions options) 
@@ -341,84 +302,11 @@ public class Spot implements Comparable <Spot>
 		return limitsOptions;
 	}
 	
-	public void initGulps() 
-	{
-		if (ptsGulps == null) {
-			ptsGulps = new CapillaryGulps();
-			ptsGulps.gulps = new ArrayList <> ();
-		}
-		
-		if (limitsOptions.analyzePartOnly) {
-			int searchFromXFirst = (int) limitsOptions.searchArea.getX();
-			int searchFromXLast = (int) limitsOptions.searchArea.getWidth() + searchFromXFirst;
-			ptsGulps.removeGulpsWithinInterval(searchFromXFirst, searchFromXLast);
-		}
-		else 
-			ptsGulps.gulps.clear();
-	}
-	
-	public void detectGulps() 
-	{
-		int indexPixel = 0;
-		int firstPixel = 1;
-		if (ptsTop.polylineLevel == null)
-			return;
-		int lastPixel = ptsTop.polylineLevel.npoints;
-		if (limitsOptions.analyzePartOnly){
-			firstPixel = (int) limitsOptions.searchArea.getX();
-			lastPixel = (int) limitsOptions.searchArea.getWidth() + firstPixel;
-			
-		} 
-		int threshold = (int) ((limitsOptions.detectGulpsThreshold_uL / spotVolume) * spotPixels);
-		ArrayList<Point2D> gulpPoints = new ArrayList<Point2D>();
-		int indexLastDetected = -1;
-		
-		for (indexPixel = firstPixel; indexPixel < lastPixel; indexPixel++) 
-		{
-			int derivativevalue = (int) ptsDerivative.polylineLevel.ypoints[indexPixel-1];
-			if (derivativevalue >= threshold) 
-				indexLastDetected = addPointMatchingThreshold(indexPixel, gulpPoints, indexLastDetected); 
-		}
-		if (indexLastDetected > 0)
-			addNewGulp(gulpPoints);
-	}
-	
-	private int addPointMatchingThreshold(int indexPixel, ArrayList<Point2D> gulpPoints, int indexLastDetected) 
-	{
-		if (indexLastDetected > 0 && ((indexPixel - indexLastDetected) > 1)) {
-			if (gulpPoints.size() == 1)
-				gulpPoints.add(new Point2D.Double(indexPixel-1, ptsTop.polylineLevel.ypoints[indexPixel-1]));
-			addNewGulp(gulpPoints);
-			gulpPoints.clear();
-			gulpPoints.add(new Point2D.Double(indexPixel-1, ptsTop.polylineLevel.ypoints[indexPixel-1]));
-		}
-		gulpPoints.add(new Point2D.Double(indexPixel, ptsTop.polylineLevel.ypoints[indexPixel]));
-		return indexPixel;
-	}
-	
-	private void addNewGulp(ArrayList<Point2D> gulpPoints) 
-	{
-		ptsGulps.addNewGulpFromPoints(gulpPoints);
-	}
-	
 	public int getLastMeasure(EnumXLSExportType option) 
 	{
 		int lastMeasure = 0;
 		switch (option) 
 		{
-		case DERIVEDVALUES:
-			lastMeasure = ptsDerivative.getLastMeasure();
-			break;
-		case SUMGULPS:
-			if (ptsGulps != null) 
-			{
-				List<Integer> datai = ptsGulps.getCumSumFromGulps(ptsTop.getNPoints());
-				lastMeasure = datai.get(datai.size()-1);
-			}
-			break;
-		case BOTTOMLEVEL:
-			lastMeasure = ptsBottom.getLastMeasure();
-			break;
 		case TOPLEVEL:
 		default:
 			lastMeasure = ptsTop.getLastMeasure();
@@ -432,18 +320,6 @@ public class Spot implements Comparable <Spot>
 		int lastMeasure = 0;
 		switch (option) 
 		{
-		case DERIVEDVALUES:
-			lastMeasure = ptsDerivative.getLastDeltaMeasure();
-			break;
-		case SUMGULPS:
-			if (ptsGulps != null) {
-				List<Integer> datai = ptsGulps.getCumSumFromGulps(ptsTop.getNPoints());
-				lastMeasure = datai.get(datai.size()-1) - datai.get(datai.size()-2);
-			}
-			break;
-		case BOTTOMLEVEL:
-			lastMeasure = ptsBottom.getLastDeltaMeasure();
-			break;
 		case TOPLEVEL:
 		default:
 			lastMeasure = ptsTop.getLastDeltaMeasure();
@@ -457,18 +333,6 @@ public class Spot implements Comparable <Spot>
 		int t0Measure = 0;
 		switch (option) 
 		{
-		case DERIVEDVALUES:
-			t0Measure = ptsDerivative.getT0Measure();
-			break;
-		case SUMGULPS:
-			if (ptsGulps != null) {
-				List<Integer> datai = ptsGulps.getCumSumFromGulps(ptsTop.getNPoints());
-				t0Measure = datai.get(0);
-			}
-			break;
-		case BOTTOMLEVEL:
-			t0Measure = ptsBottom.getT0Measure();
-			break;
 		case TOPLEVEL:
 		default:
 			t0Measure = ptsTop.getT0Measure();
@@ -481,9 +345,6 @@ public class Spot implements Comparable <Spot>
 	{
 		List<ROI2D> listrois = new ArrayList<ROI2D> ();
 		getROIFromCapillaryLevel(ptsTop, listrois);
-		getROIFromCapillaryLevel(ptsBottom, listrois);
-		getROIFromCapillaryLevel(ptsDerivative, listrois);
-		getROIsFromCapillaryGulps(ptsGulps, listrois);	
 		return listrois;
 	}
 	
@@ -503,43 +364,9 @@ public class Spot implements Comparable <Spot>
 		listrois.add( roi);
 	}
 	
-	private void getROIsFromCapillaryGulps(CapillaryGulps capGulps, List<ROI2D> listrois) 
-	{
-		int ngulps = capGulps.gulps.size();
-		if (ngulps == 0)
-			return;
-		
-		ArrayList<ROI2D> rois = new ArrayList<ROI2D> (ngulps);
-		if (capGulps.gulps.size() > 0)
-			for (Polyline2D gulpLine: capGulps.gulps) {
-				ROI2D roi = getROIfromGulp(gulpLine);
-				if (roi != null)
-					rois.add( roi);
-			}
-		
-		listrois.addAll(rois);
-	}
-	
-	private ROI2D getROIfromGulp(Polyline2D gulpLine)
-	{
-		if (gulpLine.npoints == 0)
-			return null;
-		ROI2DPolyLine roi = new ROI2DPolyLine (gulpLine);
-		int startAt = (int) gulpLine.xpoints[0];
-		String name = kymographPrefix + "_gulp_at_" + String.format("%07d", startAt);
-		roi.setName(name);
-		roi.setColor(Color.red);
-		roi.setStroke(1);
-		roi.setT(kymographIndex);
-		return roi;
-	}
-	
 	public void transferROIsToMeasures(List<ROI> listRois) 
 	{
 		ptsTop.transferROIsToMeasures(listRois);
-		ptsBottom.transferROIsToMeasures(listRois);
-		ptsGulps.transferROIsToMeasures(listRois);
-		ptsDerivative.transferROIsToMeasures(listRois);
 	}
 	
 	// -----------------------------------------------------------------------------
@@ -597,9 +424,6 @@ public class Spot implements Comparable <Spot>
 	{
 		String header = getLast2ofSpotName()+"_";
 		boolean result = ptsTop.loadCapillaryLimitFromXML(node, ID_TOPLEVEL, header) > 0;
-		result |= ptsBottom.loadCapillaryLimitFromXML(node, ID_BOTTOMLEVEL, header) > 0;
-		result |= ptsDerivative.loadCapillaryLimitFromXML(node, ID_DERIVATIVE, header) > 0;
-		result |= ptsGulps.loadGulpsFromXML(node);
 		return result;
 	}
 	
@@ -795,6 +619,16 @@ public class Spot implements Comparable <Spot>
 		descriptionOK = true;
 	}
 	
+	public void adjustToImageWidth (int imageWidth) 
+	{
+		ptsTop.adjustToImageWidth(imageWidth);
+	}
+
+	public void cropToImageWidth (int imageWidth) 
+	{
+		ptsTop.cropToImageWidth(imageWidth);
+	}
+	
 	// -----------------------------------------------------------------------------
 	
 	public String csvExportCapillarySubSectionHeader() 
@@ -845,20 +679,11 @@ public class Spot implements Comparable <Spot>
 	{
 		StringBuffer sbf = new StringBuffer();
 		String explanation1 = "columns=,name,index, npts,..,.(xi;yi)\n";
-		String explanation2 = "columns=,name,index, n_gulps(i), ..., gulp_i, .npts(j),.,(xij;yij))\n";
 		switch(measureType) {
 			case TOPLEVEL:
 				sbf.append("#,TOPLEVEL," + explanation1);
 				break;
-			case BOTTOMLEVEL:
-				sbf.append("#,BOTTOMLEVEL,"+explanation1);
-				break;
-			case TOPDERIVATIVE:
-				sbf.append("#,TOPDERIVATIVE,"+explanation1);
-				break;
-			case GULPS:
-				sbf.append("#,GULPS,"+explanation2);
-				break;
+
 			default:
 				sbf.append("#,UNDEFINED,------------\n");
 				break;
@@ -874,15 +699,6 @@ public class Spot implements Comparable <Spot>
 		switch(measureType) {
 			case TOPLEVEL:
 				ptsTop.cvsExportDataToRow(sbf);
-				break;
-			case BOTTOMLEVEL:
-				ptsBottom.cvsExportDataToRow(sbf);
-				break;
-			case TOPDERIVATIVE:
-				ptsDerivative.cvsExportDataToRow(sbf);
-				break;
-			case GULPS:
-				ptsGulps.csvExportDataToRow(sbf);
 				break;
 			default:
 				break;
@@ -913,15 +729,6 @@ public class Spot implements Comparable <Spot>
 		switch(measureType) {
 		case TOPLEVEL:
 			ptsTop.csvImportDataFromRow( data, 2); 
-			break;
-		case BOTTOMLEVEL:
-			ptsBottom.csvImportDataFromRow( data, 2);
-			break;
-		case TOPDERIVATIVE:
-			ptsDerivative.csvImportDataFromRow( data, 2); 
-			break;
-		case GULPS:
-			ptsGulps.csvImportDataFromRow(data, 2);
 			break;
 		default:
 			break;
