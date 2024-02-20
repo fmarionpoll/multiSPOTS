@@ -30,7 +30,6 @@ public class DetectArea extends BuildSeries
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
 	ArrayList<IcyBufferedImage>	cap_bufKymoImage = null;
-	int imageWidth = 0;
 	
 	// --------------------------------------------
 	
@@ -38,12 +37,12 @@ public class DetectArea extends BuildSeries
 	{
 		loadExperimentDataToMeasureAreas(exp);
 		
-		openKymoViewers(exp);
+		openViewers(exp);
 		getTimeLimitsOfSequence(exp);
 		if (measureAreas(exp)) 
 			saveComputation(exp);
 
-		closeKymoViewers();
+		closeViewers();
 		exp.seqKymos.closeSequence();
 	}
 	
@@ -78,38 +77,15 @@ public class DetectArea extends BuildSeries
 		if (directory == null)
 			return;
 		
-//		ProgressFrame progressBar = new ProgressFrame("Save measures");
-//		int nframes = exp.seqCamData.seq.getSizeT();
-//		int nCPUs = SystemUtil.getNumberOfCPUs();
-//	    final Processor processor = new Processor(nCPUs);
-//	    processor.setThreadName("buildAreaResults");
-//	    processor.setPriority(Processor.NORM_PRIORITY);
-//        ArrayList<Future<?>> futuresArray = new ArrayList<Future<?>>(nframes);
-//		futuresArray.clear();
-//		
-//		for (int t = 0; t < exp.seqKymos.seq.getSizeT(); t++) {
-//			final int t_index = t;
-//			futuresArray.add(processor.submit(new Runnable () {
-//				@Override
-//				public void run() {	
-//					Spot cap = exp.spotsArray.spotsList.get(t_index);
-//					String filename = directory + File.separator + cap.getKymographName() + ".tiff";
-//					File file = new File (filename);
-//					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
-//					try {
-//						Saver.saveImage(image, file, true);
-//					} 
-//					catch (FormatException e) {
-//						e.printStackTrace();
-//					} 
-//					catch (IOException e) {
-//						e.printStackTrace();
-//					}
-//				}}));
-//		}
-//		waitFuturesCompletion(processor, futuresArray, progressBar);
-//		progressBar.close();
+		for (Spot spot: exp.spotsArray.spotsList) 
+		{
+			spot.areaNPixels.setPolylineLevelFromTempData(
+					spot.getRoi().getName(), 
+					spot.areaNPixels.capIndexKymo, 
+					0, spot.areaNPixels.limit.length-1);		
+		}
 		exp.saveMCExperiment();
+		exp.saveSpotsMeasures();
 	}
 	
 	private void getReferenceImage (Experiment exp, int t, ImageTransformOptions options) 
@@ -159,20 +135,23 @@ public class DetectArea extends BuildSeries
 	    initMasks2DToMeasureAreas(exp);
 		initSpotsDataArrays(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
-		transformOptions.transformOption = options.transformop;
+		transformOptions.transformOption = options.transform01;
+		transformOptions.setSingleThreshold (options.detectLevel1Threshold, options.directionUp1) ;
 		getReferenceImage (exp, 0, transformOptions);
-		ImageTransformInterface transformFunction = options.transformop.getFunction();
+		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		
 		for (int ii = 0; ii < nFrames; ii++) 
 		{
 			final int fromSourceImageIndex = ii;
 			
-//			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.nTotalFrames;
+			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.nTotalFrames;
 //			System.out.println(title);
 //			progressBar.setMessage(title);
 			
-			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(ii));
+			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));
 			final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+			vData.setTitle(title);
+			seqData.setImage(0, 0, workImage); // add option??
 //			if (workImage == null)
 //				next;
 			
@@ -196,8 +175,7 @@ public class DetectArea extends BuildSeries
 						}
 					}
 				}}));
-//			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
-//			seqData.setImage(0, 0, sourceImage); // add option??
+
 //			progressBar.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nColumns);	
 		}
 
@@ -246,7 +224,6 @@ public class DetectArea extends BuildSeries
 		if (seqCamData.seq == null) 
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
-		imageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
 			try {
@@ -260,13 +237,13 @@ public class DetectArea extends BuildSeries
 	
 
 
-	private void closeKymoViewers() 
+	private void closeViewers() 
 	{
 		closeViewer(vData);
 		closeSequence(seqData);
 	}
 	
-	private void openKymoViewers(Experiment exp) 
+	private void openViewers(Experiment exp) 
 	{
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {

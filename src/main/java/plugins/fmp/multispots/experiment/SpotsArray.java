@@ -642,12 +642,9 @@ public class SpotsArray
 		try {
 			FileWriter csvWriter = new FileWriter(directory + File.separator +"SpotsMeasures.csv");
 			
-			csvSaveDescriptionSection(csvWriter);
-			
-			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.TOPLEVEL);
-			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.BOTTOMLEVEL);
-			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.TOPDERIVATIVE);
-			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.GULPS);
+			csvSaveDescriptionSection(csvWriter);			
+			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.AREANPIXELS);
+
 			csvWriter.flush();
 			csvWriter.close();
 			

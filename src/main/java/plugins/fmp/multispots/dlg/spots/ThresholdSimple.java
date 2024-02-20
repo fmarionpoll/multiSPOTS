@@ -85,8 +85,8 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		panel1.add(overlayCheckBox);
 		add(panel1);
 		
-//		transformsComboBox.setSelectedItem(EnumImageOp.NORM_BRMINUSG);
-		
+		transformsComboBox.setSelectedItem(ImageTransformEnums.RGB_DIFFS);
+		displayTransformButton.setSelected(true);
 		declareListeners();
 	}
 	
@@ -270,8 +270,9 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		 if (StringUtil.equals("thread_ended", evt.getPropertyName())) 
 		 {
 			detectButton.setText(detectString);
-			parent0.paneKymos.tabDisplay.selectKymographImage(parent0.paneKymos.tabDisplay.indexImagesCombo);
-			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
+			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+			if (exp != null)
+				parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
 		 }
 	}
 

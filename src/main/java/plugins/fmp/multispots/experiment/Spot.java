@@ -689,7 +689,7 @@ public class Spot implements Comparable <Spot>
 		sbf.append(kymographPrefix+ ","+ kymographIndex +",");
 		
 		switch(measureType) {
-			case TOPLEVEL:
+			case AREANPIXELS:
 				areaNPixels.cvsExportDataToRow(sbf);
 				break;
 			default:
@@ -719,7 +719,7 @@ public class Spot implements Comparable <Spot>
 	public void csvImportSpotData(EnumSpotMeasures measureType, String[] data) 
 	{
 		switch(measureType) {
-		case TOPLEVEL:
+		case AREANPIXELS:
 			areaNPixels.csvImportDataFromRow( data, 2); 
 			break;
 		default:

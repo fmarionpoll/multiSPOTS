@@ -271,7 +271,7 @@ public class Experiment
 		if (loadCapillaries) 
 		{
 			loadMCCapillaries_Only();
-			if (!capillaries.loadCapillaries_Measures(getKymosBinFullDirectory())) 
+			if (!capillaries.load_Measures(getKymosBinFullDirectory())) 
 				return false;
 		}
 
@@ -581,7 +581,7 @@ public class Experiment
 		String xmlCapillariesFileName = findFile_3Locations(capillaries.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
 		boolean flag1 = capillaries.loadMCCapillaries_Descriptors(xmlCapillariesFileName);
 		String kymosImagesDirectory = getKymosBinFullDirectory();
-		boolean flag2 = capillaries.loadCapillaries_Measures(kymosImagesDirectory);
+		boolean flag2 = capillaries.load_Measures(kymosImagesDirectory);
 		if (flag1 & flag2) 
 			seqKymos.loadListOfPotentialKymographsFromCapillaries(kymosImagesDirectory, capillaries);
 		return flag1 & flag2;
@@ -676,14 +676,23 @@ public class Experiment
 		
  	public boolean loadCapillariesMeasures() 
  	{
- 		return capillaries.loadCapillaries_Measures(getKymosBinFullDirectory());
+ 		return capillaries.load_Measures(getKymosBinFullDirectory());
  	}
  	
  	public boolean saveCapillariesMeasures() 
  	{
- 		return capillaries.saveCapillaries_Measures(getKymosBinFullDirectory());
+ 		return capillaries.save_Measures(getKymosBinFullDirectory());
  	}
  	
+ 	public boolean loadSpotsMeasures() 
+ 	{
+ 		return spotsArray.load_Measures(getKymosBinFullDirectory());
+ 	}
+ 	
+ 	public boolean saveSpotsMeasures() 
+ 	{
+ 		return spotsArray.save_Measures(getKymosBinFullDirectory());
+ 	}
  	public boolean loadCagesMeasures() 
 	{
 		return xmlReadDrosoTrack(null);
@@ -887,7 +896,7 @@ public class Experiment
 		{
 			seqKymos.validateRois();
 			seqKymos.transferKymosRoisToCapillaries_Measures(capillaries);
-			flag = capillaries.saveCapillaries_Measures(directory);
+			flag = capillaries.save_Measures(directory);
 		}
 		return flag;
 	}

@@ -44,7 +44,7 @@ public class CapillariesArray
 
 	// ---------------------------------
 	
-	public boolean loadCapillaries_Measures(String directory) 
+	public boolean load_Measures(String directory) 
 	{
 		boolean flag = false;
 		try {
@@ -60,7 +60,7 @@ public class CapillariesArray
 		return flag;
 	}
 	
-	public boolean saveCapillaries_Measures(String directory) 
+	public boolean save_Measures(String directory) 
 	{
 		if (directory == null)
 			return false;

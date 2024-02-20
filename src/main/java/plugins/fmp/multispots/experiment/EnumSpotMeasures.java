@@ -8,6 +8,7 @@ public enum EnumSpotMeasures
 	BOTTOMLEVEL ("BOTTOMLEVEL", "bottom capillary limit"), 
 	TOPDERIVATIVE ("TOPDERIVATIVE", "derivative of top capillary limit"), 
 	GULPS ("GULPS", "gulps detected from derivative"), 
+	AREANPIXELS("AREAPIXELS", "n pixels detected"),
 	ALL ("ALL", "all options");
 	
 	private String label;
