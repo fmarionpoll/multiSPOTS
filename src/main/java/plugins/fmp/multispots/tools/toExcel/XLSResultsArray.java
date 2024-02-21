@@ -294,7 +294,9 @@ public class XLSResultsArray
 												spot.nFlies, 
 												spot.cageID, 
 												xlsExportOptions.exportType, nOutputFrames);
-			results.dataInt = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, kymoBinCol_Ms, xlsExportOptions.buildExcelStepMs);
+			results.dataInt = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, 
+					kymoBinCol_Ms, 
+					xlsExportOptions.buildExcelStepMs);
 			if (subtractT0) 
 				results.subtractT0();
 			results.transferDataIntToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);

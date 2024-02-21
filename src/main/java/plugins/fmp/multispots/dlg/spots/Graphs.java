@@ -90,7 +90,7 @@ public class Graphs extends JPanel implements SequenceListener
 		
 		if (isThereAnyDataToDisplay(exp, EnumXLSExportType.AREA_NPIXELS))  
 		{
-			plotAreaPixels = plotToChart(exp, "top + bottom levels", 
+			plotAreaPixels = plotToChart(exp, "N pixels above threshold", 
 					EnumXLSExportType.AREA_NPIXELS, 
 					plotAreaPixels, rectv);
 			rectv.translate(dx, dy);

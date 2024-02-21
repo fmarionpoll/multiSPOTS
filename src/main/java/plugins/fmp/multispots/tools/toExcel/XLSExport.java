@@ -17,6 +17,7 @@ import plugins.fmp.multispots.dlg.JComponents.ExperimentCombo;
 import plugins.fmp.multispots.experiment.Cage;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
+import plugins.fmp.multispots.experiment.Spot;
 
 
 
@@ -356,7 +357,7 @@ public class XLSExport
 		return colmax;
 	}
 		
-	private XLSResultsArray getDescriptorsForOneExperiment( Experiment exp, EnumXLSExportType xlsOption) 
+	private XLSResultsArray getCapDescriptorsForOneExperiment( Experiment exp, EnumXLSExportType xlsOption) 
 	{
 		if (expAll == null) 
 			return null;
@@ -390,6 +391,42 @@ public class XLSExport
 		rowListForOneExp.sortRowsByName();
 		return rowListForOneExp;
 	}
+	
+	private XLSResultsArray getSpotsDescriptorsForOneExperiment( Experiment exp, EnumXLSExportType xlsOption) 
+	{
+		if (expAll == null) 
+			return null;
+		
+		// loop to get all capillaries into expAll and init rows for this experiment
+		expAll.cages.copy(exp.cages);
+		expAll.spotsArray.copy(exp.spotsArray);
+		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
+		expAll.copyExperimentFields(exp);
+		expAll.setExperimentDirectory(exp.getExperimentDirectory());
+		
+		Experiment expi = exp.chainToNextExperiment;
+		while (expi != null ) 
+		{
+			expAll.spotsArray.mergeLists(expi.spotsArray);
+			expi = expi.chainToNextExperiment;
+		}
+
+		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms)/options.buildExcelStepMs  +1) ;
+		int nspots = expAll.spotsArray.spotsList.size();
+		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
+		for (int i = 0; i < nspots; i++) 
+		{
+			Spot spot 			= expAll.spotsArray.spotsList.get(i);
+			XLSResults row 		= new XLSResults (spot.getRoiName(), spot.nFlies, spot.cageID, xlsOption, nFrames);
+			row.stimulus 		= spot.stimulus;
+			row.concentration 	= spot.concentration;
+			row.cageID 			= spot.cageID;
+			rowListForOneExp.addRow(row);
+		}
+		rowListForOneExp.sortRowsByName();
+		return rowListForOneExp;
+	}
+
 		
 	public XLSResultsArray getCapDataFromOneExperiment(Experiment exp, EnumXLSExportType exportType, XLSExportOptions options) 
 	{
@@ -441,7 +478,7 @@ public class XLSExport
 	
 	private XLSResultsArray getCapDataFromOneExperimentSeries(Experiment exp, EnumXLSExportType xlsExportType) 
 	{	
-		XLSResultsArray rowListForOneExp =  getDescriptorsForOneExperiment (exp, xlsExportType);
+		XLSResultsArray rowListForOneExp =  getCapDescriptorsForOneExperiment (exp, xlsExportType);
 		Experiment expi = exp.getFirstChainedExperiment(true); 
 		
 		while (expi != null) 
@@ -502,9 +539,8 @@ public class XLSExport
 	
 	private XLSResultsArray getSpotsDataFromOneExperimentSeries(Experiment exp, EnumXLSExportType xlsExportType) 
 	{	
-		XLSResultsArray rowListForOneExp =  getDescriptorsForOneExperiment (exp, xlsExportType);
+		XLSResultsArray rowListForOneExp =  getSpotsDescriptorsForOneExperiment (exp, xlsExportType);
 		Experiment expi = exp.getFirstChainedExperiment(true); 
-		
 		while (expi != null) 
 		{
 			int nOutputFrames = getNOutputFrames(expi);
@@ -515,7 +551,11 @@ public class XLSExport
 				switch (xlsExportType) 
 				{
 					case AREA_NPIXELS:
-						resultsArrayList.getResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+						resultsArrayList.getResults1(expi.spotsArray, 
+								xlsExportType, 
+								nOutputFrames, 
+							x	exp.binDuration_ms, // TODO check this
+								options);
 //						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
 	

@@ -87,7 +87,7 @@ public class ChartAreas extends IcyFrame
 		ymax = 0;
 		ymin = 0;
 		flagMaxMinSet = false;
-		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, option, subtractEvaporation);;
+		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, option, subtractEvaporation);
 		
 		int icage = 0;
         final NumberAxis yAxis = new NumberAxis("volume (µl)");
