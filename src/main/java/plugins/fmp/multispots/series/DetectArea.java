@@ -145,7 +145,6 @@ public class DetectArea extends BuildSeries
 			final int fromSourceImageIndex = ii;
 			
 			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.nTotalFrames;
-//			System.out.println(title);
 //			progressBar.setMessage(title);
 			
 			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));

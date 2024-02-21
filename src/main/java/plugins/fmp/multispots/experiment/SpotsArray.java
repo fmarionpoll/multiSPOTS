@@ -40,6 +40,7 @@ public class SpotsArray
 	private final static String ID_LISTOFSPOTS 		= "List_of_spots";
 	private final static String ID_SPOT_ 			= "spot_";
 	private final static String ID_MCSPOTS_XML 		= "MCspots.xml";
+	private final String csvFileName = "SpotsMeasures.csv";
 
 	// ---------------------------------
 	
@@ -53,7 +54,7 @@ public class SpotsArray
 			e.printStackTrace();
 		}
 
-		if (!flag) {
+		if (!flag) { 
 			flag = xmlLoad_SpotsMeasures(directory);
 		}
 		return flag;
@@ -522,24 +523,27 @@ public class SpotsArray
 	
 	private boolean csvLoadSpots_Measures(String directory) throws Exception 
 	{
-		String pathToCsv = directory + File.separator +"CapillariesMeasures.csv";
+		String pathToCsv = directory + File.separator + csvFileName;
 		File csvFile = new File(pathToCsv);
 		if (!csvFile.isFile()) 
 			return false;
 		
 		BufferedReader csvReader = new BufferedReader(new FileReader(pathToCsv));
 		String row;
-		while ((row = csvReader.readLine()) != null) {
+		while ((row = csvReader.readLine()) != null) 
+		{
 		    String[] data = row.split(",");
-		    if (data[0] .equals( "#")) {
-		    	switch(data[1]) {
+		    if (data[0] .equals( "#")) 
+		    {
+		    	switch(data[1]) 
+		    	{
 		    	case "DESCRIPTION":
 		    		csvLoadDescription (csvReader);
 		    		break;
 		    	case "SPOTS":
 		    		csvLoadSpotsDescription (csvReader);
 		    		break;
-		    	case "TOPLEVEL":
+		    	case "AREA_NPIXELS":
 		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.AREA_NPIXELS);
 		    		break;
 	    		default:
@@ -605,11 +609,12 @@ public class SpotsArray
 	{
 		String row;
 		try {
+			row = csvReader.readLine();
 			while ((row = csvReader.readLine()) != null) {
 				String[] data = row.split(",");
 				if (data[0] .equals( "#")) 
 					return data[1];
-				
+
 				Spot spot = getSpotFromRoiNamePrefix(data[0]);
 				if (spot == null)
 					spot = new Spot();
@@ -631,7 +636,7 @@ public class SpotsArray
 			return false;
 		
 		try {
-			FileWriter csvWriter = new FileWriter(directory + File.separator +"SpotsMeasures.csv");
+			FileWriter csvWriter = new FileWriter(directory + File.separator + csvFileName);
 			
 			csvSaveDescriptionSection(csvWriter);			
 			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.AREA_NPIXELS);
@@ -672,11 +677,9 @@ public class SpotsArray
 		try {
 			if (spotsList.size() <= 1)
 				return false;
-			
 			csvWriter.append(spotsList.get(0).csvExportMeasureSectionHeader(measureType));
 			for (Spot spot:spotsList) 
 				csvWriter.append(spot.csvExportSpotData(measureType));
-			
 			csvWriter.append("#,#\n");
 		} catch (IOException e) {
 			e.printStackTrace();

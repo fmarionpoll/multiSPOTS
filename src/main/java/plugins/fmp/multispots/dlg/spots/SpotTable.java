@@ -42,7 +42,7 @@ public class SpotTable extends JPanel
 	
 	private JButton				duplicateAllButton 	= new JButton("Duplicate cell to all");
 	private JButton				getNfliesButton 	= new JButton("Get n flies from cage");
-	private JButton				getCageNoButton		= new JButton("Set cage n#");
+	private JButton				setCageNoButton		= new JButton("Set cage n#");
 	private JButton				noFliesButton 		= new JButton("Cages0/0: no flies");
 	private MultiSPOTS 			parent0 			= null; 
 	private List <Spot> 		spotsArrayCopy 		= null;
@@ -79,7 +79,7 @@ public class SpotTable extends JPanel
         topPanel.add(panel1);
         
         JPanel panel2 = new JPanel (flowLayout);
-        panel2.add(getCageNoButton);
+        panel2.add(setCageNoButton);
         panel2.add(getNfliesButton);
         panel2.add(noFliesButton);
         panel2.add(duplicateCageButton);
@@ -187,7 +187,7 @@ public class SpotTable extends JPanel
 				}
 			}});
 		
-		getCageNoButton.addActionListener(new ActionListener () 
+		setCageNoButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 

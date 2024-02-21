@@ -31,7 +31,7 @@ public class Spot implements Comparable <Spot>
 
 	public int							kymographIndex 	= -1;
 	private String						kymographPrefix	= null;
-	
+	private String						name			= null;
 	public String 						version 		= null;
 
 	
@@ -174,7 +174,7 @@ public class Spot implements Comparable <Spot>
 		String name = roi.getName();
 		if (!name .contains("spot"))
 			return -1;
-		return Integer.valueOf(name.substring(4, 5));
+		return Integer.valueOf(name.substring(5, 6));
 	}
 	
 	public String getSideDescriptor(EnumXLSExportType xlsExportOption) 
@@ -251,7 +251,7 @@ public class Spot implements Comparable <Spot>
 		{
 		case AREA_NPIXELS:
 		default:
-			yes= areaNPixels.isThereAnyMeasuresDone();
+			yes = areaNPixels.isThereAnyMeasuresDone();
 			break;
 		}
 		return yes;
@@ -535,7 +535,6 @@ public class Spot implements Comparable <Spot>
 				"prefix",
 				"kymoIndex", 
 				"name", 
-				"--", 
 				"cage",
 				"nflies",
 				"volume", 
@@ -575,7 +574,7 @@ public class Spot implements Comparable <Spot>
 	public String csvExportMeasureSectionHeader(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		String explanation1 = "columns=,name,index, npts,..,.(xi;yi)\n";
+		String explanation1 = "\n name,index, npts,x0,y0, x1, y1, etc\n";
 		switch(measureType) {
 			case AREA_NPIXELS:
 				sbf.append("#,AREA_NPIXELS," + explanation1);
@@ -611,7 +610,7 @@ public class Spot implements Comparable <Spot>
 		int i = 0;
 		kymographPrefix = data[i]; i++;
 		kymographIndex = Integer.valueOf(data[i]); i++; 
-
+		name  = data[i]; i++;
 		cageID = Integer.valueOf(data[i]); i++;
 		nFlies = Integer.valueOf(data[i]); i++;
 		volume = Double.valueOf(data[i]); i++; 
@@ -624,7 +623,8 @@ public class Spot implements Comparable <Spot>
 		
 	public void csvImportData(EnumSpotMeasures measureType, String[] data) 
 	{
-		switch(measureType) {
+		switch(measureType) 
+		{
 		case AREA_NPIXELS:
 			areaNPixels.csvImportDataFromRow( data, 2); 
 			break;

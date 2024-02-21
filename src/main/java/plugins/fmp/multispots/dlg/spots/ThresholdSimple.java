@@ -270,8 +270,10 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		 {
 			detectButton.setText(detectString);
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-			if (exp != null)
+			if (exp != null) {
+				exp.loadSpotsMeasures();
 				parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
+			}
 		 }
 	}
 

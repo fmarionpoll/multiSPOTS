@@ -29,7 +29,7 @@ public class Options extends JPanel
 	JCheckBox	measuresCheckBox		= new JCheckBox("measures", true);
 	JCheckBox	graphsCheckBox			= new JCheckBox("graphs", true);
 
-	public 	JCheckBox 	viewCapillariesCheckBox = new JCheckBox("capillaries", true);
+	public 	JCheckBox 	viewCapillariesCheckBox = new JCheckBox("spots/lines", true);
 	public 	JCheckBox 	viewCagesCheckbox = new JCheckBox("cages", true);
 			JCheckBox 	viewFlyCheckbox = new JCheckBox("flies center", false);
 			JCheckBox 	viewFlyRectCheckbox = new JCheckBox("flies rect", false);
@@ -71,6 +71,7 @@ public class Options extends JPanel
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				displayROIsCategory(viewCapillariesCheckBox.isSelected(), "line");
+				displayROIsCategory(viewCapillariesCheckBox.isSelected(), "spot");
 			}});
 		
 		viewCagesCheckbox.addActionListener(new ActionListener () 

@@ -172,8 +172,6 @@ public class IntensityProfile  {
 
                         File outputFile = new File(path);
                         writer = new BufferedWriter(new FileWriter(outputFile));
-//                		System.out.println("-----------------------------------------");
-//                		System.out.println("---------- Time:"+ currentT +", Z:"+currentZ+" ---------");
                         int maxSize = 0;
                 		for(Object s:xyDataset.getSeries())
                 		{
@@ -198,7 +196,6 @@ public class IntensityProfile  {
                 			{
             					if(size>i)
             					{
-            						//System.out.println(it.get(i).getXValue() + " , "+ it.get(i).getYValue());
             						dataArr[i]+=(it.get(i).getXValue() + "\t"+ it.get(i).getYValue()+"\t");
             					}
             					else
@@ -729,7 +726,6 @@ public class IntensityProfile  {
 				XYSeries seriesXY2 = new XYSeries("channel " +c);	
 				for( int i = 0 ; i < profile.values[c].length ; i++ )
 				{							
-					//System.out.println(i*pixelSize + " , "+ profile.values[c][i]);
 					seriesXY2.add(i*pixelSize,  profile.values[c][i]);
 				}
 
@@ -825,41 +821,6 @@ public class IntensityProfile  {
         
         return data;
 
-	}
-
-
-
-//	@Override
-//	public void actionPerformed(ActionEvent e) {
-//		
-//		if ( e.getSource() == exportToExcelButton )
-//		{
-//			System.out.println("Export to excel.");
-//		}
-//		
-//		if ( e.getSource() == associateROIButton )
-//		{
-//			// remove previous listener.
-//					
-//			updateChart();
-//		}
-//
-//	}
-//
-//	@Override
-//	public void roiChanged(ROIEvent event) {		
-//		
-//		updateChart();
-//	
-//	}
-
-
-
-
-	
-	
-	
-	
-	
+	}	
 
 }

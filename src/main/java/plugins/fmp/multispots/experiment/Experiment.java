@@ -686,12 +686,12 @@ public class Experiment
  	
  	public boolean loadSpotsMeasures() 
  	{
- 		return spotsArray.load_Measures(getKymosBinFullDirectory());
+ 		return spotsArray.load_Measures(getExperimentDirectory());
  	}
  	
  	public boolean saveSpotsMeasures() 
  	{
- 		return spotsArray.save_Measures(getKymosBinFullDirectory());
+ 		return spotsArray.save_Measures(getExperimentDirectory());
  	}
  	
  	public boolean loadCagesMeasures() 

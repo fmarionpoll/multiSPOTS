@@ -24,8 +24,8 @@ public class LoadSaveSpots extends JPanel
 	 */
 	private static final long serialVersionUID = -4019075448319252245L;
 	
-	private JButton		openButtonCapillaries	= new JButton("Load...");
-	private JButton		saveButtonCapillaries	= new JButton("Save...");
+	private JButton		loadButton	= new JButton("Load...");
+	private JButton		saveButton	= new JButton("Save...");
 	private MultiSPOTS 	parent0 				= null;
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 
@@ -38,8 +38,8 @@ public class LoadSaveSpots extends JPanel
 		flowLayout.setVgap(0);
 		JPanel panel1 = new JPanel(flowLayout);
 		panel1.add(loadsaveText);
-		panel1.add(openButtonCapillaries);
-		panel1.add(saveButtonCapillaries);
+		panel1.add(loadButton);
+		panel1.add(saveButton);
 		panel1.validate();
 		add( panel1);
 			
@@ -49,7 +49,7 @@ public class LoadSaveSpots extends JPanel
 	
 	private void defineActionListeners() 
 	{	
-		openButtonCapillaries.addActionListener(new ActionListener () 
+		loadButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
@@ -62,7 +62,7 @@ public class LoadSaveSpots extends JPanel
 				}
 			}}); 
 		
-		saveButtonCapillaries.addActionListener(new ActionListener () 
+		saveButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
@@ -85,7 +85,7 @@ public class LoadSaveSpots extends JPanel
 	
 	public boolean saveCapillaries_file(Experiment exp) 
 	{
-		parent0.paneSpots.getDialogCapillariesInfos(exp);  // get data into desc
+//		parent0.paneSpots.getDialogCapillariesInfos(exp);  // get data into desc
 		parent0.paneExperiment.getExperimentInfosFromDialog(exp);
 		exp.capillaries.transferDescriptionToCapillaries();
 	
@@ -97,6 +97,7 @@ public class LoadSaveSpots extends JPanel
 	public boolean loadSpotsArray_File(Experiment exp) 
 	{	
 		boolean flag = exp.loadMCSpots_Only();
+		exp.loadSpotsMeasures(); 
 		exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
 		return flag;
 	}
@@ -107,9 +108,11 @@ public class LoadSaveSpots extends JPanel
 		parent0.paneExperiment.getExperimentInfosFromDialog(exp);
 		exp.spotsArray.transferDescriptionToSpots();
 	
-		exp.saveMCExperiment ();
+		boolean flag = exp.saveMCExperiment ();
 		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
-		return exp.saveMCSpots_Only();
+		flag &= exp.saveMCSpots_Only();
+		flag &= exp.saveSpotsMeasures();
+		return flag;
 	}
 
 }
