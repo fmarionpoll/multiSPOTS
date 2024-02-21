@@ -155,6 +155,7 @@ public class ExperimentUtils
 		exp.spotsArray.deleteAllSpots();
 		exp.spotsArray = new SpotsArray();
 		
+		int spotIndex = 0;
 		for (ROI2D roi:listROISCap) 
 		{	
 			String baseName = roi.getName();
@@ -178,14 +179,19 @@ public class ExperimentUtils
 			double delta = Math.sqrt(2. * radius * radius)/2;
 			delta = radius;
 			int i = 0;
-			for (Point2D point: centers) {
+			for (Point2D point: centers) 
+			{
 				double x = point.getX() - delta;
 				double y = point.getY() - delta;
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2* radius, 2*radius);
 				ROI2DEllipse roicircle = new ROI2DEllipse(ellipse);
 				roicircle.setName("spot" + substring + String.format("%02d", i));
 				i++;
-				exp.spotsArray.spotsList.add(new Spot((ROI2DShape)roicircle));
+				Spot spot = new Spot((ROI2DShape)roicircle);
+				spot.kymographIndex = spotIndex;
+				spotIndex++;
+				spot.radius = radius;
+				exp.spotsArray.spotsList.add(spot);
 			}
 		}
 		

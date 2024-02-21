@@ -836,17 +836,17 @@ public class Capillary implements Comparable <Capillary>
 		
 		sbf.append("#,CAPILLARIES,describe each capillary\n");
 		List<String> row2 = Arrays.asList(
-				"cap_prefix",
+				"prefix",
 				"kymoIndex", 
 				"kymographName", 
 				"kymoFile", 
-				"cap_cage",
-				"cap_nflies",
-				"cap_volume", 
-				"cap_npixel", 
-				"cap_stim", 
-				"cap_conc", 
-				"cap_side");
+				"cage",
+				"nflies",
+				"volume", 
+				"npixel", 
+				"stim", 
+				"conc", 
+				"side");
 		sbf.append(String.join(",", row2));
 		sbf.append("\n");
 		return sbf.toString();

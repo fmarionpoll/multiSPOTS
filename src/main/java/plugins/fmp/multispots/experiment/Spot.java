@@ -44,6 +44,7 @@ public class Spot implements Comparable <Spot>
 	public int							cageID			= 0;
 	public double 						volume 			= 1;
 	public int 							pixels 			= 5;
+	public int							radius			= 30;
 	public boolean						descriptionOK	= false;
 	public int							versionInfos	= 0;
 	
@@ -60,6 +61,7 @@ public class Spot implements Comparable <Spot>
 	private final String				ID_CAGENB		= "cage_number";
 	private final String 				ID_SPOTVOLUME 	= "volume";
 	private final String 				ID_CAPPIXELS 	= "pixels";
+	private final String 				ID_RADIUS 		= "radius";
 	private final String 				ID_STIML 		= "stimulus";
 	private final String 				ID_CONCL 		= "concentration";
 	private final String 				ID_SIDE 		= "side";
@@ -113,6 +115,7 @@ public class Spot implements Comparable <Spot>
 		cageID		= spot.cageID;
 		volume 		= spot.volume;
 		pixels 		= spot.pixels;
+		radius 		= spot.radius;
 		
 		limitsOptions	= spot.limitsOptions;
 		
@@ -370,6 +373,7 @@ public class Spot implements Comparable <Spot>
 	        cageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, cageID);
 	        volume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
 			pixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
+			radius		= XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
 			stimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
 			concentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
 			cageSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
@@ -429,6 +433,7 @@ public class Spot implements Comparable <Spot>
         XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, cageID);
 		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, volume);
 		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, pixels);
+		XMLUtil.setElementIntValue(nodeMeta, ID_RADIUS, radius);
 		XMLUtil.setElementValue(nodeMeta, ID_STIML, stimulus);
 		XMLUtil.setElementValue(nodeMeta, ID_SIDE, cageSide);
 		XMLUtil.setElementValue(nodeMeta, ID_CONCL, concentration);
@@ -527,17 +532,18 @@ public class Spot implements Comparable <Spot>
 		
 		sbf.append("#,SPOTS,describe each spot\n");
 		List<String> row2 = Arrays.asList(
-				"cap_prefix",
+				"prefix",
 				"kymoIndex", 
 				"name", 
 				"--", 
-				"cap_cage",
-				"cap_nflies",
-				"cap_volume", 
-				"cap_npixel", 
-				"cap_stim", 
-				"cap_conc", 
-				"cap_side");
+				"cage",
+				"nflies",
+				"volume", 
+				"npixel", 
+				"radius",
+				"stim", 
+				"conc", 
+				"side");
 		sbf.append(String.join(",", row2));
 		sbf.append("\n");
 		return sbf.toString();
@@ -557,6 +563,7 @@ public class Spot implements Comparable <Spot>
 				Integer.toString(nFlies),
 				Double.toString(volume), 
 				Integer.toString(pixels), 
+				Integer.toString(radius),
 				stimulus, 
 				concentration, 
 				cageSide);
@@ -609,6 +616,7 @@ public class Spot implements Comparable <Spot>
 		nFlies = Integer.valueOf(data[i]); i++;
 		volume = Double.valueOf(data[i]); i++; 
 		pixels = Integer.valueOf(data[i]); i++; 
+		radius = Integer.valueOf(data[i]); i++;
 		stimulus = data[i]; i++; 
 		concentration = data[i]; i++; 
 		cageSide = data[i]; 

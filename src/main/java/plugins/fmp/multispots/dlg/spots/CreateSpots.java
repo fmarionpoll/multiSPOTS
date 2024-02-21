@@ -43,7 +43,6 @@ public class CreateSpots extends JPanel
 	private JButton 	createPolylinesButton 	= new JButton("(2) Generate polylines");
 	private JButton 	createCirclesButton 	= new JButton("(3) Create circles");
 	
-	
 	private JComboBox<String> orientationJCombo = new JComboBox<String> (new String[] {"0°", "90°", "180°", "270°" });
 	private JSpinner 	nPointsPolylineJSpinner = new JSpinner(new SpinnerNumberModel(2, 2, 500, 1));
 	private JSpinner 	nbFliesPerCageJSpinner 	= new JSpinner(new SpinnerNumberModel(1, 0, 500, 1));
