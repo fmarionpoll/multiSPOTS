@@ -111,9 +111,9 @@ public class XLSExport
 			outputStimAndConc_according_to_DataOption(sheet, xlsExportOption, cap, transpose, x, y);
 
 			
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, cap.capCageID);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+cap.capCageID);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, cap.capNFlies); 
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, cap.cageID);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+cap.cageID);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, cap.nFlies); 
 
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.DUM4.getValue(), transpose, sheetName);
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CHOICE_NOCHOICE.getValue(), transpose, desc_getChoiceTestType(capList, t));
@@ -145,8 +145,8 @@ public class XLSExport
 			String otherSide = othercap.getCapillarySide();
 			if (!otherSide .contains(side))
 			{
-				if (cap.capStimulus.equals(othercap.capStimulus)
-					&& cap.capConcentration.equals(othercap.capConcentration))
+				if (cap.stimulus.equals(othercap.stimulus)
+					&& cap.concentration.equals(othercap.concentration))
 					choiceText  = "no-choice";
 				else
 					choiceText = "choice";
@@ -165,7 +165,7 @@ public class XLSExport
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "L+R");
 			else 
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "(L-R)/(L+R)");
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, cap.capStimulus + ": "+ cap.capConcentration);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, cap.stimulus + ": "+ cap.concentration);
 			break;
 			
 		case TTOGULP_LR:
@@ -177,12 +177,12 @@ public class XLSExport
 			{
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "max_t_to_gulp");
 			}
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, cap.capStimulus + ": "+ cap.capConcentration);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, cap.stimulus + ": "+ cap.concentration);
 			break;
 			
 		default:
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, 	cap.capStimulus);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, 	cap.capConcentration);	
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, 	cap.stimulus);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, 	cap.concentration);	
 			break;
 		}
 	}
@@ -381,10 +381,10 @@ public class XLSExport
 		for (int i = 0; i < ncapillaries; i++) 
 		{
 			Capillary cap 		= expAll.capillaries.capillariesList.get(i);
-			XLSResults row 		= new XLSResults (cap.getRoiName(), cap.capNFlies, cap.capCageID, xlsOption, nFrames);
-			row.stimulus 		= cap.capStimulus;
-			row.concentration 	= cap.capConcentration;
-			row.cageID 			= cap.capCageID;
+			XLSResults row 		= new XLSResults (cap.getRoiName(), cap.nFlies, cap.cageID, xlsOption, nFrames);
+			row.stimulus 		= cap.stimulus;
+			row.concentration 	= cap.concentration;
+			row.cageID 			= cap.cageID;
 			rowListForOneExp.addRow(row);
 		}
 		rowListForOneExp.sortRowsByName();

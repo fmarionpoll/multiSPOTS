@@ -219,17 +219,17 @@ public class CapillariesArray
 			Node nodecapillary = XMLUtil.getElement(node, ID_CAPILLARY_+i);
 			Capillary cap = new Capillary();
 			cap.loadFromXML_CapillaryOnly(nodecapillary);
-			if (capillariesDescription.grouping == 2 && (cap.capStimulus != null && cap.capStimulus.equals(".."))) 
+			if (capillariesDescription.grouping == 2 && (cap.stimulus != null && cap.stimulus.equals(".."))) 
 			{
 				if (cap.getCapillarySide().equals("R")) 
 				{
-					cap.capStimulus = capillariesDescription.stimulusR;
-					cap.capConcentration = capillariesDescription.concentrationR;
+					cap.stimulus = capillariesDescription.stimulusR;
+					cap.concentration = capillariesDescription.concentrationR;
 				} 
 				else 
 				{
-					cap.capStimulus = capillariesDescription.stimulusL;
-					cap.capConcentration = capillariesDescription.concentrationL;
+					cap.stimulus = capillariesDescription.stimulusL;
+					cap.concentration = capillariesDescription.concentrationL;
 				}
 			}
 			if (!isPresent(cap))
@@ -317,7 +317,7 @@ public class CapillariesArray
 			return;
 		String	name = cap.getRoiName();
 		String letter = name.substring(name.length() - 1);
-		cap.capSide = letter;
+		cap.cageSide = letter;
 		if (letter .equals("R")) 
 		{	
 			String nameL = name.substring(0, name.length() - 1) + "L";
@@ -325,7 +325,7 @@ public class CapillariesArray
 			if (cap0 != null) 
 			{
 //				cap.capNFlies = cap0.capNFlies;
-				cap.capCageID = cap0.capCageID;
+				cap.cageID = cap0.cageID;
 			}
 		}
 	}
@@ -432,10 +432,10 @@ public class CapillariesArray
 		for (int i=0; i< capArraySize; i++)
 		{
 			Capillary cap = capillariesList.get(i);
-			cap.capNFlies = nflies;
+			cap.nFlies = nflies;
 			if (i<= 1  || i>= capArraySize-2 )
-				cap.capNFlies = 0;
-			cap.capCageID = i/2;
+				cap.nFlies = 0;
+			cap.cageID = i/2;
 		}
 	}
 	
@@ -445,21 +445,21 @@ public class CapillariesArray
 		for (int i=0; i< capArraySize; i++) 
 		{
 			Capillary cap = capillariesList.get(i);
-			cap.capNFlies = 1;
+			cap.nFlies = 1;
 			if (i <= 1 ) 
 			{
-				cap.capNFlies = 0;
-				cap.capCageID = 0;
+				cap.nFlies = 0;
+				cap.cageID = 0;
 			}
 			else if (i >= capArraySize-2 ) 
 			{
-				cap.capNFlies = 0;
-				cap.capCageID = 5;
+				cap.nFlies = 0;
+				cap.cageID = 5;
 			}
 			else 
 			{
-				cap.capNFlies = nflies;
-				cap.capCageID = 1 + (i-2)/4;
+				cap.nFlies = nflies;
+				cap.cageID = 1 + (i-2)/4;
 			}
 		}
 	}
@@ -474,7 +474,7 @@ public class CapillariesArray
 			
 			for (Capillary cap: capillariesList) 
 			{
-				for (KymoROI2D roiFK: cap.getROIsForKymo()) 
+				for (ROI2DAlongTime roiFK: cap.getROIsForKymo()) 
 				{
 					Long[] interval = {roiFK.getStart(), (long) -1}; 
 					capillariesListTimeIntervals.addIfNew(interval);
@@ -491,11 +491,11 @@ public class CapillariesArray
 		
 		for (Capillary cap: capillariesList) 
 		{
-			List<KymoROI2D> listROI2DForKymo = cap.getROIsForKymo();
+			List<ROI2DAlongTime> listROI2DForKymo = cap.getROIsForKymo();
 			ROI2D roi = cap.getRoi();
 			if (item>0 ) 
 				roi = (ROI2D) listROI2DForKymo.get(item-1).getRoi().getCopy();
-			listROI2DForKymo.add(item, new KymoROI2D(start, roi));
+			listROI2DForKymo.add(item, new ROI2DAlongTime(start, roi));
 		}
 		return item;
 	}

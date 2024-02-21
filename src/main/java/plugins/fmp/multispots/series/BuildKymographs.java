@@ -26,7 +26,7 @@ import loci.formats.FormatException;
 
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
-import plugins.fmp.multispots.experiment.KymoROI2D;
+import plugins.fmp.multispots.experiment.ROI2DAlongTime;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.experiment.SequenceKymos;
 import plugins.fmp.multispots.tools.Bresenham;
@@ -179,7 +179,7 @@ public class BuildKymographs extends BuildSeries
 	
 	private void analyzeImageWithCapillary(IcyBufferedImage sourceImage, Capillary cap, int fromSourceImageIndex, int kymographColumn)
 	{
-		KymoROI2D capT = cap.getROI2DKymoAtIntervalT(fromSourceImageIndex);
+		ROI2DAlongTime capT = cap.getROI2DKymoAtIntervalT(fromSourceImageIndex);
 		int sizeC = sourceImage.getSizeC();
 	  
 		for (int chan = 0; chan < sizeC; chan++) {
@@ -267,7 +267,7 @@ public class BuildKymographs extends BuildSeries
 		
 		int imageHeight = 0;
 		for (Capillary cap: exp.capillaries.capillariesList) {
-			for (KymoROI2D capT : cap.getROIsForKymo()) {
+			for (ROI2DAlongTime capT : cap.getROIsForKymo()) {
 				int imageHeight_i = buildMasks(capT, sizex, sizey);
 				if (imageHeight_i > imageHeight) imageHeight = imageHeight_i;
 			}
@@ -275,7 +275,7 @@ public class BuildKymographs extends BuildSeries
 		buildCapInteger(exp, imageHeight);
 	}
 	
-	private int buildMasks (KymoROI2D capT, int sizex, int sizey) {
+	private int buildMasks (ROI2DAlongTime capT, int sizex, int sizey) {
 		ArrayList<ArrayList<int[]>> masks = new ArrayList<ArrayList<int[]>>();
 		getPointsfromROIPolyLineUsingBresenham(
 				ROI2DUtilities.getCapillaryPoints(capT.getRoi()), 

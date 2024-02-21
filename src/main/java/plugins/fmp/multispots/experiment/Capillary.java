@@ -31,7 +31,7 @@ public class Capillary implements Comparable <Capillary>
 {
 
 	private ROI2D 						roi 			= null;
-	private ArrayList<KymoROI2D>		roisForKymo 	= new ArrayList<KymoROI2D>();
+	private ArrayList<ROI2DAlongTime>	roisForKymo 	= new ArrayList<ROI2DAlongTime>();
 	private String						kymographName 	= null;
 	public int							kymographIndex 	= -1;
 	private String						kymographPrefix	= null;
@@ -41,13 +41,13 @@ public class Capillary implements Comparable <Capillary>
 	
 	public ArrayList<int[]> 			cap_Integer		= null;
 	
-	public String 						capStimulus		= new String("..");
-	public String 						capConcentration= new String("..");
-	public String						capSide			= ".";
-	public int							capNFlies		= 1;
-	public int							capCageID		= 0;
-	public double 						capVolume 		= 5.;
-	public int 							capPixels 		= 5;
+	public String 						stimulus		= new String("..");
+	public String 						concentration	= new String("..");
+	public String						cageSide		= ".";
+	public int							nFlies			= 1;
+	public int							cageID			= 0;
+	public double 						volume 			= 5.;
+	public int 							pixels 			= 5;
 	public boolean						descriptionOK	= false;
 	public int							versionInfos	= 0;
 	
@@ -120,13 +120,13 @@ public class Capillary implements Comparable <Capillary>
 		roi 			= (ROI2D) cap.roi.getCopy();
 		filenameTIFF	= cap.filenameTIFF;
 		
-		capStimulus		= cap.capStimulus;
-		capConcentration= cap.capConcentration;
-		capSide			= cap.capSide;
-		capNFlies		= cap.capNFlies;
-		capCageID		= cap.capCageID;
-		capVolume 		= cap.capVolume;
-		capPixels 		= cap.capPixels;
+		stimulus		= cap.stimulus;
+		concentration	= cap.concentration;
+		cageSide		= cap.cageSide;
+		nFlies			= cap.nFlies;
+		cageID			= cap.cageID;
+		volume 			= cap.volume;
+		pixels 			= cap.pixels;
 		
 		limitsOptions	= cap.limitsOptions;
 		
@@ -204,17 +204,17 @@ public class Capillary implements Comparable <Capillary>
 	public String getSideDescriptor(EnumXLSExportType xlsExportOption) 
 	{
 		String value = null;
-		capSide = getCapillarySide();
+		cageSide = getCapillarySide();
 		switch (xlsExportOption) 
 		{
 		case DISTANCE:
 		case ISALIVE:
-			value = capSide + "(L=R)";
+			value = cageSide + "(L=R)";
 			break;
 		case SUMGULPS_LR:
 		case TOPLEVELDELTA_LR:
 		case TOPLEVEL_LR:
-			if (capSide.equals("L"))
+			if (cageSide.equals("L"))
 				value = "sum";
 			else
 				value = "PI";
@@ -222,13 +222,13 @@ public class Capillary implements Comparable <Capillary>
 		case XYIMAGE:
 		case XYTOPCAGE:
 		case XYTIPCAPS:
-			if (capSide .equals ("L"))
+			if (cageSide .equals ("L"))
 				value = "x";
 			else
 				value = "y";
 			break;
 		default:
-			value = capSide;
+			value = cageSide;
 			break;
 		}
 		return value;
@@ -240,10 +240,10 @@ public class Capillary implements Comparable <Capillary>
 		switch(fieldEnumCode) 
 		{
 		case CAP_STIM:
-			stringValue = capStimulus;
+			stringValue = stimulus;
 			break;
 		case CAP_CONC:
-			stringValue = capConcentration;
+			stringValue = concentration;
 			break;
 		default:
 			break;
@@ -256,10 +256,10 @@ public class Capillary implements Comparable <Capillary>
 		switch(fieldEnumCode) 
 		{
 		case CAP_STIM:
-			capStimulus = stringValue;
+			stimulus = stringValue;
 			break;
 		case CAP_CONC:
-			capConcentration = stringValue;
+			concentration = stringValue;
 			break;
 		default:
 			break;
@@ -384,7 +384,7 @@ public class Capillary implements Comparable <Capillary>
 			lastPixel = (int) limitsOptions.searchArea.getWidth() + firstPixel;
 			
 		} 
-		int threshold = (int) ((limitsOptions.detectGulpsThreshold_uL / capVolume) * capPixels);
+		int threshold = (int) ((limitsOptions.detectGulpsThreshold_uL / volume) * pixels);
 		ArrayList<Point2D> gulpPoints = new ArrayList<Point2D>();
 		int indexLastDetected = -1;
 		
@@ -571,13 +571,13 @@ public class Capillary implements Comparable <Capillary>
 	        filenameTIFF 	= XMLUtil.getElementValue(nodeMeta, ID_NAMETIFF, filenameTIFF);	        
 	        descriptionOK 	= XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
-	        capNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, capNFlies);
-	        capCageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, capCageID);
-	        capVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_CAPVOLUME, Double.NaN);
-			capPixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
-			capStimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
-			capConcentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
-			capSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
+	        nFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, nFlies);
+	        cageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, cageID);
+	        volume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_CAPVOLUME, Double.NaN);
+			pixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
+			stimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
+			concentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
+			cageSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 			
 	        roi = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 	        limitsOptions.loadFromXML(nodeMeta);
@@ -597,7 +597,7 @@ public class Capillary implements Comparable <Capillary>
 		if (nitems > 0) {
         	for (int i=0; i < nitems; i++) {
         		Node node_i = XMLUtil.setElement(nodeMeta2, ID_INTERVAL+i);
-        		KymoROI2D roiInterval = new KymoROI2D();
+        		ROI2DAlongTime roiInterval = new ROI2DAlongTime();
         		roiInterval.loadFromXML(node_i);
         		roisForKymo.add(roiInterval);
         		
@@ -637,13 +637,13 @@ public class Capillary implements Comparable <Capillary>
         }
         XMLUtil.setElementBooleanValue(nodeMeta, ID_DESCOK, descriptionOK);
         XMLUtil.setElementIntValue(nodeMeta, ID_VERSIONINFOS, versionInfos);
-        XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, capNFlies);
-        XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, capCageID);
-		XMLUtil.setElementDoubleValue(nodeMeta, ID_CAPVOLUME, capVolume);
-		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, capPixels);
-		XMLUtil.setElementValue(nodeMeta, ID_STIML, capStimulus);
-		XMLUtil.setElementValue(nodeMeta, ID_SIDE, capSide);
-		XMLUtil.setElementValue(nodeMeta, ID_CONCL, capConcentration);
+        XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, nFlies);
+        XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, cageID);
+		XMLUtil.setElementDoubleValue(nodeMeta, ID_CAPVOLUME, volume);
+		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, pixels);
+		XMLUtil.setElementValue(nodeMeta, ID_STIML, stimulus);
+		XMLUtil.setElementValue(nodeMeta, ID_SIDE, cageSide);
+		XMLUtil.setElementValue(nodeMeta, ID_CONCL, concentration);
 
 		ROI2DUtilities.saveToXML_ROI(nodeMeta, roi); 
 		
@@ -776,27 +776,27 @@ public class Capillary implements Comparable <Capillary>
 	
 	// --------------------------------------------
 	
-	public List<KymoROI2D> getROIsForKymo() 
+	public List<ROI2DAlongTime> getROIsForKymo() 
 	{
 		if (roisForKymo.size() < 1) 
 			initROI2DForKymoList();
 		return roisForKymo;
 	}
 	
- 	public KymoROI2D getROI2DKymoAt(int i) 
+ 	public ROI2DAlongTime getROI2DKymoAt(int i) 
  	{
 		if (roisForKymo.size() < 1) 
 			initROI2DForKymoList();
 		return roisForKymo.get(i);
 	}
  	
- 	public KymoROI2D getROI2DKymoAtIntervalT(long t) 
+ 	public ROI2DAlongTime getROI2DKymoAtIntervalT(long t) 
  	{
 		if (roisForKymo.size() < 1) 
 			initROI2DForKymoList();
 		
-		KymoROI2D capRoi = null;
-		for (KymoROI2D item : roisForKymo) {
+		ROI2DAlongTime capRoi = null;
+		for (ROI2DAlongTime item : roisForKymo) {
 			if (t < item.getStart())
 				break;
 			capRoi = item;
@@ -806,8 +806,8 @@ public class Capillary implements Comparable <Capillary>
  	
  	public void removeROI2DIntervalStartingAt(long start) 
  	{
- 		KymoROI2D itemFound = null;
- 		for (KymoROI2D item : roisForKymo) {
+ 		ROI2DAlongTime itemFound = null;
+ 		for (ROI2DAlongTime item : roisForKymo) {
 			if (start != item.getStart())
 				continue;
 			itemFound = item;
@@ -818,13 +818,13 @@ public class Capillary implements Comparable <Capillary>
 	
 	private void initROI2DForKymoList() 
 	{ 
-		roisForKymo.add(new KymoROI2D(0, roi));		
+		roisForKymo.add(new ROI2DAlongTime(0, roi));		
 	}
 	
 	public void setVolumeAndPixels(double volume, int pixels) 
 	{
-		capVolume = volume;
-		capPixels = pixels;
+		this.volume = volume;
+		this.pixels = pixels;
 		descriptionOK = true;
 	}
 	
@@ -863,13 +863,13 @@ public class Capillary implements Comparable <Capillary>
 				Integer.toString(kymographIndex), 
 				kymographName, 
 				filenameTIFF, 
-				Integer.toString(capCageID),
-				Integer.toString(capNFlies),
-				Double.toString(capVolume), 
-				Integer.toString(capPixels), 
-				capStimulus, 
-				capConcentration, 
-				capSide);
+				Integer.toString(cageID),
+				Integer.toString(nFlies),
+				Double.toString(volume), 
+				Integer.toString(pixels), 
+				stimulus, 
+				concentration, 
+				cageSide);
 		sbf.append(String.join(",", row));
 		sbf.append("\n");
 		return sbf.toString();
@@ -934,13 +934,13 @@ public class Capillary implements Comparable <Capillary>
 		kymographIndex = Integer.valueOf(data[i]); i++; 
 		kymographName = data[i]; i++; 
 		filenameTIFF = data[i]; i++; 
-		capCageID = Integer.valueOf(data[i]); i++;
-		capNFlies = Integer.valueOf(data[i]); i++;
-		capVolume = Double.valueOf(data[i]); i++; 
-		capPixels = Integer.valueOf(data[i]); i++; 
-		capStimulus = data[i]; i++; 
-		capConcentration = data[i]; i++; 
-		capSide = data[i]; 
+		cageID = Integer.valueOf(data[i]); i++;
+		nFlies = Integer.valueOf(data[i]); i++;
+		volume = Double.valueOf(data[i]); i++; 
+		pixels = Integer.valueOf(data[i]); i++; 
+		stimulus = data[i]; i++; 
+		concentration = data[i]; i++; 
+		cageSide = data[i]; 
 	}
 		
 	public void csvImportCapillaryData(EnumCapillaryMeasures measureType, String[] data) 

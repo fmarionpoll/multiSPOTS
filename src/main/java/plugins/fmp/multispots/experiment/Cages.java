@@ -435,9 +435,9 @@ public class Cages
 			int cagenb = cage.getCageNumberInteger();
 			for (Capillary cap: capillariesList) 
 			{
-				if (cap.capCageID != cagenb)
+				if (cap.cageID != cagenb)
 					continue;
-				cage.cageNFlies = cap.capNFlies;
+				cage.cageNFlies = cap.nFlies;
 			}
 		}
 	}
@@ -449,19 +449,42 @@ public class Cages
 			int cagenb = cage.getCageNumberInteger();
 			for (Capillary cap: capillariesList) 
 			{
-				if (cap.capCageID != cagenb)
+				if (cap.cageID != cagenb)
 					continue;
-				cap.capNFlies = cage.cageNFlies;
+				cap.nFlies = cage.cageNFlies;
 			}
 		}
 	}
 	
-	public void setCageNbFromName(ArrayList<Capillary> capillariesList) 
+	public void transferNFliesFromCagesToSpots(ArrayList<Spot> spotsList)
+	{
+		for (Cage cage: cagesList ) 
+		{
+			int cagenb = cage.getCageNumberInteger();
+			for (Spot spot: spotsList) 
+			{
+				if (spot.cageID != cagenb)
+					continue;
+				spot.nFlies = cage.cageNFlies;
+			}
+		}
+	}
+	
+	public void setCageNbFromCapillaryName(ArrayList<Capillary> capillariesList) 
 	{
 		for (Capillary cap: capillariesList) 
 		{
 			int cagenb = cap.getCageIndexFromRoiName();
-			cap.capCageID = cagenb;
+			cap.cageID = cagenb;
+		}
+	}
+	
+	public void setCageNbFromSpotName(ArrayList<Spot> spotsList) 
+	{
+		for (Spot spot: spotsList) 
+		{
+			int cagenb = spot.getCageIndexFromRoiName();
+			spot.cageID = cagenb;
 		}
 	}
 	

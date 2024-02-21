@@ -17,6 +17,7 @@ import plugins.fmp.multispots.MultiSPOTS;
 import plugins.fmp.multispots.experiment.CapillariesArray;
 import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
+import plugins.fmp.multispots.experiment.Spot;
 
 
 
@@ -30,11 +31,14 @@ public class Infos extends JPanel
 	private JSpinner 		capillaryVolumeSpinner	= new JSpinner(new SpinnerNumberModel(5., 0., 100., 1.));
 	private JSpinner 		capillaryPixelsSpinner	= new JSpinner(new SpinnerNumberModel(5, 0, 1000, 1));
 	private JButton			getCapillaryLengthButton= new JButton ("pixels 1rst capillary");
-	private JButton			editCapillariesButton	= new JButton("Edit capillaries infos...");
+	private JButton			editCapillariesButton	= new JButton("Edit polyline Rois infos...");
+	private JButton			editSpotsButton			= new JButton("Edit spots infos...");
 	private MultiSPOTS 		parent0 				= null;
-	private InfosCapillaryTable infosCapillaryTable = null;
-	private List <Capillary> capillariesArrayCopy 	= null;
 	
+	private CapillaryTable infosCapillaryTable 		= null;
+	private SpotTable	   infosSpotTable			= null;
+	private List <Capillary> capillariesArrayCopy 	= null;
+	private List<Spot>		spotsArrayCopy			= null;
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{
@@ -52,6 +56,11 @@ public class Infos extends JPanel
 		JPanel panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 1));
 		panel1.add( editCapillariesButton);
 		add(panel1);
+		
+		JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 1));
+		panel2.add( editSpotsButton);
+		add(panel2);
+
 
 		defineActionListeners();
 	}
@@ -75,8 +84,22 @@ public class Infos extends JPanel
 				{
 					exp.capillaries.transferDescriptionToCapillaries();
 					if (infosCapillaryTable == null)
-						infosCapillaryTable = new InfosCapillaryTable();
+						infosCapillaryTable = new CapillaryTable();
 					infosCapillaryTable.initialize(parent0, capillariesArrayCopy);
+				}
+			}});
+		
+		editSpotsButton.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+				{
+					exp.spotsArray.transferDescriptionToSpots();
+					if (infosSpotTable == null)
+						infosSpotTable = new SpotTable();
+					infosSpotTable.initialize(parent0, spotsArrayCopy);
 				}
 			}});
 	}

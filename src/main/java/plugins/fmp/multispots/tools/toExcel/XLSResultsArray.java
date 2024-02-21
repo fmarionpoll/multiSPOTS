@@ -81,11 +81,11 @@ public class XLSResultsArray
 		if (!sameLR)
 			return;
 		if (stim == null)
-			stim = cap.capStimulus;
+			stim = cap.stimulus;
 		if (conc == null)
-			conc = cap.capConcentration;
-		sameLR &= stim .equals(cap.capStimulus);
-		sameLR &= conc .equals(cap.capConcentration);
+			conc = cap.concentration;
+		sameLR &= stim .equals(cap.stimulus);
+		sameLR &= conc .equals(cap.concentration);
 	}
 	
 	public void checkIfSameStimulusAndConcentration(Spot spot) 
@@ -93,11 +93,11 @@ public class XLSResultsArray
 		if (!sameLR)
 			return;
 		if (stim == null)
-			stim = spot.spotStimulus;
+			stim = spot.stimulus;
 		if (conc == null)
-			conc = spot.spotConcentration;
-		sameLR &= stim .equals(spot.spotStimulus);
-		sameLR &= conc .equals(spot.spotConcentration);
+			conc = spot.concentration;
+		sameLR &= stim .equals(spot.stimulus);
+		sameLR &= conc .equals(spot.concentration);
 	}
 	
 	public void subtractEvaporation() 
@@ -271,7 +271,7 @@ public class XLSResultsArray
 		for (Capillary cap: capillaries.capillariesList) 
 		{
 			checkIfSameStimulusAndConcentration(cap);
-			XLSResults results = new XLSResults(cap.getRoiName(), cap.capNFlies, cap.capCageID, xlsExportOptions.exportType, nOutputFrames);
+			XLSResults results = new XLSResults(cap.getRoiName(), cap.nFlies, cap.cageID, xlsExportOptions.exportType, nOutputFrames);
 			results.dataInt = cap.getCapillaryMeasuresForXLSPass1(xlsExportOptions.exportType, kymoBinCol_Ms, xlsExportOptions.buildExcelStepMs);
 			if (subtractT0) 
 				results.subtractT0();
@@ -291,8 +291,8 @@ public class XLSResultsArray
 		{
 			checkIfSameStimulusAndConcentration(spot);
 			XLSResults results = new XLSResults(spot.getRoiName(), 
-												spot.spotNFlies, 
-												spot.spotCageID, 
+												spot.nFlies, 
+												spot.cageID, 
 												xlsExportOptions.exportType, nOutputFrames);
 			results.dataInt = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, kymoBinCol_Ms, xlsExportOptions.buildExcelStepMs);
 			if (subtractT0) 

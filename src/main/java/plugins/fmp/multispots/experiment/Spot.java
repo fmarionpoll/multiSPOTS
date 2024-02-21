@@ -1,7 +1,6 @@
 package plugins.fmp.multispots.experiment;
 
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,24 +26,24 @@ public class Spot implements Comparable <Spot>
 {
 
 	private ROI2D 						roi 			= null;
-	private ArrayList<KymoROI2D>		roisForKymo 	= new ArrayList<KymoROI2D>();
-	public BooleanMask2D 				spotMask2D		= null;
+	private ArrayList<ROI2DAlongTime>	listRoiAlongTime= new ArrayList<ROI2DAlongTime>();
+	public BooleanMask2D 				mask2D			= null;
 
 	public int							kymographIndex 	= -1;
 	private String						kymographPrefix	= null;
 	
 	public String 						version 		= null;
-	public String						filenameTIFF	= null;
+
 	
 	public ArrayList<int[]> 			spot_Integer	= null;
 	
-	public String 						spotStimulus	= new String("..");
-	public String 						spotConcentration= new String("..");
-	public String						spotSide			= ".";
-	public int							spotNFlies		= 1;
-	public int							spotCageID		= 0;
-	public double 						spotVolume 		= 5.;
-	public int 							spotPixels 		= 5;
+	public String 						stimulus		= new String("..");
+	public String 						concentration	= new String("..");
+	public String						cageSide			= ".";
+	public int							nFlies			= 1;
+	public int							cageID			= 0;
+	public double 						volume 			= 1;
+	public int 							pixels 			= 5;
 	public boolean						descriptionOK	= false;
 	public int							versionInfos	= 0;
 	
@@ -59,8 +58,8 @@ public class Spot implements Comparable <Spot>
 	private final String 				ID_META 		= "metaMC";
 	private final String				ID_NFLIES		= "nflies";
 	private final String				ID_CAGENB		= "cage_number";
-	private final String 				ID_SPOTVOLUME 	= "spotVolume";
-	private final String 				ID_CAPPIXELS 	= "capillaryPixels";
+	private final String 				ID_SPOTVOLUME 	= "volume";
+	private final String 				ID_CAPPIXELS 	= "pixels";
 	private final String 				ID_STIML 		= "stimulus";
 	private final String 				ID_CONCL 		= "concentration";
 	private final String 				ID_SIDE 		= "side";
@@ -72,7 +71,7 @@ public class Spot implements Comparable <Spot>
 	private final String 				ID_INTERVAL 	= "interval_";
 	
 	private final String 				ID_INDEXIMAGE 	= "indexImageMC";
-	private final String 				ID_NAMETIFF 	= "filenameTIFF";
+
 	private final String 				ID_VERSION		= "version"; 
 	private final String 				ID_VERSIONNUM	= "1.0.0"; 
 	
@@ -106,15 +105,14 @@ public class Spot implements Comparable <Spot>
 		kymographIndex 	= spot.kymographIndex;
 		version 		= spot.version;
 		roi 			= (ROI2D) spot.roi.getCopy();
-		filenameTIFF	= spot.filenameTIFF;
 		
-		spotStimulus	= spot.spotStimulus;
-		spotConcentration= spot.spotConcentration;
-		spotSide		= spot.spotSide;
-		spotNFlies		= spot.spotNFlies;
-		spotCageID		= spot.spotCageID;
-		spotVolume 		= spot.spotVolume;
-		spotPixels 		= spot.spotPixels;
+		stimulus	= spot.stimulus;
+		concentration= spot.concentration;
+		cageSide		= spot.cageSide;
+		nFlies		= spot.nFlies;
+		cageID		= spot.cageID;
+		volume 		= spot.volume;
+		pixels 		= spot.pixels;
 		
 		limitsOptions	= spot.limitsOptions;
 		
@@ -179,17 +177,17 @@ public class Spot implements Comparable <Spot>
 	public String getSideDescriptor(EnumXLSExportType xlsExportOption) 
 	{
 		String value = null;
-		spotSide = getSpotSide();
+		cageSide = getSpotSide();
 		switch (xlsExportOption) 
 		{
 		case DISTANCE:
 		case ISALIVE:
-			value = spotSide + "(L=R)";
+			value = cageSide + "(L=R)";
 			break;
 		case SUMGULPS_LR:
 		case TOPLEVELDELTA_LR:
 		case TOPLEVEL_LR:
-			if (spotSide.equals("L"))
+			if (cageSide.equals("L"))
 				value = "sum";
 			else
 				value = "PI";
@@ -197,13 +195,13 @@ public class Spot implements Comparable <Spot>
 		case XYIMAGE:
 		case XYTOPCAGE:
 		case XYTIPCAPS:
-			if (spotSide .equals ("L"))
+			if (cageSide .equals ("L"))
 				value = "x";
 			else
 				value = "y";
 			break;
 		default:
-			value = spotSide;
+			value = cageSide;
 			break;
 		}
 		return value;
@@ -215,10 +213,10 @@ public class Spot implements Comparable <Spot>
 		switch(fieldEnumCode) 
 		{
 		case CAP_STIM:
-			stringValue = spotStimulus;
+			stringValue = stimulus;
 			break;
 		case CAP_CONC:
-			stringValue = spotConcentration;
+			stringValue = concentration;
 			break;
 		default:
 			break;
@@ -231,10 +229,10 @@ public class Spot implements Comparable <Spot>
 		switch(fieldEnumCode) 
 		{
 		case CAP_STIM:
-			spotStimulus = stringValue;
+			stimulus = stringValue;
 			break;
 		case CAP_CONC:
-			spotConcentration = stringValue;
+			concentration = stringValue;
 			break;
 		default:
 			break;
@@ -365,16 +363,16 @@ public class Spot implements Comparable <Spot>
 	    {
 	    	version 		= XMLUtil.getElementValue(nodeMeta, ID_VERSION, "0.0.0");
 	    	kymographIndex 	= XMLUtil.getElementIntValue(nodeMeta, ID_INDEXIMAGE, kymographIndex);
-	        filenameTIFF 	= XMLUtil.getElementValue(nodeMeta, ID_NAMETIFF, filenameTIFF);	        
+     
 	        descriptionOK 	= XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
-	        spotNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
-	        spotCageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
-	        spotVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
-			spotPixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
-			spotStimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
-			spotConcentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
-			spotSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
+	        nFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, nFlies);
+	        cageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, cageID);
+	        volume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
+			pixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
+			stimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
+			concentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
+			cageSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 			
 	        roi = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 	        limitsOptions.loadFromXML(nodeMeta);
@@ -386,7 +384,7 @@ public class Spot implements Comparable <Spot>
 	
 	private boolean loadFromXML_intervals(Node node) 
 	{
-		roisForKymo.clear();
+		listRoiAlongTime.clear();
 		final Node nodeMeta2 = XMLUtil.getElement(node, ID_INTERVALS);
 	    if (nodeMeta2 == null)
 	    	return false;
@@ -394,12 +392,12 @@ public class Spot implements Comparable <Spot>
 		if (nitems > 0) {
         	for (int i=0; i < nitems; i++) {
         		Node node_i = XMLUtil.setElement(nodeMeta2, ID_INTERVAL+i);
-        		KymoROI2D roiInterval = new KymoROI2D();
+        		ROI2DAlongTime roiInterval = new ROI2DAlongTime();
         		roiInterval.loadFromXML(node_i);
-        		roisForKymo.add(roiInterval);
+        		listRoiAlongTime.add(roiInterval);
         		
         		if (i == 0) {
-        			roi = roisForKymo.get(0).getRoi();
+        			roi = listRoiAlongTime.get(0).getRoi();
         		}
         	}
         }
@@ -424,19 +422,16 @@ public class Spot implements Comparable <Spot>
     		version = ID_VERSIONNUM;
     	XMLUtil.setElementValue(nodeMeta, ID_VERSION, version);
         XMLUtil.setElementIntValue(nodeMeta, ID_INDEXIMAGE, kymographIndex);
-        if (filenameTIFF != null ) {
-        	String filename = Paths.get(filenameTIFF).getFileName().toString();
-        	XMLUtil.setElementValue(nodeMeta, ID_NAMETIFF, filename);
-        }
+
         XMLUtil.setElementBooleanValue(nodeMeta, ID_DESCOK, descriptionOK);
         XMLUtil.setElementIntValue(nodeMeta, ID_VERSIONINFOS, versionInfos);
-        XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
-        XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
-		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, spotVolume);
-		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, spotPixels);
-		XMLUtil.setElementValue(nodeMeta, ID_STIML, spotStimulus);
-		XMLUtil.setElementValue(nodeMeta, ID_SIDE, spotSide);
-		XMLUtil.setElementValue(nodeMeta, ID_CONCL, spotConcentration);
+        XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, nFlies);
+        XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, cageID);
+		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, volume);
+		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, pixels);
+		XMLUtil.setElementValue(nodeMeta, ID_STIML, stimulus);
+		XMLUtil.setElementValue(nodeMeta, ID_SIDE, cageSide);
+		XMLUtil.setElementValue(nodeMeta, ID_CONCL, concentration);
 
 		ROI2DUtilities.saveToXML_ROI(nodeMeta, roi); 
 		
@@ -449,12 +444,12 @@ public class Spot implements Comparable <Spot>
 		final Node nodeMeta2 = XMLUtil.setElement(node, ID_INTERVALS);
 	    if (nodeMeta2 == null)
 	    	return false;
-		int nitems = roisForKymo.size();
+		int nitems = listRoiAlongTime.size();
 		XMLUtil.setElementIntValue(nodeMeta2, ID_NINTERVALS, nitems);
         if (nitems > 0) {
         	for (int i=0; i < nitems; i++) {
         		Node node_i = XMLUtil.setElement(nodeMeta2, ID_INTERVAL+i);
-        		roisForKymo.get(i).saveToXML(node_i);
+        		listRoiAlongTime.get(i).saveToXML(node_i);
         	}
         }
         return true;
@@ -462,27 +457,27 @@ public class Spot implements Comparable <Spot>
 	
 	// --------------------------------------------
 	
-	public List<KymoROI2D> getROIsForKymo() 
+	public List<ROI2DAlongTime> getROIsForKymo() 
 	{
-		if (roisForKymo.size() < 1) 
+		if (listRoiAlongTime.size() < 1) 
 			initROI2DForKymoList();
-		return roisForKymo;
+		return listRoiAlongTime;
 	}
 	
- 	public KymoROI2D getROI2DKymoAt(int i) 
+ 	public ROI2DAlongTime getROI2DKymoAt(int i) 
  	{
-		if (roisForKymo.size() < 1) 
+		if (listRoiAlongTime.size() < 1) 
 			initROI2DForKymoList();
-		return roisForKymo.get(i);
+		return listRoiAlongTime.get(i);
 	}
  	
- 	public KymoROI2D getROI2DKymoAtIntervalT(long t) 
+ 	public ROI2DAlongTime getROI2DKymoAtIntervalT(long t) 
  	{
-		if (roisForKymo.size() < 1) 
+		if (listRoiAlongTime.size() < 1) 
 			initROI2DForKymoList();
 		
-		KymoROI2D capRoi = null;
-		for (KymoROI2D item : roisForKymo) {
+		ROI2DAlongTime capRoi = null;
+		for (ROI2DAlongTime item : listRoiAlongTime) {
 			if (t < item.getStart())
 				break;
 			capRoi = item;
@@ -492,25 +487,25 @@ public class Spot implements Comparable <Spot>
  	
  	public void removeROI2DIntervalStartingAt(long start) 
  	{
- 		KymoROI2D itemFound = null;
- 		for (KymoROI2D item : roisForKymo) {
+ 		ROI2DAlongTime itemFound = null;
+ 		for (ROI2DAlongTime item : listRoiAlongTime) {
 			if (start != item.getStart())
 				continue;
 			itemFound = item;
 		}
  		if (itemFound != null)
- 			roisForKymo.remove(itemFound);
+ 			listRoiAlongTime.remove(itemFound);
 	}
 	
 	private void initROI2DForKymoList() 
 	{ 
-		roisForKymo.add(new KymoROI2D(0, roi));		
+		listRoiAlongTime.add(new ROI2DAlongTime(0, roi));		
 	}
 	
 	public void setVolumeAndPixels(double volume, int pixels) 
 	{
-		spotVolume = volume;
-		spotPixels = pixels;
+		this.volume = volume;
+		this.pixels = pixels;
 		descriptionOK = true;
 	}
 	
@@ -558,13 +553,13 @@ public class Spot implements Comparable <Spot>
 				kymographPrefix,
 				Integer.toString(kymographIndex), 
 				getRoi().getName(), 
-				Integer.toString(spotCageID),
-				Integer.toString(spotNFlies),
-				Double.toString(spotVolume), 
-				Integer.toString(spotPixels), 
-				spotStimulus, 
-				spotConcentration, 
-				spotSide);
+				Integer.toString(cageID),
+				Integer.toString(nFlies),
+				Double.toString(volume), 
+				Integer.toString(pixels), 
+				stimulus, 
+				concentration, 
+				cageSide);
 		sbf.append(String.join(",", row));
 		sbf.append("\n");
 		return sbf.toString();
@@ -609,14 +604,14 @@ public class Spot implements Comparable <Spot>
 		int i = 0;
 		kymographPrefix = data[i]; i++;
 		kymographIndex = Integer.valueOf(data[i]); i++; 
-		filenameTIFF = data[i]; i++; 
-		spotCageID = Integer.valueOf(data[i]); i++;
-		spotNFlies = Integer.valueOf(data[i]); i++;
-		spotVolume = Double.valueOf(data[i]); i++; 
-		spotPixels = Integer.valueOf(data[i]); i++; 
-		spotStimulus = data[i]; i++; 
-		spotConcentration = data[i]; i++; 
-		spotSide = data[i]; 
+
+		cageID = Integer.valueOf(data[i]); i++;
+		nFlies = Integer.valueOf(data[i]); i++;
+		volume = Double.valueOf(data[i]); i++; 
+		pixels = Integer.valueOf(data[i]); i++; 
+		stimulus = data[i]; i++; 
+		concentration = data[i]; i++; 
+		cageSide = data[i]; 
 	}
 		
 	public void csvImportData(EnumSpotMeasures measureType, String[] data) 

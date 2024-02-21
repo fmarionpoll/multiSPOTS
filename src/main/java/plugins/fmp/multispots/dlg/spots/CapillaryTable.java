@@ -28,7 +28,7 @@ import plugins.fmp.multispots.experiment.Capillary;
 import plugins.fmp.multispots.experiment.Experiment;
 
 
-public class InfosCapillaryTable extends JPanel 
+public class CapillaryTable extends JPanel 
 {
 	/**
 	 * 
@@ -197,7 +197,7 @@ public class InfosCapillaryTable extends JPanel
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 				{
-					exp.cages.setCageNbFromName(exp.capillaries.capillariesList);
+					exp.cages.setCageNbFromCapillaryName(exp.capillaries.capillariesList);
 					capillaryTableModel.fireTableDataChanged();
 				}
 			}});
@@ -230,21 +230,21 @@ public class InfosCapillaryTable extends JPanel
 	
 	private void storeCapillaryValues(Capillary capillary, Spot destinationCapillary) 
 	{
-		destinationCapillary.spotNFlies = capillary.capNFlies; 
-		destinationCapillary.spotVolume = capillary.capVolume;
-		destinationCapillary.spotStimulus = capillary.capStimulus;
-		destinationCapillary.spotConcentration = capillary.capConcentration;
-		destinationCapillary.spotSide = capillary.capSide;
+		destinationCapillary.nFlies = capillary.nFlies; 
+		destinationCapillary.volume = capillary.volume;
+		destinationCapillary.stimulus = capillary.stimulus;
+		destinationCapillary.concentration = capillary.concentration;
+		destinationCapillary.cageSide = capillary.cageSide;
 	}
 	
 	private void switchCapillaryValue(Spot sourceCapillary, Capillary cap, int columnIndex) 
 	{
 		switch (columnIndex) 
     	{
-        case 2: cap.capNFlies = sourceCapillary.spotNFlies; break;
-        case 3: cap.capVolume = sourceCapillary.spotVolume; break;
-        case 4: cap.capStimulus = sourceCapillary.spotStimulus; break;
-        case 5: cap.capConcentration = sourceCapillary.spotConcentration; break;
+        case 2: cap.nFlies = sourceCapillary.nFlies; break;
+        case 3: cap.volume = sourceCapillary.volume; break;
+        case 4: cap.stimulus = sourceCapillary.stimulus; break;
+        case 5: cap.concentration = sourceCapillary.concentration; break;
         default: break;
     	}
 		
@@ -268,11 +268,11 @@ public class InfosCapillaryTable extends JPanel
 				if (!capFrom.getRoiName().equals (capTo.getRoiName()))
 					continue;
 				capFrom.valid = true;
-				capTo.capCageID = capFrom.capCageID;
-				capTo.capNFlies = capFrom.capNFlies;
-				capTo.capVolume = capFrom.capVolume;
-				capTo.capStimulus = capFrom.capStimulus;
-				capTo.capConcentration = capFrom.capConcentration;
+				capTo.cageID = capFrom.cageID;
+				capTo.nFlies = capFrom.nFlies;
+				capTo.volume = capFrom.volume;
+				capTo.stimulus = capFrom.stimulus;
+				capTo.concentration = capFrom.concentration;
 			}
 		}
 	}
@@ -284,11 +284,11 @@ public class InfosCapillaryTable extends JPanel
 		{
 			Capillary cap = exp.capillaries.capillariesList.get(i);
 			if (i< 2 || i >= ncapillaries-2) {
-				cap.capNFlies = 0;
+				cap.nFlies = 0;
 			}
 			else 
 			{
-				cap.capNFlies = 1;
+				cap.nFlies = 1;
 			}
 		}
 	}
@@ -333,10 +333,10 @@ public class InfosCapillaryTable extends JPanel
 			}
         	switch (columnIndex) 
         	{
-            case 2: cap.capNFlies = cap0.capNFlies; break;
-            case 3: cap.capVolume = cap0.capVolume; break;
-            case 4: cap.capStimulus = cap0.capStimulus; break;
-            case 5: cap.capConcentration = cap0.capConcentration; break;
+            case 2: cap.nFlies = cap0.nFlies; break;
+            case 3: cap.volume = cap0.volume; break;
+            case 4: cap.stimulus = cap0.stimulus; break;
+            case 5: cap.concentration = cap0.concentration; break;
             default: break;
         	}					
 		}
@@ -356,10 +356,10 @@ public class InfosCapillaryTable extends JPanel
 				continue;
 			switch (columnIndex) 
 			{
-            case 2: cap.capNFlies = cap0.capNFlies; break;
-            case 3: cap.capVolume = cap0.capVolume; break;
-            case 4: cap.capStimulus = cap0.capStimulus; break;
-            case 5: cap.capConcentration = cap0.capConcentration; break;
+            case 2: cap.nFlies = cap0.nFlies; break;
+            case 3: cap.volume = cap0.volume; break;
+            case 4: cap.stimulus = cap0.stimulus; break;
+            case 5: cap.concentration = cap0.concentration; break;
             default: break;
         	}					
 		}	
@@ -373,7 +373,7 @@ public class InfosCapillaryTable extends JPanel
 			return;
 		
 		Capillary capFrom = exp.capillaries.capillariesList.get(rowIndex);	
-		int cageFrom = capFrom.capCageID; 
+		int cageFrom = capFrom.cageID; 
 		int cageTo = -1;
 				
 		int nCapillariesPerCage = getCageNCapillaries(exp, cageFrom);
@@ -383,16 +383,16 @@ public class InfosCapillaryTable extends JPanel
 		for (int i = 0; i < exp.capillaries.capillariesList.size(); i++) 
 		{
 			Capillary cap = exp.capillaries.capillariesList.get(i);
-			if (cap.capCageID == cageFrom)
+			if (cap.cageID == cageFrom)
 				continue;
 			
-			if (cap.capCageID != cageTo) 
+			if (cap.cageID != cageTo) 
 			{
-				cageTo = cap.capCageID;
+				cageTo = cap.cageID;
 				indexFirstCapillaryOfCageTo = getIndexFirstCapillaryOfCage(exp, cageTo);
 			}
 						
-			if (getCageNCapillaries(exp, cap.capCageID) != nCapillariesPerCage)
+			if (getCageNCapillaries(exp, cap.cageID) != nCapillariesPerCage)
 				continue;
 
 			int indexFrom = i - indexFirstCapillaryOfCageTo + indexFirstCapillaryOfCageFrom;
@@ -400,10 +400,10 @@ public class InfosCapillaryTable extends JPanel
 
         	switch (columnIndex) 
         	{
-            case 2: cap.capNFlies = cap0.capNFlies; break;
-            case 3: cap.capVolume = cap0.capVolume; break;
-            case 4: cap.capStimulus = cap0.capStimulus; break;
-            case 5: cap.capConcentration = cap0.capConcentration; break;
+            case 2: cap.nFlies = cap0.nFlies; break;
+            case 3: cap.volume = cap0.volume; break;
+            case 4: cap.stimulus = cap0.stimulus; break;
+            case 5: cap.concentration = cap0.concentration; break;
             default: break;
         	}					
 		}
@@ -415,7 +415,7 @@ public class InfosCapillaryTable extends JPanel
 		int nCapillaries = 0;
 		for (Capillary cap: exp.capillaries.capillariesList)
 		{
-			if (cap.capCageID == cageID)
+			if (cap.cageID == cageID)
 				nCapillaries ++;
 		}
 			
@@ -428,7 +428,7 @@ public class InfosCapillaryTable extends JPanel
 		for (int i = 0; i < exp.capillaries.capillariesList.size(); i++) 
 		{
 			Capillary cap = exp.capillaries.capillariesList.get(i);
-			if (cap.capCageID == cageID) {
+			if (cap.cageID == cageID) {
 				index = i;
 				break;
 			}

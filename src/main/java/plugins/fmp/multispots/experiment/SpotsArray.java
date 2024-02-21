@@ -168,17 +168,17 @@ public class SpotsArray
 			Node nodecapillary = XMLUtil.getElement(node, ID_SPOT_+i);
 			Spot spot = new Spot();
 			spot.loadFromXML_SpotOnly(nodecapillary);
-			if (spotsDescription.grouping == 2 && (spot.spotStimulus != null && spot.spotStimulus.equals(".."))) 
+			if (spotsDescription.grouping == 2 && (spot.stimulus != null && spot.stimulus.equals(".."))) 
 			{
 				if (spot.getSpotSide().equals("R")) 
 				{
-					spot.spotStimulus = spotsDescription.stimulusR;
-					spot.spotConcentration = spotsDescription.concentrationR;
+					spot.stimulus = spotsDescription.stimulusR;
+					spot.concentration = spotsDescription.concentrationR;
 				} 
 				else 
 				{
-					spot.spotStimulus = spotsDescription.stimulusL;
-					spot.spotConcentration = spotsDescription.concentrationL;
+					spot.stimulus = spotsDescription.stimulusL;
+					spot.concentration = spotsDescription.concentrationL;
 				}
 			}
 			if (!isPresent(spot))
@@ -265,7 +265,7 @@ public class SpotsArray
 			return;
 		String	name = spot.getRoiName();
 		String letter = name.substring(name.length() - 1);
-		spot.spotSide = letter;
+		spot.cageSide = letter;
 		if (letter .equals("R")) 
 		{	
 			String nameL = name.substring(0, name.length() - 1) + "L";
@@ -273,7 +273,7 @@ public class SpotsArray
 			if (cap0 != null) 
 			{
 //				spot.capNFlies = cap0.capNFlies;
-				spot.spotCageID = cap0.spotCageID;
+				spot.cageID = cap0.cageID;
 			}
 		}
 	}
@@ -380,10 +380,10 @@ public class SpotsArray
 		for (int i = 0; i < capArraySize; i++)
 		{
 			Spot spot = spotsList.get(i);
-			spot.spotNFlies = nflies;
+			spot.nFlies = nflies;
 			if (i <= 1  || i>= capArraySize-2 )
-				spot.spotNFlies = 0;
-			spot.spotCageID = i/2;
+				spot.nFlies = 0;
+			spot.cageID = i/2;
 		}
 	}
 	
@@ -393,21 +393,21 @@ public class SpotsArray
 		for (int i = 0; i < capArraySize; i++) 
 		{
 			Spot spot = spotsList.get(i);
-			spot.spotNFlies = 1;
+			spot.nFlies = 1;
 			if (i <= 1 ) 
 			{
-				spot.spotNFlies = 0;
-				spot.spotCageID = 0;
+				spot.nFlies = 0;
+				spot.cageID = 0;
 			}
 			else if (i >= capArraySize-2 ) 
 			{
-				spot.spotNFlies = 0;
-				spot.spotCageID = 5;
+				spot.nFlies = 0;
+				spot.cageID = 5;
 			}
 			else 
 			{
-				spot.spotNFlies = nflies;
-				spot.spotCageID = 1 + (i-2)/4;
+				spot.nFlies = nflies;
+				spot.cageID = 1 + (i-2)/4;
 			}
 		}
 	}
@@ -418,7 +418,7 @@ public class SpotsArray
 		for (int i = 0; i < capArraySize; i++) 
 		{
 			Spot spot = spotsList.get(i);
-			spot.spotNFlies = nflies;
+			spot.nFlies = nflies;
 		}
 	}
 	
@@ -432,7 +432,7 @@ public class SpotsArray
 			
 			for (Spot spot: spotsList) 
 			{
-				for (KymoROI2D roiFK: spot.getROIsForKymo()) 
+				for (ROI2DAlongTime roiFK: spot.getROIsForKymo()) 
 				{
 					Long[] interval = {roiFK.getStart(), (long) -1}; 
 					spotsListTimeIntervals.addIfNew(interval);
@@ -449,11 +449,11 @@ public class SpotsArray
 		
 		for (Spot spot: spotsList) 
 		{
-			List<KymoROI2D> listROI2DForKymo = spot.getROIsForKymo();
+			List<ROI2DAlongTime> listROI2DForKymo = spot.getROIsForKymo();
 			ROI2D roi = spot.getRoi();
 			if (item>0 ) 
 				roi = (ROI2D) listROI2DForKymo.get(item-1).getRoi().getCopy();
-			listROI2DForKymo.add(item, new KymoROI2D(start, roi));
+			listROI2DForKymo.add(item, new ROI2DAlongTime(start, roi));
 		}
 		return item;
 	}

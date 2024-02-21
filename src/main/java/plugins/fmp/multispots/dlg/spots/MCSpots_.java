@@ -27,23 +27,24 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	 * 
 	 */
 	private static final long serialVersionUID = 853047648249832145L;
-	public	PopupPanel 	capPopupPanel	= null;
-			JTabbedPane tabsPane 		= new JTabbedPane();
+	public	PopupPanel 		capPopupPanel	= null;
+			JTabbedPane 	tabsPane 		= new JTabbedPane();
 			
-	public 	CreateSpots	tabCreateForSpots = new CreateSpots();
-	ThresholdSimple simpleThreshold = new ThresholdSimple();
-	ThresholdColors colorsThreshold = new ThresholdColors();
-	public 	Graphs 		tabGraphs 		= new Graphs();
-	public 	LoadSaveSpots tabFile  		= new LoadSaveSpots();
+	public 	CreateSpots		tabCreateForSpots = new CreateSpots();
+//			Edit			tabEdit			= new Edit();
+			ThresholdSimple simpleThreshold = new ThresholdSimple();
+			ThresholdColors colorsThreshold = new ThresholdColors();
+	public 	Graphs 			tabGraphs 		= new Graphs();
+	public 	LoadSaveSpots 	tabFile  		= new LoadSaveSpots();
 	
-//			Edit		tabEdit			= new Edit();
+
 //			Adjust 		tabAdjust 		= new Adjust();
 
 	public 	Infos		tabInfos		= new Infos();
 	private int 		ID_INFOS 		= 1;
-	private int 		ID_ADJUST 		= 3;
-	private int			ID_EDIT			= 2;
-	private int			ID_FILTER 		= 4;
+//	private int 		ID_ADJUST 		= 3;
+//	private int			ID_EDIT			= 2;
+//	private int			ID_FILTER 		= 4;
 	private boolean		editSelected	= false;
 	private MultiSPOTS 	parent0 		= null;
 
@@ -63,7 +64,19 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		tabCreateForSpots.init(gridLayout, parent0);
 		tabCreateForSpots.addPropertyChangeListener(this);
 		tabsPane.addTab("Create", null, tabCreateForSpots, "Create spots defining liquid drops");
+		order++;		
+		
+		ID_INFOS = order;
+		tabInfos.init(gridLayout, parent0);
+		tabInfos.addPropertyChangeListener(this);
+		tabsPane.addTab("Infos", null, tabInfos, "Define pixel conversion unit of images and capillaries content");
 		order++;
+
+//		ID_EDIT = order;
+//		tabEdit.init(gridLayout, parent0);
+//		tabEdit.addPropertyChangeListener(this);
+//		tabsPane.addTab("Edit", null, tabEdit, "Edit capillaries position and size");
+//		order++;
 		
 		simpleThreshold.init(gridLayout, parent0);
 		simpleThreshold.addPropertyChangeListener( this);
@@ -85,17 +98,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		tabsPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with spots descriptors");
 		order++;
 		
-//		ID_INFOS = order;
-//		tabInfos.init(capLayout, parent0);
-//		tabInfos.addPropertyChangeListener(this);
-//		tabsPane.addTab("Infos", null, tabInfos, "Define pixel conversion unit of images and capillaries content");
-//		order++;
-//		
-//		ID_EDIT = order;
-//		tabEdit.init(capLayout, parent0);
-//		tabEdit.addPropertyChangeListener(this);
-//		tabsPane.addTab("Edit", null, tabEdit, "Edit capillaries position and size");
-//		order++;
+
 //		
 //		ID_ADJUST = order;
 //		tabAdjust.init(capLayout, parent0);

@@ -231,7 +231,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 					roiP.translate(rectGrid.x, rectGrid.y);
 					int cagenb = cap.getCageIndexFromRoiName();
 					roiP.setName("cage" + String.format("%03d", cagenb));
-					cap.capCageID = cagenb;
+					cap.cageID = cagenb;
 					exp.seqCamData.seq.addROI(roiP);
 				}
 			}

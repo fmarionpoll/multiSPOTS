@@ -1,11 +1,11 @@
 package plugins.fmp.multispots.dlg.JComponents;
 
 import javax.swing.table.AbstractTableModel;
-import plugins.fmp.multispots.experiment.Capillary;
+
 import plugins.fmp.multispots.experiment.Experiment;
+import plugins.fmp.multispots.experiment.Spot;
 
-
-public class CapillaryTableModel extends AbstractTableModel  
+public class SpotTableModel extends AbstractTableModel  
 {
 	/**
 	 * 
@@ -15,7 +15,7 @@ public class CapillaryTableModel extends AbstractTableModel
 	String columnNames[] = { "Name", "Cage", "N flies", "Volume", "Stimulus", "Concentration"};
 	
 	
-	public CapillaryTableModel (ExperimentCombo expList) {
+	public SpotTableModel (ExperimentCombo expList) {
 		super();
 		this.expList = expList;
 	}
@@ -54,15 +54,15 @@ public class CapillaryTableModel extends AbstractTableModel
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-    	Capillary cap = getCapillaryAt(rowIndex);
-    	if (cap != null) {
+    	Spot spot = getSpotAt(rowIndex);
+    	if (spot != null) {
         	switch (columnIndex) {
-            case 0: return cap.getRoiName();
-            case 1: return cap.cageID;
-            case 2: return cap.nFlies;
-            case 3: return cap.volume;
-            case 4: return cap.stimulus;
-            case 5: return cap.concentration;
+            case 0: return spot.getRoiName();
+            case 1: return spot.cageID;
+            case 2: return spot.nFlies;
+            case 3: return spot.volume;
+            case 4: return spot.stimulus;
+            case 5: return spot.concentration;
         	}
     	}
     	return null;
@@ -80,26 +80,25 @@ public class CapillaryTableModel extends AbstractTableModel
     
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-    	Capillary cap = getCapillaryAt(rowIndex);
-    	if (cap != null) {
+    	Spot spot = getSpotAt(rowIndex);
+    	if (spot != null) {
         	switch (columnIndex) {
-            case 0: cap.setRoiName(aValue.toString()); break;
-            case 1: cap.cageID = (int) aValue; break;
-            case 2: cap.nFlies = (int) aValue; break;
-            case 3: cap.volume = (double) aValue; break;
-            case 4: cap.stimulus = aValue.toString(); break;
-            case 5: cap.concentration = aValue.toString(); break;
+            case 0: spot.setRoiName(aValue.toString()); break;
+            case 1: spot.cageID = (int) aValue; break;
+            case 2: spot.nFlies = (int) aValue; break;
+            case 3: spot.volume = (double) aValue; break;
+            case 4: spot.stimulus = aValue.toString(); break;
+            case 5: spot.concentration = aValue.toString(); break;
         	}
     	}
     }
     
-    private Capillary getCapillaryAt(int rowIndex) {
-		Capillary cap = null;
+    private Spot getSpotAt(int rowIndex) {
+		Spot spot = null;
     	if (expList != null && expList.getSelectedIndex() >=0 ) {
     		Experiment exp = (Experiment) expList.getSelectedItem();
-    		cap = exp.capillaries.capillariesList.get(rowIndex);
+    		spot = exp.spotsArray.spotsList.get(rowIndex);
     	}
-    	return cap;
+    	return spot;
 	}
-
 }

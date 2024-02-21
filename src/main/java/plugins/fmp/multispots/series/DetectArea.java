@@ -167,7 +167,7 @@ public class DetectArea extends BuildSeries
 						int sum = 0;
 						BooleanMask2D intersectionMask = null;
 						try {
-							intersectionMask = maskAll2D.getIntersection(spot.spotMask2D );
+							intersectionMask = maskAll2D.getIntersection(spot.mask2D );
 							sum = intersectionMask.getNumberOfPoints();
 							spot.areaNPixels.limit[fromSourceImageIndex] = sum;		
 						} catch (InterruptedException e) {
@@ -227,7 +227,7 @@ public class DetectArea extends BuildSeries
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
 			try {
-				spot.spotMask2D = spot.getRoi().getBooleanMask2D( 0 , 0, 1, true );
+				spot.mask2D = spot.getRoi().getBooleanMask2D( 0 , 0, 1, true );
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

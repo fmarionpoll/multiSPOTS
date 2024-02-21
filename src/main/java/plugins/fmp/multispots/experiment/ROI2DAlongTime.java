@@ -9,7 +9,7 @@ import icy.roi.ROI2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multispots.tools.ROI2DUtilities;
 
-public class KymoROI2D implements XMLPersistent 
+public class ROI2DAlongTime implements XMLPersistent 
 {
 	private int		index			= 0;
 	private ROI2D 	roi 			= null;	
@@ -21,12 +21,12 @@ public class KymoROI2D implements XMLPersistent
 	private final String ID_START 	= "startT";
 	
 	
-	public KymoROI2D(long start, ROI2D roi) {
+	public ROI2DAlongTime(long start, ROI2D roi) {
 		setRoi(roi);
 		this.start = start;
 	}
 	
-	public KymoROI2D() {
+	public ROI2DAlongTime() {
 	}
 
 	public long getStart() {
