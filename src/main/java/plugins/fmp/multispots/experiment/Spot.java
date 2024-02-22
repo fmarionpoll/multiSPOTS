@@ -33,7 +33,6 @@ public class Spot implements Comparable <Spot>
 	private String						kymographPrefix	= null;
 	public String 						version 		= null;
 
-	
 	public ArrayList<int[]> 			spot_Integer	= null;
 	
 	public String 						stimulus		= new String("..");
@@ -52,7 +51,6 @@ public class Spot implements Comparable <Spot>
 	public  final String 				ID_AREAPIXELS 	= "areaNPixels";	
 	public SpotArea						areaNPixels  	= new SpotArea(ID_AREAPIXELS); 
 
-	
 	public boolean						valid			= true;
 
 	private final String 				ID_META 		= "metaMC";
@@ -589,7 +587,7 @@ public class Spot implements Comparable <Spot>
 	public String csvExportSpotData(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append(kymographPrefix+ ","+ kymographIndex +",");
+		sbf.append(roi.getName()+ ","+ kymographIndex +",");
 		
 		switch(measureType) {
 			case AREA_NPIXELS:

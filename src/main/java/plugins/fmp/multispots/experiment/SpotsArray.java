@@ -615,7 +615,7 @@ public class SpotsArray
 				if (data[0] .equals( "#")) 
 					return data[1];
 
-				Spot spot = getSpotFromRoiNamePrefix(data[0]);
+				Spot spot = getSpotFromRoiName(data[0]);
 				if (spot == null)
 					spot = new Spot();
 				spot.csvImportData(measureType, data);
