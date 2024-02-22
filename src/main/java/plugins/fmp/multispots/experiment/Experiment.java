@@ -55,7 +55,7 @@ public class Experiment
 	public 	long			camImageBin_ms			= -1;
 	public  long[] 			camImages_ms			= null;
 	
-	public 	long			binFirst_ms			= 0;
+	public 	long			binFirst_ms				= 0;
 	public 	long			binLast_ms				= 0;
 	public 	long			binDuration_ms			= 60000;
 	

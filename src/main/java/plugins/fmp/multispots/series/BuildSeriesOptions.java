@@ -20,7 +20,7 @@ public class BuildSeriesOptions implements XMLPersistent
 	public boolean			isFrameFixed		= false;
 	public long				t_Ms_First			= 0;
 	public long				t_Ms_Last			= 0;
-	public long				binDuration_ms	= 1;
+	public long				binDuration_ms		= 60000;
 	
 	public int 				diskRadius 			= 5;
 	public boolean 			doRegistration 		= false;

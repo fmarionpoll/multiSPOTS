@@ -554,7 +554,7 @@ public class XLSExport
 						resultsArrayList.getResults1(expi.spotsArray, 
 								xlsExportType, 
 								nOutputFrames, 
-							x	exp.binDuration_ms, // TODO check this
+								exp.binDuration_ms, // TODO check this
 								options);
 //						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
