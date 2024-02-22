@@ -55,7 +55,9 @@ public class DetectArea extends BuildSeries
 	private void getTimeLimitsOfSequence(Experiment exp)
 	{
 		exp.getFileIntervalsFromSeqCamData();
-		exp.binDuration_ms = options.binDuration_ms;
+		exp.loadFileIntervalsFromSeqCamData();
+		exp.binDuration_ms = exp.camImageBin_ms;
+		System.out.println("sequence bin size = "+exp.binDuration_ms);
 		if (options.isFrameFixed) {
 			exp.binFirst_ms = options.t_Ms_First;
 			exp.binLast_ms = options.t_Ms_Last;
@@ -81,8 +83,9 @@ public class DetectArea extends BuildSeries
 		{
 			spot.areaNPixels.setPolylineLevelFromTempData(
 					spot.getRoi().getName(), 
-					spot.areaNPixels.capIndexKymo, 
-					0, spot.areaNPixels.limit.length-1);		
+					spot.kymographIndex, 
+					0, 
+					spot.areaNPixels.limit.length-1);		
 		}
 		exp.saveMCExperiment();
 		exp.saveSpotsMeasures();

@@ -21,8 +21,8 @@ public class SpotArea
 	public Level2D 	polyline_old 	= new Level2D();
 	public int [] 	limit			= null;
 	
-	public String	capName 		= "noname";
-	public int		capIndexKymo 	= -1;
+	public String	name 			= "noname";
+	public int		index 			= -1;
 	public String 	header 			= null;
 	
 	private final String ID_NPOINTS	= "npoints";
@@ -35,13 +35,13 @@ public class SpotArea
 	
 	SpotArea(String capName) 
 	{
-		this.capName = capName;
+		this.name = capName;
 	}
 	
 	public SpotArea(String name, int indexImage, List<Point2D> limit) 
 	{
-		this.capName = name;
-		this.capIndexKymo = indexImage;
+		this.name = name;
+		this.index = indexImage;
 		polylineLevel = new Level2D(limit);
 	}
 	
@@ -52,8 +52,8 @@ public class SpotArea
 	
 	public void setPolylineLevelFromTempData(String name, int indexImage, int xStart, int xEnd) 
 	{
-		this.capName = name;
-		this.capIndexKymo = indexImage;
+		this.name = name;
+		this.index = indexImage;
 		int npoints = xEnd-xStart+1;
 		double [] xpoints = new double [npoints];
 		double [] ypoints = new double [npoints];
@@ -105,10 +105,10 @@ public class SpotArea
 		polylineLevel = new Level2D(pol); 
 	}
 	
-	void copy(SpotArea cap) 
+	void copy(SpotArea sourceSpotArea) 
 	{
-		if (cap.polylineLevel != null)
-			polylineLevel = cap.polylineLevel.clone(); 
+		if (sourceSpotArea.polylineLevel != null)
+			polylineLevel = sourceSpotArea.polylineLevel.clone(); 
 	}
 	
 	boolean isThereAnyMeasuresDone() 
@@ -165,7 +165,7 @@ public class SpotArea
 		for (ROI roi: listRois) 
 		{		
 			String roiname = roi.getName();
-			if (roi instanceof ROI2DPolyLine && roiname .contains (capName)) 
+			if (roi instanceof ROI2DPolyLine && roiname .contains (name)) 
 			{
 				polylineLevel = new Level2D(((ROI2DPolyLine)roi).getPolyline2D());
 				return true;
@@ -193,11 +193,11 @@ public class SpotArea
 		polylineLevel = null;
 	    if (nodeMeta != null)  
 	    {
-	    	capName =  XMLUtil.getElementValue(nodeMeta, ID_NAME, nodename);
-	    	if (!capName.contains("_")) 
+	    	name =  XMLUtil.getElementValue(nodeMeta, ID_NAME, nodename);
+	    	if (!name.contains("_")) 
 	    	{
 	    		this.header = header;
-	    		capName = header + capName;
+	    		name = header + name;
 	    	} 
 	    	polylineLevel = loadPolyline2DFromXML(nodeMeta);
 		    if (polylineLevel != null)
@@ -238,7 +238,7 @@ public class SpotArea
 		final Node nodeMeta = XMLUtil.setElement(node, nodename);
 	    if (nodeMeta != null) 
 	    {
-	    	XMLUtil.setElementValue(nodeMeta, ID_NAME, capName);
+	    	XMLUtil.setElementValue(nodeMeta, ID_NAME, name);
 	    	saveLevel2XML(nodeMeta, polylineLevel);
 	    	final Node nodeMeta_old = XMLUtil.setElement(node, nodename+"old");
 		    if (polyline_old != null && polyline_old.npoints != polylineLevel.npoints) 

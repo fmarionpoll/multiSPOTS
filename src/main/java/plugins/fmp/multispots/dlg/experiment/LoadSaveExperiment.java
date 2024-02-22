@@ -102,10 +102,10 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			if (selectedNames.size() < 1)
 				return;
 			
-			ExperimentDirectories eDAF0 = new ExperimentDirectories(); 
-			if (eDAF0.getDirectoriesFromExptPath(parent0.expListCombo, selectedNames.get(0), null))
+			ExperimentDirectories experimentDirectories = new ExperimentDirectories(); 
+			if (experimentDirectories.getDirectoriesFromExptPath(parent0.expListCombo, selectedNames.get(0), null))
 			{
-				final int item = addExperimentFrom3NamesAnd2Lists(eDAF0);
+				final int item = addExperimentFrom3NamesAnd2Lists(experimentDirectories);
 	        	final String binSubDirectory = parent0.expListCombo.expListBinSubDirectory;
 	        	
 	        	SwingUtilities.invokeLater(new Runnable() { public void run() 

@@ -90,7 +90,7 @@ public class ChartAreas extends IcyFrame
 		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, option, subtractEvaporation);
 		
 		int icage = 0;
-        final NumberAxis yAxis = new NumberAxis("volume (µl)");
+        final NumberAxis yAxis = new NumberAxis("n pixels");
         yAxis.setAutoRangeIncludesZero(false);  
         yAxis.setInverted(true);
         final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
@@ -182,30 +182,22 @@ public class ChartAreas extends IcyFrame
 
 	private List<XYSeriesCollection> getDataArrays(Experiment exp, EnumXLSExportType exportType, boolean subtractEvaporation) 
 	{
-		XLSResultsArray resultsArray1 = getDataAsResultsArray(exp, exportType, subtractEvaporation);
-		XLSResultsArray resultsArray2 = null;
-		if (exportType == EnumXLSExportType.TOPLEVEL) 
-			resultsArray2 = getDataAsResultsArray(exp, EnumXLSExportType.BOTTOMLEVEL, subtractEvaporation);
-		
-		XYSeriesCollection xyDataset = null;
+		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, exportType, subtractEvaporation);
+		XYSeriesCollection xySeriesCollection = null;
 		int oldcage = -1;
 		
 		List<XYSeriesCollection> xyList = new ArrayList<XYSeriesCollection>();
-		for (int iRow = 0; iRow < resultsArray1.size(); iRow++ ) 
+		for (int iRow = 0; iRow < xlsResultsArray.size(); iRow++ ) 
 		{
-			XLSResults rowXLSResults1 = resultsArray1.getRow(iRow);
-			if (oldcage != rowXLSResults1.cageID ) 
+			XLSResults xlsResults = xlsResultsArray.getRow(iRow);
+			if (oldcage != xlsResults.cageID ) 
 			{
-				xyDataset = new XYSeriesCollection();
-				oldcage = rowXLSResults1.cageID; 
-				xyList.add(xyDataset);
-			} 	
-			
-			XYSeries seriesXY = getXYSeries(rowXLSResults1, rowXLSResults1.name.substring(4));
-			if (resultsArray2 != null) 
-				appendDataToXYSeries(seriesXY, resultsArray2.getRow(iRow));
-			
-			xyDataset.addSeries(seriesXY );
+				xySeriesCollection = new XYSeriesCollection();
+				oldcage = xlsResults.cageID; 
+				xyList.add(xySeriesCollection);
+			}
+			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name.substring(4));
+			xySeriesCollection.addSeries(seriesXY );
 			updateGlobalMaxMin();
 		}
 		return xyList;
@@ -250,15 +242,6 @@ public class ChartAreas extends IcyFrame
 			addPointsAndUpdateExtrema(seriesXY, results, 0);	
 		}
 		return seriesXY;
-	}
-	
-	private void appendDataToXYSeries(XYSeries seriesXY, XLSResults results ) 
-	{	
-		if (results.valuesOut != null && results.valuesOut.length > 0) 
-		{
-			seriesXY.add(Double.NaN, Double.NaN);
-			addPointsAndUpdateExtrema(seriesXY, results, 0);	
-		}
 	}
 	
 	private void addPointsAndUpdateExtrema(XYSeries seriesXY, XLSResults results, int startFrame) 

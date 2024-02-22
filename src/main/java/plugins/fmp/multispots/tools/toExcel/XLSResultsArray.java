@@ -66,11 +66,6 @@ public class XLSResultsArray
 		return Integer.valueOf(name.substring(4, 5));
 	}
 	
-	public void addRow(XLSResults results) 
-	{
-		resultsList.add(results);
-	}
-	
 	public void sortRowsByName() 
 	{
 		Collections.sort(resultsList, new Comparators.XLSResults_Name_Comparator());
@@ -276,7 +271,7 @@ public class XLSResultsArray
 			if (subtractT0) 
 				results.subtractT0();
 			results.transferDataIntToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
-			addRow(results);
+			resultsList.add(results);
 		}
 	}
 	
@@ -293,14 +288,15 @@ public class XLSResultsArray
 			XLSResults results = new XLSResults(spot.getRoiName(), 
 												spot.nFlies, 
 												spot.cageID, 
-												xlsExportOptions.exportType, nOutputFrames);
+												xlsExportOptions.exportType, 
+												nOutputFrames);
 			results.dataInt = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, 
 					kymoBinCol_Ms, 
 					xlsExportOptions.buildExcelStepMs);
 			if (subtractT0) 
 				results.subtractT0();
 			results.transferDataIntToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
-			addRow(results);
+			resultsList.add(results);
 		}
 	}
 	

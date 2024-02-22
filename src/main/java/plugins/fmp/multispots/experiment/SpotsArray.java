@@ -40,7 +40,7 @@ public class SpotsArray
 	private final static String ID_LISTOFSPOTS 		= "List_of_spots";
 	private final static String ID_SPOT_ 			= "spot_";
 	private final static String ID_MCSPOTS_XML 		= "MCspots.xml";
-	private final String csvFileName = "SpotsMeasures.csv";
+	private final 		String 	csvFileName 		= "SpotsMeasures.csv";
 
 	// ---------------------------------
 	
@@ -204,15 +204,15 @@ public class SpotsArray
 
 	// ---------------------------------
 	
-	public void copy (SpotsArray spot) 
+	public void copy (SpotsArray sourceSpotArray) 
 	{
-		spotsDescription.copy(spot.spotsDescription);
+		spotsDescription.copy(sourceSpotArray.spotsDescription);
 		spotsList.clear();
-		for (Spot ccap: spot.spotsList) 
+		for (Spot sourceSpot: sourceSpotArray.spotsList) 
 		{
-			Spot capi = new Spot();
-			capi.copy(ccap);
-			spotsList.add(capi);
+			Spot spot = new Spot();
+			spot.copy(sourceSpot);
+			spotsList.add(spot);
 		}
 	}
 	

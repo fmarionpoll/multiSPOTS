@@ -31,7 +31,6 @@ public class Spot implements Comparable <Spot>
 
 	public int							kymographIndex 	= -1;
 	private String						kymographPrefix	= null;
-	private String						name			= null;
 	public String 						version 		= null;
 
 	
@@ -108,14 +107,14 @@ public class Spot implements Comparable <Spot>
 		version 		= spot.version;
 		roi 			= (ROI2D) spot.roi.getCopy();
 		
-		stimulus	= spot.stimulus;
-		concentration= spot.concentration;
+		stimulus		= spot.stimulus;
+		concentration	= spot.concentration;
 		cageSide		= spot.cageSide;
-		nFlies		= spot.nFlies;
-		cageID		= spot.cageID;
-		volume 		= spot.volume;
-		pixels 		= spot.pixels;
-		radius 		= spot.radius;
+		nFlies			= spot.nFlies;
+		cageID			= spot.cageID;
+		volume 			= spot.volume;
+		pixels 			= spot.pixels;
+		radius 			= spot.radius;
 		
 		limitsOptions	= spot.limitsOptions;
 		
@@ -345,7 +344,7 @@ public class Spot implements Comparable <Spot>
 			return;
 		
 		ROI2D roi = new ROI2DPolyLine(capLevel.polylineLevel);
-		String name = kymographPrefix + "_" + capLevel.capName;
+		String name = kymographPrefix + "_" + capLevel.name;
 		roi.setName(name);
 		roi.setT(kymographIndex);
 		listrois.add( roi);
@@ -610,7 +609,7 @@ public class Spot implements Comparable <Spot>
 		int i = 0;
 		kymographPrefix = data[i]; i++;
 		kymographIndex = Integer.valueOf(data[i]); i++; 
-		name  = data[i]; i++;
+		roi.setName(data[i]); i++;
 		cageID = Integer.valueOf(data[i]); i++;
 		nFlies = Integer.valueOf(data[i]); i++;
 		volume = Double.valueOf(data[i]); i++; 

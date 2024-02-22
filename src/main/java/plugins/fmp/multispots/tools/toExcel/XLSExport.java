@@ -381,12 +381,12 @@ public class XLSExport
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(ncapillaries);
 		for (int i = 0; i < ncapillaries; i++) 
 		{
-			Capillary cap 		= expAll.capillaries.capillariesList.get(i);
-			XLSResults row 		= new XLSResults (cap.getRoiName(), cap.nFlies, cap.cageID, xlsOption, nFrames);
-			row.stimulus 		= cap.stimulus;
-			row.concentration 	= cap.concentration;
-			row.cageID 			= cap.cageID;
-			rowListForOneExp.addRow(row);
+			Capillary cap = expAll.capillaries.capillariesList.get(i);
+			XLSResults rowResults 		= new XLSResults (cap.getRoiName(), cap.nFlies, cap.cageID, xlsOption, nFrames);
+			rowResults.stimulus 		= cap.stimulus;
+			rowResults.concentration 	= cap.concentration;
+			rowResults.cageID 			= cap.cageID;
+			rowListForOneExp.resultsList.add(rowResults);
 		}
 		rowListForOneExp.sortRowsByName();
 		return rowListForOneExp;
@@ -416,18 +416,17 @@ public class XLSExport
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
 		for (int i = 0; i < nspots; i++) 
 		{
-			Spot spot 			= expAll.spotsArray.spotsList.get(i);
-			XLSResults row 		= new XLSResults (spot.getRoiName(), spot.nFlies, spot.cageID, xlsOption, nFrames);
-			row.stimulus 		= spot.stimulus;
-			row.concentration 	= spot.concentration;
-			row.cageID 			= spot.cageID;
-			rowListForOneExp.addRow(row);
+			Spot spot = expAll.spotsArray.spotsList.get(i);
+			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.nFlies, spot.cageID, xlsOption, nFrames);
+			rowResults.stimulus 		= spot.stimulus;
+			rowResults.concentration 	= spot.concentration;
+			rowResults.cageID 			= spot.cageID;
+			rowListForOneExp.resultsList.add(rowResults);
 		}
 		rowListForOneExp.sortRowsByName();
 		return rowListForOneExp;
 	}
-
-		
+	
 	public XLSResultsArray getCapDataFromOneExperiment(Experiment exp, EnumXLSExportType exportType, XLSExportOptions options) 
 	{
 		this.options = options;
