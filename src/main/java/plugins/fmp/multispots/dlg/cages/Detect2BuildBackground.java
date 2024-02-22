@@ -228,7 +228,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 			options.expList.index1 = options.expList.getItemCount()-1;
 		else
 			options.expList.index1 = parent0.expListCombo.getSelectedIndex();
-		parent0.paneKymos.tabDisplay.indexImagesCombo = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
+//		parent0.paneKymos.tabDisplay.indexImagesCombo = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
 		
 		options.btrackWhite 	= true;
 		options.backgroundThreshold	= (int) backgroundThresholdSpinner.getValue();		
@@ -240,7 +240,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		options.detectFlies		= false;
 		
 		options.parent0Rect 	= parent0.mainFrame.getBoundsInternal();
-		options.binSubDirectory = parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
+//		options.binSubDirectory = parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
 		
 		options.isFrameFixed 	= parent0.paneExcel.tabCommonOptions.getIsFixedFrame();
 		options.t_Ms_First 		= parent0.paneExcel.tabCommonOptions.getStartMs();
@@ -281,8 +281,8 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		 if (StringUtil.equals("thread_ended", evt.getPropertyName())) 
 		 {
 			startComputationButton.setText(detectString);
-			parent0.paneKymos.tabDisplay.selectKymographImage(parent0.paneKymos.tabDisplay.indexImagesCombo);
-			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
+//			parent0.paneKymos.tabDisplay.selectKymographImage(parent0.paneKymos.tabDisplay.indexImagesCombo);
+//			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
 			loadBackground();
 		 }
 	}

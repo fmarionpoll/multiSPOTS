@@ -104,7 +104,8 @@ public class MCSpotsRxp_1 extends JPanel
 		SequenceKymos seqKymos = exp.seqKymos;
 		if (seqKymos == null)
 			return;
-		int imageIndex = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
+		int imageIndex = 0;
+//		int imageIndex = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
 		getAverageXandYProfile (seqKymos, imageIndex);
 		graphDisplay2Panels(exp, avgX, avgY);
 	}

@@ -166,7 +166,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			}
 			exp.closeSequences();
 		}
-		parent0.paneKymos.tabDisplay.kymographsCombo.removeAllItems();
+//		parent0.paneKymos.tabDisplay.kymographsCombo.removeAllItems();
 	}
 	
 	public void closeCurrentExperiment() 
@@ -204,19 +204,19 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			exp.loadCamDataCapillaries();
 			exp.loadCamDataSpots();
 			
-			parent0.paneKymos.tabFile.loadDefaultKymos(exp);
+//			parent0.paneKymos.tabFile.loadDefaultKymos(exp);
 			
-			if (exp.seqKymos != null) {	
-				parent0.paneLevels.tabFileLevels.dlg_levels_loadCapillaries_Measures(exp);
-				if (parent0.paneExperiment.tabOptions.graphsCheckBox.isSelected())
-					parent0.paneLevels.tabGraphs.displayGraphsPanels(exp);
-			}
+//			if (exp.seqKymos != null) {	
+//				parent0.paneLevels.tabFileLevels.dlg_levels_loadCapillaries_Measures(exp);
+//				if (parent0.paneExperiment.tabOptions.graphsCheckBox.isSelected())
+//					parent0.paneLevels.tabGraphs.displayGraphsPanels(exp);
+//			}
 			
 			exp.loadCagesMeasures();
 			progressFrame.setMessage("Load data: update dialogs");
 			
 			parent0.paneExperiment.updateDialogs(exp);
-			parent0.paneKymos.updateDialogs(exp);
+//			parent0.paneKymos.updateDialogs(exp);
 			parent0.paneSpots.updateDialogs(exp);
 		}
 		else 

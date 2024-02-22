@@ -32,8 +32,7 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 	public	PopupPanel 		capPopupPanel	= null;
 	private JTabbedPane 	tabsPane 		= new JTabbedPane();
 	public Options			tabCommonOptions= new Options();
-	private Levels			tabLevels		= new Levels();
-	private Gulps			tabGulps		= new Gulps();
+	private SpotsAreas		tabAreas		= new SpotsAreas();
 	private Move 			tabMove  		= new Move();
 	private MultiSPOTS 		parent0 = null;
 
@@ -52,15 +51,10 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 		tabCommonOptions.init(capLayout);
 		tabsPane.addTab("Common options", null, tabCommonOptions, "Define common options");
 		tabCommonOptions.addPropertyChangeListener(this);
-		
-		tabLevels.init(capLayout);
-		tabsPane.addTab("Capillaries", null, tabLevels, "Export capillary levels to file");
-		tabLevels.addPropertyChangeListener(this);
-		
-		tabGulps.init(capLayout);
-		tabsPane.addTab("Gulps", null, tabGulps, "Export gulps to file");
-		tabGulps.addPropertyChangeListener(this);
-		
+			
+		tabAreas.init(capLayout);
+		tabsPane.addTab("Areas", null, tabAreas, "Export areas of spots to file");
+		tabAreas.addPropertyChangeListener(this);
 		
 		tabMove.init(capLayout);
 		tabsPane.addTab("Move", null, tabMove, "Export fly positions to file");
@@ -116,20 +110,6 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 				xlsExport2.exportToFile(file, getLevelsOptions());
 			}});
 		}
-		else if (evt.getPropertyName().equals("EXPORT_GULPSDATA")) 
-		{
-			String file = defineXlsFileName(exp, "_gulps.xlsx");
-			if (file == null)
-				return;
-			updateParametersCurrentExperiment(exp);
-			ThreadUtil.bgRun( new Runnable() 
-			{ 
-				@Override public void run() 
-				{
-					XLSExportGulpsResults xlsExport2 = new XLSExportGulpsResults();
-					xlsExport2.exportToFile(file, getGulpsOptions());
-				}});	
-		}
 	}
 	
 	private String defineXlsFileName(Experiment exp, String pattern) 
@@ -168,38 +148,15 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 		options.sumGulps 		= false; 
 		options.nbGulps 		= false;
 		
-		options.topLevel 		= tabLevels.topLevelCheckBox.isSelected(); 
-		options.topLevelDelta   = tabLevels.topLevelDeltaCheckBox.isSelected();
-		options.bottomLevel 	= tabLevels.bottomLevelCheckBox.isSelected();  
+		options.topLevel 		= tabAreas.topLevelCheckBox.isSelected(); 
+		options.topLevelDelta   = tabAreas.topLevelDeltaCheckBox.isSelected();
+		options.bottomLevel 	= tabAreas.bottomLevelCheckBox.isSelected();  
 		options.sumGulps 		= false; 
-		options.lrPI 			= tabLevels.lrPICheckBox.isSelected(); 
-		options.lrPIThreshold 	= (double) tabLevels.lrPIThresholdJSpinner.getValue();
-		options.sumPerCage 		= tabLevels.sumPerCageCheckBox.isSelected();
-		options.t0 				= tabLevels.t0CheckBox.isSelected();
-		options.subtractEvaporation = tabLevels.subtractEvaporationCheckBox.isSelected();
-		getCommonOptions(options);
-		return options;
-	}
-	
-	private XLSExportOptions getGulpsOptions() 
-	{
-		XLSExportOptions options= new XLSExportOptions();
-		options.topLevel 		= false; 
-		options.topLevelDelta   = false;
-		options.bottomLevel 	= false; 
-		options.derivative 		= tabGulps.derivativeCheckBox.isSelected(); 
-		options.sumPerCage 		= false;
-		options.t0 				= false;
-		options.sumGulps 		= tabGulps.sumGulpsCheckBox.isSelected(); 
-		options.lrPI 			= tabGulps.sumCheckBox.isSelected(); 
-		options.nbGulps 		= tabGulps.nbGulpsCheckBox.isSelected();
-		options.amplitudeGulps 	= tabGulps.amplitudeGulpsCheckBox.isSelected();
-
-		options.autocorrelation		= tabGulps.autocorrelationCheckBox.isSelected();
-		options.crosscorrelation	= tabGulps.crosscorrelationCheckBox.isSelected();
-		options.nbinscorrelation	= (int) tabGulps.nbinsJSpinner.getValue();
-		
-		options.subtractEvaporation = false;
+		options.lrPI 			= tabAreas.lrPICheckBox.isSelected(); 
+		options.lrPIThreshold 	= (double) tabAreas.lrPIThresholdJSpinner.getValue();
+		options.sumPerCage 		= tabAreas.sumPerCageCheckBox.isSelected();
+		options.t0 				= tabAreas.t0CheckBox.isSelected();
+		options.subtractEvaporation = tabAreas.subtractEvaporationCheckBox.isSelected();
 		getCommonOptions(options);
 		return options;
 	}
@@ -220,7 +177,7 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 		options.exportAllFiles 	= tabCommonOptions.exportAllFilesCheckBox.isSelected();
 		
 		options.expList = parent0.expListCombo; 
-		options.expList.expListBinSubDirectory = parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
+//		options.expList.expListBinSubDirectory = parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
 		if (tabCommonOptions.exportAllFilesCheckBox.isSelected()) {
 			options.firstExp 	= 0;
 			options.lastExp 	= options.expList.getItemCount() - 1;

@@ -235,16 +235,16 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			options.expList.index1 = parent0.expListCombo.getSelectedIndex();
 		// list of files
 		options.detectAllSeries = allSeriesCheckBox.isSelected();
-		parent0.paneKymos.tabDisplay.indexImagesCombo = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
+//		parent0.paneKymos.tabDisplay.indexImagesCombo = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
 		if (!allSeriesCheckBox.isSelected()) 
 		{
-			options.seriesFirst = parent0.paneKymos.tabDisplay.indexImagesCombo;
+//			options.seriesFirst = parent0.paneKymos.tabDisplay.indexImagesCombo;
 			options.seriesLast = options.seriesFirst;
 		}
 		else
 		{
 			options.seriesFirst = 0;
-			options.seriesLast = parent0.paneKymos.tabDisplay.kymographsCombo.getItemCount()-1;
+//			options.seriesLast = parent0.paneKymos.tabDisplay.kymographsCombo.getItemCount()-1;
 		}
 		// other parameters
 		options.transform01 		= (ImageTransformEnums) transformsComboBox.getSelectedItem();

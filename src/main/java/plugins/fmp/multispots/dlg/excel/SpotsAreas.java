@@ -12,10 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-
-
-
-public class Levels extends JPanel  
+public class SpotsAreas extends JPanel  
 {
 	/**
 	 * 

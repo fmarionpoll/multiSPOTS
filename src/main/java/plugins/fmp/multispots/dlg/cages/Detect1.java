@@ -228,7 +228,7 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 			options.expList.index1 = options.expList.getItemCount()-1;
 		else
 			options.expList.index1 = parent0.expListCombo.getSelectedIndex();
-		parent0.paneKymos.tabDisplay.indexImagesCombo = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
+//		parent0.paneKymos.tabDisplay.indexImagesCombo = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
 		
 		options.btrackWhite 	= whiteObjectCheckBox.isSelected();
 		options.blimitLow 		= objectLowsizeCheckBox.isSelected();
@@ -250,7 +250,7 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 		options.binDuration_ms			= parent0.paneExcel.tabCommonOptions.getBinMs();
 
 		options.parent0Rect 	= parent0.mainFrame.getBoundsInternal();
-		options.binSubDirectory	= parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
+//		options.binSubDirectory	= parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
 		
 		options.detectCage = allCagesComboBox.getSelectedIndex() - 1;
 	
@@ -286,8 +286,8 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 		 if (StringUtil.equals("thread_ended", evt.getPropertyName())) 
 		 {
 			startComputationButton.setText(detectString);
-			parent0.paneKymos.tabDisplay.selectKymographImage(parent0.paneKymos.tabDisplay.indexImagesCombo);
-			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
+//			parent0.paneKymos.tabDisplay.selectKymographImage(parent0.paneKymos.tabDisplay.indexImagesCombo);
+//			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
 		 }
 	}
 
