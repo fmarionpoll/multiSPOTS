@@ -89,7 +89,8 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		declareListeners();
 	}
 	
-	private void declareListeners() {
+	private void declareListeners() 
+	{
 		overlayCheckBox.addItemListener(new ItemListener() 
 		{
 		  public void itemStateChanged(ItemEvent e) 
@@ -98,7 +99,10 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			  if (exp != null) 
 			  {
 				  if (overlayCheckBox.isSelected()) 
+				  {
 					  updateOverlay(exp);
+					  updateOverlayThreshold();
+				  }
 				  else
 					  removeOverlay(exp);
 			  }
@@ -110,9 +114,14 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			{ 
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
 				if (exp != null && exp.seqKymos != null) 
-				{
+				{				
 					int index = transformsComboBox.getSelectedIndex();
-					getCanvas2DWithFilters(exp).imageTransformFunctionsCombo.setSelectedIndex(index +1);
+					Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
+					updateTransformFunctionsOfCanvas(exp);
+					if (!displayTransformButton.isSelected()) {
+						displayTransformButton.setSelected(true);
+					}
+					canvas.imageTransformFunctionsCombo.setSelectedIndex(index +1);
 					updateOverlayThreshold();
 				}
 			}});
@@ -137,24 +146,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			{ 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) 
-				{ 
-					boolean displayCheckOverlay = false;
-					if (displayTransformButton.isSelected()) {
-						Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
-						canvas.updateListOfImageTransformFunctions( transforms);
-						int index = transformsComboBox.getSelectedIndex();
-						canvas.selectImageTransformFunction(index +1);
-						displayCheckOverlay = true;
-					}
-					else
-					{
-						removeOverlay(exp);
-						overlayCheckBox.setSelected(false);
-						getCanvas2DWithFilters(exp).imageTransformFunctionsCombo.setSelectedIndex(0);
-						
-					}
-					overlayCheckBox.setEnabled(displayCheckOverlay);
-				}
+					displayTransform(exp);
 			}});
 		
 		detectButton.addActionListener(new ActionListener () 
@@ -174,11 +166,11 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			return;
 		
 		if (overlayThreshold == null) 
-			overlayThreshold = new OverlayThreshold(exp.seqCamData);
+			overlayThreshold = new OverlayThreshold(exp.seqCamData.seq);
 		else 
 		{
 			exp.seqCamData.seq.removeOverlay(overlayThreshold);
-			overlayThreshold.setSequence(exp.seqCamData);
+			overlayThreshold.setSequence(exp.seqCamData.seq);
 		}
 		exp.seqCamData.seq.addOverlay(overlayThreshold);
 	}
@@ -218,8 +210,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		if (exp != null)
 		{
 			threadDetectLevels = new DetectArea();
-			threadDetectLevels.options = initBuildParameters(exp);
-			
+			threadDetectLevels.options = initDetectOptions(exp);
 			threadDetectLevels.addPropertyChangeListener(this);
 			threadDetectLevels.execute();
 			detectButton.setText("STOP");
@@ -232,7 +223,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			threadDetectLevels.stopFlag = true;
 	}
 	
-	private BuildSeriesOptions initBuildParameters(Experiment exp) 
+	private BuildSeriesOptions initDetectOptions(Experiment exp) 
 	{	
 		BuildSeriesOptions options = new BuildSeriesOptions();
 		// list of stack experiments
@@ -261,7 +252,40 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		options.detectLevel1Threshold= (int) thresholdSpinner.getValue();
 				
 		options.analyzePartOnly		= false; //fromCheckBox.isSelected();
+		
+		options.overlayTransform = (ImageTransformEnums) transformsComboBox.getSelectedItem(); 
+		options.overlayIfGreater = (direction1ComboBox.getSelectedIndex() == 0);
+		options.overlayThreshold = (int) thresholdSpinner.getValue();
+		
 		return options;
+	}
+
+	private void displayTransform (Experiment exp)
+	{
+		boolean displayCheckOverlay = false;
+		if (displayTransformButton.isSelected()) {
+			updateTransformFunctionsOfCanvas( exp);
+			displayCheckOverlay = true;
+		}
+		else
+		{
+			removeOverlay(exp);
+			overlayCheckBox.setSelected(false);
+			getCanvas2DWithFilters(exp).imageTransformFunctionsCombo.setSelectedIndex(0);
+			
+		}
+		overlayCheckBox.setEnabled(displayCheckOverlay);
+	}
+	
+	private void updateTransformFunctionsOfCanvas(Experiment exp)
+	{
+		Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
+		if (canvas.imageTransformFunctionsCombo.getItemCount() < (transformsComboBox.getItemCount()+1)) 
+		{
+			canvas.updateListOfImageTransformFunctions(transforms);
+		}
+		int index = transformsComboBox.getSelectedIndex();
+		canvas.selectImageTransformFunction(index +1);
 	}
 	
 	@Override

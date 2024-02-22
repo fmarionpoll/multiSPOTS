@@ -39,17 +39,16 @@ public class OverlayThreshold extends Overlay implements SequenceListener
 		super("ThresholdOverlay");	
 	}
 	
-	public OverlayThreshold(SequenceCamData seqCamData) 
+	public OverlayThreshold(Sequence seq) 
 	{
 		super("ThresholdOverlay");
-		setSequence(seqCamData);
+		setSequence(seq);
 	}
 	
-	public void setSequence (SequenceCamData seqCamData) 
+	public void setSequence (Sequence seq) 
 	{
-		localSeq = seqCamData.seq;
+		localSeq = seq;
 		localSeq.addListener(this);
-		imageTransformOptions.seqCamData = seqCamData;
 	}
 	
 	public void setThresholdSingle (int threshold, ImageTransformEnums transformop, boolean ifGreater) 
@@ -80,6 +79,12 @@ public class OverlayThreshold extends Overlay implements SequenceListener
 	public IcyBufferedImage getTransformedImage(int t) 
 	{
 		IcyBufferedImage img = localSeq.getImage(t, 0);
+		IcyBufferedImage img2 = imageTransformFunction.getTransformedImage(img, imageTransformOptions);
+		return imageThresholdFunction.getTransformedImage(img2, imageTransformOptions);
+	}
+	
+	public IcyBufferedImage getTransformedImage(IcyBufferedImage img) 
+	{
 		IcyBufferedImage img2 = imageTransformFunction.getTransformedImage(img, imageTransformOptions);
 		return imageThresholdFunction.getTransformedImage(img2, imageTransformOptions);
 	}

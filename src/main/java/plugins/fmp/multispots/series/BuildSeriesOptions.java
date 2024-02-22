@@ -48,6 +48,9 @@ public class BuildSeriesOptions implements XMLPersistent
 	public 	boolean		directionUp1			= true;
 	public 	int			detectLevel1Threshold 	= 35;
 	public 	ImageTransformEnums transform01 	= ImageTransformEnums.R_RGB;
+	public  ImageTransformEnums overlayTransform = ImageTransformEnums.NONE;
+	public int			overlayThreshold		= 0;
+	public	boolean		overlayIfGreater		= true;
 	
 	public boolean 		pass2 = false;
 	public 	boolean		directionUp2			= true;

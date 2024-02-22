@@ -139,13 +139,13 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 		if (seqCamData == null)
 			return;
 		if (overlayThreshold2 == null) {
-			overlayThreshold2 = new OverlayThreshold(seqCamData);
+			overlayThreshold2 = new OverlayThreshold(seqCamData.seq);
 			exp.seqCamData.refImage = IcyBufferedImageUtil.getCopy(exp.seqCamData.getSeqImage(0, 0));
 		}
 		else 
 		{
 			seqCamData.seq.removeOverlay(overlayThreshold2);
-			overlayThreshold2.setSequence(seqCamData);
+			overlayThreshold2.setSequence(seqCamData.seq);
 		}
 		seqCamData.seq.addOverlay(overlayThreshold2);	
 		boolean ifGreater = true; 

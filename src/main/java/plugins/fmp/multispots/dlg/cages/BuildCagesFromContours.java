@@ -140,13 +140,13 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 			return;
 		if (overlayThreshold == null) 
 		{
-			overlayThreshold = new OverlayThreshold(seqCamData);
+			overlayThreshold = new OverlayThreshold(seqCamData.seq);
 			seqCamData.seq.addOverlay(overlayThreshold);
 		}
 		else 
 		{
 			seqCamData.seq.removeOverlay(overlayThreshold);
-			overlayThreshold.setSequence(seqCamData);
+			overlayThreshold.setSequence(seqCamData.seq);
 			seqCamData.seq.addOverlay(overlayThreshold);
 		}
 		exp.cages.detect_threshold = (int) thresholdSpinner.getValue();
@@ -182,7 +182,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 	  			if (overlayCheckBox.isSelected()) 
 	  			{
 					if (overlayThreshold == null)
-						overlayThreshold = new OverlayThreshold(exp.seqCamData);
+						overlayThreshold = new OverlayThreshold(exp.seqCamData.seq);
 					exp.seqCamData.seq.addOverlay(overlayThreshold);
 					updateOverlay(exp);
 				}

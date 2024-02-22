@@ -12,7 +12,7 @@ public class ImageTransformOptions
 	public ImageTransformEnums transformOption; 
 	public IcyBufferedImage backgroundImage = null;
 	public IcyBufferedImage secondImage = null;
-	public SequenceCamData seqCamData = null;
+//	public SequenceCamData seqCamData = null;
 	public int npixels_changed = 0;
 	
 	public int xfirst;

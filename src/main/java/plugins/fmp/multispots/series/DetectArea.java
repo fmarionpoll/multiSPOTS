@@ -20,8 +20,8 @@ import icy.type.collection.array.Array1DUtil;
 import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.SequenceCamData;
 import plugins.fmp.multispots.experiment.Spot;
-import plugins.fmp.multispots.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multispots.tools.ImageTransform.ImageTransformOptions;
+import plugins.fmp.multispots.tools.Overlay.OverlayThreshold;
 
 
 
@@ -29,7 +29,7 @@ public class DetectArea extends BuildSeries
 {
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
-	ArrayList<IcyBufferedImage>	cap_bufKymoImage = null;
+	private OverlayThreshold overlayThreshold 	= null;
 	
 	// --------------------------------------------
 	
@@ -141,7 +141,10 @@ public class DetectArea extends BuildSeries
 		transformOptions.transformOption = options.transform01;
 		transformOptions.setSingleThreshold (options.detectLevel1Threshold, options.directionUp1) ;
 		getReferenceImage (exp, 0, transformOptions);
-		ImageTransformInterface transformFunction = options.transform01.getFunction();
+//		ImageTransformInterface transformFunction = options.transform01.getFunction();
+		
+		overlayThreshold = new OverlayThreshold(seqData);
+		overlayThreshold.setThresholdSingle(options.overlayThreshold, options.overlayTransform, options.overlayIfGreater);
 		
 		for (int ii = 0; ii < nFrames; ii++) 
 		{
@@ -151,9 +154,12 @@ public class DetectArea extends BuildSeries
 //			progressBar.setMessage(title);
 			
 			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));
-			final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+			//final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+			
 			vData.setTitle(title);
-			seqData.setImage(0, 0, workImage); // add option??
+			seqData.setImage(0, 0, sourceImage); 
+			final IcyBufferedImage imgOverlay = overlayThreshold.getTransformedImage(sourceImage);
+			
 //			if (workImage == null)
 //				next;
 			
@@ -161,8 +167,8 @@ public class DetectArea extends BuildSeries
 				@Override
 				public void run() {	
 
-					boolean[] boolMap = getBoolMap_FromBinaryInt(workImage);
-					BooleanMask2D maskAll2D = new BooleanMask2D(workImage.getBounds(), boolMap); 
+					boolean[] boolMap = getBoolMap_FromBinaryInt(imgOverlay);
+					BooleanMask2D maskAll2D = new BooleanMask2D(imgOverlay.getBounds(), boolMap); 
 				
 					for (Spot spot: exp.spotsArray.spotsList) 
 					{

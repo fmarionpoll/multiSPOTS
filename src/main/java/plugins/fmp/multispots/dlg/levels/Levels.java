@@ -476,11 +476,11 @@ public class Levels extends JPanel implements PropertyChangeListener
 		if (exp.seqKymos == null)
 			return;
 		if (overlayThreshold == null) 
-			overlayThreshold = new OverlayThreshold(exp.seqKymos);
+			overlayThreshold = new OverlayThreshold(exp.seqKymos.seq);
 		else 
 		{
 			exp.seqKymos.seq.removeOverlay(overlayThreshold);
-			overlayThreshold.setSequence(exp.seqKymos);
+			overlayThreshold.setSequence(exp.seqKymos.seq);
 		}
 		
 		if (transformPass1DisplayButton.isSelected() || transformPass2DisplayButton.isSelected()) {
