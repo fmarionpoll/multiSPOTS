@@ -244,7 +244,21 @@ public class XLSResultsArray
 		buildDataForPass2(xlsExportOptions);
 	}
 	
-	public void getResults1( 
+	public void getSpotsArrayResults_T0( 
+			SpotsArray spotsArray, 
+			EnumXLSExportType exportType, 
+			int nOutputFrames, 
+			long kymoBinCol_Ms, 
+			XLSExportOptions xlsExportOptions) 
+	{
+		xlsExportOptions.exportType = exportType;
+		buildDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, xlsExportOptions.t0);
+		if (xlsExportOptions.compensateEvaporation)
+			subtractEvaporation();
+		buildDataForPass2(xlsExportOptions);
+	}
+	
+	public void getSpotsArrayResults1( 
 			SpotsArray spotsArray,  
 			EnumXLSExportType exportType, 
 			int nOutputFrames, 

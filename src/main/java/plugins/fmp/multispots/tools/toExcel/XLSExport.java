@@ -479,11 +479,11 @@ public class XLSExport
 					case AREA_NPIXELS:
 					case AREA_NPIXELS_LR:
 					case AREA_NPIXELS_DELTA:
-						resultsArrayList.getResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
 						
 					case AREA_NPIXELS_RELATIVE:
-						resultsArrayList.getResults_T0(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+						resultsArrayList.getSpotsArrayResults_T0(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
 	
 					default:
@@ -519,7 +519,7 @@ public class XLSExport
 				switch (xlsExportType) 
 				{
 					case AREA_NPIXELS:
-						resultsArrayList.getResults1(expi.spotsArray, 
+						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, 
 								xlsExportType, 
 								nOutputFrames, 
 								exp.binDuration_ms, // TODO check this
