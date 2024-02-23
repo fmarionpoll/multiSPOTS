@@ -31,7 +31,9 @@ public enum EnumXLSExportType
 	ISALIVE ("_alive", "yes/no"), 
 	SLEEP ("sleep", "yes, no"),
 	
-	AREA_NPIXELS("area", "n pixels"),
+	AREA_NPIXELS("area_npixels", "n_pixels"),
+	AREA_NPIXELS_DELTA("area_delta", "n pixels difference between intervals"),
+	AREA_NPIXELS_RELATIVE("area_rel", "%initial surface"),
 	AREA_NPIXELS_LR ("area_L+R", "n_pixels");
 	
 	private String label;

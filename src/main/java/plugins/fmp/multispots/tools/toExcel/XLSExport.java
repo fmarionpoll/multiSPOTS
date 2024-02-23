@@ -15,9 +15,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import plugins.fmp.multispots.dlg.JComponents.ExperimentCombo;
 import plugins.fmp.multispots.experiment.Cage;
-import plugins.fmp.multispots.experiment.Capillary;
-import plugins.fmp.multispots.experiment.Experiment;
 import plugins.fmp.multispots.experiment.Spot;
+import plugins.fmp.multispots.experiment.Experiment;
 
 
 
@@ -84,11 +83,11 @@ public class XLSExport
 				rowmax = dumb.getValue();		
 		}
 		
-		List<Capillary> capList = exp.capillaries.capillariesList;
-		for (int t = 0; t < capList.size(); t++) 
+		List<Spot> spotsList = exp.spotsArray.spotsList;
+		for (int t = 0; t < spotsList.size(); t++) 
 		{ 
-			Capillary cap = capList.get(t);
-			String	name = cap.getRoiName();
+			Spot spot = spotsList.get(t);
+			String	name = spot.getRoiName();
 			int col = getRowIndexFromKymoFileName(name);
 			if (col >= 0) 
 				pt.x = colseries + col;
@@ -105,19 +104,19 @@ public class XLSExport
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_STRAIN.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN));
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_SEX.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_SEX));			
 
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_VOLUME.getValue(), transpose, exp.capillaries.capillariesDescription.volume);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_PIXELS.getValue(), transpose, exp.capillaries.capillariesDescription.pixels);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_VOLUME.getValue(), transpose, exp.spotsArray.spotsDescription.volume);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_PIXELS.getValue(), transpose, exp.spotsArray.spotsDescription.pixels);
 			
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP.getValue(), transpose, cap.getSideDescriptor(xlsExportOption));
-			outputStimAndConc_according_to_DataOption(sheet, xlsExportOption, cap, transpose, x, y);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP.getValue(), transpose, spot.getSideDescriptor(xlsExportOption));
+			outputStimAndConc_according_to_DataOption(sheet, xlsExportOption, spot, transpose, x, y);
 
 			
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, cap.cageID);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+cap.cageID);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, cap.nFlies); 
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.cageID);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+spot.cageID);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, spot.nFlies); 
 
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.DUM4.getValue(), transpose, sheetName);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CHOICE_NOCHOICE.getValue(), transpose, desc_getChoiceTestType(capList, t));
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CHOICE_NOCHOICE.getValue(), transpose, desc_getChoiceTestType(spotsList, t));
 			if (exp.cages.cagesList.size() > t/2) 
 			{
 					Cage cage = exp.cages.cagesList.get(t/2); //cap.capCageID);
@@ -132,18 +131,18 @@ public class XLSExport
 		return pt;
 	}
 	
-	private String desc_getChoiceTestType(List<Capillary> capList, int t)
+	private String desc_getChoiceTestType(List<Spot> spotsList, int t)
 	{
-		Capillary cap = capList.get(t);
+		Spot cap = spotsList.get(t);
 		String choiceText = "..";
-		String side = cap.getCapillarySide();
+		String side = cap.getSpotSide();
 		if (side.contains("L"))
 			t = t+1;
 		else
 			t = t-1;
-		if (t >= 0 && t < capList.size()) {
-			Capillary othercap = capList.get(t);
-			String otherSide = othercap.getCapillarySide();
+		if (t >= 0 && t < spotsList.size()) {
+			Spot othercap = spotsList.get(t);
+			String otherSide = othercap.getSpotSide();
 			if (!otherSide .contains(side))
 			{
 				if (cap.stimulus.equals(othercap.stimulus)
@@ -156,34 +155,22 @@ public class XLSExport
 		return choiceText;
 	}
 	
-	private void outputStimAndConc_according_to_DataOption(XSSFSheet sheet, EnumXLSExportType xlsExportOption, Capillary cap, boolean transpose, int x, int y)
+	private void outputStimAndConc_according_to_DataOption(XSSFSheet sheet, EnumXLSExportType xlsExportOption, Spot spot, boolean transpose, int x, int y)
 	{
 		switch (xlsExportOption) {
 		case TOPLEVEL_LR:
 		case TOPLEVELDELTA_LR:
 		case SUMGULPS_LR:
-			if (cap.getCapillarySide().equals("L")) 
+			if (spot.getSpotSide().equals("L")) 
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "L+R");
 			else 
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "(L-R)/(L+R)");
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, cap.stimulus + ": "+ cap.concentration);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, spot.stimulus + ": "+ spot.concentration);
 			break;
-			
-		case TTOGULP_LR:
-			if (cap.getCapillarySide().equals("L")) 
-			{
-				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "min_t_to_gulp");
-			} 
-			else 
-			{
-				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "max_t_to_gulp");
-			}
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, cap.stimulus + ": "+ cap.concentration);
-			break;
-			
+						
 		default:
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, 	cap.stimulus);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, 	cap.concentration);	
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, 	spot.stimulus);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, 	spot.concentration);	
 			break;
 		}
 	}
@@ -250,9 +237,9 @@ public class XLSExport
 		}
 	}
 	
-	protected int desc_getCageFromCapillaryName(String name) 
+	protected int desc_getCageFromSpotRoiName(String name) 
 	{
-		if (!name .contains("line"))
+		if (!name .contains("spot"))
 			return -1;
 		String num = name.substring(4, 5);
 		int numFromName = Integer.valueOf(num);
@@ -336,7 +323,7 @@ public class XLSExport
 	
 	protected int getDataAndExport(Experiment exp, int col0, String charSeries, EnumXLSExportType xlsExport) 
 	{	
-		XLSResultsArray rowListForOneExp = getCapDataFromOneExperimentSeries(exp, xlsExport);
+		XLSResultsArray rowListForOneExp = getSpotsDataFromOneExperimentSeries(exp, xlsExport);
 		XSSFSheet sheet = xlsInitSheet(xlsExport.toString(), xlsExport);
 		int colmax = xlsExportResultsArrayToSheet(rowListForOneExp, sheet, xlsExport, col0, charSeries);
 		
@@ -357,47 +344,12 @@ public class XLSExport
 		return colmax;
 	}
 		
-	private XLSResultsArray getCapDescriptorsForOneExperiment( Experiment exp, EnumXLSExportType xlsOption) 
+	private XLSResultsArray getSpotDescriptorsForOneExperiment( Experiment exp, EnumXLSExportType xlsOption) 
 	{
 		if (expAll == null) 
 			return null;
 		
-		// loop to get all capillaries into expAll and init rows for this experiment
-		expAll.cages.copy(exp.cages);
-		expAll.capillaries.copy(exp.capillaries);
-		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
-		expAll.copyExperimentFields(exp);
-		expAll.setExperimentDirectory(exp.getExperimentDirectory());
-		
-		Experiment expi = exp.chainToNextExperiment;
-		while (expi != null ) 
-		{
-			expAll.capillaries.mergeLists(expi.capillaries);
-			expi = expi.chainToNextExperiment;
-		}
-
-		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms)/options.buildExcelStepMs  +1) ;
-		int ncapillaries = expAll.capillaries.capillariesList.size();
-		XLSResultsArray rowListForOneExp = new XLSResultsArray(ncapillaries);
-		for (int i = 0; i < ncapillaries; i++) 
-		{
-			Capillary cap = expAll.capillaries.capillariesList.get(i);
-			XLSResults rowResults 		= new XLSResults (cap.getRoiName(), cap.nFlies, cap.cageID, xlsOption, nFrames);
-			rowResults.stimulus 		= cap.stimulus;
-			rowResults.concentration 	= cap.concentration;
-			rowResults.cageID 			= cap.cageID;
-			rowListForOneExp.resultsList.add(rowResults);
-		}
-		rowListForOneExp.sortRowsByName();
-		return rowListForOneExp;
-	}
-	
-	private XLSResultsArray getSpotsDescriptorsForOneExperiment( Experiment exp, EnumXLSExportType xlsOption) 
-	{
-		if (expAll == null) 
-			return null;
-		
-		// loop to get all capillaries into expAll and init rows for this experiment
+		// loop to get all spots into expAll and init rows for this experiment
 		expAll.cages.copy(exp.cages);
 		expAll.spotsArray.copy(exp.spotsArray);
 		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
@@ -427,13 +379,48 @@ public class XLSExport
 		return rowListForOneExp;
 	}
 	
-	public XLSResultsArray getCapDataFromOneExperiment(Experiment exp, EnumXLSExportType exportType, XLSExportOptions options) 
+	private XLSResultsArray getSpotsDescriptorsForOneExperiment( Experiment exp, EnumXLSExportType xlsOption) 
+	{
+		if (expAll == null) 
+			return null;
+		
+		// loop to get all spots into expAll and init rows for this experiment
+		expAll.cages.copy(exp.cages);
+		expAll.spotsArray.copy(exp.spotsArray);
+		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
+		expAll.copyExperimentFields(exp);
+		expAll.setExperimentDirectory(exp.getExperimentDirectory());
+		
+		Experiment expi = exp.chainToNextExperiment;
+		while (expi != null ) 
+		{
+			expAll.spotsArray.mergeLists(expi.spotsArray);
+			expi = expi.chainToNextExperiment;
+		}
+
+		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms)/options.buildExcelStepMs  +1) ;
+		int nspots = expAll.spotsArray.spotsList.size();
+		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
+		for (int i = 0; i < nspots; i++) 
+		{
+			Spot spot = expAll.spotsArray.spotsList.get(i);
+			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.nFlies, spot.cageID, xlsOption, nFrames);
+			rowResults.stimulus 		= spot.stimulus;
+			rowResults.concentration 	= spot.concentration;
+			rowResults.cageID 			= spot.cageID;
+			rowListForOneExp.resultsList.add(rowResults);
+		}
+		rowListForOneExp.sortRowsByName();
+		return rowListForOneExp;
+	}
+	
+	public XLSResultsArray getSpotDataFromOneExperiment(Experiment exp, EnumXLSExportType exportType, XLSExportOptions options) 
 	{
 		this.options = options;
 		expAll = new Experiment();
 		expAll.camImageLast_ms = exp.camImageLast_ms;
 		expAll.camImageFirst_ms = exp.camImageFirst_ms;
-		return getCapDataFromOneExperimentSeries(exp, exportType);
+		return getSpotDataFromOneExperimentSeries(exp, exportType);
 	}
 	
 	public XLSResultsArray getSpotsDataFromOneExperiment(Experiment exp, EnumXLSExportType exportType, XLSExportOptions options) 
@@ -475,9 +462,9 @@ public class XLSExport
 		return nOutputFrames;
 	}
 	
-	private XLSResultsArray getCapDataFromOneExperimentSeries(Experiment exp, EnumXLSExportType xlsExportType) 
+	private XLSResultsArray getSpotDataFromOneExperimentSeries(Experiment exp, EnumXLSExportType xlsExportType) 
 	{	
-		XLSResultsArray rowListForOneExp =  getCapDescriptorsForOneExperiment (exp, xlsExportType);
+		XLSResultsArray rowListForOneExp =  getSpotDescriptorsForOneExperiment (exp, xlsExportType);
 		Experiment expi = exp.getFirstChainedExperiment(true); 
 		
 		while (expi != null) 
@@ -485,35 +472,18 @@ public class XLSExport
 			int nOutputFrames = getNOutputFrames(expi);
 			if (nOutputFrames > 1)
 			{
-				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.capillaries.capillariesList.size());
+				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
 				switch (xlsExportType) 
 				{
-					case BOTTOMLEVEL:
-					case NBGULPS:
-					case AMPLITUDEGULPS:
-					case TTOGULP:
-					case TTOGULP_LR:
-						
-					case DERIVEDVALUES:
-					case SUMGULPS:
-					case SUMGULPS_LR:
-						
-					case AUTOCORREL:
-					case AUTOCORREL_LR:
-					case CROSSCORREL:
-					case CROSSCORREL_LR:
-						resultsArrayList.getResults1(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+					case AREA_NPIXELS:
+					case AREA_NPIXELS_LR:
+					case AREA_NPIXELS_DELTA:
+						resultsArrayList.getResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
 						
-					case TOPLEVEL:
-					case TOPLEVEL_LR:
-					case TOPLEVELDELTA:
-					case TOPLEVELDELTA_LR:
-						options.compensateEvaporation = options.subtractEvaporation;
-						
-					case TOPRAW:
-						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+					case AREA_NPIXELS_RELATIVE:
+						resultsArrayList.getResults_T0(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 						break;
 	
 					default:
@@ -526,8 +496,7 @@ public class XLSExport
 		
 		switch (xlsExportType) 
 		{
-			case TOPLEVELDELTA:
-			case TOPLEVELDELTA_LR:
+			case AREA_NPIXELS_DELTA:
 				rowListForOneExp.subtractDeltaT(1, 1); //options.buildExcelStepMs);
 				break;
 			default:
@@ -742,7 +711,7 @@ public class XLSExport
 			for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) 
 			{
 				XLSResults row = rowListForOneExp.getRow(iRow);
-				if (desc_getCageFromCapillaryName (row.name) == cagenumber)
+				if (desc_getCageFromSpotRoiName (row.name) == cagenumber)
 					row.clearValues(ilastalive);
 			}
 		}	

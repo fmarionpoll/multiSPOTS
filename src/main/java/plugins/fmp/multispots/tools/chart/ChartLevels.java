@@ -220,7 +220,7 @@ public class ChartLevels extends IcyFrame
 		options.subtractEvaporation = subtractEvaporation;
 		
 		XLSExport xlsExport = new XLSExport();
-		return xlsExport.getCapDataFromOneExperiment(exp, exportType, options);
+		return xlsExport.getSpotDataFromOneExperiment(exp, exportType, options);
 	}
 
 	private void updateGlobalMaxMin() 
