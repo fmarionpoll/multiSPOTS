@@ -17,9 +17,11 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
+import plugins.fmp.multiSPOTS.experiment.EnumSpotMeasures;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.chart.ChartAreas;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 
@@ -32,11 +34,11 @@ public class Graphs extends JPanel implements SequenceListener
 	private ChartAreas 	plotAreaPixels			= null;
 	private MultiSPOTS 	parent0 				= null;
 	private JButton 	displayResultsButton 	= new JButton("Display results");
-	private JComboBox<String> resultsComboBox = new JComboBox<String> (new String[] 
-			{"n pixels above threshold", 
-			"sum value of pixels above threshold",
-			"sumSq value of pixels above threshold",
-			"cntPix number of pixels above threshold"});
+	EnumSpotMeasures[] measures = new EnumSpotMeasures[] {
+			EnumSpotMeasures.AREA_NPIXELS, EnumSpotMeasures.AREA_SUM, EnumSpotMeasures.AREA_SUMSQ, EnumSpotMeasures.AREA_CNTPIX
+			};
+	JComboBox<EnumSpotMeasures> resultsComboBox = new JComboBox<EnumSpotMeasures> (measures);
+
 	
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 
@@ -68,8 +70,8 @@ public class Graphs extends JPanel implements SequenceListener
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
 				if (exp != null && exp.seqKymos != null) 
 				{				
-					int index = resultsComboBox.getSelectedIndex();
-					selectResults(index);
+					EnumSpotMeasures item = (EnumSpotMeasures) resultsComboBox.getSelectedItem();
+					selectResults(item);
 				}
 			}});
 		
@@ -85,21 +87,9 @@ public class Graphs extends JPanel implements SequenceListener
 			}});
 	}
 	
-	private void selectResults(int index) 
+	private void selectResults(EnumSpotMeasures index) 
 	{
-		switch(index)
-		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
-		default:
-			break;
-		}
+		
 	}
 	
 	private Rectangle getInitialUpperLeftPosition(Experiment exp)

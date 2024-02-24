@@ -6,6 +6,9 @@ public enum EnumSpotMeasures
 {
 	AREA_NPIXELS("AREA_NPIXELS", "n pixels detected"),
 	AREA_DENSITY("AREA_DENSITY", "density of grey"),
+	AREA_SUM("AREA_SUM", "sum of pixels over threshold"),
+	AREA_SUMSQ("AREA_SUMSQ", "square of sum pixels over threshold"),
+	AREA_CNTPIX("AREA_CNTPIX", "n pixels over threshold"),
 	SPOTS_DESCRIPTION("DESCRIPTION", "experiment description fields"),
 	SPOTS_MEASURES("MEASURES", "spot measures"),
 	SPOTS_ARRAY("SPOTS", "array of spots"),
