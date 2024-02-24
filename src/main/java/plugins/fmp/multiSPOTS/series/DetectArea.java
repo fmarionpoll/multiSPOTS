@@ -9,12 +9,14 @@ import javax.swing.SwingUtilities;
 
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
+import icy.image.IcyBufferedImageUtil;
 import icy.roi.BooleanMask2D;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
+import icy.type.collection.array.ArrayUtil;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -128,7 +130,7 @@ public class DetectArea extends BuildSeries
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildKymograph");
 	    processor.setPriority(Processor.NORM_PRIORITY);
-	    int ntasks =  exp.capillaries.capillariesList.size(); //
+	    int ntasks =  exp.spotsArray.spotsList.size(); //
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
 	    tasks.clear();
 	    
@@ -137,7 +139,7 @@ public class DetectArea extends BuildSeries
 		initSpotsDataArrays(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = options.transform01;
-		transformOptions.setSingleThreshold (options.detectLevel1Threshold, options.directionUp1) ;
+		transformOptions.setSingleThreshold (options.detectLevel1Threshold, options.overthreshold) ;
 		getReferenceImage (exp, 0, transformOptions);
 //		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		
@@ -151,7 +153,7 @@ public class DetectArea extends BuildSeries
 			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.nTotalFrames;
 //			progressBar.setMessage(title);
 			
-			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));
+			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));
 			//final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 			
 			vData.setTitle(title);
@@ -179,6 +181,8 @@ public class DetectArea extends BuildSeries
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
+						
+						measureValues (sourceImage, spot, fromSourceImageIndex, options.detectLevel1Threshold, options.overthreshold);
 					}
 				}}));
 
@@ -189,6 +193,47 @@ public class DetectArea extends BuildSeries
 //		progressBar.close();
 	       
 		return true;
+	}
+	
+	private void measureValues(IcyBufferedImage sourceImage, Spot spot, int t, int threshold, boolean overthreshold)
+	{
+		double sum = 0;
+        double sumSq = 0;
+//        double min = 0;
+//        double max = 0;
+        int cntPix = 0;
+        
+        final IcyBufferedImage subImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
+        final boolean[] mask = spot.mask2D.mask;
+        final double[] data = (double[]) ArrayUtil.arrayToDoubleArray(subImage.getDataXY(0), sourceImage.isSignedDataType());
+
+        for (int off = 0; off < data.length; off++)
+        {
+            // pixel contained in ROI ?
+            if (mask[off])
+            {
+                final double value = data[off];
+
+                sum += value;
+                sumSq += value * value;
+               
+//                if (value < min) min = value;
+//                if (value > max)  max = value;
+                if (overthreshold)
+                {
+                    if (value > threshold)
+                        cntPix++;
+                }
+                else
+                {
+                    if (value < threshold)
+                        cntPix++;
+                }
+            }
+        } 
+        spot.areaSum.limit[t] = (int) sum;
+        spot.areaSumSq.limit[t] = (int) sumSq;
+        spot.areaCntPix.limit[t] = (int) cntPix;
 	}
 	
 	public boolean[] getBoolMap_FromBinaryInt(IcyBufferedImage img) 
@@ -219,7 +264,13 @@ public class DetectArea extends BuildSeries
 		int nFrames = exp.seqCamData.nTotalFrames;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			spot.areaNPixels.limit = new int [nFrames+1];
+			spot.areaNPixels.limit 	= new int [nFrames+1];
+			spot.areaDensity.limit  =  new int [nFrames+1];
+			spot.areaSum .limit 	= new  int [nFrames+1];
+			spot.areaSumSq.limit  	= new  int [nFrames+1];
+			spot.areaCntPix.limit  	= new  int [nFrames+1];	
+			spot.areaMin.limit  	= new  int [nFrames+1];
+			spot.areaMax.limit  	= new  int [nFrames+1];
 		}
 
 	}

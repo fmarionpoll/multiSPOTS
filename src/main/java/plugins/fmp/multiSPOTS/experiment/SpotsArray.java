@@ -47,14 +47,22 @@ public class SpotsArray
 	{
 		boolean flag = false;
 		try {
-			flag = csvLoadSpots_Measures(directory);
+			flag = csvLoadSpots(directory, EnumSpotMeasures.SPOTS_MEASURES);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		if (!flag) { 
-			flag = xmlLoad_SpotsMeasures(directory);
+		return flag;
+	}
+	
+	public boolean load_Spots(String directory) 
+	{
+		boolean flag = false;
+		try {
+			flag = csvLoadSpots(directory, EnumSpotMeasures.ALL);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return flag;
 	}
@@ -125,36 +133,6 @@ public class SpotsArray
 		return flag;
 	}
 	
-	public boolean xmlLoadOldSpots_Only(String csFileName) 
-	{
-		if (csFileName == null)
-			return false;			
-		final Document doc = XMLUtil.loadDocument(csFileName);
-		if (doc != null) 
-		{
-			spotsDescription.xmlLoadSpotsDescription(doc);
-			xmlLoadSpots_Only_v2(doc, csFileName);
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean xmlLoad_SpotsMeasures(String directory) 
-	{
-		boolean flag = false;
-		int ncapillaries = spotsList.size();
-		for (int i = 0; i < ncapillaries; i++) 
-		{
-			String csFile = directory + File.separator + spotsList.get(i).getRoiName() + ".xml";
-			final Document capdoc = XMLUtil.loadDocument(csFile);
-			Node node = XMLUtil.getRootElement(capdoc, true);
-			Spot spot = spotsList.get(i);
-			spot.kymographIndex = i;
-			flag |= spot.loadFromXML_MeasuresOnly(node);
-		}
-		return flag;
-	}
-	
 	private boolean xmlLoadSpots_Only_v1(Document doc) 
 	{
 		Node node = XMLUtil.getElement(XMLUtil.getRootElement(doc), ID_SPOTTRACK);
@@ -186,20 +164,6 @@ public class SpotsArray
 		}
 		return true;
 	}
-
-	private void xmlLoadSpots_Only_v2(Document doc, String csFileName) 
-	{
-		xmlLoadSpots_Only_v1(doc);
-		Path directorypath = Paths.get(csFileName).getParent();
-		String directory = directorypath + File.separator;
-		for (Spot spot: spotsList) 
-		{
-			String csFile = directory + spot.getRoiName() + ".xml";
-			final Document capdoc = XMLUtil.loadDocument(csFile);
-			Node node = XMLUtil.getRootElement(capdoc, true);
-			spot.loadFromXML_SpotOnly(node);
-		}
-	}	
 
 	// ---------------------------------
 	
@@ -292,7 +256,7 @@ public class SpotsArray
 		return spotFound;
 	}
 	
-	public Spot getSpotFromKymographName(String name) 
+	public Spot getSpotFromName(String name) 
 	{
 		Spot spotFound = null;
 		for (Spot spot: spotsList) 
@@ -520,7 +484,7 @@ public class SpotsArray
 	
 	// --------------------------------
 	
-	private boolean csvLoadSpots_Measures(String directory) throws Exception 
+	private boolean csvLoadSpots(String directory, EnumSpotMeasures option) throws Exception 
 	{
 		String pathToCsv = directory + File.separator + csvFileName;
 		File csvFile = new File(pathToCsv);
@@ -537,13 +501,17 @@ public class SpotsArray
 		    	switch(data[1]) 
 		    	{
 		    	case "DESCRIPTION":
-		    		csvLoadDescription (csvReader);
+		    		if (option == EnumSpotMeasures.ALL || option ==  EnumSpotMeasures.SPOTS_DESCRIPTION)
+		    			csvLoadSpotsDescription (csvReader);
 		    		break;
 		    	case "SPOTS":
-		    		csvLoadSpotsDescription (csvReader);
+		    		if (option == EnumSpotMeasures.ALL || option ==  EnumSpotMeasures.SPOTS_ARRAY)
+		    			csvLoadSpotsArray (csvReader);
 		    		break;
 		    	case "AREA_NPIXELS":
-		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.AREA_NPIXELS);
+		    		if (option == EnumSpotMeasures.ALL || option ==  EnumSpotMeasures.SPOTS_MEASURES 
+		    		|| option ==  EnumSpotMeasures.AREA_NPIXELS)
+		    			csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.AREA_NPIXELS);
 		    		break;
 	    		default:
 	    			break;
@@ -555,7 +523,7 @@ public class SpotsArray
 		return true;
 	}
 	
-	private String csvLoadSpotsDescription (BufferedReader csvReader) 
+	private String csvLoadSpotsArray (BufferedReader csvReader) 
 	{
 		String row;
 		try {
@@ -564,7 +532,7 @@ public class SpotsArray
 				String[] data = row.split(",");
 				if (data[0] .equals( "#")) 
 					return data[1];
-				Spot spot = getSpotFromKymographName(data[2]);
+				Spot spot = getSpotFromName(data[2]);
 				if (spot == null)
 					spot = new Spot();
 				spot.csvImportSpotDescription(data);
@@ -576,7 +544,7 @@ public class SpotsArray
 		return null;
 	}
 	
-	private String csvLoadDescription (BufferedReader csvReader) 
+	private String csvLoadSpotsDescription (BufferedReader csvReader) 
 	{
 		String row;
 		try {

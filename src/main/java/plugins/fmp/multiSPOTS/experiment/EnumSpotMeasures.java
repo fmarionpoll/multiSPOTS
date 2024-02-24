@@ -4,11 +4,11 @@ package plugins.fmp.multiSPOTS.experiment;
 
 public enum EnumSpotMeasures 
 {
-	TOPLEVEL ("TOPLEVEL", "top capillary limit"), 
-	BOTTOMLEVEL ("BOTTOMLEVEL", "bottom capillary limit"), 
-	TOPDERIVATIVE ("TOPDERIVATIVE", "derivative of top capillary limit"), 
-	GULPS ("GULPS", "gulps detected from derivative"), 
 	AREA_NPIXELS("AREA_NPIXELS", "n pixels detected"),
+	AREA_DENSITY("AREA_DENSITY", "density of grey"),
+	SPOTS_DESCRIPTION("DESCRIPTION", "experiment description fields"),
+	SPOTS_MEASURES("MEASURES", "spot measures"),
+	SPOTS_ARRAY("SPOTS", "array of spots"),
 	ALL ("ALL", "all options");
 	
 	private String label;

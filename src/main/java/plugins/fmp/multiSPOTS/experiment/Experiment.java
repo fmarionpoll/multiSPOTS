@@ -555,8 +555,6 @@ public class Experiment
 			return false;
 		
 		boolean flag = spotsArray.loadMCSpots_Descriptors(mcSpotsFileName);
-		if (spotsArray.spotsList.size() < 1)
-			flag = xmlLoadOldCapillaries();
 		
 		// load MCcapillaries description of experiment
 		if (field_boxID .contentEquals("..")
@@ -589,14 +587,10 @@ public class Experiment
 	
 	public boolean loadMCSpots() 
 	{
-		String xmlSpotsFileName = findFile_3Locations(spotsArray.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
-		boolean flag1 = spotsArray.loadMCSpots_Descriptors(xmlSpotsFileName);
-		boolean flag2 = true;
-//		String kymosImagesDirectory = getKymosBinFullDirectory();
-//		boolean flag2 = spotsArray.loadSpots_Measures(kymosImagesDirectory);
-//		if (flag1 & flag2) 
-//			seqKymos.loadListOfPotentialKymographsFromCapillaries(kymosImagesDirectory, capillaries);
-		return flag1 & flag2;
+//		String xmlSpotsFileName = findFile_3Locations(spotsArray.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
+//		boolean flag1 = spotsArray.loadMCSpots_Descriptors(xmlSpotsFileName);
+		boolean flag1 = loadMCSpots_Only();
+		return flag1 & spotsArray.load_Spots(strExperimentDirectory);
 	}
 	
 	private boolean xmlLoadOldCapillaries() 

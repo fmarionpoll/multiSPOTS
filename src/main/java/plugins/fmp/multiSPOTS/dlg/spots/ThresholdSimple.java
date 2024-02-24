@@ -86,6 +86,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		add(panel1);
 		
 		transformsComboBox.setSelectedItem(ImageTransformEnums.RGB_DIFFS);
+		direction1ComboBox.setSelectedIndex(1);
 		declareListeners();
 	}
 	
@@ -248,7 +249,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		}
 		// other parameters
 		options.transform01 		= (ImageTransformEnums) transformsComboBox.getSelectedItem();
-		options.directionUp1 		= (direction1ComboBox.getSelectedIndex() == 0);
+		options.overthreshold 		= (direction1ComboBox.getSelectedIndex() == 0);
 		options.detectLevel1Threshold= (int) thresholdSpinner.getValue();
 				
 		options.analyzePartOnly		= false; //fromCheckBox.isSelected();

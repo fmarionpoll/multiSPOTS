@@ -92,7 +92,7 @@ public class ChartAreas extends IcyFrame
 		int icage = 0;
         final NumberAxis yAxis = new NumberAxis("n pixels");
         yAxis.setAutoRangeIncludesZero(false);  
-        yAxis.setInverted(true);
+//        yAxis.setInverted(true);
         final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
         Paint[] color = ChartColor.createDefaultPaintArray();
 
@@ -120,10 +120,10 @@ public class ChartAreas extends IcyFrame
 
         int width= 800;
         int height= 300;
-        int minimumDrawWidth= width;
-        int minimumDrawHeight= 300;
-        int maximumDrawWidth= 800;
-        int maximumDrawHeight= 500;
+        int minimumDrawWidth = width;
+        int minimumDrawHeight = 300;
+        int maximumDrawWidth = 800;
+        int maximumDrawHeight = 500;
         boolean useBuffer= true;
         
         final ChartPanel panel = new ChartPanel(chart, 

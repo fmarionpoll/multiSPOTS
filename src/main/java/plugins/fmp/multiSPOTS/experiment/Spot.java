@@ -31,8 +31,6 @@ public class Spot implements Comparable <Spot>
 	private String						kymographPrefix	= null;
 	public String 						version 		= null;
 
-	public ArrayList<int[]> 			spot_Integer	= null;
-	
 	public String 						stimulus		= new String("..");
 	public String 						concentration	= new String("..");
 	public String						cageSide			= ".";
@@ -46,8 +44,14 @@ public class Spot implements Comparable <Spot>
 	
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
 	
-	public  final String 				ID_AREAPIXELS 	= "areaNPixels";	
+	public  final String 				ID_AREAPIXELS 	= "areaNPixels";		
 	public SpotArea						areaNPixels  	= new SpotArea(ID_AREAPIXELS); 
+	public SpotArea						areaDensity  	= new SpotArea("areaDensity"); 
+	public SpotArea						areaSum  		= new SpotArea("areaSum"); 
+	public SpotArea						areaSumSq  		= new SpotArea("areaSumSq"); 
+	public SpotArea						areaCntPix  	= new SpotArea("cntPix"); 	
+	public SpotArea						areaMin  		= new SpotArea("min"); 
+	public SpotArea						areaMax  		= new SpotArea("max"); 	
 
 	public boolean						valid			= true;
 
@@ -55,7 +59,7 @@ public class Spot implements Comparable <Spot>
 	private final String				ID_NFLIES		= "nflies";
 	private final String				ID_CAGENB		= "cage_number";
 	private final String 				ID_SPOTVOLUME 	= "volume";
-	private final String 				ID_CAPPIXELS 	= "pixels";
+	private final String 				ID_PIXELS 		= "pixels";
 	private final String 				ID_RADIUS 		= "radius";
 	private final String 				ID_STIML 		= "stimulus";
 	private final String 				ID_CONCL 		= "concentration";
@@ -364,13 +368,13 @@ public class Spot implements Comparable <Spot>
      
 	        descriptionOK 	= XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
-	        nFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, nFlies);
-	        cageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, cageID);
-	        volume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
-			pixels 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAPPIXELS, 5);
-			radius		= XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
-			stimulus 	= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
-			concentration= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
+	        nFlies 			= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, nFlies);
+	        cageID 			= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, cageID);
+	        volume 			= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
+			pixels 			= XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
+			radius			= XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
+			stimulus 		= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
+			concentration	= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
 			cageSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 			
 	        roi = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
@@ -427,7 +431,7 @@ public class Spot implements Comparable <Spot>
         XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, nFlies);
         XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, cageID);
 		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, volume);
-		XMLUtil.setElementIntValue(nodeMeta, ID_CAPPIXELS, pixels);
+		XMLUtil.setElementIntValue(nodeMeta, ID_PIXELS, pixels);
 		XMLUtil.setElementIntValue(nodeMeta, ID_RADIUS, radius);
 		XMLUtil.setElementValue(nodeMeta, ID_STIML, stimulus);
 		XMLUtil.setElementValue(nodeMeta, ID_SIDE, cageSide);
@@ -591,6 +595,9 @@ public class Spot implements Comparable <Spot>
 			case AREA_NPIXELS:
 				areaNPixels.cvsExportDataToRow(sbf);
 				break;
+			case AREA_DENSITY:
+				areaDensity.cvsExportDataToRow(sbf);
+				break;
 			default:
 				break;
 		}
@@ -622,6 +629,9 @@ public class Spot implements Comparable <Spot>
 		{
 		case AREA_NPIXELS:
 			areaNPixels.csvImportDataFromRow( data, 2); 
+			break;
+		case AREA_DENSITY:
+			areaDensity.csvImportDataFromRow( data, 2); 
 			break;
 		default:
 			break;

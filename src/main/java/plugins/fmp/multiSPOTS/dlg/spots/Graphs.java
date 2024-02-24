@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -30,6 +31,11 @@ public class Graphs extends JPanel implements SequenceListener
 	private ChartAreas 	plotAreaPixels			= null;
 	private MultiSPOTS 	parent0 				= null;
 	private JButton 	displayResultsButton 	= new JButton("Display results");
+	private JComboBox<String> dataComboBox = new JComboBox<String> (new String[] 
+			{"n pixels above threshold", 
+			"sum value of pixels above threshold",
+			"sumSq value of pixels above threshold",
+			"cntPix number of pixels above threshold"});
 	
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 
@@ -41,6 +47,7 @@ public class Graphs extends JPanel implements SequenceListener
 		layout.setVgap(0);
 		
 		JPanel panel = new JPanel(layout);
+		panel.add(dataComboBox);
 		add(panel);
 		JPanel panel1 = new JPanel(layout);
 		add(panel1);

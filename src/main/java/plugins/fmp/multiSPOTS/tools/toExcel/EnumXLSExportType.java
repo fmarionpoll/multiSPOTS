@@ -34,7 +34,8 @@ public enum EnumXLSExportType
 	AREA_NPIXELS("area_npixels", "n_pixels"),
 	AREA_NPIXELS_DELTA("area_delta", "n pixels difference between intervals"),
 	AREA_NPIXELS_RELATIVE("area_rel", "%initial surface"),
-	AREA_NPIXELS_LR ("area_L+R", "n_pixels");
+	AREA_NPIXELS_LR ("area_L+R", "n_pixels"),
+	AREA_DENSITY("area_density", "grey density in detection area");
 	
 	private String label;
 	private String unit;

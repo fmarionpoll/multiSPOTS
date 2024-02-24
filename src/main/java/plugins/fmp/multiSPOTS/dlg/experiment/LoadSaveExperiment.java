@@ -201,15 +201,10 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		if (exp.seqCamData != null) 
 		{
 			exp.loadCamDataCapillaries();
-			exp.loadCamDataSpots();
-			
-//			parent0.paneKymos.tabFile.loadDefaultKymos(exp);
-			
-//			if (exp.seqKymos != null) {	
-//				parent0.paneLevels.tabFileLevels.dlg_levels_loadCapillaries_Measures(exp);
-//				if (parent0.paneExperiment.tabOptions.graphsCheckBox.isSelected())
-//					parent0.paneLevels.tabGraphs.displayGraphsPanels(exp);
-//			}
+			exp.loadMCSpots();
+			exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
+			if (parent0.paneExperiment.tabOptions.graphsCheckBox.isSelected())
+				parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
 			
 			exp.loadCagesMeasures();
 			progressFrame.setMessage("Load data: update dialogs");
