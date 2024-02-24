@@ -262,14 +262,27 @@ public class Spot implements Comparable <Spot>
 		switch (option) 
 		{
 		case AREA_NPIXELS:
-		case AREA_NPIXELS_LR:
+			datai = areaNPixels.getMeasures(seriesBinMs, outputBinMs);
+			break;
+		case AREA_DENSITY:
+			datai = areaDensity.getMeasures(seriesBinMs, outputBinMs);
+			break;
+		case AREA_SUM:
+			datai = areaSum.getMeasures(seriesBinMs, outputBinMs);
+			break;
+		case AREA_SUMSQ:
+			datai = areaSumSq.getMeasures(seriesBinMs, outputBinMs);
+			break;
+		case AREA_CNTPIX:
+			datai = areaCntPix.getMeasures(seriesBinMs, outputBinMs);
+			break;
 		default:
 			datai = areaNPixels.getMeasures(seriesBinMs, outputBinMs);
 			break;
 		}
 		return datai;
 	}
-		
+
 	public void cropMeasuresToNPoints (int npoints) 
 	{
 		if (areaNPixels.polylineLevel != null)

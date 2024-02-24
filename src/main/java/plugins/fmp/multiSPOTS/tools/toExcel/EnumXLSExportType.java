@@ -31,11 +31,17 @@ public enum EnumXLSExportType
 	ISALIVE ("_alive", "yes/no"), 
 	SLEEP ("sleep", "yes, no"),
 	
-	AREA_NPIXELS("area_npixels", "n_pixels"),
-	AREA_NPIXELS_DELTA("area_delta", "n pixels difference between intervals"),
-	AREA_NPIXELS_RELATIVE("area_rel", "%initial surface"),
-	AREA_NPIXELS_LR ("area_L+R", "n_pixels"),
-	AREA_DENSITY("area_density", "grey density in detection area");
+	AREA_NPIXELS("AREA_NPIXELS", "n pixels detected"),
+	AREA_DENSITY("AREA_DENSITY", "density of grey"),
+	AREA_SUM("AREA_SUM", "sum of pixels over threshold"),
+	AREA_SUMSQ("AREA_SUMSQ", "square of sum pixels over threshold"),
+	AREA_CNTPIX("AREA_CNTPIX", "n pixels over threshold");
+	
+//	AREA_NPIXELS("area_npixels", "n_pixels"),
+//	AREA_NPIXELS_DELTA("area_delta", "n pixels difference between intervals"),
+//	AREA_NPIXELS_RELATIVE("area_rel", "%initial surface"),
+//	AREA_NPIXELS_LR ("area_L+R", "n_pixels"),
+//	AREA_DENSITY("area_density", "grey density in detection area");
 	
 	private String label;
 	private String unit;

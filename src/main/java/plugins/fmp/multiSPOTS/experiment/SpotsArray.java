@@ -501,17 +501,16 @@ public class SpotsArray
 		    	switch(data[1]) 
 		    	{
 		    	case "DESCRIPTION":
-		    		if (option == EnumSpotMeasures.ALL || option ==  EnumSpotMeasures.SPOTS_DESCRIPTION)
+		    		if (option == EnumSpotCVSFileSection.ALL || option ==  EnumSpotCVSFileSection.SPOTS_DESCRIPTION)
 		    			csvLoadSpotsDescription (csvReader);
 		    		break;
 		    	case "SPOTS":
-		    		if (option == EnumSpotMeasures.ALL || option ==  EnumSpotMeasures.SPOTS_ARRAY)
+		    		if (option == EnumSpotCVSFileSection.ALL || option ==  EnumSpotCVSFileSection.SPOTS_ARRAY)
 		    			csvLoadSpotsArray (csvReader);
 		    		break;
 		    	case "AREA_NPIXELS":
-		    		if (option == EnumSpotMeasures.ALL || option ==  EnumSpotMeasures.SPOTS_MEASURES 
-		    		|| option ==  EnumSpotMeasures.AREA_NPIXELS)
-		    			csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.AREA_NPIXELS);
+		    		if (option == EnumSpotCVSFileSection.ALL || option ==  EnumSpotCVSFileSection.SPOTS_MEASURES )
+		    			csvLoadCSpotsMeasures(csvReader);
 		    		break;
 	    		default:
 	    			break;
@@ -572,7 +571,7 @@ public class SpotsArray
 		return null;
 	}
 	
-	private String csvLoadCSpotsMeasures(BufferedReader csvReader, EnumSpotMeasures measureType) 
+	private String csvLoadCSpotsMeasures(BufferedReader csvReader) 
 	{
 		String row;
 		try {
