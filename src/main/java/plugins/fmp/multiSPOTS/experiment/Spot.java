@@ -263,7 +263,7 @@ public class Spot implements Comparable <Spot>
 		{
 		case AREA_NPIXELS:
 		case AREA_NPIXELS_LR:
-			default:
+		default:
 			datai = areaNPixels.getMeasures(seriesBinMs, outputBinMs);
 			break;
 		}
