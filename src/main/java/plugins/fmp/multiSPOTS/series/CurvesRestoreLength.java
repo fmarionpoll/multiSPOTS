@@ -1,0 +1,26 @@
+package plugins.fmp.multiSPOTS.series;
+
+import plugins.fmp.multiSPOTS.experiment.Capillary;
+import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
+
+public class CurvesRestoreLength extends BuildSeries 
+{
+	void analyzeExperiment(Experiment exp) 
+	{
+		exp.loadMCExperiment();
+		exp.loadMCCapillaries();
+		if (exp.loadKymographs()) 
+		{
+			SequenceKymos seqKymos = exp.seqKymos;
+			for (int t= 0; t< seqKymos.nTotalFrames; t++) 
+			{
+				Capillary cap = exp.capillaries.capillariesList.get(t);
+				cap.restoreClippedMeasures();
+			}
+			exp.saveCapillariesMeasures();
+		}
+		exp.seqCamData.closeSequence();
+		exp.seqKymos.closeSequence();
+	}
+}
