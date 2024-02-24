@@ -19,6 +19,7 @@ import icy.sequence.SequenceListener;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
+import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
 import plugins.fmp.multiSPOTS.tools.chart.ChartAreas;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 
@@ -31,7 +32,7 @@ public class Graphs extends JPanel implements SequenceListener
 	private ChartAreas 	plotAreaPixels			= null;
 	private MultiSPOTS 	parent0 				= null;
 	private JButton 	displayResultsButton 	= new JButton("Display results");
-	private JComboBox<String> dataComboBox = new JComboBox<String> (new String[] 
+	private JComboBox<String> resultsComboBox = new JComboBox<String> (new String[] 
 			{"n pixels above threshold", 
 			"sum value of pixels above threshold",
 			"sumSq value of pixels above threshold",
@@ -47,7 +48,8 @@ public class Graphs extends JPanel implements SequenceListener
 		layout.setVgap(0);
 		
 		JPanel panel = new JPanel(layout);
-		panel.add(dataComboBox);
+		panel.add(new JLabel("results "));
+		panel.add(resultsComboBox);
 		add(panel);
 		JPanel panel1 = new JPanel(layout);
 		add(panel1);
@@ -58,6 +60,19 @@ public class Graphs extends JPanel implements SequenceListener
 	
 	private void defineActionListeners() 
 	{
+		
+		resultsComboBox.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
+				if (exp != null && exp.seqKymos != null) 
+				{				
+					int index = resultsComboBox.getSelectedIndex();
+					selectResults(index);
+				}
+			}});
+		
 		displayResultsButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
@@ -68,6 +83,23 @@ public class Graphs extends JPanel implements SequenceListener
 					displayGraphsPanels(exp);
 				}
 			}});
+	}
+	
+	private void selectResults(int index) 
+	{
+		switch(index)
+		{
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		default:
+			break;
+		}
 	}
 	
 	private Rectangle getInitialUpperLeftPosition(Experiment exp)
