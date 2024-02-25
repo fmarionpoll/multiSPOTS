@@ -9,7 +9,7 @@ public enum EnumSpotMeasures
 	SPOTS_MEASURES("MEASURES", "spot measures"),
 
 	AREA_SUM("AREA_SUM", "sum of pixels over threshold"),
-	AREA_SUMSQ("AREA_SUMSQ", "square of sum pixels over threshold"),
+	AREA_SUM2("AREA_SUM2", "square of sum pixels over threshold"),
 	AREA_CNTPIX("AREA_CNTPIX", "n pixels over threshold"),
 	ALL ("ALL", "all options");
 	

@@ -184,7 +184,7 @@ public class DetectArea extends BuildSeries
 	private void measureValues(IcyBufferedImage sourceImage, Spot spot, int t, int threshold, boolean overthreshold)
 	{
 		double sum = 0;
-        double sumSq = 0;
+        double sum2 = 0;
 //        double min = 0;
 //        double max = 0;
         int cntPix = 0;
@@ -206,7 +206,7 @@ public class DetectArea extends BuildSeries
                     if (value < threshold) {
                         cntPix++;
                         sum += value;
-                        sumSq += value * value;
+                        sum2 += value * value;
                     }
                 }
                 else
@@ -214,13 +214,13 @@ public class DetectArea extends BuildSeries
                     if (value > threshold) {
                         cntPix++;
                         sum += value;
-                        sumSq += value * value;
+                        sum2 += value * value;
                     }
                 }
             }
         } 
         spot.areaSum.limit[t] = (int) sum ;
-        spot.areaSumSq.limit[t] = (int) sumSq ;
+        spot.areaSum2.limit[t] = (int) sum2 ;
         spot.areaCntPix.limit[t] = (int) cntPix;
 	}
 	
@@ -253,7 +253,7 @@ public class DetectArea extends BuildSeries
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
 			spot.areaSum .limit 	= new  int [nFrames+1];
-			spot.areaSumSq.limit  	= new  int [nFrames+1];
+			spot.areaSum2.limit  	= new  int [nFrames+1];
 			spot.areaCntPix.limit  	= new  int [nFrames+1];	
 		}
 
