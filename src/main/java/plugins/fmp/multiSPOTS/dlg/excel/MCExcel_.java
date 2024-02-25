@@ -21,6 +21,7 @@ import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportCapillariesResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportGulpsResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportMoveResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
+import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportSpotAreasResults;
 
 
 public class MCExcel_  extends JPanel implements PropertyChangeListener 
@@ -96,9 +97,9 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 					xlsExport.exportToFile(file, getMoveOptions());
 				}});
 		} 
-		else if (evt.getPropertyName().equals("EXPORT_KYMOSDATA")) 
+		else if (evt.getPropertyName().equals("EXPORT_SPOTSMEASURES")) 
 		{
-			String file = defineXlsFileName(exp, "_feeding.xlsx");
+			String file = defineXlsFileName(exp, "_spotsareas.xlsx");
 			if (file == null)
 				return;
 			updateParametersCurrentExperiment(exp);
@@ -106,7 +107,7 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 			{ 
 				@Override public void run() 
 				{
-				XLSExportCapillariesResults xlsExport2 = new XLSExportCapillariesResults();
+					XLSExportSpotAreasResults xlsExport2 = new XLSExportSpotAreasResults();
 				xlsExport2.exportToFile(file, getLevelsOptions());
 			}});
 		}

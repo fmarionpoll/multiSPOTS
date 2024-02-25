@@ -72,7 +72,7 @@ public class SpotsAreas extends JPanel
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
-				firePropertyChange("EXPORT_KYMOSDATA", false, true);
+				firePropertyChange("EXPORT_SPOTSMEASURES", false, true);
 			}});
 	
 		lrPICheckBox.addActionListener (new ActionListener () 
