@@ -72,7 +72,7 @@ public class SpotsArray
 		if (directory == null)
 			return false;
 		
-		csvSaveSpotsMeasures_Data(directory);
+		csvSaveMeasures(directory);
 		return true;
 	}
 	
@@ -482,6 +482,12 @@ public class SpotsArray
 		spotsList.clear();
 	}
 	
+	public void transferLimitMeasuresToPolyline() 
+	{
+		for (Spot spot: spotsList) 
+			spot.transferLimitMeasuresToPolyline();	
+	}
+	
 	// --------------------------------
 	
 	private boolean csvLoadSpots(String directory, EnumSpotMeasures option) throws Exception 
@@ -501,16 +507,19 @@ public class SpotsArray
 		    	switch(data[1]) 
 		    	{
 		    	case "DESCRIPTION":
-		    		if (option == EnumSpotCVSFileSection.ALL || option ==  EnumSpotCVSFileSection.SPOTS_DESCRIPTION)
-		    			csvLoadSpotsDescription (csvReader);
+		    		csvLoadDescription (csvReader);
 		    		break;
 		    	case "SPOTS":
-		    		if (option == EnumSpotCVSFileSection.ALL || option ==  EnumSpotCVSFileSection.SPOTS_ARRAY)
-		    			csvLoadSpotsArray (csvReader);
+		    		csvLoadSpotsArray (csvReader);
 		    		break;
-		    	case "AREA_NPIXELS":
-		    		if (option == EnumSpotCVSFileSection.ALL || option ==  EnumSpotCVSFileSection.SPOTS_MEASURES )
-		    			csvLoadCSpotsMeasures(csvReader);
+		    	case "AREA_SUM":
+		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.AREA_SUM);
+		    		break;
+		    	case "AREA_SUMSQ":
+		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.AREA_SUMSQ);
+		    		break;
+		    	case "AREA_CNTPIX":
+		    		csvLoadCSpotsMeasures(csvReader, EnumSpotMeasures.AREA_CNTPIX);
 		    		break;
 	    		default:
 	    			break;
@@ -534,7 +543,7 @@ public class SpotsArray
 				Spot spot = getSpotFromName(data[2]);
 				if (spot == null)
 					spot = new Spot();
-				spot.csvImportSpotDescription(data);
+				spot.csvImportDescription(data);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -543,7 +552,7 @@ public class SpotsArray
 		return null;
 	}
 	
-	private String csvLoadSpotsDescription (BufferedReader csvReader) 
+	private String csvLoadDescription (BufferedReader csvReader) 
 	{
 		String row;
 		try {
@@ -571,7 +580,7 @@ public class SpotsArray
 		return null;
 	}
 	
-	private String csvLoadCSpotsMeasures(BufferedReader csvReader) 
+	private String csvLoadCSpotsMeasures(BufferedReader csvReader, EnumSpotMeasures measureType ) 
 	{
 		String row;
 		try {
@@ -584,7 +593,7 @@ public class SpotsArray
 				Spot spot = getSpotFromRoiName(data[0]);
 				if (spot == null)
 					spot = new Spot();
-				spot.csvImportData(measureType, data);
+				spot.csvImportMeasures_OneType(measureType, data);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -595,7 +604,7 @@ public class SpotsArray
 	
 	// ---------------------------------
 	
-	private boolean csvSaveSpotsMeasures_Data(String directory) 
+	private boolean csvSaveMeasures(String directory) 
 	{
 		Path path = Paths.get(directory);
 		if (!Files.exists(path))
@@ -604,9 +613,10 @@ public class SpotsArray
 		try {
 			FileWriter csvWriter = new FileWriter(directory + File.separator + csvFileName);
 			
-			csvSaveDescriptionSection(csvWriter);			
-			csvSaveMeasuresSection(csvWriter, EnumSpotMeasures.AREA_NPIXELS);
-
+			csvSaveDescription(csvWriter);			
+			csvSaveMeasures_OneType(csvWriter, EnumSpotMeasures.AREA_SUM);
+			csvSaveMeasures_OneType(csvWriter, EnumSpotMeasures.AREA_SUMSQ);
+			csvSaveMeasures_OneType(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
 			csvWriter.flush();
 			csvWriter.close();
 			
@@ -617,7 +627,7 @@ public class SpotsArray
 		return true;
 	}
 	
-	private boolean csvSaveDescriptionSection(FileWriter csvWriter) 
+	private boolean csvSaveDescription(FileWriter csvWriter) 
 	{
 		try {
 			csvWriter.append(spotsDescription.csvExportSectionHeader());
@@ -626,7 +636,7 @@ public class SpotsArray
 			csvWriter.append("#,#\n");
 			
 			if (spotsList.size() > 0) {
-				csvWriter.append(spotsList.get(0).csvExportSpotSubSectionHeader());
+				csvWriter.append(spotsList.get(0).csvExportSpotArrayHeader());
 				for (Spot spot:spotsList) 
 					csvWriter.append(spot.csvExportDescription());
 				csvWriter.append("#,#\n");
@@ -638,14 +648,15 @@ public class SpotsArray
 		return true;
 	}
 	
-	private boolean csvSaveMeasuresSection(FileWriter csvWriter, EnumSpotMeasures measureType) 
+	private boolean csvSaveMeasures_OneType(FileWriter csvWriter, EnumSpotMeasures measureType) 
 	{
 		try {
 			if (spotsList.size() <= 1)
 				return false;
-			csvWriter.append(spotsList.get(0).csvExportMeasureSectionHeader(measureType));
-			for (Spot spot:spotsList) 
-				csvWriter.append(spot.csvExportSpotData(measureType));
+			csvWriter.append(spotsList.get(0).csvExportMeasures_SectionHeader(measureType));
+			for (Spot spot:spotsList) {
+				csvWriter.append(spot.csvExportMeasures_OneType(measureType));
+			}
 			csvWriter.append("#,#\n");
 		} catch (IOException e) {
 			e.printStackTrace();

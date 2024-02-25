@@ -474,21 +474,25 @@ public class XLSExport
 			{
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
-				switch (xlsExportType) 
-				{
-					case AREA_NPIXELS:
-					case AREA_NPIXELS_LR:
-					case AREA_NPIXELS_DELTA:
+//				switch (xlsExportType) 
+//				{
+//					case AREA_NPIXELS:
+//					case AREA_DENSITY:
+//					case AREA_SUM:
+//					case AREA_SUMSQ:
+//					case AREA_CNTPIX:
+////					case AREA_NPIXELS_LR:
+////					case AREA_NPIXELS_DELTA:
 						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
-						break;
-						
-					case AREA_NPIXELS_RELATIVE:
-						resultsArrayList.getSpotsArrayResults_T0(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
-						break;
-	
-					default:
-						break;
-				}
+//						break;
+//						
+////					case AREA_NPIXELS_RELATIVE: // TODO
+////						resultsArrayList.getSpotsArrayResults_T0(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+////						break;
+//	
+//					default:
+//						break;
+//				}
 				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);
 			}
 			expi = expi.chainToNextExperiment;
@@ -496,9 +500,9 @@ public class XLSExport
 		
 		switch (xlsExportType) 
 		{
-			case AREA_NPIXELS_DELTA:
-				rowListForOneExp.subtractDeltaT(1, 1); //options.buildExcelStepMs);
-				break;
+//			case AREA_NPIXELS_DELTA: // TODO
+//				rowListForOneExp.subtractDeltaT(1, 1); //options.buildExcelStepMs);
+//				break;
 			default:
 				break;
 		}
@@ -516,20 +520,17 @@ public class XLSExport
 			{
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
-				switch (xlsExportType) 
-				{
-					case AREA_NPIXELS:
-						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, 
-								xlsExportType, 
-								nOutputFrames, 
-								exp.binDuration_ms, // TODO check this
-								options);
-//						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
-						break;
-	
-					default:
-						break;
-				}
+//				switch (xlsExportType) 
+//				{
+//					case AREA_NPIXELS:// TODO check exp.binDuration_ms
+//						resultsArrayList.getSpotsArrayResults1(expi.spotsArray,  xlsExportType,  nOutputFrames,  exp.binDuration_ms, options);
+////						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+//						break;
+//	
+//					default:
+						resultsArrayList.getSpotsArrayResults1(expi.spotsArray,  xlsExportType,  nOutputFrames,  exp.binDuration_ms, options);
+//						break;
+//				}
 				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);
 			}
 			expi = expi.chainToNextExperiment;

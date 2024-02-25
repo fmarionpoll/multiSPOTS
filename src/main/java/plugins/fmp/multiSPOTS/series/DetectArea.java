@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageUtil;
+import icy.painter.Overlay.OverlayPriority;
 import icy.roi.BooleanMask2D;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
@@ -20,6 +21,7 @@ import icy.type.collection.array.ArrayUtil;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Spot;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
@@ -78,15 +80,7 @@ public class DetectArea extends BuildSeries
 		if (directory == null)
 			return;
 		
-	
-		for (Spot spot: exp.spotsArray.spotsList) 
-		{
-			spot.areaNPixels.setPolylineLevelFromTempData(
-					spot.getRoi().getName(), 
-					spot.kymographIndex, 
-					0, 
-					spot.areaNPixels.limit.length-1);		
-		}
+		exp.spotsArray.transferLimitMeasuresToPolyline(); 
 		exp.saveMCExperiment();
 		exp.saveSpotsMeasures();
 	}
@@ -141,10 +135,12 @@ public class DetectArea extends BuildSeries
 		transformOptions.transformOption = options.transform01;
 		transformOptions.setSingleThreshold (options.detectLevel1Threshold, options.overthreshold) ;
 		getReferenceImage (exp, 0, transformOptions);
-//		ImageTransformInterface transformFunction = options.transform01.getFunction();
+		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		
-		overlayThreshold = new OverlayThreshold(seqData);
-		overlayThreshold.setThresholdSingle(options.overlayThreshold, options.overlayTransform, options.overlayIfGreater);
+//		overlayThreshold = new OverlayThreshold(seqData);
+//		overlayThreshold.setThresholdSingle(options.overlayThreshold, options.overlayTransform, options.overlayIfGreater);
+//		overlayThreshold.setPriority(OverlayPriority.TOPMOST);
+		seqData.addOverlay(overlayThreshold);
 		
 		for (int ii = 0; ii < nFrames; ii++) 
 		{
@@ -154,11 +150,11 @@ public class DetectArea extends BuildSeries
 //			progressBar.setMessage(title);
 			
 			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));
-			//final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+			final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 			
 			vData.setTitle(title);
-			seqData.setImage(0, 0, sourceImage); 
-			final IcyBufferedImage imgOverlay = overlayThreshold.getTransformedImage(sourceImage);
+			seqData.setImage(0, 0, workImage); 
+//			final IcyBufferedImage imgOverlay = overlayThreshold.getTransformedImage(sourceImage);
 			
 //			if (workImage == null)
 //				next;
@@ -167,22 +163,12 @@ public class DetectArea extends BuildSeries
 				@Override
 				public void run() {	
 
-					boolean[] boolMap = getBoolMap_FromBinaryInt(imgOverlay);
-					BooleanMask2D maskAll2D = new BooleanMask2D(imgOverlay.getBounds(), boolMap); 
+//					boolean[] boolMap = getBoolMap_FromBinaryInt(workImage);
+//					BooleanMask2D maskAll2D = new BooleanMask2D(workImage.getBounds(), boolMap); 
 				
 					for (Spot spot: exp.spotsArray.spotsList) 
 					{
-						int sum = 0;
-						BooleanMask2D intersectionMask = null;
-						try {
-							intersectionMask = maskAll2D.getIntersection(spot.mask2D );
-							sum = intersectionMask.getNumberOfPoints();
-							spot.areaNPixels.limit[fromSourceImageIndex] = sum;		
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						
-						measureValues (sourceImage, spot, fromSourceImageIndex, options.detectLevel1Threshold, options.overthreshold);
+						measureValues (workImage, spot, fromSourceImageIndex, options.detectLevel1Threshold, options.overthreshold);
 					}
 				}}));
 
@@ -213,26 +199,28 @@ public class DetectArea extends BuildSeries
             if (mask[off])
             {
                 final double value = data[off];
-
-                sum += value;
-                sumSq += value * value;
-               
 //                if (value < min) min = value;
 //                if (value > max)  max = value;
                 if (overthreshold)
                 {
-                    if (value > threshold)
+                    if (value < threshold) {
                         cntPix++;
+                        sum += value;
+                        sumSq += value * value;
+                    }
                 }
                 else
                 {
-                    if (value < threshold)
+                    if (value > threshold) {
                         cntPix++;
+                        sum += value;
+                        sumSq += value * value;
+                    }
                 }
             }
         } 
-        spot.areaSum.limit[t] = (int) sum;
-        spot.areaSumSq.limit[t] = (int) sumSq;
+        spot.areaSum.limit[t] = (int) sum ;
+        spot.areaSumSq.limit[t] = (int) sumSq ;
         spot.areaCntPix.limit[t] = (int) cntPix;
 	}
 	
@@ -264,13 +252,9 @@ public class DetectArea extends BuildSeries
 		int nFrames = exp.seqCamData.nTotalFrames;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			spot.areaNPixels.limit 	= new int [nFrames+1];
-			spot.areaDensity.limit  =  new int [nFrames+1];
 			spot.areaSum .limit 	= new  int [nFrames+1];
 			spot.areaSumSq.limit  	= new  int [nFrames+1];
 			spot.areaCntPix.limit  	= new  int [nFrames+1];	
-			spot.areaMin.limit  	= new  int [nFrames+1];
-			spot.areaMax.limit  	= new  int [nFrames+1];
 		}
 
 	}

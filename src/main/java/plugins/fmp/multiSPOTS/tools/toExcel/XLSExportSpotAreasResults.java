@@ -42,12 +42,14 @@ public class XLSExportSpotAreasResults extends XLSExport
 				
 				if (options.spotAreas) 
 				{	
-					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS);
-					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
+					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
+					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUMSQ);
+					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);
+//					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
 				}
 				
-				if (options.lrPI && options.spotAreas) 		
-					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
+//				if (options.lrPI && options.spotAreas) 		
+//					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
 				
 				if (!options.collateSeries || exp.chainToPreviousExperiment == null)
 					column += expList.maxSizeOfCapillaryArrays +2;

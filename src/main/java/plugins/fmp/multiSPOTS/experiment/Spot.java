@@ -8,14 +8,13 @@ import java.util.List;
 import org.w3c.dom.Node;
 
 import icy.roi.BooleanMask2D;
-import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
-import plugins.kernel.roi.roi2d.ROI2DPolyLine;
+
 
 
 
@@ -43,15 +42,10 @@ public class Spot implements Comparable <Spot>
 	public int							versionInfos	= 0;
 	
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
-	
-	public  final String 				ID_AREAPIXELS 	= "areaNPixels";		
-	public SpotArea						areaNPixels  	= new SpotArea(ID_AREAPIXELS); 
-	public SpotArea						areaDensity  	= new SpotArea("areaDensity"); 
+	 
 	public SpotArea						areaSum  		= new SpotArea("areaSum"); 
 	public SpotArea						areaSumSq  		= new SpotArea("areaSumSq"); 
 	public SpotArea						areaCntPix  	= new SpotArea("cntPix"); 	
-	public SpotArea						areaMin  		= new SpotArea("min"); 
-	public SpotArea						areaMax  		= new SpotArea("max"); 	
 
 	public boolean						valid			= true;
 
@@ -118,7 +112,9 @@ public class Spot implements Comparable <Spot>
 		
 		limitsOptions	= spot.limitsOptions;
 		
-		areaNPixels.copy(spot.areaNPixels); 
+		areaSum .copy(spot.areaSum);
+		areaSumSq .copy(spot.areaSumSq);
+		areaCntPix .copy(spot.areaCntPix);	
 	}
 	
 	public ROI2D getRoi() 
@@ -245,54 +241,44 @@ public class Spot implements Comparable <Spot>
 	
 	public boolean isThereAnyMeasuresDone(EnumXLSExportType option) 
 	{
-		boolean yes = false;
-		switch (option) 
-		{
-		case AREA_NPIXELS:
-		default:
-			yes = areaNPixels.isThereAnyMeasuresDone();
-			break;
-		}
-		return yes;
+		SpotArea spotArea = getSpotArea(option);
+		if (spotArea != null)
+			return spotArea.isThereAnyMeasuresDone();
+		return false;
 	}
 		
 	public ArrayList<Integer> getSpotMeasuresForXLSPass1(EnumXLSExportType option, long seriesBinMs, long outputBinMs) 
 	{
-		ArrayList<Integer> datai = null;
-		switch (option) 
-		{
-		case AREA_NPIXELS:
-			datai = areaNPixels.getMeasures(seriesBinMs, outputBinMs);
-			break;
-		case AREA_DENSITY:
-			datai = areaDensity.getMeasures(seriesBinMs, outputBinMs);
-			break;
-		case AREA_SUM:
-			datai = areaSum.getMeasures(seriesBinMs, outputBinMs);
-			break;
-		case AREA_SUMSQ:
-			datai = areaSumSq.getMeasures(seriesBinMs, outputBinMs);
-			break;
-		case AREA_CNTPIX:
-			datai = areaCntPix.getMeasures(seriesBinMs, outputBinMs);
-			break;
-		default:
-			datai = areaNPixels.getMeasures(seriesBinMs, outputBinMs);
-			break;
-		}
-		return datai;
+		SpotArea spotArea = getSpotArea(option);
+		if (spotArea != null)
+			return spotArea.getMeasures(seriesBinMs, outputBinMs);
+		return null;
 	}
 
 	public void cropMeasuresToNPoints (int npoints) 
 	{
-		if (areaNPixels.polylineLevel != null)
-			areaNPixels.cropToNPoints(npoints);
+		cropSpotAreaToNPoints(areaSum , npoints);
+		cropSpotAreaToNPoints(areaSumSq , npoints);
+		cropSpotAreaToNPoints(areaCntPix , npoints);
+	}
+	
+	private void cropSpotAreaToNPoints(SpotArea spotArea, int npoints) 
+	{
+		if (spotArea.polylineLevel != null)
+			spotArea.cropToNPoints(npoints);
 	}
 	
 	public void restoreClippedMeasures () 
 	{
-		if (areaNPixels.polylineLevel != null)
-			areaNPixels.restoreNPoints();
+		restoreSpotAreaClippedMeasures( areaSum );
+		restoreSpotAreaClippedMeasures( areaSumSq );
+		restoreSpotAreaClippedMeasures( areaCntPix );
+	}
+	
+	private void restoreSpotAreaClippedMeasures(SpotArea spotArea)
+	{
+		if (spotArea.polylineLevel != null)
+			spotArea.restoreNPoints();
 	}
 	
 	public void setGulpsOptions (BuildSeriesOptions options) 
@@ -305,67 +291,40 @@ public class Spot implements Comparable <Spot>
 		return limitsOptions;
 	}
 	
-	public int getLastMeasure(EnumXLSExportType option) 
+	private SpotArea getSpotArea (EnumXLSExportType option)
 	{
-		int lastMeasure = 0;
 		switch (option) 
 		{
-		case AREA_NPIXELS:
+		case AREA_SUM:		return areaSum;
+		case AREA_SUMSQ:	return areaSumSq;
+		case AREA_CNTPIX:	return areaCntPix;
 		default:
-			lastMeasure = areaNPixels.getLastMeasure();
-			break;
+			return null;
 		}
-		return lastMeasure;
+	}
+	
+	public int getLastMeasure(EnumXLSExportType option) 
+	{
+		SpotArea spotArea = getSpotArea(option);
+		if (spotArea != null)
+			return spotArea.getLastMeasure();	
+		return 0;
 	}
 	
 	public int getLastDeltaMeasure(EnumXLSExportType option) 
 	{
-		int lastMeasure = 0;
-		switch (option) 
-		{
-		case AREA_NPIXELS:
-		default:
-			lastMeasure = areaNPixels.getLastDeltaMeasure();
-			break;
-		}
-		return lastMeasure;
+		SpotArea spotArea = getSpotArea(option);
+		if (spotArea != null)
+			return spotArea.getLastDeltaMeasure();
+		return 0;
 	}
 	
 	public int getT0Measure(EnumXLSExportType option) 
 	{
-		int t0Measure = 0;
-		switch (option) 
-		{
-		case AREA_NPIXELS:
-		default:
-			t0Measure = areaNPixels.getT0Measure();
-			break;
-		}
-		return t0Measure;
-	}
-
-	public List<ROI2D> transferMeasuresToROIs() 
-	{
-		List<ROI2D> listrois = new ArrayList<ROI2D> ();
-		getROIFromCapillaryLevel(areaNPixels, listrois);
-		return listrois;
-	}
-	
-	private void getROIFromCapillaryLevel(SpotArea capLevel, List<ROI2D> listrois) 
-	{
-		if (capLevel.polylineLevel == null || capLevel.polylineLevel.npoints == 0)
-			return;
-		
-		ROI2D roi = new ROI2DPolyLine(capLevel.polylineLevel);
-		String name = kymographPrefix + "_" + capLevel.name;
-		roi.setName(name);
-		roi.setT(kymographIndex);
-		listrois.add( roi);
-	}
-	
-	public void transferROIsToMeasures(List<ROI> listRois) 
-	{
-		areaNPixels.transferROIsToMeasures(listRois);
+		SpotArea spotArea = getSpotArea(option);
+		if (spotArea != null)
+			return spotArea.getT0Measure();
+		return 0;
 	}
 	
 	// -----------------------------------------------------------------------------
@@ -418,13 +377,6 @@ public class Spot implements Comparable <Spot>
         	}
         }
         return true;
-	}
-	
-	public boolean loadFromXML_MeasuresOnly(Node node) 
-	{
-		String header = getLast2ofSpotName()+"_";
-		boolean result = areaNPixels.loadCapillaryLimitFromXML(node, ID_AREAPIXELS, header) > 0;
-		return result;
 	}
 	
 	// -----------------------------------------------------------------------------
@@ -528,17 +480,28 @@ public class Spot implements Comparable <Spot>
 	
 	public void adjustToImageWidth (int imageWidth) 
 	{
-		areaNPixels.adjustToImageWidth(imageWidth);
+		areaSum.adjustToImageWidth(imageWidth);
+		areaSumSq.adjustToImageWidth(imageWidth);
+		areaCntPix.adjustToImageWidth(imageWidth);
 	}
 
 	public void cropToImageWidth (int imageWidth) 
 	{
-		areaNPixels.cropToImageWidth(imageWidth);
+		areaSum.cropToImageWidth(imageWidth);
+		areaSumSq.cropToImageWidth(imageWidth);
+		areaCntPix.cropToImageWidth(imageWidth);
+	}
+	
+	public void transferLimitMeasuresToPolyline() 
+	{
+		areaSum.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+		areaSumSq.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+		areaCntPix.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
 	}
 	
 	// -----------------------------------------------------------------------------
 	
-	public String csvExportSpotSubSectionHeader() 
+	public String csvExportSpotArrayHeader() 
 	{
 		StringBuffer sbf = new StringBuffer();
 		
@@ -583,13 +546,16 @@ public class Spot implements Comparable <Spot>
 		return sbf.toString();
 	}
 	
-	public String csvExportMeasureSectionHeader(EnumSpotMeasures measureType) 
+	public String csvExportMeasures_SectionHeader(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		String explanation1 = "\n name,index, npts,x0,y0, x1, y1, etc\n";
-		switch(measureType) {
-			case AREA_NPIXELS:
-				sbf.append("#,AREA_NPIXELS," + explanation1);
+		switch(measureType) 
+		{
+			case AREA_SUM:
+			case AREA_SUMSQ:
+			case AREA_CNTPIX:	
+				sbf.append("#,"+measureType.toString()+"," + explanation1);
 				break;
 
 			default:
@@ -599,18 +565,16 @@ public class Spot implements Comparable <Spot>
 		return sbf.toString();
 	}
 	
-	public String csvExportSpotData(EnumSpotMeasures measureType) 
+	public String csvExportMeasures_OneType(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		sbf.append(roi.getName()+ ","+ kymographIndex +",");
 		
-		switch(measureType) {
-			case AREA_NPIXELS:
-				areaNPixels.cvsExportDataToRow(sbf);
-				break;
-			case AREA_DENSITY:
-				areaDensity.cvsExportDataToRow(sbf);
-				break;
+		switch(measureType) 
+		{
+			case AREA_SUM:  	areaSum.cvsExportDataToRow(sbf); break;
+			case AREA_SUMSQ:  	areaSumSq.cvsExportDataToRow(sbf); break;
+			case AREA_CNTPIX:  	areaCntPix.cvsExportDataToRow(sbf); break;
 			default:
 				break;
 		}
@@ -620,7 +584,7 @@ public class Spot implements Comparable <Spot>
 	
 	// --------------------------------------------
 	
-	public void csvImportSpotDescription(String[] data) 
+	public void csvImportDescription(String[] data) 
 	{
 		int i = 0;
 		kymographPrefix = data[i]; i++;
@@ -636,16 +600,13 @@ public class Spot implements Comparable <Spot>
 		cageSide = data[i]; 
 	}
 		
-	public void csvImportData(EnumSpotMeasures measureType, String[] data) 
+	public void csvImportMeasures_OneType(EnumSpotMeasures measureType, String[] data) 
 	{
 		switch(measureType) 
 		{
-		case AREA_NPIXELS:
-			areaNPixels.csvImportDataFromRow( data, 2); 
-			break;
-		case AREA_DENSITY:
-			areaDensity.csvImportDataFromRow( data, 2); 
-			break;
+		case AREA_SUM:  	areaSum.csvImportDataFromRow( data, 2); break;
+		case AREA_SUMSQ:  	areaSumSq.csvImportDataFromRow( data, 2); break;
+		case AREA_CNTPIX:  	areaCntPix.csvImportDataFromRow( data, 2); break;
 		default:
 			break;
 		}

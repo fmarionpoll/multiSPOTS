@@ -31,8 +31,6 @@ public enum EnumXLSExportType
 	ISALIVE ("_alive", "yes/no"), 
 	SLEEP ("sleep", "yes, no"),
 	
-	AREA_NPIXELS("AREA_NPIXELS", "n pixels detected"),
-	AREA_DENSITY("AREA_DENSITY", "density of grey"),
 	AREA_SUM("AREA_SUM", "sum of pixels over threshold"),
 	AREA_SUMSQ("AREA_SUMSQ", "square of sum pixels over threshold"),
 	AREA_CNTPIX("AREA_CNTPIX", "n pixels over threshold");
@@ -44,12 +42,12 @@ public enum EnumXLSExportType
 //	AREA_DENSITY("area_density", "grey density in detection area");
 	
 	private String label;
-	private String unit;
+	private String title;
 	
 	EnumXLSExportType (String label, String unit) 
 	{ 
 		this.label = label;
-		this.unit = unit;
+		this.title = unit;
 	}
 	
 	public String toString() 
@@ -57,9 +55,9 @@ public enum EnumXLSExportType
 		return label;
 	}
 	
-	public String toUnit() 
+	public String toTitle() 
 	{
-		return unit;
+		return title;
 	}
 	
 	public static EnumXLSExportType findByText(String abbr)

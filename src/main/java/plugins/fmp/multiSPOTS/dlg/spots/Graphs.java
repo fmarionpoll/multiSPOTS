@@ -17,11 +17,8 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.experiment.EnumSpotMeasures;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
-import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.chart.ChartAreas;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 
@@ -34,10 +31,13 @@ public class Graphs extends JPanel implements SequenceListener
 	private ChartAreas 	plotAreaPixels			= null;
 	private MultiSPOTS 	parent0 				= null;
 	private JButton 	displayResultsButton 	= new JButton("Display results");
-	EnumSpotMeasures[] measures = new EnumSpotMeasures[] {
-			EnumSpotMeasures.AREA_NPIXELS, EnumSpotMeasures.AREA_SUM, EnumSpotMeasures.AREA_SUMSQ, EnumSpotMeasures.AREA_CNTPIX
+	EnumXLSExportType[] measures = new EnumXLSExportType[] 
+			{
+			EnumXLSExportType.AREA_SUM, 
+			EnumXLSExportType.AREA_SUMSQ, 
+			EnumXLSExportType.AREA_CNTPIX
 			};
-	JComboBox<EnumSpotMeasures> resultsComboBox = new JComboBox<EnumSpotMeasures> (measures);
+	JComboBox<EnumXLSExportType> resultsComboBox = new JComboBox<EnumXLSExportType> (measures);
 
 	
 	
@@ -70,8 +70,7 @@ public class Graphs extends JPanel implements SequenceListener
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
 				if (exp != null && exp.seqKymos != null) 
 				{				
-					EnumSpotMeasures item = (EnumSpotMeasures) resultsComboBox.getSelectedItem();
-					selectResults(item);
+					displayGraphsPanels(exp);
 				}
 			}});
 		
@@ -85,11 +84,6 @@ public class Graphs extends JPanel implements SequenceListener
 					displayGraphsPanels(exp);
 				}
 			}});
-	}
-	
-	private void selectResults(EnumSpotMeasures index) 
-	{
-		
 	}
 	
 	private Rectangle getInitialUpperLeftPosition(Experiment exp)
@@ -115,12 +109,10 @@ public class Graphs extends JPanel implements SequenceListener
 		int dx = 5;
 		int dy = 10; 
 		exp.seqCamData.seq.addListener(this);
-		
-		if (isThereAnyDataToDisplay(exp, EnumXLSExportType.AREA_NPIXELS))  
+		EnumXLSExportType option = (EnumXLSExportType) resultsComboBox.getSelectedItem();
+		if (isThereAnyDataToDisplay(exp, option))  
 		{
-			plotAreaPixels = plotToChart(exp, "N pixels above threshold", 
-					EnumXLSExportType.AREA_NPIXELS, 
-					plotAreaPixels, rectv);
+			plotAreaPixels = plotToChart(exp, option.toTitle(), option, plotAreaPixels, rectv);
 			rectv.translate(dx, dy);
 		}
 	}

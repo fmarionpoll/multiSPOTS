@@ -66,6 +66,24 @@ public class SpotArea
 		polylineLevel = new Level2D(xpoints, ypoints, npoints);
 	}
 	
+	public void setPolylineLevelFromTempData(String name, int indexImage) 
+	{
+		this.name = name;
+		this.index = indexImage;
+		int xStart = 0;
+		int xEnd = limit.length-1;
+		int npoints = xEnd-xStart+1;
+		double [] xpoints = new double [npoints];
+		double [] ypoints = new double [npoints];
+		int j= 0;
+		for (int i = xStart; i <= xEnd; i++, j++) 
+		{
+			xpoints[j] = i;
+			ypoints[j] = limit[j];
+		}
+		polylineLevel = new Level2D(xpoints, ypoints, npoints);
+	}
+	
 	public void setTempDataFromPolylineLevel() 
 	{
 		int npoints = polylineLevel.npoints;
