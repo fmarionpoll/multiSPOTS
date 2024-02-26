@@ -47,7 +47,7 @@ public class SpotTableModel extends AbstractTableModel
     public int getRowCount() {
     	if (expList != null && expList.getSelectedIndex() >= 0 ) {
     		Experiment exp = (Experiment) expList.getSelectedItem();
-			return exp.capillaries.capillariesList.size();
+			return exp.spotsArray.spotsList.size();
     	}
         return 0;
     }
