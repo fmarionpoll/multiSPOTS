@@ -474,6 +474,7 @@ public class XLSExport
 			{
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
+				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 //				switch (xlsExportType) 
 //				{
 //					case AREA_NPIXELS:
@@ -483,7 +484,7 @@ public class XLSExport
 //					case AREA_CNTPIX:
 ////					case AREA_NPIXELS_LR:
 ////					case AREA_NPIXELS_DELTA:
-						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+//						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
 //						break;
 //						
 ////					case AREA_NPIXELS_RELATIVE: // TODO

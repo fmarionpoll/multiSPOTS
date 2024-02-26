@@ -195,10 +195,10 @@ public class SpotsArray
 
 	public void mergeLists(SpotsArray caplist)  
 	{
-		for (Spot capm : caplist.spotsList ) 
+		for (Spot spot : caplist.spotsList ) 
 		{
-			if (!isPresent(capm))
-				spotsList.add(capm);
+			if (!isPresent(spot))
+				spotsList.add(spot);
 		}
 	}
 	

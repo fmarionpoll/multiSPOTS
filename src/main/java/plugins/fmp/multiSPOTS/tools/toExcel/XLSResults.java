@@ -80,8 +80,8 @@ public class XLSResults
 			return;
 		
 		boolean removeZeros = false;
-		if (xlsExport == EnumXLSExportType.AMPLITUDEGULPS)
-			removeZeros = true;
+//		if (xlsExport == EnumXLSExportType.AMPLITUDEGULPS)
+//			removeZeros = true;
 			
 		int len = Math.min(dimension,  dataInt.size());
 		if (removeZeros) 
