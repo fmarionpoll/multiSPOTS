@@ -50,17 +50,17 @@ public class CreateSpots extends JPanel
 	private JSpinner 	nCagesPerRowSpinner 	= new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
 
 	private Polygon2D 	capillariesPolygon 		= null;
-	private JSpinner 	nRowsJSpinner 			= new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
-	private JSpinner 	nColumnsJSpinner 		= new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
+//	private JSpinner 	nRowsJSpinner 			= new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
+//	private JSpinner 	nColumnsJSpinner 		= new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
 
 	private String []	flyString				= new String[] {"fly", "flies"};
-	private String []	colString				= new String[] {"col X", "cols X"};	
-	private String []	rowString				= new String[] {"row of", "rows of"};
+//	private String []	colString				= new String[] {"col X", "cols X"};	
+//	private String []	rowString				= new String[] {"row of", "rows of"};
 	
 	private JLabel 		flyLabel 				= new JLabel (flyString[0]);
 	private JLabel 		pointsLabel				= new JLabel ("points at");
-	private JLabel 		colLabel 				= new JLabel (colString[0]);
-	private JLabel 		rowLabel 				= new JLabel (rowString[0]);
+//	private JLabel 		colLabel 				= new JLabel (colString[0]);
+//	private JLabel 		rowLabel 				= new JLabel (rowString[0]);
 
 	
 	private MultiSPOTS 	parent0 				= null;
@@ -77,17 +77,16 @@ public class CreateSpots extends JPanel
 		panel0.add(createCirclesButton);
 		
 		JPanel panel1 = new JPanel(flowLayout);
-		panel1.add(new JLabel ("Grouped as"));
-		panel1.add(nColumnsJSpinner);
-		nColumnsJSpinner.setPreferredSize(new Dimension (40, 20));
-		panel1.add(colLabel);
-		panel1.add(nRowsJSpinner);
-		nRowsJSpinner.setPreferredSize(new Dimension (40, 20));
-		panel1.add(rowLabel);
-		
+//		panel1.add(new JLabel ("Grouped as"));
+//		panel1.add(nColumnsJSpinner);
+//		nColumnsJSpinner.setPreferredSize(new Dimension (40, 20));
+//		panel1.add(colLabel);
+//		panel1.add(nRowsJSpinner);
+//		nRowsJSpinner.setPreferredSize(new Dimension (40, 20));
+//		panel1.add(rowLabel);	
 		panel1.add(nCagesPerRowSpinner);	
 		nCagesPerRowSpinner.setPreferredSize(new Dimension (60, 20));
-		panel1.add(new JLabel ("cages and"));
+		panel1.add(new JLabel ("cages with"));
 		panel1.add(nbFliesPerCageJSpinner);
 		nbFliesPerCageJSpinner.setPreferredSize(new Dimension (40, 20));
 		panel1.add(flyLabel);
@@ -167,21 +166,21 @@ public class CreateSpots extends JPanel
 		        nbFliesPerCageJSpinner.requestFocus();
 		    }});
 
-		nColumnsJSpinner.addChangeListener(new ChangeListener() {
-		    @Override
-		    public void stateChanged(ChangeEvent e) {
-		    	int i = (int) nColumnsJSpinner.getValue() > 1 ? 1:0;
-		        colLabel.setText(colString[i]);
-		        nColumnsJSpinner.requestFocus();
-		    }});
-		
-		nRowsJSpinner.addChangeListener(new ChangeListener() {
-		    @Override
-		    public void stateChanged(ChangeEvent e) {
-		    	int i = (int) nRowsJSpinner.getValue() > 1 ? 1:0;
-		        rowLabel.setText(rowString[i]);
-		        nRowsJSpinner.requestFocus();
-		    }});
+//		nColumnsJSpinner.addChangeListener(new ChangeListener() {
+//		    @Override
+//		    public void stateChanged(ChangeEvent e) {
+//		    	int i = (int) nColumnsJSpinner.getValue() > 1 ? 1:0;
+//		        colLabel.setText(colString[i]);
+//		        nColumnsJSpinner.requestFocus();
+//		    }});
+//		
+//		nRowsJSpinner.addChangeListener(new ChangeListener() {
+//		    @Override
+//		    public void stateChanged(ChangeEvent e) {
+//		    	int i = (int) nRowsJSpinner.getValue() > 1 ? 1:0;
+//		        rowLabel.setText(rowString[i]);
+//		        nRowsJSpinner.requestFocus();
+//		    }});
 	}
 	
 	// set/ get	

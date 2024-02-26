@@ -17,8 +17,6 @@ import icy.system.thread.ThreadUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.dlg.JComponents.Dialog;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportCapillariesResults;
-import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportGulpsResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportMoveResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportSpotAreasResults;
@@ -149,9 +147,15 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 		options.sumGulps 		= false; 
 		options.nbGulps 		= false;
 		
+		options.spotAreas 		= true;
+		options.sum 			= tabAreas.sumCheckBox.isSelected(); 
+		options.sum2   			= tabAreas.sum2CheckBox.isSelected();
+		options.nPixels 		= tabAreas.nPixelsCheckBox.isSelected();  
+		
 		options.topLevel 		= tabAreas.sumCheckBox.isSelected(); 
 		options.topLevelDelta   = tabAreas.sum2CheckBox.isSelected();
 		options.bottomLevel 	= tabAreas.nPixelsCheckBox.isSelected();  
+		
 		options.sumGulps 		= false; 
 		options.lrPI 			= tabAreas.lrPICheckBox.isSelected(); 
 		options.lrPIThreshold 	= (double) tabAreas.lrPIThresholdJSpinner.getValue();

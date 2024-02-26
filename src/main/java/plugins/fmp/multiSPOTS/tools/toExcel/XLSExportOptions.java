@@ -22,6 +22,9 @@ public class XLSExportOptions
 	public double	lrPIThreshold		= 0.;
 	
 	public boolean  spotAreas			= true;
+	public boolean  sum					= true; 
+	public boolean  sum2				= true;
+	public boolean  nPixels 			= true; 
 	
 	public boolean  autocorrelation		= false;
 	public boolean	crosscorrelation	= false;

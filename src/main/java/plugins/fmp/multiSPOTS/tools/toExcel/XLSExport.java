@@ -536,15 +536,15 @@ public class XLSExport
 			expi = expi.chainToNextExperiment;
 		}
 		
-		switch (xlsExportType) 
-		{
-			case TOPLEVELDELTA:
-			case TOPLEVELDELTA_LR:
-				rowListForOneExp.subtractDeltaT(1, 1); //options.buildExcelStepMs);
-				break;
-			default:
-				break;
-		}
+//		switch (xlsExportType) 
+//		{
+//			case TOPLEVELDELTA:
+//			case TOPLEVELDELTA_LR:
+//				rowListForOneExp.subtractDeltaT(1, 1); //options.buildExcelStepMs);
+//				break;
+//			default:
+//				break;
+//		}
 		return rowListForOneExp;
 	}
 	

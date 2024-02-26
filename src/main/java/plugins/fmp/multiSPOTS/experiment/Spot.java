@@ -295,9 +295,12 @@ public class Spot implements Comparable <Spot>
 	{
 		switch (option) 
 		{
-		case AREA_SUM:		return areaSum;
-		case AREA_SUM2:		return areaSum2;
-		case AREA_CNTPIX:	return areaCntPix;
+		case AREA_SUM:		
+			return areaSum;
+		case AREA_SUM2:		
+			return areaSum2;
+		case AREA_CNTPIX:	
+			return areaCntPix;
 		default:
 			return null;
 		}
