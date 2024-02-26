@@ -22,15 +22,15 @@ public class SpotsAreas extends JPanel
 	JButton 	exportToXLSButton 	= new JButton("save XLS (v1)");
 	JButton 	exportToXLSButton2 	= new JButton("save XLS");
 	
-	JCheckBox 	topLevelCheckBox 	= new JCheckBox("top", true);
-	JCheckBox 	topLevelDeltaCheckBox 	= new JCheckBox("delta top", false);
-	JCheckBox 	bottomLevelCheckBox = new JCheckBox("bottom", false);
-	JCheckBox	t0CheckBox			= new JCheckBox("t-t0", true);
-
-	JCheckBox	subtractEvaporationCheckBox = new JCheckBox("subtract evaporation", true);
+	JCheckBox 	sumCheckBox 	= new JCheckBox("sum", true);
+	JCheckBox 	sum2CheckBox 	= new JCheckBox("sum x sum", true);
+	JCheckBox 	nPixelsCheckBox = new JCheckBox("n pixels", true);
 	
 	
-	JCheckBox 	lrPICheckBox 		= new JCheckBox("L+R & pref index", true);
+	JCheckBox	t0CheckBox			= new JCheckBox("t-t0", false);
+	
+	
+	JCheckBox 	lrPICheckBox 		= new JCheckBox("L+R & pref index", false);
 	JLabel		lrPILabel			= new JLabel("compute PI only if L+R > ");
 	JCheckBox 	sumPerCageCheckBox 	= new JCheckBox("sum/cage", false);
 	JSpinner 	lrPIThresholdJSpinner = new JSpinner(new SpinnerNumberModel(0.0, 0., 100., 0.01));
@@ -43,11 +43,10 @@ public class SpotsAreas extends JPanel
 		FlowLayout flowLayout0 = new FlowLayout(FlowLayout.LEFT);
 		flowLayout0.setVgap(0);
 		JPanel panel0 = new JPanel(flowLayout0);
-		panel0.add(topLevelCheckBox);
-		panel0.add(topLevelDeltaCheckBox);
-		panel0.add(bottomLevelCheckBox);
+		panel0.add(sumCheckBox);
+		panel0.add(sum2CheckBox);
+		panel0.add(nPixelsCheckBox);
 		panel0.add(t0CheckBox);
-		panel0.add(subtractEvaporationCheckBox);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(flowLayout0);
