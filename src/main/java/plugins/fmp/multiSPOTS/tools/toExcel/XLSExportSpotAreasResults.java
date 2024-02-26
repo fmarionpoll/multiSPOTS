@@ -52,7 +52,7 @@ public class XLSExportSpotAreasResults extends XLSExport
 //					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
 				
 				if (!options.collateSeries || exp.chainToPreviousExperiment == null)
-					column += expList.maxSizeOfCapillaryArrays +2;
+					column += expList.maxSizeOfSpotsArrays +2;
 				iSeries++;
 				progress.incPosition();
 			}

@@ -72,7 +72,7 @@ public class XLSExportMoveResults extends XLSExport
 					getMoveDataAndExport(exp, column, charSeries, EnumXLSExportType.SLEEP);
 				
 				if (!options.collateSeries || exp.chainToPreviousExperiment == null)
-					column += expList.maxSizeOfCapillaryArrays +2;
+					column += expList.maxSizeOfSpotsArrays +2;
 				iSeries++;
 				progress.incPosition();
 			}

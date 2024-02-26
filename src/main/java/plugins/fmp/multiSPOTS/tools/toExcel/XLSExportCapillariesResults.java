@@ -60,7 +60,7 @@ public class XLSExportCapillariesResults extends XLSExport
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.DERIVEDVALUES);	
 				
 				if (!options.collateSeries || exp.chainToPreviousExperiment == null)
-					column += expList.maxSizeOfCapillaryArrays +2;
+					column += expList.maxSizeOfSpotsArrays +2;
 				iSeries++;
 				progress.incPosition();
 			}

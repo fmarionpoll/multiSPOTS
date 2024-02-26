@@ -25,7 +25,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 	private static final long serialVersionUID = 1L;
 	public 	int 	index0 						= 0;
 	public 	int 	index1 						= 0;
-	public	int		maxSizeOfCapillaryArrays 	= 0;
+	public	int		maxSizeOfSpotsArrays 	= 0;
 	public 	String 	expListBinSubDirectory 		= null; 
 	
 
@@ -110,7 +110,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 		ProgressFrame progress = new ProgressFrame("Load experiment(s) parameters");
 		int nexpts = getItemCount();
 
-		maxSizeOfCapillaryArrays = 0;
+		maxSizeOfSpotsArrays = 0;
 		progress.setLength(nexpts);
 		boolean flag = true;
 		
@@ -135,11 +135,11 @@ public class ExperimentCombo extends JComboBox<Experiment>
 					if (expListBinSubDirectory == null)
 						exp.checkKymosDirectory(exp.getBinSubDirectory());
 					exp.openMeasures(loadCapillaries, loadDrosoTrack);
-					if (maxSizeOfCapillaryArrays < exp.capillaries.capillariesList.size())
+					if (maxSizeOfSpotsArrays < exp.spotsArray.spotsList.size())
 					{
-						maxSizeOfCapillaryArrays = exp.capillaries.capillariesList.size();
-						if (maxSizeOfCapillaryArrays % 2 != 0)
-							maxSizeOfCapillaryArrays += 1;
+						maxSizeOfSpotsArrays = exp.spotsArray.spotsList.size();
+						if (maxSizeOfSpotsArrays % 2 != 0)
+							maxSizeOfSpotsArrays += 1;
 					}
 					progress.incPosition();
 				}}));
