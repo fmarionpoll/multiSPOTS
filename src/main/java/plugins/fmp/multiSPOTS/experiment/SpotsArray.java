@@ -49,7 +49,6 @@ public class SpotsArray
 		try {
 			flag = csvLoadSpots(directory, EnumSpotMeasures.SPOTS_MEASURES);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return flag;
@@ -61,7 +60,6 @@ public class SpotsArray
 		try {
 			flag = csvLoadSpots(directory, EnumSpotMeasures.ALL);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return flag;
@@ -444,9 +442,6 @@ public class SpotsArray
 		double scalingFactorToPhysicalUnits; 
 		switch (xlsoption) 
 		{
-			case NBGULPS:
-			case TTOGULP:
-			case TTOGULP_LR:
 			case AUTOCORREL:
 			case CROSSCORREL:
 			case CROSSCORREL_LR:
@@ -546,7 +541,6 @@ public class SpotsArray
 				spot.csvImportDescription(data);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -596,7 +590,6 @@ public class SpotsArray
 				spot.csvImportMeasures_OneType(measureType, data);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

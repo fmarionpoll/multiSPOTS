@@ -79,10 +79,7 @@ public class XLSResults
 		if (dimension == 0 || dataInt == null || dataInt.size() < 1)
 			return;
 		
-		boolean removeZeros = false;
-//		if (xlsExport == EnumXLSExportType.AMPLITUDEGULPS)
-//			removeZeros = true;
-			
+		boolean removeZeros = false;	
 		int len = Math.min(dimension,  dataInt.size());
 		if (removeZeros) 
 		{

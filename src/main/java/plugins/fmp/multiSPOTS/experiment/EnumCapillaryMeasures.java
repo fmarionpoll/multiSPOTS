@@ -7,7 +7,6 @@ public enum EnumCapillaryMeasures
 	TOPLEVEL ("TOPLEVEL", "top capillary limit"), 
 	BOTTOMLEVEL ("BOTTOMLEVEL", "bottom capillary limit"), 
 	TOPDERIVATIVE ("TOPDERIVATIVE", "derivative of top capillary limit"), 
-	GULPS ("GULPS", "gulps detected from derivative"), 
 	ALL ("ALL", "all options");
 	
 	private String label;

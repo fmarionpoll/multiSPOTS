@@ -60,12 +60,8 @@ public class BuildSeriesOptions implements XMLPersistent
 	public Rectangle 	searchArea				= new Rectangle();
 	
 	public  int			spanDiffTop				= 3;
-	
-	public double		detectGulpsThreshold_uL	= .3;
-	public ImageTransformEnums transformForGulps = ImageTransformEnums.XDIFFN;
 	public int			spanDiff				= 3;
-	public boolean 		detectAllGulps 			= true;
-	public boolean		buildGulps				= true;
+
 	public boolean		buildDerivative			= true;
 
 	public int 			threshold 				= -1;
@@ -100,11 +96,8 @@ public class BuildSeriesOptions implements XMLPersistent
 		destination.transform01 			= transform01;
 		destination.overthreshold 			= overthreshold;
 		destination.detectLevel1Threshold 	= detectLevel1Threshold;
-		destination.detectAllSeries 			= detectAllSeries;
-		
-		destination.detectGulpsThreshold_uL = detectGulpsThreshold_uL;
-		destination.transformForGulps 		= transformForGulps;
-		destination.detectAllGulps 			= detectAllGulps;
+		destination.detectAllSeries 		= detectAllSeries;
+
 	}
 	
 	void copyFrom(BuildSeriesOptions destination) 
@@ -114,11 +107,7 @@ public class BuildSeriesOptions implements XMLPersistent
 		transform01 			= destination.transform01;
 		overthreshold 			= destination.overthreshold;
 		detectLevel1Threshold 	= destination.detectLevel1Threshold;
-		detectAllSeries 			= destination.detectAllSeries;
-		
-		detectGulpsThreshold_uL = destination.detectGulpsThreshold_uL;
-		transformForGulps 		= destination.transformForGulps;
-		detectAllGulps 			= destination.detectAllGulps;
+		detectAllSeries 		= destination.detectAllSeries;
 	}
 	
 	public void copyParameters (BuildSeriesOptions det) 
@@ -154,11 +143,8 @@ public class BuildSeriesOptions implements XMLPersistent
 			seriesFirst = XMLUtil.getElementIntValue(nodeMeta, "firstImage", seriesFirst);
 			detectLevel1Threshold = XMLUtil.getElementIntValue(nodeMeta, "detectLevelThreshold", detectLevel1Threshold);
 			transform01 = ImageTransformEnums.findByText(XMLUtil.getElementValue(nodeMeta, "Transform", transform01.toString()));       
-			
-			detectAllGulps = XMLUtil.getElementBooleanValue(nodeMeta, "detectAllGulps", detectAllGulps);
-	    	buildGulps = XMLUtil.getElementBooleanValue(nodeMeta, "buildGulps", buildGulps);
+
 	    	buildDerivative = XMLUtil.getElementBooleanValue(nodeMeta, "buildDerivative", buildDerivative);
-	    	transformForGulps = ImageTransformEnums.findByText(XMLUtil.getElementValue(nodeMeta, "Transform", transformForGulps.toString()));       
 	    }
 		
 		Element xmlVal = XMLUtil.getElement(node, "DetectFliesParameters");
@@ -192,10 +178,7 @@ public class BuildSeriesOptions implements XMLPersistent
 			XMLUtil.setElementIntValue(nodeMeta, "detectLevelThreshold", detectLevel1Threshold);
 		    XMLUtil.setElementValue(nodeMeta, "Transform", transform01.toString()); 
 		    
-		    XMLUtil.setElementBooleanValue(nodeMeta, "detectAllGulps", detectAllGulps);
-	    	XMLUtil.setElementBooleanValue(nodeMeta, "buildGulps", buildGulps);
-	    	XMLUtil.setElementBooleanValue(nodeMeta, "buildDerivative", buildDerivative);
-	    	XMLUtil.setElementValue(nodeMeta, "Transform", transformForGulps.toString());       
+	    	XMLUtil.setElementBooleanValue(nodeMeta, "buildDerivative", buildDerivative);      
 	    }
 		
 		Element xmlVal = XMLUtil.addElement(node, "DetectFliesParameters");

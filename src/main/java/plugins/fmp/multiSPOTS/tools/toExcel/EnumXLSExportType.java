@@ -10,14 +10,7 @@ public enum EnumXLSExportType
 	TOPLEVEL_LR ("toplevel_L+R", "volume (ul)"), 
 	TOPLEVELDELTA ("topdelta", "volume (ul)"),
 	TOPLEVELDELTA_LR ("topdelta_L+R", "volume (ul)"),
-	
-	SUMGULPS ("sumGulps", "volume (ul)"), 
-	SUMGULPS_LR ("sumGulps_L+R", "volume (ul)"), 
-	NBGULPS ("nbGulps", "volume (ul)"),
-	AMPLITUDEGULPS ("amplitudeGulps", "volume (ul)"),
-	TTOGULP("tToGulp", "minutes"),
-	TTOGULP_LR("tToGulp_LR", "minutes"),
-	
+
 	AUTOCORREL("autocorrel", "n observ"),
 	AUTOCORREL_LR("autocorrel_LR", "n observ"),
 	CROSSCORREL("crosscorrel", "n observ"),

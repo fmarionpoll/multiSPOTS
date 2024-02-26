@@ -35,12 +35,6 @@ public class XLSExportOptions
 	public boolean 	t0					= true;
 	public boolean 	onlyalive			= true;
 	public boolean  subtractEvaporation = true;
-	
-	public boolean 	sumGulps 			= false;
-	public boolean  nbGulps				= false;
-	public boolean 	amplitudeGulps		= false;
-	public boolean	tToNextGulp			= false;
-	public boolean	tToNextGulp_LR		= false;
 
 	public boolean 	transpose 			= false;
 	public boolean 	duplicateSeries 	= true;

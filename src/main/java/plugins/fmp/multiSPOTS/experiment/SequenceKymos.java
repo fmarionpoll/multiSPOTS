@@ -74,18 +74,13 @@ public class SequenceKymos extends SequenceCamData
 			if (roi.getT() != t)
 				continue;
 			// interpolate missing points if necessary
-			if (roi.getName().contains("level") || roi.getName().contains("gulp")) 
+			if (roi.getName().contains("level")) 
 			{
 				ROI2DUtilities.interpolateMissingPointsAlongXAxis ((ROI2DPolyLine) roi, width);
 				continue;
 			}
 			if (roi.getName().contains("deriv"))
 				continue;
-			// if gulp not found - add an index to it	
-			ROI2DPolyLine roiLine = (ROI2DPolyLine) roi;
-			Polyline2D line = roiLine.getPolyline2D();
-			roi.setName("gulp"+String.format("%07d", (int) line.xpoints[0]));
-			roi.setColor(Color.red);
 		}
 		Collections.sort(listRois, new Comparators.ROI2D_Name_Comparator());
 	}
@@ -129,18 +124,13 @@ public class SequenceKymos extends SequenceCamData
 			if (!(roi instanceof ROI2DPolyLine))
 				continue;
 			// interpolate missing points if necessary
-			if (roi.getName().contains("level") || roi.getName().contains("gulp")) 
+			if (roi.getName().contains("level")) 
 			{
 				ROI2DUtilities.interpolateMissingPointsAlongXAxis ((ROI2DPolyLine) roi, width);
 				continue;
 			}
 			if (roi.getName().contains("derivative"))
 				continue;
-			// if gulp not found - add an index to it	
-			ROI2DPolyLine roiLine = (ROI2DPolyLine) roi;
-			Polyline2D line = roiLine.getPolyline2D();
-			roi.setName("gulp"+String.format("%07d", (int) line.xpoints[0]));
-			roi.setColor(Color.red);
 		}
 		Collections.sort(listRois, new Comparators.ROI2D_Name_Comparator());
 	}

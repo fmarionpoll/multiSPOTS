@@ -522,9 +522,6 @@ public class CapillariesArray
 		double scalingFactorToPhysicalUnits; 
 		switch (xlsoption) 
 		{
-			case NBGULPS:
-			case TTOGULP:
-			case TTOGULP_LR:
 			case AUTOCORREL:
 			case CROSSCORREL:
 			case CROSSCORREL_LR:
@@ -589,9 +586,6 @@ public class CapillariesArray
 		    		break;
 		    	case "TOPDERIVATIVE":
 		    		csvLoadCapillariesMeasures(csvReader, EnumCapillaryMeasures.TOPDERIVATIVE);
-		    		break;
-		    	case "GULPS": 
-		    		csvLoadCapillariesMeasures(csvReader, EnumCapillaryMeasures.GULPS);
 		    		break;
 	    		default:
 	    			break;
@@ -689,7 +683,6 @@ public class CapillariesArray
 			csvSaveMeasuresSection(csvWriter, EnumCapillaryMeasures.TOPLEVEL);
 			csvSaveMeasuresSection(csvWriter, EnumCapillaryMeasures.BOTTOMLEVEL);
 			csvSaveMeasuresSection(csvWriter, EnumCapillaryMeasures.TOPDERIVATIVE);
-			csvSaveMeasuresSection(csvWriter, EnumCapillaryMeasures.GULPS);
 			csvWriter.flush();
 			csvWriter.close();
 			

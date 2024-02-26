@@ -181,39 +181,7 @@ public class XLSResultsArray
 			rowR.valuesOut[index] = pi;
 		}
 	}
-	
-	void getMinTimeToGulpLR(XLSResults rowL, XLSResults rowR, XLSResults rowOut) 
-	{
-		int len = getLen(rowL, rowR);
-		for (int index = 0; index < len; index++) 
-		{
-			double dataMax = Double.NaN;
-			double dataL = rowL.valuesOut[index];
-			double dataR = rowR.valuesOut[index];
-			if (dataL <= dataR)
-				dataMax = dataL;
-			else if (dataL > dataR)
-				dataMax = dataR;
-			rowOut.valuesOut[index] = dataMax;
-		}
-	}
-	
-	void getMaxTimeToGulpLR(XLSResults rowL, XLSResults rowR, XLSResults rowOut) 
-	{
-		int len = getLen(rowL, rowR);
-		for (int index = 0; index < len; index++) 
-		{
-			double dataMin = Double.NaN;
-			double dataL = rowL.valuesOut[index];
-			double dataR = rowR.valuesOut[index];
-			if (dataL >= dataR)
-				dataMin = dataL;
-			else if (dataL < dataR)
-				dataMin = dataR;
-			rowOut.valuesOut[index] = dataMin;
-		}
-	}
-	
+
 	// ---------------------------------------------------
 	
 	public void getResults1( 
@@ -320,7 +288,6 @@ public class XLSResultsArray
 		{
 		case TOPLEVEL_LR:
 		case TOPLEVELDELTA_LR:
-		case SUMGULPS_LR:
 			buildLR (xlsExportOptions.lrPIThreshold); 
 			break;
 		case AUTOCORREL:

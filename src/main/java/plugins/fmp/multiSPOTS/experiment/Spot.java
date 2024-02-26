@@ -182,7 +182,6 @@ public class Spot implements Comparable <Spot>
 		case ISALIVE:
 			value = cageSide + "(L=R)";
 			break;
-		case SUMGULPS_LR:
 		case TOPLEVELDELTA_LR:
 		case TOPLEVEL_LR:
 			if (cageSide.equals("L"))
@@ -280,17 +279,7 @@ public class Spot implements Comparable <Spot>
 		if (spotArea.polylineLevel != null)
 			spotArea.restoreNPoints();
 	}
-	
-	public void setGulpsOptions (BuildSeriesOptions options) 
-	{
-		limitsOptions = options;
-	}
-	
-	public BuildSeriesOptions getGulpsOptions () 
-	{
-		return limitsOptions;
-	}
-	
+
 	private SpotArea getSpotArea (EnumXLSExportType option)
 	{
 		switch (option) 

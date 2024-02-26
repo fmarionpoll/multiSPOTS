@@ -88,7 +88,7 @@ public class XLSExport
 		{ 
 			Spot spot = spotsList.get(t);
 			String	name = spot.getRoiName();
-			int col = getRowIndexFromKymoFileName(name);
+			int col = getRowIndexFromSpotName(name);
 			if (col >= 0) 
 				pt.x = colseries + col;
 			int x = pt.x;
@@ -160,7 +160,6 @@ public class XLSExport
 		switch (xlsExportOption) {
 		case TOPLEVEL_LR:
 		case TOPLEVELDELTA_LR:
-		case SUMGULPS_LR:
 			if (spot.getSpotSide().equals("L")) 
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "L+R");
 			else 
@@ -241,31 +240,23 @@ public class XLSExport
 	{
 		if (!name .contains("spot"))
 			return -1;
-		String num = name.substring(4, 5);
+		String num = name.substring(4, 6);
 		int numFromName = Integer.valueOf(num);
 		return numFromName;
 	}
 	
-	protected int getRowIndexFromKymoFileName(String name) 
+	protected int getRowIndexFromSpotName(String name) 
 	{
-		if (!name .contains("line"))
+		if (!name .contains("spot"))
 			return -1;
-		String num = name.substring(4, 5);
+		String num = name.substring(4, 6);
 		int numFromName = Integer.valueOf(num);
-		if( name.length() > 5) 
-		{
-			String side = name.substring(5, 6);
-			if (side != null) 
-			{
-				if (side .equals("R")) 
-				{
-					numFromName = numFromName* 2;
-					numFromName += 1;
-				}
-				else if (side .equals("L"))
-					numFromName = numFromName* 2;
-			}
-		}
+		
+		String num2 = name.substring(7, 9);
+		int numFromName2 = Integer.valueOf(num2);
+		
+		numFromName = numFromName*2 + numFromName2;
+		
 		return numFromName;
 	}
 		
@@ -280,7 +271,7 @@ public class XLSExport
 	
 	protected Point getCellXCoordinateFromDataName(XLSResults xlsResults, Point pt_main, int colseries) 
 	{
-		int col = getRowIndexFromKymoFileName(xlsResults.name);
+		int col = getRowIndexFromSpotName(xlsResults.name);
 		if (col >= 0)
 			pt_main.x = colseries + col;
 		return pt_main;
@@ -605,8 +596,6 @@ public class XLSExport
 				{
 					case TOPLEVEL:
 					case TOPLEVEL_LR:
-					case SUMGULPS:
-					case SUMGULPS_LR:
 					case TOPLEVELDELTA:
 					case TOPLEVELDELTA_LR:
 						if (options.collateSeries && options.padIntervals && expi.chainToPreviousExperiment != null) 
@@ -785,7 +774,7 @@ public class XLSExport
 	{
 		boolean transpose = options.transpose;
 		pt.y = column_dataArea;
-		int col = getRowIndexFromKymoFileName(row.name);
+		int col = getRowIndexFromSpotName(row.name);
 		pt.x = rowSeries + col; 
 		if (row.valuesOut == null)
 			return;

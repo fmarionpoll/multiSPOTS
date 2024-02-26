@@ -60,7 +60,6 @@ public class Capillary implements Comparable <Capillary>
 	public CapillaryLevel				ptsTop  		= new CapillaryLevel(ID_TOPLEVEL); 
 	public CapillaryLevel				ptsBottom 		= new CapillaryLevel(ID_BOTTOMLEVEL); 
 	public CapillaryLevel				ptsDerivative 	= new CapillaryLevel(ID_DERIVATIVE); 
-	public CapillaryGulps 				ptsGulps 		= new CapillaryGulps(); 
 	
 	public boolean						valid			= true;
 
@@ -130,7 +129,6 @@ public class Capillary implements Comparable <Capillary>
 		
 		limitsOptions	= cap.limitsOptions;
 		
-		ptsGulps.copy(cap.ptsGulps);
 		ptsTop.copy(cap.ptsTop); 
 		ptsBottom.copy(cap.ptsBottom); 
 		ptsDerivative.copy(cap.ptsDerivative); 
@@ -211,7 +209,6 @@ public class Capillary implements Comparable <Capillary>
 		case ISALIVE:
 			value = cageSide + "(L=R)";
 			break;
-		case SUMGULPS_LR:
 		case TOPLEVELDELTA_LR:
 		case TOPLEVEL_LR:
 			if (cageSide.equals("L"))
@@ -276,9 +273,6 @@ public class Capillary implements Comparable <Capillary>
 		case DERIVEDVALUES:
 			yes= (ptsDerivative.isThereAnyMeasuresDone());
 			break;
-		case SUMGULPS:
-			yes= (ptsGulps.isThereAnyMeasuresDone());
-			break;
 		case BOTTOMLEVEL:
 			yes= ptsBottom.isThereAnyMeasuresDone();
 			break;
@@ -297,19 +291,6 @@ public class Capillary implements Comparable <Capillary>
 		{
 		case DERIVEDVALUES:
 			datai = ptsDerivative.getMeasures(seriesBinMs, outputBinMs);
-			break;
-		case SUMGULPS:
-		case SUMGULPS_LR:
-		case NBGULPS:
-		case AMPLITUDEGULPS:
-		case TTOGULP:
-		case TTOGULP_LR:
-		case AUTOCORREL:
-		case AUTOCORREL_LR:
-		case CROSSCORREL:
-		case CROSSCORREL_LR:
-			if (ptsGulps != null)
-				datai = ptsGulps.getMeasuresFromGulps(option, ptsTop.getNPoints(), seriesBinMs, outputBinMs);
 			break;
 		case BOTTOMLEVEL:
 			datai = ptsBottom.getMeasures(seriesBinMs, outputBinMs);
@@ -345,77 +326,7 @@ public class Capillary implements Comparable <Capillary>
 		if (ptsDerivative.polylineLevel != null)
 			ptsDerivative.restoreNPoints();
 	}
-	
-	public void setGulpsOptions (BuildSeriesOptions options) 
-	{
-		limitsOptions = options;
-	}
-	
-	public BuildSeriesOptions getGulpsOptions () 
-	{
-		return limitsOptions;
-	}
-	
-	public void initGulps() 
-	{
-		if (ptsGulps == null) {
-			ptsGulps = new CapillaryGulps();
-			ptsGulps.gulps = new ArrayList <> ();
-		}
-		
-		if (limitsOptions.analyzePartOnly) {
-			int searchFromXFirst = (int) limitsOptions.searchArea.getX();
-			int searchFromXLast = (int) limitsOptions.searchArea.getWidth() + searchFromXFirst;
-			ptsGulps.removeGulpsWithinInterval(searchFromXFirst, searchFromXLast);
-		}
-		else 
-			ptsGulps.gulps.clear();
-	}
-	
-	public void detectGulps() 
-	{
-		int indexPixel = 0;
-		int firstPixel = 1;
-		if (ptsTop.polylineLevel == null)
-			return;
-		int lastPixel = ptsTop.polylineLevel.npoints;
-		if (limitsOptions.analyzePartOnly){
-			firstPixel = (int) limitsOptions.searchArea.getX();
-			lastPixel = (int) limitsOptions.searchArea.getWidth() + firstPixel;
-			
-		} 
-		int threshold = (int) ((limitsOptions.detectGulpsThreshold_uL / volume) * pixels);
-		ArrayList<Point2D> gulpPoints = new ArrayList<Point2D>();
-		int indexLastDetected = -1;
-		
-		for (indexPixel = firstPixel; indexPixel < lastPixel; indexPixel++) 
-		{
-			int derivativevalue = (int) ptsDerivative.polylineLevel.ypoints[indexPixel-1];
-			if (derivativevalue >= threshold) 
-				indexLastDetected = addPointMatchingThreshold(indexPixel, gulpPoints, indexLastDetected); 
-		}
-		if (indexLastDetected > 0)
-			addNewGulp(gulpPoints);
-	}
-	
-	private int addPointMatchingThreshold(int indexPixel, ArrayList<Point2D> gulpPoints, int indexLastDetected) 
-	{
-		if (indexLastDetected > 0 && ((indexPixel - indexLastDetected) > 1)) {
-			if (gulpPoints.size() == 1)
-				gulpPoints.add(new Point2D.Double(indexPixel-1, ptsTop.polylineLevel.ypoints[indexPixel-1]));
-			addNewGulp(gulpPoints);
-			gulpPoints.clear();
-			gulpPoints.add(new Point2D.Double(indexPixel-1, ptsTop.polylineLevel.ypoints[indexPixel-1]));
-		}
-		gulpPoints.add(new Point2D.Double(indexPixel, ptsTop.polylineLevel.ypoints[indexPixel]));
-		return indexPixel;
-	}
-	
-	private void addNewGulp(ArrayList<Point2D> gulpPoints) 
-	{
-		ptsGulps.addNewGulpFromPoints(gulpPoints);
-	}
-	
+
 	public int getLastMeasure(EnumXLSExportType option) 
 	{
 		int lastMeasure = 0;
@@ -423,13 +334,6 @@ public class Capillary implements Comparable <Capillary>
 		{
 		case DERIVEDVALUES:
 			lastMeasure = ptsDerivative.getLastMeasure();
-			break;
-		case SUMGULPS:
-			if (ptsGulps != null) 
-			{
-				List<Integer> datai = ptsGulps.getCumSumFromGulps(ptsTop.getNPoints());
-				lastMeasure = datai.get(datai.size()-1);
-			}
 			break;
 		case BOTTOMLEVEL:
 			lastMeasure = ptsBottom.getLastMeasure();
@@ -450,12 +354,6 @@ public class Capillary implements Comparable <Capillary>
 		case DERIVEDVALUES:
 			lastMeasure = ptsDerivative.getLastDeltaMeasure();
 			break;
-		case SUMGULPS:
-			if (ptsGulps != null) {
-				List<Integer> datai = ptsGulps.getCumSumFromGulps(ptsTop.getNPoints());
-				lastMeasure = datai.get(datai.size()-1) - datai.get(datai.size()-2);
-			}
-			break;
 		case BOTTOMLEVEL:
 			lastMeasure = ptsBottom.getLastDeltaMeasure();
 			break;
@@ -475,12 +373,6 @@ public class Capillary implements Comparable <Capillary>
 		case DERIVEDVALUES:
 			t0Measure = ptsDerivative.getT0Measure();
 			break;
-		case SUMGULPS:
-			if (ptsGulps != null) {
-				List<Integer> datai = ptsGulps.getCumSumFromGulps(ptsTop.getNPoints());
-				t0Measure = datai.get(0);
-			}
-			break;
 		case BOTTOMLEVEL:
 			t0Measure = ptsBottom.getT0Measure();
 			break;
@@ -498,7 +390,6 @@ public class Capillary implements Comparable <Capillary>
 		getROIFromCapillaryLevel(ptsTop, listrois);
 		getROIFromCapillaryLevel(ptsBottom, listrois);
 		getROIFromCapillaryLevel(ptsDerivative, listrois);
-		getROIsFromCapillaryGulps(ptsGulps, listrois);	
 		return listrois;
 	}
 	
@@ -518,42 +409,10 @@ public class Capillary implements Comparable <Capillary>
 		listrois.add( roi);
 	}
 	
-	private void getROIsFromCapillaryGulps(CapillaryGulps capGulps, List<ROI2D> listrois) 
-	{
-		int ngulps = capGulps.gulps.size();
-		if (ngulps == 0)
-			return;
-		
-		ArrayList<ROI2D> rois = new ArrayList<ROI2D> (ngulps);
-		if (capGulps.gulps.size() > 0)
-			for (Polyline2D gulpLine: capGulps.gulps) {
-				ROI2D roi = getROIfromGulp(gulpLine);
-				if (roi != null)
-					rois.add( roi);
-			}
-		
-		listrois.addAll(rois);
-	}
-	
-	private ROI2D getROIfromGulp(Polyline2D gulpLine)
-	{
-		if (gulpLine.npoints == 0)
-			return null;
-		ROI2DPolyLine roi = new ROI2DPolyLine (gulpLine);
-		int startAt = (int) gulpLine.xpoints[0];
-		String name = kymographPrefix + "_gulp_at_" + String.format("%07d", startAt);
-		roi.setName(name);
-		roi.setColor(Color.red);
-		roi.setStroke(1);
-		roi.setT(kymographIndex);
-		return roi;
-	}
-	
 	public void transferROIsToMeasures(List<ROI> listRois) 
 	{
 		ptsTop.transferROIsToMeasures(listRois);
 		ptsBottom.transferROIsToMeasures(listRois);
-		ptsGulps.transferROIsToMeasures(listRois);
 		ptsDerivative.transferROIsToMeasures(listRois);
 	}
 	
@@ -615,7 +474,6 @@ public class Capillary implements Comparable <Capillary>
 		boolean result = ptsTop.loadCapillaryLimitFromXML(node, ID_TOPLEVEL, header) > 0;
 		result |= ptsBottom.loadCapillaryLimitFromXML(node, ID_BOTTOMLEVEL, header) > 0;
 		result |= ptsDerivative.loadCapillaryLimitFromXML(node, ID_DERIVATIVE, header) > 0;
-		result |= ptsGulps.loadGulpsFromXML(node);
 		return result;
 	}
 	
@@ -763,7 +621,6 @@ public class Capillary implements Comparable <Capillary>
 		ptsTop.adjustToImageWidth(imageWidth);
 		ptsBottom.adjustToImageWidth(imageWidth);
 		ptsDerivative.adjustToImageWidth(imageWidth);
-		ptsGulps.gulps.clear(); 
 	}
 
 	public void cropToImageWidth (int imageWidth) 
@@ -771,7 +628,6 @@ public class Capillary implements Comparable <Capillary>
 		ptsTop.cropToImageWidth(imageWidth);
 		ptsBottom.cropToImageWidth(imageWidth);
 		ptsDerivative.cropToImageWidth(imageWidth);
-		ptsGulps.gulps.clear();
 	}
 	
 	// --------------------------------------------
@@ -879,7 +735,6 @@ public class Capillary implements Comparable <Capillary>
 	{
 		StringBuffer sbf = new StringBuffer();
 		String explanation1 = "columns=,name,index, npts,..,.(xi;yi)\n";
-		String explanation2 = "columns=,name,index, n_gulps(i), ..., gulp_i, .npts(j),.,(xij;yij))\n";
 		switch(measureType) {
 			case TOPLEVEL:
 				sbf.append("#,TOPLEVEL," + explanation1);
@@ -889,9 +744,6 @@ public class Capillary implements Comparable <Capillary>
 				break;
 			case TOPDERIVATIVE:
 				sbf.append("#,TOPDERIVATIVE,"+explanation1);
-				break;
-			case GULPS:
-				sbf.append("#,GULPS,"+explanation2);
 				break;
 			default:
 				sbf.append("#,UNDEFINED,------------\n");
@@ -914,9 +766,6 @@ public class Capillary implements Comparable <Capillary>
 				break;
 			case TOPDERIVATIVE:
 				ptsDerivative.cvsExportDataToRow(sbf);
-				break;
-			case GULPS:
-				ptsGulps.csvExportDataToRow(sbf);
 				break;
 			default:
 				break;
@@ -954,9 +803,6 @@ public class Capillary implements Comparable <Capillary>
 			break;
 		case TOPDERIVATIVE:
 			ptsDerivative.csvImportDataFromRow( data, 2); 
-			break;
-		case GULPS:
-			ptsGulps.csvImportDataFromRow(data, 2);
 			break;
 		default:
 			break;
