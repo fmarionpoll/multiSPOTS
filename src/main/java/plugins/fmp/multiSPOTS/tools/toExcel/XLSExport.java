@@ -473,6 +473,7 @@ public class XLSExport
 //					case AREA_SUM:
 //					case AREA_SUMSQ:
 //					case AREA_CNTPIX:
+//					case AREA_MEANGREAY:
 ////					case AREA_NPIXELS_LR:
 ////					case AREA_NPIXELS_DELTA:
 //						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);

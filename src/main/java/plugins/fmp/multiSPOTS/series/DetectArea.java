@@ -10,8 +10,6 @@ import javax.swing.SwingUtilities;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageUtil;
-import icy.painter.Overlay.OverlayPriority;
-import icy.roi.BooleanMask2D;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
@@ -185,8 +183,6 @@ public class DetectArea extends BuildSeries
 	{
 		double sum = 0;
         double sum2 = 0;
-//        double min = 0;
-//        double max = 0;
         int cntPix = 0;
         
         final IcyBufferedImage subImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
@@ -199,8 +195,6 @@ public class DetectArea extends BuildSeries
             if (mask[off])
             {
                 final double value = data[off];
-//                if (value < min) min = value;
-//                if (value > max)  max = value;
                 if (overthreshold)
                 {
                     if (value < threshold) {
@@ -209,19 +203,17 @@ public class DetectArea extends BuildSeries
                         sum2 += value * value;
                     }
                 }
-                else
-                {
-                    if (value > threshold) {
+                else if (value > threshold) {
                         cntPix++;
                         sum += value;
                         sum2 += value * value;
-                    }
                 }
             }
         } 
-        spot.areaSum.limit[t] = (int) sum ;
-        spot.areaSum2.limit[t] = (int) sum2 ;
-        spot.areaCntPix.limit[t] = (int) cntPix;
+        spot.sum.measure[t] = sum ;
+        spot.sum2.measure[t] = sum2 ;
+        spot.cntPix.measure[t] = cntPix;
+        spot.meanGrey.measure[t] = sum / cntPix;
 	}
 	
 	public boolean[] getBoolMap_FromBinaryInt(IcyBufferedImage img) 
@@ -252,9 +244,10 @@ public class DetectArea extends BuildSeries
 		int nFrames = exp.seqCamData.nTotalFrames;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			spot.areaSum .limit 	= new  int [nFrames+1];
-			spot.areaSum2.limit  	= new  int [nFrames+1];
-			spot.areaCntPix.limit  	= new  int [nFrames+1];	
+			spot.sum .measure 	= new  double [nFrames+1];
+			spot.sum2.measure  	= new  double [nFrames+1];
+			spot.cntPix.measure  = new  double [nFrames+1];	
+			spot.meanGrey.measure  = new  double [nFrames+1];	
 		}
 
 	}
@@ -275,8 +268,6 @@ public class DetectArea extends BuildSeries
 			}
 		}
 	}
-	
-
 
 	private void closeViewers() 
 	{

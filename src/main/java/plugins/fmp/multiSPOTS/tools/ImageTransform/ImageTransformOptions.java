@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import icy.image.IcyBufferedImage;
-import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 
 
 public class ImageTransformOptions 
@@ -12,7 +11,6 @@ public class ImageTransformOptions
 	public ImageTransformEnums transformOption; 
 	public IcyBufferedImage backgroundImage = null;
 	public IcyBufferedImage secondImage = null;
-//	public SequenceCamData seqCamData = null;
 	public int npixels_changed = 0;
 	
 	public int xfirst;

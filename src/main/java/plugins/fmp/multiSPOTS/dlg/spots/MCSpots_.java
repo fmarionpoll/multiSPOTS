@@ -14,7 +14,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
-import icy.gui.viewer.Viewer;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
@@ -45,7 +44,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 //	private int 		ID_ADJUST 		= 3;
 //	private int			ID_EDIT			= 2;
 //	private int			ID_FILTER 		= 4;
-	private boolean		editSelected	= false;
+//	private boolean		editSelected	= false;
 	private MultiSPOTS 	parent0 		= null;
 
 	

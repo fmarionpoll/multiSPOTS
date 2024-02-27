@@ -45,6 +45,7 @@ public class XLSExportSpotAreasResults extends XLSExport
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM2);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);
+					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_MEANGREY);
 //					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
 				}
 				

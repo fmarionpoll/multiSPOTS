@@ -35,7 +35,8 @@ public class Graphs extends JPanel implements SequenceListener
 			{
 			EnumXLSExportType.AREA_SUM, 
 			EnumXLSExportType.AREA_SUM2, 
-			EnumXLSExportType.AREA_CNTPIX
+			EnumXLSExportType.AREA_CNTPIX,
+			EnumXLSExportType.AREA_MEANGREY
 			};
 	JComboBox<EnumXLSExportType> resultsComboBox = new JComboBox<EnumXLSExportType> (measures);
 

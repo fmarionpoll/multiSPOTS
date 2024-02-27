@@ -18,14 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.tools.ComboBoxColorRenderer;
-import plugins.fmp.multiSPOTS.tools.EnumColorDistanceType;
 
 
 
@@ -160,18 +156,18 @@ public class ThresholdColors extends JPanel implements PropertyChangeListener {
 	
 	private void pickColor() {
 		
-		boolean bActiveTrapOverlay = false;
+//		boolean bActiveTrapOverlay = false;
 		
 		if (pickColorButton.getText().contains("*") || pickColorButton.getText().contains(":")) {
 			pickColorButton.setBackground(Color.LIGHT_GRAY);
 			pickColorButton.setText(textPickAPixel);
-			bActiveTrapOverlay = false;
+//			bActiveTrapOverlay = false;
 		}
 		else
 		{
 			pickColorButton.setText("*"+textPickAPixel+"*");
 			pickColorButton.setBackground(Color.DARK_GRAY);
-			bActiveTrapOverlay = true;
+//			bActiveTrapOverlay = true;
 		}	
 //		multiSpots.vSequence.setMouseTrapOverlay(bActiveTrapOverlay, pickColorButton, colorPickCombo);
 	}

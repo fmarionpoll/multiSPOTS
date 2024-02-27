@@ -43,9 +43,10 @@ public class Spot implements Comparable <Spot>
 	
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
 	 
-	public SpotArea						areaSum  		= new SpotArea("areaSum"); 
-	public SpotArea						areaSum2  		= new SpotArea("areaSum2"); 
-	public SpotArea						areaCntPix  	= new SpotArea("cntPix"); 	
+	public SpotArea						sum  			= new SpotArea("sum"); 
+	public SpotArea						sum2  			= new SpotArea("sum2"); 
+	public SpotArea						cntPix  		= new SpotArea("cntPix"); 
+	public SpotArea						meanGrey		= new SpotArea("meanGrey"); 
 
 	public boolean						valid			= true;
 
@@ -112,9 +113,10 @@ public class Spot implements Comparable <Spot>
 		
 		limitsOptions	= spot.limitsOptions;
 		
-		areaSum .copy(spot.areaSum);
-		areaSum2 .copy(spot.areaSum2);
-		areaCntPix .copy(spot.areaCntPix);	
+		sum .copy(spot.sum);
+		sum2 .copy(spot.sum2);
+		cntPix .copy(spot.cntPix);	
+		meanGrey .copy(spot.meanGrey);	
 	}
 	
 	public ROI2D getRoi() 
@@ -256,9 +258,10 @@ public class Spot implements Comparable <Spot>
 
 	public void cropMeasuresToNPoints (int npoints) 
 	{
-		cropSpotAreaToNPoints(areaSum , npoints);
-		cropSpotAreaToNPoints(areaSum2 , npoints);
-		cropSpotAreaToNPoints(areaCntPix , npoints);
+		cropSpotAreaToNPoints(sum , npoints);
+		cropSpotAreaToNPoints(sum2 , npoints);
+		cropSpotAreaToNPoints(cntPix , npoints);
+		cropSpotAreaToNPoints(meanGrey , npoints);
 	}
 	
 	private void cropSpotAreaToNPoints(SpotArea spotArea, int npoints) 
@@ -269,9 +272,10 @@ public class Spot implements Comparable <Spot>
 	
 	public void restoreClippedMeasures () 
 	{
-		restoreSpotAreaClippedMeasures( areaSum );
-		restoreSpotAreaClippedMeasures( areaSum2 );
-		restoreSpotAreaClippedMeasures( areaCntPix );
+		restoreSpotAreaClippedMeasures( sum );
+		restoreSpotAreaClippedMeasures( sum2 );
+		restoreSpotAreaClippedMeasures( cntPix );
+		restoreSpotAreaClippedMeasures( meanGrey );
 	}
 	
 	private void restoreSpotAreaClippedMeasures(SpotArea spotArea)
@@ -279,17 +283,29 @@ public class Spot implements Comparable <Spot>
 		if (spotArea.polylineLevel != null)
 			spotArea.restoreNPoints();
 	}
-
+	
+	public void setGulpsOptions (BuildSeriesOptions options) 
+	{
+		limitsOptions = options;
+	}
+	
+	public BuildSeriesOptions getGulpsOptions () 
+	{
+		return limitsOptions;
+	}
+	
 	private SpotArea getSpotArea (EnumXLSExportType option)
 	{
 		switch (option) 
 		{
 		case AREA_SUM:		
-			return areaSum;
+			return sum;
 		case AREA_SUM2:		
-			return areaSum2;
+			return sum2;
 		case AREA_CNTPIX:	
-			return areaCntPix;
+			return cntPix;
+		case AREA_MEANGREY:
+			return meanGrey;
 		default:
 			return null;
 		}
@@ -472,23 +488,26 @@ public class Spot implements Comparable <Spot>
 	
 	public void adjustToImageWidth (int imageWidth) 
 	{
-		areaSum.adjustToImageWidth(imageWidth);
-		areaSum2.adjustToImageWidth(imageWidth);
-		areaCntPix.adjustToImageWidth(imageWidth);
+		sum.adjustToImageWidth(imageWidth);
+		sum2.adjustToImageWidth(imageWidth);
+		cntPix.adjustToImageWidth(imageWidth);
+		meanGrey.adjustToImageWidth(imageWidth);
 	}
 
 	public void cropToImageWidth (int imageWidth) 
 	{
-		areaSum.cropToImageWidth(imageWidth);
-		areaSum2.cropToImageWidth(imageWidth);
-		areaCntPix.cropToImageWidth(imageWidth);
+		sum.cropToImageWidth(imageWidth);
+		sum2.cropToImageWidth(imageWidth);
+		cntPix.cropToImageWidth(imageWidth);
+		meanGrey.cropToImageWidth(imageWidth);
 	}
 	
 	public void transferLimitMeasuresToPolyline() 
 	{
-		areaSum.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
-		areaSum2.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
-		areaCntPix.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+		sum.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+		sum2.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+		cntPix.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+		meanGrey.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
 	}
 	
 	// -----------------------------------------------------------------------------
@@ -547,6 +566,7 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM:
 			case AREA_SUM2:
 			case AREA_CNTPIX:	
+			case AREA_MEANGREY:
 				sbf.append("#,"+measureType.toString()+"," + explanation1);
 				break;
 
@@ -564,9 +584,10 @@ public class Spot implements Comparable <Spot>
 		
 		switch(measureType) 
 		{
-			case AREA_SUM:  	areaSum.cvsExportDataToRow(sbf); break;
-			case AREA_SUM2:  	areaSum2.cvsExportDataToRow(sbf); break;
-			case AREA_CNTPIX:  	areaCntPix.cvsExportDataToRow(sbf); break;
+			case AREA_SUM:  	sum.cvsExportDataToRow(sbf); break;
+			case AREA_SUM2:  	sum2.cvsExportDataToRow(sbf); break;
+			case AREA_CNTPIX:  	cntPix.cvsExportDataToRow(sbf); break;
+			case AREA_MEANGREY: meanGrey.cvsExportDataToRow(sbf); break;
 			default:
 				break;
 		}
@@ -596,9 +617,10 @@ public class Spot implements Comparable <Spot>
 	{
 		switch(measureType) 
 		{
-		case AREA_SUM:  	areaSum.csvImportDataFromRow( data, 2); break;
-		case AREA_SUM2:  	areaSum2.csvImportDataFromRow( data, 2); break;
-		case AREA_CNTPIX:  	areaCntPix.csvImportDataFromRow( data, 2); break;
+		case AREA_SUM:  	sum.csvImportDataFromRow( data, 2); break;
+		case AREA_SUM2:  	sum2.csvImportDataFromRow( data, 2); break;
+		case AREA_CNTPIX:  	cntPix.csvImportDataFromRow( data, 2); break;
+		case AREA_MEANGREY: meanGrey.csvImportDataFromRow( data, 2); break;
 		default:
 			break;
 		}

@@ -188,7 +188,7 @@ public class DetectLevels  extends BuildSeries
 	{
 		for (int ix = firstColumn; ix <= lastColumn; ix++) 
 		{
-			int iy = limits[ix];
+			int iy = (int) limits[ix];
 			int maxVal = transformed1DArray2[ix + iy * imageWidth];
 			int iyVal = iy;
 			for (int irow = iy + delta; irow > iy - delta; irow--) 

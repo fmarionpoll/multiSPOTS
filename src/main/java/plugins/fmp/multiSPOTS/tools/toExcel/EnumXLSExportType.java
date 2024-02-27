@@ -26,7 +26,8 @@ public enum EnumXLSExportType
 	
 	AREA_SUM("AREA_SUM", "sum of pixels over threshold"),
 	AREA_SUM2("AREA_SUM2", "square of sum pixels over threshold"),
-	AREA_CNTPIX("AREA_CNTPIX", "n pixels over threshold");
+	AREA_CNTPIX("AREA_CNTPIX", "n pixels over threshold"),
+	AREA_MEANGREY("AREA_MEANGREY", "average grey value of pixels over threshold"),;
 	
 //	AREA_NPIXELS("area_npixels", "n_pixels"),
 //	AREA_NPIXELS_DELTA("area_delta", "n pixels difference between intervals"),

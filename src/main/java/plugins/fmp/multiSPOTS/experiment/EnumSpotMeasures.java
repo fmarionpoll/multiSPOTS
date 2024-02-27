@@ -11,6 +11,7 @@ public enum EnumSpotMeasures
 	AREA_SUM("AREA_SUM", "sum of pixels over threshold"),
 	AREA_SUM2("AREA_SUM2", "square of sum pixels over threshold"),
 	AREA_CNTPIX("AREA_CNTPIX", "n pixels over threshold"),
+	AREA_MEANGREY("AREA_MEANGREY", "average grey value of pixels over threshold"),
 	ALL ("ALL", "all options");
 	
 	private String label;
