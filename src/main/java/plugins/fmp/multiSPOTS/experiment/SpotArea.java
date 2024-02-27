@@ -340,9 +340,9 @@ public class SpotArea
 		if (npoints > 0) {
 			for (int i = 0; i < polylineLevel.npoints; i++)
 	        {
-	            sbf.append(StringUtil.toString((int) polylineLevel.xpoints[i]));
+	            sbf.append(StringUtil.toString((double) polylineLevel.xpoints[i]));
 	            sbf.append(",");
-	            sbf.append(StringUtil.toString((int) polylineLevel.ypoints[i]));
+	            sbf.append(StringUtil.toString((double) polylineLevel.ypoints[i]));
 	            sbf.append(",");
 	        }
 		}
@@ -356,13 +356,13 @@ public class SpotArea
 		
 		int npoints = Integer.valueOf(data[startAt]);
 		if (npoints > 0) {
-			int[] x = new int[npoints];
-			int[] y = new int[npoints];
+			double[] x = new double[npoints];
+			double[] y = new double[npoints];
 			int offset = startAt+1;
 			for (int i = 0; i < npoints; i++) { 
-				x[i] = Integer.valueOf(data[offset]);
+				x[i] = Double.valueOf(data[offset]);
 				offset++;
-				y[i] = Integer.valueOf(data[offset]);
+				y[i] = Double.valueOf(data[offset]);
 				offset++;
 			}
 			polylineLevel = new Level2D(x, y, npoints);
