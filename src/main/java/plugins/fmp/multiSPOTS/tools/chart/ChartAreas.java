@@ -90,7 +90,7 @@ public class ChartAreas extends IcyFrame
 		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, option, subtractEvaporation);
 		
 		int icage = 0;
-        final NumberAxis yAxis = new NumberAxis("n pixels");
+        final NumberAxis yAxis = new NumberAxis(option.toUnit());
         yAxis.setAutoRangeIncludesZero(false);  
 //        yAxis.setInverted(true);
         final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);

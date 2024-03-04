@@ -33,7 +33,6 @@ public class Infos extends JPanel
 	private Table 		dialog 				= null;
 	private List <Cage> cagesArrayCopy 		= new ArrayList<Cage>();
 	
-	JRadioButton useCapillaries = new JRadioButton("capillary");
 	JRadioButton useCages = new JRadioButton("cages");
 	JRadioButton useManual = new JRadioButton("manual entry");
 	ButtonGroup useGroup = new ButtonGroup();
@@ -55,11 +54,9 @@ public class Infos extends JPanel
 		
 		JPanel panel0a = new JPanel(flowLayout);
 		panel0a.add(new JLabel("Use as reference: "));
-		panel0a.add(useCapillaries);
 		panel0a.add(useCages);
 		panel0a.add(useManual);
 		add(panel0a);
-		useGroup.add(useCapillaries);
 		useGroup.add(useCages);
 		useGroup.add(useManual);
 		useCages.setSelected(true);
@@ -98,15 +95,6 @@ public class Infos extends JPanel
 				}
 			}});
 		
-		useCapillaries.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
-				lengthSpinner.setValue(23.);
-				measureButton.setText("get length 1rst capillary");
-				measureButton.setVisible(true);
-			}});
-		
 		useCages.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
@@ -127,19 +115,8 @@ public class Infos extends JPanel
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
-				if (useCapillaries.isSelected()) {
-					measureFirstCapillary();
-				}
-				else if (useCages.isSelected()) {
 					measureCagesSpan();
-				}
 			}});
-	}
-	
-	void measureFirstCapillary() {
-		int npixels = parent0.paneSpots.tabInfos.getLengthFirstCapillaryROI();
-		if (npixels > 0) 
-			pixelsSpinner.setValue(npixels);
 	}
 	
 	void measureCagesSpan() {
