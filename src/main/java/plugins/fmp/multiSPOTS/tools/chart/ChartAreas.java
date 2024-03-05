@@ -2,6 +2,7 @@ package plugins.fmp.multiSPOTS.tools.chart;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -55,19 +56,18 @@ public class ChartAreas extends IcyFrame
 	private double ymin = 0;
 	private double xmax = 0;
 	private List<JFreeChart> xyChartList  = new ArrayList <JFreeChart>();
-	private String title;
+
 
 	//----------------------------------------
 	
 	public void createChartPanel(MultiSPOTS parent, String cstitle) 
 	{
-		title = cstitle;
 		parent0 = parent;
 		
 		mainChartPanel = new JPanel(); 
 		mainChartPanel.setLayout( new BoxLayout( mainChartPanel, BoxLayout.LINE_AXIS ) );
 		
-		mainChartFrame = GuiUtil.generateTitleFrame(title, new JPanel(), new Dimension(300, 70), true, true, true, true);	    
+		mainChartFrame = GuiUtil.generateTitleFrame(cstitle, new JPanel(), new Dimension(300, 70), true, true, true, true);	    
 		mainChartFrame.add(mainChartPanel);
 	}
 
@@ -81,7 +81,7 @@ public class ChartAreas extends IcyFrame
 		pt = new Point(rectv.x, rectv.y);
 	}
 	
-	public void displayData(Experiment exp, EnumXLSExportType option, String title, boolean subtractEvaporation) 
+	public void displayData(Experiment exp, EnumXLSExportType option, boolean subtractEvaporation) 
 	{
 		xyChartList.clear();
 		ymax = 0;
@@ -116,7 +116,9 @@ public class ChartAreas extends IcyFrame
 			icage++;
 		}
 		
-        JFreeChart chart = new JFreeChart(title, null, combinedXYPlot, true);
+        JFreeChart chart = new JFreeChart(option.toTitle(), null, combinedXYPlot, true);
+        Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
+        chart.getTitle().setFont(font);
 
         int width= 800;
         int height= 300;
@@ -127,7 +129,8 @@ public class ChartAreas extends IcyFrame
         boolean useBuffer= true;
         
         final ChartPanel panel = new ChartPanel(chart, 
-        		width, height, minimumDrawWidth, minimumDrawHeight, maximumDrawWidth, maximumDrawHeight, useBuffer,
+        		width, height, minimumDrawWidth, minimumDrawHeight, maximumDrawWidth, maximumDrawHeight, 
+        		useBuffer,
         		true, true, true, false, true); // boolean properties, boolean save, boolean print, boolean zoom, boolean tooltips)
         panel.addChartMouseListener(new ChartMouseListener() {
 		    public void chartMouseClicked(ChartMouseEvent e) {

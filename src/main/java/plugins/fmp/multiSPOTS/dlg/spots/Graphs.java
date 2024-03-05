@@ -113,20 +113,19 @@ public class Graphs extends JPanel implements SequenceListener
 		EnumXLSExportType option = (EnumXLSExportType) resultsComboBox.getSelectedItem();
 		if (isThereAnyDataToDisplay(exp, option))  
 		{
-			plotAreaPixels = plotToChart(exp, option.toTitle(), option, plotAreaPixels, rectv);
+			plotAreaPixels = plotToChart(exp, option, plotAreaPixels, rectv);
 			rectv.translate(dx, dy);
 		}
 	}
 	
-	private ChartAreas plotToChart(Experiment exp, String title, EnumXLSExportType option, 
-											ChartAreas iChart, Rectangle rectv ) 
+	private ChartAreas plotToChart(Experiment exp, EnumXLSExportType option, ChartAreas iChart, Rectangle rectv ) 
 	{	
 		if (iChart != null) 
 			iChart.mainChartFrame.dispose();
 		iChart = new ChartAreas();
-		iChart.createChartPanel(parent0, title);
+		iChart.createChartPanel(parent0, "Spots measures");
 		iChart.setUpperLeftLocation(rectv);
-		iChart.displayData(exp, option, title, false);
+		iChart.displayData(exp, option, false);
 		iChart.mainChartFrame.toFront();
 		iChart.mainChartFrame.requestFocus();
 		return iChart;
