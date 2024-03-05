@@ -18,7 +18,7 @@ public class XLSExportCapillariesResults extends XLSExport
 		
 		boolean loadCapillaries = true;
 		boolean loadDrosoTrack =  options.onlyalive;
-		expList.loadListOfMeasuresFromAllExperiments(loadCapillaries, loadDrosoTrack);
+		expList.loadListOfMeasuresFromAllExperiments(loadCapillaries, false, loadDrosoTrack);
 		expList.chainExperimentsUsingKymoIndexes(options.collateSeries);
 		expList.setFirstImageForAllExperiments(options.collateSeries);
 		expAll = expList.get_MsTime_of_StartAndEnd_AllExperiments(options);
@@ -32,7 +32,7 @@ public class XLSExportCapillariesResults extends XLSExport
 			int column = 1;
 			int iSeries = 0;
 			workbook = xlsInitWorkbook();
-			for (int index = options.firstExp; index <= options.lastExp; index++) 
+			for (int index = options.expIndexFirst; index <= options.expIndexLast; index++) 
 			{
 				Experiment exp = expList.getItemAt(index);
 				if (exp.chainToPreviousExperiment != null)

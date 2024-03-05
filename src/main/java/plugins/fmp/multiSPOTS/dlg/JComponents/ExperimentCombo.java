@@ -105,7 +105,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 		return expAll;
 	}
 		
-	public boolean loadListOfMeasuresFromAllExperiments(boolean loadCapillaries, boolean loadDrosoTrack) 
+	public boolean loadListOfMeasuresFromAllExperiments(boolean loadCapillaries, boolean loadSpots, boolean loadDrosoTrack) 
 	{
 		ProgressFrame progress = new ProgressFrame("Load experiment(s) parameters");
 		int nexpts = getItemCount();
@@ -134,7 +134,9 @@ public class ExperimentCombo extends JComboBox<Experiment>
 					exp.setBinSubDirectory(expListBinSubDirectory);
 					if (expListBinSubDirectory == null)
 						exp.checkKymosDirectory(exp.getBinSubDirectory());
-					exp.openMeasures(loadCapillaries, loadDrosoTrack);
+					if (loadCapillaries) exp.openCapillarieMeasures();
+					if (loadSpots) exp.openSpotsMeasures();
+					if (loadDrosoTrack) exp.openPositionsMeasures();
 					if (maxSizeOfSpotsArrays < exp.capillaries.capillariesList.size())
 					{
 						maxSizeOfSpotsArrays = exp.capillaries.capillariesList.size();

@@ -258,7 +258,7 @@ public class Experiment
 			seqReference.close();
 	}
 	
-	public boolean openMeasures(boolean loadCapillaries, boolean loadDrosoPositions) 
+	public boolean openCapillarieMeasures() 
 	{
 		if (seqCamData == null) 
 			seqCamData = new SequenceCamData();
@@ -268,15 +268,41 @@ public class Experiment
 		
 		if (seqKymos == null)
 			seqKymos = new SequenceKymos();
-		if (loadCapillaries) 
-		{
-			loadMCCapillaries_Only();
-			if (!capillaries.load_Measures(getKymosBinFullDirectory())) 
-				return false;
-		}
 
-		if (loadDrosoPositions)
-			xmlReadDrosoTrack(null);
+		loadMCCapillaries_Only();
+		if (!capillaries.load_Measures(getKymosBinFullDirectory())) 
+			return false;
+		
+		return true;
+	}
+	
+	public boolean openPositionsMeasures() 
+	{
+		if (seqCamData == null) 
+			seqCamData = new SequenceCamData();
+		loadMCExperiment ();
+		
+		getFileIntervalsFromSeqCamData();
+		
+		if (seqKymos == null)
+			seqKymos = new SequenceKymos();
+
+
+		return xmlReadDrosoTrack(null);
+	}
+	
+	public boolean openSpotsMeasures() 
+	{
+		if (seqCamData == null) 
+			seqCamData = new SequenceCamData();
+		loadMCExperiment ();
+		
+		getFileIntervalsFromSeqCamData();
+		
+		loadMCSpots_Only();
+		if (!spotsArray.load_Measures(getKymosBinFullDirectory())) 
+			return false;
+	
 		return true;
 	}
 	

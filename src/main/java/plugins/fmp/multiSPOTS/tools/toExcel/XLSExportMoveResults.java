@@ -33,7 +33,7 @@ public class XLSExportMoveResults extends XLSExport
 
 		boolean loadCapillaries = true;
 		boolean loadDrosoTrack = true; 
-		expList.loadListOfMeasuresFromAllExperiments(loadCapillaries, loadDrosoTrack);
+		expList.loadListOfMeasuresFromAllExperiments(loadCapillaries, false, loadDrosoTrack);
 //		expList.chainExperimentsUsingCamIndexes(options.collateSeries);
 		expList.chainExperimentsUsingKymoIndexes(options.collateSeries);
 		expList.setFirstImageForAllExperiments(options.collateSeries);
@@ -48,7 +48,7 @@ public class XLSExportMoveResults extends XLSExport
 			int column = 1;
 			int iSeries = 0;
 			workbook = xlsInitWorkbook();
-			for (int index = options.firstExp; index <= options.lastExp; index++) 
+			for (int index = options.expIndexFirst; index <= options.expIndexLast; index++) 
 			{
 				Experiment exp = expList.getItemAt(index);
 				if (exp.chainToPreviousExperiment != null)

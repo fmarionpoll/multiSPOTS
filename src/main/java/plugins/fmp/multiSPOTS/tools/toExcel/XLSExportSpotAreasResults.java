@@ -15,10 +15,8 @@ public class XLSExportSpotAreasResults extends XLSExport
 		System.out.println("XLSExpoportSpotAreas:exportToFile() - start output");
 		options = opt;
 		expList = options.expList;
-		
-		boolean loadCapillaries = true;
-		boolean loadDrosoTrack =  options.onlyalive;
-		expList.loadListOfMeasuresFromAllExperiments(loadCapillaries, loadDrosoTrack);
+
+		expList.loadListOfMeasuresFromAllExperiments(false, true, options.onlyalive);
 		expList.chainExperimentsUsingKymoIndexes(options.collateSeries);
 		expList.setFirstImageForAllExperiments(options.collateSeries);
 		expAll = expList.get_MsTime_of_StartAndEnd_AllExperiments(options);
@@ -32,7 +30,7 @@ public class XLSExportSpotAreasResults extends XLSExport
 			int column = 1;
 			int iSeries = 0;
 			workbook = xlsInitWorkbook();
-			for (int index = options.firstExp; index <= options.lastExp; index++) 
+			for (int index = options.expIndexFirst; index <= options.expIndexLast; index++) 
 			{
 				Experiment exp = expList.getItemAt(index);
 				if (exp.chainToPreviousExperiment != null)
@@ -40,21 +38,17 @@ public class XLSExportSpotAreasResults extends XLSExport
 				progress.setMessage("Export experiment "+ (index+1) +" of "+ nbexpts);
 				String charSeries = CellReference.convertNumToColString(iSeries);
 				
-//				int collast = column;
+				int collast = column;
 				if (options.spotAreas) 
 				{	
-					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
+					collast = getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM2);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_MEANGREY);
 					if (options.lrPI ) 		
 						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
 				}
-				
-				if (!options.collateSeries || exp.chainToPreviousExperiment == null)
-					column += expList.maxSizeOfSpotsArrays +2;
-//				column = collast +2;
-				System.out.println("column="+column);
+				column = collast +2;
 				iSeries++;
 				progress.incPosition();
 			}

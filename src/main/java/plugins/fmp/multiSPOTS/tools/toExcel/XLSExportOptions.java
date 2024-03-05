@@ -48,8 +48,8 @@ public class XLSExportOptions
 	public boolean 	collateSeries		= false;
 	public boolean  padIntervals		= true;
 	
-	public int 		firstExp 			= -1;
-	public int 		lastExp 			= -1;
+	public int 		expIndexFirst 			= -1;
+	public int 		expIndexLast 			= -1;
 	public ExperimentCombo expList 		= null;
 
 	// internal parameters
