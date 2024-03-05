@@ -40,20 +40,21 @@ public class XLSExportSpotAreasResults extends XLSExport
 				progress.setMessage("Export experiment "+ (index+1) +" of "+ nbexpts);
 				String charSeries = CellReference.convertNumToColString(iSeries);
 				
+//				int collast = column;
 				if (options.spotAreas) 
 				{	
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM2);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_MEANGREY);
-//					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
+					if (options.lrPI ) 		
+						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
 				}
-				
-//				if (options.lrPI && options.spotAreas) 		
-//					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
 				
 				if (!options.collateSeries || exp.chainToPreviousExperiment == null)
 					column += expList.maxSizeOfSpotsArrays +2;
+//				column = collast +2;
+				System.out.println("column="+column);
 				iSeries++;
 				progress.incPosition();
 			}

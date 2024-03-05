@@ -2,37 +2,37 @@ package plugins.fmp.multiSPOTS.tools.toExcel;
 
 public enum EnumXLSExportType 
 {
-	TOPRAW ("topraw", "volume (ul)", "capillary level"),
-	TOPLEVEL ("toplevel", "volume (ul)", "capillary top level"),
-	BOTTOMLEVEL ("bottomlevel", "volume (ul)", "capillary bottom level"), 
-	DERIVEDVALUES ("derivative", "volume (ul)", "derivative of capillary level (tn - tn-1)"), 
+	TOPRAW ("topraw", "volume (ul)", "Capillary level"),
+	TOPLEVEL ("toplevel", "volume (ul)", "Capillary top level"),
+	BOTTOMLEVEL ("bottomlevel", "volume (ul)", "Capillary bottom level"), 
+	DERIVEDVALUES ("derivative", "volume (ul)", "Derivative of capillary level (tn - tn-1)"), 
 	
-	TOPLEVEL_LR ("toplevel_L+R", "volume (ul)", "sum of consumption of left and right capillaries"), 
-	TOPLEVELDELTA ("topdelta", "volume (ul)", "delta value of top level"),
-	TOPLEVELDELTA_LR ("topdelta_L+R", "volume (ul)", "difference of total consumtion (tn - tn-1)"),
+	TOPLEVEL_LR ("toplevel_L+R", "volume (ul)", "Sum of consumption of left and right capillaries"), 
+	TOPLEVELDELTA ("topdelta", "volume (ul)", "Delta value of top level"),
+	TOPLEVELDELTA_LR ("topdelta_L+R", "volume (ul)", "Difference of total consumtion (tn - tn-1)"),
 
-	AUTOCORREL("autocorrel", "n observ", "autocorrelation"),
-	AUTOCORREL_LR("autocorrel_LR", "n observ", "autocorrelation of sum L+R"),
-	CROSSCORREL("crosscorrel", "n observ", "cross-correlation"),
-	CROSSCORREL_LR("crosscorrel_LR", "n observ", "cross-correlation L+R"),
+	AUTOCORREL("autocorrel", "n observ", "Autocorrelation"),
+	AUTOCORREL_LR("autocorrel_LR", "n observ", "Autocorrelation of sum L+R"),
+	CROSSCORREL("crosscorrel", "n observ", "Cross-correlation"),
+	CROSSCORREL_LR("crosscorrel_LR", "n observ", "Cross-correlation L+R"),
 	
 	XYIMAGE ("xy-image", "mm", "xy image"), 
 	XYTOPCAGE ("xy-topcage", "mm", "xy top cage"), 
 	XYTIPCAPS ("xy-tipcaps", "mm", "xy tip capillaries"), 
-	ELLIPSEAXES ("ellipse-axes", "mm", "ellipse of axes"),
-	DISTANCE ("distance", "mm", "distance between consecutive points"), 
-	ISALIVE ("_alive", "yes/no", "fly alive or not"), 
-	SLEEP ("sleep", "yes, no", "fly sleeping"),
+	ELLIPSEAXES ("ellipse-axes", "mm", "Ellipse of axes"),
+	DISTANCE ("distance", "mm", "Distance between consecutive points"), 
+	ISALIVE ("_alive", "yes/no", "Fly alive or not"), 
+	SLEEP ("sleep", "yes, no", "Fly sleeping"),
 	
-	AREA_SUM("AREA_SUM", "grey value", "Grey value sum of pixels over threshold"),
-	AREA_SUM2("AREA_SUM2", "grey value*2", "Grey value of sum*sum of pixels over threshold"),
-	AREA_CNTPIX("AREA_CNTPIX", "n pixels", "N pixels over threshold"),
-	AREA_MEANGREY("AREA_MEANGREY", "total grey value / n pixels", "Average grey value of pixels over threshold"),;
+	AREA_SUM("AREA_SUM", "grey value", "Spot grey value sum of pixels over threshold"),
+	AREA_SUM2("AREA_SUM2", "grey value*2", "Spot grey value of sum*sum of pixels over threshold"),
+	AREA_CNTPIX("AREA_CNTPIX", "n pixels", "Spot n pixels over threshold"),
+	AREA_MEANGREY("AREA_MEANGREY", "total grey value / n pixels", "Spot average grey value of pixels over threshold"),
 	
 //	AREA_NPIXELS("area_npixels", "n_pixels"),
 //	AREA_NPIXELS_DELTA("area_delta", "n pixels difference between intervals"),
 //	AREA_NPIXELS_RELATIVE("area_rel", "%initial surface"),
-//	AREA_NPIXELS_LR ("area_L+R", "n_pixels"),
+	AREA_NPIXELS_LR ("area_L+R", "n_pixels", "SUM and PI");
 //	AREA_DENSITY("area_density", "grey density in detection area");
 	
 	private String label;
