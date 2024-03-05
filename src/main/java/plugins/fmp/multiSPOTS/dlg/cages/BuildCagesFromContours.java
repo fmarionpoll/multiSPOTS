@@ -195,7 +195,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 	private void createROIsFromSelectedPolygon(Experiment exp) 
 	{
 		exp.cages.removeAllRoiCagesFromSequence(exp.seqCamData);
-		int t = exp.seqCamData.currentFrame;
+		int t = exp.seqCamData.frameCurrent;
 		IcyBufferedImage img0 = IcyBufferedImageUtil.convertToType(
 				overlayThreshold.getTransformedImage(t), 
 				DataType.INT, 

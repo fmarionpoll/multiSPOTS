@@ -109,8 +109,8 @@ public class BuildBackground extends BuildSeries
 		final int t_first = (int) ((first_ms - exp.cages.detectFirst_Ms)/exp.camImageBin_ms);
 		
 		int t_last = options.backgroundFirst + options.backgroundNFrames;
-		if (t_last > exp.seqCamData.nTotalFrames)
-			t_last = exp.seqCamData.nTotalFrames;
+		if (t_last > exp.seqCamData.frameNTotal)
+			t_last = exp.seqCamData.frameNTotal;
 
 		for (int t = t_first + 1; t <= t_last && !stopFlag; t ++) 
 		{

@@ -195,7 +195,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 			return;
 		if (ov == null) {
 			ov = new OverlayThreshold(seqCamData.seq);
-			int t = exp.seqCamData.currentFrame;
+			int t = exp.seqCamData.frameCurrent;
 			exp.seqCamData.refImage = IcyBufferedImageUtil.getCopy(exp.seqCamData.getSeqImage(t, 0));
 		}
 		else 
@@ -234,7 +234,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		options.backgroundThreshold	= (int) backgroundThresholdSpinner.getValue();		
 		options.backgroundNFrames = (int) backgroundNFramesSpinner.getValue();	
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		options.backgroundFirst = (int) exp.seqCamData.currentFrame;
+		options.backgroundFirst = (int) exp.seqCamData.frameCurrent;
 		
 		options.forceBuildBackground = true;
 		options.detectFlies		= false;

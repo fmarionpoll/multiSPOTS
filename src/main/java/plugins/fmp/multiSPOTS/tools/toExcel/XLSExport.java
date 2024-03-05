@@ -446,7 +446,7 @@ public class XLSExport
 			
 			if (nOutputFrames <= 1) 
 			{
-				nOutputFrames = expi.seqCamData.nTotalFrames;
+				nOutputFrames = expi.seqCamData.frameNTotal;
 				exportError(expi, nOutputFrames);
 			}
 		}

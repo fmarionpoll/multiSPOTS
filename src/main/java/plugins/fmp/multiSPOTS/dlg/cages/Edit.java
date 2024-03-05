@@ -151,7 +151,7 @@ public class Edit extends JPanel
 	
 	boolean findFirst(Experiment exp) 
 	{
-		int dataSize = exp.seqCamData.nTotalFrames;
+		int dataSize = exp.seqCamData.frameNTotal;
 		foundT = -1;
 		foundCage = -1;
 		for (int frame = 0; frame < dataSize; frame++) 
@@ -181,7 +181,7 @@ public class Edit extends JPanel
 	void findAllMissedPoints(Experiment exp) 
 	{
 		foundCombo.removeAllItems();
-		int dataSize = exp.seqCamData.nTotalFrames;
+		int dataSize = exp.seqCamData.frameNTotal;
 		for (int frame = 0; frame < dataSize; frame++) 
 		{
 			for (Cage cage: exp.cages.cagesList) 

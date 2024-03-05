@@ -80,11 +80,11 @@ public class FlyDetect1 extends BuildSeries
 		{
 			final int t_previous = t_current;
 			final int t_from = (int) ((index_ms - exp.camImageFirst_ms)/exp.camImageBin_ms);
-			if (t_from >= exp.seqCamData.nTotalFrames)
+			if (t_from >= exp.seqCamData.frameNTotal)
 				continue;
 			
 			t_current = t_from;
-			String title = "Frame #"+ t_from + "/" + exp.seqCamData.nTotalFrames;
+			String title = "Frame #"+ t_from + "/" + exp.seqCamData.frameNTotal;
 			progressBar.setMessage(title);
 	
 			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t_from));
