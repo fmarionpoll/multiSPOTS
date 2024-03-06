@@ -326,8 +326,8 @@ public class Spot implements Comparable <Spot>
 		case AREA_CNTPIX:
 		case AREA_CNTPIX_LR:
 			return cntPix;
-		case AREA_MEANGREY:
-		case AREA_MEANGREY_LR:
+		case AREA_AVGGREY:
+		case AREA_AVGGREY_LR:
 			return meanGrey;
 		default:
 			return null;
