@@ -804,6 +804,7 @@ public class Experiment
 		case CAP_STIM:
 		case CAP_CONC:
 			addCapillariesValues(fieldEnumCode, textList);
+			addSpotsValues(fieldEnumCode, textList);
 			break;
 		default:
 			break;
@@ -871,6 +872,8 @@ public class Experiment
 		case CAP_CONC:
 			if(replaceCapillariesValuesIfEqualOld(fieldEnumCode, oldValue, newValue));
 				saveMCCapillaries_Only();
+			if(replaceSpotsValuesIfEqualOld(fieldEnumCode, oldValue, newValue));
+				saveMCSpots_Only();	
 			break;
 		default:
 			break;
@@ -1123,6 +1126,22 @@ public class Experiment
 		return flag;
 	}
 	
+	private boolean replaceSpotsValuesIfEqualOld(EnumXLSColumnHeader fieldEnumCode, String oldValue, String newValue)
+	{
+		if (spotsArray.spotsList.size() == 0)
+			loadMCSpots_Only();
+		boolean flag = false;
+		for (Spot spot:  spotsArray.spotsList) 
+		{
+			if (spot.getSpotField(fieldEnumCode) .equals(oldValue))
+			{
+				spot.setSpotField(fieldEnumCode, newValue);
+				flag = true;
+			}
+		}
+		return flag;
+	}
+	
 	private String concatenateExptDirectoryWithSubpathAndName(String subpath, String name) 
 	{
 		if (subpath != null)
@@ -1190,6 +1209,14 @@ public class Experiment
 			loadMCCapillaries_Only();
 		for (Capillary cap:  capillaries.capillariesList) 
 			addValue(cap.getCapillaryField(fieldEnumCode), textList);
+	}
+	
+	private void addSpotsValues(EnumXLSColumnHeader fieldEnumCode, List<String> textList)
+	{
+		if (spotsArray.spotsList.size() == 0)
+			loadMCSpots_Only();
+		for (Spot spot : spotsArray.spotsList) 
+			addValue(spot.getSpotField(fieldEnumCode), textList);
 	}
 	
 	private void addValue(String text, List<String> textList) {
