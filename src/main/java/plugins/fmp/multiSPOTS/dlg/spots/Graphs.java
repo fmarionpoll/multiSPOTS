@@ -34,7 +34,6 @@ public class Graphs extends JPanel implements SequenceListener
 	EnumXLSExportType[] measures = new EnumXLSExportType[] 
 			{
 			EnumXLSExportType.AREA_SUM, 
-			EnumXLSExportType.AREA_SUM2, 
 			EnumXLSExportType.AREA_CNTPIX,
 			EnumXLSExportType.AREA_MEANGREY
 			};
@@ -79,7 +78,7 @@ public class Graphs extends JPanel implements SequenceListener
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
-				Experiment exp = (Experiment)  parent0.expListCombo.getSelectedItem();
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) 
 				{
 					displayGraphsPanels(exp);

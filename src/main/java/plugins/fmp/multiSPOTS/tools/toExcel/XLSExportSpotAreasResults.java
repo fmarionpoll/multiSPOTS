@@ -42,11 +42,13 @@ public class XLSExportSpotAreasResults extends XLSExport
 				if (options.spotAreas) 
 				{	
 					collast = getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
-					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM2);
+//					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM2);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_MEANGREY);
-					if (options.lrPI ) 		
-						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_NPIXELS_LR);
+					if (options.lrPI ) 
+					{
+						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX_LR);
+					}
 				}
 				column = collast +2;
 				iSeries++;

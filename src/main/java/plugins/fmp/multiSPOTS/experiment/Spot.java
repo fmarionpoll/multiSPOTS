@@ -318,12 +318,16 @@ public class Spot implements Comparable <Spot>
 		switch (option) 
 		{
 		case AREA_SUM:		
+		case AREA_SUM_LR:
 			return sum;
-		case AREA_SUM2:		
+		case AREA_SUM2:	
+//		case AREA_SUM2_LR:
 			return sum2;
-		case AREA_CNTPIX:	
+		case AREA_CNTPIX:
+		case AREA_CNTPIX_LR:
 			return cntPix;
 		case AREA_MEANGREY:
+		case AREA_MEANGREY_LR:
 			return meanGrey;
 		default:
 			return null;

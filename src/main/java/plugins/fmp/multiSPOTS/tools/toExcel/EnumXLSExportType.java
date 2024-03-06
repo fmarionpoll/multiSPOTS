@@ -32,7 +32,9 @@ public enum EnumXLSExportType
 //	AREA_NPIXELS("area_npixels", "n_pixels"),
 //	AREA_NPIXELS_DELTA("area_delta", "n pixels difference between intervals"),
 //	AREA_NPIXELS_RELATIVE("area_rel", "%initial surface"),
-	AREA_NPIXELS_LR ("area_L+R", "n_pixels", "SUM and PI");
+	AREA_SUM_LR ("area sumgrey_L+R", "sum grey", "SUM and PI"),
+	AREA_CNTPIX_LR ("area cntpix_L+R", "n_pixels", "SUM and PI"),
+	AREA_MEANGREY_LR ("area meangrey_L+R", "meangrey", "SUM and PI");
 //	AREA_DENSITY("area_density", "grey density in detection area");
 	
 	private String label;
