@@ -312,8 +312,9 @@ public class XLSExport
 		return sheet;
 	}
 	
-	protected int getDataAndExport(Experiment exp, int col0, String charSeries,EnumXLSExportType exportType) 
+	protected int getDataAndExport(Experiment exp, int col0, String charSeries, EnumXLSExportType exportType) 
 	{	
+		options.exportType = exportType;
 		XLSResultsArray rowListForOneExp = getSpotsDataFromOneExperimentSeries(exp, options);
 		XSSFSheet sheet = xlsInitSheet(exportType.toString(), exportType);
 		int colmax = xlsExportResultsArrayToSheet(rowListForOneExp, 
@@ -469,11 +470,7 @@ public class XLSExport
 			{
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
-				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, 
-						xlsExportType, 
-						nOutputFrames, 
-						exp.binDuration_ms, 
-						options);
+				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
 //				switch (xlsExportType) 
 //				{
 //					case AREA_NPIXELS:
@@ -529,11 +526,7 @@ public class XLSExport
 //						break;
 //	
 //					default:
-						resultsArrayList.getSpotsArrayResults1(expi.spotsArray,  
-								options.exportType,  
-								nOutputFrames,  
-								exp.binDuration_ms, 
-								options);
+						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
 //						break;
 //				}
 				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);

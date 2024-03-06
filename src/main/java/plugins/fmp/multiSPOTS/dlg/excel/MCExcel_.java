@@ -146,17 +146,12 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 
 		options.spotAreas 		= true;
 		options.sum 			= tabAreas.sumCheckBox.isSelected(); 
-		options.sum2   			= tabAreas.sum2CheckBox.isSelected();
-		options.nPixels 		= tabAreas.nPixelsCheckBox.isSelected();  
-		
-		options.topLevel 		= tabAreas.sumCheckBox.isSelected(); 
-		options.topLevelDelta   = tabAreas.sum2CheckBox.isSelected();
-		options.bottomLevel 	= tabAreas.nPixelsCheckBox.isSelected();  
+		options.nPixels 		= tabAreas.nPixelsCheckBox.isSelected();   
 		
 		options.lrPI 			= tabAreas.lrPICheckBox.isSelected(); 
 		options.lrPIThreshold 	= (double) tabAreas.lrPIThresholdJSpinner.getValue();
 		options.sumPerCage 		= tabAreas.sumPerCageCheckBox.isSelected();
-		options.subtractT0 				= tabAreas.t0CheckBox.isSelected();
+		options.relativeToT0 	= tabAreas.t0CheckBox.isSelected();
 		options.subtractEvaporation = false;
 		getCommonOptions(options);
 		return options;

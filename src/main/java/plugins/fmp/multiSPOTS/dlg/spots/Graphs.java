@@ -39,7 +39,7 @@ public class Graphs extends JPanel implements SequenceListener
 			EnumXLSExportType.AREA_AVGGREY
 			};
 	JComboBox<EnumXLSExportType> exportTypeComboBox = new JComboBox<EnumXLSExportType> (measures);
-	private JCheckBox 	t0Checkbox 	= new JCheckBox("relative to t0", false);
+	private JCheckBox 	t0Checkbox 	= new JCheckBox("relative to t0", true);
 	
 	
 	

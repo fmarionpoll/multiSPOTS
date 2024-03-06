@@ -441,18 +441,18 @@ public class SpotsArray
 	
 	public double getScalingFactorToPhysicalUnits(EnumXLSExportType xlsoption) 
 	{
-		double scalingFactorToPhysicalUnits; 
-		switch (xlsoption) 
-		{
-			case AUTOCORREL:
-			case CROSSCORREL:
-			case CROSSCORREL_LR:
-				scalingFactorToPhysicalUnits = 1.;
-				break;
-			default:
-				scalingFactorToPhysicalUnits = spotsDescription.volume / spotsDescription.pixels;
-				break;
-		}
+		double scalingFactorToPhysicalUnits = 1.; 
+//		switch (xlsoption) 
+//		{
+//			case AUTOCORREL:
+//			case CROSSCORREL:
+//			case CROSSCORREL_LR:
+//				scalingFactorToPhysicalUnits = 1.;
+//				break;
+//			default:
+//				scalingFactorToPhysicalUnits = spotsDescription.volume / spotsDescription.pixels;
+//				break;
+//		}
 		return scalingFactorToPhysicalUnits;
 	}
 	

@@ -22,14 +22,10 @@ public class SpotsAreas extends JPanel
 	JButton 	exportToXLSButton 	= new JButton("save XLS (v1)");
 	JButton 	exportToXLSButton2 	= new JButton("save XLS");
 	
-	JCheckBox 	sumCheckBox 	= new JCheckBox("sum", true);
-	JCheckBox 	sum2CheckBox 	= new JCheckBox("sum x sum", true);
-	JCheckBox 	nPixelsCheckBox = new JCheckBox("n pixels", true);
-	
-	
-	JCheckBox	t0CheckBox			= new JCheckBox("t-t0", false);
-	
-	
+	JCheckBox 	sumCheckBox 		= new JCheckBox("sum", true);
+	JCheckBox 	nPixelsCheckBox 	= new JCheckBox("n pixels", true);
+	JCheckBox	t0CheckBox			= new JCheckBox("Value(t)/Value(t0)", false);
+		
 	JCheckBox 	lrPICheckBox 		= new JCheckBox("L+R & pref index", false);
 	JLabel		lrPILabel			= new JLabel("compute PI only if L+R > ");
 	JCheckBox 	sumPerCageCheckBox 	= new JCheckBox("sum/cage", false);
@@ -44,7 +40,6 @@ public class SpotsAreas extends JPanel
 		flowLayout0.setVgap(0);
 		JPanel panel0 = new JPanel(flowLayout0);
 		panel0.add(sumCheckBox);
-		panel0.add(sum2CheckBox);
 		panel0.add(nPixelsCheckBox);
 		panel0.add(t0CheckBox);
 		add(panel0);

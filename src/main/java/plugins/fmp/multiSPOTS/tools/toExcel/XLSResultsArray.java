@@ -229,14 +229,8 @@ public class XLSResultsArray
 		buildDataForPass2(xlsExportOptions);
 	}
 	
-	public void getSpotsArrayResults1( 
-			SpotsArray spotsArray,  
-			EnumXLSExportType exportType, 
-			int nOutputFrames, 
-			long kymoBinCol_Ms, 
-			XLSExportOptions xlsExportOptions) 
+	public void getSpotsArrayResults1(SpotsArray spotsArray, int nOutputFrames, long kymoBinCol_Ms, XLSExportOptions xlsExportOptions) 
 	{
-		xlsExportOptions.exportType = exportType;
 		buildSpotsDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions);
 		buildDataForPass2(xlsExportOptions);
 	}
@@ -276,6 +270,7 @@ public class XLSResultsArray
 												spot.cageID, 
 												xlsExportOptions.exportType, 
 												nOutputFrames);
+			
 			results.dataValues = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, 
 												kymoBinCol_Ms, 
 												xlsExportOptions.buildExcelStepMs);
