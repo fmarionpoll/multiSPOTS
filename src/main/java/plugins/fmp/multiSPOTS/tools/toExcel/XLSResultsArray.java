@@ -275,7 +275,7 @@ public class XLSResultsArray
 												kymoBinCol_Ms, 
 												xlsExportOptions.buildExcelStepMs);
 			if (xlsExportOptions.relativeToT0) 
-				results.relativeT0();
+				results.relativeToT0();
 			results.transferMeasuresToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
 			resultsList.add(results);
 		}

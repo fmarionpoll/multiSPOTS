@@ -120,15 +120,15 @@ public class XLSResults
 		return dataValues;
 	}
 	
-	public List<Double> relativeT0 () 
+	public List<Double> relativeToT0 () 
 	{
 		if (dataValues == null || dataValues.size() < 1)
 			return null;
-		double item0 = dataValues.get(0);
+		double value0 = dataValues.get(0);
 		for (int index = 0; index < dataValues.size(); index++) 
 		{
 			double value = dataValues.get(index);
-			dataValues.set(index, (value/item0));
+			dataValues.set(index, ((value0-value)/value0));
 		}
 		return dataValues;
 	}
