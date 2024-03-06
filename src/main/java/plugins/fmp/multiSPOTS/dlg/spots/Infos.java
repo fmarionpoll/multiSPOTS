@@ -33,13 +33,10 @@ public class Infos extends JPanel
 	{
 		setLayout(capLayout);
 		this.parent0 = parent0;
-				
-		JPanel panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 1));
-		add(panel1);
 		
-		JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 1));
-		panel2.add( editSpotsButton);
-		add(panel2);
+		JPanel panel01 = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 1));
+		panel01.add( editSpotsButton);
+		add(panel01);
 
 
 		defineActionListeners();

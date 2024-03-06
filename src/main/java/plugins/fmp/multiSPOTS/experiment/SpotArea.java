@@ -330,7 +330,7 @@ public class SpotArea
 	
 	// ----------------------------------------------------------------------
 	
-	public boolean cvsExportDataToRow(StringBuffer sbf) 
+	public boolean cvsExportXYDataToRow(StringBuffer sbf) 
 	{
 		int npoints = 0;
 		if (polylineLevel != null && polylineLevel.npoints > 0)
@@ -349,7 +349,24 @@ public class SpotArea
 		return true;
 	}
 	
-	public boolean csvImportDataFromRow(String[] data, int startAt) 
+	public boolean cvsExportYDataToRow(StringBuffer sbf) 
+	{
+		int npoints = 0;
+		if (polylineLevel != null && polylineLevel.npoints > 0)
+			npoints = polylineLevel.npoints; 
+			
+		sbf.append(Integer.toString(npoints)+ ",");
+		if (npoints > 0) {
+			for (int i = 0; i < polylineLevel.npoints; i++)
+	        {
+	            sbf.append(StringUtil.toString((double) polylineLevel.ypoints[i]));
+	            sbf.append(",");
+	        }
+		}
+		return true;
+	}
+	
+	public boolean csvImportXYDataFromRow(String[] data, int startAt) 
 	{
 		if (data.length < startAt)
 			return false;
@@ -370,4 +387,24 @@ public class SpotArea
 		return true;
 	}
 	
+	
+	public boolean csvImportYDataFromRow(String[] data, int startAt) 
+	{
+		if (data.length < startAt)
+			return false;
+		
+		int npoints = Integer.valueOf(data[startAt]);
+		if (npoints > 0) {
+			double[] x = new double[npoints];
+			double[] y = new double[npoints];
+			int offset = startAt+1;
+			for (int i = 0; i < npoints; i++) { 
+				x[i] = i;
+				y[i] = Double.valueOf(data[offset]);
+				offset++;
+			}
+			polylineLevel = new Level2D(x, y, npoints);
+		}
+		return true;
+	}
 }

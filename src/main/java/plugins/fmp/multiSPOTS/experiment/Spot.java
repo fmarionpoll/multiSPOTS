@@ -153,7 +153,7 @@ public class Spot implements Comparable <Spot>
 	
  	public String getSpotSide() 
 	{
-		return roi.getName().substring(roi.getName().length() -1);
+		return roi.getName().substring(roi.getName().length() -2);
 	}
 	
 	public static String replace_LR_with_12(String name) 
@@ -186,7 +186,7 @@ public class Spot implements Comparable <Spot>
 			break;
 		case TOPLEVELDELTA_LR:
 		case TOPLEVEL_LR:
-			if (cageSide.equals("L"))
+			if (cageSide.equals("00"))
 				value = "sum";
 			else
 				value = "PI";
@@ -194,7 +194,7 @@ public class Spot implements Comparable <Spot>
 		case XYIMAGE:
 		case XYTOPCAGE:
 		case XYTIPCAPS:
-			if (cageSide .equals ("L"))
+			if (cageSide .equals ("00"))
 				value = "x";
 			else
 				value = "y";
@@ -292,6 +292,25 @@ public class Spot implements Comparable <Spot>
 	public BuildSeriesOptions getGulpsOptions () 
 	{
 		return limitsOptions;
+	}
+	
+	public void computeSpotAreaMeanGrey(int cntPixel) 
+	{
+		int nFrames = sum.measure.length;
+		for (int i = 0; i < nFrames; i++)
+		{
+			meanGrey.measure[i] = sum.measure[i]/cntPixel;
+		}
+	}
+	
+	public void computeSpotAreaSum2() 
+	{
+		int nFrames = sum.measure.length;
+		for (int i = 0; i < nFrames; i++)
+		{
+			double value = sum.measure[i];
+			sum2.measure[i] = value*value;
+		}
 	}
 	
 	private SpotArea getSpotArea (EnumXLSExportType option)
@@ -560,7 +579,7 @@ public class Spot implements Comparable <Spot>
 	public String csvExportMeasures_SectionHeader(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		String explanation1 = "\n name,index, npts,x0,y0, x1, y1, etc\n";
+		String explanation1 = "\n name,index, npts, y0, y1, etc\n";
 		switch(measureType) 
 		{
 			case AREA_SUM:
@@ -584,10 +603,10 @@ public class Spot implements Comparable <Spot>
 		
 		switch(measureType) 
 		{
-			case AREA_SUM:  	sum.cvsExportDataToRow(sbf); break;
-			case AREA_SUM2:  	sum2.cvsExportDataToRow(sbf); break;
-			case AREA_CNTPIX:  	cntPix.cvsExportDataToRow(sbf); break;
-			case AREA_MEANGREY: meanGrey.cvsExportDataToRow(sbf); break;
+			case AREA_SUM:  	sum.cvsExportYDataToRow(sbf); break;
+			case AREA_SUM2:  	sum2.cvsExportYDataToRow(sbf); break;
+			case AREA_CNTPIX:  	cntPix.cvsExportYDataToRow(sbf); break;
+			case AREA_MEANGREY: meanGrey.cvsExportYDataToRow(sbf); break;
 			default:
 				break;
 		}
@@ -613,16 +632,31 @@ public class Spot implements Comparable <Spot>
 		cageSide = data[i]; 
 	}
 		
-	public void csvImportMeasures_OneType(EnumSpotMeasures measureType, String[] data) 
+	public void csvImportMeasures_OneType(EnumSpotMeasures measureType, String[] data, boolean x, boolean y) 
 	{
-		switch(measureType) 
+		if (x && y) 
 		{
-		case AREA_SUM:  	sum.csvImportDataFromRow( data, 2); break;
-		case AREA_SUM2:  	sum2.csvImportDataFromRow( data, 2); break;
-		case AREA_CNTPIX:  	cntPix.csvImportDataFromRow( data, 2); break;
-		case AREA_MEANGREY: meanGrey.csvImportDataFromRow( data, 2); break;
-		default:
-			break;
+			switch(measureType) 
+			{
+			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
+			case AREA_SUM2:  	sum2.csvImportXYDataFromRow( data, 2); break;
+			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
+			case AREA_MEANGREY: meanGrey.csvImportXYDataFromRow( data, 2); break;
+			default:
+				break;
+			}
+		}
+		else if (!x && y) 
+		{
+			switch(measureType) 
+			{
+			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
+			case AREA_SUM2:  	sum2.csvImportYDataFromRow( data, 2); break;
+			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
+			case AREA_MEANGREY: meanGrey.csvImportYDataFromRow( data, 2); break;
+			default:
+				break;
+			}
 		}
 	}
 		

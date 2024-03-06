@@ -148,15 +148,15 @@ public class SpotsArray
 			spot.loadFromXML_SpotOnly(nodecapillary);
 			if (spotsDescription.grouping == 2 && (spot.stimulus != null && spot.stimulus.equals(".."))) 
 			{
-				if (spot.getSpotSide().equals("R")) 
-				{
-					spot.stimulus = spotsDescription.stimulusR;
-					spot.concentration = spotsDescription.concentrationR;
-				} 
-				else 
+				if (spot.getSpotSide().equals("00")) 
 				{
 					spot.stimulus = spotsDescription.stimulusL;
 					spot.concentration = spotsDescription.concentrationL;
+				} 
+				else 
+				{
+					spot.stimulus = spotsDescription.stimulusR;
+					spot.concentration = spotsDescription.concentrationR;
 				}
 			}
 			if (!isPresent(spot))
@@ -479,10 +479,26 @@ public class SpotsArray
 		spotsList.clear();
 	}
 	
+	public void computeMeanGrey(int t) 
+	{
+		for (Spot spot: spotsList) {
+			int cntPix = (int) spot.cntPix.measure[t];
+			spot.computeSpotAreaMeanGrey(cntPix);	
+		}
+	}
+	
+	public void computeSum2() 
+	{
+		for (Spot spot: spotsList) {
+			spot.computeSpotAreaSum2();	
+		}
+	}
+	
 	public void transferLimitMeasuresToPolyline() 
 	{
-		for (Spot spot: spotsList) 
+		for (Spot spot: spotsList) {
 			spot.transferLimitMeasuresToPolyline();	
+		}
 	}
 	
 	// --------------------------------
@@ -585,6 +601,8 @@ public class SpotsArray
 		String row;
 		try {
 			row = csvReader.readLine();
+			boolean y = true;
+			boolean x = row.contains("x0");
 			while ((row = csvReader.readLine()) != null) {
 				String[] data = row.split(",");
 				if (data[0] .equals( "#")) 
@@ -593,7 +611,7 @@ public class SpotsArray
 				Spot spot = getSpotFromRoiName(data[0]);
 				if (spot == null)
 					spot = new Spot();
-				spot.csvImportMeasures_OneType(measureType, data);
+				spot.csvImportMeasures_OneType(measureType, data, x, y);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

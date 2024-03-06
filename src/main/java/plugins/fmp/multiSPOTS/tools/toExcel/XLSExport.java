@@ -133,10 +133,10 @@ public class XLSExport
 	
 	private String desc_getChoiceTestType(List<Spot> spotsList, int t)
 	{
-		Spot cap = spotsList.get(t);
+		Spot spot = spotsList.get(t);
 		String choiceText = "..";
-		String side = cap.getSpotSide();
-		if (side.contains("L"))
+		String side = spot.getSpotSide();
+		if (side.contains("00"))
 			t = t+1;
 		else
 			t = t-1;
@@ -145,8 +145,8 @@ public class XLSExport
 			String otherSide = othercap.getSpotSide();
 			if (!otherSide .contains(side))
 			{
-				if (cap.stimulus.equals(othercap.stimulus)
-					&& cap.concentration.equals(othercap.concentration))
+				if (spot.stimulus.equals(othercap.stimulus)
+					&& spot.concentration.equals(othercap.concentration))
 					choiceText  = "no-choice";
 				else
 					choiceText = "choice";
@@ -160,7 +160,7 @@ public class XLSExport
 		switch (xlsExportOption) {
 		case TOPLEVEL_LR:
 		case TOPLEVELDELTA_LR:
-			if (spot.getSpotSide().equals("L")) 
+			if (spot.getSpotSide().equals("00")) 
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "L+R");
 			else 
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "(L-R)/(L+R)");

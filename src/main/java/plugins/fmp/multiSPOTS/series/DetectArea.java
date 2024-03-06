@@ -77,7 +77,8 @@ public class DetectArea extends BuildSeries
 		String directory = exp.getDirectoryToSaveResults(); 
 		if (directory == null)
 			return;
-		
+		exp.spotsArray.computeMeanGrey(0);
+		exp.spotsArray.computeSum2();
 		exp.spotsArray.transferLimitMeasuresToPolyline(); 
 		exp.saveMCExperiment();
 		exp.saveSpotsMeasures();
@@ -182,7 +183,6 @@ public class DetectArea extends BuildSeries
 	private void measureValues(IcyBufferedImage sourceImage, Spot spot, int t, int threshold, boolean overthreshold)
 	{
 		double sum = 0;
-        double sum2 = 0;
         int cntPix = 0;
         
         final IcyBufferedImage subImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
@@ -200,20 +200,16 @@ public class DetectArea extends BuildSeries
                     if (value < threshold) {
                         cntPix++;
                         sum += value;
-                        sum2 += value * value;
                     }
                 }
                 else if (value > threshold) {
                         cntPix++;
                         sum += value;
-                        sum2 += value * value;
                 }
             }
         } 
         spot.sum.measure[t] = sum ;
-        spot.sum2.measure[t] = sum2 ;
         spot.cntPix.measure[t] = cntPix;
-        spot.meanGrey.measure[t] = sum / cntPix;
 	}
 	
 	public boolean[] getBoolMap_FromBinaryInt(IcyBufferedImage img) 
@@ -249,7 +245,6 @@ public class DetectArea extends BuildSeries
 			spot.cntPix.measure  = new  double [nFrames+1];	
 			spot.meanGrey.measure  = new  double [nFrames+1];	
 		}
-
 	}
 	
 	private void initMasks2DToMeasureAreas(Experiment exp) 
