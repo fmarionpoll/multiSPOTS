@@ -215,7 +215,7 @@ public class ChartLevels extends IcyFrame
 	{
 		XLSExportOptions options = new XLSExportOptions();
 		options.buildExcelStepMs = 60000;
-		options.t0 = true;
+		options.subtractT0 = true;
 		options.subtractEvaporation = subtractEvaporation;
 		
 		XLSExport xlsExport = new XLSExport();

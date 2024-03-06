@@ -312,24 +312,28 @@ public class XLSExport
 		return sheet;
 	}
 	
-	protected int getDataAndExport(Experiment exp, int col0, String charSeries, EnumXLSExportType xlsExport) 
+	protected int getDataAndExport(Experiment exp, int col0, String charSeries,EnumXLSExportType exportType) 
 	{	
-		XLSResultsArray rowListForOneExp = getSpotsDataFromOneExperimentSeries(exp, xlsExport);
-		XSSFSheet sheet = xlsInitSheet(xlsExport.toString(), xlsExport);
-		int colmax = xlsExportResultsArrayToSheet(rowListForOneExp, sheet, xlsExport, col0, charSeries);
+		XLSResultsArray rowListForOneExp = getSpotsDataFromOneExperimentSeries(exp, options);
+		XSSFSheet sheet = xlsInitSheet(exportType.toString(), exportType);
+		int colmax = xlsExportResultsArrayToSheet(rowListForOneExp, 
+				sheet, 
+				exportType, 
+				col0, 
+				charSeries);
 		
 		if (options.onlyalive) 
 		{
 			trimDeadsFromArrayList(rowListForOneExp, exp);
-			sheet = xlsInitSheet(xlsExport.toString()+"_alive", xlsExport);
-			xlsExportResultsArrayToSheet(rowListForOneExp, sheet, xlsExport, col0, charSeries);
+			sheet = xlsInitSheet(exportType.toString()+"_alive", exportType);
+			xlsExportResultsArrayToSheet(rowListForOneExp, sheet, exportType, col0, charSeries);
 		}
 		
 		if (options.sumPerCage) 
 		{
 			combineDataForOneCage(rowListForOneExp, exp);
-			sheet = xlsInitSheet(xlsExport.toString()+"_cage", xlsExport);
-			xlsExportResultsArrayToSheet(rowListForOneExp, sheet, xlsExport, col0, charSeries);
+			sheet = xlsInitSheet(exportType.toString()+"_cage", exportType);
+			xlsExportResultsArrayToSheet(rowListForOneExp, sheet, exportType, col0, charSeries);
 		}
 		
 		return colmax;
@@ -414,13 +418,13 @@ public class XLSExport
 		return getSpotDataFromOneExperimentSeries(exp, exportType);
 	}
 	
-	public XLSResultsArray getSpotsDataFromOneExperiment(Experiment exp, EnumXLSExportType exportType, XLSExportOptions options) 
+	public XLSResultsArray getSpotsDataFromOneExperiment(Experiment exp, XLSExportOptions options) 
 	{
 		this.options = options;
 		expAll = new Experiment();
 		expAll.camImageLast_ms = exp.camImageLast_ms;
 		expAll.camImageFirst_ms = exp.camImageFirst_ms;
-		return getSpotsDataFromOneExperimentSeries(exp, exportType);
+		return getSpotsDataFromOneExperimentSeries(exp, options);
 	}
 	
 	private void exportError (Experiment expi, int nOutputFrames) 
@@ -465,7 +469,11 @@ public class XLSExport
 			{
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
-				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
+				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, 
+						xlsExportType, 
+						nOutputFrames, 
+						exp.binDuration_ms, 
+						options);
 //				switch (xlsExportType) 
 //				{
 //					case AREA_NPIXELS:
@@ -502,9 +510,9 @@ public class XLSExport
 		return rowListForOneExp;
 	}
 	
-	private XLSResultsArray getSpotsDataFromOneExperimentSeries(Experiment exp, EnumXLSExportType xlsExportType) 
+	private XLSResultsArray getSpotsDataFromOneExperimentSeries(Experiment exp, XLSExportOptions options) 
 	{	
-		XLSResultsArray rowListForOneExp =  getSpotsDescriptorsForOneExperiment (exp, xlsExportType);
+		XLSResultsArray rowListForOneExp =  getSpotsDescriptorsForOneExperiment (exp, options.exportType);
 		Experiment expi = exp.getFirstChainedExperiment(true); 
 		while (expi != null) 
 		{
@@ -521,7 +529,11 @@ public class XLSExport
 //						break;
 //	
 //					default:
-						resultsArrayList.getSpotsArrayResults1(expi.spotsArray,  xlsExportType,  nOutputFrames,  exp.binDuration_ms, options);
+						resultsArrayList.getSpotsArrayResults1(expi.spotsArray,  
+								options.exportType,  
+								nOutputFrames,  
+								exp.binDuration_ms, 
+								options);
 //						break;
 //				}
 				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);

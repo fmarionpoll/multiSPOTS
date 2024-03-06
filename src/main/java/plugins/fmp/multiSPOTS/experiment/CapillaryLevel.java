@@ -116,17 +116,17 @@ public class CapillaryLevel
 		return (polylineLevel != null && polylineLevel.npoints > 0);
 	}
 	
-	ArrayList<Integer> getMeasures(long seriesBinMs, long outputBinMs) 
+	ArrayList<Double> getMeasures(long seriesBinMs, long outputBinMs) 
 	{
 		if (polylineLevel == null || polylineLevel.npoints == 0)
 			return null;
 		long maxMs = (polylineLevel.ypoints.length -1) * seriesBinMs;
 		long npoints = (maxMs / outputBinMs)+1;
-		ArrayList<Integer> arrayInt = new ArrayList<Integer>((int) npoints);
+		ArrayList<Double> arrayInt = new ArrayList<Double>((int) npoints);
 		for (double iMs = 0; iMs <= maxMs; iMs += outputBinMs) 
 		{
 			int index = (int) (iMs  / seriesBinMs);
-			arrayInt.add((int) polylineLevel.ypoints[index]);
+			arrayInt.add(polylineLevel.ypoints[index]);
 		}
 		return arrayInt;
 	}

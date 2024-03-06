@@ -19,7 +19,7 @@ public class XLSResults
 	public int					nflies		= 1;
 	public int 					cageID		= 0;
 	public EnumXLSExportType 	exportType 	= null;
-	public ArrayList<Integer > 	dataInt 	= null;
+	public ArrayList<Double > 	dataValues 	= null;
 	public double []			valuesOut	= null;
 	
 	
@@ -69,30 +69,30 @@ public class XLSResults
 	
 	void clearAll() 
 	{
-		dataInt = null;
+		dataValues = null;
 		valuesOut = null;
 		nflies = 0;
 	}
 	
-	public void transferDataIntToValuesOut(double scalingFactorToPhysicalUnits, EnumXLSExportType xlsExport) 
+	public void transferMeasuresToValuesOut(double scalingFactorToPhysicalUnits, EnumXLSExportType xlsExport) 
 	{
-		if (dimension == 0 || dataInt == null || dataInt.size() < 1)
+		if (dimension == 0 || dataValues == null || dataValues.size() < 1)
 			return;
 		
 		boolean removeZeros = false;	
-		int len = Math.min(dimension,  dataInt.size());
+		int len = Math.min(dimension,  dataValues.size());
 		if (removeZeros) 
 		{
 			for (int i = 0; i < len; i++) 
 			{
-				int ivalue = dataInt.get(i);
+				double ivalue = dataValues.get(i);
 				valuesOut[i] = (ivalue == 0? Double.NaN: ivalue) * scalingFactorToPhysicalUnits;
 			}
 		}
 		else
 		{
 			for (int i = 0; i < len; i++)
-				valuesOut[i] = dataInt.get(i) * scalingFactorToPhysicalUnits;
+				valuesOut[i] = dataValues.get(i) * scalingFactorToPhysicalUnits;
 		}
 	}
 	
@@ -107,17 +107,30 @@ public class XLSResults
 			valuesOut[i] = sourceRow.valuesOut[i];
 	}
 	
-	public List<Integer> subtractT0 () 
+	public List<Double> subtractT0 () 
 	{
-		if (dataInt == null || dataInt.size() < 1)
+		if (dataValues == null || dataValues.size() < 1)
 			return null;
-		int item0 = dataInt.get(0);
-		for (int index= 0; index < dataInt.size(); index++) 
+		double item0 = dataValues.get(0);
+		for (int index = 0; index < dataValues.size(); index++) 
 		{
-			int value = dataInt.get(index);
-			dataInt.set(index, value-item0);
+			double value = dataValues.get(index);
+			dataValues.set(index, (value-item0));
 		}
-		return dataInt;
+		return dataValues;
+	}
+	
+	public List<Double> relativeT0 () 
+	{
+		if (dataValues == null || dataValues.size() < 1)
+			return null;
+		double item0 = dataValues.get(0);
+		for (int index = 0; index < dataValues.size(); index++) 
+		{
+			double value = dataValues.get(index);
+			dataValues.set(index, (value/item0));
+		}
+		return dataValues;
 	}
 	
 	boolean subtractDeltaT(int arrayStep, int binStep) {

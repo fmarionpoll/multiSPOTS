@@ -284,9 +284,9 @@ public class Capillary implements Comparable <Capillary>
 		return yes;
 	}
 		
-	public ArrayList<Integer> getCapillaryMeasuresForXLSPass1(EnumXLSExportType option, long seriesBinMs, long outputBinMs) 
+	public ArrayList<Double> getCapillaryMeasuresForXLSPass1(EnumXLSExportType option, long seriesBinMs, long outputBinMs) 
 	{
-		ArrayList<Integer> datai = null;
+		ArrayList<Double> datai = null;
 		switch (option) 
 		{
 		case DERIVEDVALUES:

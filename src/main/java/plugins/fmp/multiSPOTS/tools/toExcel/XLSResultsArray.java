@@ -192,7 +192,7 @@ public class XLSResultsArray
 			XLSExportOptions xlsExportOptions) 
 	{
 		xlsExportOptions.exportType = exportType;
-		buildDataForPass1(capillaries, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, false);
+		buildCapillaryDataForPass1(capillaries, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, false);
 		if (xlsExportOptions.compensateEvaporation)
 			subtractEvaporation();
 		buildDataForPass2(xlsExportOptions);
@@ -206,7 +206,7 @@ public class XLSResultsArray
 			XLSExportOptions xlsExportOptions) 
 	{
 		xlsExportOptions.exportType = exportType;
-		buildDataForPass1(caps, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, xlsExportOptions.t0);
+		buildCapillaryDataForPass1(caps, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, xlsExportOptions.subtractT0);
 		if (xlsExportOptions.compensateEvaporation)
 			subtractEvaporation();
 		buildDataForPass2(xlsExportOptions);
@@ -220,7 +220,10 @@ public class XLSResultsArray
 			XLSExportOptions xlsExportOptions) 
 	{
 		xlsExportOptions.exportType = exportType;
-		buildDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, xlsExportOptions.t0);
+		buildSpotsDataForPass1(spotsArray, 
+				nOutputFrames, 
+				kymoBinCol_Ms, 
+				xlsExportOptions);
 		if (xlsExportOptions.compensateEvaporation)
 			subtractEvaporation();
 		buildDataForPass2(xlsExportOptions);
@@ -234,11 +237,11 @@ public class XLSResultsArray
 			XLSExportOptions xlsExportOptions) 
 	{
 		xlsExportOptions.exportType = exportType;
-		buildDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, false);
+		buildSpotsDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions);
 		buildDataForPass2(xlsExportOptions);
 	}
 	
-	private void buildDataForPass1(CapillariesArray capillaries,
+	private void buildCapillaryDataForPass1(CapillariesArray capillaries,
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
 			XLSExportOptions xlsExportOptions, 
@@ -249,19 +252,20 @@ public class XLSResultsArray
 		{
 			checkIfSameStimulusAndConcentration(cap);
 			XLSResults results = new XLSResults(cap.getRoiName(), cap.nFlies, cap.cageID, xlsExportOptions.exportType, nOutputFrames);
-			results.dataInt = cap.getCapillaryMeasuresForXLSPass1(xlsExportOptions.exportType, kymoBinCol_Ms, xlsExportOptions.buildExcelStepMs);
+			results.dataValues = cap.getCapillaryMeasuresForXLSPass1(xlsExportOptions.exportType, 
+					kymoBinCol_Ms, 
+					xlsExportOptions.buildExcelStepMs);
 			if (subtractT0) 
 				results.subtractT0();
-			results.transferDataIntToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
+			results.transferMeasuresToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
 			resultsList.add(results);
 		}
 	}
 	
-	private void buildDataForPass1(SpotsArray spotsArray,
+	private void buildSpotsDataForPass1(SpotsArray spotsArray,
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
-			XLSExportOptions xlsExportOptions, 
-			boolean subtractT0)
+			XLSExportOptions xlsExportOptions)
 	{
 		double scalingFactorToPhysicalUnits = spotsArray.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
 		for (Spot spot: spotsArray.spotsList) 
@@ -272,12 +276,12 @@ public class XLSResultsArray
 												spot.cageID, 
 												xlsExportOptions.exportType, 
 												nOutputFrames);
-			results.dataInt = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, 
+			results.dataValues = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, 
 												kymoBinCol_Ms, 
 												xlsExportOptions.buildExcelStepMs);
-			if (subtractT0) 
-				results.subtractT0();
-			results.transferDataIntToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
+			if (xlsExportOptions.relativeToT0) 
+				results.relativeT0();
+			results.transferMeasuresToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
 			resultsList.add(results);
 		}
 	}

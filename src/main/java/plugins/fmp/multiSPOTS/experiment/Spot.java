@@ -248,7 +248,7 @@ public class Spot implements Comparable <Spot>
 		return false;
 	}
 		
-	public ArrayList<Integer> getSpotMeasuresForXLSPass1(EnumXLSExportType option, long seriesBinMs, long outputBinMs) 
+	public ArrayList<Double> getSpotMeasuresForXLSPass1(EnumXLSExportType option, long seriesBinMs, long outputBinMs) 
 	{
 		SpotArea spotArea = getSpotArea(option);
 		if (spotArea != null)

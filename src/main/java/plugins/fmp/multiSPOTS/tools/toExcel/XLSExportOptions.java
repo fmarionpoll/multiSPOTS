@@ -32,7 +32,8 @@ public class XLSExportOptions
 	public int		nbinscorrelation	= 40;
 	
 	public boolean 	sumPerCage 			= true;
-	public boolean 	t0					= true;
+	public boolean 	subtractT0			= true;
+	public boolean	relativeToT0		= true;
 	public boolean 	onlyalive			= true;
 	public boolean  subtractEvaporation = true;
 

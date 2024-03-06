@@ -34,7 +34,6 @@ import icy.gui.util.GuiUtil;
 import icy.gui.viewer.Viewer;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExport;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSResults;
@@ -81,16 +80,16 @@ public class ChartAreas extends IcyFrame
 		pt = new Point(rectv.x, rectv.y);
 	}
 	
-	public void displayData(Experiment exp, EnumXLSExportType option, boolean subtractEvaporation) 
+	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) 
 	{
 		xyChartList.clear();
 		ymax = 0;
 		ymin = 0;
 		flagMaxMinSet = false;
-		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, option, subtractEvaporation);
+		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
 		
 		int icage = 0;
-        final NumberAxis yAxis = new NumberAxis(option.toUnit());
+        final NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
         yAxis.setAutoRangeIncludesZero(false);  
 //        yAxis.setInverted(true);
         final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
@@ -116,7 +115,7 @@ public class ChartAreas extends IcyFrame
 			icage++;
 		}
 		
-        JFreeChart chart = new JFreeChart(option.toTitle(), null, combinedXYPlot, true);
+        JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, true);
         Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
         chart.getTitle().setFont(font);
 
@@ -183,9 +182,9 @@ public class ChartAreas extends IcyFrame
         	v.setPositionT(isel);
 	}
 
-	private List<XYSeriesCollection> getDataArrays(Experiment exp, EnumXLSExportType exportType, boolean subtractEvaporation) 
+	private List<XYSeriesCollection> getDataArrays(Experiment exp, XLSExportOptions xlsExportOptions) 
 	{
-		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, exportType, subtractEvaporation);
+		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, xlsExportOptions);
 		XYSeriesCollection xySeriesCollection = null;
 		int oldcage = -1;
 		
@@ -206,15 +205,10 @@ public class ChartAreas extends IcyFrame
 		return xyList;
 	}
 	
-	private XLSResultsArray getDataAsResultsArray(Experiment exp, EnumXLSExportType exportType, boolean subtractEvaporation)
+	private XLSResultsArray getDataAsResultsArray(Experiment exp, XLSExportOptions xlsExportOptions)
 	{
-		XLSExportOptions options = new XLSExportOptions();
-		options.buildExcelStepMs = 60000;
-		options.t0 = true;
-		options.subtractEvaporation = subtractEvaporation;
-		
 		XLSExport xlsExport = new XLSExport();
-		return xlsExport.getSpotsDataFromOneExperiment(exp, exportType, options);
+		return xlsExport.getSpotsDataFromOneExperiment(exp, xlsExportOptions);
 	}
 
 	private void updateGlobalMaxMin() 

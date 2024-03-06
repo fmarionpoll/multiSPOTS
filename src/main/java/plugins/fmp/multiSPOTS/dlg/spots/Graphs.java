@@ -7,11 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import icy.gui.util.GuiUtil;
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
@@ -21,6 +21,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.chart.ChartAreas;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
+import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 
 public class Graphs extends JPanel implements SequenceListener
 {
@@ -37,8 +38,9 @@ public class Graphs extends JPanel implements SequenceListener
 			EnumXLSExportType.AREA_CNTPIX,
 			EnumXLSExportType.AREA_AVGGREY
 			};
-	JComboBox<EnumXLSExportType> resultsComboBox = new JComboBox<EnumXLSExportType> (measures);
-
+	JComboBox<EnumXLSExportType> exportTypeComboBox = new JComboBox<EnumXLSExportType> (measures);
+	private JCheckBox 	t0Checkbox 	= new JCheckBox("relative to t0", false);
+	
 	
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 
@@ -49,29 +51,34 @@ public class Graphs extends JPanel implements SequenceListener
 		FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
 		layout.setVgap(0);
 		
-		JPanel panel = new JPanel(layout);
-		panel.add(new JLabel("results "));
-		panel.add(resultsComboBox);
-		add(panel);
+		JPanel panel01 = new JPanel(layout);
+		panel01.add(new JLabel("results "));
+		panel01.add(exportTypeComboBox);
+		add(panel01);
 		JPanel panel1 = new JPanel(layout);
 		add(panel1);
 		
-		add(GuiUtil.besidesPanel(displayResultsButton, new JLabel(" "))); 
+		JPanel panel02 = new JPanel(layout);
+		panel02.add(t0Checkbox);
+		add(panel02);
+		
+		JPanel panel03 = new JPanel(layout);
+		panel03.add(displayResultsButton);
+		add(panel03);
+		
 		defineActionListeners();
 	}
 	
 	private void defineActionListeners() 
 	{
 		
-		resultsComboBox.addActionListener(new ActionListener () 
+		exportTypeComboBox.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
-				if (exp != null && exp.seqKymos != null) 
-				{				
+				if (exp != null) 				
 					displayGraphsPanels(exp);
-				}
 			}});
 		
 		displayResultsButton.addActionListener(new ActionListener () 
@@ -80,9 +87,16 @@ public class Graphs extends JPanel implements SequenceListener
 			{ 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) 
-				{
 					displayGraphsPanels(exp);
-				}
+			}});
+		
+		t0Checkbox.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
+				if (exp != null) 				
+					displayGraphsPanels(exp);
 			}});
 	}
 	
@@ -109,22 +123,29 @@ public class Graphs extends JPanel implements SequenceListener
 		int dx = 5;
 		int dy = 10; 
 		exp.seqCamData.seq.addListener(this);
-		EnumXLSExportType option = (EnumXLSExportType) resultsComboBox.getSelectedItem();
-		if (isThereAnyDataToDisplay(exp, option))  
+		EnumXLSExportType exportType = (EnumXLSExportType) exportTypeComboBox.getSelectedItem();
+		if (isThereAnyDataToDisplay(exp, exportType))  
 		{
-			plotAreaPixels = plotToChart(exp, option, plotAreaPixels, rectv);
+			plotAreaPixels = plotToChart(exp, exportType, plotAreaPixels, rectv);
 			rectv.translate(dx, dy);
 		}
 	}
 	
-	private ChartAreas plotToChart(Experiment exp, EnumXLSExportType option, ChartAreas iChart, Rectangle rectv ) 
+	private ChartAreas plotToChart(Experiment exp, EnumXLSExportType exportType, ChartAreas iChart, Rectangle rectv ) 
 	{	
 		if (iChart != null) 
 			iChart.mainChartFrame.dispose();
 		iChart = new ChartAreas();
 		iChart.createChartPanel(parent0, "Spots measures");
 		iChart.setUpperLeftLocation(rectv);
-		iChart.displayData(exp, option, false);
+		
+		XLSExportOptions xlsExportOptions = new XLSExportOptions();
+		xlsExportOptions.buildExcelStepMs = 60000;
+		xlsExportOptions.relativeToT0 = t0Checkbox.isSelected();
+		xlsExportOptions.subtractEvaporation = false;
+		xlsExportOptions.exportType = exportType;
+		
+		iChart.displayData(exp, xlsExportOptions);
 		iChart.mainChartFrame.toFront();
 		iChart.mainChartFrame.requestFocus();
 		return iChart;
