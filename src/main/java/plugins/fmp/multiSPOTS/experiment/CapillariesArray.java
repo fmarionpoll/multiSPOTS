@@ -419,11 +419,8 @@ public class CapillariesArray
 
 	public void transferCapillaryRoiToSequence(Sequence seq) 
 	{
-		seq.removeAllROI();
 		for (Capillary cap: capillariesList) 
-		{
 			seq.addROI(cap.getRoi());
-		}
 	}
 
 	public void initCapillariesWith10Cages(int nflies)

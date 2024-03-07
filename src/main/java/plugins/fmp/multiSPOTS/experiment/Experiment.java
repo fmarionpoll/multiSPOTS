@@ -342,9 +342,16 @@ public class Experiment
 	
 	public boolean loadCamDataCapillaries()
 	{	
+		if( capillaries.capillariesList.size() > 0) 
+		{
+			for (Capillary cap: capillaries.capillariesList)
+				seqCamData.seq.removeROI(cap.getRoi());	
+		}
 		loadMCCapillaries_Only();
 		if (seqCamData != null && seqCamData.seq != null) 
+		{
 			capillaries.transferCapillaryRoiToSequence(seqCamData.seq);
+		}
 		
 		return (seqCamData != null && seqCamData.seq != null);
 	}

@@ -25,6 +25,8 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 
+import icy.canvas.IcyCanvas;
+import icy.canvas.Layer;
 import icy.file.Loader;
 import icy.file.SequenceFileImporter;
 import icy.gui.viewer.Viewer;
@@ -398,4 +400,23 @@ public class SequenceCamData
         return seq;
 	}
 	
+	// -------------------------
+	
+	public void displayROIs(boolean isVisible, String pattern) 
+	{
+		Viewer v = seq.getFirstViewer();
+		IcyCanvas canvas = v.getCanvas();
+		List<Layer> layers = canvas.getLayers(false);
+		if (layers == null)
+			return;
+		for (Layer layer: layers) 
+		{
+			ROI roi = layer.getAttachedROI();
+			if (roi == null)
+				continue;
+			String cs = roi.getName();
+			if (cs.contains(pattern))  
+				layer.setVisible(isVisible);
+		}
+	}
 }

@@ -5,16 +5,11 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import icy.canvas.IcyCanvas;
-import icy.canvas.Layer;
-import icy.gui.viewer.Viewer;
-import icy.roi.ROI;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
@@ -24,12 +19,11 @@ public class Options extends JPanel
 {
 	private static final long serialVersionUID = 6565346204580890307L;
 
-	JCheckBox	kymographsCheckBox		= new JCheckBox("kymos", true);
 	JCheckBox	cagesCheckBox			= new JCheckBox("cages", true);
 	JCheckBox	measuresCheckBox		= new JCheckBox("measures", true);
 	JCheckBox	graphsCheckBox			= new JCheckBox("graphs", true);
 
-	public 	JCheckBox 	viewCapillariesCheckBox = new JCheckBox("spots/lines", true);
+	public 	JCheckBox 	viewSpotsCheckBox = new JCheckBox("spots", true);
 	public 	JCheckBox 	viewCagesCheckbox = new JCheckBox("cages", true);
 			JCheckBox 	viewFlyCheckbox = new JCheckBox("flies center", false);
 			JCheckBox 	viewFlyRectCheckbox = new JCheckBox("flies rect", false);
@@ -46,7 +40,6 @@ public class Options extends JPanel
 		
 		JPanel panel2 = new JPanel(layout);
 		panel2.add(new JLabel("Load: "));
-		panel2.add(kymographsCheckBox);
 		panel2.add(cagesCheckBox);
 		panel2.add(measuresCheckBox);
 		panel2.add(graphsCheckBox);
@@ -55,7 +48,7 @@ public class Options extends JPanel
 		
 		JPanel panel1 = new JPanel (layout);
 		panel1.add(new JLabel("View : "));
-		panel1.add(viewCapillariesCheckBox);
+		panel1.add(viewSpotsCheckBox);
 		panel1.add(viewCagesCheckbox);
 		panel1.add(viewFlyCheckbox);
 		panel1.add(viewFlyRectCheckbox);
@@ -66,12 +59,12 @@ public class Options extends JPanel
 	
 	private void defineActionListeners() 
 	{
-		viewCapillariesCheckBox.addActionListener(new ActionListener () 
+		viewSpotsCheckBox.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
-				displayROIsCategory(viewCapillariesCheckBox.isSelected(), "line");
-				displayROIsCategory(viewCapillariesCheckBox.isSelected(), "spot");
+				displayROIsCategory(viewSpotsCheckBox.isSelected(), "line");
+				displayROIsCategory(viewSpotsCheckBox.isSelected(), "spot");
 			}});
 		
 		viewCagesCheckbox.addActionListener(new ActionListener () 
@@ -101,20 +94,7 @@ public class Options extends JPanel
 		Experiment exp = (Experiment)  parent0.expListCombo.getSelectedItem();
 		if (exp == null)
 			return;
-		Viewer v = exp.seqCamData.seq.getFirstViewer();
-		IcyCanvas canvas = v.getCanvas();
-		List<Layer> layers = canvas.getLayers(false);
-		if (layers == null)
-			return;
-		for (Layer layer: layers) 
-		{
-			ROI roi = layer.getAttachedROI();
-			if (roi == null)
-				continue;
-			String cs = roi.getName();
-			if (cs.contains(pattern))  
-				layer.setVisible(isVisible);
-		}
+		exp.seqCamData.displayROIs(isVisible, pattern);
 	}
 
 }

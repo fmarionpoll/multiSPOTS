@@ -27,23 +27,19 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	 */
 	private static final long serialVersionUID = 853047648249832145L;
 	public	PopupPanel 		capPopupPanel	= null;
-			JTabbedPane 	tabsPane 		= new JTabbedPane();
-			
+			JTabbedPane 	tabsPane 		= new JTabbedPane();		
 	public 	CreateSpots		tabCreateForSpots = new CreateSpots();
-//			Edit			tabEdit			= new Edit();
 			ThresholdSimple simpleThreshold = new ThresholdSimple();
 			ThresholdColors colorsThreshold = new ThresholdColors();
 	public 	Graphs 			tabGraphs 		= new Graphs();
 	public 	LoadSaveSpots 	tabFile  		= new LoadSaveSpots();
 	
-
 //			Adjust 		tabAdjust 		= new Adjust();
 
 	public 	Infos		tabInfos		= new Infos();
-	private int 		ID_INFOS 		= 1;
+	private int			id_infos		= 1;
+	private int 		id_create 		= 0;
 //	private int 		ID_ADJUST 		= 3;
-//	private int			ID_EDIT			= 2;
-//	private int			ID_FILTER 		= 4;
 //	private boolean		editSelected	= false;
 	private MultiSPOTS 	parent0 		= null;
 
@@ -63,20 +59,15 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		tabCreateForSpots.init(gridLayout, parent0);
 		tabCreateForSpots.addPropertyChangeListener(this);
 		tabsPane.addTab("Create", null, tabCreateForSpots, "Create spots defining liquid drops");
+		id_create = order;
 		order++;		
 		
-		ID_INFOS = order;
 		tabInfos.init(gridLayout, parent0);
 		tabInfos.addPropertyChangeListener(this);
 		tabsPane.addTab("Infos", null, tabInfos, "Define pixel conversion unit of images and capillaries content");
+		id_infos = order;
 		order++;
 
-//		ID_EDIT = order;
-//		tabEdit.init(gridLayout, parent0);
-//		tabEdit.addPropertyChangeListener(this);
-//		tabsPane.addTab("Edit", null, tabEdit, "Edit capillaries position and size");
-//		order++;
-		
 		simpleThreshold.init(gridLayout, parent0);
 		simpleThreshold.addPropertyChangeListener( this);
 		tabsPane.addTab("Simple threshold", null, simpleThreshold, "Measure area using a simple transform and threshold");
@@ -96,22 +87,12 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		tabFile.addPropertyChangeListener(this);
 		tabsPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with spots descriptors");
 		order++;
-		
 
-//		
 //		ID_ADJUST = order;
 //		tabAdjust.init(capLayout, parent0);
 //		tabAdjust.addPropertyChangeListener(this);
 //		tabsPane.addTab("Adjust", null, tabAdjust, "Adjust ROIS position to the capillaries");
 //		order++;
-		
-//		ID_FILTER = order;
-//		tabFilterImage.init(capLayout, parent0);
-//		tabFilterImage.addPropertyChangeListener(this);
-//		tabsPane.addTab("Experimental", null, tabFilterImage, "Try different filters");
-//		order++;
-		
-
 		
 		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		capPanel.add(tabsPane);
@@ -134,15 +115,12 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (exp != null) {
 				displayCapillariesInformation(exp);
-			  	tabsPane.setSelectedIndex(ID_INFOS);
+			  	tabsPane.setSelectedIndex(id_infos);
 			  	parent0.paneExperiment.tabIntervals.displayCamDataIntervals(exp);
 			}
 		}			  
 		else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
-			tabsPane.setSelectedIndex(ID_INFOS);
-		}
-		else if (event.getPropertyName().equals("CAPILLARIES_NEW")) {
-			tabsPane.setSelectedIndex(ID_INFOS);
+			tabsPane.setSelectedIndex(id_infos);
 		}
 
 	}
@@ -152,7 +130,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		SwingUtilities.invokeLater(new Runnable() { 
 			public void run() {
 				updateDialogs( exp);
-				parent0.paneExperiment.tabOptions.viewCapillariesCheckBox.setSelected(true);
+				parent0.paneExperiment.tabOptions.viewSpotsCheckBox.setSelected(true);
 			}});
 	}
 	
@@ -161,54 +139,32 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		if (exp != null) {
 			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 			exp.capillaries.desc_old.copy(exp.capillaries.capillariesDescription);
-//			tabInfos.setAllDescriptors(exp.capillaries);
-			
+	
 			ExperimentUtils.transferCamDataROIStoSpots(exp);
 			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
-//			tabCreate.setGroupingAndNumber(exp.capillaries);
 		}
 	}
 	
-//	public void getDialogCapillariesInfos(Experiment exp) 
-//	{
-//		tabInfos.getDescriptors(exp.capillaries);
-////		tabCreate.setCapillariesGrouping(exp.capillaries);
-//	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) 
 	{
-//		JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
-//        int selectedIndex = tabbedPane.getSelectedIndex();
-//        tabAdjust.roisDisplayrefBar(selectedIndex == ID_ADJUST);
-//        boolean disableCapillaries = (selectedIndex != ID_FILTER);
-//        parent0.paneExperiment.tabOptions.displayROIsCategory(disableCapillaries, "line");
-//        
-//        parent0.paneExperiment.tabOptions.viewCapillariesCheckBox.setSelected(selectedIndex == ID_INFOS);
-//        if (selectedIndex == ID_EDIT) {
-//        	Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-// 			if (exp != null) {
-// 				Viewer v = exp.seqCamData.seq.getFirstViewer(); 			
-//	     		if (v != null) {
-//	     			v.toFront();
-//					v.requestFocus();
-//	     		}
-// 			}
-// 			tabEdit.openDialog();
-// 			editSelected = true;
-//        }
-//        else if (editSelected) {
-//        	tabEdit.closeDialog();
-//        	editSelected = false;
-//        }
+		JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
+        int selectedIndex = tabbedPane.getSelectedIndex();
+        Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+		if (exp != null) {
+			boolean displayCapillaries = (selectedIndex == id_create);
+			if (displayCapillaries && exp.capillaries.capillariesList.size() < 1)
+				exp.loadCamDataCapillaries();
+			exp.seqCamData.displayROIs(displayCapillaries, "line");
+			exp.seqCamData.displayROIs(true, "spots");
+		}
 	}
 	
 	public void transferPreviousExperimentCapillariesInfos(Experiment exp0, Experiment exp)
 	{
 		exp.capillaries.capillariesDescription.grouping = exp0.capillaries.capillariesDescription.grouping;
-//		tabCreate.setGroupedBy2(exp0.capillaries.capillariesDescription.grouping == 2);
 		exp.capillaries.capillariesDescription.volume = exp0.capillaries.capillariesDescription.volume;
-//		tabInfos.setAllDescriptors(exp0.capillaries) ;
 	}
 
 }

@@ -154,7 +154,6 @@ public class CreateSpots extends JPanel
 					ExperimentUtils.transferSpotsToCamData(exp); 
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
 					exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
-//					firePropertyChange("CAPILLARIES_NEW", false, true);
 				}
 			}});
 		

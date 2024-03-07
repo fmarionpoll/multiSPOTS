@@ -81,14 +81,14 @@ public class MCCages_ extends JPanel implements PropertyChangeListener
 	            if (selectedIndex == iTAB_EDIT) 
 	            {
 	            	bTrapROIsEdit = true;
-	            	parent0.paneExperiment.tabOptions.displayROIsCategory (false, "line");
+	            	parent0.paneExperiment.tabOptions.displayROIsCategory (false, "spot");
 	            	parent0.paneExperiment.tabOptions.displayROIsCategory(false, "cage");
 	            } 
 	            else 
 	            {
 	            	if (bTrapROIsEdit) 
 	            	{
-	            		parent0.paneExperiment.tabOptions.displayROIsCategory (parent0.paneExperiment.tabOptions.viewCapillariesCheckBox.isSelected(), "line");
+	            		parent0.paneExperiment.tabOptions.displayROIsCategory (parent0.paneExperiment.tabOptions.viewSpotsCheckBox.isSelected(), "spot");
 		            	parent0.paneExperiment.tabOptions.displayROIsCategory(parent0.paneExperiment.tabOptions.viewCagesCheckbox.isSelected(), "cage");
 	            	}
 	            	bTrapROIsEdit = false;

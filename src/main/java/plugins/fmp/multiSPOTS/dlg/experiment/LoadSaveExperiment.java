@@ -200,7 +200,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		exp.seqCamData.seq.addListener(this);
 		if (exp.seqCamData != null) 
 		{
-			exp.loadCamDataCapillaries();
+//			exp.loadCamDataCapillaries();
 			exp.loadMCSpots();
 			exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
 			if (parent0.paneExperiment.tabOptions.graphsCheckBox.isSelected())
