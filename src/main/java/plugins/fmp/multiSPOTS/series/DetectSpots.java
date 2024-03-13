@@ -35,17 +35,17 @@ public class DetectSpots extends BuildSeries
 	
 	void analyzeExperiment(Experiment exp) 
 	{
-		loadExperimentDataToMeasureAreas(exp);
+		loadExperimentDataToMeasureSpots(exp);
 		
 		openViewers(exp);
 		getTimeLimitsOfSequence(exp);
-		if (measureAreas(exp)) 
+		if (measureSpots(exp)) 
 			saveComputation(exp);
 
 		closeViewers();
 	}
 	
-	private boolean loadExperimentDataToMeasureAreas(Experiment exp) 
+	private boolean loadExperimentDataToMeasureSpots(Experiment exp) 
 	{
 		boolean flag = exp.loadMCSpots_Only();
 		exp.seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
@@ -84,27 +84,27 @@ public class DetectSpots extends BuildSeries
 		exp.saveSpotsMeasures();
 	}
 	
-	private void getReferenceImage (Experiment exp, int t, ImageTransformOptions options) 
-	{
-		switch (options.transformOption) 
-		{
-			case SUBTRACT_TM1: 
-				options.backgroundImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
-				break;
-				
-			case SUBTRACT_T0:
-			case SUBTRACT_REF:
-				if (options.backgroundImage == null)
-					options.backgroundImage = imageIORead(exp.seqCamData.getFileNameFromImageList(0));
-				break;
-				
-			case NONE:
-			default:
-				break;
-		}
-	}
+//	private void getReferenceImage (Experiment exp, int t, ImageTransformOptions options) 
+//	{
+//		switch (options.transformOption) 
+//		{
+//			case SUBTRACT_TM1: 
+//				options.backgroundImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+//				break;
+//				
+//			case SUBTRACT_T0:
+//			case SUBTRACT_REF:
+//				if (options.backgroundImage == null)
+//					options.backgroundImage = imageIORead(exp.seqCamData.getFileNameFromImageList(0));
+//				break;
+//				
+//			case NONE:
+//			default:
+//				break;
+//		}
+//	}
 	
-	private boolean measureAreas (Experiment exp) 
+	private boolean measureSpots (Experiment exp) 
 	{
 		if (exp.spotsArray.spotsList.size() < 1) {
 			System.out.println("DetectAreas:measureAreas Abort (1): nbspots = 0");
@@ -133,7 +133,7 @@ public class DetectSpots extends BuildSeries
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = options.transform01;
 		transformOptions.setSingleThreshold (options.detectLevel1Threshold, options.overthreshold) ;
-		getReferenceImage (exp, 0, transformOptions);
+//		getReferenceImage (exp, 0, transformOptions);
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		
 //		overlayThreshold = new OverlayThreshold(seqData);

@@ -16,7 +16,7 @@ import plugins.fmp.multiSPOTS.experiment.Spot;
 
 
 
-public class Infos extends JPanel 
+public class Edit extends JPanel 
 {
 	/**
 	 * 
@@ -24,7 +24,8 @@ public class Infos extends JPanel
 	private static final long 	serialVersionUID 			= 4950182090521600937L;
 	
 	private JButton			editSpotsButton			= new JButton("Edit spots infos...");
-	private SpotTable	   infosSpotTable			= null;
+	private JButton			filterSpikesButton		= new JButton("Filter spikes...");
+	private SpotTable	   	infosSpotTable			= null;
 	private List<Spot>		spotsArrayCopy			= new ArrayList<Spot>();
 	private MultiSPOTS 		parent0 				= null;
 	
@@ -34,18 +35,20 @@ public class Infos extends JPanel
 		setLayout(capLayout);
 		this.parent0 = parent0;
 		
-		JPanel panel01 = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 1));
+		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 3, 1);
+		
+		JPanel panel01 = new JPanel(flowLayout);
 		panel01.add( editSpotsButton);
 		add(panel01);
-
+		JPanel panel02 = new JPanel(flowLayout);
+		panel02.add( filterSpikesButton);
+		add(panel02);
 
 		defineActionListeners();
 	}
 	
 	private void defineActionListeners() 
 	{
-
-		
 		editSpotsButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
@@ -57,6 +60,19 @@ public class Infos extends JPanel
 					if (infosSpotTable == null)
 						infosSpotTable = new SpotTable();
 					infosSpotTable.initialize(parent0, spotsArrayCopy);
+				}
+			}});
+		
+		filterSpikesButton.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+				{
+					exp.spotsArray.filterSpikes();
+//					exp.saveSpotsMeasures();
+					parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
 				}
 			}});
 	}

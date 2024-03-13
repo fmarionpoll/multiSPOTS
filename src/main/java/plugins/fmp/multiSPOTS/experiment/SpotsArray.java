@@ -222,6 +222,13 @@ public class SpotsArray
 			spot.setVolumeAndPixels (spotsDescription.volume, spotsDescription.pixels);
 		}
 	}
+	public void filterSpikes()
+	{
+		for (Spot spot: spotsList) 
+		{
+			spot.filterSpikes();
+		}
+	}
 	
 	private void transferCapGroupCageIDToSpot (Spot spot) 
 	{
@@ -483,14 +490,14 @@ public class SpotsArray
 	{
 		for (Spot spot: spotsList) {
 			int cntPix = (int) spot.cntPix.measure[t];
-			spot.computeSpotAreaMeanGrey(cntPix);	
+			spot.computeMeanGreyFromMeasure(cntPix);	
 		}
 	}
 	
 	public void computeSum2() 
 	{
 		for (Spot spot: spotsList) {
-			spot.computeSpotAreaSum2();	
+			spot.computeSum2FromMeasure();	
 		}
 	}
 	

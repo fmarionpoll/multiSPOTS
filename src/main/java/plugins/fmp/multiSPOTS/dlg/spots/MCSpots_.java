@@ -28,15 +28,16 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	private static final long serialVersionUID = 853047648249832145L;
 	public	PopupPanel 		capPopupPanel	= null;
 			JTabbedPane 	tabsPane 		= new JTabbedPane();		
-	public 	CreateSpots		tabCreateForSpots = new CreateSpots();
+	public 	CreateSpots		tabCreateSpots 	= new CreateSpots();
 			ThresholdSimple simpleThreshold = new ThresholdSimple();
 			ThresholdColors colorsThreshold = new ThresholdColors();
+
+	public 	Edit			tabEdit			= new Edit();
 	public 	Graphs 			tabGraphs 		= new Graphs();
 	public 	LoadSaveSpots 	tabFile  		= new LoadSaveSpots();
 	
 //			Adjust 		tabAdjust 		= new Adjust();
 
-	public 	Infos		tabInfos		= new Infos();
 	private int			id_infos		= 1;
 	private int 		id_create 		= 0;
 //	private int 		ID_ADJUST 		= 3;
@@ -56,18 +57,18 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		GridLayout gridLayout = new GridLayout(3, 1);
 		int order = 0;
 		
-		tabCreateForSpots.init(gridLayout, parent0);
-		tabCreateForSpots.addPropertyChangeListener(this);
-		tabsPane.addTab("Create", null, tabCreateForSpots, "Create spots defining liquid drops");
+		tabCreateSpots.init(gridLayout, parent0);
+		tabCreateSpots.addPropertyChangeListener(this);
+		tabsPane.addTab("Create", null, tabCreateSpots, "Create spots defining liquid drops");
 		id_create = order;
 		order++;		
 		
-		tabInfos.init(gridLayout, parent0);
-		tabInfos.addPropertyChangeListener(this);
-		tabsPane.addTab("Infos", null, tabInfos, "Define pixel conversion unit of images and capillaries content");
+		tabEdit.init(gridLayout, parent0);
+		tabEdit.addPropertyChangeListener(this);
+		tabsPane.addTab("Edit", null, tabEdit, "Edit infos and correct curves");
 		id_infos = order;
 		order++;
-
+		
 		simpleThreshold.init(gridLayout, parent0);
 		simpleThreshold.addPropertyChangeListener( this);
 		tabsPane.addTab("Simple threshold", null, simpleThreshold, "Measure area using a simple transform and threshold");

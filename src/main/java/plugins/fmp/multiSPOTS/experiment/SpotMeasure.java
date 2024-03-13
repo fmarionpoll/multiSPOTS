@@ -15,7 +15,7 @@ import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 
 
 
-public class SpotArea 
+public class SpotMeasure 
 {
 	public Level2D 	polylineLevel 	= new Level2D();
 	public Level2D 	polyline_old 	= new Level2D();
@@ -33,12 +33,12 @@ public class SpotArea
 	
 	// -------------------------
 	
-	SpotArea(String capName) 
+	SpotMeasure(String capName) 
 	{
 		this.name = capName;
 	}
 	
-	public SpotArea(String name, int indexImage, List<Point2D> limit) 
+	public SpotMeasure(String name, int indexImage, List<Point2D> limit) 
 	{
 		this.name = name;
 		this.index = indexImage;
@@ -123,7 +123,7 @@ public class SpotArea
 		polylineLevel = new Level2D(pol); 
 	}
 	
-	void copy(SpotArea sourceSpotArea) 
+	void copy(SpotMeasure sourceSpotArea) 
 	{
 		if (sourceSpotArea.polylineLevel != null)
 			polylineLevel = sourceSpotArea.polylineLevel.clone(); 
@@ -202,6 +202,11 @@ public class SpotArea
 		return arrayDouble;
 	}
 
+	public void filterSpikes() 
+	{
+		polylineLevel.filterSpikes();
+	}
+	
 	// ----------------------------------------------------------------------
 	
 	public int loadCapillaryLimitFromXML(Node node, String nodename, String header) 
@@ -387,7 +392,6 @@ public class SpotArea
 		return true;
 	}
 	
-	
 	public boolean csvImportYDataFromRow(String[] data, int startAt) 
 	{
 		if (data.length < startAt)
@@ -407,4 +411,7 @@ public class SpotArea
 		}
 		return true;
 	}
+
+	// -----------------------------------------------------------------------
+	
 }

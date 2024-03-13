@@ -13,6 +13,16 @@ public class Level2D extends Polyline2D
 		super();
 	}
 	
+	public Level2D(int npoints) 
+	{
+        this.npoints = npoints;
+        this.xpoints = new double[npoints];
+        this.ypoints = new double[npoints];
+        for (int i = 0; i <
+        		npoints; i++)
+        	xpoints[i] = i;
+	}
+	
 	public Level2D(Polyline2D polyline) 
 	{
 		super(polyline.xpoints, polyline.ypoints, polyline.npoints);
@@ -120,5 +130,51 @@ public class Level2D extends Polyline2D
 			nxpoints[i] = i;
 		}
 		return new Level2D (nxpoints, nypoints, imageSize);
+	}
+	
+	public void filterSpikes() 
+	{
+		double previousValue = ypoints[0];
+		boolean goingdown = false;
+		for (int i = 0; i < npoints; i++) {
+			if (ypoints[i] < previousValue) 
+			{
+				previousValue = ypoints[i];
+				goingdown = true;
+				continue;
+			}
+			
+			else if (!goingdown)
+				continue;
+			
+			//search backwards find first point < current
+			int firstSpikeIndex = i;
+			int lastSpikeIndex = i;
+			double lastSpikeValue = ypoints[i];
+			double firstSpikeValue = ypoints[i];
+			boolean foundSpikeStart = false;
+			for (int j=i-1; j >=0; j--) 
+			{
+				if (ypoints[j] > lastSpikeValue) 
+				{
+					foundSpikeStart = true;
+					firstSpikeIndex = j;
+					firstSpikeValue = ypoints[j];
+					break;
+				}
+			}
+			
+			if (foundSpikeStart) 
+			{
+				double delta = (lastSpikeValue - firstSpikeValue)/(lastSpikeIndex - firstSpikeIndex + 1);
+				for (int k = firstSpikeIndex; k < lastSpikeIndex; k++)
+				{
+					ypoints[k] = firstSpikeValue + delta*(k-firstSpikeIndex);
+				}
+			}
+			
+			previousValue = ypoints[i];
+			goingdown = false;
+		}
 	}
 }

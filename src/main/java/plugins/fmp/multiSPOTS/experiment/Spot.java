@@ -43,10 +43,10 @@ public class Spot implements Comparable <Spot>
 	
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
 	 
-	public SpotArea						sum  			= new SpotArea("sum"); 
-	public SpotArea						sum2  			= new SpotArea("sum2"); 
-	public SpotArea						cntPix  		= new SpotArea("cntPix"); 
-	public SpotArea						meanGrey		= new SpotArea("meanGrey"); 
+	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
+	public SpotMeasure					sum2  			= new SpotMeasure("sum2"); 
+	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
+	public SpotMeasure					meanGrey		= new SpotMeasure("meanGrey"); 
 
 	public boolean						valid			= true;
 
@@ -242,7 +242,7 @@ public class Spot implements Comparable <Spot>
 	
 	public boolean isThereAnyMeasuresDone(EnumXLSExportType option) 
 	{
-		SpotArea spotArea = getSpotArea(option);
+		SpotMeasure spotArea = getSpotArea(option);
 		if (spotArea != null)
 			return spotArea.isThereAnyMeasuresDone();
 		return false;
@@ -250,7 +250,7 @@ public class Spot implements Comparable <Spot>
 		
 	public ArrayList<Double> getSpotMeasuresForXLSPass1(EnumXLSExportType option, long seriesBinMs, long outputBinMs) 
 	{
-		SpotArea spotArea = getSpotArea(option);
+		SpotMeasure spotArea = getSpotArea(option);
 		if (spotArea != null)
 			return spotArea.getMeasures(seriesBinMs, outputBinMs);
 		return null;
@@ -264,7 +264,7 @@ public class Spot implements Comparable <Spot>
 		cropSpotAreaToNPoints(meanGrey , npoints);
 	}
 	
-	private void cropSpotAreaToNPoints(SpotArea spotArea, int npoints) 
+	private void cropSpotAreaToNPoints(SpotMeasure spotArea, int npoints) 
 	{
 		if (spotArea.polylineLevel != null)
 			spotArea.cropToNPoints(npoints);
@@ -278,7 +278,7 @@ public class Spot implements Comparable <Spot>
 		restoreSpotAreaClippedMeasures( meanGrey );
 	}
 	
-	private void restoreSpotAreaClippedMeasures(SpotArea spotArea)
+	private void restoreSpotAreaClippedMeasures(SpotMeasure spotArea)
 	{
 		if (spotArea.polylineLevel != null)
 			spotArea.restoreNPoints();
@@ -294,7 +294,7 @@ public class Spot implements Comparable <Spot>
 		return limitsOptions;
 	}
 	
-	public void computeSpotAreaMeanGrey(int cntPixel) 
+	public void computeMeanGreyFromMeasure(int cntPixel) 
 	{
 		int nFrames = sum.measure.length;
 		for (int i = 0; i < nFrames; i++)
@@ -303,7 +303,7 @@ public class Spot implements Comparable <Spot>
 		}
 	}
 	
-	public void computeSpotAreaSum2() 
+	public void computeSum2FromMeasure() 
 	{
 		int nFrames = sum.measure.length;
 		for (int i = 0; i < nFrames; i++)
@@ -313,7 +313,37 @@ public class Spot implements Comparable <Spot>
 		}
 	}
 	
-	private SpotArea getSpotArea (EnumXLSExportType option)
+	public void computeMeanGreyFromPolyline(int cntPixel) 
+	{
+		int nFrames = sum.polylineLevel.npoints;
+		for (int i = 0; i < nFrames; i++)
+		{
+			meanGrey.polylineLevel.ypoints[i] = sum.polylineLevel.ypoints[i]/cntPixel;
+		}
+	}
+	
+	public void computeSum2FromPolyline() 
+	{
+		int nFrames = sum.polylineLevel.npoints;
+		sum2.polylineLevel = new Level2D(nFrames);
+		for (int i = 0; i < nFrames; i++)
+		{
+			double value = sum.polylineLevel.ypoints[i];
+			sum2.polylineLevel.ypoints[i] = value*value;
+		}
+	}
+	
+	public void filterSpikes()
+	{
+		sum.filterSpikes(); 
+		cntPix.filterSpikes(); 
+	
+		computeMeanGreyFromPolyline(0);
+		computeSum2FromPolyline();	
+	}
+	
+	
+	private SpotMeasure getSpotArea (EnumXLSExportType option)
 	{
 		switch (option) 
 		{
@@ -336,7 +366,7 @@ public class Spot implements Comparable <Spot>
 	
 	public int getLastMeasure(EnumXLSExportType option) 
 	{
-		SpotArea spotArea = getSpotArea(option);
+		SpotMeasure spotArea = getSpotArea(option);
 		if (spotArea != null)
 			return spotArea.getLastMeasure();	
 		return 0;
@@ -344,7 +374,7 @@ public class Spot implements Comparable <Spot>
 	
 	public int getLastDeltaMeasure(EnumXLSExportType option) 
 	{
-		SpotArea spotArea = getSpotArea(option);
+		SpotMeasure spotArea = getSpotArea(option);
 		if (spotArea != null)
 			return spotArea.getLastDeltaMeasure();
 		return 0;
@@ -352,7 +382,7 @@ public class Spot implements Comparable <Spot>
 	
 	public int getT0Measure(EnumXLSExportType option) 
 	{
-		SpotArea spotArea = getSpotArea(option);
+		SpotMeasure spotArea = getSpotArea(option);
 		if (spotArea != null)
 			return spotArea.getT0Measure();
 		return 0;
