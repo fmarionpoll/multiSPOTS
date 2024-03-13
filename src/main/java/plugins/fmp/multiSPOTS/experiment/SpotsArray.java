@@ -146,19 +146,21 @@ public class SpotsArray
 			Node nodecapillary = XMLUtil.getElement(node, ID_SPOT_+i);
 			Spot spot = new Spot();
 			spot.loadFromXML_SpotOnly(nodecapillary);
-			if (spotsDescription.grouping == 2 && (spot.spotStim != null && spot.spotStim.equals(".."))) 
-			{
-				if (spot.getSpotSide().equals("00")) 
-				{
-					spot.spotStim = spotsDescription.stimulusL;
-					spot.spotConc = spotsDescription.concentrationL;
-				} 
-				else 
-				{
-					spot.spotStim = spotsDescription.stimulusR;
-					spot.spotConc = spotsDescription.concentrationR;
-				}
-			}
+//			if (spotsDescription.grouping == 2 
+//			&& (spot.spotStim != null 
+//			&& spot.spotStim.equals(".."))) 
+//			{
+//				if (spot.getSpotSide().equals("00")) 
+//				{
+//					spot.spotStim = spotsDescription.stimulusL;
+//					spot.spotConc = spotsDescription.concentrationL;
+//				} 
+//				else 
+//				{
+//					spot.spotStim = spotsDescription.stimulusR;
+//					spot.spotConc = spotsDescription.concentrationR;
+//				}
+//			}
 			if (!isPresent(spot))
 				spotsList.add(spot);
 		}

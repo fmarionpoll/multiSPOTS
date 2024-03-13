@@ -219,19 +219,19 @@ public class CapillariesArray
 			Node nodecapillary = XMLUtil.getElement(node, ID_CAPILLARY_+i);
 			Capillary cap = new Capillary();
 			cap.loadFromXML_CapillaryOnly(nodecapillary);
-			if (capillariesDescription.grouping == 2 && (cap.stimulus != null && cap.stimulus.equals(".."))) 
-			{
-				if (cap.getCapillarySide().equals("R")) 
-				{
-					cap.stimulus = capillariesDescription.stimulusR;
-					cap.concentration = capillariesDescription.concentrationR;
-				} 
-				else 
-				{
-					cap.stimulus = capillariesDescription.stimulusL;
-					cap.concentration = capillariesDescription.concentrationL;
-				}
-			}
+//			if (capillariesDescription.grouping == 2 && (cap.stimulus != null && cap.stimulus.equals(".."))) 
+//			{
+//				if (cap.getCapillarySide().equals("R")) 
+//				{
+//					cap.stimulus = capillariesDescription.stimulusR;
+//					cap.concentration = capillariesDescription.concentrationR;
+//				} 
+//				else 
+//				{
+//					cap.stimulus = capillariesDescription.stimulusL;
+//					cap.concentration = capillariesDescription.concentrationL;
+//				}
+//			}
 			if (!isPresent(cap))
 				capillariesList.add(cap);
 		}
