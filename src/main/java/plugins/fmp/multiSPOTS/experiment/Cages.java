@@ -463,9 +463,9 @@ public class Cages
 			int cagenb = cage.getCageNumberInteger();
 			for (Spot spot: spotsList) 
 			{
-				if (spot.cageID != cagenb)
+				if (spot.spotCageID != cagenb)
 					continue;
-				spot.nFlies = cage.cageNFlies;
+				spot.spotNFlies = cage.cageNFlies;
 			}
 		}
 	}
@@ -484,7 +484,7 @@ public class Cages
 		for (Spot spot: spotsList) 
 		{
 			int cagenb = spot.getCageIndexFromRoiName();
-			spot.cageID = cagenb;
+			spot.spotCageID = cagenb;
 		}
 	}
 	

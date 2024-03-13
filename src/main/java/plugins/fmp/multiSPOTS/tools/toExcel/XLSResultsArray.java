@@ -88,11 +88,11 @@ public class XLSResultsArray
 		if (!sameLR)
 			return;
 		if (stim == null)
-			stim = spot.stimulus;
+			stim = spot.spotStim;
 		if (conc == null)
-			conc = spot.concentration;
-		sameLR &= stim .equals(spot.stimulus);
-		sameLR &= conc .equals(spot.concentration);
+			conc = spot.spotConc;
+		sameLR &= stim .equals(spot.spotStim);
+		sameLR &= conc .equals(spot.spotConc);
 	}
 	
 	public void subtractEvaporation() 
@@ -266,8 +266,8 @@ public class XLSResultsArray
 		{
 			checkIfSameStimulusAndConcentration(spot);
 			XLSResults results = new XLSResults(spot.getRoiName(), 
-												spot.nFlies, 
-												spot.cageID, 
+												spot.spotNFlies, 
+												spot.spotCageID, 
 												xlsExportOptions.exportType, 
 												nOutputFrames);
 			

@@ -111,9 +111,9 @@ public class XLSExport
 			outputStimAndConc_according_to_DataOption(sheet, xlsExportOption, spot, transpose, x, y);
 
 			
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.cageID);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+spot.cageID);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, spot.nFlies); 
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.spotCageID);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+spot.spotCageID);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, spot.spotNFlies); 
 
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.DUM4.getValue(), transpose, sheetName);
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CHOICE_NOCHOICE.getValue(), transpose, desc_getChoiceTestType(spotsList, t));
@@ -145,8 +145,8 @@ public class XLSExport
 			String otherSide = othercap.getSpotSide();
 			if (!otherSide .contains(side))
 			{
-				if (spot.stimulus.equals(othercap.stimulus)
-					&& spot.concentration.equals(othercap.concentration))
+				if (spot.spotStim.equals(othercap.spotStim)
+					&& spot.spotConc.equals(othercap.spotConc))
 					choiceText  = "no-choice";
 				else
 					choiceText = "choice";
@@ -164,12 +164,12 @@ public class XLSExport
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "L+R");
 			else 
 				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "(L-R)/(L+R)");
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, spot.stimulus + ": "+ spot.concentration);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, spot.spotStim + ": "+ spot.spotConc);
 			break;
 						
 		default:
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, 	spot.stimulus);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, 	spot.concentration);	
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, 	spot.spotStim);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, 	spot.spotConc);	
 			break;
 		}
 	}
@@ -365,10 +365,10 @@ public class XLSExport
 		for (int i = 0; i < nspots; i++) 
 		{
 			Spot spot = expAll.spotsArray.spotsList.get(i);
-			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.nFlies, spot.cageID, xlsOption, nFrames);
-			rowResults.stimulus 		= spot.stimulus;
-			rowResults.concentration 	= spot.concentration;
-			rowResults.cageID 			= spot.cageID;
+			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotCageID, xlsOption, nFrames);
+			rowResults.stimulus 		= spot.spotStim;
+			rowResults.concentration 	= spot.spotConc;
+			rowResults.cageID 			= spot.spotCageID;
 			rowListForOneExp.resultsList.add(rowResults);
 		}
 		rowListForOneExp.sortRowsByName();
@@ -400,10 +400,10 @@ public class XLSExport
 		for (int i = 0; i < nspots; i++) 
 		{
 			Spot spot = expAll.spotsArray.spotsList.get(i);
-			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.nFlies, spot.cageID, xlsOption, nFrames);
-			rowResults.stimulus 		= spot.stimulus;
-			rowResults.concentration 	= spot.concentration;
-			rowResults.cageID 			= spot.cageID;
+			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotCageID, xlsOption, nFrames);
+			rowResults.stimulus 		= spot.spotStim;
+			rowResults.concentration 	= spot.spotConc;
+			rowResults.cageID 			= spot.spotCageID;
 			rowListForOneExp.resultsList.add(rowResults);
 		}
 		rowListForOneExp.sortRowsByName();

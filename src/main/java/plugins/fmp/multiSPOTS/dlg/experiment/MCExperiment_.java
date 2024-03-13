@@ -98,7 +98,6 @@ public class MCExperiment_ extends JPanel implements ViewerListener, ChangeListe
 	{
 		tabIntervals.displayCamDataIntervals(exp);
 		tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
-//		parent0.paneKymos.tabDisplay.updateResultsAvailable(exp);
 	}
 
 	public void getExperimentInfosFromDialog(Experiment exp) 

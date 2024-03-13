@@ -58,11 +58,11 @@ public class SpotTableModel extends AbstractTableModel
     	if (spot != null) {
         	switch (columnIndex) {
             case 0: return spot.getRoiName();
-            case 1: return spot.cageID;
-            case 2: return spot.nFlies;
-            case 3: return spot.volume;
-            case 4: return spot.stimulus;
-            case 5: return spot.concentration;
+            case 1: return spot.spotCageID;
+            case 2: return spot.spotNFlies;
+            case 3: return spot.spotVolume;
+            case 4: return spot.spotStim;
+            case 5: return spot.spotConc;
         	}
     	}
     	return null;
@@ -84,11 +84,13 @@ public class SpotTableModel extends AbstractTableModel
     	if (spot != null) {
         	switch (columnIndex) {
             case 0: spot.setRoiName(aValue.toString()); break;
-            case 1: spot.cageID = (int) aValue; break;
-            case 2: spot.nFlies = (int) aValue; break;
-            case 3: spot.volume = (double) aValue; break;
-            case 4: spot.stimulus = aValue.toString(); break;
-            case 5: spot.concentration = aValue.toString(); break;
+            case 1: spot.spotCageID = (int) aValue; break;
+            case 2: spot.spotNFlies = (int) aValue; break;
+            case 3: spot.spotVolume = (double) aValue; break;
+            case 4: spot.spotStim = aValue.toString(); break;
+            case 5: 
+            	spot.spotConc = aValue.toString(); 
+            	break;
         	}
     	}
     }

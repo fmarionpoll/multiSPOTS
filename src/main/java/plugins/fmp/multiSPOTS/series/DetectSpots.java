@@ -25,7 +25,7 @@ import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
 
 
-public class DetectArea extends BuildSeries  
+public class DetectSpots extends BuildSeries  
 {
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
