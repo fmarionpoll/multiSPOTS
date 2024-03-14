@@ -189,20 +189,22 @@ public class DetectSpots extends BuildSeries
         final boolean[] mask = spot.mask2D.mask;
         final double[] data = (double[]) ArrayUtil.arrayToDoubleArray(subImage.getDataXY(0), sourceImage.isSignedDataType());
 
-        for (int off = 0; off < data.length; off++)
+        for (int offset = 0; offset < data.length; offset++)
         {
             // pixel contained in ROI ?
-            if (mask[off])
+            if (mask[offset])
             {
-                final double value = data[off];
+                final double value = data[offset];
                 if (overthreshold)
                 {
-                    if (value < threshold) {
+                    if (value < threshold) 
+                    {
                         cntPix++;
                         sum += value;
                     }
                 }
-                else if (value > threshold) {
+                else if (value > threshold) 
+                {
                         cntPix++;
                         sum += value;
                 }

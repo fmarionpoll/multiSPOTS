@@ -62,6 +62,7 @@ public class FlyDetect2 extends BuildSeries
 		ImageTransformInterface transformFunction = transformOptions.transformOption.getFunction();
 		
 		long last_ms = exp.cages.detectLast_Ms + exp.cages.detectBin_Ms ;
+		
 		for (long index_ms = exp.cages.detectFirst_Ms ; index_ms <= last_ms; index_ms += exp.cages.detectBin_Ms ) 
 		{
 			final int t_from = (int) ((index_ms - exp.camImageFirst_ms)/exp.camImageBin_ms);

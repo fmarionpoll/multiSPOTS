@@ -728,7 +728,7 @@ public class Experiment
 	
 	public boolean saveCagesMeasures() 
 	{
-		return cages.saveCagesMeasures(getKymosBinFullDirectory());
+		return cages.saveCagesMeasures(getExperimentDirectory());
 	}
 	
 	// ----------------------------------

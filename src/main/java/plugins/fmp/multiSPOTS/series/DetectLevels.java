@@ -73,13 +73,13 @@ public class DetectLevels  extends BuildSeries
 			capi.kymographIndex = tKymo;
 			capi.ptsDerivative.clear();
 			capi.limitsOptions.copyFrom(options);
+			final IcyBufferedImage rawImage = imageIORead(seqKymos.getFileNameFromImageList(capi.kymographIndex));
 				
 			futures.add(processor.submit(new Runnable () 
 			{
 				@Override
 				public void run() 
 				{	
-					IcyBufferedImage rawImage = imageIORead(seqKymos.getFileNameFromImageList(capi.kymographIndex));
 					int imageWidth = rawImage.getSizeX();
 					int imageHeight = rawImage.getSizeY();
 					Rectangle searchRect = new Rectangle(0, 0, rawImage.getSizeX()-1, rawImage.getSizeY()-1);

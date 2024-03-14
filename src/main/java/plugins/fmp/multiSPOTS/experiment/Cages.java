@@ -470,6 +470,20 @@ public class Cages
 		}
 	}
 	
+	public void transferNFliesFromSpotsToCages(ArrayList<Spot> spotsList) 
+	{
+		for (Cage cage: cagesList ) 
+		{
+			int cagenb = cage.getCageNumberInteger();
+			for (Spot spot: spotsList) 
+			{
+				if (spot.spotCageID != cagenb)
+					continue;
+				cage.cageNFlies = spot.spotNFlies;
+			}
+		}
+	}
+	
 	public void setCageNbFromCapillaryName(ArrayList<Capillary> capillariesList) 
 	{
 		for (Capillary cap: capillariesList) 

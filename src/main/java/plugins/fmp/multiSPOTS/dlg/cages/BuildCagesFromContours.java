@@ -29,6 +29,7 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Capillary;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
+import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.Blobs;
 import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
@@ -101,11 +102,10 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 				{
 					ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
 					exp.cages.removeCages();
-					createROIsFromSelectedPolygon(exp);
+					createROIsFromSelectedPolygonAndSpots(exp);
 					exp.cages.cagesFromROIs(exp.seqCamData);
-					exp.cages.setFirstAndLastCageToZeroFly();
-					if(exp.capillaries.capillariesList.size() > 0)
-						exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.capillariesList);
+					if (exp.spotsArray.spotsList.size() > 0)
+						exp.cages.transferNFliesFromSpotsToCages(exp.spotsArray.spotsList);
 				}
 			}});
 		
@@ -192,14 +192,56 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 		}
 	}
 
-	private void createROIsFromSelectedPolygon(Experiment exp) 
+//	private void createROIsFromSelectedPolygonAndCapillaries(Experiment exp) 
+//	{
+//		int t = exp.seqCamData.frameCurrent;
+//		IcyBufferedImage img0 = IcyBufferedImageUtil.convertToType(
+//				overlayThreshold.getTransformedImage(t), 
+//				DataType.INT, 
+//				false);
+//		Rectangle rectGrid = new Rectangle(0,0, img0.getSizeX(), img0.getSizeY());
+//		Blobs blobs = new Blobs(img0);
+//		blobs.getPixelsConnected ();
+//		blobs.getBlobsConnected();
+//		blobs.fillBlanksPixelsWithinBlobs ();
+//	
+//		List<Integer> blobsfound = new ArrayList<Integer> ();
+//		for (Capillary cap : exp.capillaries.capillariesList) 
+//		{
+//			Point2D pt = cap.getCapillaryROILowestPoint();
+//			if (pt != null) 
+//			{
+//				int ix = (int) (pt.getX() - rectGrid.x);
+//				int iy = (int) (pt.getY() - rectGrid.y);
+//				int blobi = blobs.getBlobAt(ix, iy);
+//				boolean found = false;
+//				for (int i: blobsfound) 
+//				{
+//					if (i == blobi) 
+//					{
+//						found = true;
+//						break;
+//					}
+//				}
+//				if (!found) 
+//				{
+//					blobsfound.add(blobi);
+//					ROI2DPolygon roiP = new ROI2DPolygon (blobs.getBlobPolygon2D(blobi));
+//					roiP.translate(rectGrid.x, rectGrid.y);
+//					int cagenb = cap.getCageIndexFromRoiName();
+//					roiP.setName("cage" + String.format("%03d", cagenb));
+//					cap.cageID = cagenb;
+//					exp.seqCamData.seq.addROI(roiP);
+//				}
+//			}
+//		}
+//	}
+	
+	private void createROIsFromSelectedPolygonAndSpots(Experiment exp) 
 	{
-		exp.cages.removeAllRoiCagesFromSequence(exp.seqCamData);
 		int t = exp.seqCamData.frameCurrent;
 		IcyBufferedImage img0 = IcyBufferedImageUtil.convertToType(
-				overlayThreshold.getTransformedImage(t), 
-				DataType.INT, 
-				false);
+				overlayThreshold.getTransformedImage(t), DataType.INT, false);
 		Rectangle rectGrid = new Rectangle(0,0, img0.getSizeX(), img0.getSizeY());
 		Blobs blobs = new Blobs(img0);
 		blobs.getPixelsConnected ();
@@ -207,9 +249,9 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 		blobs.fillBlanksPixelsWithinBlobs ();
 	
 		List<Integer> blobsfound = new ArrayList<Integer> ();
-		for (Capillary cap : exp.capillaries.capillariesList) 
+		for (Spot spot : exp.spotsArray.spotsList) 
 		{
-			Point2D pt = cap.getCapillaryROILowestPoint();
+			Point2D pt = spot.getSpotCenter();
 			if (pt != null) 
 			{
 				int ix = (int) (pt.getX() - rectGrid.x);
@@ -229,9 +271,9 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 					blobsfound.add(blobi);
 					ROI2DPolygon roiP = new ROI2DPolygon (blobs.getBlobPolygon2D(blobi));
 					roiP.translate(rectGrid.x, rectGrid.y);
-					int cagenb = cap.getCageIndexFromRoiName();
+					int cagenb = spot.getCageIndexFromRoiName();
 					roiP.setName("cage" + String.format("%03d", cagenb));
-					cap.cageID = cagenb;
+					spot.spotCageID = cagenb;
 					exp.seqCamData.seq.addROI(roiP);
 				}
 			}

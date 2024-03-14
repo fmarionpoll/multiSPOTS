@@ -74,8 +74,8 @@ public class FlyDetect1 extends BuildSeries
 		ImageTransformInterface transformFunction = options.transformop.getFunction();
 		
 		int t_current = 0;
-	
 		long last_ms = exp.cages.detectLast_Ms + exp.cages.detectBin_Ms ;
+		
 		for (long index_ms = exp.cages.detectFirst_Ms; index_ms <= last_ms; index_ms += exp.cages.detectBin_Ms ) 
 		{
 			final int t_previous = t_current;
