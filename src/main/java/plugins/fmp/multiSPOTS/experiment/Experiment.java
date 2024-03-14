@@ -700,7 +700,6 @@ public class Experiment
 		return spotsArray.xmlSaveSpots_Descriptors(xmlSpotFileName);
 	}
 
-		
  	public boolean loadCapillariesMeasures() 
  	{
  		return capillaries.load_Measures(getKymosBinFullDirectory());
@@ -865,6 +864,8 @@ public class Experiment
 	
 	public void replaceFieldValue(EnumXLSColumnHeader fieldEnumCode, String oldValue, String newValue) 
 	{
+		loadMCExperiment();
+		loadSpotsMeasures();
 		switch (fieldEnumCode)
 		{
 		case EXP_STIM:
@@ -886,6 +887,7 @@ public class Experiment
 			break;
 		}
 		saveMCExperiment();
+		saveSpotsMeasures();
 	}
 	
 	// --------------------------------------------
