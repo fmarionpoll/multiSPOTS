@@ -1,9 +1,7 @@
 package plugins.fmp.multiSPOTS.experiment;
 
-
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,14 +11,11 @@ import org.w3c.dom.Node;
 
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI2D;
-import icy.type.geom.Polyline2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
-import plugins.kernel.roi.roi2d.ROI2DLine;
-import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 
 
 
