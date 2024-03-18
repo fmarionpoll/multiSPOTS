@@ -75,6 +75,9 @@ public class Cage
 		return true;
 	}
 	
+	//--------------------------------------
+	final String sep = ",";
+	
 	public String csvExportCageDescription() 
 	{	
 		StringBuffer sbf = new StringBuffer();
@@ -99,7 +102,7 @@ public class Cage
 		}
 		else
 			row.add("0");
-		sbf.append(String.join(",", row));
+		sbf.append(String.join(sep, row));
 		sbf.append("\n");
 		return sbf.toString();
 	}
@@ -218,7 +221,7 @@ public class Cage
 	
 	public void copyCage (Cage cage) 
 	{
-		cageRoi2D			= cage.cageRoi2D;
+		cageRoi2D		= cage.cageRoi2D;
 		cageNFlies  	= cage.cageNFlies;
 		strCageComment 	= cage.strCageComment;
 		strCageNumber 	= cage.strCageNumber;

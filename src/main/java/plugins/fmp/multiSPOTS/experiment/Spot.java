@@ -105,10 +105,10 @@ public class Spot implements Comparable <Spot>
 		roi 			= (ROI2D) spotFrom.roi.getCopy();
 		
 		spotStim		= spotFrom.spotStim;
-		spotConc	= spotFrom.spotConc;
-		spotCageSide		= spotFrom.spotCageSide;
-		spotNFlies			= spotFrom.spotNFlies;
-		spotCageID			= spotFrom.spotCageID;
+		spotConc		= spotFrom.spotConc;
+		spotCageSide	= spotFrom.spotCageSide;
+		spotNFlies		= spotFrom.spotNFlies;
+		spotCageID		= spotFrom.spotCageID;
 		spotVolume 		= spotFrom.spotVolume;
 		pixels 			= spotFrom.pixels;
 		radius 			= spotFrom.radius;
@@ -412,14 +412,14 @@ public class Spot implements Comparable <Spot>
      
 	        descriptionOK 	= XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
-	        spotNFlies 			= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
-	        spotCageID 			= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
-	        spotVolume 			= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
+	        spotNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
+	        spotCageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
+	        spotVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
 			pixels 			= XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
 			radius			= XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
 			spotStim 		= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
-			spotConc	= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
-			spotCageSide 		= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
+			spotConc		= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
+			spotCageSide 	= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 			
 	        roi = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 	        limitsOptions.loadFromXML(nodeMeta);
@@ -576,11 +576,13 @@ public class Spot implements Comparable <Spot>
 	
 	// -----------------------------------------------------------------------------
 	
+	String sep = ",";
+	
 	public String csvExportSpotArrayHeader() 
 	{
 		StringBuffer sbf = new StringBuffer();
 		
-		sbf.append("#,SPOTS,describe each spot\n");
+		sbf.append("#"+sep+"SPOTS"+sep+"describe each spot\n");
 		List<String> row2 = Arrays.asList(
 				"prefix",
 				"kymoIndex", 
@@ -593,7 +595,7 @@ public class Spot implements Comparable <Spot>
 				"stim", 
 				"conc", 
 				"side");
-		sbf.append(String.join(",", row2));
+		sbf.append(String.join(sep, row2));
 		sbf.append("\n");
 		return sbf.toString();
 	}
@@ -613,10 +615,10 @@ public class Spot implements Comparable <Spot>
 				Double.toString(spotVolume), 
 				Integer.toString(pixels), 
 				Integer.toString(radius),
-				spotStim, 
-				spotConc, 
-				spotCageSide);
-		sbf.append(String.join(",", row));
+				spotStim.replace(",", "."), 
+				spotConc.replace(",", "."), 
+				spotCageSide.replace(",", "."));
+		sbf.append(String.join(sep, row));
 		sbf.append("\n");
 		return sbf.toString();
 	}
@@ -624,18 +626,20 @@ public class Spot implements Comparable <Spot>
 	public String csvExportMeasures_SectionHeader(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		String explanation1 = "\n name,index, npts, y0, y1, etc\n";
+		List<String> listExplanation1 =  Arrays.asList("\n name", "index", "npts", "y0", "y1", "etc\n");		
+		String explanation1 = String.join(sep, listExplanation1);
+		
 		switch(measureType) 
 		{
 			case AREA_SUM:
 			case AREA_SUM2:
 			case AREA_CNTPIX:	
 			case AREA_MEANGREY:
-				sbf.append("#,"+measureType.toString()+"," + explanation1);
+				sbf.append("#" + sep + measureType.toString() + sep + explanation1);
 				break;
 
 			default:
-				sbf.append("#,UNDEFINED,------------\n");
+				sbf.append("#" + sep + "UNDEFINED"+sep+"------------\n");
 				break;
 		}
 		return sbf.toString();
@@ -644,7 +648,7 @@ public class Spot implements Comparable <Spot>
 	public String csvExportMeasures_OneType(EnumSpotMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append(roi.getName()+ ","+ kymographIndex +",");
+		sbf.append(roi.getName() + sep + kymographIndex + sep);
 		
 		switch(measureType) 
 		{

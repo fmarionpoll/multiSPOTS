@@ -205,6 +205,8 @@ public class SpotsDescription
 	
 	// --------------------------------------
 	
+	final String sep = ",";
+	
 	public String csvExportSectionHeader() {
 		StringBuffer sbf = new StringBuffer();
 		sbf.append("#,DESCRIPTION, multiSPOTS data\n");
@@ -222,7 +224,7 @@ public class SpotsDescription
 				ID_COMMENT2, 
 				ID_STRAIN, 
 				ID_SEX);
-		sbf.append(String.join(",", row2));
+		sbf.append(String.join(sep, row2));
 		sbf.append("\n");
 		return sbf.toString();
 	}
@@ -243,7 +245,7 @@ public class SpotsDescription
 				old_comment2, 
 				old_strain, 
 				old_sex);
-		sbf.append(String.join(",", row3));
+		sbf.append(String.join(sep, row3));
 		sbf.append("\n");
 		return sbf.toString();
 	}

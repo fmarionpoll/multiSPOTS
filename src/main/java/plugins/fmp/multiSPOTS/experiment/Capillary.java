@@ -686,11 +686,13 @@ public class Capillary implements Comparable <Capillary>
 	
 	// -----------------------------------------------------------------------------
 	
+	final String sep = ",";
+	
 	public String csvExportCapillarySubSectionHeader() 
 	{
 		StringBuffer sbf = new StringBuffer();
 		
-		sbf.append("#,CAPILLARIES,describe each capillary\n");
+		sbf.append("#"+sep+"CAPILLARIES,describe each capillary\n");
 		List<String> row2 = Arrays.asList(
 				"prefix",
 				"kymoIndex", 
@@ -703,7 +705,7 @@ public class Capillary implements Comparable <Capillary>
 				"stim", 
 				"conc", 
 				"side");
-		sbf.append(String.join(",", row2));
+		sbf.append(String.join(sep, row2));
 		sbf.append("\n");
 		return sbf.toString();
 	}
@@ -723,10 +725,10 @@ public class Capillary implements Comparable <Capillary>
 				Integer.toString(nFlies),
 				Double.toString(volume), 
 				Integer.toString(pixels), 
-				stimulus, 
-				concentration, 
-				cageSide);
-		sbf.append(String.join(",", row));
+				stimulus.replace(sep, "."), 
+				concentration.replace(sep, "."), 
+				cageSide.replace(sep, "."));
+		sbf.append(String.join(sep, row));
 		sbf.append("\n");
 		return sbf.toString();
 	}
@@ -734,19 +736,19 @@ public class Capillary implements Comparable <Capillary>
 	public String csvExportMeasureSectionHeader(EnumCapillaryMeasures measureType) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		String explanation1 = "columns=,name,index, npts,..,.(xi;yi)\n";
+		String explanation1 = "columns="+sep+"name"+sep+"index"+sep+" npts"+sep+"..,.(xi;yi)\n";
 		switch(measureType) {
 			case TOPLEVEL:
-				sbf.append("#,TOPLEVEL," + explanation1);
+				sbf.append("#"+sep+"TOPLEVEL"+sep + explanation1);
 				break;
 			case BOTTOMLEVEL:
-				sbf.append("#,BOTTOMLEVEL,"+explanation1);
+				sbf.append("#"+sep+"BOTTOMLEVEL" +sep+explanation1);
 				break;
 			case TOPDERIVATIVE:
-				sbf.append("#,TOPDERIVATIVE,"+explanation1);
+				sbf.append("#"+sep+"TOPDERIVATIVE"+sep+explanation1);
 				break;
 			default:
-				sbf.append("#,UNDEFINED,------------\n");
+				sbf.append("#"+sep+"UNDEFINED"+sep+"------------\n");
 				break;
 		}
 		return sbf.toString();

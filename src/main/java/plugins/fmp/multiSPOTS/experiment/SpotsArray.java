@@ -512,6 +512,8 @@ public class SpotsArray
 	
 	// --------------------------------
 	
+	final String sep = ",";
+	
 	private boolean csvLoadSpots(String directory, EnumSpotMeasures option) throws Exception 
 	{
 		String pathToCsv = directory + File.separator + csvFileName;
@@ -523,7 +525,7 @@ public class SpotsArray
 		String row;
 		while ((row = csvReader.readLine()) != null) 
 		{
-		    String[] data = row.split(",");
+		    String[] data = row.split(sep);
 		    if (data[0] .equals( "#")) 
 		    {
 		    	switch(data[1]) 
@@ -562,7 +564,7 @@ public class SpotsArray
 		try {
 			row = csvReader.readLine();			
 			while ((row = csvReader.readLine()) != null) {
-				String[] data = row.split(",");
+				String[] data = row.split(sep);
 				if (data[0] .equals( "#")) 
 					return data[1];
 				Spot spot = getSpotFromName(data[2]);
@@ -583,10 +585,10 @@ public class SpotsArray
 		try {
 			row = csvReader.readLine();
 			row = csvReader.readLine();
-			String[] data = row.split(",");
+			String[] data = row.split(sep);
 			spotsDescription.csvImportSpotsDescriptionData(data);
 			row = csvReader.readLine();
-			data = row.split(",");
+			data = row.split(sep);
 			if ( data[0].substring(0, Math.min( data[0].length(), 5)).equals("n spot")) {
 				int nspots = Integer.valueOf(data[1]);
 				if (nspots >= spotsList.size())
@@ -594,7 +596,7 @@ public class SpotsArray
 				else
 					spotsList.subList(nspots, spotsList.size()).clear();
 				row = csvReader.readLine();
-				data = row.split(",");
+				data = row.split(sep);
 			}
 			if (data[0] .equals( "#")) {
 			  	return data[1];
@@ -613,7 +615,7 @@ public class SpotsArray
 			boolean y = true;
 			boolean x = row.contains("x0");
 			while ((row = csvReader.readLine()) != null) {
-				String[] data = row.split(",");
+				String[] data = row.split(sep);
 				if (data[0] .equals( "#")) 
 					return data[1];
 
@@ -660,14 +662,14 @@ public class SpotsArray
 		try {
 			csvWriter.append(spotsDescription.csvExportSectionHeader());
 			csvWriter.append(spotsDescription.csvExportExperimentDescriptors());
-			csvWriter.append("n spots=," + Integer.toString(spotsList.size()) + "\n");
-			csvWriter.append("#,#\n");
+			csvWriter.append("n spots="+sep + Integer.toString(spotsList.size()) + "\n");
+			csvWriter.append("#"+sep+"#\n");
 			
 			if (spotsList.size() > 0) {
 				csvWriter.append(spotsList.get(0).csvExportSpotArrayHeader());
 				for (Spot spot:spotsList) 
 					csvWriter.append(spot.csvExportDescription());
-				csvWriter.append("#,#\n");
+				csvWriter.append("#"+sep+"#\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -685,7 +687,7 @@ public class SpotsArray
 			for (Spot spot:spotsList) {
 				csvWriter.append(spot.csvExportMeasures_OneType(measureType));
 			}
-			csvWriter.append("#,#\n");
+			csvWriter.append("#"+sep+"#\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -88,16 +88,17 @@ public class ChartAreas extends IcyFrame
 		flagMaxMinSet = false;
 		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
 		
-		int icage = 0;
         final NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
         yAxis.setAutoRangeIncludesZero(false);  
-//        yAxis.setInverted(true);
+
         final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
         Paint[] color = ChartColor.createDefaultPaintArray();
 
 		for (XYSeriesCollection xySeriesCollection : xyDataSetList) 
 		{
-			NumberAxis xAxis = new NumberAxis("Cage " + icage);
+			String[] description = xySeriesCollection.getSeries(0).getDescription().split("_");
+			
+			NumberAxis xAxis = new NumberAxis(description[0]);
 			XYLineAndShapeRenderer subPlotRenderer = new XYLineAndShapeRenderer(true, false);
 			final XYPlot subplot = new XYPlot(xySeriesCollection, xAxis, null, subPlotRenderer);
 			int icolor = 0;
@@ -107,12 +108,20 @@ public class ChartAreas extends IcyFrame
 					icolor = 0;
 				subPlotRenderer.setSeriesPaint(i, color[icolor]);
 			}
-			subplot.setBackgroundPaint(Color.LIGHT_GRAY);
-			subplot.setDomainGridlinePaint(Color.WHITE);
-			subplot.setRangeGridlinePaint(Color.WHITE);
+			
+			int nflies = Integer.valueOf(description[1]);
+			if (nflies < 1) {
+				subplot.setBackgroundPaint(Color.LIGHT_GRAY);
+				subplot.setDomainGridlinePaint(Color.WHITE);
+				subplot.setRangeGridlinePaint(Color.WHITE);
+			}
+			else
+			{
+				subplot.setBackgroundPaint(Color.WHITE);
+				subplot.setDomainGridlinePaint(Color.GRAY);
+				subplot.setRangeGridlinePaint(Color.GRAY);
+			}
 			combinedXYPlot.add(subplot);
-						
-			icage++;
 		}
 		
         JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, true);
@@ -199,6 +208,7 @@ public class ChartAreas extends IcyFrame
 				xyList.add(xySeriesCollection);
 			}
 			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name.substring(4));
+			seriesXY.setDescription("cage "+ xlsResults.cageID + "_"+ xlsResults.nflies);
 			xySeriesCollection.addSeries(seriesXY );
 			updateGlobalMaxMin();
 		}
