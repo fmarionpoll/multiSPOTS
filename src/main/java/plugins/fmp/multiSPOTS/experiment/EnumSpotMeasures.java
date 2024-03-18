@@ -8,10 +8,10 @@ public enum EnumSpotMeasures
 	SPOTS_ARRAY("SPOTS", "array of spots"),
 	SPOTS_MEASURES("MEASURES", "spot measures"),
 
-	AREA_SUM("AREA_SUM", "sum of pixels over threshold"),
-	AREA_SUM2("AREA_SUM2", "square of sum pixels over threshold"),
-	AREA_CNTPIX("AREA_CNTPIX", "n pixels over threshold"),
-	AREA_MEANGREY("AREA_MEANGREY", "average grey value of pixels over threshold"),
+	AREA_SUM("AREA_SUM", "sum grey over threshold"),
+	AREA_SUM2("AREA_SUM2", "sum2 grey over threshold"),
+	AREA_CNTPIX("AREA_CNTPIX", "pixels over threshold"),
+	AREA_MEANGREY("AREA_MEANGREY", "avg grey of pixels over threshold"),
 	ALL ("ALL", "all options");
 	
 	private String label;
