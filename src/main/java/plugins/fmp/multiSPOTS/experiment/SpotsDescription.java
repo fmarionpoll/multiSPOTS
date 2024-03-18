@@ -236,9 +236,9 @@ public class SpotsDescription
 				Double.toString(volume), 
 				Integer.toString(pixels), 
 				stimulusR,
-				concentrationR,
+				concentrationR.replace(",", "."),
 				stimulusL,
-				concentrationL,
+				concentrationL.replace(",", "."),
 				old_boxID, 
 				old_experiment, 
 				old_comment1, 
@@ -252,19 +252,19 @@ public class SpotsDescription
 	
 	public void csvImportSpotsDescriptionData(String[] data) {
 		int i= 0; 
-		grouping = Integer.valueOf(data[i]); i++;
-		volume = Double.valueOf(data[i]); i++; 
-		pixels = Integer.valueOf(data[i]); i++; 
-		stimulusR = data[i]; i++;
-		concentrationR = data[i]; i++;
-		stimulusL = data[i]; i++;
-		concentrationL = data[i]; i++;
-		old_boxID= data[i]; i++; 
-		old_experiment= data[i]; i++; 
-		old_comment1= data[i]; i++; 
-		old_comment2= data[i]; i++; 
-		old_strain= data[i]; i++; 
-		old_sex= data[i]; 
+		grouping 		= Integer.valueOf(data[i]); i++;
+		volume 			= Double.valueOf(data[i]); i++; 
+		pixels 			= Integer.valueOf(data[i]); i++; 
+		stimulusR 		= data[i]; i++;
+		concentrationR 	= data[i]; i++;
+		stimulusL 		= data[i]; i++;
+		concentrationL 	= data[i]; i++;
+		old_boxID 		= data[i]; i++; 
+		old_experiment	= data[i]; i++; 
+		old_comment1	= data[i]; i++; 
+		old_comment2	= data[i]; i++; 
+		old_strain		= data[i]; i++; 
+		old_sex			= data[i]; 
 	}
 
 }

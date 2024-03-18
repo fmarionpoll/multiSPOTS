@@ -639,8 +639,8 @@ public class Spot implements Comparable <Spot>
 				break;
 
 			default:
-				sbf.append("#" + sep + "UNDEFINED"+sep+"------------\n");
-				break;
+				sbf.append("#" + sep + "UNDEFINED"+ sep + "------------\n");
+				break; 
 		}
 		return sbf.toString();
 	}
@@ -667,16 +667,16 @@ public class Spot implements Comparable <Spot>
 	{
 		int i = 0;
 		kymographPrefix = data[i]; i++;
-		kymographIndex = Integer.valueOf(data[i]); i++; 
+		kymographIndex 	= Integer.valueOf(data[i]); i++; 
 		roi.setName(data[i]); i++;
-		spotCageID = Integer.valueOf(data[i]); i++;
-		spotNFlies = Integer.valueOf(data[i]); i++;
-		spotVolume = Double.valueOf(data[i]); i++; 
-		pixels = Integer.valueOf(data[i]); i++; 
-		radius = Integer.valueOf(data[i]); i++;
-		spotStim = data[i]; i++; 
-		spotConc = data[i]; i++; 
-		spotCageSide = data[i]; 
+		spotCageID 		= Integer.valueOf(data[i]); i++;
+		spotNFlies 		= Integer.valueOf(data[i]); i++;
+		spotVolume 		= Double.valueOf(data[i]); i++; 
+		pixels 			= Integer.valueOf(data[i]); i++; 
+		radius 			= Integer.valueOf(data[i]); i++;
+		spotStim 		= data[i]; i++; 
+		spotConc 		= data[i]; i++; 
+		spotCageSide 	= data[i]; 
 	}
 		
 	public void csvImportMeasures_OneType(EnumSpotMeasures measureType, String[] data, boolean x, boolean y) 
