@@ -262,7 +262,7 @@ public class Experiment
 	{
 		if (seqCamData == null) 
 			seqCamData = new SequenceCamData();
-		loadMCExperiment ();
+		loadXML_MCExperiment ();
 		
 		getFileIntervalsFromSeqCamData();
 		
@@ -280,7 +280,7 @@ public class Experiment
 	{
 		if (seqCamData == null) 
 			seqCamData = new SequenceCamData();
-		loadMCExperiment ();
+		loadXML_MCExperiment ();
 		
 		getFileIntervalsFromSeqCamData();
 		
@@ -295,7 +295,7 @@ public class Experiment
 	{
 		if (seqCamData == null) 
 			seqCamData = new SequenceCamData();
-		loadMCExperiment ();
+		loadXML_MCExperiment ();
 		
 		getFileIntervalsFromSeqCamData();
 		
@@ -377,7 +377,7 @@ public class Experiment
 		loadImagesForSequenceCamData(strImagesDirectory);
 		if (seqCamData != null) 
 		{
-			loadMCExperiment();
+			loadXML_MCExperiment();
 			getFileIntervalsFromSeqCamData();
 		}
 		return seqCamData;
@@ -496,7 +496,7 @@ public class Experiment
 	
 	// -------------------------------
 	
-	public boolean loadMCExperiment () 
+	public boolean loadXML_MCExperiment () 
 	{
 		if (strExperimentDirectory == null && seqCamData != null) 
 		{
@@ -507,7 +507,7 @@ public class Experiment
 		return found;
 	}
 	
-	public boolean saveMCExperiment () 
+	public boolean saveXML_MCExperiment () 
 	{
 		final Document doc = XMLUtil.createDocument(true);
 		if (doc != null) 
@@ -557,11 +557,11 @@ public class Experiment
 	{
 		String mcCapillaryFileName = findFile_3Locations(capillaries.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
 		if (mcCapillaryFileName == null && seqCamData != null) 
-			return xmlLoadOldCapillaries();
+			return xmlLoad_OldCapillaries();
 		
 		boolean flag = capillaries.loadMCCapillaries_Descriptors(mcCapillaryFileName);
 		if (capillaries.capillariesList.size() < 1)
-			flag = xmlLoadOldCapillaries();
+			flag = xmlLoad_OldCapillaries();
 		
 		// load MCcapillaries description of experiment
 		if (field_boxID .contentEquals("..")
@@ -587,7 +587,7 @@ public class Experiment
 		if (mcSpotsFileName == null && seqCamData != null) 
 			return false;
 		
-		boolean flag = spotsArray.loadMCSpots_Descriptors(mcSpotsFileName);
+		boolean flag = spotsArray.xmlLoad_MCSpots_Descriptors(mcSpotsFileName);
 		
 		// load MCcapillaries description of experiment
 		if (field_boxID .contentEquals("..")
@@ -618,20 +618,23 @@ public class Experiment
 		return flag1 & flag2;
 	}
 	
-	public boolean loadMCSpots() 
+	public boolean load_Spots() 
 	{
-//		String xmlSpotsFileName = findFile_3Locations(spotsArray.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
-//		boolean flag1 = spotsArray.loadMCSpots_Descriptors(xmlSpotsFileName);
 		boolean flag1 = loadMCSpots_Only();
 		return flag1 & spotsArray.load_Spots(strExperimentDirectory);
 	}
 	
-	private boolean xmlLoadOldCapillaries() 
+	public boolean save_Spots() 
+	{
+		return spotsArray.save_Spots(strExperimentDirectory);
+	}
+	
+	private boolean xmlLoad_OldCapillaries() 
 	{
 		String filename = findFile_3Locations("capillarytrack.xml", IMG_DIRECTORY, EXPT_DIRECTORY, BIN_DIRECTORY);
 		if (capillaries.xmlLoadOldCapillaries_Only(filename)) 
 		{
-			saveMCCapillaries_Only();
+			xmlSave_MCCapillaries_Only();
 			saveCapillariesMeasures();
 			try {
 		        Files.delete(Paths.get(filename));
@@ -641,9 +644,9 @@ public class Experiment
 			return true;
 		}
 		filename = findFile_3Locations("roislines.xml", IMG_DIRECTORY, EXPT_DIRECTORY, BIN_DIRECTORY);
-		if (xmlReadCamDataROIs(filename)) 
+		if (xmlLoad_CamDataROIs(filename)) 
 		{
-			xmlReadRoiLineParameters(filename);
+			xmlLoad_RoiLineParameters(filename);
 			try {
 		        Files.delete(Paths.get(filename));
 		    } catch (IOException e) {
@@ -654,7 +657,7 @@ public class Experiment
 		return false;
 	}
 	
-	private boolean xmlReadCamDataROIs(String fileName) 
+	private boolean xmlLoad_CamDataROIs(String fileName) 
 	{
 		Sequence seq = seqCamData.seq;
 		if (fileName != null)  
@@ -673,7 +676,7 @@ public class Experiment
 		return false;
 	}
 	
-	private boolean xmlReadRoiLineParameters(String filename) 
+	private boolean xmlLoad_RoiLineParameters(String filename) 
 	{
 		if (filename != null)  
 		{
@@ -686,18 +689,18 @@ public class Experiment
 
 	// ---------------------------------------------
 	
-	public boolean saveMCCapillaries_Only() 
+	public boolean xmlSave_MCCapillaries_Only() 
 	{
 		String xmlCapillaryFileName = strExperimentDirectory + File.separator + capillaries.getXMLNameToAppend();
 		transferExpDescriptorsToCapillariesDescriptors();
 		return capillaries.xmlSaveCapillaries_Descriptors(xmlCapillaryFileName);
 	}
 	
-	public boolean saveMCSpots_Only() 
+	public boolean xmlSave_MCSpots_Only() 
 	{
 		String xmlSpotFileName = strExperimentDirectory + File.separator + spotsArray.getXMLNameToAppend();
 		transferExpDescriptorsToSpotsDescriptors();
-		return spotsArray.xmlSaveSpots_Descriptors(xmlSpotFileName);
+		return spotsArray.xmlSave_Spots_Descriptors(xmlSpotFileName);
 	}
 
  	public boolean loadCapillariesMeasures() 
@@ -864,8 +867,6 @@ public class Experiment
 	
 	public void replaceFieldValue(EnumXLSColumnHeader fieldEnumCode, String oldValue, String newValue) 
 	{
-		loadMCExperiment();
-		loadSpotsMeasures();
 		switch (fieldEnumCode)
 		{
 		case EXP_STIM:
@@ -879,15 +880,13 @@ public class Experiment
 		case CAP_STIM:
 		case CAP_CONC:
 			if(replaceCapillariesValuesIfEqualOld(fieldEnumCode, oldValue, newValue));
-				saveMCCapillaries_Only();
+				xmlSave_MCCapillaries_Only();
 			if(replaceSpotsValuesIfEqualOld(fieldEnumCode, oldValue, newValue));
-				saveMCSpots_Only();	
+				xmlSave_MCSpots_Only();	
 			break;
 		default:
 			break;
 		}
-		saveMCExperiment();
-		saveSpotsMeasures();
 	}
 	
 	// --------------------------------------------

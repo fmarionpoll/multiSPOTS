@@ -116,7 +116,7 @@ public class BuildKymographs extends BuildSeries
 		}
 		waitFuturesCompletion(processor, futuresArray, progressBar);
 		progressBar.close();
-		exp.saveMCExperiment();
+		exp.saveXML_MCExperiment();
 	}
 	
 	private boolean buildKymo (Experiment exp) 

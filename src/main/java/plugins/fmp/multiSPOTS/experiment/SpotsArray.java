@@ -46,7 +46,8 @@ public class SpotsArray
 	public boolean load_Measures(String directory) 
 	{
 		boolean flag = false;
-		try {
+		try 
+		{
 			flag = csvLoadSpots(directory, EnumSpotMeasures.SPOTS_MEASURES);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -58,8 +59,22 @@ public class SpotsArray
 	public boolean load_Spots(String directory) 
 	{
 		boolean flag = false;
-		try {
+		try 
+		{
 			flag = csvLoadSpots(directory, EnumSpotMeasures.ALL);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return flag;
+	}
+	
+	public boolean save_Spots(String directory) 
+	{
+		boolean flag = false;
+		try 
+		{
+			flag = csvSaveSpots(directory);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,7 +87,7 @@ public class SpotsArray
 		if (directory == null)
 			return false;
 		
-		csvSaveMeasures(directory);
+		csvSaveSpots(directory);
 		return true;
 	}
 	
@@ -83,14 +98,14 @@ public class SpotsArray
 		return ID_MCSPOTS_XML;
 	}
 
-	public boolean xmlSaveSpots_Descriptors(String csFileName) 
+	public boolean xmlSave_Spots_Descriptors(String csFileName) 
 	{
 		if (csFileName != null) {
 			final Document doc = XMLUtil.createDocument(true);
 			if (doc != null) 
 			{
 				spotsDescription.xmlSaveSpotsDescription (doc);
-				xmlSaveListOfSpots(doc);
+				xmlSave_ListOfSpots(doc);
 				return XMLUtil.saveDocument(doc, csFileName);
 			}
 		}
@@ -99,7 +114,7 @@ public class SpotsArray
 	
 	// ---------------------------------
 	
-	private boolean xmlSaveListOfSpots(Document doc) 
+	private boolean xmlSave_ListOfSpots(Document doc) 
 	{
 		Node node = XMLUtil.getElement(XMLUtil.getRootElement(doc), ID_SPOTTRACK);
 		if (node == null)
@@ -118,7 +133,7 @@ public class SpotsArray
 		return true;
 	}
 	
-	public boolean loadMCSpots_Descriptors(String csFileName) 
+	public boolean xmlLoad_MCSpots_Descriptors(String csFileName) 
 	{	
 		boolean flag = false;
 		if (csFileName == null)
@@ -128,12 +143,12 @@ public class SpotsArray
 		if (doc != null) 
 		{
 			spotsDescription.xmlLoadSpotsDescription(doc);
-			flag = xmlLoadSpots_Only_v1(doc);
+			flag = xmlLoad_Spots_Only_v1(doc);
 		}
 		return flag;
 	}
 	
-	private boolean xmlLoadSpots_Only_v1(Document doc) 
+	private boolean xmlLoad_Spots_Only_v1(Document doc) 
 	{
 		Node node = XMLUtil.getElement(XMLUtil.getRootElement(doc), ID_SPOTTRACK);
 		if (node == null)
@@ -530,7 +545,7 @@ public class SpotsArray
 				sep = String.valueOf(row.charAt(1));
 			
 		    String[] data = row.split(sep);
-		    if (data[0] .equals( "#")) 
+		    if (data[0] .equals("#")) 
 		    {
 		    	switch(data[1]) 
 		    	{
@@ -639,7 +654,7 @@ public class SpotsArray
 	
 	// ---------------------------------
 	
-	private boolean csvSaveMeasures(String directory) 
+	private boolean csvSaveSpots(String directory) 
 	{
 		Path path = Paths.get(directory);
 		if (!Files.exists(path))

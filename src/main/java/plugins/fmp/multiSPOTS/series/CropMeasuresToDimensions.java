@@ -5,7 +5,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 public class CropMeasuresToDimensions  extends BuildSeries  {
 	void analyzeExperiment(Experiment exp) 
 	{
-		exp.loadMCExperiment();
+		exp.loadXML_MCExperiment();
 		exp.loadMCCapillaries();
 		if (exp.loadKymographs()) 
 		{

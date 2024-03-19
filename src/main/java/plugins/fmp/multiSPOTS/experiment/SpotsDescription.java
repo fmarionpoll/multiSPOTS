@@ -208,7 +208,7 @@ public class SpotsDescription
 	public String csvExportSectionHeader(String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append("#"+csvSep+"DESCRIPTION, multiSPOTS data\n");
+		sbf.append("#"+csvSep+"DESCRIPTION"+csvSep+"multiSPOTS data\n");
 		List<String> row2 = Arrays.asList(
 				ID_DESCGROUPING, 
 				ID_DESCVOLUMEUL, 

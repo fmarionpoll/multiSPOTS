@@ -80,7 +80,7 @@ public class DetectSpots extends BuildSeries
 		exp.spotsArray.computeMeanGrey(0);
 		exp.spotsArray.computeSum2();
 		exp.spotsArray.transferLimitMeasuresToPolyline(); 
-		exp.saveMCExperiment();
+		exp.saveXML_MCExperiment();
 		exp.saveSpotsMeasures();
 	}
 	

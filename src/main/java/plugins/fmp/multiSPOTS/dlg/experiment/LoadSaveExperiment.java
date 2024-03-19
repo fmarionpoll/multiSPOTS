@@ -160,12 +160,12 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		if (exp != null) 
 		{
 			if (exp.seqCamData != null) {
-				exp.saveMCExperiment();
+				exp.saveXML_MCExperiment();
+				exp.saveSpotsMeasures();
 				exp.saveCapillariesMeasures(exp.getKymosBinFullDirectory());
 			}
 			exp.closeSequences();
 		}
-//		parent0.paneKymos.tabDisplay.kymographsCombo.removeAllItems();
 	}
 	
 	public void closeCurrentExperiment() 
@@ -189,7 +189,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	boolean openSelecteExperiment(Experiment exp) 
 	{
 		ProgressFrame progressFrame = new ProgressFrame("Load Data");
-		exp.loadMCExperiment();
+		exp.loadXML_MCExperiment();
 
 		boolean flag = true;
 		progressFrame.setMessage("Load image");
@@ -200,8 +200,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		exp.seqCamData.seq.addListener(this);
 		if (exp.seqCamData != null) 
 		{
-//			exp.loadCamDataCapillaries();
-			exp.loadMCSpots();
+			exp.load_Spots();
 			exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
 			if (parent0.paneExperiment.tabOptions.graphsCheckBox.isSelected())
 				parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
@@ -210,7 +209,6 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			progressFrame.setMessage("Load data: update dialogs");
 			
 			parent0.paneExperiment.updateDialogs(exp);
-//			parent0.paneKymos.updateDialogs(exp);
 			parent0.paneSpots.updateDialogs(exp);
 		}
 		else 
