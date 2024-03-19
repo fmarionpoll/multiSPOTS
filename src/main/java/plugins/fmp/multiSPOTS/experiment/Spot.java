@@ -576,13 +576,12 @@ public class Spot implements Comparable <Spot>
 	
 	// -----------------------------------------------------------------------------
 	
-	String sep = ",";
 	
-	public String csvExportSpotArrayHeader() 
+	public String csvExportSpotArrayHeader(String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		
-		sbf.append("#"+sep+"SPOTS"+sep+"describe each spot\n");
+		sbf.append("#"+csvSep+"SPOTS"+csvSep+"describe each spot\n");
 		List<String> row2 = Arrays.asList(
 				"prefix",
 				"kymoIndex", 
@@ -595,12 +594,12 @@ public class Spot implements Comparable <Spot>
 				"stim", 
 				"conc", 
 				"side");
-		sbf.append(String.join(sep, row2));
+		sbf.append(String.join(csvSep, row2));
 		sbf.append("\n");
 		return sbf.toString();
 	}
 	
-	public String csvExportDescription() 
+	public String csvExportDescription(String csvSep) 
 	{	
 		StringBuffer sbf = new StringBuffer();
 		if (kymographPrefix == null)
@@ -618,16 +617,16 @@ public class Spot implements Comparable <Spot>
 				spotStim.replace(",", "."), 
 				spotConc.replace(",", "."), 
 				spotCageSide.replace(",", "."));
-		sbf.append(String.join(sep, row));
+		sbf.append(String.join(csvSep, row));
 		sbf.append("\n");
 		return sbf.toString();
 	}
 	
-	public String csvExportMeasures_SectionHeader(EnumSpotMeasures measureType) 
+	public String csvExportMeasures_SectionHeader(EnumSpotMeasures measureType, String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		List<String> listExplanation1 =  Arrays.asList("\n name", "index", "npts", "y0", "y1", "etc\n");		
-		String explanation1 = String.join(sep, listExplanation1);
+		String explanation1 = String.join(csvSep, listExplanation1);
 		
 		switch(measureType) 
 		{
@@ -635,27 +634,27 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM2:
 			case AREA_CNTPIX:	
 			case AREA_MEANGREY:
-				sbf.append("#" + sep + measureType.toString() + sep + explanation1);
+				sbf.append("#" + csvSep + measureType.toString() + csvSep + explanation1);
 				break;
 
 			default:
-				sbf.append("#" + sep + "UNDEFINED"+ sep + "------------\n");
+				sbf.append("#" + csvSep + "UNDEFINED"+ csvSep + "------------\n");
 				break; 
 		}
 		return sbf.toString();
 	}
 	
-	public String csvExportMeasures_OneType(EnumSpotMeasures measureType) 
+	public String csvExportMeasures_OneType(EnumSpotMeasures measureType, String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append(roi.getName() + sep + kymographIndex + sep);
+		sbf.append(roi.getName() + csvSep + kymographIndex + csvSep);
 		
 		switch(measureType) 
 		{
-			case AREA_SUM:  	sum.cvsExportYDataToRow(sbf); break;
-			case AREA_SUM2:  	sum2.cvsExportYDataToRow(sbf); break;
-			case AREA_CNTPIX:  	cntPix.cvsExportYDataToRow(sbf); break;
-			case AREA_MEANGREY: meanGrey.cvsExportYDataToRow(sbf); break;
+			case AREA_SUM:  	sum.cvsExportYDataToRow(sbf, csvSep); break;
+			case AREA_SUM2:  	sum2.cvsExportYDataToRow(sbf, csvSep); break;
+			case AREA_CNTPIX:  	cntPix.cvsExportYDataToRow(sbf, csvSep); break;
+			case AREA_MEANGREY: meanGrey.cvsExportYDataToRow(sbf, csvSep); break;
 			default:
 				break;
 		}

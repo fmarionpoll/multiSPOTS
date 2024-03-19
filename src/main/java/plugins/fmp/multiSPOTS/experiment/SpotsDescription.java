@@ -207,9 +207,10 @@ public class SpotsDescription
 	
 	final String sep = ",";
 	
-	public String csvExportSectionHeader() {
+	public String csvExportSectionHeader(String csvSep) 
+	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append("#,DESCRIPTION, multiSPOTS data\n");
+		sbf.append("#"+csvSep+"DESCRIPTION, multiSPOTS data\n");
 		List<String> row2 = Arrays.asList(
 				ID_DESCGROUPING, 
 				ID_DESCVOLUMEUL, 
@@ -224,12 +225,13 @@ public class SpotsDescription
 				ID_COMMENT2, 
 				ID_STRAIN, 
 				ID_SEX);
-		sbf.append(String.join(sep, row2));
+		sbf.append(String.join(csvSep, row2));
 		sbf.append("\n");
 		return sbf.toString();
 	}
 	
-	public String csvExportExperimentDescriptors() {
+	public String csvExportExperimentDescriptors(String csvSep) 
+	{
 		StringBuffer sbf = new StringBuffer();
 		List<String> row3 = Arrays.asList(
 				Integer.toString(grouping),
@@ -245,12 +247,13 @@ public class SpotsDescription
 				old_comment2, 
 				old_strain, 
 				old_sex);
-		sbf.append(String.join(sep, row3));
+		sbf.append(String.join(csvSep, row3));
 		sbf.append("\n");
 		return sbf.toString();
 	}
 	
-	public void csvImportSpotsDescriptionData(String[] data) {
+	public void csvImportSpotsDescriptionData(String[] data) 
+	{
 		int i= 0; 
 		grouping 		= Integer.valueOf(data[i]); i++;
 		volume 			= Double.valueOf(data[i]); i++; 

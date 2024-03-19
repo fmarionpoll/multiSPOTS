@@ -512,7 +512,8 @@ public class SpotsArray
 	
 	// --------------------------------
 	
-	final String sep = ",";
+//	final String sep = ",";
+	final String csvSep = ";";
 	
 	private boolean csvLoadSpots(String directory, EnumSpotMeasures option) throws Exception 
 	{
@@ -521,50 +522,55 @@ public class SpotsArray
 		if (!csvFile.isFile()) 
 			return false;
 		
-		BufferedReader csvReader = new BufferedReader(new FileReader(pathToCsv));
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(pathToCsv));
 		String row;
-		while ((row = csvReader.readLine()) != null) 
+		String sep = ";";
+		while ((row = bufferedReader.readLine()) != null) 
 		{
+			if (row.charAt(0) == '#') 
+				sep = String.valueOf(row.charAt(1));
+			
 		    String[] data = row.split(sep);
 		    if (data[0] .equals( "#")) 
 		    {
 		    	switch(data[1]) 
 		    	{
 		    	case "DESCRIPTION":
-		    		csvLoadDescription (csvReader);
+		    		csvLoadDescription (bufferedReader, sep);
 		    		break;
 		    	case "SPOTS":
-		    		csvLoadSpotsArray (csvReader);
+		    		csvLoadSpotsArray (bufferedReader, sep);
 		    		break;
 		    	case "AREA_SUM":
-		    		csvLoadSpotsMeasures(csvReader, EnumSpotMeasures.AREA_SUM);
+		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM, sep);
 		    		break;
 		    	case "AREA_SUMSQ":
-		    		csvLoadSpotsMeasures(csvReader, EnumSpotMeasures.AREA_SUM2);
+		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM2, sep);
 		    		break;
 		    	case "AREA_MEANGREY":
-		    		csvLoadSpotsMeasures(csvReader, EnumSpotMeasures.AREA_MEANGREY);
+		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_MEANGREY, sep);
 		    		break;
 		    	case "AREA_CNTPIX":
-		    		csvLoadSpotsMeasures(csvReader, EnumSpotMeasures.AREA_CNTPIX);
+		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_CNTPIX, sep);
 		    		break;
 	    		default:
 	    			break;
 		    	}
 		    }
 		}
-		csvReader.close();
+		bufferedReader.close();
 		
 		return true;
 	}
 	
-	private String csvLoadSpotsArray (BufferedReader csvReader) 
+	private String csvLoadSpotsArray (BufferedReader csvReader, String csvSep) 
 	{
 		String row;
 		try {
 			row = csvReader.readLine();			
-			while ((row = csvReader.readLine()) != null) {
-				String[] data = row.split(sep);
+			while ((row = csvReader.readLine()) != null) 
+			{
+				String[] data = row.split(csvSep);
 				if (data[0] .equals( "#")) 
 					return data[1];
 				Spot spot = getSpotFromName(data[2]);
@@ -579,24 +585,25 @@ public class SpotsArray
 		return null;
 	}
 	
-	private String csvLoadDescription (BufferedReader csvReader) 
+	private String csvLoadDescription (BufferedReader csvReader, String csvSep) 
 	{
 		String row;
 		try {
 			row = csvReader.readLine();
 			row = csvReader.readLine();
-			String[] data = row.split(sep);
+			String[] data = row.split(csvSep);
 			spotsDescription.csvImportSpotsDescriptionData(data);
 			row = csvReader.readLine();
-			data = row.split(sep);
-			if ( data[0].substring(0, Math.min( data[0].length(), 5)).equals("n spot")) {
+			data = row.split(csvSep);
+			if ( data[0].substring(0, Math.min( data[0].length(), 5)).equals("n spot"))
+			{
 				int nspots = Integer.valueOf(data[1]);
 				if (nspots >= spotsList.size())
 					spotsList.ensureCapacity(nspots);
 				else
 					spotsList.subList(nspots, spotsList.size()).clear();
 				row = csvReader.readLine();
-				data = row.split(sep);
+				data = row.split(csvSep);
 			}
 			if (data[0] .equals( "#")) {
 			  	return data[1];
@@ -607,7 +614,7 @@ public class SpotsArray
 		return null;
 	}
 	
-	private String csvLoadSpotsMeasures(BufferedReader csvReader, EnumSpotMeasures measureType ) 
+	private String csvLoadSpotsMeasures(BufferedReader csvReader, EnumSpotMeasures measureType, String csvSep ) 
 	{
 		String row;
 		try {
@@ -615,7 +622,7 @@ public class SpotsArray
 			boolean y = true;
 			boolean x = row.contains("x0");
 			while ((row = csvReader.readLine()) != null) {
-				String[] data = row.split(sep);
+				String[] data = row.split(csvSep);
 				if (data[0] .equals( "#")) 
 					return data[1];
 
@@ -660,16 +667,16 @@ public class SpotsArray
 	private boolean csvSaveDescription(FileWriter csvWriter) 
 	{
 		try {
-			csvWriter.append(spotsDescription.csvExportSectionHeader());
-			csvWriter.append(spotsDescription.csvExportExperimentDescriptors());
-			csvWriter.append("n spots="+sep + Integer.toString(spotsList.size()) + "\n");
-			csvWriter.append("#"+sep+"#\n");
+			csvWriter.append(spotsDescription.csvExportSectionHeader(csvSep));
+			csvWriter.append(spotsDescription.csvExportExperimentDescriptors(csvSep));
+			csvWriter.append("n spots="+csvSep + Integer.toString(spotsList.size()) + "\n");
+			csvWriter.append("#"+csvSep+"#\n");
 			
 			if (spotsList.size() > 0) {
-				csvWriter.append(spotsList.get(0).csvExportSpotArrayHeader());
+				csvWriter.append(spotsList.get(0).csvExportSpotArrayHeader(csvSep));
 				for (Spot spot:spotsList) 
-					csvWriter.append(spot.csvExportDescription());
-				csvWriter.append("#"+sep+"#\n");
+					csvWriter.append(spot.csvExportDescription(csvSep));
+				csvWriter.append("#"+csvSep+"#\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -683,11 +690,11 @@ public class SpotsArray
 		try {
 			if (spotsList.size() <= 1)
 				return false;
-			csvWriter.append(spotsList.get(0).csvExportMeasures_SectionHeader(measureType));
+			csvWriter.append(spotsList.get(0).csvExportMeasures_SectionHeader(measureType, csvSep));
 			for (Spot spot:spotsList) {
-				csvWriter.append(spot.csvExportMeasures_OneType(measureType));
+				csvWriter.append(spot.csvExportMeasures_OneType(measureType, csvSep));
 			}
-			csvWriter.append("#"+sep+"#\n");
+			csvWriter.append("#"+csvSep+"#\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
