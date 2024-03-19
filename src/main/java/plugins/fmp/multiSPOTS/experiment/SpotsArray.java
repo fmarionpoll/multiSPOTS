@@ -634,7 +634,7 @@ public class SpotsArray
 		try {
 			row = csvReader.readLine();
 			boolean y = true;
-			boolean x = row.contains("x0");
+			boolean x = row.contains("xi");
 			while ((row = csvReader.readLine()) != null) {
 				String[] data = row.split(csvSep);
 				if (data[0] .equals( "#")) 

@@ -625,7 +625,7 @@ public class Spot implements Comparable <Spot>
 	public String csvExportMeasures_SectionHeader(EnumSpotMeasures measureType, String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		List<String> listExplanation1 =  Arrays.asList("\n name", "index", "npts", "y0", "y1", "etc\n");		
+		List<String> listExplanation1 =  Arrays.asList("\n name", "index", "npts", "yi","\n");		
 		String explanation1 = String.join(csvSep, listExplanation1);
 		
 		switch(measureType) 
