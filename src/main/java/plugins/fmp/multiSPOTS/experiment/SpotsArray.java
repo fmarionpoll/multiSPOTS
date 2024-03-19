@@ -663,11 +663,11 @@ public class SpotsArray
 		try {
 			FileWriter csvWriter = new FileWriter(directory + File.separator + csvFileName);
 			
-			csvSaveDescription(csvWriter);			
-			csvSaveMeasures_OneType(csvWriter, EnumSpotMeasures.AREA_SUM);
-			csvSaveMeasures_OneType(csvWriter, EnumSpotMeasures.AREA_SUM2);
-			csvSaveMeasures_OneType(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
-			csvSaveMeasures_OneType(csvWriter, EnumSpotMeasures.AREA_MEANGREY);
+			csvSave_DescriptionSection(csvWriter);			
+			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM);
+			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM2);
+			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
+			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_MEANGREY);
 			csvWriter.flush();
 			csvWriter.close();
 			
@@ -678,7 +678,7 @@ public class SpotsArray
 		return true;
 	}
 	
-	private boolean csvSaveDescription(FileWriter csvWriter) 
+	private boolean csvSave_DescriptionSection(FileWriter csvWriter) 
 	{
 		try {
 			csvWriter.append(spotsDescription.csvExportSectionHeader(csvSep));
@@ -699,7 +699,7 @@ public class SpotsArray
 		return true;
 	}
 	
-	private boolean csvSaveMeasures_OneType(FileWriter csvWriter, EnumSpotMeasures measureType) 
+	private boolean csvSave_MeasuresSection(FileWriter csvWriter, EnumSpotMeasures measureType) 
 	{
 		try {
 			if (spotsList.size() <= 1)

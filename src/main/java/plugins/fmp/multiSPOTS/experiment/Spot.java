@@ -651,10 +651,18 @@ public class Spot implements Comparable <Spot>
 		
 		switch(measureType) 
 		{
-			case AREA_SUM:  	sum.cvsExportYDataToRow(sbf, csvSep); break;
-			case AREA_SUM2:  	sum2.cvsExportYDataToRow(sbf, csvSep); break;
-			case AREA_CNTPIX:  	cntPix.cvsExportYDataToRow(sbf, csvSep); break;
-			case AREA_MEANGREY: meanGrey.cvsExportYDataToRow(sbf, csvSep); break;
+			case AREA_SUM:  	
+				sum.cvsExportYDataToRow(sbf, csvSep); 
+				break;
+			case AREA_SUM2:  	
+				sum2.cvsExportYDataToRow(sbf, csvSep); 
+				break;
+			case AREA_CNTPIX:  	
+				cntPix.cvsExportYDataToRow(sbf, csvSep); 
+				break;
+			case AREA_MEANGREY: 
+				meanGrey.cvsExportYDataToRow(sbf, csvSep); 
+				break;
 			default:
 				break;
 		}

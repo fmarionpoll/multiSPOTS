@@ -336,37 +336,37 @@ public class SpotMeasure
 	// ----------------------------------------------------------------------
 	
 	
-	public boolean cvsExportXYDataToRow(StringBuffer sbf, String csvSep) 
+	public boolean cvsExportXYDataToRow(StringBuffer sbf, String sep) 
 	{
 		int npoints = 0;
 		if (polylineLevel != null && polylineLevel.npoints > 0)
 			npoints = polylineLevel.npoints; 
 			
-		sbf.append(Integer.toString(npoints)+ csvSep);
+		sbf.append(Integer.toString(npoints)+ sep);
 		if (npoints > 0) {
 			for (int i = 0; i < polylineLevel.npoints; i++)
 	        {
 	            sbf.append(StringUtil.toString((double) polylineLevel.xpoints[i]));
-	            sbf.append(csvSep);
+	            sbf.append(sep);
 	            sbf.append(StringUtil.toString((double) polylineLevel.ypoints[i]));
-	            sbf.append(csvSep);
+	            sbf.append(sep);
 	        }
 		}
 		return true;
 	}
 	
-	public boolean cvsExportYDataToRow(StringBuffer sbf, String csvSep) 
+	public boolean cvsExportYDataToRow(StringBuffer sbf, String sep) 
 	{
 		int npoints = 0;
 		if (polylineLevel != null && polylineLevel.npoints > 0)
 			npoints = polylineLevel.npoints; 
 			
-		sbf.append(Integer.toString(npoints)+ csvSep);
+		sbf.append(Integer.toString(npoints)+ sep);
 		if (npoints > 0) {
 			for (int i = 0; i < polylineLevel.npoints; i++)
 	        {
 	            sbf.append(StringUtil.toString((double) polylineLevel.ypoints[i]));
-	            sbf.append(csvSep);
+	            sbf.append(sep);
 	        }
 		}
 		return true;
