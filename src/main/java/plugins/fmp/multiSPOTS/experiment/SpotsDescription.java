@@ -205,8 +205,6 @@ public class SpotsDescription
 	
 	// --------------------------------------
 	
-	final String sep = ",";
-	
 	public String csvExportSectionHeader(String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();

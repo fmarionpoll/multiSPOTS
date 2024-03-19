@@ -312,9 +312,7 @@ public class CapillaryLevel
 	
 	// ----------------------------------------------------------------------
 	
-	final String sep = ",";
-	
-	public boolean cvsExportDataToRow(StringBuffer sbf) 
+	public boolean cvsExportDataToRow(StringBuffer sbf, String sep) 
 	{
 		int npoints = 0;
 		if (polylineLevel != null && polylineLevel.npoints > 0)

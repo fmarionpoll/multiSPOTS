@@ -76,9 +76,8 @@ public class Cage
 	}
 	
 	//--------------------------------------
-	final String sep = ",";
 	
-	public String csvExportCageDescription() 
+	public String csvExportCageDescription(String sep) 
 	{	
 		StringBuffer sbf = new StringBuffer();
 		List<String> row = new ArrayList<String>();

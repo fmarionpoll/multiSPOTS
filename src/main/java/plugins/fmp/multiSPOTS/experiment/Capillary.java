@@ -686,9 +686,7 @@ public class Capillary implements Comparable <Capillary>
 	
 	// -----------------------------------------------------------------------------
 	
-	final String sep = ",";
-	
-	public String csvExportCapillarySubSectionHeader() 
+	public String csvExportCapillarySubSectionHeader(String sep) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		
@@ -710,7 +708,7 @@ public class Capillary implements Comparable <Capillary>
 		return sbf.toString();
 	}
 	
-	public String csvExportCapillaryDescription() 
+	public String csvExportCapillaryDescription(String sep) 
 	{	
 		StringBuffer sbf = new StringBuffer();
 		if (kymographPrefix == null)
@@ -733,7 +731,7 @@ public class Capillary implements Comparable <Capillary>
 		return sbf.toString();
 	}
 	
-	public String csvExportMeasureSectionHeader(EnumCapillaryMeasures measureType) 
+	public String csvExportMeasureSectionHeader(EnumCapillaryMeasures measureType, String sep) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		String explanation1 = "columns="+sep+"name"+sep+"index"+sep+" npts"+sep+"..,.(xi;yi)\n";
@@ -754,20 +752,20 @@ public class Capillary implements Comparable <Capillary>
 		return sbf.toString();
 	}
 	
-	public String csvExportCapillaryData(EnumCapillaryMeasures measureType) 
+	public String csvExportCapillaryData(EnumCapillaryMeasures measureType, String sep) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append(kymographPrefix+ ","+ kymographIndex +",");
+		sbf.append(kymographPrefix+ sep + kymographIndex +sep);
 		
 		switch(measureType) {
 			case TOPLEVEL:
-				ptsTop.cvsExportDataToRow(sbf);
+				ptsTop.cvsExportDataToRow(sbf, sep);
 				break;
 			case BOTTOMLEVEL:
-				ptsBottom.cvsExportDataToRow(sbf);
+				ptsBottom.cvsExportDataToRow(sbf, sep);
 				break;
 			case TOPDERIVATIVE:
-				ptsDerivative.cvsExportDataToRow(sbf);
+				ptsDerivative.cvsExportDataToRow(sbf, sep);
 				break;
 			default:
 				break;

@@ -512,7 +512,6 @@ public class SpotsArray
 	
 	// --------------------------------
 	
-//	final String sep = ",";
 	final String csvSep = ";";
 	
 	private boolean csvLoadSpots(String directory, EnumSpotMeasures option) throws Exception 
