@@ -748,11 +748,11 @@ public class XLSExport
 	{
 		Point pt = new Point(col0, 0);
 		writeExperiment_descriptors(expAll, charSeries, sheet, pt, xlsExportOption);
-		pt = writeExperiment_data(rowListForOneExp, sheet, xlsExportOption, pt);
+		pt = writeExperiment_data(rowListForOneExp, sheet, pt);
 		return pt.x;
 	}
 			
-	private Point writeExperiment_data (XLSResultsArray rowListForOneExp, XSSFSheet sheet, EnumXLSExportType option, Point pt_main) 
+	private Point writeExperiment_data (XLSResultsArray rowListForOneExp, XSSFSheet sheet, Point pt_main) 
 	{
 		int rowSeries = pt_main.x +2;
 		int column_dataArea = pt_main.y;
