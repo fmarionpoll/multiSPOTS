@@ -33,7 +33,7 @@ public class Graphs extends JPanel implements SequenceListener
 	private MultiSPOTS 	parent0 				= null;
 	private JButton 	displayResultsButton 	= new JButton("Display results");
 	EnumXLSExportType[] measures = new EnumXLSExportType[]{
-			EnumXLSExportType.AREA_SUM, EnumXLSExportType.AREA_CNTPIX, EnumXLSExportType.AREA_AVGGREY
+			EnumXLSExportType.AREA_SUM, EnumXLSExportType.AREA_CNTPIX, EnumXLSExportType.AREA_MEANGREY
 			};
 	JComboBox<EnumXLSExportType> exportTypeComboBox = new JComboBox<EnumXLSExportType> (measures);
 	private JCheckBox 	t0Checkbox 	= new JCheckBox("relative to t0", true);

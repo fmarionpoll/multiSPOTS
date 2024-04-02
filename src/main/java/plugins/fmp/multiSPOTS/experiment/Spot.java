@@ -323,9 +323,10 @@ public class Spot implements Comparable <Spot>
 		}
 	}
 	
-	public void computeMeanGreyFromPolyline(int cntPixel) 
+	void computeMeanGreyFromPolyline(int cntPixel) 
 	{
 		int nFrames = sum.polylineLevel.npoints;
+		if (cntPixel < 1) cntPixel = 1;
 		for (int i = 0; i < nFrames; i++)
 		{
 			meanGrey.polylineLevel.ypoints[i] = sum.polylineLevel.ypoints[i]/cntPixel;
@@ -367,8 +368,8 @@ public class Spot implements Comparable <Spot>
 		case AREA_CNTPIX:
 		case AREA_CNTPIX_LR:
 			return cntPix;
-		case AREA_AVGGREY:
-		case AREA_AVGGREY_LR:
+		case AREA_MEANGREY:
+		case AREA_MEANGREY_LR:
 			return meanGrey;
 		default:
 			return null;
