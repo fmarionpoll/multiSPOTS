@@ -187,9 +187,9 @@ public class DetectSpots extends BuildSeries
 	            }
 	        }
         }
-        spot.sum.measure[t] = sum ;
-        spot.flyPresent[t] = flyFound;
-        spot.cntPix.measure[t] = cntPix;
+        spot.sum.measureValues[t] = sum ;
+        spot.flyPresent.measureBooleans[t] = flyFound;
+        spot.cntPix.measureValues[t] = cntPix;
 	}
 	
 	public boolean[] getBoolMap_FromBinaryInt(IcyBufferedImage img) 
@@ -220,12 +220,10 @@ public class DetectSpots extends BuildSeries
 		int nFrames = exp.seqCamData.nTotalFrames;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			spot.sum.measure 			= new  double [nFrames+1];
-			spot.sumClean.measure 		= new  double [nFrames+1];
-			spot.flyPresent 			= new  boolean [nFrames+1];
-			spot.cntPix.measure  		= new  double [nFrames+1];	
-//			spot.sum2.measure  	= new  double [nFrames+1];
-//			spot.meanGrey.measure  = new  double [nFrames+1];	
+			spot.sum.measureValues 			= new  double [nFrames+1];
+			spot.sumClean.measureValues 		= new  double [nFrames+1];
+			spot.flyPresent.measureBooleans = new  boolean [nFrames+1];
+			spot.cntPix.measureValues  		= new  double [nFrames+1];		
 		}
 	}
 	

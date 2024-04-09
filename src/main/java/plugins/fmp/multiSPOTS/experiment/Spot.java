@@ -49,9 +49,6 @@ public class Spot implements Comparable <Spot>
 	public SpotMeasure					sumClean		= new SpotMeasure("sumClean"); 
 	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
 	public SpotMeasure					flyPresent		= new SpotMeasure("flyPresent"); 
-//	public SpotMeasure					sum2  			= new SpotMeasure("sum2"); 
-//	public SpotMeasure					meanGrey		= new SpotMeasure("meanGrey"); 
-
 	public boolean						valid			= true;
 
 	private final String 				ID_META 		= "metaMC";
@@ -120,8 +117,7 @@ public class Spot implements Comparable <Spot>
 		sum .copy(spotFrom.sum);
 		sumClean .copy(spotFrom.sumClean);
 		cntPix .copy(spotFrom.cntPix);	
-//		sum2 .copy(spotFrom.sum2);
-		//		meanGrey .copy(spotFrom.meanGrey);	
+		flyPresent.copy(spotFrom.flyPresent);	
 	}
 	
 	public ROI2D getRoi() 
@@ -274,8 +270,7 @@ public class Spot implements Comparable <Spot>
 		cropSpotAreaToNPoints(sum , npoints);
 		cropSpotAreaToNPoints(sumClean , npoints);
 		cropSpotAreaToNPoints(cntPix , npoints);
-//		cropSpotAreaToNPoints(sum2 , npoints);
-//		cropSpotAreaToNPoints(meanGrey , npoints);
+		cropSpotAreaToNPoints(flyPresent , npoints);
 	}
 	
 	private void cropSpotAreaToNPoints(SpotMeasure spotArea, int npoints) 
@@ -289,8 +284,7 @@ public class Spot implements Comparable <Spot>
 		restoreSpotAreaClippedMeasures( sum );
 		restoreSpotAreaClippedMeasures( sumClean );
 		restoreSpotAreaClippedMeasures( cntPix );
-//		restoreSpotAreaClippedMeasures( sum2 );
-//		restoreSpotAreaClippedMeasures( meanGrey );
+		restoreSpotAreaClippedMeasures( flyPresent );
 	}
 	
 	private void restoreSpotAreaClippedMeasures(SpotMeasure spotArea)
@@ -309,54 +303,11 @@ public class Spot implements Comparable <Spot>
 		return limitsOptions;
 	}
 	
-//	public void computeMeanGreyFromMeasure(int cntPixel) 
-//	{
-//		int nFrames = sum.measure.length;
-//		for (int i = 0; i < nFrames; i++)
-//		{
-//			meanGrey.measure[i] = sum.measure[i]/cntPixel;
-//		}
-//	}
-	
-//	public void computeSum2FromMeasure() 
-//	{
-//		int nFrames = sum.measure.length;
-//		for (int i = 0; i < nFrames; i++)
-//		{
-//			double value = sum.measure[i];
-//			sum2.measure[i] = value*value;
-//		}
-//	}
-//	
-//	void computeMeanGreyFromPolyline(int cntPixel) 
-//	{
-//		int nFrames = sum.polylineLevel.npoints;
-//		if (cntPixel < 1) cntPixel = 1;
-//		for (int i = 0; i < nFrames; i++)
-//		{
-//			meanGrey.polylineLevel.ypoints[i] = sum.polylineLevel.ypoints[i]/cntPixel;
-//		}
-//	}
-	
-//	public void computeSum2FromPolyline() 
-//	{
-//		int nFrames = sum.polylineLevel.npoints;
-//		sum2.polylineLevel = new Level2D(nFrames);
-//		for (int i = 0; i < nFrames; i++)
-//		{
-//			double value = sum.polylineLevel.ypoints[i];
-//			sum2.polylineLevel.ypoints[i] = value*value;
-//		}
-//	}
-	
 	public void filterSpikes()
 	{
 		sum.filterSpikes(); 
 		sumClean.filterSpikes();
 		cntPix.filterSpikes(); 
-	
-//		computeMeanGreyFromPolyline(0);
-//		computeSum2FromPolyline();	
 	}
 	
 	// -----------------------------------------------------------
@@ -372,15 +323,9 @@ public class Spot implements Comparable <Spot>
 			return sumClean;
 		case AREA_FLYPRESENT:
 			return flyPresent;
-//		case AREA_SUM2:	
-//		case AREA_SUM2_LR:
-//			return sum2;
 		case AREA_CNTPIX:
 		case AREA_CNTPIX_LR:
 			return cntPix;
-//		case AREA_MEANGREY:
-//		case AREA_MEANGREY_LR:
-//			return meanGrey;
 		default:
 			return null;
 		}
@@ -419,7 +364,7 @@ public class Spot implements Comparable <Spot>
 	    if (flag) 
 	    {
 	    	version 		= XMLUtil.getElementValue(nodeMeta, ID_VERSION, "0.0.0");
-	    	cageIndex 	= XMLUtil.getElementIntValue(nodeMeta, ID_INDEXIMAGE, cageIndex);
+	    	cageIndex 		= XMLUtil.getElementIntValue(nodeMeta, ID_INDEXIMAGE, cageIndex);
      
 	        descriptionOK 	= XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
@@ -566,8 +511,7 @@ public class Spot implements Comparable <Spot>
 		sum.adjustToImageWidth(imageWidth);
 		sumClean.adjustToImageWidth(imageWidth);
 		cntPix.adjustToImageWidth(imageWidth);
-//		sum2.adjustToImageWidth(imageWidth);
-//		meanGrey.adjustToImageWidth(imageWidth);
+		flyPresent.adjustToImageWidth(imageWidth);
 	}
 
 	public void cropToImageWidth (int imageWidth) 
@@ -575,38 +519,36 @@ public class Spot implements Comparable <Spot>
 		sum.cropToImageWidth(imageWidth);
 		sumClean.cropToImageWidth(imageWidth);
 		cntPix.cropToImageWidth(imageWidth);
-//		sum2.cropToImageWidth(imageWidth);
-//		meanGrey.cropToImageWidth(imageWidth);
+		flyPresent.cropToImageWidth(imageWidth);
 	}
 	
 	public void transferToPolyline() 
 	{
-		sum.setPolylineLevelFromTempData(getRoi().getName(), cageIndex);
-		sumClean.setPolylineLevelFromTempData(getRoi().getName(), cageIndex);
-		cntPix.setPolylineLevelFromTempData(getRoi().getName(), cageIndex);
-//		sum2.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
-//		meanGrey.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+		sum.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
+		sumClean.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
+		cntPix.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
+		flyPresent.setPolylineLevelFromMeasureBoolean(getRoi().getName(), cageIndex);
 	}
 	
 	public void transferSumToSumClean()
 	{
-		int npoints = sum.measure.length;
+		int npoints = sum.measureValues.length;
 		
 		for (int i = 0; i <npoints; i++) 
 		{
-			if(!flyPresent[i]) {
-				sumClean.measure[i] = sum.measure[i];
+			if(!flyPresent.measureBooleans[i]) {
+				sumClean.measureValues[i] = sum.measureValues[i];
 			} else if (i > 0) {
-				sumClean.measure[i] = sumClean.measure[i-1];
+				sumClean.measureValues[i] = sumClean.measureValues[i-1];
 			} else {
 				double value = Double.NaN;
 				for (int j= i; j < npoints; j++) {
-					if (!flyPresent[j]) {
-						value = sum.measure[j];
+					if (!flyPresent.measureBooleans[j]) {
+						value = sum.measureValues[j];
 						break;
 					}
 				}
-				sumClean.measure[i] = value;
+				sumClean.measureValues[i] = value;
 			}
 			
 		}
@@ -672,8 +614,6 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUMCLEAN:
 			case AREA_FLYPRESENT:
 			case AREA_CNTPIX:	
-//			case AREA_SUM2:
-//			case AREA_MEANGREY:
 				sbf.append("#" + csvSep + measureType.toString() + csvSep + explanation1);
 				break;
 
@@ -698,17 +638,11 @@ public class Spot implements Comparable <Spot>
 				sumClean.cvsExportYDataToRow(sbf, csvSep); 
 				break;
 			case AREA_FLYPRESENT:
-				flyPresent.cvsExportBooleanDataToRow(sbf, csvSep); 
+				flyPresent.cvsExportYDataToRow(sbf, csvSep); 
 				break;
 			case AREA_CNTPIX:  	
 				cntPix.cvsExportYDataToRow(sbf, csvSep); 
 				break;	
-//			case AREA_SUM2:  	
-//				sum2.cvsExportYDataToRow(sbf, csvSep); 
-//				break;
-//			case AREA_MEANGREY: 
-//				meanGrey.cvsExportYDataToRow(sbf, csvSep); 
-//				break;
 			default:
 				break;
 		}
@@ -741,9 +675,7 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN:	sumClean.csvImportXYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
-			case AREA_FLYPRESENT:  flyPresent.csvImportBooleanDataFromRow( data, 2); break;
-//			case AREA_SUM2:  	sum2.csvImportXYDataFromRow( data, 2); break;
-//			case AREA_MEANGREY: meanGrey.csvImportXYDataFromRow( data, 2); break;
+			case AREA_FLYPRESENT:  flyPresent.csvImportXYDataFromRow( data, 2); break;
 			default:
 				break;
 			}
@@ -755,9 +687,7 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN: sumClean.csvImportYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
-			case AREA_FLYPRESENT: flyPresent.csvImportBooleanDataFromRow( data, 2); break;
-//			case AREA_SUM2:  	sum2.csvImportYDataFromRow( data, 2); break;
-//			case AREA_MEANGREY: meanGrey.csvImportYDataFromRow( data, 2); break;
+			case AREA_FLYPRESENT: flyPresent.csvImportYDataFromRow( data, 2); break;
 			default:
 				break;
 			}

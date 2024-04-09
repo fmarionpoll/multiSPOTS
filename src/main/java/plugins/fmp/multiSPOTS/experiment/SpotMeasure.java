@@ -19,8 +19,8 @@ public class SpotMeasure
 {
 	public Level2D 	polylineLevel 	= new Level2D();
 	public Level2D 	polyline_old 	= new Level2D();
-	public double [] measure		= null;
-	public boolean [] measureBool	= null;
+	public double [] measureValues	= null;
+	public boolean [] measureBooleans	= null;
 	
 	public String	name 			= "noname";
 	public int		index 			= -1;
@@ -62,17 +62,17 @@ public class SpotMeasure
 		for (int i = xStart; i <= xEnd; i++, j++) 
 		{
 			xpoints[j] = i;
-			ypoints[j] = measure[j];
+			ypoints[j] = measureValues[j];
 		}
 		polylineLevel = new Level2D(xpoints, ypoints, npoints);
 	}
 	
-	public void setPolylineLevelFromTempData(String name, int indexImage) 
+	public void setPolylineLevelFromMeasureValues(String name, int indexImage) 
 	{
 		this.name = name;
 		this.index = indexImage;
 		int xStart = 0;
-		int xEnd = measure.length-1;
+		int xEnd = measureValues.length-1;
 		int npoints = xEnd-xStart+1;
 		double [] xpoints = new double [npoints];
 		double [] ypoints = new double [npoints];
@@ -80,7 +80,25 @@ public class SpotMeasure
 		for (int i = xStart; i <= xEnd; i++, j++) 
 		{
 			xpoints[j] = i;
-			ypoints[j] = measure[j];
+			ypoints[j] = measureValues[j];
+		}
+		polylineLevel = new Level2D(xpoints, ypoints, npoints);
+	}
+	
+	public void setPolylineLevelFromMeasureBoolean(String name, int indexImage) 
+	{
+		this.name = name;
+		this.index = indexImage;
+		int xStart = 0;
+		int xEnd = measureValues.length-1;
+		int npoints = xEnd-xStart+1;
+		double [] xpoints = new double [npoints];
+		double [] ypoints = new double [npoints];
+		int j= 0;
+		for (int i = xStart; i <= xEnd; i++, j++) 
+		{
+			xpoints[j] = i;
+			ypoints[j] =  measureBooleans[j] ? 1. : 0.;
 		}
 		polylineLevel = new Level2D(xpoints, ypoints, npoints);
 	}
@@ -88,10 +106,10 @@ public class SpotMeasure
 	public void setTempDataFromPolylineLevel() 
 	{
 		int npoints = polylineLevel.npoints;
-		measure = new double [npoints];
+		measureValues = new double [npoints];
 		for (int j = 0; j < npoints; j++) 
 		{
-			measure[j] = polylineLevel.ypoints[j];
+			measureValues[j] = polylineLevel.ypoints[j];
 		}
 	}
 	

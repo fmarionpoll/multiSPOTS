@@ -503,21 +503,6 @@ public class SpotsArray
 		spotsList.clear();
 	}
 	
-//	public void computeMeanGrey(int t) 
-//	{
-//		for (Spot spot: spotsList) {
-//			int cntPix = (int) spot.cntPix.measure[t];
-//			spot.computeMeanGreyFromMeasure(cntPix);	
-//		}
-//	}
-	
-//	public void computeSum2() 
-//	{
-//		for (Spot spot: spotsList) {
-//			spot.computeSum2FromMeasure();	
-//		}
-//	}
-	
 	public void transferSumToSumClean() 
 	{
 		for (Spot spot: spotsList) {
