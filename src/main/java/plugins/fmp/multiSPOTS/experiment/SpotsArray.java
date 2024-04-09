@@ -518,10 +518,17 @@ public class SpotsArray
 //		}
 //	}
 	
+	public void transferSumToSumClean() 
+	{
+		for (Spot spot: spotsList) {
+			spot.transferSumToSumClean();	
+		}
+	}
+	
 	public void transferLimitMeasuresToPolyline() 
 	{
 		for (Spot spot: spotsList) {
-			spot.transferLimitMeasuresToPolyline();	
+			spot.transferToPolyline();	
 		}
 	}
 	
@@ -669,8 +676,8 @@ public class SpotsArray
 			csvSave_DescriptionSection(csvWriter);			
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUMCLEAN);
-//			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM2);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
+//			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM2);
 //			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_MEANGREY);
 			csvWriter.flush();
 			csvWriter.close();

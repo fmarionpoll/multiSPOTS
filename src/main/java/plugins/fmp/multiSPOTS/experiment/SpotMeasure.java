@@ -20,6 +20,7 @@ public class SpotMeasure
 	public Level2D 	polylineLevel 	= new Level2D();
 	public Level2D 	polyline_old 	= new Level2D();
 	public double [] measure		= null;
+	public boolean [] measureBool	= null;
 	
 	public String	name 			= "noname";
 	public int		index 			= -1;

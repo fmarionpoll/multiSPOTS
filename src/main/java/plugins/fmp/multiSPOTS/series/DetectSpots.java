@@ -80,6 +80,7 @@ public class DetectSpots extends BuildSeries
 		if (directory == null)
 			return;
 
+		exp.spotsArray.transferSumToSumClean();
 		exp.spotsArray.transferLimitMeasuresToPolyline(); 
 		exp.saveXML_MCExperiment();
 		exp.saveSpotsMeasures();
@@ -130,7 +131,7 @@ public class DetectSpots extends BuildSeries
 				public void run() {	
 					for (Spot spot: exp.spotsArray.spotsList) 
 					{
-						measureValues (workImage, spot, fromSourceImageIndex, options.detectLevel1Threshold, options.overthreshold);
+						measureValues (sourceImage, workImage, spot, fromSourceImageIndex, options.detectLevel1Threshold, options.overthreshold, options.thresholdFly);
 					}
 				}}));
 
@@ -139,37 +140,55 @@ public class DetectSpots extends BuildSeries
 		return true;
 	}
 	
-	private void measureValues(IcyBufferedImage workImage, Spot spot, int t, int threshold, boolean overthreshold)
+	private void measureValues(IcyBufferedImage sourceImage, IcyBufferedImage workImage, Spot spot, int t, int threshold, boolean overthreshold, int thresholdFly)
 	{
 		double sum = 0;
         int cntPix = 0;
         
-        final IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, spot.mask2D.bounds);
-        final boolean[] mask = spot.mask2D.mask;
-        final double[] data = (double[]) ArrayUtil.arrayToDoubleArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());
-
-        for (int offset = 0; offset < data.length; offset++)
+        IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, spot.mask2D.bounds);
+        boolean[] mask = spot.mask2D.mask;
+        double[] workData = (double[]) ArrayUtil.arrayToDoubleArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());
+        
+        IcyBufferedImage subSourceImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
+        double[] sourceData = (double[]) ArrayUtil.arrayToDoubleArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
+        boolean flyFound = false;
+        
+        if (overthreshold)
         {
-            // pixel contained in ROI ?
-            if (mask[offset])
-            {
-                final double value = data[offset];
-                if (overthreshold)
-                {
+	        for (int offset = 0; offset < workData.length; offset++)
+	        {
+	            if (mask[offset])
+	            {
+	                double value = workData[offset];    
                     if (value < threshold) 
                     {
                         cntPix++;
                         sum += value;
                     }
-                }
-                else if (value > threshold) 
-                {
+	                if (!flyFound && sourceData[offset] < thresholdFly)
+	                	flyFound = true;
+	            }
+	        } 
+        }
+        else 
+        {
+	        for (int offset = 0; offset < workData.length; offset++)
+	        {
+	            if (mask[offset])
+	            {
+	                double value = workData[offset];
+	                if (value > threshold) 
+	                {
                         cntPix++;
                         sum += value;
-                }
-            }
-        } 
+	                }
+	                if (!flyFound && sourceData[offset] < thresholdFly)
+	                	flyFound = true;
+	            }
+	        }
+        }
         spot.sum.measure[t] = sum ;
+        spot.flyPresent[t] = flyFound;
         spot.cntPix.measure[t] = cntPix;
 	}
 	
@@ -201,9 +220,10 @@ public class DetectSpots extends BuildSeries
 		int nFrames = exp.seqCamData.nTotalFrames;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			spot.sum.measure 	= new  double [nFrames+1];
-			spot.sumClean.measure 	= new  double [nFrames+1];
-			spot.cntPix.measure  = new  double [nFrames+1];	
+			spot.sum.measure 			= new  double [nFrames+1];
+			spot.sumClean.measure 		= new  double [nFrames+1];
+			spot.flyPresent 			= new  boolean [nFrames+1];
+			spot.cntPix.measure  		= new  double [nFrames+1];	
 //			spot.sum2.measure  	= new  double [nFrames+1];
 //			spot.meanGrey.measure  = new  double [nFrames+1];	
 		}
@@ -247,4 +267,5 @@ public class DetectSpots extends BuildSeries
 			e.printStackTrace();
 		}
 	}
+
 }

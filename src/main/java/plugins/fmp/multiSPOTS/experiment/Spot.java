@@ -28,8 +28,8 @@ public class Spot implements Comparable <Spot>
 	private ArrayList<ROI2DAlongTime>	listRoiAlongTime= new ArrayList<ROI2DAlongTime>();
 	public BooleanMask2D 				mask2D			= null;
 
-	public int							kymographIndex 	= -1;
-	private String						kymographPrefix	= null;
+	public int							cageIndex 	= -1;
+	private String						cagePrefix	= null;
 	public String 						version 		= null;
 
 	public String 						spotStim		= new String("..");
@@ -48,6 +48,7 @@ public class Spot implements Comparable <Spot>
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
 	public SpotMeasure					sumClean		= new SpotMeasure("sumClean"); 
 	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
+	public boolean[]					flyPresent		= null;
 //	public SpotMeasure					sum2  			= new SpotMeasure("sum2"); 
 //	public SpotMeasure					meanGrey		= new SpotMeasure("meanGrey"); 
 
@@ -101,7 +102,7 @@ public class Spot implements Comparable <Spot>
 	
 	public void copy(Spot spotFrom) 
 	{
-		kymographIndex 	= spotFrom.kymographIndex;
+		cageIndex 	= spotFrom.cageIndex;
 		version 		= spotFrom.version;
 		roi 			= (ROI2D) spotFrom.roi.getCopy();
 		
@@ -117,9 +118,10 @@ public class Spot implements Comparable <Spot>
 		limitsOptions	= spotFrom.limitsOptions;
 		
 		sum .copy(spotFrom.sum);
-//		sum2 .copy(spotFrom.sum2);
+		sumClean .copy(spotFrom.sumClean);
 		cntPix .copy(spotFrom.cntPix);	
-//		meanGrey .copy(spotFrom.meanGrey);	
+//		sum2 .copy(spotFrom.sum2);
+		//		meanGrey .copy(spotFrom.meanGrey);	
 	}
 	
 	public ROI2D getRoi() 
@@ -151,7 +153,7 @@ public class Spot implements Comparable <Spot>
 	
 	public String getRoiNamePrefix() 
 	{
-		return kymographPrefix;
+		return cagePrefix;
 	}
 	
  	public String getSpotSide() 
@@ -185,7 +187,7 @@ public class Spot implements Comparable <Spot>
 		{
 		case DISTANCE:
 		case ISALIVE:
-			value = spotCageSide + "(L=R)";
+			value = spotCageSide + "(T=B)";
 			break;
 		case TOPLEVELDELTA_LR:
 		case TOPLEVEL_LR:
@@ -270,8 +272,9 @@ public class Spot implements Comparable <Spot>
 	public void cropMeasuresToNPoints (int npoints) 
 	{
 		cropSpotAreaToNPoints(sum , npoints);
-//		cropSpotAreaToNPoints(sum2 , npoints);
+		cropSpotAreaToNPoints(sumClean , npoints);
 		cropSpotAreaToNPoints(cntPix , npoints);
+//		cropSpotAreaToNPoints(sum2 , npoints);
 //		cropSpotAreaToNPoints(meanGrey , npoints);
 	}
 	
@@ -284,8 +287,9 @@ public class Spot implements Comparable <Spot>
 	public void restoreClippedMeasures () 
 	{
 		restoreSpotAreaClippedMeasures( sum );
-//		restoreSpotAreaClippedMeasures( sum2 );
+		restoreSpotAreaClippedMeasures( sumClean );
 		restoreSpotAreaClippedMeasures( cntPix );
+//		restoreSpotAreaClippedMeasures( sum2 );
 //		restoreSpotAreaClippedMeasures( meanGrey );
 	}
 	
@@ -348,6 +352,7 @@ public class Spot implements Comparable <Spot>
 	public void filterSpikes()
 	{
 		sum.filterSpikes(); 
+		sumClean.filterSpikes();
 		cntPix.filterSpikes(); 
 	
 //		computeMeanGreyFromPolyline(0);
@@ -412,7 +417,7 @@ public class Spot implements Comparable <Spot>
 	    if (flag) 
 	    {
 	    	version 		= XMLUtil.getElementValue(nodeMeta, ID_VERSION, "0.0.0");
-	    	kymographIndex 	= XMLUtil.getElementIntValue(nodeMeta, ID_INDEXIMAGE, kymographIndex);
+	    	cageIndex 	= XMLUtil.getElementIntValue(nodeMeta, ID_INDEXIMAGE, cageIndex);
      
 	        descriptionOK 	= XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
@@ -465,7 +470,7 @@ public class Spot implements Comparable <Spot>
     	if (version == null)
     		version = ID_VERSIONNUM;
     	XMLUtil.setElementValue(nodeMeta, ID_VERSION, version);
-        XMLUtil.setElementIntValue(nodeMeta, ID_INDEXIMAGE, kymographIndex);
+        XMLUtil.setElementIntValue(nodeMeta, ID_INDEXIMAGE, cageIndex);
 
         XMLUtil.setElementBooleanValue(nodeMeta, ID_DESCOK, descriptionOK);
         XMLUtil.setElementIntValue(nodeMeta, ID_VERSIONINFOS, versionInfos);
@@ -557,25 +562,52 @@ public class Spot implements Comparable <Spot>
 	public void adjustToImageWidth (int imageWidth) 
 	{
 		sum.adjustToImageWidth(imageWidth);
-//		sum2.adjustToImageWidth(imageWidth);
+		sumClean.adjustToImageWidth(imageWidth);
 		cntPix.adjustToImageWidth(imageWidth);
+//		sum2.adjustToImageWidth(imageWidth);
 //		meanGrey.adjustToImageWidth(imageWidth);
 	}
 
 	public void cropToImageWidth (int imageWidth) 
 	{
 		sum.cropToImageWidth(imageWidth);
-//		sum2.cropToImageWidth(imageWidth);
+		sumClean.cropToImageWidth(imageWidth);
 		cntPix.cropToImageWidth(imageWidth);
+//		sum2.cropToImageWidth(imageWidth);
 //		meanGrey.cropToImageWidth(imageWidth);
 	}
 	
-	public void transferLimitMeasuresToPolyline() 
+	public void transferToPolyline() 
 	{
-		sum.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+		sum.setPolylineLevelFromTempData(getRoi().getName(), cageIndex);
+		sumClean.setPolylineLevelFromTempData(getRoi().getName(), cageIndex);
+		cntPix.setPolylineLevelFromTempData(getRoi().getName(), cageIndex);
 //		sum2.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
-		cntPix.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
 //		meanGrey.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+	}
+	
+	public void transferSumToSumClean()
+	{
+		int npoints = sum.measure.length;
+		
+		for (int i = 0; i <npoints; i++) 
+		{
+			if(!flyPresent[i]) {
+				sumClean.measure[i] = sum.measure[i];
+			} else if (i > 0) {
+				sumClean.measure[i] = sumClean.measure[i-1];
+			} else {
+				double value = Double.NaN;
+				for (int j= i; j < npoints; j++) {
+					if (!flyPresent[j]) {
+						value = sum.measure[j];
+						break;
+					}
+				}
+				sumClean.measure[i] = value;
+			}
+			
+		}
 	}
 	
 	// -----------------------------------------------------------------------------
@@ -606,12 +638,12 @@ public class Spot implements Comparable <Spot>
 	public String csvExportDescription(String csvSep) 
 	{	
 		StringBuffer sbf = new StringBuffer();
-		if (kymographPrefix == null)
-			kymographPrefix = getLast2ofSpotName();
+		if (cagePrefix == null)
+			cagePrefix = getLast2ofSpotName();
 		
 		List<String> row = Arrays.asList(
-				kymographPrefix,
-				Integer.toString(kymographIndex), 
+				cagePrefix,
+				Integer.toString(cageIndex), 
 				getRoi().getName(), 
 				Integer.toString(spotCageID),
 				Integer.toString(spotNFlies),
@@ -636,8 +668,8 @@ public class Spot implements Comparable <Spot>
 		{
 			case AREA_SUM:
 			case AREA_SUMCLEAN:
-//			case AREA_SUM2:
 			case AREA_CNTPIX:	
+//			case AREA_SUM2:
 //			case AREA_MEANGREY:
 				sbf.append("#" + csvSep + measureType.toString() + csvSep + explanation1);
 				break;
@@ -652,7 +684,7 @@ public class Spot implements Comparable <Spot>
 	public String csvExportMeasures_OneType(EnumSpotMeasures measureType, String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append(roi.getName() + csvSep + kymographIndex + csvSep);
+		sbf.append(roi.getName() + csvSep + cageIndex + csvSep);
 		
 		switch(measureType) 
 		{
@@ -662,12 +694,12 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUMCLEAN:  	
 				sumClean.cvsExportYDataToRow(sbf, csvSep); 
 				break;
-//			case AREA_SUM2:  	
-//				sum2.cvsExportYDataToRow(sbf, csvSep); 
-//				break;
 			case AREA_CNTPIX:  	
 				cntPix.cvsExportYDataToRow(sbf, csvSep); 
 				break;
+//			case AREA_SUM2:  	
+//				sum2.cvsExportYDataToRow(sbf, csvSep); 
+//				break;
 //			case AREA_MEANGREY: 
 //				meanGrey.cvsExportYDataToRow(sbf, csvSep); 
 //				break;
@@ -681,8 +713,8 @@ public class Spot implements Comparable <Spot>
 	public void csvImportDescription(String[] data) 
 	{
 		int i = 0;
-		kymographPrefix = data[i]; i++;
-		kymographIndex 	= Integer.valueOf(data[i]); i++; 
+		cagePrefix = data[i]; i++;
+		cageIndex 	= Integer.valueOf(data[i]); i++; 
 		roi.setName(data[i]); i++;
 		spotCageID 		= Integer.valueOf(data[i]); i++;
 		spotNFlies 		= Integer.valueOf(data[i]); i++;
@@ -702,8 +734,8 @@ public class Spot implements Comparable <Spot>
 			{
 			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN:	sumClean.csvImportXYDataFromRow( data, 2); break;
-//			case AREA_SUM2:  	sum2.csvImportXYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
+//			case AREA_SUM2:  	sum2.csvImportXYDataFromRow( data, 2); break;
 //			case AREA_MEANGREY: meanGrey.csvImportXYDataFromRow( data, 2); break;
 			default:
 				break;
@@ -715,8 +747,8 @@ public class Spot implements Comparable <Spot>
 			{
 			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN: sumClean.csvImportYDataFromRow( data, 2); break;
-//			case AREA_SUM2:  	sum2.csvImportYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
+//			case AREA_SUM2:  	sum2.csvImportYDataFromRow( data, 2); break;
 //			case AREA_MEANGREY: meanGrey.csvImportYDataFromRow( data, 2); break;
 			default:
 				break;

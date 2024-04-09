@@ -65,6 +65,7 @@ public class BuildSeriesOptions implements XMLPersistent
 	public boolean		buildDerivative			= true;
 
 	public int 			threshold 				= -1;
+	public int 			thresholdFly 			= 60;
 	public int			backgroundThreshold		= 40;
 	public int			backgroundNFrames		= 60;
 	public int			backgroundFirst			= 0;

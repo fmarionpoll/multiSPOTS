@@ -188,7 +188,7 @@ public class ExperimentUtils
 				roicircle.setName("spot" + substring + String.format("%02d", i));
 				i++;
 				Spot spot = new Spot((ROI2DShape)roicircle);
-				spot.kymographIndex = spotIndex;
+				spot.cageIndex = spotIndex;
 				spotIndex++;
 				spot.radius = radius;
 				exp.spotsArray.spotsList.add(spot);

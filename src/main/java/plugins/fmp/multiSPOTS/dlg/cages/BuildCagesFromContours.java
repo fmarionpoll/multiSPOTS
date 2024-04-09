@@ -57,7 +57,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 				ImageTransformEnums.H_HSB, ImageTransformEnums.S_HSB, ImageTransformEnums.B_HSB	});
 	private OverlayThreshold overlayThreshold 	= null;
 	private MultiSPOTS 			parent0			= null;
-	private ROI2DPolygon 		userPolygon 		= null;
+	private ROI2DPolygon 		userPolygon 	= null;
 	
 	
 	
