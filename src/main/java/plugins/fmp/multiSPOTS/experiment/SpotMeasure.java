@@ -90,7 +90,7 @@ public class SpotMeasure
 		this.name = name;
 		this.index = indexImage;
 		int xStart = 0;
-		int xEnd = measureValues.length-1;
+		int xEnd = measureBooleans.length-1;
 		int npoints = xEnd-xStart+1;
 		double [] xpoints = new double [npoints];
 		double [] ypoints = new double [npoints];
