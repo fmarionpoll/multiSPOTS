@@ -5,8 +5,8 @@
 <band name="Others">
 <item classname="plugins.adufour.activecontours.ActiveContours" priority="low"/>
 <item classname="plugins.vannary.morphomaths.AnalyzeSkeleton" priority="low"/>
-<item classname="plugins.fmp.multispots.viewer1D.Chart1DCanvas" priority="low"/>
-<item classname="plugins.fmp.multispots.tools.ImageTransform.Filters.ChessboardImage" priority="low"/>
+<item classname="plugins.fmp.multiSPOTS.viewer1D.Chart1DCanvas" priority="low"/>
+<item classname="plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.ChessboardImage" priority="low"/>
 <item classname="plugins.vannary.morphomaths.blocks.ClosingBinary" priority="low"/>
 <item classname="plugins.adufour.connectedcomponents.ConnectedComponents" priority="low"/>
 <item classname="plugins.adufour.roi.Convexify" priority="low"/>
@@ -19,9 +19,8 @@
 <item classname="plugins.adufour.roi.LabelExtractor" priority="low"/>
 <item classname="plugins.nchenouard.linearprogrammingfullsimplex.LinearProgrammingICYPlugin" priority="low"/>
 <item classname="plugins.nherve.maskeditor.MaskEditor" priority="low"/>
-<item classname="plugins.fmp.multispots.viewer1D.plugins.adufour.viewers.Montage2D" priority="low"/>
 <item classname="plugins.vannary.morphomaths.MorphoMaths" priority="low"/>
-<item classname="plugins.fmp.multispots.multiSPOTS" priority="low"/>
+<item classname="plugins.fmp.multiSPOTS.MultiSPOTS" priority="low"/>
 <item classname="plugins.vannary.morphomaths.blocks.OpeningBinary" priority="low"/>
 <item classname="plugins.adufour.protocols.Protocols" priority="low"/>
 <item classname="plugins.adufour.roi.ROIMeasures" priority="low"/>

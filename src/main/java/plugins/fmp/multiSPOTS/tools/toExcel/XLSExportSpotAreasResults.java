@@ -42,6 +42,7 @@ public class XLSExportSpotAreasResults extends XLSExport
 				if (options.spotAreas) 
 				{	
 					collast = getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
+					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_FLYPRESENT);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUMCLEAN);
 //					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM2);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);

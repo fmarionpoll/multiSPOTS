@@ -48,7 +48,7 @@ public class Spot implements Comparable <Spot>
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
 	public SpotMeasure					sumClean		= new SpotMeasure("sumClean"); 
 	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
-	public boolean[]					flyPresent		= null;
+	public SpotMeasure					flyPresent		= new SpotMeasure("flyPresent"); 
 //	public SpotMeasure					sum2  			= new SpotMeasure("sum2"); 
 //	public SpotMeasure					meanGrey		= new SpotMeasure("meanGrey"); 
 
@@ -370,6 +370,8 @@ public class Spot implements Comparable <Spot>
 			return sum;
 		case AREA_SUMCLEAN:
 			return sumClean;
+		case AREA_FLYPRESENT:
+			return flyPresent;
 //		case AREA_SUM2:	
 //		case AREA_SUM2_LR:
 //			return sum2;
@@ -668,6 +670,7 @@ public class Spot implements Comparable <Spot>
 		{
 			case AREA_SUM:
 			case AREA_SUMCLEAN:
+			case AREA_FLYPRESENT:
 			case AREA_CNTPIX:	
 //			case AREA_SUM2:
 //			case AREA_MEANGREY:
@@ -694,9 +697,12 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUMCLEAN:  	
 				sumClean.cvsExportYDataToRow(sbf, csvSep); 
 				break;
+			case AREA_FLYPRESENT:
+				flyPresent.cvsExportBooleanDataToRow(sbf, csvSep); 
+				break;
 			case AREA_CNTPIX:  	
 				cntPix.cvsExportYDataToRow(sbf, csvSep); 
-				break;
+				break;	
 //			case AREA_SUM2:  	
 //				sum2.cvsExportYDataToRow(sbf, csvSep); 
 //				break;
@@ -735,6 +741,7 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN:	sumClean.csvImportXYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
+			case AREA_FLYPRESENT:  flyPresent.csvImportBooleanDataFromRow( data, 2); break;
 //			case AREA_SUM2:  	sum2.csvImportXYDataFromRow( data, 2); break;
 //			case AREA_MEANGREY: meanGrey.csvImportXYDataFromRow( data, 2); break;
 			default:
@@ -748,6 +755,7 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN: sumClean.csvImportYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
+			case AREA_FLYPRESENT: flyPresent.csvImportBooleanDataFromRow( data, 2); break;
 //			case AREA_SUM2:  	sum2.csvImportYDataFromRow( data, 2); break;
 //			case AREA_MEANGREY: meanGrey.csvImportYDataFromRow( data, 2); break;
 			default:

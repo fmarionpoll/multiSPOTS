@@ -75,7 +75,7 @@
 </section>
 <section name="export"/>
 </section>
-<key name="lastUpdateCheckTime" value="1707981577019"/>
+<key name="lastUpdateCheckTime" value="1712597864848"/>
 <key name="sequencePersistence" value="false"/>
 <key name="virtualMode" value="true"/>
 <key name="loaderFolder" value="C:\Users\fred\OneDrive\Documents\2024 gouttes\2024-02-09"/>
@@ -134,7 +134,7 @@
 </section>
 </section>
 <key name="version" value="2.5.1.0"/>
-<key name="lastUploadDate" value="1707918066436"/>
+<key name="lastUploadDate" value="1712597862180"/>
 <section name="frame">
 <section name="imageLoader">
 <key name="loadtype" value="0"/>
@@ -156,18 +156,25 @@
 </section>
 </section>
 </section>
+<section name="multiSPOTS">
+<section name="MultiSPOTS">
+<section name="gui">
+<key name="lastUsedPath" value="E:\charline\Gouttes\Manip"/>
+</section>
+</section>
+</section>
 </section>
 </section>
 <section name="frame">
 <section name="main">
-<key name="XE" value="3360"/>
-<key name="YE" value="54"/>
-<key name="WidthE" value="1590"/>
+<key name="XE" value="532"/>
+<key name="YE" value="139"/>
+<key name="WidthE" value="1825"/>
 <key name="HeightE" value="1094"/>
 <key name="MaximizedE" value="false"/>
 </section>
 <section name="inspector">
-<key name="XC" value="1198"/>
+<key name="XC" value="1433"/>
 <key name="YC" value="0"/>
 <key name="XE" value="600"/>
 <key name="YE" value="140"/>
