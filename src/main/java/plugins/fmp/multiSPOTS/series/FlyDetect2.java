@@ -40,7 +40,7 @@ public class FlyDetect2 extends BuildSeries
 	{
 		exp.cleanPreviousDetectedFliesROIs();
 		find_flies.initParametersForDetection(exp, options);
-		find_flies.initCagesPositions(exp, options.detectCage);
+		exp.cages.initFlyPositions(options.detectCage);
 		options.threshold = options.thresholdDiff;
 
 		if (exp.loadReferenceImage()) 
@@ -52,22 +52,16 @@ public class FlyDetect2 extends BuildSeries
 
 	private void findFliesInAllFrames(Experiment exp) 
 	{
-		ProgressFrame progressBar = new ProgressFrame("Detecting flies...");
-		find_flies.initCagesPositions(exp, options.detectCage);
-		seqNegative.removeAllROI();
-		
+		ProgressFrame progressBar = new ProgressFrame("Detecting flies...");		
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = ImageTransformEnums.SUBTRACT_REF;
 		transformOptions.backgroundImage = IcyBufferedImageUtil.getCopy(exp.seqCamData.refImage);
 		ImageTransformInterface transformFunction = transformOptions.transformOption.getFunction();
 		
-		long last_ms = exp.cages.detectLast_Ms + exp.cages.detectBin_Ms ;
-		
-		for (long index_ms = exp.cages.detectFirst_Ms ; index_ms <= last_ms; index_ms += exp.cages.detectBin_Ms ) 
+		int totalFrames = exp.seqCamData.nTotalFrames;
+		for (int index = 0; index < totalFrames; index++ )  
 		{
-			final int t_from = (int) ((index_ms - exp.camImageFirst_ms)/exp.camImageBin_ms);
-			if (t_from >= exp.seqCamData.nTotalFrames)
-				continue;
+			int t_from = index;
 			String title = "Frame #"+ t_from + "/" + exp.seqCamData.nTotalFrames;
 			progressBar.setMessage(title);
 
@@ -77,8 +71,8 @@ public class FlyDetect2 extends BuildSeries
 				seqNegative.beginUpdate();
 				seqNegative.setImage(0, 0, negativeImage);
 				vNegative.setTitle(title);
-				List<Rectangle2D> listRectangles = find_flies.findFlies2( negativeImage, t_from);
-				addGreenROI2DPoints(seqNegative, listRectangles, true);
+				List<Rectangle2D> listRectangles = find_flies.findFlies( negativeImage, t_from);
+				displayRectanglesAsROIs(seqNegative, listRectangles, true);
 				seqNegative.endUpdate();
 			} 
 			catch (InterruptedException e) {

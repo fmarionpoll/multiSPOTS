@@ -64,7 +64,7 @@ public class BuildKymographs extends BuildSeries
 	private void getTimeLimitsOfSequence(Experiment exp)
 	{
 		exp.getFileIntervalsFromSeqCamData();
-		exp.binDuration_ms = options.binDuration_ms;
+		exp.binDuration_ms = options.t_Ms_BinDuration;
 		if (options.isFrameFixed) {
 			exp.binFirst_ms = options.t_Ms_First;
 			exp.binLast_ms = options.t_Ms_Last;

@@ -16,7 +16,7 @@ import icy.system.thread.Processor;
 import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Cages;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.FlyPositions;
+
 import plugins.kernel.roi.roi2d.ROI2DArea;
 
 
@@ -98,10 +98,10 @@ public class FlyDetectTools
 		return new ROI2DArea( bmask );
 	}
 		
-	public List<Rectangle2D> findFlies1(IcyBufferedImage workimage, int t) throws InterruptedException 
+	public List<Rectangle2D> findFlies(IcyBufferedImage workimage, int t) throws InterruptedException 
 	{
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
-	    processor.setThreadName("detectFlies1");
+	    processor.setThreadName("detectFlies");
 	    processor.setPriority(Processor.NORM_PRIORITY);
         ArrayList<Future<?>> futures = new ArrayList<Future<?>>(cages.cagesList.size());
 		futures.clear();
@@ -133,48 +133,13 @@ public class FlyDetectTools
 		return listRectangles;
 	}
 	
-	public List<Rectangle2D> findFlies2( final IcyBufferedImage workimage, final int t) throws InterruptedException 
-	{
-		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
-	    processor.setThreadName("detectFlies1");
-	    processor.setPriority(Processor.NORM_PRIORITY);
-        ArrayList<Future<?>> futures = new ArrayList<Future<?>>(cages.cagesList.size());
-		futures.clear();
-		
-		final ROI2DArea binarizedImageRoi = binarizeInvertedImage (workimage, options.threshold);
-		List<Rectangle2D> listRectangles = new ArrayList<Rectangle2D> (cages.cagesList.size());
-		
- 		for (Cage cage: cages.cagesList) 
- 		{		
-			if (options.detectCage != -1 && cage.getCageNumberInteger() != options.detectCage)
-				continue;
-			if (cage.cageNFlies <1)
-				continue;
-			
-			futures.add(processor.submit(new Runnable () 
-			{
-				@Override
-				public void run() 
-				{	
-					BooleanMask2D bestMask = getBestMask(binarizedImageRoi, cage.cageMask2D);
-					Rectangle2D rect = saveMask(bestMask, cage, t);
-					if (rect != null) 
-						listRectangles.add(rect);
-			}}));
-		}
- 		waitDetectCompletion(processor, futures, null);
-		processor.shutdown();
-		return listRectangles;
-	}
-	
 	BooleanMask2D getBestMask(ROI2DArea binarizedImageRoi, BooleanMask2D cageMask) 
 	{
 		BooleanMask2D bestMask = null;
 		try {
 			bestMask = findLargestBlob(binarizedImageRoi, cageMask);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		} 
+		catch (InterruptedException e) {e.printStackTrace();}
 		return bestMask;
 	}
 	
@@ -214,24 +179,6 @@ public class FlyDetectTools
 		}
 		BooleanMask2D bmask = new BooleanMask2D( img.getBounds(), mask); 
 		return new ROI2DArea( bmask );
-	}
-	
-	public void initCagesPositions(Experiment exp, int option_cagenumber) 
-	{
-		cages = exp.cages;
-		int nbcages = cages.cagesList.size();
-		for (int i = 0; i < nbcages; i++) 
-		{
-			Cage cage = cages.cagesList.get(i);
-			if (options.detectCage != -1 && cage.getCageNumberInteger() != option_cagenumber)
-				continue;
-			if (cage.cageNFlies > 0) 
-			{
-				FlyPositions positions = new FlyPositions();
-				positions.ensureCapacity(exp.cages.detect_nframes);
-				cage.flyPositions = positions;
-			}
-		}
 	}
 	
 	public void initParametersForDetection(Experiment exp, BuildSeriesOptions	options) 
@@ -280,6 +227,7 @@ public class FlyDetectTools
              frame ++;
          }
    }
+	
 	
 	
 }

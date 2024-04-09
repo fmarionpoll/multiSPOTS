@@ -12,6 +12,8 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 
 
 
+
+
 public class FlyDetect1 extends BuildSeries 
 {
 	public boolean buildBackground	= true;
@@ -28,6 +30,7 @@ public class FlyDetect1 extends BuildSeries
 			return;
 		
 		runFlyDetect1(exp);
+		exp.cages.orderFlyPositions();
 		if (!stopFlag)
 			exp.saveCagesMeasures() ;
 		exp.seqCamData.closeSequence();
@@ -38,11 +41,10 @@ public class FlyDetect1 extends BuildSeries
 	{
 		exp.cleanPreviousDetectedFliesROIs();
 		find_flies.initParametersForDetection(exp, options);
-		find_flies.initCagesPositions(exp, options.detectCage);
+		exp.cages.initFlyPositions(options.detectCage);
 		
 		openFlyDetectViewers(exp);
 		findFliesInAllFrames(exp);
-		exp.cages.orderFlyPositions();
 	}
 	
 	private void getReferenceImage (Experiment exp, int t, ImageTransformOptions options) 
@@ -70,41 +72,34 @@ public class FlyDetect1 extends BuildSeries
 		ProgressFrame progressBar = new ProgressFrame("Detecting flies...");
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = options.transformop;
-		getReferenceImage (exp, 0, transformOptions);
 		ImageTransformInterface transformFunction = options.transformop.getFunction();
 		
-		int t_current = 0;
-		long last_ms = exp.cages.detectLast_Ms + exp.cages.detectBin_Ms ;
+		int t_previous = 0;
+		int totalFrames = exp.seqCamData.nTotalFrames;
 		
-		for (long index_ms = exp.cages.detectFirst_Ms; index_ms <= last_ms; index_ms += exp.cages.detectBin_Ms ) 
+		for (int index = 0; index < totalFrames; index++ ) 
 		{
-			final int t_previous = t_current;
-			final int t_from = (int) ((index_ms - exp.camImageFirst_ms)/exp.camImageBin_ms);
-			if (t_from >= exp.seqCamData.nTotalFrames)
-				continue;
-			
-			t_current = t_from;
+			int t_from = index;	
 			String title = "Frame #"+ t_from + "/" + exp.seqCamData.nTotalFrames;
 			progressBar.setMessage(title);
 	
 			IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t_from));
 			getReferenceImage (exp, t_previous, transformOptions);
 			IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
-			if (workImage == null)
-				return;
-
 			try 
 			{
 				seqNegative.beginUpdate();
 				seqNegative.setImage(0, 0, workImage);
 				vNegative.setTitle(title);
-				List<Rectangle2D> listRectangles = find_flies.findFlies1 (workImage, t_from);
-				addGreenROI2DPoints(seqNegative, listRectangles, true);
+				List<Rectangle2D> listRectangles = find_flies.findFlies (workImage, t_from);
+				displayRectanglesAsROIs(seqNegative, listRectangles, true);
 				seqNegative.endUpdate();
 			} 
 			catch (InterruptedException e) {
 				e.printStackTrace();
-			}					
+			}
+			
+			t_previous = t_from;
 		}
 
 		progressBar.close();

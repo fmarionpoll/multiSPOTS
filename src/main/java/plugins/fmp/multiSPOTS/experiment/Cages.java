@@ -27,6 +27,7 @@ import plugins.fmp.multiSPOTS.tools.Comparators;
 
 
 
+
 public class Cages 
 {	
 	public List<Cage>	cagesList			= new ArrayList<Cage>();
@@ -111,6 +112,7 @@ public class Cages
 	}
 	
 	// -----------------------------------------------------
+	
 	final String csvSep = ";";
 	
 	private boolean csvSaveCagesMeasures(String directory) 
@@ -538,6 +540,24 @@ public class Cages
 		for (Cage cage: cagesList) 
 			Collections.sort(cage.flyPositions.flyPositionList, new Comparators.XYTaValue_Tindex_Comparator());
 	}
+	
+	public void initFlyPositions(int option_cagenumber)
+	{
+		int nbcages = cagesList.size();
+		for (int i = 0; i < nbcages; i++) 
+		{
+			Cage cage = cagesList.get(i);
+			if (option_cagenumber != -1 && cage.getCageNumberInteger() != option_cagenumber)
+				continue;
+			if (cage.cageNFlies > 0) 
+			{
+				cage.flyPositions = new FlyPositions();
+				cage.flyPositions.ensureCapacity(detect_nframes);
+			}
+		}
+	}
+	
+	// ----------------
 	
 	public void computeBooleanMasksForCages() 
 	{

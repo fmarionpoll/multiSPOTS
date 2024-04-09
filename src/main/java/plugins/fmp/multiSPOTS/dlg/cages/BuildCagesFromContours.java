@@ -25,8 +25,8 @@ import icy.image.IcyBufferedImageUtil;
 import icy.roi.ROI2D;
 import icy.type.DataType;
 import icy.type.geom.Polygon2D;
+
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.experiment.Capillary;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -44,6 +44,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 	 * 
 	 */
 	private static final long serialVersionUID 	= -121724000730795396L;
+	private JButton 	drawPolygon2DButton 	= new JButton("Draw Polygon2D");
 	private JButton 	createCagesButton 		= new JButton("Create cages");
 	private JSpinner 	thresholdSpinner 		= new JSpinner(new SpinnerNumberModel(60, 0, 10000, 1));
 	public 	JCheckBox 	overlayCheckBox			= new JCheckBox("Overlay ", false);
@@ -56,6 +57,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 				ImageTransformEnums.H_HSB, ImageTransformEnums.S_HSB, ImageTransformEnums.B_HSB	});
 	private OverlayThreshold overlayThreshold 	= null;
 	private MultiSPOTS 			parent0			= null;
+	private ROI2DPolygon 		userPolygon 		= null;
 	
 	
 	
@@ -68,6 +70,7 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 		flowLayout.setVgap(0);
 		
 		JPanel panel1 = new JPanel(flowLayout);
+		panel1.add(drawPolygon2DButton);
 		panel1.add(createCagesButton);
 		add(panel1);
 		
@@ -93,6 +96,15 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 	
 	private void defineActionListeners() 
 	{
+		drawPolygon2DButton.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+					create2DPolygon(exp);
+			}});
+		
 		createCagesButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
@@ -191,59 +203,27 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
     	  	}
 		}
 	}
-
-//	private void createROIsFromSelectedPolygonAndCapillaries(Experiment exp) 
-//	{
-//		int t = exp.seqCamData.frameCurrent;
-//		IcyBufferedImage img0 = IcyBufferedImageUtil.convertToType(
-//				overlayThreshold.getTransformedImage(t), 
-//				DataType.INT, 
-//				false);
-//		Rectangle rectGrid = new Rectangle(0,0, img0.getSizeX(), img0.getSizeY());
-//		Blobs blobs = new Blobs(img0);
-//		blobs.getPixelsConnected ();
-//		blobs.getBlobsConnected();
-//		blobs.fillBlanksPixelsWithinBlobs ();
-//	
-//		List<Integer> blobsfound = new ArrayList<Integer> ();
-//		for (Capillary cap : exp.capillaries.capillariesList) 
-//		{
-//			Point2D pt = cap.getCapillaryROILowestPoint();
-//			if (pt != null) 
-//			{
-//				int ix = (int) (pt.getX() - rectGrid.x);
-//				int iy = (int) (pt.getY() - rectGrid.y);
-//				int blobi = blobs.getBlobAt(ix, iy);
-//				boolean found = false;
-//				for (int i: blobsfound) 
-//				{
-//					if (i == blobi) 
-//					{
-//						found = true;
-//						break;
-//					}
-//				}
-//				if (!found) 
-//				{
-//					blobsfound.add(blobi);
-//					ROI2DPolygon roiP = new ROI2DPolygon (blobs.getBlobPolygon2D(blobi));
-//					roiP.translate(rectGrid.x, rectGrid.y);
-//					int cagenb = cap.getCageIndexFromRoiName();
-//					roiP.setName("cage" + String.format("%03d", cagenb));
-//					cap.cageID = cagenb;
-//					exp.seqCamData.seq.addROI(roiP);
-//				}
-//			}
-//		}
-//	}
 	
 	private void createROIsFromSelectedPolygonAndSpots(Experiment exp) 
 	{
+		ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
+		exp.cages.removeCages();
+		
 		int t = exp.seqCamData.currentFrame;
 		IcyBufferedImage img0 = IcyBufferedImageUtil.convertToType(
-				overlayThreshold.getTransformedImage(t), DataType.INT, false);
-		Rectangle rectGrid = new Rectangle(0,0, img0.getSizeX(), img0.getSizeY());
-		Blobs blobs = new Blobs(img0);
+				overlayThreshold.getTransformedImage(t), 
+				DataType.INT, 
+				false);		
+		
+		Rectangle rectGrid = new Rectangle(0, 0, img0.getSizeX(), img0.getSizeY());
+		if (userPolygon != null) 
+		{
+			rectGrid = userPolygon.getBounds();
+			exp.seqCamData.seq.removeROI(userPolygon);
+		}	
+		IcyBufferedImage subImg0 = IcyBufferedImageUtil.getSubImage(img0, rectGrid);
+		
+		Blobs blobs = new Blobs(subImg0);
 		blobs.getPixelsConnected ();
 		blobs.getBlobsConnected();
 		blobs.fillBlanksPixelsWithinBlobs ();
@@ -305,6 +285,47 @@ public class BuildCagesFromContours  extends JPanel implements ChangeListener
 				((ROI2DPolygon)cageRoi).setPolygon2D(newPolygon);
 			}
 		}
+	}
+
+	private void create2DPolygon(Experiment exp) 
+	{
+		final String dummyname = "perimeter_enclosing";
+		if (userPolygon == null)
+		{
+			ArrayList<ROI2D> listRois = exp.seqCamData.seq.getROI2Ds();
+			for (ROI2D roi: listRois) 
+			{
+				if (roi.getName() .equals(dummyname))
+					return;
+			}
+	
+			Rectangle rect = exp.seqCamData.seq.getBounds2D();
+			List<Point2D> points = new ArrayList<Point2D>();
+			int rectleft = rect.x + rect.width /6;
+			int rectright = rect.x + rect.width*5 /6;
+			int recttop = rect.y + rect.height *2/3; 
+			if (exp.capillaries.capillariesList.size() > 0) 
+			{
+				Rectangle bound0 = exp.capillaries.capillariesList.get(0).getRoi().getBounds();
+				int last = exp.capillaries.capillariesList.size() - 1;
+				Rectangle bound1 = exp.capillaries.capillariesList.get(last).getRoi().getBounds();
+				rectleft = bound0.x;
+				rectright = bound1.x + bound1.width;
+				int diff = (rectright - rectleft)*2/60;
+				rectleft -= diff;
+				rectright += diff;
+				recttop = bound0.y+ bound0.height- (bound0.height /8);
+			}
+			
+			points.add(new Point2D.Double(rectleft, recttop));
+			points.add(new Point2D.Double(rectright, recttop));
+			points.add(new Point2D.Double(rectright, rect.y + rect.height - 4));
+			points.add(new Point2D.Double(rectleft, rect.y + rect.height - 4 ));
+			userPolygon = new ROI2DPolygon(points);
+			userPolygon.setName(dummyname);
+		}
+		exp.seqCamData.seq.addROI(userPolygon);
+		exp.seqCamData.seq.setSelectedROI(userPolygon);
 	}
 	
 }

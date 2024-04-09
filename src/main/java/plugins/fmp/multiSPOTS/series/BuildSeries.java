@@ -152,7 +152,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 
     protected boolean checkBoundsForCages(Experiment exp) 
 	{
-		exp.cages.detectBin_Ms = options.binDuration_ms;
+		exp.cages.detectBin_Ms = options.t_Ms_BinDuration;
 		if (options.isFrameFixed) 
 		{
 			exp.cages.detectFirst_Ms = options.t_Ms_First;
@@ -223,10 +223,10 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 		return seq;
 	}
 
-	void addGreenROI2DPoints(Sequence seq, List<Rectangle2D> listRectangles, boolean eraseOldPoints) 
+	void displayRectanglesAsROIs(Sequence seq, List<Rectangle2D> listRectangles, boolean eraseOldPoints) 
 	{
 		if (eraseOldPoints)
-				seq.removeAllROI();
+			seq.removeAllROI();
 		
 		for (Rectangle2D rectangle: listRectangles) 
  		{
@@ -253,5 +253,4 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 			e.printStackTrace();
 		}
 	}
-	
 }
