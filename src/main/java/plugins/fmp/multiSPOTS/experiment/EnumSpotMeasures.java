@@ -9,8 +9,9 @@ public enum EnumSpotMeasures
 	SPOTS_MEASURES("MEASURES", "spot measures"),
 
 	AREA_SUM("AREA_SUM", "sum grey over threshold"),
-//	AREA_SUM2("AREA_SUM2", "sum2 grey over threshold"),
+	AREA_SUMCLEAN("AREA_SUM_CLEAN", "sum grey over threshold with no fly"),
 	AREA_CNTPIX("AREA_CNTPIX", "pixels over threshold"),
+//	AREA_SUM2("AREA_SUM2", "sum2 grey over threshold"),
 //	AREA_MEANGREY("AREA_MEANGREY", "mean grey value of pixels over threshold"),
 	ALL ("ALL", "all options");
 	

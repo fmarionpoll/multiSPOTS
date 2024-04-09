@@ -25,6 +25,7 @@ public enum EnumXLSExportType
 	SLEEP ("sleep", "yes, no", "Fly sleeping"),
 	
 	AREA_SUM("AREA_SUM", "grey value", "Spot grey value sum of pixels over threshold"),
+	AREA_SUMCLEAN("AREA_SUM_CLEAN", "grey value - no fly", "Spot grey value sum of pixels over threshold but with no fly"),
 //	AREA_SUM2("AREA_SUM2", "grey value*2", "Spot grey value of sum*sum of pixels over threshold"),
 	AREA_CNTPIX("AREA_CNTPIX", "n pixels", "Spot n pixels over threshold"),
 //	AREA_MEANGREY("AREA_MEANGREY", "grey value / n pixels at t0", "Grey value per pixel over threshold"),

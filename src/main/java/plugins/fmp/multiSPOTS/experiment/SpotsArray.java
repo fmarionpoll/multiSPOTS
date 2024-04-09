@@ -558,6 +558,9 @@ public class SpotsArray
 		    	case "AREA_SUM":
 		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM, sep);
 		    		break;
+		    	case "AREA_SUMCLEAN":
+		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUMCLEAN, sep);
+		    		break;
 //		    	case "AREA_SUMSQ":
 //		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM2, sep);
 //		    		break;
@@ -665,6 +668,7 @@ public class SpotsArray
 			
 			csvSave_DescriptionSection(csvWriter);			
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM);
+			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUMCLEAN);
 //			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM2);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
 //			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_MEANGREY);

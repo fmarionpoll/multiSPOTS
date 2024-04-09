@@ -37,28 +37,27 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	 */
 	private static final long serialVersionUID = 8921207247623517524L;
 	
-	private String 		detectString 			= "        Detect     ";
-	private JButton 	detectButton 			= new JButton(detectString);
-	private JCheckBox 	allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
+	private String 				detectString 			= "        Detect     ";
+	private JButton 			detectButton 			= new JButton(detectString);
+	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
 	
-	private JLabel videochannel = new JLabel("filter  ");
-	private JComboBox<String> direction1ComboBox = new JComboBox<String> (new String[] {" threshold >", " threshold <" });
+	private JLabel 				videochannel 			= new JLabel("filter  ");
+	private JComboBox<String> 	direction1ComboBox 		= new JComboBox<String> (new String[] {" threshold >", " threshold <" });
 	
 	ImageTransformEnums[] transforms = new ImageTransformEnums[] {
-			ImageTransformEnums.R_RGB, ImageTransformEnums.G_RGB, ImageTransformEnums.B_RGB, 
+			ImageTransformEnums.R_RGB, 		ImageTransformEnums.G_RGB, 		ImageTransformEnums.B_RGB, 
 			ImageTransformEnums.R2MINUS_GB, ImageTransformEnums.G2MINUS_RB, ImageTransformEnums.B2MINUS_RG, ImageTransformEnums.RGB,
 			ImageTransformEnums.GBMINUS_2R, ImageTransformEnums.RBMINUS_2G, ImageTransformEnums.RGMINUS_2B, ImageTransformEnums.RGB_DIFFS,
-			ImageTransformEnums.H_HSB, ImageTransformEnums.S_HSB, ImageTransformEnums.B_HSB
+			ImageTransformEnums.H_HSB, 		ImageTransformEnums.S_HSB, 		ImageTransformEnums.B_HSB
 			};
 			JComboBox<ImageTransformEnums> transformsComboBox = new JComboBox<ImageTransformEnums> (transforms);
-			JSpinner 			thresholdSpinner = new JSpinner(new SpinnerNumberModel(35, 0, 255, 1));
-	private JCheckBox 			overlayCheckBox 	= new JCheckBox("overlay");
-	private JToggleButton 		displayTransformButton = new JToggleButton("View");
+			JSpinner 			thresholdSpinner 		= new JSpinner(new SpinnerNumberModel(35, 0, 255, 1));
+	private JCheckBox 			overlayCheckBox 		= new JCheckBox("overlay");
+	private JToggleButton 		displayTransformButton 	= new JToggleButton("View");
 	
-	private OverlayThreshold 	overlayThreshold 	= null;
-	private DetectSpots 			threadDetectLevels 	= null;
-	
-	MultiSPOTS parent0 = null;
+	private OverlayThreshold 	overlayThreshold 		= null;
+	private DetectSpots 		threadDetectLevels 		= null;	
+	private MultiSPOTS 			parent0 				= null;
 	
 	
 	
@@ -77,8 +76,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		JPanel panel1 = new JPanel(layoutLeft);
 		((FlowLayout)panel1.getLayout()).setVgap(0);
 		panel1.add( videochannel);
-		panel1.add(transformsComboBox);
-		add(panel1);
+		panel1.add(transformsComboBox);	
 		panel1.add(direction1ComboBox);
 		panel1.add(thresholdSpinner);
 		panel1.add(displayTransformButton);

@@ -46,8 +46,9 @@ public class Spot implements Comparable <Spot>
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
 	 
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
-//	public SpotMeasure					sum2  			= new SpotMeasure("sum2"); 
+	public SpotMeasure					sumClean		= new SpotMeasure("sumClean"); 
 	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
+//	public SpotMeasure					sum2  			= new SpotMeasure("sum2"); 
 //	public SpotMeasure					meanGrey		= new SpotMeasure("meanGrey"); 
 
 	public boolean						valid			= true;
@@ -362,6 +363,8 @@ public class Spot implements Comparable <Spot>
 		case AREA_SUM:		
 		case AREA_SUM_LR:
 			return sum;
+		case AREA_SUMCLEAN:
+			return sumClean;
 //		case AREA_SUM2:	
 //		case AREA_SUM2_LR:
 //			return sum2;
@@ -632,6 +635,7 @@ public class Spot implements Comparable <Spot>
 		switch(measureType) 
 		{
 			case AREA_SUM:
+			case AREA_SUMCLEAN:
 //			case AREA_SUM2:
 			case AREA_CNTPIX:	
 //			case AREA_MEANGREY:
@@ -654,6 +658,9 @@ public class Spot implements Comparable <Spot>
 		{
 			case AREA_SUM:  	
 				sum.cvsExportYDataToRow(sbf, csvSep); 
+				break;
+			case AREA_SUMCLEAN:  	
+				sumClean.cvsExportYDataToRow(sbf, csvSep); 
 				break;
 //			case AREA_SUM2:  	
 //				sum2.cvsExportYDataToRow(sbf, csvSep); 
@@ -694,6 +701,7 @@ public class Spot implements Comparable <Spot>
 			switch(measureType) 
 			{
 			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
+			case AREA_SUMCLEAN:	sumClean.csvImportXYDataFromRow( data, 2); break;
 //			case AREA_SUM2:  	sum2.csvImportXYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
 //			case AREA_MEANGREY: meanGrey.csvImportXYDataFromRow( data, 2); break;
@@ -706,6 +714,7 @@ public class Spot implements Comparable <Spot>
 			switch(measureType) 
 			{
 			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
+			case AREA_SUMCLEAN: sumClean.csvImportYDataFromRow( data, 2); break;
 //			case AREA_SUM2:  	sum2.csvImportYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
 //			case AREA_MEANGREY: meanGrey.csvImportYDataFromRow( data, 2); break;
