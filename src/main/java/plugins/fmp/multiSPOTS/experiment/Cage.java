@@ -4,16 +4,19 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
+import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
+
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;
-import icy.type.geom.Polygon2D;
+
 
 
 
@@ -21,7 +24,7 @@ public class Cage
 {
 	public ROI2D 		cageRoi2D				= null;
 	public BooleanMask2D cageMask2D				= null;
-	public XYTaSeriesArrayList 	flyPositions 	= new XYTaSeriesArrayList();
+	public FlyPositions 	flyPositions 	= new FlyPositions();
 	public int 			cageNFlies  			= 0;
 	public int 			cageAge 				= 5;
 	public String 		strCageComment 			= "..";
@@ -230,12 +233,12 @@ public class Cage
 	
 	public ROI2DRectangle getRoiRectangleFromPositionAtT(int t) 
 	{
-		int nitems = flyPositions.xytArrayList.size();
+		int nitems = flyPositions.flyPositionList.size();
 		if (nitems == 0 || t >= nitems)
 			return null;
-		XYTaValue aValue = flyPositions.xytArrayList.get(t);
+		FlyPosition aValue = flyPositions.flyPositionList.get(t);
 		
-		ROI2DRectangle flyRoiR = new ROI2DRectangle(aValue.rectBounds);
+		ROI2DRectangle flyRoiR = new ROI2DRectangle(aValue.rectPosition);
 		flyRoiR.setName("detR"+getCageNumber() +"_" + t );
 		flyRoiR.setT( t );
 		return flyRoiR;
@@ -251,7 +254,7 @@ public class Cage
 				continue;
 			Rectangle2D rect = ((ROI2DRectangle) roi).getRectangle();
 			int t = roi.getT();	
-			flyPositions.xytArrayList.get(t).rectBounds = rect;
+			flyPositions.flyPositionList.get(t).rectPosition = rect;
 		}
 	}
 	

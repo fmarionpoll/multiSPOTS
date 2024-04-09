@@ -79,7 +79,7 @@ public class Adjust extends JPanel
 		
 		int chan = 0;
 		int jitter = (int) jitterJSpinner.getValue();
-		int t = seqCamData.frameCurrent;
+		int t = seqCamData.currentFrame;
 		seqCamData.seq.setPositionT(t);
 		IcyBufferedImage vinputImage = seqCamData.seq.getImage(t, 0, chan) ;
 		if (vinputImage == null) 

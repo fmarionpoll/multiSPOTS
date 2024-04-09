@@ -397,12 +397,12 @@ public class Experiment
 		{	
 			seqCamData.setImagesDirectory(strImagesDirectory);
 			firstImage_FileTime = seqCamData.getFileTimeFromStructuredName(0);
-			lastImage_FileTime = seqCamData.getFileTimeFromStructuredName(seqCamData.frameNTotal-1);
+			lastImage_FileTime = seqCamData.getFileTimeFromStructuredName(seqCamData.nTotalFrames-1);
 			if (firstImage_FileTime != null && lastImage_FileTime != null)
 			{
 				camImageFirst_ms = firstImage_FileTime.toMillis();
 				camImageLast_ms = lastImage_FileTime.toMillis();
-				camImageBin_ms = (camImageLast_ms - camImageFirst_ms)/(seqCamData.frameNTotal-1);
+				camImageBin_ms = (camImageLast_ms - camImageFirst_ms)/(seqCamData.nTotalFrames-1);
 				if (camImageBin_ms == 0)
 					System.out.println("Experiment:loadFileIntervalsFromSeqCamData() error / file interval size");
 			}
@@ -415,11 +415,11 @@ public class Experiment
 
 	public long[] build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList() 
 	{
-		camImages_ms = new long[seqCamData.frameNTotal];
+		camImages_ms = new long[seqCamData.nTotalFrames];
 		
 		FileTime firstImage_FileTime = seqCamData.getFileTimeFromStructuredName(0);
 		long firstImage_ms = firstImage_FileTime.toMillis();
-		for (int i = 0; i < seqCamData.frameNTotal; i++) {
+		for (int i = 0; i < seqCamData.nTotalFrames; i++) {
 			FileTime image_FileTime = seqCamData.getFileTimeFromStructuredName(i);
 			long image_ms = image_FileTime.toMillis() - firstImage_ms;
 			camImages_ms[i] = image_ms;
@@ -765,7 +765,7 @@ public class Experiment
 	{
 		int lastFrame = 0;
 		if (seqCamData != null )
-			lastFrame = seqCamData.frameNTotal -1;
+			lastFrame = seqCamData.nTotalFrames -1;
 		return lastFrame;
 	}
 	

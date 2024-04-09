@@ -135,7 +135,7 @@ public class BuildKymographs extends BuildSeries
 		final int nKymographColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		int iToColumn = 0; 
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
-		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.binFirst_ms, 0, exp.seqCamData.frameNTotal);
+		int sourceImageIndex = exp.findNearestIntervalWithBinarySearch(exp.binFirst_ms, 0, exp.seqCamData.nTotalFrames);
 		String vDataTitle = new String(" / " + nKymographColumns);
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 

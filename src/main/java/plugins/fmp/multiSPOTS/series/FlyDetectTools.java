@@ -16,7 +16,7 @@ import icy.system.thread.Processor;
 import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Cages;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.XYTaSeriesArrayList;
+import plugins.fmp.multiSPOTS.experiment.FlyPositions;
 import plugins.kernel.roi.roi2d.ROI2DArea;
 
 
@@ -179,15 +179,11 @@ public class FlyDetectTools
 	}
 	
 	Rectangle2D saveMask(BooleanMask2D bestMask, Cage cage, int t) 
-	{	
+	{
 		Rectangle2D rect = null;
-		ROI2DArea flyROI = null;
 		if (bestMask != null) 
-		{
-			flyROI = new ROI2DArea(bestMask);
-			rect = flyROI.getBounds2D();
-		}
-		cage.flyPositions.addPosition(t, rect, flyROI);
+			rect = bestMask.getOptimizedBounds();
+		cage.flyPositions.addPositionWithoutRoiArea(t, rect);
 		return rect;
 	}
 	
@@ -231,7 +227,7 @@ public class FlyDetectTools
 				continue;
 			if (cage.cageNFlies > 0) 
 			{
-				XYTaSeriesArrayList positions = new XYTaSeriesArrayList();
+				FlyPositions positions = new FlyPositions();
 				positions.ensureCapacity(exp.cages.detect_nframes);
 				cage.flyPositions = positions;
 			}

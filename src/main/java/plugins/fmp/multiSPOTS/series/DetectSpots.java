@@ -127,7 +127,7 @@ public class DetectSpots extends BuildSeries
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
 	    tasks.clear();
 	    
-	    int nFrames = exp.seqCamData.frameNTotal;
+	    int nFrames = exp.seqCamData.nTotalFrames;
 	    initMasks2DToMeasureAreas(exp);
 		initSpotsDataArrays(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
@@ -145,7 +145,7 @@ public class DetectSpots extends BuildSeries
 		{
 			final int fromSourceImageIndex = ii;
 			
-			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.frameNTotal;
+			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.nTotalFrames;
 //			progressBar.setMessage(title);
 			
 			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));
@@ -239,7 +239,7 @@ public class DetectSpots extends BuildSeries
 	private void initSpotsDataArrays(Experiment exp)
 	{
 		//int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms + 1);
-		int nFrames = exp.seqCamData.frameNTotal;
+		int nFrames = exp.seqCamData.nTotalFrames;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
 			spot.sum .measure 	= new  double [nFrames+1];

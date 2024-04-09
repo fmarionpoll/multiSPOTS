@@ -47,8 +47,8 @@ public class SequenceCamData
 	public long						seqAnalysisStart 		= 0;
 	public int 						seqAnalysisStep 		= 1;
 	
-	public int 						frameCurrent 			= 0;
-	public int						frameNTotal 			= 0;
+	public int 						currentFrame 			= 0;
+	public int						nTotalFrames 			= 0;
 
 	public EnumStatus 				status					= EnumStatus.REGULAR;		
 	protected String 				csCamFileName 			= null;
@@ -109,7 +109,7 @@ public class SequenceCamData
 
 	public String getDecoratedImageName(int t) 
 	{
-		frameCurrent = t; 
+		currentFrame = t; 
 		if (seq != null)
 			return getCSCamFileName() + " ["+(t)+ "/" + (seq.getSizeT()-1) + "]";
 		else
@@ -170,7 +170,7 @@ public class SequenceCamData
 	
 	public IcyBufferedImage getSeqImage(int t, int z) 
 	{
-		frameCurrent = t;
+		currentFrame = t;
 		return seq.getImage(t, z);
 	}
 	
@@ -324,7 +324,7 @@ public class SequenceCamData
 	{
 		imagesList.clear();
 		imagesList.addAll(extImagesList);
-		frameNTotal = imagesList.size();
+		nTotalFrames = imagesList.size();
 		status = EnumStatus.FILESTACK;
 	}
 	

@@ -66,9 +66,9 @@ public class FlyDetect2 extends BuildSeries
 		for (long index_ms = exp.cages.detectFirst_Ms ; index_ms <= last_ms; index_ms += exp.cages.detectBin_Ms ) 
 		{
 			final int t_from = (int) ((index_ms - exp.camImageFirst_ms)/exp.camImageBin_ms);
-			if (t_from >= exp.seqCamData.frameNTotal)
+			if (t_from >= exp.seqCamData.nTotalFrames)
 				continue;
-			String title = "Frame #"+ t_from + "/" + exp.seqCamData.frameNTotal;
+			String title = "Frame #"+ t_from + "/" + exp.seqCamData.nTotalFrames;
 			progressBar.setMessage(title);
 
 			IcyBufferedImage workImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t_from));

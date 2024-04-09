@@ -16,11 +16,15 @@ import org.w3c.dom.Node;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
-import plugins.fmp.multiSPOTS.dlg.JComponents.Dialog;
-import plugins.fmp.multiSPOTS.tools.Comparators;
+
+
 import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
+
+import plugins.fmp.multiSPOTS.dlg.JComponents.Dialog;
+import plugins.fmp.multiSPOTS.tools.Comparators;
+
 
 
 public class Cages 
@@ -208,7 +212,7 @@ public class Cages
 			List<ROI2D> cageLimitROIList = new ArrayList<ROI2D>();
 			if (xmlLoadCagesLimits_v0(node, cageLimitROIList)) 
 			{
-				List<XYTaSeriesArrayList> flyPositionsList = new ArrayList<XYTaSeriesArrayList>();
+				List<FlyPositions> flyPositionsList = new ArrayList<FlyPositions>();
 				xmlLoadFlyPositions_v0(node, flyPositionsList);
 				transferDataToCages_v0(cageLimitROIList, flyPositionsList);
 			}
@@ -234,7 +238,7 @@ public class Cages
 	
 	// --------------
 	
-	private void transferDataToCages_v0(List<ROI2D> cageLimitROIList, List<XYTaSeriesArrayList> flyPositionsList) 
+	private void transferDataToCages_v0(List<ROI2D> cageLimitROIList, List<FlyPositions> flyPositionsList) 
 	{
 		cagesList.clear();
 		Collections.sort(cageLimitROIList, new Comparators.ROI2D_Name_Comparator());
@@ -267,7 +271,7 @@ public class Cages
 		return true;
 	}
 	
-	private boolean xmlLoadFlyPositions_v0(Node node, List<XYTaSeriesArrayList> flyPositionsList) 
+	private boolean xmlLoadFlyPositions_v0(Node node, List<FlyPositions> flyPositionsList) 
 	{
 		if (node == null)
 			return false;
@@ -280,7 +284,7 @@ public class Cages
 		for (int i =0; i < nb_items; i++) 
 		{
 			Element subnode = XMLUtil.getElement(xmlVal, "cage"+ielement);
-			XYTaSeriesArrayList pos = new XYTaSeriesArrayList();
+			FlyPositions pos = new FlyPositions();
 			pos.loadXYTseriesFromXML(subnode);
 			flyPositionsList.add(pos);
 			ielement++;
@@ -532,7 +536,7 @@ public class Cages
 	public void orderFlyPositions() 
 	{
 		for (Cage cage: cagesList) 
-			Collections.sort(cage.flyPositions.xytArrayList, new Comparators.XYTaValue_Tindex_Comparator());
+			Collections.sort(cage.flyPositions.flyPositionList, new Comparators.XYTaValue_Tindex_Comparator());
 	}
 	
 	public void computeBooleanMasksForCages() 
