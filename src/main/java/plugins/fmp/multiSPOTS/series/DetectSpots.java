@@ -140,7 +140,7 @@ public class DetectSpots extends BuildSeries
 	
 	private void measureValues(IcyBufferedImage sourceImage, IcyBufferedImage workImage, Spot spot, int t  )
 	{
-		double sum = 0;
+		int sum = 0;
         int cntPix = 0;
         
         boolean spotThresholdUp = options.thresholdUp;
@@ -149,10 +149,10 @@ public class DetectSpots extends BuildSeries
         
         IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, spot.mask2D.bounds);
         boolean[] mask = spot.mask2D.mask;
-        double[] workData = (double[]) ArrayUtil.arrayToDoubleArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());
+        int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());
         
         IcyBufferedImage subSourceImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
-        double[] sourceData = (double[]) ArrayUtil.arrayToDoubleArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
+        int[] sourceData = (int[]) ArrayUtil.arrayToIntArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
         boolean flyFound = false;
         
         if (spotThresholdUp)
@@ -161,7 +161,7 @@ public class DetectSpots extends BuildSeries
 	        {
 	            if (mask[offset])
 	            {
-	                double value = workData[offset];    
+	                int value = workData[offset];    
                     if (value < spotThreshold) 
                     {
                         cntPix++;
@@ -178,7 +178,7 @@ public class DetectSpots extends BuildSeries
 	        {
 	            if (mask[offset])
 	            {
-	                double value = workData[offset];
+	                int value = workData[offset];
 	                if (value > spotThreshold) 
 	                {
                         cntPix++;

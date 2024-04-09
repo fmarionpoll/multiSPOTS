@@ -61,7 +61,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private JLabel 				fliesFilterLabel 		= new JLabel("  Flies filter");
 	private JComboBox<ImageTransformEnums> fliesTransformsComboBox = new JComboBox<ImageTransformEnums> (transforms);
 	private JComboBox<String> 	fliesDirectionComboBox 	= new JComboBox<String> (directions);
-	private JSpinner 			fliesThresholdSpinner 	= new JSpinner(new SpinnerNumberModel(30, 0, 255, 1));
+	private JSpinner 			fliesThresholdSpinner 	= new JSpinner(new SpinnerNumberModel(15, 0, 255, 1));
 	private JCheckBox 			fliesOverlayCheckBox 	= new JCheckBox("overlay");
 	private JToggleButton 		fliesViewButton 		= new JToggleButton("View");
 	

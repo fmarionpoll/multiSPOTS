@@ -159,7 +159,7 @@
 <section name="multiSPOTS">
 <section name="MultiSPOTS">
 <section name="gui">
-<key name="lastUsedPath" value="C:\Users\fred\Desktop\gouttes\2024-02-20"/>
+<key name="lastUsedPath" value="C:\Users\fred\Desktop\Manip"/>
 </section>
 </section>
 </section>
@@ -167,21 +167,21 @@
 </section>
 <section name="frame">
 <section name="main">
-<key name="XE" value="80"/>
+<key name="XE" value="3597"/>
 <key name="YE" value="31"/>
-<key name="WidthE" value="1714"/>
-<key name="HeightE" value="1032"/>
+<key name="WidthE" value="1503"/>
+<key name="HeightE" value="1065"/>
 <key name="MaximizedE" value="false"/>
 </section>
 <section name="inspector">
-<key name="XC" value="1263"/>
+<key name="XC" value="1142"/>
 <key name="YC" value="0"/>
 <key name="XE" value="600"/>
 <key name="YE" value="140"/>
 <key name="XI" value="600"/>
 <key name="YI" value="140"/>
-<key name="WidthC" value="443"/>
-<key name="HeightC" value="870"/>
+<key name="WidthC" value="353"/>
+<key name="HeightC" value="903"/>
 <key name="WidthE" value="300"/>
 <key name="HeightE" value="600"/>
 <key name="WidthI" value="300"/>
@@ -198,8 +198,8 @@
 <key name="YE" value="100"/>
 <key name="XI" value="100"/>
 <key name="YI" value="100"/>
-<key name="WidthC" value="435"/>
-<key name="HeightC" value="780"/>
+<key name="WidthC" value="345"/>
+<key name="HeightC" value="813"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="600"/>
 <key name="WidthI" value="400"/>
@@ -216,8 +216,8 @@
 <key name="YE" value="200"/>
 <key name="XI" value="200"/>
 <key name="YI" value="200"/>
-<key name="WidthC" value="435"/>
-<key name="HeightC" value="780"/>
+<key name="WidthC" value="345"/>
+<key name="HeightC" value="813"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="300"/>
 <key name="WidthI" value="400"/>
