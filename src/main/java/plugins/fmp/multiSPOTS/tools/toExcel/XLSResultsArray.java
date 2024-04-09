@@ -289,7 +289,7 @@ public class XLSResultsArray
 		case TOPLEVELDELTA_LR:
 		case AREA_CNTPIX_LR:
 		case AREA_SUM_LR:
-		case AREA_MEANGREY_LR:
+//		case AREA_MEANGREY_LR:
 			buildLR (xlsExportOptions.lrPIThreshold); 
 			break;
 		case AUTOCORREL:

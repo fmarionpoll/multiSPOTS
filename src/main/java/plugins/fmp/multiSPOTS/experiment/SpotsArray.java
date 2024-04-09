@@ -503,20 +503,20 @@ public class SpotsArray
 		spotsList.clear();
 	}
 	
-	public void computeMeanGrey(int t) 
-	{
-		for (Spot spot: spotsList) {
-			int cntPix = (int) spot.cntPix.measure[t];
-			spot.computeMeanGreyFromMeasure(cntPix);	
-		}
-	}
+//	public void computeMeanGrey(int t) 
+//	{
+//		for (Spot spot: spotsList) {
+//			int cntPix = (int) spot.cntPix.measure[t];
+//			spot.computeMeanGreyFromMeasure(cntPix);	
+//		}
+//	}
 	
-	public void computeSum2() 
-	{
-		for (Spot spot: spotsList) {
-			spot.computeSum2FromMeasure();	
-		}
-	}
+//	public void computeSum2() 
+//	{
+//		for (Spot spot: spotsList) {
+//			spot.computeSum2FromMeasure();	
+//		}
+//	}
 	
 	public void transferLimitMeasuresToPolyline() 
 	{
@@ -558,12 +558,12 @@ public class SpotsArray
 		    	case "AREA_SUM":
 		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM, sep);
 		    		break;
-		    	case "AREA_SUMSQ":
-		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM2, sep);
-		    		break;
-		    	case "AREA_MEANGREY":
-		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_MEANGREY, sep);
-		    		break;
+//		    	case "AREA_SUMSQ":
+//		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM2, sep);
+//		    		break;
+//		    	case "AREA_MEANGREY":
+//		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_MEANGREY, sep);
+//		    		break;
 		    	case "AREA_CNTPIX":
 		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_CNTPIX, sep);
 		    		break;
@@ -665,9 +665,9 @@ public class SpotsArray
 			
 			csvSave_DescriptionSection(csvWriter);			
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM);
-			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM2);
+//			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM2);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
-			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_MEANGREY);
+//			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_MEANGREY);
 			csvWriter.flush();
 			csvWriter.close();
 			

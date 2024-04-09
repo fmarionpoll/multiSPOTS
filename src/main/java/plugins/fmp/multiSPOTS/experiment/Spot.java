@@ -46,9 +46,9 @@ public class Spot implements Comparable <Spot>
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
 	 
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
-	public SpotMeasure					sum2  			= new SpotMeasure("sum2"); 
+//	public SpotMeasure					sum2  			= new SpotMeasure("sum2"); 
 	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
-	public SpotMeasure					meanGrey		= new SpotMeasure("meanGrey"); 
+//	public SpotMeasure					meanGrey		= new SpotMeasure("meanGrey"); 
 
 	public boolean						valid			= true;
 
@@ -116,9 +116,9 @@ public class Spot implements Comparable <Spot>
 		limitsOptions	= spotFrom.limitsOptions;
 		
 		sum .copy(spotFrom.sum);
-		sum2 .copy(spotFrom.sum2);
+//		sum2 .copy(spotFrom.sum2);
 		cntPix .copy(spotFrom.cntPix);	
-		meanGrey .copy(spotFrom.meanGrey);	
+//		meanGrey .copy(spotFrom.meanGrey);	
 	}
 	
 	public ROI2D getRoi() 
@@ -269,9 +269,9 @@ public class Spot implements Comparable <Spot>
 	public void cropMeasuresToNPoints (int npoints) 
 	{
 		cropSpotAreaToNPoints(sum , npoints);
-		cropSpotAreaToNPoints(sum2 , npoints);
+//		cropSpotAreaToNPoints(sum2 , npoints);
 		cropSpotAreaToNPoints(cntPix , npoints);
-		cropSpotAreaToNPoints(meanGrey , npoints);
+//		cropSpotAreaToNPoints(meanGrey , npoints);
 	}
 	
 	private void cropSpotAreaToNPoints(SpotMeasure spotArea, int npoints) 
@@ -283,9 +283,9 @@ public class Spot implements Comparable <Spot>
 	public void restoreClippedMeasures () 
 	{
 		restoreSpotAreaClippedMeasures( sum );
-		restoreSpotAreaClippedMeasures( sum2 );
+//		restoreSpotAreaClippedMeasures( sum2 );
 		restoreSpotAreaClippedMeasures( cntPix );
-		restoreSpotAreaClippedMeasures( meanGrey );
+//		restoreSpotAreaClippedMeasures( meanGrey );
 	}
 	
 	private void restoreSpotAreaClippedMeasures(SpotMeasure spotArea)
@@ -304,53 +304,53 @@ public class Spot implements Comparable <Spot>
 		return limitsOptions;
 	}
 	
-	public void computeMeanGreyFromMeasure(int cntPixel) 
-	{
-		int nFrames = sum.measure.length;
-		for (int i = 0; i < nFrames; i++)
-		{
-			meanGrey.measure[i] = sum.measure[i]/cntPixel;
-		}
-	}
+//	public void computeMeanGreyFromMeasure(int cntPixel) 
+//	{
+//		int nFrames = sum.measure.length;
+//		for (int i = 0; i < nFrames; i++)
+//		{
+//			meanGrey.measure[i] = sum.measure[i]/cntPixel;
+//		}
+//	}
 	
-	public void computeSum2FromMeasure() 
-	{
-		int nFrames = sum.measure.length;
-		for (int i = 0; i < nFrames; i++)
-		{
-			double value = sum.measure[i];
-			sum2.measure[i] = value*value;
-		}
-	}
+//	public void computeSum2FromMeasure() 
+//	{
+//		int nFrames = sum.measure.length;
+//		for (int i = 0; i < nFrames; i++)
+//		{
+//			double value = sum.measure[i];
+//			sum2.measure[i] = value*value;
+//		}
+//	}
+//	
+//	void computeMeanGreyFromPolyline(int cntPixel) 
+//	{
+//		int nFrames = sum.polylineLevel.npoints;
+//		if (cntPixel < 1) cntPixel = 1;
+//		for (int i = 0; i < nFrames; i++)
+//		{
+//			meanGrey.polylineLevel.ypoints[i] = sum.polylineLevel.ypoints[i]/cntPixel;
+//		}
+//	}
 	
-	void computeMeanGreyFromPolyline(int cntPixel) 
-	{
-		int nFrames = sum.polylineLevel.npoints;
-		if (cntPixel < 1) cntPixel = 1;
-		for (int i = 0; i < nFrames; i++)
-		{
-			meanGrey.polylineLevel.ypoints[i] = sum.polylineLevel.ypoints[i]/cntPixel;
-		}
-	}
-	
-	public void computeSum2FromPolyline() 
-	{
-		int nFrames = sum.polylineLevel.npoints;
-		sum2.polylineLevel = new Level2D(nFrames);
-		for (int i = 0; i < nFrames; i++)
-		{
-			double value = sum.polylineLevel.ypoints[i];
-			sum2.polylineLevel.ypoints[i] = value*value;
-		}
-	}
+//	public void computeSum2FromPolyline() 
+//	{
+//		int nFrames = sum.polylineLevel.npoints;
+//		sum2.polylineLevel = new Level2D(nFrames);
+//		for (int i = 0; i < nFrames; i++)
+//		{
+//			double value = sum.polylineLevel.ypoints[i];
+//			sum2.polylineLevel.ypoints[i] = value*value;
+//		}
+//	}
 	
 	public void filterSpikes()
 	{
 		sum.filterSpikes(); 
 		cntPix.filterSpikes(); 
 	
-		computeMeanGreyFromPolyline(0);
-		computeSum2FromPolyline();	
+//		computeMeanGreyFromPolyline(0);
+//		computeSum2FromPolyline();	
 	}
 	
 	// -----------------------------------------------------------
@@ -362,15 +362,15 @@ public class Spot implements Comparable <Spot>
 		case AREA_SUM:		
 		case AREA_SUM_LR:
 			return sum;
-		case AREA_SUM2:	
+//		case AREA_SUM2:	
 //		case AREA_SUM2_LR:
-			return sum2;
+//			return sum2;
 		case AREA_CNTPIX:
 		case AREA_CNTPIX_LR:
 			return cntPix;
-		case AREA_MEANGREY:
-		case AREA_MEANGREY_LR:
-			return meanGrey;
+//		case AREA_MEANGREY:
+//		case AREA_MEANGREY_LR:
+//			return meanGrey;
 		default:
 			return null;
 		}
@@ -554,25 +554,25 @@ public class Spot implements Comparable <Spot>
 	public void adjustToImageWidth (int imageWidth) 
 	{
 		sum.adjustToImageWidth(imageWidth);
-		sum2.adjustToImageWidth(imageWidth);
+//		sum2.adjustToImageWidth(imageWidth);
 		cntPix.adjustToImageWidth(imageWidth);
-		meanGrey.adjustToImageWidth(imageWidth);
+//		meanGrey.adjustToImageWidth(imageWidth);
 	}
 
 	public void cropToImageWidth (int imageWidth) 
 	{
 		sum.cropToImageWidth(imageWidth);
-		sum2.cropToImageWidth(imageWidth);
+//		sum2.cropToImageWidth(imageWidth);
 		cntPix.cropToImageWidth(imageWidth);
-		meanGrey.cropToImageWidth(imageWidth);
+//		meanGrey.cropToImageWidth(imageWidth);
 	}
 	
 	public void transferLimitMeasuresToPolyline() 
 	{
 		sum.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
-		sum2.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+//		sum2.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
 		cntPix.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
-		meanGrey.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
+//		meanGrey.setPolylineLevelFromTempData(getRoi().getName(), kymographIndex);
 	}
 	
 	// -----------------------------------------------------------------------------
@@ -632,9 +632,9 @@ public class Spot implements Comparable <Spot>
 		switch(measureType) 
 		{
 			case AREA_SUM:
-			case AREA_SUM2:
+//			case AREA_SUM2:
 			case AREA_CNTPIX:	
-			case AREA_MEANGREY:
+//			case AREA_MEANGREY:
 				sbf.append("#" + csvSep + measureType.toString() + csvSep + explanation1);
 				break;
 
@@ -655,15 +655,15 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM:  	
 				sum.cvsExportYDataToRow(sbf, csvSep); 
 				break;
-			case AREA_SUM2:  	
-				sum2.cvsExportYDataToRow(sbf, csvSep); 
-				break;
+//			case AREA_SUM2:  	
+//				sum2.cvsExportYDataToRow(sbf, csvSep); 
+//				break;
 			case AREA_CNTPIX:  	
 				cntPix.cvsExportYDataToRow(sbf, csvSep); 
 				break;
-			case AREA_MEANGREY: 
-				meanGrey.cvsExportYDataToRow(sbf, csvSep); 
-				break;
+//			case AREA_MEANGREY: 
+//				meanGrey.cvsExportYDataToRow(sbf, csvSep); 
+//				break;
 			default:
 				break;
 		}
@@ -694,9 +694,9 @@ public class Spot implements Comparable <Spot>
 			switch(measureType) 
 			{
 			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
-			case AREA_SUM2:  	sum2.csvImportXYDataFromRow( data, 2); break;
+//			case AREA_SUM2:  	sum2.csvImportXYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
-			case AREA_MEANGREY: meanGrey.csvImportXYDataFromRow( data, 2); break;
+//			case AREA_MEANGREY: meanGrey.csvImportXYDataFromRow( data, 2); break;
 			default:
 				break;
 			}
@@ -706,9 +706,9 @@ public class Spot implements Comparable <Spot>
 			switch(measureType) 
 			{
 			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
-			case AREA_SUM2:  	sum2.csvImportYDataFromRow( data, 2); break;
+//			case AREA_SUM2:  	sum2.csvImportYDataFromRow( data, 2); break;
 			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
-			case AREA_MEANGREY: meanGrey.csvImportYDataFromRow( data, 2); break;
+//			case AREA_MEANGREY: meanGrey.csvImportYDataFromRow( data, 2); break;
 			default:
 				break;
 			}

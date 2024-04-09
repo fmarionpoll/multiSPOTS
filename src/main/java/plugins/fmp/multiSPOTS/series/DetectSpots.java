@@ -77,8 +77,8 @@ public class DetectSpots extends BuildSeries
 		String directory = exp.getDirectoryToSaveResults(); 
 		if (directory == null)
 			return;
-		exp.spotsArray.computeMeanGrey(0);
-		exp.spotsArray.computeSum2();
+//		exp.spotsArray.computeMeanGrey(0);
+//		exp.spotsArray.computeSum2();
 		exp.spotsArray.transferLimitMeasuresToPolyline(); 
 		exp.saveXML_MCExperiment();
 		exp.saveSpotsMeasures();
@@ -121,7 +121,7 @@ public class DetectSpots extends BuildSeries
 //		ProgressFrame progressBar = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
-	    processor.setThreadName("buildKymograph");
+	    processor.setThreadName("buildSpots");
 	    processor.setPriority(Processor.NORM_PRIORITY);
 	    int ntasks =  exp.spotsArray.spotsList.size(); //
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
@@ -243,9 +243,9 @@ public class DetectSpots extends BuildSeries
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
 			spot.sum .measure 	= new  double [nFrames+1];
-			spot.sum2.measure  	= new  double [nFrames+1];
+//			spot.sum2.measure  	= new  double [nFrames+1];
 			spot.cntPix.measure  = new  double [nFrames+1];	
-			spot.meanGrey.measure  = new  double [nFrames+1];	
+//			spot.meanGrey.measure  = new  double [nFrames+1];	
 		}
 	}
 	
