@@ -45,7 +45,7 @@ public class BuildSeriesOptions implements XMLPersistent
 	public  boolean 	runBackwards 			= false;
 	
 	public	boolean		pass1 = true;
-	public 	boolean		overthreshold			= true;
+	public 	boolean		thresholdUp			= true;
 	public 	int			detectLevel1Threshold 	= 35;
 	public 	ImageTransformEnums transform01 	= ImageTransformEnums.R_RGB;
 	public  ImageTransformEnums overlayTransform = ImageTransformEnums.NONE;
@@ -95,7 +95,7 @@ public class BuildSeriesOptions implements XMLPersistent
 		destination.detectTop 				= detectTop; 
 		destination.detectBottom 			= detectBottom; 
 		destination.transform01 			= transform01;
-		destination.overthreshold 			= overthreshold;
+		destination.thresholdUp 			= thresholdUp;
 		destination.detectLevel1Threshold 	= detectLevel1Threshold;
 		destination.detectAllSeries 		= detectAllSeries;
 
@@ -106,7 +106,7 @@ public class BuildSeriesOptions implements XMLPersistent
 		detectTop 				= destination.detectTop; 
 		detectBottom 			= destination.detectBottom; 
 		transform01 			= destination.transform01;
-		overthreshold 			= destination.overthreshold;
+		thresholdUp 			= destination.thresholdUp;
 		detectLevel1Threshold 	= destination.detectLevel1Threshold;
 		detectAllSeries 		= destination.detectAllSeries;
 	}
@@ -140,7 +140,7 @@ public class BuildSeriesOptions implements XMLPersistent
 			detectTop = XMLUtil.getElementBooleanValue(nodeMeta, "detectTop", detectTop);
 			detectBottom = XMLUtil.getElementBooleanValue(nodeMeta, "detectBottom", detectBottom);
 			detectAllSeries = XMLUtil.getElementBooleanValue(nodeMeta, "detectAllImages", detectAllSeries);
-			overthreshold = XMLUtil.getElementBooleanValue(nodeMeta, "directionUp", overthreshold);
+			thresholdUp = XMLUtil.getElementBooleanValue(nodeMeta, "directionUp", thresholdUp);
 			seriesFirst = XMLUtil.getElementIntValue(nodeMeta, "firstImage", seriesFirst);
 			detectLevel1Threshold = XMLUtil.getElementIntValue(nodeMeta, "detectLevelThreshold", detectLevel1Threshold);
 			transform01 = ImageTransformEnums.findByText(XMLUtil.getElementValue(nodeMeta, "Transform", transform01.toString()));       
@@ -174,7 +174,7 @@ public class BuildSeriesOptions implements XMLPersistent
 			XMLUtil.setElementBooleanValue(nodeMeta, "detectTop", detectTop);
 			XMLUtil.setElementBooleanValue(nodeMeta, "detectBottom", detectBottom);
 			XMLUtil.setElementBooleanValue(nodeMeta, "detectAllImages", detectAllSeries);
-			XMLUtil.setElementBooleanValue(nodeMeta, "directionUp", overthreshold);
+			XMLUtil.setElementBooleanValue(nodeMeta, "directionUp", thresholdUp);
 			XMLUtil.setElementIntValue(nodeMeta, "firstImage", seriesFirst);
 			XMLUtil.setElementIntValue(nodeMeta, "detectLevelThreshold", detectLevel1Threshold);
 		    XMLUtil.setElementValue(nodeMeta, "Transform", transform01.toString()); 
