@@ -27,17 +27,11 @@ public enum EnumXLSExportType
 	AREA_SUM("AREA_SUM", "grey value", "Spot grey value sum of pixels over threshold"),
 	AREA_SUMCLEAN("AREA_SUMCLEAN", "grey value - no fly", "Spot grey value sum of pixels over threshold but with no fly"),
 	AREA_FLYPRESENT("AREA_FLYPRESENT", "boolean value", "fly is present or not over the spot"),
-//	AREA_SUM2("AREA_SUM2", "grey value*2", "Spot grey value of sum*sum of pixels over threshold"),
 	AREA_CNTPIX("AREA_CNTPIX", "n pixels", "Spot n pixels over threshold"),
-//	AREA_MEANGREY("AREA_MEANGREY", "grey value / n pixels at t0", "Grey value per pixel over threshold"),
-	
-//	AREA_NPIXELS("area_npixels", "n_pixels"),
-//	AREA_NPIXELS_DELTA("area_delta", "n pixels difference between intervals"),
-//	AREA_NPIXELS_RELATIVE("area_rel", "%initial surface"),
 	AREA_SUM_LR ("area sum_L+R", "sum grey", "SUM and PI"),
+	AREA_SUMCLEAN_LR ("area sumclean_L+R", "sumclean grey", "SUM and PI"),
 	AREA_CNTPIX_LR ("area cntpix_L+R", "n_pixels", "SUM and PI");
-//	AREA_MEANGREY_LR ("area meangrey_L+R", "meangrey", "SUM and PI");
-//	AREA_DENSITY("area_density", "grey density in detection area");
+
 	
 	private String label;
 	private String unit;

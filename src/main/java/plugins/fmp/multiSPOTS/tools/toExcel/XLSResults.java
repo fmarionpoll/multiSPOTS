@@ -124,6 +124,7 @@ public class XLSResults
 	{
 		if (dataValues == null || dataValues.size() < 1)
 			return null;
+		
 		double value0 = dataValues.get(0);
 		for (int index = 0; index < dataValues.size(); index++) 
 		{

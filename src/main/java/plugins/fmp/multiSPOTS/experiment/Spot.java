@@ -320,6 +320,7 @@ public class Spot implements Comparable <Spot>
 		case AREA_SUM_LR:
 			return sum;
 		case AREA_SUMCLEAN:
+		case AREA_SUMCLEAN_LR:
 			return sumClean;
 		case AREA_FLYPRESENT:
 			return flyPresent;

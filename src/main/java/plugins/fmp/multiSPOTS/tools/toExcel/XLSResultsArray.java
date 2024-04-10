@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import plugins.fmp.multiSPOTS.experiment.CapillariesArray;
-import plugins.fmp.multiSPOTS.experiment.Capillary;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Comparators;
@@ -69,18 +67,6 @@ public class XLSResultsArray
 	public void sortRowsByName() 
 	{
 		Collections.sort(resultsList, new Comparators.XLSResults_Name_Comparator());
-	}
-	
-	public void checkIfSameStimulusAndConcentration(Capillary cap) 
-	{
-		if (!sameLR)
-			return;
-		if (stim == null)
-			stim = cap.stimulus;
-		if (conc == null)
-			conc = cap.concentration;
-		sameLR &= stim .equals(cap.stimulus);
-		sameLR &= conc .equals(cap.concentration);
 	}
 	
 	public void checkIfSameStimulusAndConcentration(Spot spot) 
@@ -184,48 +170,14 @@ public class XLSResultsArray
 
 	// ---------------------------------------------------
 	
-	public void getResults1( 
-			CapillariesArray capillaries,  
+	public void getSpotsArrayResults_T0(SpotsArray spotsArray, 
 			EnumXLSExportType exportType, 
 			int nOutputFrames, 
 			long kymoBinCol_Ms, 
 			XLSExportOptions xlsExportOptions) 
 	{
 		xlsExportOptions.exportType = exportType;
-		buildCapillaryDataForPass1(capillaries, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, false);
-		if (xlsExportOptions.compensateEvaporation)
-			subtractEvaporation();
-		buildDataForPass2(xlsExportOptions);
-	}
-	
-	public void getResults_T0( 
-			CapillariesArray caps, 
-			EnumXLSExportType exportType, 
-			int nOutputFrames, 
-			long kymoBinCol_Ms, 
-			XLSExportOptions xlsExportOptions) 
-	{
-		xlsExportOptions.exportType = exportType;
-		buildCapillaryDataForPass1(caps, nOutputFrames, kymoBinCol_Ms, xlsExportOptions, xlsExportOptions.subtractT0);
-		if (xlsExportOptions.compensateEvaporation)
-			subtractEvaporation();
-		buildDataForPass2(xlsExportOptions);
-	}
-	
-	public void getSpotsArrayResults_T0( 
-			SpotsArray spotsArray, 
-			EnumXLSExportType exportType, 
-			int nOutputFrames, 
-			long kymoBinCol_Ms, 
-			XLSExportOptions xlsExportOptions) 
-	{
-		xlsExportOptions.exportType = exportType;
-		buildSpotsDataForPass1(spotsArray, 
-				nOutputFrames, 
-				kymoBinCol_Ms, 
-				xlsExportOptions);
-		if (xlsExportOptions.compensateEvaporation)
-			subtractEvaporation();
+		buildSpotsDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions);
 		buildDataForPass2(xlsExportOptions);
 	}
 	
@@ -234,32 +186,11 @@ public class XLSResultsArray
 		buildSpotsDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions);
 		buildDataForPass2(xlsExportOptions);
 	}
-	
-	private void buildCapillaryDataForPass1(CapillariesArray capillaries,
-			int nOutputFrames, 
-			long kymoBinCol_Ms, 
-			XLSExportOptions xlsExportOptions, 
-			boolean subtractT0)
-	{
-		double scalingFactorToPhysicalUnits = capillaries.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
-		for (Capillary cap: capillaries.capillariesList) 
-		{
-			checkIfSameStimulusAndConcentration(cap);
-			XLSResults results = new XLSResults(cap.getRoiName(), cap.nFlies, cap.cageID, xlsExportOptions.exportType, nOutputFrames);
-			results.dataValues = cap.getCapillaryMeasuresForXLSPass1(xlsExportOptions.exportType, 
-					kymoBinCol_Ms, 
-					xlsExportOptions.buildExcelStepMs);
-			if (subtractT0) 
-				results.subtractT0();
-			results.transferMeasuresToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
-			resultsList.add(results);
-		}
-	}
-	
+		
 	private void buildSpotsDataForPass1(SpotsArray spotsArray,
-			int nOutputFrames, 
-			long kymoBinCol_Ms, 
-			XLSExportOptions xlsExportOptions)
+										int nOutputFrames, 
+										long kymoBinCol_Ms, 
+										XLSExportOptions xlsExportOptions)
 	{
 		double scalingFactorToPhysicalUnits = spotsArray.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
 		for (Spot spot: spotsArray.spotsList) 
@@ -274,7 +205,7 @@ public class XLSResultsArray
 			results.dataValues = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, 
 												kymoBinCol_Ms, 
 												xlsExportOptions.buildExcelStepMs);
-			if (xlsExportOptions.relativeToT0) 
+			if (xlsExportOptions.relativeToT0 && xlsExportOptions.exportType != EnumXLSExportType.AREA_FLYPRESENT) 
 				results.relativeToT0();
 			results.transferMeasuresToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
 			resultsList.add(results);
@@ -289,7 +220,7 @@ public class XLSResultsArray
 		case TOPLEVELDELTA_LR:
 		case AREA_CNTPIX_LR:
 		case AREA_SUM_LR:
-//		case AREA_MEANGREY_LR:
+		case AREA_SUMCLEAN_LR:
 			buildLR (xlsExportOptions.lrPIThreshold); 
 			break;
 		case AUTOCORREL:

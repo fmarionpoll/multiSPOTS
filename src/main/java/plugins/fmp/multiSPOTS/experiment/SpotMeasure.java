@@ -98,7 +98,7 @@ public class SpotMeasure
 		for (int i = xStart; i <= xEnd; i++, j++) 
 		{
 			xpoints[j] = i;
-			ypoints[j] =  measureBooleans[j] ? 1. : 0.;
+			ypoints[j] = measureBooleans[j] ? 1d : 0d;
 		}
 		polylineLevel = new Level2D(xpoints, ypoints, npoints);
 	}

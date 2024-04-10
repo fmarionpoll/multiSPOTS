@@ -518,31 +518,12 @@ public class XLSExport
 			{
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
-//				switch (xlsExportType) 
-//				{
-//					case AREA_NPIXELS:// TODO check exp.binDuration_ms
-//						resultsArrayList.getSpotsArrayResults1(expi.spotsArray,  xlsExportType,  nOutputFrames,  exp.binDuration_ms, options);
-////						resultsArrayList.getResults_T0(expi.capillaries, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
-//						break;
-//	
-//					default:
-						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
-//						break;
-//				}
+				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
 				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);
 			}
 			expi = expi.chainToNextExperiment;
 		}
 		
-//		switch (xlsExportType) 
-//		{
-//			case TOPLEVELDELTA:
-//			case TOPLEVELDELTA_LR:
-//				rowListForOneExp.subtractDeltaT(1, 1); //options.buildExcelStepMs);
-//				break;
-//			default:
-//				break;
-//		}
 		return rowListForOneExp;
 	}
 	
