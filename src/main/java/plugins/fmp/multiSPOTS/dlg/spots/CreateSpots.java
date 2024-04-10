@@ -49,18 +49,12 @@ public class CreateSpots extends JPanel
 	private JSpinner 	pixelRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(30, 1, 1000, 1));
 	private JSpinner 	nCagesPerRowSpinner 	= new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
 
-	private Polygon2D 	capillariesPolygon 		= null;
-//	private JSpinner 	nRowsJSpinner 			= new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
-//	private JSpinner 	nColumnsJSpinner 		= new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
-
+	private Polygon2D 	spotsLocationPolygon	= null;
 	private String []	flyString				= new String[] {"fly", "flies"};
-//	private String []	colString				= new String[] {"col X", "cols X"};	
-//	private String []	rowString				= new String[] {"row of", "rows of"};
-	
+
 	private JLabel 		flyLabel 				= new JLabel (flyString[0]);
 	private JLabel 		pointsLabel				= new JLabel ("points at");
-//	private JLabel 		colLabel 				= new JLabel (colString[0]);
-//	private JLabel 		rowLabel 				= new JLabel (rowString[0]);
+
 
 	
 	private MultiSPOTS 	parent0 				= null;
@@ -77,13 +71,6 @@ public class CreateSpots extends JPanel
 		panel0.add(createCirclesButton);
 		
 		JPanel panel1 = new JPanel(flowLayout);
-//		panel1.add(new JLabel ("Grouped as"));
-//		panel1.add(nColumnsJSpinner);
-//		nColumnsJSpinner.setPreferredSize(new Dimension (40, 20));
-//		panel1.add(colLabel);
-//		panel1.add(nRowsJSpinner);
-//		nRowsJSpinner.setPreferredSize(new Dimension (40, 20));
-//		panel1.add(rowLabel);	
 		panel1.add(nCagesPerRowSpinner);	
 		nCagesPerRowSpinner.setPreferredSize(new Dimension (60, 20));
 		panel1.add(new JLabel ("cages with"));
@@ -164,22 +151,6 @@ public class CreateSpots extends JPanel
 		        flyLabel.setText(flyString[i]);
 		        nbFliesPerCageJSpinner.requestFocus();
 		    }});
-
-//		nColumnsJSpinner.addChangeListener(new ChangeListener() {
-//		    @Override
-//		    public void stateChanged(ChangeEvent e) {
-//		    	int i = (int) nColumnsJSpinner.getValue() > 1 ? 1:0;
-//		        colLabel.setText(colString[i]);
-//		        nColumnsJSpinner.requestFocus();
-//		    }});
-//		
-//		nRowsJSpinner.addChangeListener(new ChangeListener() {
-//		    @Override
-//		    public void stateChanged(ChangeEvent e) {
-//		    	int i = (int) nRowsJSpinner.getValue() > 1 ? 1:0;
-//		        rowLabel.setText(rowString[i]);
-//		        nRowsJSpinner.requestFocus();
-//		    }});
 	}
 	
 	// set/ get	
@@ -215,7 +186,7 @@ public class CreateSpots extends JPanel
 	
 	private Polygon2D getCapillariesPolygon(SequenceCamData seqCamData)
 	{
-		if (capillariesPolygon == null)
+		if (spotsLocationPolygon == null)
 		{		
 			Rectangle rect = seqCamData.seq.getBounds2D();
 			List<Point2D> points = new ArrayList<Point2D>();
@@ -223,9 +194,9 @@ public class CreateSpots extends JPanel
 			points.add(new Point2D.Double(rect.x + rect.width*4 /5, rect.y + rect.height /5));
 			points.add(new Point2D.Double(rect.x + rect.width*4 /5, rect.y + rect.height*2 /3));
 			points.add(new Point2D.Double(rect.x + rect.width /5, rect.y + rect.height *2 /3));
-			capillariesPolygon = new Polygon2D(points);
+			spotsLocationPolygon = new Polygon2D(points);
 		}
-		return capillariesPolygon;
+		return spotsLocationPolygon;
 	}
 	
 	private void rotate (Polygon2D roiPolygon) 
@@ -271,9 +242,9 @@ public class CreateSpots extends JPanel
 			return;
 		}
 		
-		capillariesPolygon = ROI2DUtilities.orderVerticesofPolygon (((ROI2DPolygon) roi).getPolygon());
+		spotsLocationPolygon = ROI2DUtilities.orderVerticesofPolygon (((ROI2DPolygon) roi).getPolygon());
 	
-		rotate(capillariesPolygon);
+		rotate(spotsLocationPolygon);
 		
 		seqCamData.seq.removeROI(roi);
 
@@ -283,9 +254,9 @@ public class CreateSpots extends JPanel
 			for (int i = 0; i < nbcapillaries; i += 2) 
 			{
 				double span0 = (width_between_capillaries + width_interval)*i/2;
-				addROILine(seqCamData, "line"+i/2+"L", capillariesPolygon, span0, span);
+				addROILine(seqCamData, "line"+i/2+"L", spotsLocationPolygon, span0, span);
 				span0 += width_between_capillaries ;
-				addROILine(seqCamData, "line"+i/2+"R", capillariesPolygon, span0, span);
+				addROILine(seqCamData, "line"+i/2+"R", spotsLocationPolygon, span0, span);
 			}
 		}
 		else 
@@ -294,7 +265,7 @@ public class CreateSpots extends JPanel
 			for (int i=0; i< nbcapillaries; i++) 
 			{
 				double span0 = width_between_capillaries*i;
-				addROILine(seqCamData, "line"+ String.format("%02d", i), capillariesPolygon, span0, span);
+				addROILine(seqCamData, "line"+ String.format("%02d", i), spotsLocationPolygon, span0, span);
 			}
 		}
 	}

@@ -121,16 +121,19 @@ public class DetectSpots extends BuildSeries
 			final int fromSourceImageIndex = ii;
 			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.nTotalFrames;
 			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));
-			final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+			
 			
 			vData.setTitle(title);
-			seqData.setImage(0, 0, workImage); 
+			seqData.setImage(0, 0, sourceImage); 
 		
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
-					for (Spot spot: exp.spotsArray.spotsList)  
-						measureValues (sourceImage, workImage, spot, fromSourceImageIndex);
+					final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+					for (Spot spot: exp.spotsArray.spotsList)  {
+						measureSpotArea (workImage, spot, fromSourceImageIndex);
+						spot.flyPresent.measureBooleans[fromSourceImageIndex] = isFlyPresentInSpotArea (sourceImage, spot, fromSourceImageIndex);
+					}
 				}}));
 
 		}
@@ -138,22 +141,37 @@ public class DetectSpots extends BuildSeries
 		return true;
 	}
 	
-	private void measureValues(IcyBufferedImage sourceImage, IcyBufferedImage workImage, Spot spot, int t  )
+	private boolean isFlyPresentInSpotArea(IcyBufferedImage sourceImage, Spot spot, int t  )
+	{
+		int flyThreshold = options.thresholdFly;
+        
+        IcyBufferedImage subSourceImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
+        int[] sourceData = (int[]) ArrayUtil.arrayToIntArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
+        boolean flyFound = false;        
+        
+        for (int offset = 0; offset < sourceData.length; offset++)
+        {
+            if (sourceData[offset] < flyThreshold)
+            {
+            	flyFound = true;
+            	break;
+            }
+        }
+        return flyFound;
+	}
+	
+	private void measureSpotArea(IcyBufferedImage workImage, Spot spot, int t  )
 	{
 		int sum = 0;
         int cntPix = 0;
         
         boolean spotThresholdUp = options.thresholdUp;
-        int flyThreshold = options.thresholdFly;
         int spotThreshold = options.detectLevel1Threshold;
         
         IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, spot.mask2D.bounds);
         boolean[] mask = spot.mask2D.mask;
         int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());
-        
-        IcyBufferedImage subSourceImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
-        int[] sourceData = (int[]) ArrayUtil.arrayToIntArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
-        boolean flyFound = false;
+       
         
         if (spotThresholdUp)
         {
@@ -167,8 +185,6 @@ public class DetectSpots extends BuildSeries
                         cntPix++;
                         sum += value;
                     }
-	                if (!flyFound && sourceData[offset] < flyThreshold)
-	                	flyFound = true;
 	            }
 	        } 
         }
@@ -184,13 +200,10 @@ public class DetectSpots extends BuildSeries
                         cntPix++;
                         sum += value;
 	                }
-	                if (!flyFound && sourceData[offset] < flyThreshold)
-	                	flyFound = true;
 	            }
 	        }
         }
         spot.sum.measureValues[t] = sum ;
-        spot.flyPresent.measureBooleans[t] = flyFound;
         spot.cntPix.measureValues[t] = cntPix;
 	}
 	

@@ -24,7 +24,7 @@ public class Cage
 {
 	public ROI2D 		cageRoi2D				= null;
 	public BooleanMask2D cageMask2D				= null;
-	public FlyPositions 	flyPositions 	= new FlyPositions();
+	public FlyPositions flyPositions 			= new FlyPositions();
 	public int 			cageNFlies  			= 0;
 	public int 			cageAge 				= 5;
 	public String 		strCageComment 			= "..";
