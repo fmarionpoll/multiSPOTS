@@ -239,13 +239,6 @@ public class SpotsArray
 			spot.setVolumeAndPixels (spotsDescription.volume, spotsDescription.pixels);
 		}
 	}
-	public void filterSpikes()
-	{
-		for (Spot spot: spotsList) 
-		{
-			spot.filterSpikes();
-		}
-	}
 	
 	private void transferCapGroupCageIDToSpot (Spot spot) 
 	{

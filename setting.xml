@@ -1,6 +1,6 @@
 <root>
 <section name="icy">
-<key name="maxMemory" value="33120"/>
+<key name="maxMemory" value="16640"/>
 <section name="general">
 <section name="toolTips">
 <key name="mainMenuTip" value="false"/>
@@ -96,10 +96,10 @@
 </section>
 <section name="online"/>
 </section>
-<key name="id" value="173896209"/>
+<key name="id" value="252879768"/>
 <key name="os" value="win64"/>
-<key name="clientCpuNumber" value="20"/>
-<key name="clientTotalMemory" value="34078789632"/>
+<key name="clientCpuNumber" value="4"/>
+<key name="clientTotalMemory" value="17056403456"/>
 <key name="appFolder" value="C:/Users/fred/.m2/repository/org/bioimageanalysis/icy/icy-kernel/2.5.1"/>
 <section name="loader">
 <section name="entry0">
@@ -159,7 +159,7 @@
 <section name="multiSPOTS">
 <section name="MultiSPOTS">
 <section name="gui">
-<key name="lastUsedPath" value="D:\2024 gouttes\gouttes\Manip"/>
+<key name="lastUsedPath" value="C:\Users\fred\Desktop\2024-02-21"/>
 </section>
 </section>
 </section>

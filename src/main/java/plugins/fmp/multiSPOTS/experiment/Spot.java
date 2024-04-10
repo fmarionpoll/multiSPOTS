@@ -28,10 +28,9 @@ public class Spot implements Comparable <Spot>
 	private ArrayList<ROI2DAlongTime>	listRoiAlongTime= new ArrayList<ROI2DAlongTime>();
 	public BooleanMask2D 				mask2D			= null;
 
-	public int							cageIndex 	= -1;
-	private String						cagePrefix	= null;
+	public int							cageIndex 		= -1;
+	private String						cagePrefix		= null;
 	public String 						version 		= null;
-
 	public String 						spotStim		= new String("..");
 	public String 						spotConc		= new String("..");
 	public String						spotCageSide	= ".";

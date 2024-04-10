@@ -128,7 +128,7 @@ public class CreateSpots extends JPanel
 				if (exp != null) {
 					ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
-					exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage);
+					exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage, false);
 				}
 			}});
 		

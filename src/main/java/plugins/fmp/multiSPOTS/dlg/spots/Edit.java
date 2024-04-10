@@ -21,10 +21,9 @@ public class Edit extends JPanel
 	/**
 	 * 
 	 */
-	private static final long 	serialVersionUID 			= 4950182090521600937L;
+	private static final long 	serialVersionUID 	= 4950182090521600937L;
 	
 	private JButton			editSpotsButton			= new JButton("Edit spots infos...");
-	private JButton			filterSpikesButton		= new JButton("Filter spikes...");
 	private SpotTable	   	infosSpotTable			= null;
 	private List<Spot>		spotsArrayCopy			= new ArrayList<Spot>();
 	private MultiSPOTS 		parent0 				= null;
@@ -41,7 +40,6 @@ public class Edit extends JPanel
 		panel01.add( editSpotsButton);
 		add(panel01);
 		JPanel panel02 = new JPanel(flowLayout);
-		panel02.add( filterSpikesButton);
 		add(panel02);
 
 		defineActionListeners();
@@ -60,19 +58,6 @@ public class Edit extends JPanel
 					if (infosSpotTable == null)
 						infosSpotTable = new SpotTable();
 					infosSpotTable.initialize(parent0, spotsArrayCopy);
-				}
-			}});
-		
-		filterSpikesButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
-				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null)
-				{
-					exp.spotsArray.filterSpikes();
-//					exp.saveSpotsMeasures();
-					parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
 				}
 			}});
 	}
