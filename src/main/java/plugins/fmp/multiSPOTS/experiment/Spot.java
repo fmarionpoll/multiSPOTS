@@ -29,13 +29,12 @@ public class Spot implements Comparable <Spot>
 	public BooleanMask2D 				mask2D			= null;
 
 	public int							cageIndex 		= -1;
-	private String						cagePrefix		= null;
 	public String 						version 		= null;
 	public String 						spotStim		= new String("..");
 	public String 						spotConc		= new String("..");
 	public String						spotCageSide	= ".";
 	public int							spotNFlies		= 1;
-	public int							spotCageID		= 0;
+	public int							spotIndex		= 0;
 	public double 						spotVolume 		= 1;
 	public int 							pixels 			= 5;
 	public int							radius			= 30;
@@ -106,7 +105,7 @@ public class Spot implements Comparable <Spot>
 		spotConc		= spotFrom.spotConc;
 		spotCageSide	= spotFrom.spotCageSide;
 		spotNFlies		= spotFrom.spotNFlies;
-		spotCageID		= spotFrom.spotCageID;
+		spotIndex		= spotFrom.spotIndex;
 		spotVolume 		= spotFrom.spotVolume;
 		pixels 			= spotFrom.pixels;
 		radius 			= spotFrom.radius;
@@ -144,11 +143,6 @@ public class Spot implements Comparable <Spot>
 		if (roi == null)
 			return "missing";
 		return roi.getName().substring(roi.getName().length() -2);
-	}
-	
-	public String getRoiNamePrefix() 
-	{
-		return cagePrefix;
 	}
 	
  	public String getSpotSide() 
@@ -369,7 +363,7 @@ public class Spot implements Comparable <Spot>
 	        descriptionOK 	= XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 	        versionInfos 	= XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
 	        spotNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
-	        spotCageID 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
+	        spotIndex 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
 	        spotVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
 			pixels 			= XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
 			radius			= XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
@@ -422,7 +416,7 @@ public class Spot implements Comparable <Spot>
         XMLUtil.setElementBooleanValue(nodeMeta, ID_DESCOK, descriptionOK);
         XMLUtil.setElementIntValue(nodeMeta, ID_VERSIONINFOS, versionInfos);
         XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
-        XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, spotCageID);
+        XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
 		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, spotVolume);
 		XMLUtil.setElementIntValue(nodeMeta, ID_PIXELS, pixels);
 		XMLUtil.setElementIntValue(nodeMeta, ID_RADIUS, radius);
@@ -563,8 +557,7 @@ public class Spot implements Comparable <Spot>
 		
 		sbf.append("#"+csvSep+"SPOTS"+csvSep+"describe each spot\n");
 		List<String> row2 = Arrays.asList(
-				"prefix",
-				"kymoIndex", 
+				"index", 
 				"name", 
 				"cage",
 				"nflies",
@@ -582,14 +575,13 @@ public class Spot implements Comparable <Spot>
 	public String csvExportDescription(String csvSep) 
 	{	
 		StringBuffer sbf = new StringBuffer();
-		if (cagePrefix == null)
-			cagePrefix = getLast2ofSpotName();
+//		if (cagePrefix == null)
+//			cagePrefix = getLast2ofSpotName();
 		
 		List<String> row = Arrays.asList(
-				cagePrefix,
-				Integer.toString(cageIndex), 
+				Integer.toString(spotIndex), 
 				getRoi().getName(), 
-				Integer.toString(spotCageID),
+				Integer.toString(cageIndex),
 				Integer.toString(spotNFlies),
 				Double.toString(spotVolume), 
 				Integer.toString(pixels), 
@@ -650,13 +642,14 @@ public class Spot implements Comparable <Spot>
 		return sbf.toString();
 	}
 	
-	public void csvImportDescription(String[] data) 
+	public void csvImportDescription(String[] data, boolean dummyColumn) 
 	{
 		int i = 0;
-		cagePrefix = data[i]; i++;
+		if (dummyColumn) 
+			i++;
 		cageIndex 	= Integer.valueOf(data[i]); i++; 
 		roi.setName(data[i]); i++;
-		spotCageID 		= Integer.valueOf(data[i]); i++;
+		spotIndex 		= Integer.valueOf(data[i]); i++;
 		spotNFlies 		= Integer.valueOf(data[i]); i++;
 		spotVolume 		= Double.valueOf(data[i]); i++; 
 		pixels 			= Integer.valueOf(data[i]); i++; 

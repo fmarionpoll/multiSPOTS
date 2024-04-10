@@ -198,7 +198,7 @@ public class XLSResultsArray
 			checkIfSameStimulusAndConcentration(spot);
 			XLSResults results = new XLSResults(spot.getRoiName(), 
 												spot.spotNFlies, 
-												spot.spotCageID, 
+												spot.spotIndex, 
 												xlsExportOptions.exportType, 
 												nOutputFrames);
 			

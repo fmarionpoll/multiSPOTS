@@ -111,18 +111,16 @@ public class DetectSpots extends BuildSeries
 		initSpotsDataArrays(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = options.transform01;
-		transformOptions.setSingleThreshold (options.detectLevel1Threshold, options.thresholdUp) ;
+		transformOptions.setSingleThreshold (options.spotThreshold, options.spotThresholdUp) ;
 
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		seqData.addOverlay(overlayThreshold);
 		
 		for (int ii = 0; ii < nFrames; ii++) 
 		{
-			final int fromSourceImageIndex = ii;
-			String title = "Frame #"+ fromSourceImageIndex + " /" + exp.seqCamData.nTotalFrames;
-			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(fromSourceImageIndex));
-			
-			
+			final int t = ii;
+			String title = "Frame #"+ t + " /" + exp.seqCamData.nTotalFrames;
+			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
 			vData.setTitle(title);
 			seqData.setImage(0, 0, sourceImage); 
 		
@@ -131,11 +129,10 @@ public class DetectSpots extends BuildSeries
 				public void run() {	
 					final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 					for (Spot spot: exp.spotsArray.spotsList)  {
-						measureSpotArea (workImage, spot, fromSourceImageIndex);
-						spot.flyPresent.measureBooleans[fromSourceImageIndex] = isFlyPresentInSpotArea (sourceImage, spot, fromSourceImageIndex);
+						measureSpotArea (workImage, spot, t);
+						spot.flyPresent.measureBooleans[t] = isFlyPresentInSpotArea (sourceImage, spot, t);
 					}
 				}}));
-
 		}
 		waitFuturesCompletion(processor, tasks, null);
 		return true;
@@ -143,19 +140,28 @@ public class DetectSpots extends BuildSeries
 	
 	private boolean isFlyPresentInSpotArea(IcyBufferedImage sourceImage, Spot spot, int t  )
 	{
-		int flyThreshold = options.thresholdFly;
+		int flyThreshold = options.flyThreshold;
         
         IcyBufferedImage subSourceImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
         int[] sourceData = (int[]) ArrayUtil.arrayToIntArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
-        boolean flyFound = false;        
+        boolean flyFound = false;    
+        boolean[] mask = spot.mask2D.mask;
         
-        for (int offset = 0; offset < sourceData.length; offset++)
-        {
-            if (sourceData[offset] < flyThreshold)
-            {
-            	flyFound = true;
-            	break;
-            }
+        if (options.flyThresholdUp) { 
+	        for (int offset = 0; offset < sourceData.length; offset++) {
+	            if (mask[offset] && (sourceData[offset] > flyThreshold)) {
+	            	flyFound = true;
+	            	break;
+	            }
+	        }
+        }
+        else {
+        	for (int offset = 0; offset < sourceData.length; offset++) {
+	            if (mask[offset] && (sourceData[offset] < flyThreshold)) {
+	            	flyFound = true;
+	            	break;
+	            }
+	        }
         }
         return flyFound;
 	}
@@ -165,38 +171,29 @@ public class DetectSpots extends BuildSeries
 		int sum = 0;
         int cntPix = 0;
         
-        boolean spotThresholdUp = options.thresholdUp;
-        int spotThreshold = options.detectLevel1Threshold;
+        boolean spotThresholdUp = options.spotThresholdUp;
+        int spotThreshold = options.spotThreshold;
         
         IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, spot.mask2D.bounds);
         boolean[] mask = spot.mask2D.mask;
-        int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());
-       
+        int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());  
         
-        if (spotThresholdUp)
-        {
-	        for (int offset = 0; offset < workData.length; offset++)
-	        {
-	            if (mask[offset])
-	            {
+        if (spotThresholdUp) {
+	        for (int offset = 0; offset < workData.length; offset++) {
+	            if (mask[offset])  {
 	                int value = workData[offset];    
-                    if (value < spotThreshold) 
-                    {
+                    if (value < spotThreshold) {
                         cntPix++;
                         sum += value;
                     }
 	            }
 	        } 
         }
-        else 
-        {
-	        for (int offset = 0; offset < workData.length; offset++)
-	        {
-	            if (mask[offset])
-	            {
+        else  {
+	        for (int offset = 0; offset < workData.length; offset++) {
+	            if (mask[offset]) {
 	                int value = workData[offset];
-	                if (value > spotThreshold) 
-	                {
+	                if (value > spotThreshold) {
                         cntPix++;
                         sum += value;
 	                }
@@ -220,7 +217,7 @@ public class DetectSpots extends BuildSeries
 		else
 			imageSourceDataBuffer = img.getDataXYAsByte(0);
 		
-		for (int x = 0; x < boolMap.length; x++)  {
+		for (int x = 0; x < boolMap.length; x++) {
 			if (imageSourceDataBuffer[x] == 0)
 				boolMap[x] =  false;
 			else
@@ -233,10 +230,9 @@ public class DetectSpots extends BuildSeries
 	{
 		//int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms + 1);
 		int nFrames = exp.seqCamData.nTotalFrames;
-		for (Spot spot: exp.spotsArray.spotsList) 
-		{
+		for (Spot spot: exp.spotsArray.spotsList) {
 			spot.sum.measureValues 			= new  double [nFrames+1];
-			spot.sumClean.measureValues 		= new  double [nFrames+1];
+			spot.sumClean.measureValues 	= new  double [nFrames+1];
 			spot.flyPresent.measureBooleans = new  boolean [nFrames+1];
 			spot.cntPix.measureValues  		= new  double [nFrames+1];		
 		}

@@ -254,7 +254,7 @@ public class SpotsArray
 			if (cap0 != null) 
 			{
 //				spot.capNFlies = cap0.capNFlies;
-				spot.spotCageID = cap0.spotCageID;
+				spot.spotIndex = cap0.spotIndex;
 			}
 		}
 	}
@@ -285,20 +285,6 @@ public class SpotsArray
 			}
 		}
 		return spotFound;
-	}
-	
-	public Spot getSpotFromRoiNamePrefix(String name) 
-	{
-		Spot capFound = null;
-		for (Spot spot: spotsList) 
-		{
-			if (spot.getRoiNamePrefix().equals(name)) 
-			{
-				capFound = spot;
-				break;
-			}
-		}
-		return capFound;
 	}
 
 	public void updateSpotsFromSequence(Sequence seq) 
@@ -364,7 +350,7 @@ public class SpotsArray
 			spot.spotNFlies = nflies;
 			if (i <= 1  || i>= capArraySize-2 )
 				spot.spotNFlies = 0;
-			spot.spotCageID = i/2;
+			spot.spotIndex = i/2;
 		}
 	}
 	
@@ -378,17 +364,17 @@ public class SpotsArray
 			if (i <= 1 ) 
 			{
 				spot.spotNFlies = 0;
-				spot.spotCageID = 0;
+				spot.spotIndex = 0;
 			}
 			else if (i >= capArraySize-2 ) 
 			{
 				spot.spotNFlies = 0;
-				spot.spotCageID = 5;
+				spot.spotIndex = 5;
 			}
 			else 
 			{
 				spot.spotNFlies = nflies;
-				spot.spotCageID = 1 + (i-2)/4;
+				spot.spotIndex = 1 + (i-2)/4;
 			}
 		}
 	}
@@ -566,7 +552,10 @@ public class SpotsArray
 	{
 		String row;
 		try {
-			row = csvReader.readLine();			
+			row = csvReader.readLine();
+			String[] data0 = row.split(csvSep);
+			boolean dummyColumn = data0[0].contains("prefix");
+			
 			while ((row = csvReader.readLine()) != null) 
 			{
 				String[] data = row.split(csvSep);
@@ -575,7 +564,7 @@ public class SpotsArray
 				Spot spot = getSpotFromName(data[2]);
 				if (spot == null)
 					spot = new Spot();
-				spot.csvImportDescription(data);
+				spot.csvImportDescription(data, dummyColumn);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

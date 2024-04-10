@@ -265,7 +265,7 @@ public class SpotTable extends JPanel
 				if (!spotFrom.getRoiName().equals (spotTo.getRoiName()))
 					continue;
 				spotFrom.valid = true;
-				spotTo.spotCageID = spotFrom.spotCageID;
+				spotTo.spotIndex = spotFrom.spotIndex;
 				spotTo.spotNFlies = spotFrom.spotNFlies;
 				spotTo.spotVolume = spotFrom.spotVolume;
 				spotTo.spotStim = spotFrom.spotStim;
@@ -367,7 +367,7 @@ public class SpotTable extends JPanel
 			return;
 		
 		Spot spotFrom = exp.spotsArray.spotsList.get(rowIndex);	
-		int cageFrom = spotFrom.spotCageID; 
+		int cageFrom = spotFrom.spotIndex; 
 		int cageTo = -1;
 				
 		int nSpotsPerCage = getCageNSpots(exp, cageFrom);
@@ -377,16 +377,16 @@ public class SpotTable extends JPanel
 		for (int i = 0; i < exp.spotsArray.spotsList.size(); i++) 
 		{
 			Spot spot = exp.spotsArray.spotsList.get(i);
-			if (spot.spotCageID == cageFrom)
+			if (spot.spotIndex == cageFrom)
 				continue;
 			
-			if (spot.spotCageID != cageTo) 
+			if (spot.spotIndex != cageTo) 
 			{
-				cageTo = spot.spotCageID;
+				cageTo = spot.spotIndex;
 				indexFirstSpotOfCageTo = getIndexFirstSpotOfCage(exp, cageTo);
 			}
 						
-			if (getCageNSpots(exp, spot.spotCageID) != nSpotsPerCage)
+			if (getCageNSpots(exp, spot.spotIndex) != nSpotsPerCage)
 				continue;
 
 			int indexFrom = i - indexFirstSpotOfCageTo + indexFirstSpotOfCageFrom;
@@ -409,7 +409,7 @@ public class SpotTable extends JPanel
 		int nSpots = 0;
 		for (Spot spot: exp.spotsArray.spotsList)
 		{
-			if (spot.spotCageID == cageID)
+			if (spot.spotIndex == cageID)
 				nSpots ++;
 		}
 			
@@ -422,7 +422,7 @@ public class SpotTable extends JPanel
 		for (int i = 0; i < exp.spotsArray.spotsList.size(); i++) 
 		{
 			Spot spot = exp.spotsArray.spotsList.get(i);
-			if (spot.spotCageID == cageID) {
+			if (spot.spotIndex == cageID) {
 				index = i;
 				break;
 			}

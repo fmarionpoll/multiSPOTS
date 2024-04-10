@@ -114,8 +114,8 @@ public class XLSExport
 			outputStimAndConc_according_to_DataOption(sheet, xlsExportOption, spot, transpose, x, y);
 
 			
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.spotCageID);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+spot.spotCageID);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.spotIndex);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+spot.spotIndex);
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, spot.spotNFlies); 
 
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.DUM4.getValue(), transpose, sheetName);
@@ -368,10 +368,10 @@ public class XLSExport
 		for (int i = 0; i < nspots; i++) 
 		{
 			Spot spot = expAll.spotsArray.spotsList.get(i);
-			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotCageID, xlsOption, nFrames);
+			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotIndex, xlsOption, nFrames);
 			rowResults.stimulus 		= spot.spotStim;
 			rowResults.concentration 	= spot.spotConc;
-			rowResults.cageID 			= spot.spotCageID;
+			rowResults.cageID 			= spot.spotIndex;
 			rowListForOneExp.resultsList.add(rowResults);
 		}
 		rowListForOneExp.sortRowsByName();
@@ -403,10 +403,10 @@ public class XLSExport
 		for (int i = 0; i < nspots; i++) 
 		{
 			Spot spot = expAll.spotsArray.spotsList.get(i);
-			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotCageID, xlsOption, nFrames);
+			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotIndex, xlsOption, nFrames);
 			rowResults.stimulus 		= spot.spotStim;
 			rowResults.concentration 	= spot.spotConc;
-			rowResults.cageID 			= spot.spotCageID;
+			rowResults.cageID 			= spot.spotIndex;
 			rowListForOneExp.resultsList.add(rowResults);
 		}
 		rowListForOneExp.sortRowsByName();

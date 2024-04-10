@@ -17,19 +17,20 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 
 public class BuildSeriesOptions implements XMLPersistent 
 {
-	public boolean			isFrameFixed		= false;
-	public long				t_Ms_First			= 0;
-	public long				t_Ms_Last			= 0;
-	public long				t_Ms_BinDuration	= 1;
+	public boolean		isFrameFixed			= false;
+	public long			t_Ms_First				= 0;
+	public long			t_Ms_Last				= 0;
+	public long			t_Ms_BinDuration		= 1;
 	
-	public int 				diskRadius 			= 5;
-	public boolean 			doRegistration 		= false;
-	public int				referenceFrame		= 0;
-	public boolean			doCreateBinDir		= false;
 	public ArrayList<ROI2D> listROIStoBuildKymos= new ArrayList<ROI2D> ();
 	public ExperimentCombo	expList;
-	public Rectangle 		parent0Rect 		= null;
-	public String 			binSubDirectory 	= null;
+	
+	public Rectangle 	parent0Rect 			= null;
+	public String 		binSubDirectory 		= null;
+	public int 			diskRadius 				= 5;
+	public boolean 		doRegistration 			= false;
+	public int			referenceFrame			= 0;
+	public boolean		doCreateBinDir			= false;
 	
 	public boolean 		loopRunning 			= false;	
 	
@@ -43,50 +44,51 @@ public class BuildSeriesOptions implements XMLPersistent
 	public 	int			seriesFirst				= 0;
 	public  int			seriesLast				= 0;
 	public  boolean 	runBackwards 			= false;
-	
-	public	boolean		pass1 = true;
-	public 	boolean		thresholdUp			= true;
-	public 	int			detectLevel1Threshold 	= 35;
-	public 	ImageTransformEnums transform01 	= ImageTransformEnums.R_RGB;
-	public  ImageTransformEnums overlayTransform = ImageTransformEnums.NONE;
-	public int			overlayThreshold		= 0;
-	public	boolean		overlayIfGreater		= true;
-	
-	public boolean 		pass2 = false;
-	public 	boolean		directionUp2			= true;
-	public 	int			detectLevel2Threshold 	= 35;
-	public ImageTransformEnums transform02 		= ImageTransformEnums.L1DIST_TO_1RSTCOL;
 	public 	boolean 	analyzePartOnly			= false;
-	public Rectangle 	searchArea				= new Rectangle();
 	
+	public 	int			spotThreshold 			= 35;
+	public 	int			detectLevel2Threshold 	= 35;
+	public int 			threshold 				= -1;
+	public int 			flyThreshold 			= 60;
+	public int			backgroundThreshold		= 40;
+	public int			overlayThreshold		= 0;
+	
+	public ImageTransformEnums transform01 		= ImageTransformEnums.R_RGB;
+	public ImageTransformEnums overlayTransform = ImageTransformEnums.NONE;
+	public ImageTransformEnums transform02 		= ImageTransformEnums.L1DIST_TO_1RSTCOL;
+	public ImageTransformEnums transformop 		= ImageTransformEnums.NONE; 
+	
+	public boolean		overlayIfGreater		= true;
+	public boolean		spotThresholdUp			= true;
+	public boolean		flyThresholdUp			= true;
+	public boolean 		btrackWhite 			= false;
+	public boolean  	blimitLow 				= false;
+	public boolean  	blimitUp 				= false;
+	public boolean		forceBuildBackground	= false;
+	public boolean		detectFlies				= true;
+	public boolean 		backgroundSubstraction 	= false;
+	public boolean		buildDerivative			= true;
+	public boolean		pass1 					= true;
+	public boolean 		pass2 					= false;
+	public boolean		directionUp2			= true;
+	
+	public Rectangle 	searchArea				= new Rectangle();
 	public  int			spanDiffTop				= 3;
 	public int			spanDiff				= 3;
-
-	public boolean		buildDerivative			= true;
-
-	public int 			threshold 				= -1;
-	public int 			thresholdFly 			= 60;
-	public int			backgroundThreshold		= 40;
+	
 	public int			backgroundNFrames		= 60;
 	public int			backgroundFirst			= 0;
 	
 	public int			thresholdDiff			= 100;
-	public boolean 		btrackWhite 			= false;
-	public boolean  	blimitLow 				= false;
-	public boolean  	blimitUp 				= false;
 	public int  		limitLow				= 0;
 	public int  		limitUp					= 1;
 	public int			limitRatio				= 4;
 	public int 			jitter 					= 10;
-	public boolean		forceBuildBackground	= false;
-	public boolean		detectFlies				= true;
 	public int			nFliesPresent			= 1;
 	
-	public ImageTransformEnums transformop 		= ImageTransformEnums.NONE; 
 	public int			videoChannel 			= 0;
-	public boolean 		backgroundSubstraction 	= false;
-	public int 			background_delta = 50;
-	public int 			background_jitter = 1;
+	public int 			background_delta 		= 50;
+	public int 			background_jitter 		= 1;
 
 	// -----------------------
 	
@@ -95,8 +97,8 @@ public class BuildSeriesOptions implements XMLPersistent
 		destination.detectTop 				= detectTop; 
 		destination.detectBottom 			= detectBottom; 
 		destination.transform01 			= transform01;
-		destination.thresholdUp 			= thresholdUp;
-		destination.detectLevel1Threshold 	= detectLevel1Threshold;
+		destination.spotThresholdUp 			= spotThresholdUp;
+		destination.spotThreshold 	= spotThreshold;
 		destination.detectAllSeries 		= detectAllSeries;
 
 	}
@@ -106,8 +108,8 @@ public class BuildSeriesOptions implements XMLPersistent
 		detectTop 				= destination.detectTop; 
 		detectBottom 			= destination.detectBottom; 
 		transform01 			= destination.transform01;
-		thresholdUp 			= destination.thresholdUp;
-		detectLevel1Threshold 	= destination.detectLevel1Threshold;
+		spotThresholdUp 			= destination.spotThresholdUp;
+		spotThreshold 	= destination.spotThreshold;
 		detectAllSeries 		= destination.detectAllSeries;
 	}
 	
@@ -140,9 +142,9 @@ public class BuildSeriesOptions implements XMLPersistent
 			detectTop = XMLUtil.getElementBooleanValue(nodeMeta, "detectTop", detectTop);
 			detectBottom = XMLUtil.getElementBooleanValue(nodeMeta, "detectBottom", detectBottom);
 			detectAllSeries = XMLUtil.getElementBooleanValue(nodeMeta, "detectAllImages", detectAllSeries);
-			thresholdUp = XMLUtil.getElementBooleanValue(nodeMeta, "directionUp", thresholdUp);
+			spotThresholdUp = XMLUtil.getElementBooleanValue(nodeMeta, "directionUp", spotThresholdUp);
 			seriesFirst = XMLUtil.getElementIntValue(nodeMeta, "firstImage", seriesFirst);
-			detectLevel1Threshold = XMLUtil.getElementIntValue(nodeMeta, "detectLevelThreshold", detectLevel1Threshold);
+			spotThreshold = XMLUtil.getElementIntValue(nodeMeta, "detectLevelThreshold", spotThreshold);
 			transform01 = ImageTransformEnums.findByText(XMLUtil.getElementValue(nodeMeta, "Transform", transform01.toString()));       
 
 	    	buildDerivative = XMLUtil.getElementBooleanValue(nodeMeta, "buildDerivative", buildDerivative);
@@ -174,9 +176,9 @@ public class BuildSeriesOptions implements XMLPersistent
 			XMLUtil.setElementBooleanValue(nodeMeta, "detectTop", detectTop);
 			XMLUtil.setElementBooleanValue(nodeMeta, "detectBottom", detectBottom);
 			XMLUtil.setElementBooleanValue(nodeMeta, "detectAllImages", detectAllSeries);
-			XMLUtil.setElementBooleanValue(nodeMeta, "directionUp", thresholdUp);
+			XMLUtil.setElementBooleanValue(nodeMeta, "directionUp", spotThresholdUp);
 			XMLUtil.setElementIntValue(nodeMeta, "firstImage", seriesFirst);
-			XMLUtil.setElementIntValue(nodeMeta, "detectLevelThreshold", detectLevel1Threshold);
+			XMLUtil.setElementIntValue(nodeMeta, "detectLevelThreshold", spotThreshold);
 		    XMLUtil.setElementValue(nodeMeta, "Transform", transform01.toString()); 
 		    
 	    	XMLUtil.setElementBooleanValue(nodeMeta, "buildDerivative", buildDerivative);      
