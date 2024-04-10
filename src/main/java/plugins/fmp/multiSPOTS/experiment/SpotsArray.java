@@ -556,12 +556,6 @@ public class SpotsArray
 		    	case "AREA_FLYPRESENT":
 		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_FLYPRESENT, sep);
 		    		break;
-//		    	case "AREA_SUMSQ":
-//		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM2, sep);
-//		    		break;
-//		    	case "AREA_MEANGREY":
-//		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_MEANGREY, sep);
-//		    		break;
 		    	case "AREA_CNTPIX":
 		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_CNTPIX, sep);
 		    		break;

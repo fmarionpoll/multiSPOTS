@@ -299,6 +299,8 @@ public class ExperimentCombo extends JComboBox<Experiment>
 		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_CONC) .equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_CONC));
 		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN) .equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN));
 		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_SEX) .equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_SEX));
+		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_COND1) 	.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_COND1));
+		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_COND2) 	.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_COND2));
 		return flag;
 	}
 

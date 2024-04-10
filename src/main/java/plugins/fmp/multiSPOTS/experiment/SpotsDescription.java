@@ -22,6 +22,8 @@ public class SpotsDescription
 	public String 	old_comment2	= new String("..");
 	public String 	old_strain		= new String("..");
 	public String 	old_sex			= new String("..");
+	public String	old_cond1		= new String("..");
+	public String	old_cond2		= new String("..");
 	
 	public int		grouping 		= 2;
 	public String 	stimulusR		= new String("..");
@@ -52,6 +54,8 @@ public class SpotsDescription
 	private final static String ID_COMMENT2 		= "comment2";
 	private final static String ID_STRAIN 			= "strain";
 	private final static String ID_SEX 				= "sex";
+	private final static String ID_COND1			= "cond1";
+	private final static String ID_COND2			= "cond2";
 	
 	private final static String ID_NOPE 			= "..";
 
@@ -103,6 +107,8 @@ public class SpotsDescription
 		XMLUtil.setElementValue(xmlVal, ID_COMMENT2, old_comment2);
 		XMLUtil.setElementValue(xmlVal, ID_STRAIN, old_strain);
 		XMLUtil.setElementValue(xmlVal, ID_SEX, old_sex);
+		XMLUtil.setElementValue(xmlVal, ID_COND1, old_cond1);
+		XMLUtil.setElementValue(xmlVal, ID_COND2, old_cond2);
 			
 		return true;
 	}
@@ -163,6 +169,8 @@ public class SpotsDescription
 			old_comment2 	= XMLUtil.getAttributeValue(xmlVal, ID_COMMENT2, ID_NOPE);
 			old_strain 		= XMLUtil.getAttributeValue(xmlVal, ID_STRAIN, ID_NOPE);
 			old_sex 		= XMLUtil.getAttributeValue(xmlVal, ID_SEX, ID_NOPE);
+			old_cond1 		= XMLUtil.getAttributeValue(xmlVal, ID_COND1, ID_NOPE);
+			old_cond2 		= XMLUtil.getAttributeValue(xmlVal, ID_COND2, ID_NOPE);
 		}
 		return true;
 	}
@@ -222,7 +230,9 @@ public class SpotsDescription
 				ID_COMMENT1, 
 				ID_COMMENT2, 
 				ID_STRAIN, 
-				ID_SEX);
+				ID_SEX,
+				ID_COND1,
+				ID_COND2);
 		sbf.append(String.join(csvSep, row2));
 		sbf.append("\n");
 		return sbf.toString();
@@ -244,7 +254,9 @@ public class SpotsDescription
 				old_comment1, 
 				old_comment2, 
 				old_strain, 
-				old_sex);
+				old_sex,
+				old_cond1,
+				old_cond2);
 		sbf.append(String.join(csvSep, row3));
 		sbf.append("\n");
 		return sbf.toString();
@@ -266,6 +278,9 @@ public class SpotsDescription
 		old_comment2	= data[i]; i++; 
 		old_strain		= data[i]; i++; 
 		old_sex			= data[i]; 
+		int nitems = data.length;
+		if (i < nitems) old_cond1 = data[i]; i++;
+		if (i < nitems) old_cond2 = data[i];
 	}
 
 }

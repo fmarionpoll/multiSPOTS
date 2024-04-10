@@ -20,6 +20,7 @@ import plugins.fmp.multiSPOTS.experiment.Spot;
 
 
 
+
 public class XLSExport 
 {
 	protected XLSExportOptions 	options 			= null;
@@ -103,6 +104,8 @@ public class XLSExport
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_CONC.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_CONC));
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_STRAIN.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN));
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_SEX.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_SEX));			
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_COND1.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_COND1));	
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.EXP_COND2.getValue(), transpose, exp.getExperimentField(EnumXLSColumnHeader.EXP_COND2));	
 
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_VOLUME.getValue(), transpose, exp.spotsArray.spotsDescription.volume);
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_PIXELS.getValue(), transpose, exp.spotsArray.spotsDescription.pixels);
