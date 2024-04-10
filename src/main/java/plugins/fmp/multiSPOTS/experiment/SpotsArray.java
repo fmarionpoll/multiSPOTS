@@ -350,7 +350,7 @@ public class SpotsArray
 			spot.spotNFlies = nflies;
 			if (i <= 1  || i>= capArraySize-2 )
 				spot.spotNFlies = 0;
-			spot.spotIndex = i/2;
+			spot.cageIndex = i/2;
 		}
 	}
 	
@@ -364,17 +364,17 @@ public class SpotsArray
 			if (i <= 1 ) 
 			{
 				spot.spotNFlies = 0;
-				spot.spotIndex = 0;
+				spot.cageIndex = 0;
 			}
 			else if (i >= capArraySize-2 ) 
 			{
 				spot.spotNFlies = 0;
-				spot.spotIndex = 5;
+				spot.cageIndex = 5;
 			}
 			else 
 			{
 				spot.spotNFlies = nflies;
-				spot.spotIndex = 1 + (i-2)/4;
+				spot.cageIndex = 1 + (i-2)/4;
 			}
 		}
 	}
@@ -561,7 +561,7 @@ public class SpotsArray
 				String[] data = row.split(csvSep);
 				if (data[0] .equals( "#")) 
 					return data[1];
-				Spot spot = getSpotFromName(data[2]);
+				Spot spot = getSpotFromName(data[dummyColumn? 2: 1]);
 				if (spot == null)
 					spot = new Spot();
 				spot.csvImportDescription(data, dummyColumn);

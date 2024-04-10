@@ -97,7 +97,7 @@ public class Spot implements Comparable <Spot>
 	
 	public void copy(Spot spotFrom) 
 	{
-		cageIndex 	= spotFrom.cageIndex;
+		cageIndex 		= spotFrom.cageIndex;
 		version 		= spotFrom.version;
 		roi 			= (ROI2D) spotFrom.roi.getCopy();
 		
@@ -165,7 +165,7 @@ public class Spot implements Comparable <Spot>
 		String name = roi.getName();
 		if (!name .contains("spot"))
 			return -1;
-		return Integer.valueOf(name.substring(5, 6));
+		return Integer.valueOf(name.substring(4, 5));
 	}
 	
 	public String getSideDescriptor(EnumXLSExportType xlsExportOption) 
@@ -574,10 +574,7 @@ public class Spot implements Comparable <Spot>
 	
 	public String csvExportDescription(String csvSep) 
 	{	
-		StringBuffer sbf = new StringBuffer();
-//		if (cagePrefix == null)
-//			cagePrefix = getLast2ofSpotName();
-		
+		StringBuffer sbf = new StringBuffer();	
 		List<String> row = Arrays.asList(
 				Integer.toString(spotIndex), 
 				getRoi().getName(), 
@@ -644,12 +641,10 @@ public class Spot implements Comparable <Spot>
 	
 	public void csvImportDescription(String[] data, boolean dummyColumn) 
 	{
-		int i = 0;
-		if (dummyColumn) 
-			i++;
-		cageIndex 	= Integer.valueOf(data[i]); i++; 
+		int i = dummyColumn ? 1: 0;
+		spotIndex 		= Integer.valueOf(data[i]); i++; 
 		roi.setName(data[i]); i++;
-		spotIndex 		= Integer.valueOf(data[i]); i++;
+		cageIndex 		= Integer.valueOf(data[i]); i++;
 		spotNFlies 		= Integer.valueOf(data[i]); i++;
 		spotVolume 		= Double.valueOf(data[i]); i++; 
 		pixels 			= Integer.valueOf(data[i]); i++; 

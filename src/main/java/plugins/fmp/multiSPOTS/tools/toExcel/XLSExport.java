@@ -115,7 +115,7 @@ public class XLSExport
 
 			
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.spotIndex);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+spot.spotIndex);
+			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries+spot.cageIndex);
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, spot.spotNFlies); 
 
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.DUM4.getValue(), transpose, sheetName);
@@ -371,7 +371,7 @@ public class XLSExport
 			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotIndex, xlsOption, nFrames);
 			rowResults.stimulus 		= spot.spotStim;
 			rowResults.concentration 	= spot.spotConc;
-			rowResults.cageID 			= spot.spotIndex;
+			rowResults.cageID 			= spot.cageIndex;
 			rowListForOneExp.resultsList.add(rowResults);
 		}
 		rowListForOneExp.sortRowsByName();
@@ -406,7 +406,7 @@ public class XLSExport
 			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotIndex, xlsOption, nFrames);
 			rowResults.stimulus 		= spot.spotStim;
 			rowResults.concentration 	= spot.spotConc;
-			rowResults.cageID 			= spot.spotIndex;
+			rowResults.cageID 			= spot.cageIndex;
 			rowListForOneExp.resultsList.add(rowResults);
 		}
 		rowListForOneExp.sortRowsByName();
