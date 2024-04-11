@@ -225,23 +225,23 @@ public class SpotTable extends JPanel
 		}
 	}
 	
-	private void copyAllSpotValues(Spot sourceSpot, Spot destinationSpot) 
+	private void copyAllSpotValues(Spot spotFrom, Spot spotTo) 
 	{
-		destinationSpot.spotNFlies = sourceSpot.spotNFlies; 
-		destinationSpot.spotVolume = sourceSpot.spotVolume;
-		destinationSpot.spotStim = sourceSpot.spotStim;
-		destinationSpot.spotConc = sourceSpot.spotConc;
-		destinationSpot.spotCageSide = sourceSpot.spotCageSide;
+		spotTo.spotNFlies = spotFrom.spotNFlies; 
+		spotTo.spotVolume = spotFrom.spotVolume;
+		spotTo.spotStim = spotFrom.spotStim;
+		spotTo.spotConc = spotFrom.spotConc;
+		spotTo.spotCageSide = spotFrom.spotCageSide;
 	}
 	
-	private void copySingleSpotValue(Spot sourceSpot, Spot destinationSpot, int columnIndex) 
+	private void copySingleSpotValue(Spot spotFrom, Spot spotTo, int columnIndex) 
 	{
 		switch (columnIndex) 
     	{
-        case 2: destinationSpot.spotNFlies = sourceSpot.spotNFlies; break;
-        case 3: destinationSpot.spotVolume = sourceSpot.spotVolume; break;
-        case 4: destinationSpot.spotStim = sourceSpot.spotStim; break;
-        case 5: destinationSpot.spotConc = sourceSpot.spotConc; break;
+        case 2: spotTo.spotNFlies = spotFrom.spotNFlies; break;
+        case 3: spotTo.spotVolume = spotFrom.spotVolume; break;
+        case 4: spotTo.spotStim = spotFrom.spotStim; break;
+        case 5: spotTo.spotConc = spotFrom.spotConc; break;
         default: break;
     	}
 		

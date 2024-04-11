@@ -155,6 +155,7 @@ public class ExperimentUtils
 		exp.spotsArray.deleteAllSpots();
 		exp.spotsArray = new SpotsArray();
 		
+		int spotIndex = 0;
 		int cageIndex = 0;
 		for (ROI2D roi:listROISCap) 
 		{	
@@ -188,11 +189,13 @@ public class ExperimentUtils
 				roicircle.setName("spot" + substring + String.format("%02d", i));
 				i++;
 				Spot spot = new Spot((ROI2DShape)roicircle);
+				spot.spotIndex = spotIndex;
 				spot.cageIndex = cageIndex;
-				cageIndex++;
 				spot.radius = radius;
 				exp.spotsArray.spotsList.add(spot);
+				spotIndex++;
 			}
+			cageIndex++;
 		}
 		
 //		// TODO remove the lines?

@@ -493,13 +493,6 @@ public class Spot implements Comparable <Spot>
 		listRoiAlongTime.add(new ROI2DAlongTime(0, roi));		
 	}
 	
-	public void setVolumeAndPixels(double volume, int pixels) 
-	{
-		this.spotVolume = volume;
-		this.pixels = pixels;
-		descriptionOK = true;
-	}
-	
 	public void adjustToImageWidth (int imageWidth) 
 	{
 		sum.adjustToImageWidth(imageWidth);
@@ -616,7 +609,7 @@ public class Spot implements Comparable <Spot>
 	public String csvExportMeasures_OneType(EnumSpotMeasures measureType, String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append(roi.getName() + csvSep + cageIndex + csvSep);
+		sbf.append(roi.getName() + csvSep + spotIndex + csvSep);
 		
 		switch(measureType) 
 		{

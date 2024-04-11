@@ -236,7 +236,6 @@ public class SpotsArray
 		for (Spot spot: spotsList) 
 		{
 			transferCapGroupCageIDToSpot(spot);
-			spot.setVolumeAndPixels (spotsDescription.volume, spotsDescription.pixels);
 		}
 	}
 	
@@ -250,11 +249,11 @@ public class SpotsArray
 		if (letter .equals("R")) 
 		{	
 			String nameL = name.substring(0, name.length() - 1) + "L";
-			Spot cap0 = getSpotFromRoiName(nameL);
-			if (cap0 != null) 
+			Spot spot00 = getSpotFromRoiName(nameL);
+			if (spot00 != null) 
 			{
 //				spot.capNFlies = cap0.capNFlies;
-				spot.spotIndex = cap0.spotIndex;
+				spot.cageIndex = spot00.cageIndex;
 			}
 		}
 	}
@@ -343,12 +342,12 @@ public class SpotsArray
 
 	public void initSpotsWith10Cages(int nflies)
 	{
-		int capArraySize = spotsList.size();
-		for (int i = 0; i < capArraySize; i++)
+		int spotArraySize = spotsList.size();
+		for (int i = 0; i < spotArraySize; i++)
 		{
 			Spot spot = spotsList.get(i);
 			spot.spotNFlies = nflies;
-			if (i <= 1  || i>= capArraySize-2 )
+			if (i <= 1  || i >= spotArraySize-2 )
 				spot.spotNFlies = 0;
 			spot.cageIndex = i/2;
 		}
@@ -356,8 +355,8 @@ public class SpotsArray
 	
 	public void initSpotsWith6Cages(int nflies) 
 	{
-		int capArraySize = spotsList.size();
-		for (int i = 0; i < capArraySize; i++) 
+		int spotArraySize = spotsList.size();
+		for (int i = 0; i < spotArraySize; i++) 
 		{
 			Spot spot = spotsList.get(i);
 			spot.spotNFlies = 1;
@@ -366,7 +365,7 @@ public class SpotsArray
 				spot.spotNFlies = 0;
 				spot.cageIndex = 0;
 			}
-			else if (i >= capArraySize-2 ) 
+			else if (i >= spotArraySize-2 ) 
 			{
 				spot.spotNFlies = 0;
 				spot.cageIndex = 5;
@@ -381,8 +380,8 @@ public class SpotsArray
 	
 	public void initSpotsWithNFlies(int nflies) 
 	{
-		int capArraySize = spotsList.size();
-		for (int i = 0; i < capArraySize; i++) 
+		int spotArraySize = spotsList.size();
+		for (int i = 0; i < spotArraySize; i++) 
 		{
 			Spot spot = spotsList.get(i);
 			spot.spotNFlies = nflies;
@@ -391,57 +390,7 @@ public class SpotsArray
 	
 	// -------------------------------------------------
 	
-	public KymoIntervals getKymoIntervalsFromCapillaries() 
-	{
-		if (spotsListTimeIntervals == null) 
-		{
-			spotsListTimeIntervals = new KymoIntervals();
-			
-			for (Spot spot: spotsList) 
-			{
-				for (ROI2DAlongTime roiFK: spot.getROIsForKymo()) 
-				{
-					Long[] interval = {roiFK.getStart(), (long) -1}; 
-					spotsListTimeIntervals.addIfNew(interval);
-				}
-			}
-		}
-		return spotsListTimeIntervals;
-	}
-	
-	public int addKymoROI2DInterval(long start) 
-	{
-		Long[] interval = {start, (long) -1};
-		int item = spotsListTimeIntervals.addIfNew(interval);
-		
-		for (Spot spot: spotsList) 
-		{
-			List<ROI2DAlongTime> listROI2DForKymo = spot.getROIsForKymo();
-			ROI2D roi = spot.getRoi();
-			if (item>0 ) 
-				roi = (ROI2D) listROI2DForKymo.get(item-1).getRoi().getCopy();
-			listROI2DForKymo.add(item, new ROI2DAlongTime(start, roi));
-		}
-		return item;
-	}
-	
-	public void deleteKymoROI2DInterval(long start) 
-	{
-		spotsListTimeIntervals.deleteIntervalStartingAt(start);
-		for (Spot spot: spotsList) 
-			spot.removeROI2DIntervalStartingAt(start);
-	}
-	
-	public int findKymoROI2DIntervalStart(long intervalT) 
-	{
-		return spotsListTimeIntervals.findStartItem(intervalT);
-	}
-	
-	public long getKymoROI2DIntervalsStartAt(int selectedItem) 
-	{
-		return spotsListTimeIntervals.get(selectedItem)[0];
-	}
-	
+
 	public double getScalingFactorToPhysicalUnits(EnumXLSExportType xlsoption) 
 	{
 		double scalingFactorToPhysicalUnits = 1.; 
@@ -642,8 +591,6 @@ public class SpotsArray
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUMCLEAN);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_FLYPRESENT);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
-//			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM2);
-//			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_MEANGREY);
 			csvWriter.flush();
 			csvWriter.close();
 			
