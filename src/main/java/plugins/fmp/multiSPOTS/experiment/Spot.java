@@ -12,11 +12,13 @@ import org.w3c.dom.Node;
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
+import plugins.kernel.roi.roi2d.ROI2DShape;
+
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
-import plugins.kernel.roi.roi2d.ROI2DArea;
+
 
 
 
@@ -25,7 +27,7 @@ import plugins.kernel.roi.roi2d.ROI2DArea;
 public class Spot implements Comparable <Spot> 
 {
 
-	private ROI2DArea 						roi 			= null;
+	private ROI2DShape 					roi 			= null;
 	private ArrayList<ROI2DAlongTime>	listRoiAlongTime= new ArrayList<ROI2DAlongTime>();
 	public BooleanMask2D 				mask2D			= null;
 
@@ -73,7 +75,7 @@ public class Spot implements Comparable <Spot>
 	
 	// ----------------------------------------------------
 	
-	public Spot(ROI2DArea roi) 
+	public Spot(ROI2DShape roi) 
 	{
 		this.roi = roi;
 	}
@@ -100,7 +102,7 @@ public class Spot implements Comparable <Spot>
 	{
 		cageIndex 		= spotFrom.cageIndex;
 		version 		= spotFrom.version;
-		roi 			= (ROI2DArea) spotFrom.roi.getCopy();
+		roi 			= (ROI2DShape) spotFrom.roi.getCopy();
 		
 		spotStim		= spotFrom.spotStim;
 		spotConc		= spotFrom.spotConc;
@@ -124,7 +126,7 @@ public class Spot implements Comparable <Spot>
 		return roi;
 	}
 	
-	public void setRoi(ROI2DArea roi) 
+	public void setRoi(ROI2DShape roi) 
 	{
 		this.roi = roi;
 	}
@@ -372,7 +374,7 @@ public class Spot implements Comparable <Spot>
 			spotConc		= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
 			spotCageSide 	= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 			
-	        roi = (ROI2DArea) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
+	        roi = (ROI2DShape) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 	        limitsOptions.loadFromXML(nodeMeta);
 	        
 	        loadFromXML_intervals(node);
@@ -395,7 +397,7 @@ public class Spot implements Comparable <Spot>
         		listRoiAlongTime.add(roiInterval);
         		
         		if (i == 0) {
-        			roi = (ROI2DArea) listRoiAlongTime.get(0).getRoi();
+        			roi = (ROI2DShape) listRoiAlongTime.get(0).getRoi();
         		}
         	}
         }

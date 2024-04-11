@@ -66,7 +66,6 @@ public class ExperimentUtils
 		if (exp.capillaries == null) 
 			exp.capillaries = new CapillariesArray();
 		
-		// rois not in cap? add
 		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString ("spot", exp.seqCamData.seq);
 		for (ROI2D roi:listROISCap) 
 		{
@@ -80,7 +79,7 @@ public class ExperimentUtils
 				}
 			}
 			if (!found) {
-				ROI2DArea roi_new = new ROI2DArea();
+				ROI2DPolygon roi_new = new ROI2DPolygon(new Ellipse2D.Double());
 				exp.spotsArray.spotsList.add(new Spot(roi_new));
 			}
 		}
@@ -191,7 +190,7 @@ public class ExperimentUtils
 				ROI2DEllipse roicircle = new ROI2DEllipse(ellipse);
 				roicircle.setName("spot" + substring + String.format("%02d", i));
 				i++;
-				Spot spot = new Spot((ROI2DArea)roicircle);
+				Spot spot = new Spot((ROI2DShape)roicircle);
 				spot.spotIndex = spotIndex;
 				spot.cageIndex = cageIndex;
 				spot.radius = radius;
