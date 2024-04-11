@@ -24,7 +24,7 @@ import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
-import plugins.kernel.roi.roi2d.ROI2DShape;
+import plugins.kernel.roi.roi2d.ROI2DArea;
 
 
 public class SpotsArray 
@@ -288,20 +288,20 @@ public class SpotsArray
 
 	public void updateSpotsFromSequence(Sequence seq) 
 	{
-		List<ROI2D> listROISSpot = ROI2DUtilities.getROIs2DContainingString ("spot", seq);
+		List<ROI2DArea> listROISSpot = ROI2DUtilities.getROIs2DAreaContainingString ("spot", seq);
 		Collections.sort(listROISSpot, new Comparators.ROI2D_Name_Comparator());
 		for (Spot spot: spotsList) 
 		{
 			spot.valid = false;
 			String spotName = Spot.replace_LR_with_12(spot.getRoiName());
-			Iterator <ROI2D> iterator = listROISSpot.iterator();
+			Iterator <ROI2DArea> iterator = listROISSpot.iterator();
 			while(iterator.hasNext()) 
 			{ 
 				ROI2D roi = iterator.next();
 				String roiName = Spot.replace_LR_with_12(roi.getName());
 				if (roiName.equals (spotName)) 
 				{
-					spot.setRoi((ROI2DShape) roi);
+					spot.setRoi((ROI2DArea) roi);
 					spot.valid = true;
 				}
 				if (spot.valid) 
@@ -322,7 +322,7 @@ public class SpotsArray
 		{
 			for (ROI2D roi: listROISSpot) 
 			{
-				Spot spot = new Spot((ROI2DShape) roi);
+				Spot spot = new Spot((ROI2DArea) roi);
 				if (!isPresent(spot))
 					spotsList.add(spot);
 			}

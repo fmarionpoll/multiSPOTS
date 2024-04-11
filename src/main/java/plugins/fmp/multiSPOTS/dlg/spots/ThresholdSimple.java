@@ -38,6 +38,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private static final long serialVersionUID = 8921207247623517524L;
 	
 	private String 				detectString 			= "        Detect     ";
+	private JButton 			reduceAreaButton 		= new JButton("reducee area");
 	private JButton 			detectButton 			= new JButton(detectString);
 	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
 	
@@ -78,6 +79,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		layoutLeft.setVgap(0);
 
 		JPanel panel0 = new JPanel(layoutLeft);
+		panel0.add(reduceAreaButton);
 		panel0.add(detectButton);
 		panel0.add(allSeriesCheckBox);
 		add(panel0);

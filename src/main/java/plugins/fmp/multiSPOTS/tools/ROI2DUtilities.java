@@ -20,6 +20,7 @@ import icy.type.geom.Polygon2D;
 import icy.type.geom.Polyline2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
+import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.kernel.roi.roi2d.ROI2DLine;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DShape;
@@ -247,6 +248,19 @@ public class ROI2DUtilities
 		{
 			if ((roi instanceof ROI2DShape) && roi.getName().contains(string)) 
 				listROIsMatchingString.add(roi);
+		}
+		return listROIsMatchingString;
+	}
+	
+	public static List<ROI2DArea> getROIs2DAreaContainingString (String string, Sequence seq) 
+	{
+		List<ROI2D> roiList = seq.getROI2Ds();
+		Collections.sort(roiList, new Comparators.ROI2D_Name_Comparator());
+		List<ROI2DArea> listROIsMatchingString = new ArrayList<ROI2DArea>();
+		for ( ROI2D roi : roiList ) 
+		{
+			if ((roi instanceof ROI2DArea) && roi.getName().contains(string)) 
+				listROIsMatchingString.add((ROI2DArea) roi);
 		}
 		return listROIsMatchingString;
 	}

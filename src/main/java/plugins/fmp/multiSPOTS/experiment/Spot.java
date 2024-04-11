@@ -16,6 +16,7 @@ import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
+import plugins.kernel.roi.roi2d.ROI2DArea;
 
 
 
@@ -24,7 +25,7 @@ import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 public class Spot implements Comparable <Spot> 
 {
 
-	private ROI2D 						roi 			= null;
+	private ROI2DArea 						roi 			= null;
 	private ArrayList<ROI2DAlongTime>	listRoiAlongTime= new ArrayList<ROI2DAlongTime>();
 	public BooleanMask2D 				mask2D			= null;
 
@@ -72,9 +73,9 @@ public class Spot implements Comparable <Spot>
 	
 	// ----------------------------------------------------
 	
-	public Spot(ROI2D roiCapillary) 
+	public Spot(ROI2DArea roi) 
 	{
-		this.roi = roiCapillary;
+		this.roi = roi;
 	}
 	
 	Spot(String name) 
@@ -99,7 +100,7 @@ public class Spot implements Comparable <Spot>
 	{
 		cageIndex 		= spotFrom.cageIndex;
 		version 		= spotFrom.version;
-		roi 			= (ROI2D) spotFrom.roi.getCopy();
+		roi 			= (ROI2DArea) spotFrom.roi.getCopy();
 		
 		spotStim		= spotFrom.spotStim;
 		spotConc		= spotFrom.spotConc;
@@ -123,7 +124,7 @@ public class Spot implements Comparable <Spot>
 		return roi;
 	}
 	
-	public void setRoi(ROI2D roi) 
+	public void setRoi(ROI2DArea roi) 
 	{
 		this.roi = roi;
 	}
@@ -371,7 +372,7 @@ public class Spot implements Comparable <Spot>
 			spotConc		= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
 			spotCageSide 	= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 			
-	        roi = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
+	        roi = (ROI2DArea) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 	        limitsOptions.loadFromXML(nodeMeta);
 	        
 	        loadFromXML_intervals(node);
@@ -394,7 +395,7 @@ public class Spot implements Comparable <Spot>
         		listRoiAlongTime.add(roiInterval);
         		
         		if (i == 0) {
-        			roi = listRoiAlongTime.get(0).getRoi();
+        			roi = (ROI2DArea) listRoiAlongTime.get(0).getRoi();
         		}
         	}
         }

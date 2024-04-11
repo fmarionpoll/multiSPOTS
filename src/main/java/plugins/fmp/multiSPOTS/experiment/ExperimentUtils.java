@@ -14,6 +14,7 @@ import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DEllipse;
 import plugins.kernel.roi.roi2d.ROI2DLine;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
+import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
 
@@ -78,8 +79,10 @@ public class ExperimentUtils
 					break;
 				}
 			}
-			if (!found)
-				exp.spotsArray.spotsList.add(new Spot((ROI2DShape)roi));
+			if (!found) {
+				ROI2DArea roi_new = new ROI2DArea();
+				exp.spotsArray.spotsList.add(new Spot(roi_new));
+			}
 		}
 		
 		// cap with no corresponding roi? remove
@@ -188,7 +191,7 @@ public class ExperimentUtils
 				ROI2DEllipse roicircle = new ROI2DEllipse(ellipse);
 				roicircle.setName("spot" + substring + String.format("%02d", i));
 				i++;
-				Spot spot = new Spot((ROI2DShape)roicircle);
+				Spot spot = new Spot((ROI2DArea)roicircle);
 				spot.spotIndex = spotIndex;
 				spot.cageIndex = cageIndex;
 				spot.radius = radius;
