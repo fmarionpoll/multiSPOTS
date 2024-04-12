@@ -12,7 +12,6 @@ import java.awt.event.ItemListener;
 import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +32,7 @@ import icy.roi.BooleanMask2D;
 import icy.sequence.Sequence;
 import icy.type.collection.array.ArrayUtil;
 import icy.util.StringUtil;
+
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -54,7 +54,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private static final long serialVersionUID = 8921207247623517524L;
 	
 	private String 				detectString 			= "        Detect     ";
-	private JButton 			reduceSpotAreasButton 	= new JButton("reduce spots areas");
+	private JButton 			reduceSpotAreasButton 	= new JButton("Reduce spots areas");
 	private JButton 			detectButton 			= new JButton(detectString);
 	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
 	
@@ -394,9 +394,24 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
         }
         
         BooleanMask2D mask2d = new BooleanMask2D(rectSpot, mask);
+        BooleanMask2D[] components = null; 
         List<Point> points = null;
 		try {
-			points = mask2d.getConnectedContourPoints();
+			components = mask2d.getComponents();
+			int itemMax = 0;
+			if (components.length > 1)
+            {
+				int maxPoints = 0;
+                for (int i=0; i < components.length; i++)
+                {
+                	BooleanMask2D comp =  components[i];
+                    if (comp.getNumberOfPoints() > maxPoints) {
+                    	itemMax = i;
+                    	maxPoints = comp.getNumberOfPoints();
+                    }
+                }
+            }
+			points = components[itemMax].getConnectedContourPoints();
 		} catch (InterruptedException e) {
 
 //			 TODO Auto-generated catch block
