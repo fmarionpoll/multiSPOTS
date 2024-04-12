@@ -27,7 +27,7 @@ import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 public class Spot implements Comparable <Spot> 
 {
 
-	private ROI2DShape 					roi 			= null;
+	private ROI2DShape 					spotRoi			= null;
 	private ArrayList<ROI2DAlongTime>	listRoiAlongTime= new ArrayList<ROI2DAlongTime>();
 	public BooleanMask2D 				mask2D			= null;
 
@@ -77,7 +77,7 @@ public class Spot implements Comparable <Spot>
 	
 	public Spot(ROI2DShape roi) 
 	{
-		this.roi = roi;
+		this.spotRoi = roi;
 	}
 	
 	Spot(String name) 
@@ -92,7 +92,7 @@ public class Spot implements Comparable <Spot>
 	public int compareTo(Spot o) 
 	{
 		if (o != null)
-			return (this.roi.getName()).compareTo(o.roi.getName());
+			return (this.spotRoi.getName()).compareTo(o.spotRoi.getName());
 		return 1;
 	}
 	
@@ -102,7 +102,7 @@ public class Spot implements Comparable <Spot>
 	{
 		cageIndex 		= spotFrom.cageIndex;
 		version 		= spotFrom.version;
-		roi 			= (ROI2DShape) spotFrom.roi.getCopy();
+		spotRoi 		= (ROI2DShape) spotFrom.spotRoi.getCopy();
 		
 		spotStim		= spotFrom.spotStim;
 		spotConc		= spotFrom.spotConc;
@@ -123,34 +123,34 @@ public class Spot implements Comparable <Spot>
 	
 	public ROI2D getRoi() 
 	{
-		return roi;
+		return spotRoi;
 	}
 	
 	public void setRoi(ROI2DShape roi) 
 	{
-		this.roi = roi;
+		this.spotRoi = roi;
 	}
 	
 	public void setRoiName(String name) 
 	{
-		roi.setName(name);
+		spotRoi.setName(name);
 	}
 	
 	public String getRoiName() 
 	{
-		return roi.getName();
+		return spotRoi.getName();
 	}
 	
 	public String getLast2ofSpotName() 
 	{
-		if (roi == null)
+		if (spotRoi == null)
 			return "missing";
-		return roi.getName().substring(roi.getName().length() -2);
+		return spotRoi.getName().substring(spotRoi.getName().length() -2);
 	}
 	
  	public String getSpotSide() 
 	{
-		return roi.getName().substring(roi.getName().length() -2);
+		return spotRoi.getName().substring(spotRoi.getName().length() -2);
 	}
 	
 	public static String replace_LR_with_12(String name) 
@@ -165,7 +165,7 @@ public class Spot implements Comparable <Spot>
 	
 	public int getCageIndexFromRoiName() 
 	{
-		String name = roi.getName();
+		String name = spotRoi.getName();
 		if (!name .contains("spot"))
 			return -1;
 		return Integer.valueOf(name.substring(4, 5));
@@ -237,8 +237,8 @@ public class Spot implements Comparable <Spot>
 	
 	public Point2D getSpotCenter () 
 	{	
-		Point pt = roi.getPosition();
-		Rectangle rect = roi.getBounds();
+		Point pt = spotRoi.getPosition();
+		Rectangle rect = spotRoi.getBounds();
 		pt.translate(rect.height/2, rect.width/2);
 		return pt;
 	}
@@ -374,7 +374,7 @@ public class Spot implements Comparable <Spot>
 			spotConc		= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
 			spotCageSide 	= XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 			
-	        roi = (ROI2DShape) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
+	        spotRoi = (ROI2DShape) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 	        limitsOptions.loadFromXML(nodeMeta);
 	        
 	        loadFromXML_intervals(node);
@@ -397,7 +397,7 @@ public class Spot implements Comparable <Spot>
         		listRoiAlongTime.add(roiInterval);
         		
         		if (i == 0) {
-        			roi = (ROI2DShape) listRoiAlongTime.get(0).getRoi();
+        			spotRoi = (ROI2DShape) listRoiAlongTime.get(0).getRoi();
         		}
         	}
         }
@@ -427,7 +427,7 @@ public class Spot implements Comparable <Spot>
 		XMLUtil.setElementValue(nodeMeta, ID_SIDE, spotCageSide);
 		XMLUtil.setElementValue(nodeMeta, ID_CONCL, spotConc);
 
-		ROI2DUtilities.saveToXML_ROI(nodeMeta, roi); 
+		ROI2DUtilities.saveToXML_ROI(nodeMeta, spotRoi); 
 		
 		boolean flag = saveToXML_intervals(node);
 	    return flag;
@@ -493,7 +493,7 @@ public class Spot implements Comparable <Spot>
 	
 	private void initROI2DForKymoList() 
 	{ 
-		listRoiAlongTime.add(new ROI2DAlongTime(0, roi));		
+		listRoiAlongTime.add(new ROI2DAlongTime(0, spotRoi));		
 	}
 	
 	public void adjustToImageWidth (int imageWidth) 
@@ -612,7 +612,7 @@ public class Spot implements Comparable <Spot>
 	public String csvExportMeasures_OneType(EnumSpotMeasures measureType, String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		sbf.append(roi.getName() + csvSep + spotIndex + csvSep);
+		sbf.append(spotRoi.getName() + csvSep + spotIndex + csvSep);
 		
 		switch(measureType) 
 		{
@@ -639,7 +639,7 @@ public class Spot implements Comparable <Spot>
 	{
 		int i = dummyColumn ? 1: 0;
 		spotIndex 		= Integer.valueOf(data[i]); i++; 
-		roi.setName(data[i]); i++;
+		spotRoi.setName(data[i]); i++;
 		cageIndex 		= Integer.valueOf(data[i]); i++;
 		spotNFlies 		= Integer.valueOf(data[i]); i++;
 		spotVolume 		= Double.valueOf(data[i]); i++; 

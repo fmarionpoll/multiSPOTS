@@ -14,7 +14,7 @@ import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DEllipse;
 import plugins.kernel.roi.roi2d.ROI2DLine;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
-import plugins.kernel.roi.roi2d.ROI2DArea;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
 
@@ -79,7 +79,7 @@ public class ExperimentUtils
 				}
 			}
 			if (!found) {
-				ROI2DPolygon roi_new = new ROI2DPolygon(new Ellipse2D.Double());
+				ROI2DPolygon roi_new = new ROI2DPolygon();
 				exp.spotsArray.spotsList.add(new Spot(roi_new));
 			}
 		}
@@ -187,10 +187,10 @@ public class ExperimentUtils
 				double x = point.getX() - delta;
 				double y = point.getY() - delta;
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2* radius, 2*radius);
-				ROI2DEllipse roicircle = new ROI2DEllipse(ellipse);
-				roicircle.setName("spot" + substring + String.format("%02d", i));
+				ROI2DEllipse roiEllipse = new ROI2DEllipse(ellipse);
+				roiEllipse.setName("spot" + substring + String.format("%02d", i));
 				i++;
-				Spot spot = new Spot((ROI2DShape)roicircle);
+				Spot spot = new Spot(roiEllipse);
 				spot.spotIndex = spotIndex;
 				spot.cageIndex = cageIndex;
 				spot.radius = radius;
