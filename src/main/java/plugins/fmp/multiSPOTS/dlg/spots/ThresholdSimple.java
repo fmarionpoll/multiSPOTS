@@ -3,13 +3,18 @@ package plugins.fmp.multiSPOTS.dlg.spots;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -38,7 +43,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
-import plugins.kernel.roi.roi2d.ROI2DArea;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
 
 public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 {
@@ -358,7 +363,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ROI2DArea roi = measureSpotArea (workImage, spot, t, options);
+			ROI2DPolygon roi = measureSpotArea (workImage, spot, t, options);
 		    
 		    roi.setName(spot.getRoi().getName()+"_mask");
 		    roi.setColor(Color.RED);
@@ -366,7 +371,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		}
 	}
 	
-	private ROI2DArea measureSpotArea(IcyBufferedImage workImage, Spot spot, int t, BuildSeriesOptions options  )
+	private ROI2DPolygon measureSpotArea(IcyBufferedImage workImage, Spot spot, int t, BuildSeriesOptions options  )
 	{
         boolean spotThresholdUp = options.spotThresholdUp;
         int spotThreshold = options.spotThreshold;
@@ -389,7 +394,18 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
         }
         
         BooleanMask2D mask2d = new BooleanMask2D(rectSpot, mask);
-	    ROI2DArea roi = new ROI2DArea(mask2d);
+        List<Point> points = null;
+		try {
+			points = mask2d.getConnectedContourPoints();
+		} catch (InterruptedException e) {
+
+//			 TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        List<Point2D> points2s = points.stream()
+        	    .map(point -> new Point2D.Double(point.getX(), point.getY()))
+        	    .collect(Collectors.toList());
+        ROI2DPolygon roi = new ROI2DPolygon(points2s);
         return roi;
 	}
 
