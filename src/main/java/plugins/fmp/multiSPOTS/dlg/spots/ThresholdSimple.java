@@ -413,7 +413,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
             }
 			points = components[itemMax].getConnectedContourPoints();
 		} catch (InterruptedException e) {
-
 //			 TODO Auto-generated catch block
 			e.printStackTrace();
 		}

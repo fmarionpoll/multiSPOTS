@@ -22,8 +22,6 @@ import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 
 
 
-
-
 public class Spot implements Comparable <Spot> 
 {
 
