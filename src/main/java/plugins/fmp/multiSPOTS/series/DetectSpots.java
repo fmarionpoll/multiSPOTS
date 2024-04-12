@@ -13,9 +13,8 @@ import icy.image.IcyBufferedImageUtil;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
-import icy.type.DataType;
-import icy.type.collection.array.Array1DUtil;
 import icy.type.collection.array.ArrayUtil;
+
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -85,7 +84,6 @@ public class DetectSpots extends BuildSeries
 		exp.saveXML_MCExperiment();
 		exp.saveSpotsMeasures();
 	}
-	
 	
 	private boolean measureSpots (Experiment exp) 
 	{
@@ -202,28 +200,6 @@ public class DetectSpots extends BuildSeries
         }
         spot.sum.measureValues[t] = sum ;
         spot.cntPix.measureValues[t] = cntPix;
-	}
-	
-	public boolean[] getBoolMap_FromBinaryInt(IcyBufferedImage img) 
-	{
-		boolean[] boolMap = new boolean[ img.getSizeX() * img.getSizeY() ];
-		byte [] imageSourceDataBuffer = null;
-		DataType datatype = img.getDataType_();
-		
-		if (datatype != DataType.BYTE && datatype != DataType.UBYTE) {
-			Object sourceArray = img.getDataXY(0);
-			imageSourceDataBuffer = Array1DUtil.arrayToByteArray(sourceArray);
-		}
-		else
-			imageSourceDataBuffer = img.getDataXYAsByte(0);
-		
-		for (int x = 0; x < boolMap.length; x++) {
-			if (imageSourceDataBuffer[x] == 0)
-				boolMap[x] =  false;
-			else
-				boolMap[x] =  true;
-		}
-		return boolMap;
 	}
 	
 	private void initSpotsDataArrays(Experiment exp)

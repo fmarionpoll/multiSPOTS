@@ -1,7 +1,9 @@
 package plugins.fmp.multiSPOTS.dlg.spots;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -20,14 +22,23 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import icy.image.IcyBufferedImage;
+import icy.image.IcyBufferedImageUtil;
+import icy.roi.BooleanMask2D;
+import icy.sequence.Sequence;
+import icy.type.collection.array.ArrayUtil;
 import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.series.DetectSpots;
 import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
+import plugins.kernel.roi.roi2d.ROI2DArea;
 
 public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 {
@@ -38,7 +49,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private static final long serialVersionUID = 8921207247623517524L;
 	
 	private String 				detectString 			= "        Detect     ";
-	private JButton 			reduceAreaButton 		= new JButton("reducee area");
+	private JButton 			reduceSpotAreasButton 	= new JButton("reduce spots areas");
 	private JButton 			detectButton 			= new JButton(detectString);
 	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
 	
@@ -62,8 +73,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private JComboBox<ImageTransformEnums> fliesTransformsComboBox = new JComboBox<ImageTransformEnums> (transforms);
 	private JComboBox<String> 	fliesDirectionComboBox 	= new JComboBox<String> (directions);
 	private JSpinner 			fliesThresholdSpinner 	= new JSpinner(new SpinnerNumberModel(15, 0, 255, 1));
-//	private JCheckBox 			fliesOverlayCheckBox 	= new JCheckBox("overlay");
-//	private JToggleButton 		fliesViewButton 		= new JToggleButton("View");
 	
 	private OverlayThreshold 	overlayThreshold 		= null;
 	private DetectSpots 		threadDetectLevels 		= null;	
@@ -79,7 +88,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		layoutLeft.setVgap(0);
 
 		JPanel panel0 = new JPanel(layoutLeft);
-		panel0.add(reduceAreaButton);
+		panel0.add(reduceSpotAreasButton);
 		panel0.add(detectButton);
 		panel0.add(allSeriesCheckBox);
 		add(panel0);
@@ -98,8 +107,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		panel2.add(fliesTransformsComboBox);	
 		panel2.add(fliesDirectionComboBox);
 		panel2.add(fliesThresholdSpinner);
-//		panel2.add(fliesViewButton);
-//		panel2.add(fliesOverlayCheckBox);
 		add(panel2);
 		
 		spotsTransformsComboBox.setSelectedItem(ImageTransformEnums.RGB_DIFFS);
@@ -179,6 +186,15 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 				else 
 					stopDetection();
 			}});	
+		
+		reduceSpotAreasButton.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) 
+					reduceSpotArea(exp) ;
+			}});
 	}
 
 	void updateOverlay (Experiment exp) 
@@ -319,6 +335,62 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 				parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
 			}
 		 }
+	}
+	
+	private void reduceSpotArea(Experiment exp) 
+	{
+		BuildSeriesOptions options = initDetectOptions(exp);
+		ImageTransformOptions transformOptions = new ImageTransformOptions();
+		transformOptions.transformOption = options.transform01;
+		transformOptions.setSingleThreshold (options.spotThreshold, options.spotThresholdUp) ;
+
+		ImageTransformInterface transformFunction = options.transform01.getFunction();
+		
+		Sequence seqData = exp.seqCamData.seq;
+		seqData.addOverlay(overlayThreshold);
+		int t = 0;
+		IcyBufferedImage sourceImage = seqData.getImage(t, 0);
+		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+		for (Spot spot: exp.spotsArray.spotsList)  {
+			try {
+				spot.mask2D = spot.getRoi().getBooleanMask2D( 0 , 0, 1, true );
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ROI2DArea roi = measureSpotArea (workImage, spot, t, options);
+		    
+		    roi.setName(spot.getRoi().getName()+"_mask");
+		    roi.setColor(Color.RED);
+		    seqData.addROI(roi);
+		}
+	}
+	
+	private ROI2DArea measureSpotArea(IcyBufferedImage workImage, Spot spot, int t, BuildSeriesOptions options  )
+	{
+        boolean spotThresholdUp = options.spotThresholdUp;
+        int spotThreshold = options.spotThreshold;
+        Rectangle rectSpot = spot.mask2D.bounds;
+        IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, rectSpot);
+        boolean[] mask = spot.mask2D.mask;
+        int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());  
+        
+        if (spotThresholdUp) {
+	        for (int offset = 0; offset < workData.length; offset++) {
+	            if (mask[offset])
+	            	mask[offset] = (workData[offset] < spotThreshold);
+	        } 
+        }
+        else  {
+	        for (int offset = 0; offset < workData.length; offset++) {
+	            if (mask[offset]) 
+	            	mask[offset] = (workData[offset]> spotThreshold);
+	        }
+        }
+        
+        BooleanMask2D mask2d = new BooleanMask2D(rectSpot, mask);
+	    ROI2DArea roi = new ROI2DArea(mask2d);
+        return roi;
 	}
 
 }
