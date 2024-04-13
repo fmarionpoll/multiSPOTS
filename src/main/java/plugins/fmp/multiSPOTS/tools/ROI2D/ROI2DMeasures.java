@@ -1,8 +1,11 @@
 package plugins.fmp.multiSPOTS.tools.ROI2D;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -10,15 +13,21 @@ import javax.vecmath.Vector2d;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
+import icy.image.IcyBufferedImage;
+import icy.image.IcyBufferedImageUtil;
 import icy.math.MathUtil;
+import icy.roi.BooleanMask2D;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.roi.ROIIterator;
 import icy.sequence.Sequence;
+import icy.type.collection.array.ArrayUtil;
 import icy.type.point.Point5D;
 import icy.type.rectangle.Rectangle5D;
-
+import plugins.fmp.multiSPOTS.experiment.Spot;
+import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.kernel.roi.roi2d.ROI2DPoint;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
 
 // copy of ROIEllipsoidFittingDescriptor from package plugins.adufour.roi;
@@ -308,4 +317,55 @@ public class ROI2DMeasures {
 	        return new Point5D.Double(x / numPts, y / numPts, z / numPts, t / numPts, c / numPts);
 	    }
 
+	    public static ROI2DPolygon getContourOfDetectedSpot(IcyBufferedImage workImage, Spot spot, int t, BuildSeriesOptions options  )
+		{
+	        boolean spotThresholdUp = options.spotThresholdUp;
+	        int spotThreshold = options.spotThreshold;
+	        Rectangle rectSpot = spot.mask2D.bounds;
+	        IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, rectSpot);
+	        boolean[] mask = spot.mask2D.mask;
+	        int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());  
+	        
+	        if (spotThresholdUp) {
+		        for (int offset = 0; offset < workData.length; offset++) {
+		            if (mask[offset])
+		            	mask[offset] = (workData[offset] < spotThreshold);
+		        } 
+	        }
+	        else  {
+		        for (int offset = 0; offset < workData.length; offset++) {
+		            if (mask[offset]) 
+		            	mask[offset] = (workData[offset]> spotThreshold);
+		        }
+	        }
+	        
+	        BooleanMask2D mask2d = new BooleanMask2D(rectSpot, mask);
+	        BooleanMask2D[] components = null; 
+	        List<Point> points = null;
+			try {
+				components = mask2d.getComponents();
+				int itemMax = 0;
+				if (components.length > 1)
+	            {
+					int maxPoints = 0;
+	                for (int i=0; i < components.length; i++)
+	                {
+	                	BooleanMask2D comp =  components[i];
+	                    if (comp.getNumberOfPoints() > maxPoints) {
+	                    	itemMax = i;
+	                    	maxPoints = comp.getNumberOfPoints();
+	                    }
+	                }
+	            }
+				points = components[itemMax].getConnectedContourPoints();
+			} catch (InterruptedException e) {
+//				 TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        List<Point2D> points2s = points.stream()
+	        	    .map(point -> new Point2D.Double(point.getX(), point.getY()))
+	        	    .collect(Collectors.toList());
+	        ROI2DPolygon roi = new ROI2DPolygon(points2s);
+	        return roi;
+		}
 }

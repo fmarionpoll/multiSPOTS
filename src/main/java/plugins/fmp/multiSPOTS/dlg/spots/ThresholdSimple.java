@@ -3,17 +3,12 @@ package plugins.fmp.multiSPOTS.dlg.spots;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,10 +22,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.image.IcyBufferedImage;
-import icy.image.IcyBufferedImageUtil;
-import icy.roi.BooleanMask2D;
 import icy.sequence.Sequence;
-import icy.type.collection.array.ArrayUtil;
 import icy.util.StringUtil;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
@@ -43,6 +35,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DMeasures;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 
 public class ThresholdSimple  extends JPanel implements PropertyChangeListener
@@ -60,14 +53,12 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
 	private String[]  			directions 				= new String[] {" threshold >", " threshold <" };
-	
 	ImageTransformEnums[] transforms = new ImageTransformEnums[] {
 			ImageTransformEnums.R_RGB, 		ImageTransformEnums.G_RGB, 		ImageTransformEnums.B_RGB, 
 			ImageTransformEnums.R2MINUS_GB, ImageTransformEnums.G2MINUS_RB, ImageTransformEnums.B2MINUS_RG, ImageTransformEnums.RGB,
 			ImageTransformEnums.GBMINUS_2R, ImageTransformEnums.RBMINUS_2G, ImageTransformEnums.RGMINUS_2B, ImageTransformEnums.RGB_DIFFS,
 			ImageTransformEnums.H_HSB, 		ImageTransformEnums.S_HSB, 		ImageTransformEnums.B_HSB
 			};
-	
 	private JComboBox<ImageTransformEnums> spotsTransformsComboBox = new JComboBox<ImageTransformEnums> (transforms);
 	private JComboBox<String> 	spotsDirectionComboBox 	= new JComboBox<String> (directions);
 	private JSpinner 			spotsThresholdSpinner 	= new JSpinner(new SpinnerNumberModel(35, 0, 255, 1));
@@ -363,7 +354,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ROI2DPolygon roi = measureSpotArea (workImage, spot, t, options);
+			ROI2DPolygon roi = ROI2DMeasures.getContourOfDetectedSpot (workImage, spot, t, options);
 		    
 		    roi.setName(spot.getRoi().getName()+"_mask");
 		    roi.setColor(Color.RED);
@@ -371,56 +362,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		}
 	}
 	
-	private ROI2DPolygon measureSpotArea(IcyBufferedImage workImage, Spot spot, int t, BuildSeriesOptions options  )
-	{
-        boolean spotThresholdUp = options.spotThresholdUp;
-        int spotThreshold = options.spotThreshold;
-        Rectangle rectSpot = spot.mask2D.bounds;
-        IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, rectSpot);
-        boolean[] mask = spot.mask2D.mask;
-        int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());  
-        
-        if (spotThresholdUp) {
-	        for (int offset = 0; offset < workData.length; offset++) {
-	            if (mask[offset])
-	            	mask[offset] = (workData[offset] < spotThreshold);
-	        } 
-        }
-        else  {
-	        for (int offset = 0; offset < workData.length; offset++) {
-	            if (mask[offset]) 
-	            	mask[offset] = (workData[offset]> spotThreshold);
-	        }
-        }
-        
-        BooleanMask2D mask2d = new BooleanMask2D(rectSpot, mask);
-        BooleanMask2D[] components = null; 
-        List<Point> points = null;
-		try {
-			components = mask2d.getComponents();
-			int itemMax = 0;
-			if (components.length > 1)
-            {
-				int maxPoints = 0;
-                for (int i=0; i < components.length; i++)
-                {
-                	BooleanMask2D comp =  components[i];
-                    if (comp.getNumberOfPoints() > maxPoints) {
-                    	itemMax = i;
-                    	maxPoints = comp.getNumberOfPoints();
-                    }
-                }
-            }
-			points = components[itemMax].getConnectedContourPoints();
-		} catch (InterruptedException e) {
-//			 TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        List<Point2D> points2s = points.stream()
-        	    .map(point -> new Point2D.Double(point.getX(), point.getY()))
-        	    .collect(Collectors.toList());
-        ROI2DPolygon roi = new ROI2DPolygon(points2s);
-        return roi;
-	}
+	
 
 }
