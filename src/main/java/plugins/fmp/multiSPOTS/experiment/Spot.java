@@ -166,7 +166,7 @@ public class Spot implements Comparable <Spot>
 		String name = spotRoi.getName();
 		if (!name .contains("spot"))
 			return -1;
-		return Integer.valueOf(name.substring(4, 5));
+		return Integer.valueOf(name.substring(4, 6));
 	}
 	
 	public String getSideDescriptor(EnumXLSExportType xlsExportOption) 

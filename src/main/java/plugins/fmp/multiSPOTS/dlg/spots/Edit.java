@@ -107,12 +107,12 @@ public class Edit extends JPanel
 				if (exp != null)
 				{
 					exp.spotsArray.transferDescriptionToSpots();
-					if (infosSpotTable == null) {
-						infosSpotTable = new SpotTable();
-						infosSpotTable.initialize(parent0, spotsArrayCopy);
+					if (infosSpotTable != null) {
+						infosSpotTable.close();
 					}
-					else
-						infosSpotTable.requestFocus();
+					infosSpotTable = new SpotTable();
+					infosSpotTable.initialize(parent0, spotsArrayCopy);
+					infosSpotTable.requestFocus();
 				}
 			}});
 
