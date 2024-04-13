@@ -22,6 +22,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.image.IcyBufferedImage;
+import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
@@ -33,7 +34,9 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DMeasures;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
+import plugins.kernel.roi.roi2d.ROI2DShape;
 
 
 
@@ -44,11 +47,14 @@ public class Edit extends JPanel
 	 */
 	private static final long 	serialVersionUID 	= 4950182090521600937L;
 	
-	private JButton			editSpotsButton			= new JButton("Edit spots infos...");
-	private SpotTable	   	infosSpotTable			= null;
-	private List<Spot>		spotsArrayCopy			= new ArrayList<Spot>();
+	private JButton				editSpotsButton			= new JButton("Edit spots infos...");
+	private SpotTable	   		infosSpotTable			= null;
+	private List<Spot>			spotsArrayCopy			= new ArrayList<Spot>();
 	
-	private JButton 			reduceSpotAreasButton 	= new JButton("Reduce spots areas");
+	private JButton 			outlineSpotsButton 		= new JButton("Detect spots contours");
+	private JButton 			useContoursButton 		= new JButton("Replace ellipses with contours");
+	private JButton 			restoreSpotsButton 		= new JButton("Restore");
+	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
 	private String[]  			directions 				= new String[] {" threshold >", " threshold <" };
 	ImageTransformEnums[] transforms = new ImageTransformEnums[] {
@@ -80,7 +86,9 @@ public class Edit extends JPanel
 		add(panel01);
 		
 		JPanel panel0 = new JPanel(layoutLeft);
-		panel0.add(reduceSpotAreasButton);
+		panel0.add(outlineSpotsButton);
+		panel0.add(useContoursButton);
+		panel0.add(restoreSpotsButton);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -174,13 +182,35 @@ public class Edit extends JPanel
 					displayTransform(exp);
 			}});	
 		
-		reduceSpotAreasButton.addActionListener(new ActionListener () 
+		outlineSpotsButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) 
+				if (exp != null) {
+					ROI2DUtilities.removeRoisContainingString(-1, "mask", exp.seqCamData.seq);
 					reduceSpotArea(exp) ;
+					}
+			}});
+		
+		useContoursButton.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) {
+					transferContoursToSpotsRois(exp) ;
+					}
+			}});
+		
+		restoreSpotsButton.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) {
+					restoreOldSpotsRois(exp) ;
+					}
 			}});
 	}
 
@@ -305,6 +335,37 @@ public class Edit extends JPanel
 		    roi.setName(spot.getRoi().getName()+"_mask");
 		    roi.setColor(Color.RED);
 		    seqData.addROI(roi);
+		}
+	}
+	
+	private void transferContoursToSpotsRois(Experiment exp) 
+	{
+		List<ROI2D> contoursList = ROI2DUtilities.getROIs2DContainingString ("mask", exp.seqCamData.seq);
+		for (ROI2D contour: contoursList)
+		{
+			int length = contour.getName().length();
+			String name = contour.getName().substring(0, length-5);
+			Spot spot = exp.spotsArray.getSpotFromName(name);
+			ROI2D roi_old = spot.getRoi();
+			exp.seqCamData.seq.removeROI(contour);
+			exp.seqCamData.seq.removeROI(roi_old);
+			spot.setRoi_old((ROI2DShape) roi_old);
+			contour.setName(name);
+			contour.setColor(roi_old.getColor());
+			spot.setRoi((ROI2DShape) contour);
+			exp.seqCamData.seq.addROI(contour);
+		}
+	}
+	
+	private void restoreOldSpotsRois(Experiment exp) 
+	{
+		for (Spot spot: exp.spotsArray.spotsList)
+		{
+			ROI2D roi_old = spot.getRoi();
+			ROI2D roi = spot.getRoi_old();
+			spot.setRoi((ROI2DShape) roi);
+			exp.seqCamData.seq.removeROI(roi_old);
+			exp.seqCamData.seq.addROI(roi);
 		}
 	}
 

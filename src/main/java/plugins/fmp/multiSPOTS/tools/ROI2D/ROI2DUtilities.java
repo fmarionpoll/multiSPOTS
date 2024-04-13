@@ -279,10 +279,10 @@ public class ROI2DUtilities
 		}
 	}
 
-	public static Polygon2D getPolygonEnclosingCapillaries(ArrayList<ROI2D> listRois) {
+	public static Polygon2D getPolygonEnclosingROI2DArray(ArrayList<ROI2D> listRois) {
 		ROI2D roi1 = listRois.get(0);
-		Point2D pt1 = getFirstPoint(roi1);
-		Point2D pt2 = getLastPoint(roi1);
+		Point2D pt1 = getROI2DFirstPoint(roi1);
+		Point2D pt2 = getROI2DLastPoint(roi1);
 		double [] xpoints = {pt1.getX(), pt1.getX(), pt2.getX(), pt2.getX()};
 		double [] ypoints = {pt1.getY(), pt1.getY(), pt2.getY(), pt2.getY()};
 		
@@ -290,11 +290,11 @@ public class ROI2DUtilities
 			if (!roi.getName().contains("line")) 
 				continue;
 			
-			pt1 = getFirstPoint(roi);
+			pt1 = getROI2DFirstPoint(roi);
 			updateUpperLeftCorner(pt1, xpoints, ypoints);
 			updateUpperRightCorner(pt1, xpoints, ypoints);
 			
-			pt2 = getLastPoint(roi);
+			pt2 = getROI2DLastPoint(roi);
 			updateLowerLeftCorner(pt2, xpoints, ypoints);
 			updateLowerRightCorner(pt2, xpoints, ypoints);
 		}
@@ -339,17 +339,17 @@ public class ROI2DUtilities
 		}
 	}
 	
-	private static Point2D getFirstPoint(ROI2D roi) {
+	private static Point2D getROI2DFirstPoint(ROI2D roi) {
 		Rectangle rect = roi.getBounds();
 		return new Point2D.Double(rect.getX(), rect.getY());
 	}
 	
-	private static Point2D getLastPoint(ROI2D roi) {
+	private static Point2D getROI2DLastPoint(ROI2D roi) {
 		Rectangle rect = roi.getBounds();
 		return new Point2D.Double(rect.getX() + rect.getWidth(), rect.getY()+rect.getHeight());
 	}
 
-	public static ArrayList<Point2D> getCapillaryPoints (ROI2D roi) 
+	public static ArrayList<Point2D> getPoints2DArrayFromROI2D (ROI2D roi) 
 	{
 		ArrayList<Point2D> points = new ArrayList<Point2D>();		
 		if (roi instanceof ROI2DPolyLine) 

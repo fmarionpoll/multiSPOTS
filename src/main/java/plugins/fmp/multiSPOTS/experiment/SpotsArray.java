@@ -390,7 +390,6 @@ public class SpotsArray
 	
 	// -------------------------------------------------
 	
-
 	public double getScalingFactorToPhysicalUnits(EnumXLSExportType xlsoption) 
 	{
 		double scalingFactorToPhysicalUnits = 1.; 

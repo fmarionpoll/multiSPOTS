@@ -277,7 +277,7 @@ public class BuildKymographs extends BuildSeries
 	private int buildMasks (ROI2DAlongTime capT, int sizex, int sizey) {
 		ArrayList<ArrayList<int[]>> masks = new ArrayList<ArrayList<int[]>>();
 		getPointsfromROIPolyLineUsingBresenham(
-				ROI2DUtilities.getCapillaryPoints(capT.getRoi()), 
+				ROI2DUtilities.getPoints2DArrayFromROI2D(capT.getRoi()), 
 				masks, 
 				options.diskRadius, 
 				sizex, 
