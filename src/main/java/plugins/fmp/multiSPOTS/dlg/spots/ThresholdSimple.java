@@ -1,6 +1,5 @@
 package plugins.fmp.multiSPOTS.dlg.spots;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -21,22 +20,17 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import icy.image.IcyBufferedImage;
-import icy.sequence.Sequence;
 import icy.util.StringUtil;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.series.DetectSpots;
 import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DMeasures;
-import plugins.kernel.roi.roi2d.ROI2DPolygon;
+
+
 
 public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 {
@@ -47,7 +41,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private static final long serialVersionUID = 8921207247623517524L;
 	
 	private String 				detectString 			= "        Detect     ";
-	private JButton 			reduceSpotAreasButton 	= new JButton("Reduce spots areas");
 	private JButton 			detectButton 			= new JButton(detectString);
 	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
 	
@@ -84,7 +77,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		layoutLeft.setVgap(0);
 
 		JPanel panel0 = new JPanel(layoutLeft);
-		panel0.add(reduceSpotAreasButton);
 		panel0.add(detectButton);
 		panel0.add(allSeriesCheckBox);
 		add(panel0);
@@ -182,15 +174,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 				else 
 					stopDetection();
 			}});	
-		
-		reduceSpotAreasButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
-				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) 
-					reduceSpotArea(exp) ;
-			}});
 	}
 
 	void updateOverlay (Experiment exp) 
@@ -207,7 +190,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		}
 		exp.seqCamData.seq.addOverlay(overlayThreshold);
 	}
-
 
 	void removeOverlay(Experiment exp) 
 	{
@@ -332,36 +314,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			}
 		 }
 	}
-	
-	private void reduceSpotArea(Experiment exp) 
-	{
-		BuildSeriesOptions options = initDetectOptions(exp);
-		ImageTransformOptions transformOptions = new ImageTransformOptions();
-		transformOptions.transformOption = options.transform01;
-		transformOptions.setSingleThreshold (options.spotThreshold, options.spotThresholdUp) ;
-
-		ImageTransformInterface transformFunction = options.transform01.getFunction();
-		
-		Sequence seqData = exp.seqCamData.seq;
-		seqData.addOverlay(overlayThreshold);
-		int t = 0;
-		IcyBufferedImage sourceImage = seqData.getImage(t, 0);
-		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
-		for (Spot spot: exp.spotsArray.spotsList)  {
-			try {
-				spot.mask2D = spot.getRoi().getBooleanMask2D( 0 , 0, 1, true );
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			ROI2DPolygon roi = ROI2DMeasures.getContourOfDetectedSpot (workImage, spot, t, options);
-		    
-		    roi.setName(spot.getRoi().getName()+"_mask");
-		    roi.setColor(Color.RED);
-		    seqData.addROI(roi);
-		}
-	}
-	
 	
 
 }
