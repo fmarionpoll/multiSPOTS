@@ -30,7 +30,7 @@ import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.tools.Bresenham;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
-import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 
 
 public class BuildKymographs extends BuildSeries  

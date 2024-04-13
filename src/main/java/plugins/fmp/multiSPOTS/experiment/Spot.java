@@ -15,7 +15,7 @@ import icy.util.XMLUtil;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
-import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 

@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.tools;
+package plugins.fmp.multiSPOTS.tools.ROI2D;
 
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -24,6 +24,7 @@ import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
+import plugins.fmp.multiSPOTS.tools.Comparators;
 
 
 

@@ -27,7 +27,7 @@ import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
 import icy.type.geom.Polyline2D;
 import plugins.fmp.multiSPOTS.tools.Comparators;
-import plugins.fmp.multiSPOTS.tools.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 
 
