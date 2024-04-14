@@ -22,8 +22,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.image.IcyBufferedImage;
+import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.sequence.Sequence;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
+import plugins.kernel.roi.roi2d.ROI2DShape;
+
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -35,8 +39,8 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DMeasures;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
-import plugins.kernel.roi.roi2d.ROI2DPolygon;
-import plugins.kernel.roi.roi2d.ROI2DShape;
+
+
 
 
 
@@ -54,6 +58,7 @@ public class Edit extends JPanel
 	private JButton 			outlineSpotsButton 		= new JButton("Detect spots contours");
 	private JButton 			useContoursButton 		= new JButton("Replace ellipses with contours");
 	private JButton 			restoreSpotsButton 		= new JButton("Restore");
+	private JButton 			cutAndInterpolateButton = new JButton("Cut");
 	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
 	private String[]  			directions 				= new String[] {" threshold >", " threshold <" };
@@ -89,6 +94,7 @@ public class Edit extends JPanel
 		panel0.add(outlineSpotsButton);
 		panel0.add(useContoursButton);
 		panel0.add(restoreSpotsButton);
+		panel0.add(cutAndInterpolateButton);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -211,6 +217,15 @@ public class Edit extends JPanel
 				if (exp != null) {
 					restoreOldSpotsRois(exp) ;
 					}
+			}});
+		
+		cutAndInterpolateButton.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+					cutAndInterpolate(exp);
 			}});
 	}
 
@@ -367,6 +382,29 @@ public class Edit extends JPanel
 			exp.seqCamData.seq.removeROI(roi_old);
 			exp.seqCamData.seq.addROI(roi);
 		}
+	}
+	
+	void cutAndInterpolate(Experiment exp) 
+	{
+		ROI2D roi = exp.seqCamData.seq.getSelectedROI2D();
+		if (roi == null)
+			return;
+		for (Spot spot: exp.spotsArray.spotsList)  {
+			
+			ROI2D spotRoi = spot.getRoi();
+			try {
+				if (!spotRoi.intersects(roi))
+						continue;
+				ROI newRoi = spotRoi.getSubtraction(roi);
+				newRoi.setColor(Color.YELLOW);
+				exp.seqCamData.seq.addROI(newRoi);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;			
+		}
+		
 	}
 
 			
