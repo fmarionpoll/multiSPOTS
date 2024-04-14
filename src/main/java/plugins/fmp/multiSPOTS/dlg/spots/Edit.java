@@ -330,7 +330,7 @@ public class Edit extends JPanel
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ROI2DPolygon roi = ROI2DMeasures.getContourOfDetectedSpot (workImage, spot, t, options);
+			ROI2DPolygon roi = ROI2DMeasures.getContourOfDetectedSpot (workImage, spot, options);
 		    
 		    roi.setName(spot.getRoi().getName()+"_mask");
 		    roi.setColor(Color.RED);
