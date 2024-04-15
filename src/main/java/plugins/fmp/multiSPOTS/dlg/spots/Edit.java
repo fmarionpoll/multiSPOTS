@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -51,10 +50,6 @@ public class Edit extends JPanel
 	 */
 	private static final long 	serialVersionUID 	= 4950182090521600937L;
 	
-	private JButton				editSpotsButton			= new JButton("Edit spots infos...");
-	private SpotTable	   		infosSpotTable			= null;
-	private List<Spot>			spotsArrayCopy			= new ArrayList<Spot>();
-	
 	private JButton 			outlineSpotsButton 		= new JButton("Detect spots contours");
 	private JButton 			useContoursButton 		= new JButton("Replace ellipses with contours");
 	private JButton 			restoreSpotsButton 		= new JButton("Restore");
@@ -86,15 +81,10 @@ public class Edit extends JPanel
 		FlowLayout layoutLeft = new FlowLayout(FlowLayout.LEFT);
 		layoutLeft.setVgap(0);
 		
-		JPanel panel01 = new JPanel(layoutLeft);
-		panel01.add( editSpotsButton);
-		add(panel01);
-		
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(outlineSpotsButton);
 		panel0.add(useContoursButton);
 		panel0.add(restoreSpotsButton);
-		panel0.add(cutAndInterpolateButton);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -105,6 +95,10 @@ public class Edit extends JPanel
 		panel1.add(spotsViewButton);
 		panel1.add(spotsOverlayCheckBox);
 		add(panel1);
+		
+		JPanel panel2 = new JPanel(layoutLeft);
+		panel2.add(cutAndInterpolateButton);
+		add(panel2);
 
 		spotsTransformsComboBox.setSelectedItem(ImageTransformEnums.RGB_DIFFS);
 		spotsDirectionComboBox.setSelectedIndex(1);
@@ -113,23 +107,6 @@ public class Edit extends JPanel
 	
 	private void declareListeners() 
 	{
-		editSpotsButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
-				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null)
-				{
-					exp.spotsArray.transferDescriptionToSpots();
-					if (infosSpotTable != null) {
-						infosSpotTable.close();
-					}
-					infosSpotTable = new SpotTable();
-					infosSpotTable.initialize(parent0, spotsArrayCopy);
-					infosSpotTable.requestFocus();
-				}
-			}});
-
 		spotsOverlayCheckBox.addItemListener(new ItemListener() 
 		{
 		  public void itemStateChanged(ItemEvent e) 
@@ -360,17 +337,23 @@ public class Edit extends JPanel
 		{
 			int length = contour.getName().length();
 			String name = contour.getName().substring(0, length-5);
-			Spot spot = exp.spotsArray.getSpotFromName(name);
+			Spot spot = exp.spotsArray.getSpotFromName(name);			
 			ROI2D roi_old = spot.getRoi();
-			exp.seqCamData.seq.removeROI(contour);
-			exp.seqCamData.seq.removeROI(roi_old);
-			spot.setRoi_old((ROI2DShape) roi_old);
-			contour.setName(name);
-			contour.setColor(roi_old.getColor());
-			spot.setRoi((ROI2DShape) contour);
-			exp.seqCamData.seq.addROI(contour);
+			replaceRoi(exp, spot, roi_old, contour);
 		}
 	}
+	
+	private void replaceRoi(Experiment exp, Spot spot, ROI2D roi_old, ROI2D roi_new) 
+	{
+		spot.setRoi_old((ROI2DShape) roi_old);
+		exp.seqCamData.seq.removeROI(roi_new);
+		exp.seqCamData.seq.removeROI(roi_old);
+		roi_new.setName(roi_old.getName());
+		roi_new.setColor(roi_old.getColor());
+		spot.setRoi((ROI2DShape) roi_new);
+		exp.seqCamData.seq.addROI(roi_new);
+	}
+	
 	
 	private void restoreOldSpotsRois(Experiment exp) 
 	{
@@ -396,8 +379,7 @@ public class Edit extends JPanel
 				if (!spotRoi.intersects(roi))
 						continue;
 				ROI newRoi = spotRoi.getSubtraction(roi);
-				newRoi.setColor(Color.YELLOW);
-				exp.seqCamData.seq.addROI(newRoi);
+				replaceRoi(exp, spot, spotRoi, (ROI2D) newRoi);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

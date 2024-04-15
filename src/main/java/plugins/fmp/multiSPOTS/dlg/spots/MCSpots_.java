@@ -28,20 +28,19 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	private static final long serialVersionUID = 853047648249832145L;
 	public	PopupPanel 		capPopupPanel	= null;
 			JTabbedPane 	tabsPane 		= new JTabbedPane();		
-	public 	CreateSpots		tabCreateSpots 	= new CreateSpots();
+			CreateSpots		tabCreateSpots 	= new CreateSpots();
 			ThresholdSimple simpleThreshold = new ThresholdSimple();
 			ThresholdColors colorsThreshold = new ThresholdColors();
 
-	public 	Edit			tabEdit			= new Edit();
-	public 	Graphs 			tabGraphs 		= new Graphs();
+			Infos			tabInfos		= new Infos();
+			Edit			tabEdit			= new Edit();
+	public	Graphs 			tabGraphs 		= new Graphs();
 	public 	LoadSaveSpots 	tabFile  		= new LoadSaveSpots();
 	
 //			Adjust 		tabAdjust 		= new Adjust();
 
 	private int			id_infos		= 1;
 	private int 		id_create 		= 0;
-//	private int 		ID_ADJUST 		= 3;
-//	private boolean		editSelected	= false;
 	private MultiSPOTS 	parent0 		= null;
 
 	
@@ -61,11 +60,17 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		tabCreateSpots.addPropertyChangeListener(this);
 		tabsPane.addTab("Create", null, tabCreateSpots, "Create spots defining liquid drops");
 		id_create = order;
-		order++;		
+		order++;
+		
+		tabInfos.init(gridLayout, parent0);
+		tabInfos.addPropertyChangeListener(this);
+		tabsPane.addTab("Infos", null, tabInfos, "Edit infos");
+		id_infos = order;
+		order++;
 		
 		tabEdit.init(gridLayout, parent0);
 		tabEdit.addPropertyChangeListener(this);
-		tabsPane.addTab("Edit", null, tabEdit, "Edit infos and correct curves");
+		tabsPane.addTab("Edit", null, tabEdit, "Edit spots shape");
 		id_infos = order;
 		order++;
 		
@@ -88,12 +93,6 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		tabFile.addPropertyChangeListener(this);
 		tabsPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with spots descriptors");
 		order++;
-
-//		ID_ADJUST = order;
-//		tabAdjust.init(capLayout, parent0);
-//		tabAdjust.addPropertyChangeListener(this);
-//		tabsPane.addTab("Adjust", null, tabAdjust, "Adjust ROIS position to the capillaries");
-//		order++;
 		
 		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		capPanel.add(tabsPane);
