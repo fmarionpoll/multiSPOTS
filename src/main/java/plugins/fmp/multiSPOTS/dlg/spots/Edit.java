@@ -312,7 +312,8 @@ public class Edit extends JPanel
 		
 		Sequence seqData = exp.seqCamData.seq;
 		seqData.addOverlay(overlayThreshold);
-		int t = 0;
+		
+		int t = (int) seqData.getPositionT();
 		IcyBufferedImage sourceImage = seqData.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 		for (Spot spot: exp.spotsArray.spotsList)  {
