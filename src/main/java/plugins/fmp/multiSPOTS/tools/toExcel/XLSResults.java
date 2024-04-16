@@ -120,12 +120,12 @@ public class XLSResults
 		return dataValues;
 	}
 	
-	public List<Double> relativeToT0 () 
+	public List<Double> relativeToT (int t) 
 	{
 		if (dataValues == null || dataValues.size() < 1)
 			return null;
 		
-		double value0 = dataValues.get(0);
+		double value0 = dataValues.get(t);
 		for (int index = 0; index < dataValues.size(); index++) 
 		{
 			double value = dataValues.get(index);
@@ -133,6 +133,7 @@ public class XLSResults
 		}
 		return dataValues;
 	}
+	
 	
 	boolean subtractDeltaT(int arrayStep, int binStep) {
 		if (valuesOut == null || valuesOut.length < 2)

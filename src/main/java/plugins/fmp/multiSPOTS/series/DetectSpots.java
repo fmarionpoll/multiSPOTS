@@ -114,7 +114,7 @@ public class DetectSpots extends BuildSeries
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		seqData.addOverlay(overlayThreshold);
 		
-		for (int ii = 0; ii < nFrames; ii++) 
+		for (int ii = (int) exp.binT0; ii < nFrames; ii++) 
 		{
 			final int t = ii;
 			String title = "Frame #"+ t + " /" + exp.seqCamData.nTotalFrames;

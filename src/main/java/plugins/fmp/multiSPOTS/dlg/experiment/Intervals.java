@@ -87,9 +87,10 @@ public class Intervals extends JPanel
 	
 	private void setExptParmsFromDialog(Experiment exp) {
 		exp.camImageBin_ms = (long) (((double) binSizeJSpinner.getValue())* binUnit.getMsUnitValue());
-		double bin_ms = exp.camImageBin_ms;
-		exp.binFirst_ms = (long) ((double) frameFirstJSpinner.getValue() * bin_ms);
-		exp.binLast_ms = (long) ((double) frameLastJSpinner.getValue() * bin_ms);
+		long bin_ms = exp.camImageBin_ms;
+		exp.binT0 = ((Double)frameFirstJSpinner.getValue()).longValue();
+		exp.binFirst_ms =  exp.binT0 * bin_ms;
+		exp.binLast_ms = (long) frameLastJSpinner.getValue() * bin_ms;
 	}
 	
 	public void displayCamDataIntervals (Experiment exp) 
