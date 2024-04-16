@@ -252,6 +252,26 @@ public class Spot implements Comparable <Spot>
 		return pt;
 	}
 
+	private SpotMeasure getSpotArea (EnumXLSExportType option)
+	{
+		switch (option) 
+		{
+		case AREA_SUM:		
+		case AREA_SUM_LR:
+			return sum;
+		case AREA_SUMCLEAN:
+		case AREA_SUMCLEAN_LR:
+			return sumClean;
+		case AREA_FLYPRESENT:
+			return flyPresent;
+		case AREA_CNTPIX:
+		case AREA_CNTPIX_LR:
+			return cntPix;
+		default:
+			return null;
+		}
+	}
+	
 	// -----------------------------------------
 	
 	public boolean isThereAnyMeasuresDone(EnumXLSExportType option) 
@@ -297,70 +317,7 @@ public class Spot implements Comparable <Spot>
 		if (spotArea.polylineLevel != null)
 			spotArea.restoreNPoints();
 	}
-	
-	public void setGulpsOptions (BuildSeriesOptions options) 
-	{
-		limitsOptions = options;
-	}
-	
-	public BuildSeriesOptions getGulpsOptions () 
-	{
-		return limitsOptions;
-	}
-	
-	public void filterSpikes()
-	{
-		sum.filterSpikes(); 
-		sumClean.filterSpikes();
-		cntPix.filterSpikes(); 
-	}
-	
-	// -----------------------------------------------------------
-	
-	private SpotMeasure getSpotArea (EnumXLSExportType option)
-	{
-		switch (option) 
-		{
-		case AREA_SUM:		
-		case AREA_SUM_LR:
-			return sum;
-		case AREA_SUMCLEAN:
-		case AREA_SUMCLEAN_LR:
-			return sumClean;
-		case AREA_FLYPRESENT:
-			return flyPresent;
-		case AREA_CNTPIX:
-		case AREA_CNTPIX_LR:
-			return cntPix;
-		default:
-			return null;
-		}
-	}
-	
-	public int getLastMeasure(EnumXLSExportType option) 
-	{
-		SpotMeasure spotArea = getSpotArea(option);
-		if (spotArea != null)
-			return spotArea.getLastMeasure();	
-		return 0;
-	}
-	
-	public int getLastDeltaMeasure(EnumXLSExportType option) 
-	{
-		SpotMeasure spotArea = getSpotArea(option);
-		if (spotArea != null)
-			return spotArea.getLastDeltaMeasure();
-		return 0;
-	}
-	
-	public int getT0Measure(EnumXLSExportType option) 
-	{
-		SpotMeasure spotArea = getSpotArea(option);
-		if (spotArea != null)
-			return spotArea.getT0Measure();
-		return 0;
-	}
-	
+
 	// -----------------------------------------------------------------------------
 
 	public boolean loadFromXML_SpotOnly(Node node) 
@@ -413,8 +370,6 @@ public class Spot implements Comparable <Spot>
         return true;
 	}
 	
-	// -----------------------------------------------------------------------------
-
 	public boolean saveToXML_SpotOnly(Node node) 
 	{
 	    final Node nodeMeta = XMLUtil.setElement(node, ID_META);

@@ -172,30 +172,6 @@ public class SpotMeasure
 	{
 		return getDoubleArrayFromPolyline2D();
 	}
-	
-	int getLastMeasure() 
-	{	
-		if (polylineLevel == null || polylineLevel.npoints == 0)
-			return 0;
-		int lastitem = polylineLevel.ypoints.length - 1;
-		int ivalue = (int) polylineLevel.ypoints[lastitem];
-		return ivalue;
-	}
-	
-	int getT0Measure() 
-	{	
-		if (polylineLevel == null|| polylineLevel.npoints == 0)
-			return 0;
-		return (int) polylineLevel.ypoints[0];
-	}
-	
-	int getLastDeltaMeasure() 
-	{	
-		if (polylineLevel == null|| polylineLevel.npoints == 0)
-			return 0;
-		int lastitem = polylineLevel.ypoints.length - 1;
-		return (int) (polylineLevel.ypoints[lastitem] - polylineLevel.ypoints[lastitem-1]);
-	}
 
 	boolean transferROIsToMeasures(List<ROI> listRois) 
 	{	
@@ -221,11 +197,6 @@ public class SpotMeasure
 		return arrayDouble;
 	}
 
-	public void filterSpikes() 
-	{
-		polylineLevel.filterSpikes();
-	}
-	
 	// ----------------------------------------------------------------------
 	
 	public int loadCapillaryLimitFromXML(Node node, String nodename, String header) 

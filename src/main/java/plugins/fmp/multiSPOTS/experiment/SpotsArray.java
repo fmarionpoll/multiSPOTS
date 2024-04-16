@@ -112,8 +112,6 @@ public class SpotsArray
 		return false;
 	}
 	
-	// ---------------------------------
-	
 	private boolean xmlSave_ListOfSpots(Document doc) 
 	{
 		Node node = XMLUtil.getElement(XMLUtil.getRootElement(doc), ID_SPOTTRACK);

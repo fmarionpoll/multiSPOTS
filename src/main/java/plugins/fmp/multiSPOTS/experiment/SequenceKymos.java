@@ -1,6 +1,5 @@
 package plugins.fmp.multiSPOTS.experiment;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +24,6 @@ import icy.roi.ROI2D;
 import icy.sequence.MetaDataUtil;
 import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
-import icy.type.geom.Polyline2D;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
