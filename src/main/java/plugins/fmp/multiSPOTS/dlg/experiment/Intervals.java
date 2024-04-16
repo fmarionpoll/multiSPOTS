@@ -25,8 +25,13 @@ public class Intervals extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = -5739112045358747277L;
-	JSpinner 	frameFirstJSpinner	= new JSpinner(new SpinnerNumberModel(0., 0., 10000., 1.)); 
-	JSpinner 	frameLastJSpinner	= new JSpinner(new SpinnerNumberModel(99999999., 1., 99999999., 1.));
+	Long val = 0L; //set your own value, I used to check if it works
+	Long min = 0L;
+	Long max = 10000L;
+	Long step = 1L;
+	Long maxLast = 99999999L;
+	JSpinner 	frameFirstJSpinner	= new JSpinner(new SpinnerNumberModel(val, min, max, step)); 
+	JSpinner 	frameLastJSpinner	= new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
 	JSpinner 	binSizeJSpinner		= new JSpinner(new SpinnerNumberModel(1., 0., 1000., 1.));
 	JComboMs 	binUnit 			= new JComboMs();
 	JButton		applyButton 		= new JButton("Apply changes");
@@ -88,21 +93,21 @@ public class Intervals extends JPanel
 	private void setExptParmsFromDialog(Experiment exp) {
 		exp.camImageBin_ms = (long) (((double) binSizeJSpinner.getValue())* binUnit.getMsUnitValue());
 		long bin_ms = exp.camImageBin_ms;
-		exp.binT0 = ((Double)frameFirstJSpinner.getValue()).longValue();
+		exp.binT0 = (long) frameFirstJSpinner.getValue();
 		exp.binFirst_ms =  exp.binT0 * bin_ms;
-		exp.binLast_ms = (long) frameLastJSpinner.getValue() * bin_ms;
+		exp.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
 	}
 	
 	public void displayCamDataIntervals (Experiment exp) 
 	{
 		refreshBinSize(exp);
 		
-		double bin_ms = exp.camImageBin_ms;
-		double dFirst = exp.binFirst_ms/bin_ms;
+		long bin_ms = exp.camImageBin_ms;
+		long dFirst = (long) exp.binFirst_ms/bin_ms;
 		frameFirstJSpinner.setValue(dFirst);
 		if(exp.binLast_ms <= 0)
 			exp.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
-		double dLast = exp.binLast_ms/bin_ms;
+		long dLast = (long) exp.binLast_ms/bin_ms;
 		frameLastJSpinner.setValue(dLast);
 		exp.getFileIntervalsFromSeqCamData();
 	}

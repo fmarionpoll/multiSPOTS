@@ -474,26 +474,6 @@ public class XLSExport
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
 				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
-//				switch (xlsExportType) 
-//				{
-//					case AREA_NPIXELS:
-//					case AREA_DENSITY:
-//					case AREA_SUM:
-//					case AREA_SUMSQ:
-//					case AREA_CNTPIX:
-//					case AREA_MEANGREAY:
-////					case AREA_NPIXELS_LR:
-////					case AREA_NPIXELS_DELTA:
-//						resultsArrayList.getSpotsArrayResults1(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
-//						break;
-//						
-////					case AREA_NPIXELS_RELATIVE: // TODO
-////						resultsArrayList.getSpotsArrayResults_T0(expi.spotsArray, xlsExportType, nOutputFrames, exp.binDuration_ms, options);
-////						break;
-//	
-//					default:
-//						break;
-//				}
 				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);
 			}
 			expi = expi.chainToNextExperiment;

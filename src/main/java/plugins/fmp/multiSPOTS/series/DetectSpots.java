@@ -113,8 +113,8 @@ public class DetectSpots extends BuildSeries
 
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		seqData.addOverlay(overlayThreshold);
-		
-		for (int ii = (int) exp.binT0; ii < nFrames; ii++) 
+		int binT0 = (int) exp.binT0;
+		for (int ii = binT0; ii < nFrames; ii++) 
 		{
 			final int t = ii;
 			String title = "Frame #"+ t + " /" + exp.seqCamData.nTotalFrames;
@@ -205,7 +205,7 @@ public class DetectSpots extends BuildSeries
 	private void initSpotsDataArrays(Experiment exp)
 	{
 		//int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms + 1);
-		int nFrames = exp.seqCamData.nTotalFrames;
+		int nFrames = exp.seqCamData.nTotalFrames - (int) exp.binT0;
 		for (Spot spot: exp.spotsArray.spotsList) {
 			spot.sum.measureValues 			= new  double [nFrames+1];
 			spot.sumClean.measureValues 	= new  double [nFrames+1];
