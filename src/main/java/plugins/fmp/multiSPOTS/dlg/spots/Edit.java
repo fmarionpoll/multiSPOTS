@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -26,7 +27,7 @@ import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
-
+import plugins.adufour.quickhull.QuickHull2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -323,8 +324,10 @@ public class Edit extends JPanel
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ROI2DPolygon roi = ROI2DMeasures.getContourOfDetectedSpot (workImage, spot, options);
+			ROI2DPolygon roi0 = ROI2DMeasures.getContourOfDetectedSpot (workImage, spot, options);
+			 List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());
 		    
+			ROI2DPolygon roi = new ROI2DPolygon(listPoints);
 		    roi.setName(spot.getRoi().getName()+"_mask");
 		    roi.setColor(Color.RED);
 		    seqData.addROI(roi);

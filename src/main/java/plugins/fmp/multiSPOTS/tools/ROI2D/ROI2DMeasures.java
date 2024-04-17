@@ -381,5 +381,4 @@ public class ROI2DMeasures {
 		return points;
     }
     
-    
 }
