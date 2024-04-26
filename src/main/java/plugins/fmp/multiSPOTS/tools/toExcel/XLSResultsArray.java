@@ -218,7 +218,7 @@ public class XLSResultsArray
 		{
 		case TOPLEVEL_LR:
 		case TOPLEVELDELTA_LR:
-		case AREA_CNTPIX_LR:
+//		case AREA_CNTPIX_LR:
 		case AREA_SUM_LR:
 		case AREA_SUMCLEAN_LR:
 			buildLR (xlsExportOptions.lrPIThreshold); 

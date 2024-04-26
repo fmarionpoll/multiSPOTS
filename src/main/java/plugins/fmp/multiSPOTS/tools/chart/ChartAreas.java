@@ -34,6 +34,7 @@ import icy.gui.util.GuiUtil;
 import icy.gui.viewer.Viewer;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExport;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSResults;
@@ -86,7 +87,13 @@ public class ChartAreas extends IcyFrame
 		ymax = 0;
 		ymin = 0;
 		flagMaxMinSet = false;
+		List<XYSeriesCollection> xyDataSetList2 = null;
 		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
+		if (xlsExportOptions.exportType == EnumXLSExportType.AREA_SUMCLEAN) {
+			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUM;
+			xyDataSetList2 = getDataArrays(exp, xlsExportOptions);
+			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
+		}
 		
         final NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
         yAxis.setAutoRangeIncludesZero(false);  
@@ -94,18 +101,29 @@ public class ChartAreas extends IcyFrame
         final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
         Paint[] color = ChartColor.createDefaultPaintArray();
 
-		for (XYSeriesCollection xySeriesCollection : xyDataSetList) 
-		{
-			String[] description = xySeriesCollection.getSeries(0).getDescription().split("_");
-			
+//		for (XYSeriesCollection xySeriesCollection : xyDataSetList) {
+        for (int iseries = 0; iseries < xyDataSetList.size(); iseries++) {
+    		XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);
+    		if (xyDataSetList2 != null) {
+    			XYSeriesCollection xySeriesCollection2 = xyDataSetList2.get(iseries);
+    			for (int j = 0; j < xySeriesCollection2.getSeriesCount(); j++ ) {
+    				XYSeries xySeries = xySeriesCollection2.getSeries(j);
+    				xySeries.setKey(xySeries.getKey()+"*");
+    				xySeriesCollection.addSeries(xySeries);
+    			}
+    		}
+    		
+			String[] description = xySeriesCollection.getSeries(0).getDescription().split("_");		
 			NumberAxis xAxis = new NumberAxis(description[0]);
 			XYLineAndShapeRenderer subPlotRenderer = new XYLineAndShapeRenderer(true, false);
 			final XYPlot subplot = new XYPlot(xySeriesCollection, xAxis, null, subPlotRenderer);
+			
 			int icolor = 0;
+			int maxcolor = 1; //color.length
 			for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++ )
 			{
-				if (icolor > color.length)
-					icolor = 0;
+				if (icolor > maxcolor)
+					icolor = icolor+13; //0;
 				subPlotRenderer.setSeriesPaint(i, color[icolor]);
 			}
 			

@@ -27,10 +27,10 @@ public enum EnumXLSExportType
 	AREA_SUM("AREA_SUM", "grey value", "Spot grey value sum of pixels over threshold"),
 	AREA_SUMCLEAN("AREA_SUMCLEAN", "grey value - no fly", "Spot grey value sum of pixels over threshold but with no fly"),
 	AREA_FLYPRESENT("AREA_FLYPRESENT", "boolean value", "fly is present or not over the spot"),
-	AREA_CNTPIX("AREA_CNTPIX", "n pixels", "Spot n pixels over threshold"),
+//	AREA_CNTPIX("AREA_CNTPIX", "n pixels", "Spot n pixels over threshold"),
 	AREA_SUM_LR ("area sum_L+R", "sum grey", "SUM and PI"),
-	AREA_SUMCLEAN_LR ("area sumclean_L+R", "sumclean grey", "SUM and PI"),
-	AREA_CNTPIX_LR ("area cntpix_L+R", "n_pixels", "SUM and PI");
+	AREA_SUMCLEAN_LR ("area sumclean_L+R", "sumclean grey", "SUM and PI");
+//	AREA_CNTPIX_LR ("area cntpix_L+R", "n_pixels", "SUM and PI");
 
 	
 	private String label;

@@ -47,7 +47,7 @@ public class Spot implements Comparable <Spot>
 	 
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
 	public SpotMeasure					sumClean		= new SpotMeasure("sumClean"); 
-	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
+//	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
 	public SpotMeasure					flyPresent		= new SpotMeasure("flyPresent"); 
 	public boolean						valid			= true;
 
@@ -116,7 +116,7 @@ public class Spot implements Comparable <Spot>
 		
 		sum .copy(spotFrom.sum);
 		sumClean .copy(spotFrom.sumClean);
-		cntPix .copy(spotFrom.cntPix);	
+//		cntPix .copy(spotFrom.cntPix);	
 		flyPresent.copy(spotFrom.flyPresent);	
 	}
 	
@@ -264,9 +264,9 @@ public class Spot implements Comparable <Spot>
 			return sumClean;
 		case AREA_FLYPRESENT:
 			return flyPresent;
-		case AREA_CNTPIX:
-		case AREA_CNTPIX_LR:
-			return cntPix;
+//		case AREA_CNTPIX:
+//		case AREA_CNTPIX_LR:
+//			return cntPix;
 		default:
 			return null;
 		}
@@ -294,7 +294,7 @@ public class Spot implements Comparable <Spot>
 	{
 		cropSpotAreaToNPoints(sum , npoints);
 		cropSpotAreaToNPoints(sumClean , npoints);
-		cropSpotAreaToNPoints(cntPix , npoints);
+//		cropSpotAreaToNPoints(cntPix , npoints);
 		cropSpotAreaToNPoints(flyPresent , npoints);
 	}
 	
@@ -308,7 +308,7 @@ public class Spot implements Comparable <Spot>
 	{
 		restoreSpotAreaClippedMeasures( sum );
 		restoreSpotAreaClippedMeasures( sumClean );
-		restoreSpotAreaClippedMeasures( cntPix );
+//		restoreSpotAreaClippedMeasures( cntPix );
 		restoreSpotAreaClippedMeasures( flyPresent );
 	}
 	
@@ -464,7 +464,7 @@ public class Spot implements Comparable <Spot>
 	{
 		sum.adjustToImageWidth(imageWidth);
 		sumClean.adjustToImageWidth(imageWidth);
-		cntPix.adjustToImageWidth(imageWidth);
+//		cntPix.adjustToImageWidth(imageWidth);
 		flyPresent.adjustToImageWidth(imageWidth);
 	}
 
@@ -472,7 +472,7 @@ public class Spot implements Comparable <Spot>
 	{
 		sum.cropToImageWidth(imageWidth);
 		sumClean.cropToImageWidth(imageWidth);
-		cntPix.cropToImageWidth(imageWidth);
+//		cntPix.cropToImageWidth(imageWidth);
 		flyPresent.cropToImageWidth(imageWidth);
 	}
 	
@@ -480,7 +480,7 @@ public class Spot implements Comparable <Spot>
 	{
 		sum.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
 		sumClean.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
-		cntPix.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
+//		cntPix.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
 		flyPresent.setPolylineLevelFromMeasureBoolean(getRoi().getName(), cageIndex);
 	}
 	
@@ -562,7 +562,7 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM:
 			case AREA_SUMCLEAN:
 			case AREA_FLYPRESENT:
-			case AREA_CNTPIX:	
+//			case AREA_CNTPIX:	
 				sbf.append("#" + csvSep + measureType.toString() + csvSep + explanation1);
 				break;
 
@@ -589,9 +589,9 @@ public class Spot implements Comparable <Spot>
 			case AREA_FLYPRESENT:
 				flyPresent.cvsExportYDataToRow(sbf, csvSep); 
 				break;
-			case AREA_CNTPIX:  	
-				cntPix.cvsExportYDataToRow(sbf, csvSep); 
-				break;	
+//			case AREA_CNTPIX:  	
+//				cntPix.cvsExportYDataToRow(sbf, csvSep); 
+//				break;	
 			default:
 				break;
 		}
@@ -622,7 +622,7 @@ public class Spot implements Comparable <Spot>
 			{
 			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN:	sumClean.csvImportXYDataFromRow( data, 2); break;
-			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
+//			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
 			case AREA_FLYPRESENT:  flyPresent.csvImportXYDataFromRow( data, 2); break;
 			default:
 				break;
@@ -634,7 +634,7 @@ public class Spot implements Comparable <Spot>
 			{
 			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN: sumClean.csvImportYDataFromRow( data, 2); break;
-			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
+//			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
 			case AREA_FLYPRESENT: flyPresent.csvImportYDataFromRow( data, 2); break;
 			default:
 				break;

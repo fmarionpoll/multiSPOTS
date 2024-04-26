@@ -481,9 +481,9 @@ public class SpotsArray
 		    	case "AREA_FLYPRESENT":
 		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_FLYPRESENT, sep);
 		    		break;
-		    	case "AREA_CNTPIX":
-		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_CNTPIX, sep);
-		    		break;
+//		    	case "AREA_CNTPIX":
+//		    		csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_CNTPIX, sep);
+//		    		break;
 	    		default:
 	    			break;
 		    	}
@@ -587,7 +587,7 @@ public class SpotsArray
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUMCLEAN);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_FLYPRESENT);
-			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
+//			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_CNTPIX);
 			csvWriter.flush();
 			csvWriter.close();
 			

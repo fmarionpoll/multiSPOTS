@@ -167,7 +167,7 @@ public class DetectSpots extends BuildSeries
 	private void measureSpotArea(IcyBufferedImage workImage, Spot spot, int t  )
 	{
 		int sum = 0;
-        int cntPix = 0;
+//        int cntPix = 0;
         
         boolean spotThresholdUp = options.spotThresholdUp;
         int spotThreshold = options.spotThreshold;
@@ -181,7 +181,7 @@ public class DetectSpots extends BuildSeries
 	            if (mask[offset])  {
 	                int value = workData[offset];    
                     if (value < spotThreshold) {
-                        cntPix++;
+//                        cntPix++;
                         sum += value;
                     }
 	            }
@@ -192,14 +192,14 @@ public class DetectSpots extends BuildSeries
 	            if (mask[offset]) {
 	                int value = workData[offset];
 	                if (value > spotThreshold) {
-                        cntPix++;
+//                        cntPix++;
                         sum += value;
 	                }
 	            }
 	        }
         }
         spot.sum.measureValues[t] = sum ;
-        spot.cntPix.measureValues[t] = cntPix;
+//        spot.cntPix.measureValues[t] = cntPix;
 	}
 	
 	private void initSpotsDataArrays(Experiment exp)
@@ -210,7 +210,7 @@ public class DetectSpots extends BuildSeries
 			spot.sum.measureValues 			= new  double [nFrames+1];
 			spot.sumClean.measureValues 	= new  double [nFrames+1];
 			spot.flyPresent.measureBooleans = new  boolean [nFrames+1];
-			spot.cntPix.measureValues  		= new  double [nFrames+1];		
+//			spot.cntPix.measureValues  		= new  double [nFrames+1];		
 		}
 	}
 	

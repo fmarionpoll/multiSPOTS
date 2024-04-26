@@ -44,12 +44,12 @@ public class XLSExportSpotAreasResults extends XLSExport
 					collast = getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_FLYPRESENT);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUMCLEAN);
-					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);
+//					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);
 					if (options.lrPI ) 
 					{
 						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM_LR);
 						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUMCLEAN_LR);
-						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX_LR);
+//						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX_LR);
 					}
 				}
 				column = collast +2;
