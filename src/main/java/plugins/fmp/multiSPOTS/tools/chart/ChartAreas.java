@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Stroke;
+import java.awt.BasicStroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -115,18 +117,20 @@ public class ChartAreas extends IcyFrame
     		
 			String[] description = xySeriesCollection.getSeries(0).getDescription().split("_");		
 			NumberAxis xAxis = new NumberAxis(description[0]);
-			XYLineAndShapeRenderer subPlotRenderer = new XYLineAndShapeRenderer(true, false);
-			final XYPlot subplot = new XYPlot(xySeriesCollection, xAxis, null, subPlotRenderer);
-			
+			XYLineAndShapeRenderer subPlotRenderer = new XYLineAndShapeRenderer(true, false);		
 			int icolor = 0;
 			int maxcolor = 1; //color.length
+			Stroke stroke = new BasicStroke(0.5f,  BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[] { 2.0f, 4.0f }, 0.0f);
 			for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++ )
 			{
-				if (icolor > maxcolor)
+				if (icolor > maxcolor) {
 					icolor = icolor+13; //0;
-				subPlotRenderer.setSeriesPaint(i, color[icolor]);
+					subPlotRenderer.setSeriesStroke(i, stroke);
+				}
+				subPlotRenderer.setSeriesPaint(i, color[icolor]);				
 			}
 			
+			final XYPlot subplot = new XYPlot(xySeriesCollection, xAxis, null, subPlotRenderer);
 			int nflies = Integer.valueOf(description[1]);
 			if (nflies < 1) {
 				subplot.setBackgroundPaint(Color.LIGHT_GRAY);
