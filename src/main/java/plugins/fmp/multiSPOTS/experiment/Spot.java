@@ -47,7 +47,6 @@ public class Spot implements Comparable <Spot>
 	 
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
 	public SpotMeasure					sumClean		= new SpotMeasure("sumClean"); 
-//	public SpotMeasure					cntPix  		= new SpotMeasure("cntPix"); 
 	public SpotMeasure					flyPresent		= new SpotMeasure("flyPresent"); 
 	public boolean						valid			= true;
 

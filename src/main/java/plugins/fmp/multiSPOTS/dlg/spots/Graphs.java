@@ -6,20 +6,23 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
+
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
-import plugins.fmp.multiSPOTS.tools.chart.ChartAreas;
+import plugins.fmp.multiSPOTS.tools.chart.ChartSpots;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 
@@ -29,16 +32,18 @@ public class Graphs extends JPanel implements SequenceListener
 	 * 
 	 */
 	private static final long serialVersionUID = -7079184380174992501L;
-	private ChartAreas 	plotAreaPixels			= null;
+	private ChartSpots 	plotAreaPixels			= null;
 	private MultiSPOTS 	parent0 				= null;
 	private JButton 	displayResultsButton 	= new JButton("Display results");
-	EnumXLSExportType[] measures 				= new EnumXLSExportType[]{
+	private EnumXLSExportType[] measures 		= new EnumXLSExportType[]{
 			EnumXLSExportType.AREA_SUM, 
 			EnumXLSExportType.AREA_SUMCLEAN
 			};
-	JComboBox<EnumXLSExportType> exportTypeComboBox = new JComboBox<EnumXLSExportType> (measures);
+	private JComboBox<EnumXLSExportType> exportTypeComboBox = new JComboBox<EnumXLSExportType> (measures);
 	private JCheckBox 	t0Checkbox 				= new JCheckBox("relative to t0", true);
-	
+
+    private JRadioButton displayAllButton = new JRadioButton("all cages");
+    private JRadioButton displaySelectedButton = new JRadioButton("cage selected");
 	
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 
@@ -50,11 +55,12 @@ public class Graphs extends JPanel implements SequenceListener
 		layout.setVgap(0);
 		
 		JPanel panel01 = new JPanel(layout);
-		panel01.add(new JLabel("results "));
+		panel01.add(new JLabel("Measure"));
 		panel01.add(exportTypeComboBox);
+		panel01.add(new JLabel(" display"));
+		panel01.add(displayAllButton);
+		panel01.add(displaySelectedButton);
 		add(panel01);
-		JPanel panel1 = new JPanel(layout);
-		add(panel1);
 		
 		JPanel panel02 = new JPanel(layout);
 		panel02.add(t0Checkbox);
@@ -64,6 +70,10 @@ public class Graphs extends JPanel implements SequenceListener
 		panel03.add(displayResultsButton);
 		add(panel03);
 		
+		ButtonGroup group = new ButtonGroup();
+	    group.add(displayAllButton);
+	    group.add(displaySelectedButton);
+	    displayAllButton.setSelected(true);
 		defineActionListeners();
 	}
 	
@@ -129,11 +139,11 @@ public class Graphs extends JPanel implements SequenceListener
 		}
 	}
 	
-	private ChartAreas plotToChart(Experiment exp, EnumXLSExportType exportType, ChartAreas iChart, Rectangle rectv ) 
+	private ChartSpots plotToChart(Experiment exp, EnumXLSExportType exportType, ChartSpots iChart, Rectangle rectv ) 
 	{	
 		if (iChart != null) 
 			iChart.mainChartFrame.dispose();
-		iChart = new ChartAreas();
+		iChart = new ChartSpots();
 		iChart.createChartPanel(parent0, "Spots measures");
 		iChart.setUpperLeftLocation(rectv);
 		
@@ -154,7 +164,7 @@ public class Graphs extends JPanel implements SequenceListener
 		plotAreaPixels = closeChart (plotAreaPixels); 
 	}
 	
-	private ChartAreas closeChart(ChartAreas chart) 
+	private ChartSpots closeChart(ChartSpots chart) 
 	{
 		if (chart != null) 
 			chart.mainChartFrame.dispose();
@@ -185,4 +195,5 @@ public class Graphs extends JPanel implements SequenceListener
 		sequence.removeListener(this);
 		closeAllCharts();
 	}
+
 }

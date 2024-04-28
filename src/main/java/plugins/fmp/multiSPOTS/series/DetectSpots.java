@@ -128,7 +128,7 @@ public class DetectSpots extends BuildSeries
 					final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 					for (Spot spot: exp.spotsArray.spotsList)  {
 						measureSpotArea (workImage, spot, t);
-						spot.flyPresent.measureBooleans[t] = isFlyPresentInSpotArea (sourceImage, spot, t);
+						spot.flyPresent.measureBooleans[t] = isFlyPresentInSpotArea (sourceImage, spot, t) > 0;
 					}
 				}}));
 		}
@@ -136,19 +136,19 @@ public class DetectSpots extends BuildSeries
 		return true;
 	}
 	
-	private boolean isFlyPresentInSpotArea(IcyBufferedImage sourceImage, Spot spot, int t  )
+	private int isFlyPresentInSpotArea(IcyBufferedImage sourceImage, Spot spot, int t  )
 	{
 		int flyThreshold = options.flyThreshold;
         
         IcyBufferedImage subSourceImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
         int[] sourceData = (int[]) ArrayUtil.arrayToIntArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
-        boolean flyFound = false;    
+        int flyFound = 0;    
         boolean[] mask = spot.mask2D.mask;
         
         if (options.flyThresholdUp) { 
 	        for (int offset = 0; offset < sourceData.length; offset++) {
 	            if (mask[offset] && (sourceData[offset] > flyThreshold)) {
-	            	flyFound = true;
+	            	flyFound ++;
 	            	break;
 	            }
 	        }
@@ -156,7 +156,7 @@ public class DetectSpots extends BuildSeries
         else {
         	for (int offset = 0; offset < sourceData.length; offset++) {
 	            if (mask[offset] && (sourceData[offset] < flyThreshold)) {
-	            	flyFound = true;
+	            	flyFound++;
 	            	break;
 	            }
 	        }

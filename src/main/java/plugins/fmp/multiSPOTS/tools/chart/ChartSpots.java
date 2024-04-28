@@ -28,21 +28,24 @@ import org.jfree.chart.plot.CombinedRangeXYPlot;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import icy.gui.frame.IcyFrame;
 import icy.gui.util.GuiUtil;
 import icy.gui.viewer.Viewer;
+import icy.roi.ROI2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExport;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSResultsArray;
 
-public class ChartAreas extends IcyFrame
+public class ChartSpots extends IcyFrame
 {
 	public JPanel 	mainChartPanel 	= null;
 	public IcyFrame mainChartFrame 	= null;
@@ -103,7 +106,6 @@ public class ChartAreas extends IcyFrame
         final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
         Paint[] color = ChartColor.createDefaultPaintArray();
 
-//		for (XYSeriesCollection xySeriesCollection : xyDataSetList) {
         for (int iseries = 0; iseries < xyDataSetList.size(); iseries++) {
     		XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);
     		if (xyDataSetList2 != null) {
@@ -164,7 +166,7 @@ public class ChartAreas extends IcyFrame
         		true, true, true, false, true); // boolean properties, boolean save, boolean print, boolean zoom, boolean tooltips)
         panel.addChartMouseListener(new ChartMouseListener() {
 		    public void chartMouseClicked(ChartMouseEvent e) {
-		    	selectKymoImage(getSelectedCurve(e)); }
+		    	selectSpot(getClickedSpot(e)); }
 		    public void chartMouseMoved(ChartMouseEvent e) {}
 		});
     	
@@ -175,42 +177,53 @@ public class ChartAreas extends IcyFrame
 		mainChartFrame.setVisible(true);
 	}
 	
-	private int getSelectedCurve(ChartMouseEvent e) 
+	private Spot getClickedSpot(ChartMouseEvent e) 
 	{
 		final MouseEvent trigger = e.getTrigger();
         if (trigger.getButton() != MouseEvent.BUTTON1)
-        	return -1;
+        	return null;
         
 		JFreeChart chart = e.getChart();
 		ChartEntity chartEntity = e.getEntity();
 		MouseEvent mouseEvent = e.getTrigger();
-
-		int isel= 0;
-		if (chartEntity != null && chartEntity instanceof XYItemEntity) {
-		   XYItemEntity xyItemEntity = ((XYItemEntity) e.getEntity());
-		   isel += xyItemEntity.getSeriesIndex();
-		}
-
+		ChartPanel panel = (ChartPanel) mainChartPanel.getComponent(0);
+		PlotRenderingInfo plotInfo = panel.getChartRenderingInfo().getPlotInfo();
+		Point2D pointClicked = panel.translateScreenToJava2D(mouseEvent.getPoint());
+		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+		
+		// get chart
+		int subplotindex = plotInfo.getSubplotIndex(pointClicked);
 		CombinedRangeXYPlot combinedXYPlot = (CombinedRangeXYPlot) chart.getPlot();
 		@SuppressWarnings("unchecked")
         List<XYPlot> subplots = combinedXYPlot.getSubplots();
 		
-		ChartPanel panel = (ChartPanel) mainChartPanel.getComponent(0);
-		PlotRenderingInfo plotInfo = panel.getChartRenderingInfo().getPlotInfo();
-		Point2D p = panel.translateScreenToJava2D(mouseEvent.getPoint());
-		int subplotindex = plotInfo.getSubplotIndex(p);
-		for (int i= 0; i < subplotindex ; i++)
-			isel += subplots.get(i).getSeriesCount();
-
-		return isel;
+		// get item in the chart
+		int isel= 0;
+		Spot spotFound = null;
+		if (chartEntity != null && chartEntity instanceof XYItemEntity) {
+		   XYItemEntity xyItemEntity = ((XYItemEntity) e.getEntity());
+		   isel = xyItemEntity.getSeriesIndex();
+		   XYDataset xyDataset = xyItemEntity.getDataset();
+		   String description = (String) xyDataset.getSeriesKey(isel); 
+		   spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
+		   System.out.println(description+ " roi="+spotFound.getRoi().getName());
+		}
+		else 
+		{
+			for (int i= 0; i < subplotindex ; i++)
+				isel += subplots.get(i).getSeriesCount();
+			System.out.println("clicked chart area nb="+ subplotindex + " series="+isel);
+		}
+		return spotFound;
 	}
 
-	private void selectKymoImage(int isel)
+	private void selectSpot(Spot spot)
 	{
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-        Viewer v = exp.seqKymos.seq.getFirstViewer();
-        if (v != null && isel >= 0)
-        	v.setPositionT(isel);
+        Viewer v = exp.seqCamData.seq.getFirstViewer();
+        if (v != null && spot != null) {
+        	ROI2D roi = spot.getRoi();
+        }
 	}
 
 	private List<XYSeriesCollection> getDataArrays(Experiment exp, XLSExportOptions xlsExportOptions) 

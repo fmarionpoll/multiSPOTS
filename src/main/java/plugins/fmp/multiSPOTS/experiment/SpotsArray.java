@@ -247,7 +247,7 @@ public class SpotsArray
 		if (letter .equals("R")) 
 		{	
 			String nameL = name.substring(0, name.length() - 1) + "L";
-			Spot spot00 = getSpotFromRoiName(nameL);
+			Spot spot00 = getSpotFromName(nameL);
 			if (spot00 != null) 
 			{
 //				spot.capNFlies = cap0.capNFlies;
@@ -256,7 +256,7 @@ public class SpotsArray
 		}
 	}
 	
-	public Spot getSpotFromRoiName(String name) 
+	public Spot getSpotFromName(String name) 
 	{
 		Spot spotFound = null;
 		for (Spot spot: spotsList) 
@@ -270,12 +270,12 @@ public class SpotsArray
 		return spotFound;
 	}
 	
-	public Spot getSpotFromName(String name) 
+	public Spot getSpotContainingName(String name) 
 	{
 		Spot spotFound = null;
 		for (Spot spot: spotsList) 
 		{
-			if (spot.getRoiName().equals(name)) 
+			if (spot.getRoiName().contains(name)) 
 			{
 				spotFound = spot;
 				break;
@@ -560,7 +560,7 @@ public class SpotsArray
 				if (data[0] .equals( "#")) 
 					return data[1];
 
-				Spot spot = getSpotFromRoiName(data[0]);
+				Spot spot = getSpotFromName(data[0]);
 				if (spot == null)
 					spot = new Spot();
 				spot.csvImportMeasures_OneType(measureType, data, x, y);
