@@ -254,10 +254,8 @@ public class Edit extends JPanel
 		// other parameters
 		options.transform01 		= (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem();
 		options.spotThresholdUp 	= (spotsDirectionComboBox.getSelectedIndex() == 0);
-		options.spotThreshold		= (int) spotsThresholdSpinner.getValue();
-				
+		options.spotThreshold		= (int) spotsThresholdSpinner.getValue();				
 		options.analyzePartOnly		= false; //fromCheckBox.isSelected();
-		
 		options.overlayTransform = (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem(); 
 		options.overlayIfGreater = (spotsDirectionComboBox.getSelectedIndex() == 0);
 		options.overlayThreshold = (int) spotsThresholdSpinner.getValue();
