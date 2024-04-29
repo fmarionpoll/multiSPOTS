@@ -72,7 +72,6 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 		tabEdit.init(gridLayout, parent0);
 		tabEdit.addPropertyChangeListener(this);
 		tabsPane.addTab("Edit", null, tabEdit, "Edit spots shape");
-		id_infos = order;
 		order++;
 		
 		tabFile.init(gridLayout, parent0);

@@ -206,7 +206,7 @@ public class ChartSpots extends IcyFrame
 		   XYDataset xyDataset = xyItemEntity.getDataset();
 		   String description = (String) xyDataset.getSeriesKey(isel); 
 		   spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
-		   System.out.println(description+ " roi="+spotFound.getRoi().getName());
+//		   System.out.println(description+ " roi="+spotFound.getRoi().getName());
 		}
 		else 
 		{
@@ -223,6 +223,7 @@ public class ChartSpots extends IcyFrame
         Viewer v = exp.seqCamData.seq.getFirstViewer();
         if (v != null && spot != null) {
         	ROI2D roi = spot.getRoi();
+        	exp.seqCamData.seq.setSelectedROI(roi);
         }
 	}
 

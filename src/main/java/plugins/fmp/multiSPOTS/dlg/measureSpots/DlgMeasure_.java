@@ -36,8 +36,7 @@ public class DlgMeasure_ extends JPanel implements PropertyChangeListener, Chang
 	
 //			Adjust 		tabAdjust 		= new Adjust();
 
-	private int			id_infos		= 1;
-	private int 		id_create 		= 0;
+	private int			id_threshold		= 1;
 	private MultiSPOTS 	parent0 		= null;
 
 	
@@ -56,6 +55,7 @@ public class DlgMeasure_ extends JPanel implements PropertyChangeListener, Chang
 		simpleThreshold.init(gridLayout, parent0);
 		simpleThreshold.addPropertyChangeListener( this);
 		tabsPane.addTab("Simple threshold", null, simpleThreshold, "Measure area using a simple transform and threshold");
+		id_threshold = order;
 		order++;
 		
 //		colorsThreshold.init(gridLayout, parent0);	
@@ -94,12 +94,12 @@ public class DlgMeasure_ extends JPanel implements PropertyChangeListener, Chang
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (exp != null) {
 				displayCapillariesInformation(exp);
-			  	tabsPane.setSelectedIndex(id_infos);
+			  	tabsPane.setSelectedIndex(id_threshold);
 			  	parent0.dlgExperiment.tabIntervals.displayCamDataIntervals(exp);
 			}
 		}			  
 		else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
-			tabsPane.setSelectedIndex(id_infos);
+			tabsPane.setSelectedIndex(id_threshold);
 		}
 
 	}
@@ -132,7 +132,7 @@ public class DlgMeasure_ extends JPanel implements PropertyChangeListener, Chang
         int selectedIndex = tabbedPane.getSelectedIndex();
         Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null) {
-			boolean displayCapillaries = (selectedIndex == id_create);
+			boolean displayCapillaries = (selectedIndex == id_threshold);
 			if (displayCapillaries && exp.capillaries.capillariesList.size() < 1)
 				exp.loadCamDataCapillaries();
 			exp.seqCamData.displayROIs(displayCapillaries, "line");
