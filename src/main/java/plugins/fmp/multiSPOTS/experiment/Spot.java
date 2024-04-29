@@ -38,7 +38,7 @@ public class Spot implements Comparable <Spot>
 	public int							spotNFlies		= 1;
 	public int							spotIndex		= 0;
 	public double 						spotVolume 		= 1;
-	public int 							pixels 			= 5;
+	public int 							spotNPixels		= 1;
 	public int							radius			= 30;
 	public boolean						descriptionOK	= false;
 	public int							versionInfos	= 0;
@@ -108,7 +108,7 @@ public class Spot implements Comparable <Spot>
 		spotNFlies		= spotFrom.spotNFlies;
 		spotIndex		= spotFrom.spotIndex;
 		spotVolume 		= spotFrom.spotVolume;
-		pixels 			= spotFrom.pixels;
+		spotNPixels 			= spotFrom.spotNPixels;
 		radius 			= spotFrom.radius;
 		
 		limitsOptions	= spotFrom.limitsOptions;
@@ -333,7 +333,7 @@ public class Spot implements Comparable <Spot>
 	        spotNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
 	        spotIndex 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
 	        spotVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
-			pixels 			= XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
+			spotNPixels 			= XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
 			radius			= XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
 			spotStim 		= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
 			spotConc		= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
@@ -384,7 +384,7 @@ public class Spot implements Comparable <Spot>
         XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
         XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
 		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, spotVolume);
-		XMLUtil.setElementIntValue(nodeMeta, ID_PIXELS, pixels);
+		XMLUtil.setElementIntValue(nodeMeta, ID_PIXELS, spotNPixels);
 		XMLUtil.setElementIntValue(nodeMeta, ID_RADIUS, radius);
 		XMLUtil.setElementValue(nodeMeta, ID_STIML, spotStim);
 		XMLUtil.setElementValue(nodeMeta, ID_SIDE, spotCageSide);
@@ -540,7 +540,7 @@ public class Spot implements Comparable <Spot>
 				Integer.toString(cageIndex),
 				Integer.toString(spotNFlies),
 				Double.toString(spotVolume), 
-				Integer.toString(pixels), 
+				Integer.toString(spotNPixels), 
 				Integer.toString(radius),
 				spotStim.replace(",", "."), 
 				spotConc.replace(",", "."), 
@@ -606,7 +606,7 @@ public class Spot implements Comparable <Spot>
 		cageIndex 		= Integer.valueOf(data[i]); i++;
 		spotNFlies 		= Integer.valueOf(data[i]); i++;
 		spotVolume 		= Double.valueOf(data[i]); i++; 
-		pixels 			= Integer.valueOf(data[i]); i++; 
+		spotNPixels 			= Integer.valueOf(data[i]); i++; 
 		radius 			= Integer.valueOf(data[i]); i++;
 		spotStim 		= data[i]; i++; 
 		spotConc 		= data[i]; i++; 

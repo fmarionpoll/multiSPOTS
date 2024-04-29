@@ -43,7 +43,7 @@ public class SpotTable extends JPanel
 	private JButton				duplicateAllButton 	= new JButton("Duplicate cell to all");
 	private JButton				getNfliesButton 	= new JButton("Get n flies from cage");
 	private JButton				setCageNoButton		= new JButton("Set cage n#");
-	private JButton				noFliesButton 		= new JButton("Cages0/0: no flies");
+	private JButton				nPixelsButton 		= new JButton("Get n pixels");
 	private MultiSPOTS 			parent0 			= null; 
 	private List <Spot> 		spotsArrayCopy 		= null;
 	
@@ -81,7 +81,7 @@ public class SpotTable extends JPanel
         JPanel panel2 = new JPanel (flowLayout);
         panel2.add(setCageNoButton);
         panel2.add(getNfliesButton);
-        panel2.add(noFliesButton);
+        panel2.add(nPixelsButton);
         panel2.add(duplicateCageButton);
         topPanel.add(panel2);
         
@@ -124,14 +124,14 @@ public class SpotTable extends JPanel
 				spotTableModel.fireTableDataChanged();
 			}});
 		
-		noFliesButton.addActionListener(new ActionListener () 
+		nPixelsButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 				{
-					setFliesNumbers(exp);
+					setSpotsNPixels(exp);
 					spotTableModel.fireTableDataChanged();
 				}
 			}});
@@ -274,16 +274,16 @@ public class SpotTable extends JPanel
 		}
 	}
 	
-	private void setFliesNumbers(Experiment exp)
+	private void setSpotsNPixels(Experiment exp)
 	{
-		int nspots =  exp.spotsArray.spotsList.size();
-		for (int i = 0; i < nspots; i++) 
+		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			Spot spot = exp.spotsArray.spotsList.get(i);
-			if (i< 2 || i >= nspots-2)
-				spot.spotNFlies = 0;
-			else 
-				spot.spotNFlies = 1;
+			try {
+				spot.spotNPixels = (int) spot.getRoi().getNumberOfPoints();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
