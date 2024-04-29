@@ -28,7 +28,7 @@ import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
 
 
 
-public class MCExperiment_ extends JPanel implements ViewerListener, ChangeListener
+public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeListener
 {
 	/**
 	 * 
@@ -160,7 +160,7 @@ public class MCExperiment_ extends JPanel implements ViewerListener, ChangeListe
 					{
 						int t = v.getPositionT(); 
 						v.setTitle(exp.seqCamData.getDecoratedImageName(t));
-						if (parent0.paneCages.bTrapROIsEdit) 
+						if (parent0.dlgCages.bTrapROIsEdit) 
 							exp.saveDetRoisToPositions();
 						exp.updateROIsAt(t);
 					}

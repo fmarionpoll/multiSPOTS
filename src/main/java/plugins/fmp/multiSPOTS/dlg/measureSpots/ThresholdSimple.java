@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.dlg.spots;
+package plugins.fmp.multiSPOTS.dlg.measureSpots;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -310,7 +310,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (exp != null) {
 				exp.loadSpotsMeasures();
-				parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
+				parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
 			}
 		 }
 	}

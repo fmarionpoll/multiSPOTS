@@ -123,7 +123,7 @@ public class Filter  extends JPanel
 	
 	public void initFilterCombos() 
 	{
-		if (!parent0.paneExperiment.panelLoadSave.filteredCheck.isSelected())
+		if (!parent0.dlgExperiment.panelLoadSave.filteredCheck.isSelected())
 			filterExpList.setExperimentsFromList(parent0.expListCombo.getExperimentsAsList());
 		filterExpList.getFieldValuesToCombo(exptCombo, EnumXLSColumnHeader.EXP_EXPT); 
 		filterExpList.getFieldValuesToCombo(cmt1Combo, EnumXLSColumnHeader.EXP_STIM);
@@ -142,7 +142,7 @@ public class Filter  extends JPanel
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				filterExperimentList(true);
-				parent0.paneExperiment.tabsPane.setSelectedIndex(0);
+				parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
 			}});
 		
 		clearButton.addActionListener(new ActionListener () 
@@ -167,8 +167,8 @@ public class Filter  extends JPanel
 		
 		if (parent0.expListCombo.getItemCount() > 0)
 			parent0.expListCombo.setSelectedIndex(0);
-		if (setFilter != parent0.paneExperiment.panelLoadSave.filteredCheck.isSelected())
-			parent0.paneExperiment.panelLoadSave.filteredCheck.setSelected(setFilter);
+		if (setFilter != parent0.dlgExperiment.panelLoadSave.filteredCheck.isSelected())
+			parent0.dlgExperiment.panelLoadSave.filteredCheck.setSelected(setFilter);
 	}
 	
 	void clearAllCheckBoxes () 

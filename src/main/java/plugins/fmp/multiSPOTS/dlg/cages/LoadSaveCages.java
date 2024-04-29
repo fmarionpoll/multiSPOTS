@@ -58,7 +58,7 @@ public class LoadSaveCages extends JPanel
 				{
 					loadCages(exp);
 					firePropertyChange("LOAD_DATA", false, true);
-					parent0.paneCages.tabsPane.setSelectedIndex(3);
+					parent0.dlgCages.tabsPane.setSelectedIndex(3);
 				}
 			}});
 		
@@ -70,7 +70,7 @@ public class LoadSaveCages extends JPanel
 				if (exp != null)
 				{
 					saveCagesAndMeasures(exp);
-					parent0.paneCages.tabsPane.setSelectedIndex(3);
+					parent0.dlgCages.tabsPane.setSelectedIndex(3);
 				}
 			}});
 	}

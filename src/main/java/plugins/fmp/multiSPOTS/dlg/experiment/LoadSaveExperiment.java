@@ -97,7 +97,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	{
 		if (evt.getPropertyName().equals("SELECT1_CLOSED")) 
 		{
-			parent0.paneExperiment.tabInfos.disableChangeFile = true;
+			parent0.dlgExperiment.tabInfos.disableChangeFile = true;
 			if (selectedNames.size() < 1)
 				return;
 			
@@ -109,7 +109,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	        	
 	        	SwingUtilities.invokeLater(new Runnable() { public void run() 
 				{	
-	        		parent0.paneExperiment.tabInfos.disableChangeFile = false;
+	        		parent0.dlgExperiment.tabInfos.disableChangeFile = false;
 		        	for (int i = 1; i < selectedNames.size(); i++) 
 					{
 						ExperimentDirectories eDAF = new ExperimentDirectories(); 
@@ -118,12 +118,12 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 					}
 					selectedNames.clear();
 					updateBrowseInterface();
-					parent0.paneExperiment.tabInfos.disableChangeFile = true;
-					parent0.paneExperiment.tabInfos.initInfosCombos(); 
+					parent0.dlgExperiment.tabInfos.disableChangeFile = true;
+					parent0.dlgExperiment.tabInfos.initInfosCombos(); 
 			     	parent0.expListCombo.setSelectedIndex(item);
 			     	Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 					if (exp != null)
-						parent0.paneExperiment.tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
+						parent0.dlgExperiment.tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
 				}});
 			}
 		}
@@ -149,9 +149,9 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	{
 		closeCurrentExperiment();
 		parent0.expListCombo.removeAllItems();
-		parent0.paneExperiment.tabFilter.clearAllCheckBoxes ();
-		parent0.paneExperiment.tabFilter.filterExpList.removeAllItems();
-		parent0.paneExperiment.tabInfos.clearCombos();
+		parent0.dlgExperiment.tabFilter.clearAllCheckBoxes ();
+		parent0.dlgExperiment.tabFilter.filterExpList.removeAllItems();
+		parent0.dlgExperiment.tabInfos.clearCombos();
 		filteredCheck.setSelected(false);
 	}
 	
@@ -195,28 +195,28 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		progressFrame.setMessage("Load image");
 		
 		exp.loadCamDataImages();
-		parent0.paneExperiment.updateViewerForSequenceCam(exp);
+		parent0.dlgExperiment.updateViewerForSequenceCam(exp);
 		
 		exp.seqCamData.seq.addListener(this);
 		if (exp.seqCamData != null) 
 		{
 			exp.load_Spots();
 			exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
-			if (parent0.paneExperiment.tabOptions.graphsCheckBox.isSelected())
-				parent0.paneSpots.tabGraphs.displayGraphsPanels(exp);
+			if (parent0.dlgExperiment.tabOptions.graphsCheckBox.isSelected())
+				parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
 			
 			exp.loadCagesMeasures();
 			progressFrame.setMessage("Load data: update dialogs");
 			
-			parent0.paneExperiment.updateDialogs(exp);
-			parent0.paneSpots.updateDialogs(exp);
+			parent0.dlgExperiment.updateDialogs(exp);
+			parent0.dlgSpots.updateDialogs(exp);
 		}
 		else 
 		{
 			flag = false;
 			System.out.println("LoadSaveExperiments:openSelectedExperiment() Error: no jpg files found for this experiment\n");
 		}
-		parent0.paneExperiment.tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
+		parent0.dlgExperiment.tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
 		progressFrame.close();
 		
 		return flag;
@@ -271,7 +271,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
             	if (eDAF.getDirectoriesFromDialog(parent0.expListCombo, null, true)) 
             	{
 	            	int item = addExperimentFrom3NamesAnd2Lists(eDAF);
-	            	parent0.paneExperiment.tabInfos.initInfosCombos();
+	            	parent0.dlgExperiment.tabInfos.initInfosCombos();
 	            	parent0.expListCombo.setSelectedIndex(item);
             	}
             }});
@@ -285,7 +285,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
             	if (eDAF.getDirectoriesFromDialog(parent0.expListCombo, null, false)) 
             	{
             		int item = addExperimentFrom3NamesAnd2Lists(eDAF);
-            		parent0.paneExperiment.tabInfos.initInfosCombos();
+            		parent0.dlgExperiment.tabInfos.initInfosCombos();
             		parent0.expListCombo.setSelectedIndex(item);
             	}
             }});
@@ -295,7 +295,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				closeAllExperiments();
-				parent0.paneExperiment.tabsPane.setSelectedIndex(0);
+				parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
 				parent0.expListCombo.removeAllItems();
 				parent0.expListCombo.updateUI();
 			}});
@@ -305,7 +305,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
             @Override
             public void actionPerformed(ActionEvent arg0) 
             {
-            	parent0.paneExperiment.tabFilter.filterExperimentList(filteredCheck.isSelected());
+            	parent0.dlgExperiment.tabFilter.filterExperimentList(filteredCheck.isSelected());
             }});
 	}
 	

@@ -244,10 +244,10 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 		options.transformop		= (ImageTransformEnums) backgroundComboBox.getSelectedItem();
 		options.threshold		= (int) thresholdSpinner.getValue();
 		
-		options.isFrameFixed 	= parent0.paneExcel.tabCommonOptions.getIsFixedFrame();
-		options.t_Ms_First 		= parent0.paneExcel.tabCommonOptions.getStartMs();
-		options.t_Ms_Last 		= parent0.paneExcel.tabCommonOptions.getEndMs();
-		options.t_Ms_BinDuration	= parent0.paneExcel.tabCommonOptions.getBinMs();
+		options.isFrameFixed 	= parent0.dlgExcel.tabCommonOptions.getIsFixedFrame();
+		options.t_Ms_First 		= parent0.dlgExcel.tabCommonOptions.getStartMs();
+		options.t_Ms_Last 		= parent0.dlgExcel.tabCommonOptions.getEndMs();
+		options.t_Ms_BinDuration	= parent0.dlgExcel.tabCommonOptions.getBinMs();
 
 		options.parent0Rect 	= parent0.mainFrame.getBoundsInternal();
 //		options.binSubDirectory	= parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
@@ -262,7 +262,7 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null) 
 			return;
-		parent0.paneExperiment.panelLoadSave.closeViewsForCurrentExperiment(exp);
+		parent0.dlgExperiment.panelLoadSave.closeViewsForCurrentExperiment(exp);
 		
 		flyDetect1 = new FlyDetect1();			
 		flyDetect1.options 			= initTrackParameters();

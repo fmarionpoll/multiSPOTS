@@ -22,7 +22,7 @@ import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportSpotAreasResults;
 
 
-public class MCExcel_  extends JPanel implements PropertyChangeListener 
+public class DlgExcel_  extends JPanel implements PropertyChangeListener 
 {
 	/**
 	 * 
@@ -122,7 +122,7 @@ public class MCExcel_  extends JPanel implements PropertyChangeListener
 	
 	private void updateParametersCurrentExperiment(Experiment exp) 
 	{
-		parent0.paneExperiment.tabInfos.getExperimentInfosFromDialog(exp);
+		parent0.dlgExperiment.tabInfos.getExperimentInfosFromDialog(exp);
 	}
 	
 	private XLSExportOptions getMoveOptions() 

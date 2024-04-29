@@ -61,7 +61,7 @@ public class SelectFiles1 extends JPanel
 	public void initialize (MultiSPOTS parent0) 
 	{
 		this.parent0 = parent0;
-		this.parent1 = parent0.paneExperiment.panelLoadSave;
+		this.parent1 = parent0.dlgExperiment.panelLoadSave;
 		addPropertyChangeListener(parent1);
 		
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();

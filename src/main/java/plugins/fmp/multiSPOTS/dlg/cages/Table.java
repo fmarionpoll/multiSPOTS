@@ -159,7 +159,7 @@ public class Table extends JPanel
 		if (exp != null)
 		{
 			exp.cages.transferNFliesFromCagesToCapillaries(exp.capillaries.capillariesList);
-			parent0.paneSpots.tabFile.saveCapillaries_file(exp);
+			parent0.dlgSpots.tabFile.saveCapillaries_file(exp);
 		}
 	}
 	

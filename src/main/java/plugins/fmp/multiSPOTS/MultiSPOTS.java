@@ -12,10 +12,11 @@ import icy.plugin.PluginLoader;
 import icy.plugin.abstract_.PluginActionable;
 import icy.preferences.GeneralPreferences;
 import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
-import plugins.fmp.multiSPOTS.dlg.cages.MCCages_;
-import plugins.fmp.multiSPOTS.dlg.excel.MCExcel_;
-import plugins.fmp.multiSPOTS.dlg.experiment.MCExperiment_;
-import plugins.fmp.multiSPOTS.dlg.spots.MCSpots_;
+import plugins.fmp.multiSPOTS.dlg.cages.DlgCages_;
+import plugins.fmp.multiSPOTS.dlg.excel.DlgExcel_;
+import plugins.fmp.multiSPOTS.dlg.experiment.DlgExperiment_;
+import plugins.fmp.multiSPOTS.dlg.measureSpots.DlgMeasure_;
+import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
 
 
 
@@ -24,10 +25,11 @@ public class MultiSPOTS extends PluginActionable
 	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS April 28, 2024", true, true, true, true);
 	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
 	
-	public MCExperiment_ 	paneExperiment 	= new MCExperiment_();
-	public MCSpots_ 		paneSpots		= new MCSpots_();
-	public MCCages_ 		paneCages 		= new MCCages_();
-	public MCExcel_			paneExcel		= new MCExcel_();
+	public DlgExperiment_ 	dlgExperiment 	= new DlgExperiment_();
+	public DlgSpots_ 		dlgSpots		= new DlgSpots_();
+	public DlgMeasure_ 		dlgMeasure 		= new DlgMeasure_();
+	public DlgCages_ 		dlgCages 		= new DlgCages_();
+	public DlgExcel_		dlgExcel		= new DlgExcel_();
 	
 	public JTabbedPane 		tabsPane 		= new JTabbedPane();
 	
@@ -37,10 +39,11 @@ public class MultiSPOTS extends PluginActionable
 	public void run() 
 	{		
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
-		paneExperiment.init(mainPanel, "Experiments", this);
-		paneSpots.init(mainPanel, "Spots", this);
-		paneCages.init(mainPanel, "Cages", this);
-		paneExcel.init(mainPanel, "Export", this);
+		dlgExperiment.init(mainPanel, "Experiments", this);
+		dlgSpots.init(mainPanel, "Spots", this);
+		dlgMeasure.init(mainPanel, "Measure", this);
+		dlgCages.init(mainPanel, "Cages", this);
+		dlgExcel.init(mainPanel, "Export", this);
 		
 		mainFrame.setLayout(new BorderLayout());
 		mainFrame.add(mainPanel, BorderLayout.WEST);
@@ -49,7 +52,7 @@ public class MultiSPOTS extends PluginActionable
 		mainFrame.setVisible(true);
 		mainFrame.addToDesktopPane();
 		
-		paneExperiment.capPopupPanel.expand();
+		dlgExperiment.capPopupPanel.expand();
 	}	 
 	
 	public static void main (String[] args)

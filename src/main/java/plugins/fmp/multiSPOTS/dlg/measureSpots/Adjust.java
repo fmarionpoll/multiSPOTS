@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.dlg.spots;
+package plugins.fmp.multiSPOTS.dlg.measureSpots;
 
 import java.awt.Color;
 import java.awt.GridLayout;

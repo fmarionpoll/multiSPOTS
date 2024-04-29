@@ -15,12 +15,13 @@ import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
+import plugins.fmp.multiSPOTS.dlg.measureSpots.ThresholdColors;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 
 
 
-public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeListener 
+public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeListener 
 {
 	/**
 	 * 
@@ -29,12 +30,12 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 	public	PopupPanel 		capPopupPanel	= null;
 			JTabbedPane 	tabsPane 		= new JTabbedPane();		
 			CreateSpots		tabCreateSpots 	= new CreateSpots();
-			ThresholdSimple simpleThreshold = new ThresholdSimple();
+
 			ThresholdColors colorsThreshold = new ThresholdColors();
 
 			Infos			tabInfos		= new Infos();
 			Edit			tabEdit			= new Edit();
-	public	Graphs 			tabGraphs 		= new Graphs();
+
 	public 	LoadSaveSpots 	tabFile  		= new LoadSaveSpots();
 	
 //			Adjust 		tabAdjust 		= new Adjust();
@@ -74,21 +75,6 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		id_infos = order;
 		order++;
 		
-		simpleThreshold.init(gridLayout, parent0);
-		simpleThreshold.addPropertyChangeListener( this);
-		tabsPane.addTab("Simple threshold", null, simpleThreshold, "Measure area using a simple transform and threshold");
-		order++;
-		
-//		colorsThreshold.init(gridLayout, parent0);	
-//		colorsThreshold.addPropertyChangeListener( this);
-//		tabsPane.addTab("Colors threshold", null, colorsThreshold, "Measure area using colors defined by user");
-//		order++;
-		
-		tabGraphs.init(gridLayout, parent0);
-		tabGraphs.addPropertyChangeListener(this);
-		tabsPane.addTab("Graphs", null, tabGraphs, "Display results as a graph");
-		order++;
-		
 		tabFile.init(gridLayout, parent0);
 		tabFile.addPropertyChangeListener(this);
 		tabsPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with spots descriptors");
@@ -116,7 +102,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 			if (exp != null) {
 				displayCapillariesInformation(exp);
 			  	tabsPane.setSelectedIndex(id_infos);
-			  	parent0.paneExperiment.tabIntervals.displayCamDataIntervals(exp);
+			  	parent0.dlgExperiment.tabIntervals.displayCamDataIntervals(exp);
 			}
 		}			  
 		else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
@@ -130,7 +116,7 @@ public class MCSpots_ extends JPanel implements PropertyChangeListener, ChangeLi
 		SwingUtilities.invokeLater(new Runnable() { 
 			public void run() {
 				updateDialogs( exp);
-				parent0.paneExperiment.tabOptions.viewSpotsCheckBox.setSelected(true);
+				parent0.dlgExperiment.tabOptions.viewSpotsCheckBox.setSelected(true);
 			}});
 	}
 	
