@@ -12,7 +12,7 @@ public class SpotTableModel extends AbstractTableModel
 	 */
 	private static final long serialVersionUID = 6325792669154093747L;
 	private ExperimentCombo expList 	= null;
-	String columnNames[] = { "Name", "Cage", "N flies", "N pixels", "Stimulus", "Concentration"};
+	String columnNames[] = { "Name", "Cage", "N flies", "N pixels", "Volume", "Stimulus", "Concentration"};
 	
 	
 	public SpotTableModel (ExperimentCombo expList) {
@@ -31,9 +31,10 @@ public class SpotTableModel extends AbstractTableModel
     	case 0: return String.class;
     	case 1: return Integer.class;
     	case 2: return Integer.class;
-    	case 3:	return Double.class;
-    	case 4: return String.class;
+    	case 3: return Integer.class;
+    	case 4:	return Double.class;
     	case 5: return String.class;
+    	case 6: return String.class;
         }
     	return String.class;
     }
@@ -61,8 +62,9 @@ public class SpotTableModel extends AbstractTableModel
             case 1: return spot.cageIndex;
             case 2: return spot.spotNFlies;
             case 3: return spot.spotNPixels;
-            case 4: return spot.spotStim;
-            case 5: return spot.spotConc;
+            case 4: return spot.spotVolume;
+            case 5: return spot.spotStim;
+            case 6: return spot.spotConc;
         	}
     	}
     	return null;
@@ -85,10 +87,11 @@ public class SpotTableModel extends AbstractTableModel
         	switch (columnIndex) {
             case 0: spot.setRoiName(aValue.toString()); break;
             case 1: spot.cageIndex = (int) aValue; break;
-            case 2: spot.spotNPixels = (int) aValue; break;
-            case 3: spot.spotVolume = (double) aValue; break;
-            case 4: spot.spotStim = aValue.toString(); break;
-            case 5: spot.spotConc = aValue.toString(); break;
+            case 2: spot.spotNFlies = (int) aValue; break;
+            case 3: spot.spotNPixels = (int) aValue; break;
+            case 4: spot.spotVolume = (double) aValue; break;
+            case 5: spot.spotStim = aValue.toString(); break;
+            case 6: spot.spotConc = aValue.toString(); break;
         	}
     	}
     }

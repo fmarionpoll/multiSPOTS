@@ -53,7 +53,6 @@ public class Edit extends JPanel
 	
 	private JButton 			outlineSpotsButton 		= new JButton("Detect spots contours");
 	private JButton 			useContoursButton 		= new JButton("Replace ellipses with contours");
-//	private JButton 			restoreSpotsButton 		= new JButton("Restore");
 	private JButton 			cutAndInterpolateButton = new JButton("Cut");
 	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
@@ -85,7 +84,6 @@ public class Edit extends JPanel
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(outlineSpotsButton);
 		panel0.add(useContoursButton);
-//		panel0.add(restoreSpotsButton);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -184,26 +182,19 @@ public class Edit extends JPanel
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					transferContoursToSpotsRois(exp) ;
+					parent0.dlgSpots.tabFile.saveSpotsArray_file(exp);
 					}
 			}});
-		
-//		restoreSpotsButton.addActionListener(new ActionListener () 
-//		{ 
-//			@Override public void actionPerformed( final ActionEvent e ) 
-//			{ 
-//				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-//				if (exp != null) {
-//					restoreOldSpotsRois(exp) ;
-//					}
-//			}});
 		
 		cutAndInterpolateButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null)
+				if (exp != null) {
 					cutAndInterpolate(exp);
+					parent0.dlgSpots.tabFile.saveSpotsArray_file(exp);
+				}
 			}});
 	}
 
@@ -355,21 +346,13 @@ public class Edit extends JPanel
 		roi_new.setName(roi_old.getName());
 		roi_new.setColor(roi_old.getColor());
 		spot.setRoi((ROI2DShape) roi_new);
+		try {
+			spot.spotNPixels = (int) roi_new.getNumberOfPoints();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		exp.seqCamData.seq.addROI(roi_new);
 	}
-	
-	
-//	private void restoreOldSpotsRois(Experiment exp) 
-//	{
-//		for (Spot spot: exp.spotsArray.spotsList)
-//		{
-//			ROI2D roi_old = spot.getRoi();
-//			ROI2D roi = spot.getRoi_old();
-//			spot.setRoi((ROI2DShape) roi);
-//			exp.seqCamData.seq.removeROI(roi_old);
-//			exp.seqCamData.seq.addROI(roi);
-//		}
-//	}
 	
 	void cutAndInterpolate(Experiment exp) 
 	{

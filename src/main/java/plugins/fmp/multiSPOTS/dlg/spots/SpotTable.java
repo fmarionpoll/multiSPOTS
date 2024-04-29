@@ -31,7 +31,7 @@ public class SpotTable extends JPanel
 	 */
 	private static final long serialVersionUID 		= -8611587540329642259L;
 	IcyFrame 					dialogFrame 		= null;
-    private JTable 				tableView 			= new JTable();
+    private JTable 				jTable 			= new JTable();
 	private SpotTableModel 		spotTableModel 		= null;
 	private JButton				copyButton 			= new JButton("Copy table");
 	private JButton				pasteButton 		= new JButton("Paste");
@@ -55,18 +55,25 @@ public class SpotTable extends JPanel
 		spotsArrayCopy = spotCopy;
 		
 		spotTableModel = new SpotTableModel(parent0.expListCombo);
-	    tableView.setModel(spotTableModel);
-	    tableView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	    tableView.setPreferredScrollableViewportSize(new Dimension(500, 400));
-	    tableView.setFillsViewportHeight(true);
-	    TableColumnModel columnModel = tableView.getColumnModel();
+	    jTable.setModel(spotTableModel);
+	    jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    jTable.setPreferredScrollableViewportSize(new Dimension(500, 400));
+	    jTable.setFillsViewportHeight(true);	    
+	    TableColumnModel columnModel = jTable.getColumnModel();
+	    
 	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 	    centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 	    for (int i = 0 ; i < spotTableModel.getColumnCount(); i++) {
 	    	TableColumn col = columnModel.getColumn(i);
 	    	col.setCellRenderer( centerRenderer );
 	    	}
-        JScrollPane scrollPane = new JScrollPane(tableView);
+	    columnModel.getColumn(0).setPreferredWidth(25);
+	    columnModel.getColumn(1).setPreferredWidth(15);
+	    columnModel.getColumn(2).setPreferredWidth(15);
+	    columnModel.getColumn(3).setPreferredWidth(25);
+	    columnModel.getColumn(4).setPreferredWidth(15);
+	    
+        JScrollPane scrollPane = new JScrollPane(jTable);
         
 		JPanel topPanel = new JPanel(new GridLayout(2, 1));
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT); 
@@ -207,7 +214,7 @@ public class SpotTable extends JPanel
 	
 	private void exchangeLR(Experiment exp) 
 	{
-		int columnIndex = tableView.getSelectedColumn();
+		int columnIndex = jTable.getSelectedColumn();
 		if (columnIndex < 0) 
 			columnIndex = 5;
 		String side0 =  exp.spotsArray.spotsList.get(0).getSpotSide();
@@ -229,6 +236,7 @@ public class SpotTable extends JPanel
 	{
 		spotTo.spotNFlies = spotFrom.spotNFlies; 
 		spotTo.spotVolume = spotFrom.spotVolume;
+		spotTo.spotNPixels = spotFrom.spotNPixels;
 		spotTo.spotStim = spotFrom.spotStim;
 		spotTo.spotConc = spotFrom.spotConc;
 		spotTo.spotCageSide = spotFrom.spotCageSide;
@@ -239,7 +247,7 @@ public class SpotTable extends JPanel
 		switch (columnIndex) 
     	{
         case 2: spotTo.spotNFlies = spotFrom.spotNFlies; break;
-        case 3: spotTo.spotVolume = spotFrom.spotVolume; break;
+        case 3: spotTo.spotNPixels = spotFrom.spotNPixels; break;
         case 4: spotTo.spotStim = spotFrom.spotStim; break;
         case 5: spotTo.spotConc = spotFrom.spotConc; break;
         default: break;
@@ -267,7 +275,7 @@ public class SpotTable extends JPanel
 				spotFrom.valid = true;
 				spotTo.cageIndex = spotFrom.cageIndex;
 				spotTo.spotNFlies = spotFrom.spotNFlies;
-				spotTo.spotVolume = spotFrom.spotVolume;
+				// do not copy spotNPixels
 				spotTo.spotStim = spotFrom.spotStim;
 				spotTo.spotConc = spotFrom.spotConc;
 			}
@@ -290,8 +298,8 @@ public class SpotTable extends JPanel
 	
 	private void duplicateLR(Experiment exp)
 	{
-		int rowIndex = tableView.getSelectedRow();
-		int columnIndex = tableView.getSelectedColumn();
+		int rowIndex = jTable.getSelectedRow();
+		int columnIndex = jTable.getSelectedColumn();
 		if (rowIndex < 0)
 			return;
 		
@@ -328,9 +336,10 @@ public class SpotTable extends JPanel
         	switch (columnIndex) 
         	{
             case 2: spot.spotNFlies = spot0.spotNFlies; break;
-            case 3: spot.spotVolume = spot0.spotVolume; break;
-            case 4: spot.spotStim = spot0.spotStim; break;
-            case 5: spot.spotConc = spot0.spotConc; break;
+            case 3: spot.spotNPixels = spot0.spotNPixels; break;
+            case 4: spot.spotVolume = spot0.spotVolume; break;
+            case 5: spot.spotStim = spot0.spotStim; break;
+            case 6: spot.spotConc = spot0.spotConc; break;
             default: break;
         	}					
 		}
@@ -338,8 +347,8 @@ public class SpotTable extends JPanel
 	
 	private void duplicateAll(Experiment exp)
 	{
-		int rowIndex = tableView.getSelectedRow();
-		int columnIndex = tableView.getSelectedColumn();
+		int rowIndex = jTable.getSelectedRow();
+		int columnIndex = jTable.getSelectedColumn();
 		if (rowIndex < 0) 
 			return;
 		
@@ -351,9 +360,10 @@ public class SpotTable extends JPanel
 			switch (columnIndex) 
 			{
             case 2: spot.spotNFlies = spotFrom.spotNFlies; break;
-            case 3: spot.spotVolume = spotFrom.spotVolume; break;
-            case 4: spot.spotStim = spotFrom.spotStim; break;
-            case 5: spot.spotConc = spotFrom.spotConc; break;
+            case 3: spot.spotNPixels = spotFrom.spotNPixels; break;
+            case 4: spot.spotVolume = spotFrom.spotVolume; break;
+            case 5: spot.spotStim = spotFrom.spotStim; break;
+            case 6: spot.spotConc = spotFrom.spotConc; break;
             default: break;
         	}					
 		}	
@@ -361,8 +371,8 @@ public class SpotTable extends JPanel
 	
 	private void duplicateCage(Experiment exp)
 	{
-		int rowIndex = tableView.getSelectedRow();
-		int columnIndex = tableView.getSelectedColumn();
+		int rowIndex = jTable.getSelectedRow();
+		int columnIndex = jTable.getSelectedColumn();
 		if (rowIndex < 0)
 			return;
 		
@@ -395,9 +405,10 @@ public class SpotTable extends JPanel
         	switch (columnIndex) 
         	{
             case 2: spot.spotNFlies = spot0.spotNFlies; break;
-            case 3: spot.spotVolume = spot0.spotVolume; break;
-            case 4: spot.spotStim = spot0.spotStim; break;
-            case 5: spot.spotConc = spot0.spotConc; break;
+            case 3: spot.spotNPixels = spot0.spotNPixels; break;
+            case 4: spot.spotVolume = spot0.spotVolume; break;
+            case 5: spot.spotStim = spot0.spotStim; break;
+            case 6: spot.spotConc = spot0.spotConc; break;
             default: break;
         	}					
 		}

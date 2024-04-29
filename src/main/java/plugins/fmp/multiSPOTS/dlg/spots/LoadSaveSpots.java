@@ -85,7 +85,6 @@ public class LoadSaveSpots extends JPanel
 	
 	public boolean saveCapillaries_file(Experiment exp) 
 	{
-//		parent0.paneSpots.getDialogCapillariesInfos(exp);  // get data into desc
 		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
 		exp.capillaries.transferDescriptionToCapillaries();
 	
@@ -104,7 +103,6 @@ public class LoadSaveSpots extends JPanel
 	
 	public boolean saveSpotsArray_file(Experiment exp) 
 	{
-//		parent0.paneSpots.getDialogCapillariesInfos(exp);  // get data into desc
 		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
 		exp.spotsArray.transferDescriptionToSpots();
 	

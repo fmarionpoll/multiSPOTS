@@ -221,7 +221,6 @@ public class ChartSpots extends IcyFrame
         Viewer v = exp.seqCamData.seq.getFirstViewer();
         if (v != null && spot != null) {
         	ROI2D roi = spot.getRoi();
-//        	exp.seqCamData.seq.setSelectedROI(roi);
         	exp.seqCamData.seq.setFocusedROI(roi);
         }
 	}
