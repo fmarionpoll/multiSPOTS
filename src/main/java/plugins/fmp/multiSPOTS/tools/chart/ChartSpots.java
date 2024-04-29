@@ -198,21 +198,19 @@ public class ChartSpots extends IcyFrame
         List<XYPlot> subplots = combinedXYPlot.getSubplots();
 		
 		// get item in the chart
-		int isel= 0;
 		Spot spotFound = null;
 		if (chartEntity != null && chartEntity instanceof XYItemEntity) {
 		   XYItemEntity xyItemEntity = ((XYItemEntity) e.getEntity());
-		   isel = xyItemEntity.getSeriesIndex();
+		   int isel = xyItemEntity.getSeriesIndex();
 		   XYDataset xyDataset = xyItemEntity.getDataset();
 		   String description = (String) xyDataset.getSeriesKey(isel); 
 		   spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
-//		   System.out.println(description+ " roi="+spotFound.getRoi().getName());
 		}
 		else 
 		{
-			for (int i= 0; i < subplotindex ; i++)
-				isel += subplots.get(i).getSeriesCount();
-			System.out.println("clicked chart area nb="+ subplotindex + " series="+isel);
+			XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
+			String description = (String) xyDataset.getSeriesKey(0); 
+			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 		}
 		return spotFound;
 	}
@@ -223,7 +221,8 @@ public class ChartSpots extends IcyFrame
         Viewer v = exp.seqCamData.seq.getFirstViewer();
         if (v != null && spot != null) {
         	ROI2D roi = spot.getRoi();
-        	exp.seqCamData.seq.setSelectedROI(roi);
+//        	exp.seqCamData.seq.setSelectedROI(roi);
+        	exp.seqCamData.seq.setFocusedROI(roi);
         }
 	}
 
