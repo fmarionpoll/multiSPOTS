@@ -105,8 +105,11 @@ public class ChartSpots extends IcyFrame
 
         final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
         Paint[] color = ChartColor.createDefaultPaintArray();
+        
+        int firstSeries = 0;
+        int lastSeries = xyDataSetList.size();
 
-        for (int iseries = 0; iseries < xyDataSetList.size(); iseries++) {
+        for (int iseries = firstSeries; iseries < lastSeries; iseries++) {
     		XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);
     		if (xyDataSetList2 != null) {
     			XYSeriesCollection xySeriesCollection2 = xyDataSetList2.get(iseries);
