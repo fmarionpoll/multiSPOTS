@@ -13,6 +13,7 @@ import icy.file.Saver;
 import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
+import icy.image.IcyBufferedImageCursor;
 import icy.image.IcyBufferedImageUtil;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
@@ -142,10 +143,12 @@ public class BuildKymosSpots extends BuildSeries
 		threadRunning = true;
 		stopFlag = false;
 		
-		final int nKymographColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		int iToColumn = 0; 
+//		final int nKymographColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
+		
+		int iToColumn = 0;
+		int nFrames = exp.seqCamData.nTotalFrames;
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
-		String vDataTitle = new String(" / " + nKymographColumns);
+		String vDataTitle = new String(" / " + nFrames);
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
@@ -156,8 +159,7 @@ public class BuildKymosSpots extends BuildSeries
 		
 	    tasks.clear();
 	    int binT0 = (int) exp.binT0;
-	    int nFrames = exp.seqCamData.nTotalFrames;
-		for (int ii = binT0; ii < nFrames; ii++)  
+	    for (int ii = binT0; ii < nFrames; ii++)  
 		{
 			final int fromSourceImageIndex = ii;
 			final int t =  iToColumn;	
@@ -170,7 +172,7 @@ public class BuildKymosSpots extends BuildSeries
 						analyzeImageWithSpot(sourceImage, spoti, fromSourceImageIndex, t);
 				}}));
 			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
-			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nKymographColumns);	
+			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nFrames);	
 		}
 
 		waitFuturesCompletion(processor, tasks, null);
@@ -203,18 +205,22 @@ public class BuildKymosSpots extends BuildSeries
 	            if (mask[offset])  
 	            {
 	            	tabValues[index] = workData[offset];
-	                 index++;
+	                index++;
 	            }
 	        }
-			Object destArray = spot.spot_Image.getDataXY(chan);
-			Array1DUtil.intArrayToSafeArray(
-					tabValues, // int
-					0, // inOffset
-					destArray, // out
-					0, // outOffset
-					-1, // length
-					isSigned, isSigned);
-			spot.spot_Image.setDataXY(chan, destArray);
+			
+			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
+			int height = spot.spot_Image.getHeight();
+			try {
+				for (int y = 0; y < height; y++) {
+//					for (int x = 0; x < w; x++) {
+					cursor.set(t, y, 0, tabValues[y]);
+//					}
+				}
+			}
+			finally {
+				cursor.commitChanges();
+			}
 		}
 		
 	}
