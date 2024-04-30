@@ -21,12 +21,11 @@ import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
 import loci.formats.FormatException;
 
-import plugins.fmp.multiSPOTS.experiment.Capillary;
+import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ROI2DAlongTime;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
-import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.Bresenham;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
@@ -63,7 +62,7 @@ public class BuildKymosSpots extends BuildSeries
 	
 	private boolean loadExperimentDataToBuildKymos(Experiment exp) 
 	{
-		boolean flag = exp.loadMCCapillaries_Only();
+		boolean flag = exp.loadMCspotsArray_Only();
 		exp.seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 		return flag;
 	}
@@ -108,7 +107,7 @@ public class BuildKymosSpots extends BuildSeries
 				@Override
 				public void run() {	
 					Spot spot = exp.spotsArray.spotsList.get(t_index);
-					String filename = directory + File.separator + spot.getKymographName() + ".tiff";
+					String filename = directory + File.separator + spot.getRoiName() + ".tiff";
 					File file = new File (filename);
 					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
 					try {
@@ -129,8 +128,8 @@ public class BuildKymosSpots extends BuildSeries
 	
 	private boolean buildKymo (Experiment exp) 
 	{
-		if (exp.capillaries.capillariesList.size() < 1) {
-			System.out.println("BuildKymographs:buildKymo Abort (1): nbcapillaries = 0");
+		if (exp.spotsArray.spotsList.size() < 1) {
+			System.out.println("BuildKymoSpots:buildKymo Abort (1): nb spots = 0");
 			return false;
 		}
 		SequenceKymos seqKymos = exp.seqKymos;
@@ -150,7 +149,7 @@ public class BuildKymosSpots extends BuildSeries
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildKymograph");
 	    processor.setPriority(Processor.NORM_PRIORITY);
-	    int ntasks =  exp.capillaries.capillariesList.size(); //
+	    int ntasks =  exp.spotsArray.spotsList.size(); //
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
 		
 	    tasks.clear();
@@ -164,8 +163,8 @@ public class BuildKymosSpots extends BuildSeries
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
-					for (Capillary capi: exp.capillaries.capillariesList) 
-						analyzeImageWithCapillary(sourceImage, capi, fromSourceImageIndex, kymographColumn);
+					for (Spot spoti: exp.spotsArray.spotsList) 
+						analyzeImageWithSpot(sourceImage, spoti, fromSourceImageIndex, kymographColumn);
 				}}));
 			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
 //			seqData.setImage(0, 0, sourceImage); // add option??
@@ -177,22 +176,22 @@ public class BuildKymosSpots extends BuildSeries
 		
 		ProgressFrame progressBar2 = new ProgressFrame("Combine results into kymograph");
 		int sizeC = seqData.getSizeC();
-		exportCapillaryIntegerArrays_to_Kymograph(exp, seqKymos.seq, sizeC);
+		exportSpotIntegerArrays_to_Kymograph(exp, seqKymos.seq, sizeC);
         progressBar2.close();
         
 		return true;
 	}
 	
 	
-	private void analyzeImageWithCapillary(IcyBufferedImage sourceImage, Capillary cap, int fromSourceImageIndex, int kymographColumn)
+	private void analyzeImageWithSpot(IcyBufferedImage sourceImage, Spot spot, int fromSourceImageIndex, int kymographColumn)
 	{
-		ROI2DAlongTime capT = cap.getROI2DKymoAtIntervalT(fromSourceImageIndex);
+		ROI2DAlongTime capT = spot.getROI2DKymoAtIntervalT(fromSourceImageIndex);
 		int sizeC = sourceImage.getSizeC();
 	  
-		for (int chan = 0; chan < sizeC; chan++) {
-			
+		for (int chan = 0; chan < sizeC; chan++) 
+		{
 			int [] sourceImageChannel =  Array1DUtil.arrayToIntArray(sourceImage.getDataXY(chan), sourceImage.isSignedDataType()); 			
-			int [] capImageChannel = cap.cap_Integer.get(chan); 
+			int [] capImageChannel = spot.cap_Integer.get(chan); 
 		
 			int cnt = 0;
 			int sourceImageWidth = sourceImage.getWidth();
@@ -221,26 +220,27 @@ public class BuildKymosSpots extends BuildSeries
 		return sourceImage;
 	}
 	
-	private void exportCapillaryIntegerArrays_to_Kymograph(Experiment exp, Sequence seqKymo, final int sizeC)
+	private void exportSpotIntegerArrays_to_Kymograph(Experiment exp, Sequence seqKymo, final int sizeC)
 	{
 		seqKymo.beginUpdate();
 		
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildKymograph");
 	    processor.setPriority(Processor.NORM_PRIORITY);
-	    int nbcapillaries =  exp.capillaries.capillariesList.size(); 
-	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( nbcapillaries);
+	    int nbspots =  exp.spotsArray.spotsList.size(); 
+	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( nbspots );
 		tasks.clear();
 		 
-		for (int icap = 0; icap < nbcapillaries; icap++) {
-			final Capillary cap = exp.capillaries.capillariesList.get(icap);
-			final IcyBufferedImage cap_Image = cap_bufKymoImage.get(icap);
-			final int indexCap = icap;
+		for (int ispot = 0; ispot < nbspots; ispot++) 
+		{
+			final Spot spot = exp.spotsArray.spotsList.get(ispot);
+			final IcyBufferedImage cap_Image = cap_bufKymoImage.get(ispot);
+			final int indexSpot = ispot;
 			
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {		
-					exportOneCapillaryIntegerArray_to_Kymograph(seqKymo, indexCap, cap, cap_Image, sizeC);
+					exportOneSpotIntegerArray_to_Kymograph(seqKymo, indexSpot, spot, cap_Image, sizeC);
 				}}));
 		}
 		
@@ -249,11 +249,12 @@ public class BuildKymosSpots extends BuildSeries
 		seqKymo.endUpdate();
 	}
 	
-	private void exportOneCapillaryIntegerArray_to_Kymograph(Sequence seqKymo, int icap, Capillary cap, IcyBufferedImage cap_Image, int sizeC)
+	private void exportOneSpotIntegerArray_to_Kymograph(Sequence seqKymo, int icap, Spot spot, IcyBufferedImage cap_Image, int sizeC)
 	{
-		ArrayList<int[]> cap_Integer = cap.cap_Integer;
+		ArrayList<int[]> cap_Integer = spot.cap_Integer;
 		boolean isSignedDataType = cap_Image.isSignedDataType();
-		for (int chan = 0; chan < sizeC; chan++) {
+		for (int chan = 0; chan < sizeC; chan++) 
+		{
 			int [] tabValues = cap_Integer.get(chan); ; 
 			Object destArray = cap_Image.getDataXY(chan);
 			Array1DUtil.intArrayToSafeArray(tabValues, 0, destArray, 0, -1, isSignedDataType, isSignedDataType);
@@ -273,8 +274,8 @@ public class BuildKymosSpots extends BuildSeries
 		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		
 		int imageHeight = 0;
-		for (Capillary cap: exp.capillaries.capillariesList) {
-			for (ROI2DAlongTime capT : cap.getROIsForKymo()) {
+		for (Spot spot: exp.spotsArray.spotsList) {
+			for (ROI2DAlongTime capT : spot.getROIsForKymo()) {
 				int imageHeight_i = buildMasks(capT, sizex, sizey);
 				if (imageHeight_i > imageHeight) imageHeight = imageHeight_i;
 			}
@@ -282,15 +283,15 @@ public class BuildKymosSpots extends BuildSeries
 		buildCapInteger(exp, imageHeight);
 	}
 	
-	private int buildMasks (ROI2DAlongTime capT, int sizex, int sizey) {
+	private int buildMasks (ROI2DAlongTime roiT, int sizex, int sizey) {
 		ArrayList<ArrayList<int[]>> masks = new ArrayList<ArrayList<int[]>>();
 		getPointsfromROIPolyLineUsingBresenham(
-				ROI2DUtilities.getPoints2DArrayFromROI2D(capT.getRoi()), 
+				ROI2DUtilities.getPoints2DArrayFromROI2D(roiT.getRoi()), 
 				masks, 
 				options.diskRadius, 
 				sizex, 
 				sizey);
-		capT.setMasksList(masks);	
+		roiT.setMasksList(masks);	
 		return masks.size();
 	}
 	
@@ -306,19 +307,20 @@ public class BuildKymosSpots extends BuildSeries
 			dataType = DataType.UBYTE;
 
 		int len = kymoImageWidth * imageHeight;
-		int nbcapillaries = exp.capillaries.capillariesList.size();
-		cap_bufKymoImage = new ArrayList<IcyBufferedImage>(nbcapillaries);
+		int nbspotsArray = exp.spotsArray.spotsList.size();
+		cap_bufKymoImage = new ArrayList<IcyBufferedImage>(nbspotsArray);
 		
-		for (int i=0; i < nbcapillaries; i++) {
+		for (int i = 0; i < nbspotsArray; i++) 
+		{
 			IcyBufferedImage cap_Image = new IcyBufferedImage(kymoImageWidth, imageHeight, numC, dataType);
 			cap_bufKymoImage.add(cap_Image);
 			
-			Capillary cap = exp.capillaries.capillariesList.get(i);
-			cap.cap_Integer = new ArrayList <int []>(numC);
+			Spot spot = exp.spotsArray.spotsList.get(i);
+			spot.cap_Integer = new ArrayList <int []>(numC);
 
 			for (int chan = 0; chan < numC; chan++) {
 				int[] tabValues = new int[len];
-				cap.cap_Integer.add(tabValues);
+				spot.cap_Integer.add(tabValues);
 			}
 		}
 	}
