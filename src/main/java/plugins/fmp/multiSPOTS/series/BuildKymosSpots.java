@@ -112,8 +112,8 @@ public class BuildKymosSpots extends BuildSeries
 					Spot spot = exp.spotsArray.spotsList.get(t_index);
 					String filename = directory + File.separator + spot.getRoiName() + ".tiff";
 					File file = new File (filename);
-//					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
-					IcyBufferedImage image = spot.spot_Image;
+					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
+//					IcyBufferedImage image = spot.spot_Image;
 					
 					try {
 						Saver.saveImage(image, file, true);
@@ -172,7 +172,7 @@ public class BuildKymosSpots extends BuildSeries
 					int sizeC = sourceImage.getSizeC();
 					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 					for (Spot spot: exp.spotsArray.spotsList) 
-						analyzeImageWithSpot(cursorSource, spot, t, sizeC, binT0);
+						analyzeImageWithSpot(cursorSource, spot, t, sizeC);
 				}}));
 			
 			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nFrames);	
@@ -189,13 +189,9 @@ public class BuildKymosSpots extends BuildSeries
 		return true;
 	}
 	
-	private void analyzeImageWithSpot(IcyBufferedImageCursor cursorSource, Spot spot, int t, int sizeC, int binT0)
+	private void analyzeImageWithSpot(IcyBufferedImageCursor cursorSource, Spot spot, int t, int sizeC)
 	{
-		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
-		
-		
-		if (t == binT0) System.out.println("n points for "+ spot.getRoi().getName() + "=" + roiT.cPoints.length);
-		
+		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);		
 		for (int chan = 0; chan < sizeC; chan++) 
 		{
 			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
@@ -210,7 +206,6 @@ public class BuildKymosSpots extends BuildSeries
 				cursor.commitChanges();
 			}
 		}
-
 	}
 	
 	private IcyBufferedImage loadImageFromIndex(Experiment exp, int frameIndex) 

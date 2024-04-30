@@ -198,6 +198,20 @@ public class SequenceKymos extends SequenceCamData
 		return myListOfFiles;
 	}
 	
+	public List <ImageFileDescriptor> loadListOfPotentialKymographsFromSpots(String dir, SpotsArray spotsArray) 
+	{
+		String directoryFull = dir +File.separator ;
+		int nspots = spotsArray.spotsList.size();
+		List<ImageFileDescriptor> myListOfFiles = new ArrayList<ImageFileDescriptor>(nspots);
+		for (int i = 0; i < nspots; i++) 
+		{
+			ImageFileDescriptor temp = new ImageFileDescriptor();
+			temp.fileName  = directoryFull+ spotsArray.spotsList.get(i).getRoiName()+ ".tiff";
+			myListOfFiles.add(temp);
+		}
+		return myListOfFiles;
+	}
+	
 	private void renameCapillary_Files(String directory) 
 	{
 		File folder = new File(directory);
@@ -263,7 +277,7 @@ public class SequenceKymos extends SequenceCamData
 	{
 		imageWidthMax = 0;
 		imageHeightMax = 0;
-		for (int i= 0; i < files.size(); i++) 
+		for (int i = 0; i < files.size(); i++) 
 		{
 			ImageFileDescriptor fileProp = files.get(i);
 			if (!fileProp.exists)

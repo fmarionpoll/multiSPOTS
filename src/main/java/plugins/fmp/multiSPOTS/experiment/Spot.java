@@ -45,10 +45,9 @@ public class Spot implements Comparable <Spot>
 	public int							versionInfos	= 0;
 	
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
-	private ArrayList<ROI2DAlongTime>	spot_RoisForKymo 	= new ArrayList<ROI2DAlongTime>();
-	private String						spot_KymographName 	= null;
+
 	public int							spot_KymographIndex = -1;
-	private String						spot_KymographPrefix= null;
+	public String						spot_filenameTIFF = null;
 	public IcyBufferedImage 			spot_Image		= null;
 	 
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 

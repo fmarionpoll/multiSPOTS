@@ -25,6 +25,7 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 	public	PopupPanel capPopupPanel	= null;
 	JTabbedPane 		tabsPane 		= new JTabbedPane();
 	public Create 		tabCreate 		= new Create();
+	public LoadSave 	tabLoadSave 	= new LoadSave();
 	
 	private MultiSPOTS parent0 = null;
 
@@ -40,12 +41,15 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 		
 		tabCreate.init(capLayout, this.parent0);
 		tabCreate.addPropertyChangeListener(this);
-		tabsPane.addTab("Build kymos (experimental)", null, tabCreate, "Build pseudo-kymographs from ROIs");
-	
+		tabsPane.addTab("Build kymos", null, tabCreate, "Build pseudo-kymographs from ROIs");
 	
 		tabsPane.addChangeListener(this);
 		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		capPanel.add(tabsPane);
+		
+		tabLoadSave.init(capLayout, parent0);
+		tabLoadSave.addPropertyChangeListener(this);
+		tabsPane.addTab("Load/Save", null, tabLoadSave, "Load/Save xml file with capillaries descriptors");
 		
 		capPopupPanel.addComponentListener(new ComponentAdapter() 
 		{
