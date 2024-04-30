@@ -19,7 +19,6 @@ import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.DataType;
-import icy.type.collection.array.Array1DUtil;
 import icy.type.collection.array.ArrayUtil;
 import loci.formats.FormatException;
 
@@ -112,7 +111,9 @@ public class BuildKymosSpots extends BuildSeries
 					Spot spot = exp.spotsArray.spotsList.get(t_index);
 					String filename = directory + File.separator + spot.getRoiName() + ".tiff";
 					File file = new File (filename);
-					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
+//					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
+					IcyBufferedImage image = spot.spot_Image;
+					
 					try {
 						Saver.saveImage(image, file, true);
 					} 
@@ -145,7 +146,7 @@ public class BuildKymosSpots extends BuildSeries
 		
 //		final int nKymographColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
 		
-		int iToColumn = 0;
+
 		int nFrames = exp.seqCamData.nTotalFrames;
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
 		String vDataTitle = new String(" / " + nFrames);
@@ -162,8 +163,10 @@ public class BuildKymosSpots extends BuildSeries
 	    for (int ii = binT0; ii < nFrames; ii++)  
 		{
 			final int fromSourceImageIndex = ii;
-			final int t =  iToColumn;	
+			final int t =  ii;	
 			final IcyBufferedImage sourceImage = loadImageFromIndex(exp, fromSourceImageIndex);
+			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
+			seqData.setImage(0, 0, sourceImage); 
 			
 			tasks.add(processor.submit(new Runnable () {
 				@Override
@@ -171,7 +174,7 @@ public class BuildKymosSpots extends BuildSeries
 					for (Spot spoti: exp.spotsArray.spotsList) 
 						analyzeImageWithSpot(sourceImage, spoti, fromSourceImageIndex, t);
 				}}));
-			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
+			
 			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nFrames);	
 		}
 
@@ -212,9 +215,9 @@ public class BuildKymosSpots extends BuildSeries
 			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
 			int height = spot.spot_Image.getHeight();
 			try {
-				for (int y = 0; y < height; y++) {
+				for (int y = 0; y < index; y++) {
 //					for (int x = 0; x < w; x++) {
-					cursor.set(t, y, 0, tabValues[y]);
+					cursor.set(t, y, chan, tabValues[y]);
 //					}
 				}
 			}
@@ -222,7 +225,6 @@ public class BuildKymosSpots extends BuildSeries
 				cursor.commitChanges();
 			}
 		}
-		
 	}
 	
 	private IcyBufferedImage loadImageFromIndex(Experiment exp, int indexFromFrame) 
