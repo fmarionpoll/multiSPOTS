@@ -1,6 +1,7 @@
 package plugins.fmp.multiSPOTS.series;
 
 
+import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -19,7 +20,7 @@ import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.DataType;
-import icy.type.collection.array.ArrayUtil;
+
 import loci.formats.FormatException;
 
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -143,12 +144,9 @@ public class BuildKymosSpots extends BuildSeries
 		
 		threadRunning = true;
 		stopFlag = false;
-		
-//		final int nKymographColumns = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		
 
 		int nFrames = exp.seqCamData.nTotalFrames;
-		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
+//		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
 		String vDataTitle = new String(" / " + nFrames);
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
@@ -171,8 +169,10 @@ public class BuildKymosSpots extends BuildSeries
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
-					for (Spot spoti: exp.spotsArray.spotsList) 
-						analyzeImageWithSpot(sourceImage, spoti, fromSourceImageIndex, t);
+					int sizeC = sourceImage.getSizeC();
+					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
+					for (Spot spot: exp.spotsArray.spotsList) 
+						analyzeImageWithSpot(cursorSource, spot, t, sizeC, binT0);
 				}}));
 			
 			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nFrames);	
@@ -189,47 +189,33 @@ public class BuildKymosSpots extends BuildSeries
 		return true;
 	}
 	
-	private void analyzeImageWithSpot(IcyBufferedImage sourceImage, Spot spot, int fromSourceImageIndex, int t)
+	private void analyzeImageWithSpot(IcyBufferedImageCursor cursorSource, Spot spot, int t, int sizeC, int binT0)
 	{
-		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(fromSourceImageIndex);
-		IcyBufferedImage subImage = IcyBufferedImageUtil.getSubImage(sourceImage, roiT.getBooleanMask2D().bounds);
-		boolean[] mask = roiT.getBooleanMask2D().mask;
-        boolean isSigned =  sourceImage.isSignedDataType();
-		int sizeC = sourceImage.getSizeC();
+		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
+		
+		
+		if (t == binT0) System.out.println("n points for "+ spot.getRoi().getName() + "=" + roiT.cPoints.length);
 		
 		for (int chan = 0; chan < sizeC; chan++) 
 		{
-			int [] tabValues = new int [roiT.getMask2D_N_Valid_Points()];
-			
-			int[] workData = (int[]) ArrayUtil.arrayToIntArray(subImage.getDataXY(chan), isSigned);
-			int index = 0;
-			for (int offset = 0; offset < workData.length; offset++) 
-	        {
-	            if (mask[offset])  
-	            {
-	            	tabValues[index] = workData[offset];
-	                index++;
-	            }
-	        }
-			
 			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
-			int height = spot.spot_Image.getHeight();
 			try {
-				for (int y = 0; y < index; y++) {
-//					for (int x = 0; x < w; x++) {
-					cursor.set(t, y, chan, tabValues[y]);
-//					}
+				for (int y = 0; y < roiT.cPoints.length; y++) 
+				{
+					Point pt = roiT.cPoints[y];
+					cursor.set(t, y, chan, cursorSource.get((int)pt.getX(), (int)pt.getY(), chan));
 				}
 			}
 			finally {
 				cursor.commitChanges();
 			}
 		}
+
 	}
 	
-	private IcyBufferedImage loadImageFromIndex(Experiment exp, int indexFromFrame) 
+	private IcyBufferedImage loadImageFromIndex(Experiment exp, int frameIndex) 
 	{
-		IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(indexFromFrame));				
+		IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(frameIndex));				
 		if (options.doRegistration ) 
 		{
 			String referenceImageName = exp.seqCamData.getFileNameFromImageList(options.referenceFrame);			
@@ -279,6 +265,7 @@ public class BuildKymosSpots extends BuildSeries
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
+		kymoImageWidth = exp.seqCamData.nTotalFrames;
 		int numC = seqCamData.seq.getSizeC();
 		if (numC <= 0)
 			numC = 3;
@@ -293,7 +280,8 @@ public class BuildKymosSpots extends BuildSeries
 			for (ROI2DAlongTime roiT : spot.getROIsForKymo()) 
 			{
 				roiT.setBooleanMask2D();
-				int imageHeight_i = roiT.getBooleanMask2D().mask.length;
+				
+				int imageHeight_i = roiT.cPoints.length;
 				if (imageHeight_i > imageHeight) 
 					imageHeight = imageHeight_i;
 			}

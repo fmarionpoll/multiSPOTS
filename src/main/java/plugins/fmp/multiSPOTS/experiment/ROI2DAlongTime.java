@@ -1,5 +1,6 @@
 package plugins.fmp.multiSPOTS.experiment;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import org.w3c.dom.Node;
@@ -16,8 +17,9 @@ public class ROI2DAlongTime implements XMLPersistent
 	private ROI2D 	roi 			= null;	
 	private long 	start 			= 0;
 	private ArrayList<ArrayList<int[]>> masksList = null;
-	private BooleanMask2D			mask2D = null;
-	private int						mask2D_n_valid_points = 0;
+	private BooleanMask2D mask2D = null;
+	private int		mask2D_n_valid_points = 0;
+	public	Point[] cPoints = null;
 	
 	private final String ID_META 	= "metaT";
 	private final String ID_INDEX	= "indexT";
@@ -58,8 +60,9 @@ public class ROI2DAlongTime implements XMLPersistent
 	
 	public void setBooleanMask2D() {
 		try {
-			mask2D = roi.getBooleanMask2D(0 , 0, 1, true );
-			int length = mask2D.mask.length;
+			mask2D = roi.getBooleanMask2D(0, 0, 1, true ); // z, t, c, inclusive
+			cPoints = mask2D.getPoints();
+			int length = cPoints.length;
 			mask2D_n_valid_points = 0;
 			for (int i = 0; i < length; i++) {
 				if (mask2D.mask[i])
