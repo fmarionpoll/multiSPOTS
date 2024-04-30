@@ -105,7 +105,7 @@ public class DetectSpots extends BuildSeries
 	    tasks.clear();
 	    
 	    int nFrames = exp.seqCamData.nTotalFrames;
-	    initMasks2DToMeasureAreas(exp);
+	    initMasks2D(exp);
 		initSpotsDataArrays(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = options.transform01;
@@ -113,6 +113,7 @@ public class DetectSpots extends BuildSeries
 
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		seqData.addOverlay(overlayThreshold);
+		
 		int binT0 = (int) exp.binT0;
 		for (int ii = binT0; ii < nFrames; ii++) 
 		{
@@ -167,7 +168,6 @@ public class DetectSpots extends BuildSeries
 	private void measureSpotArea(IcyBufferedImage workImage, Spot spot, int t  )
 	{
 		int sum = 0;
-//        int cntPix = 0;
         
         boolean spotThresholdUp = options.spotThresholdUp;
         int spotThreshold = options.spotThreshold;
@@ -176,30 +176,33 @@ public class DetectSpots extends BuildSeries
         boolean[] mask = spot.mask2D.mask;
         int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());  
         
-        if (spotThresholdUp) {
-	        for (int offset = 0; offset < workData.length; offset++) {
-	            if (mask[offset])  {
+        if (spotThresholdUp) 
+        {
+	        for (int offset = 0; offset < workData.length; offset++) 
+	        {
+	            if (mask[offset])  
+	            {
 	                int value = workData[offset];    
-                    if (value < spotThreshold) {
-//                        cntPix++;
+                    if (value < spotThreshold) 
+                    {
                         sum += value;
                     }
 	            }
 	        } 
         }
         else  {
-	        for (int offset = 0; offset < workData.length; offset++) {
+	        for (int offset = 0; offset < workData.length; offset++) 
+	        {
 	            if (mask[offset]) {
 	                int value = workData[offset];
-	                if (value > spotThreshold) {
-//                        cntPix++;
+	                if (value > spotThreshold) 
+	                {
                         sum += value;
 	                }
 	            }
 	        }
         }
         spot.sum.measureValues[t] = sum ;
-//        spot.cntPix.measureValues[t] = cntPix;
 	}
 	
 	private void initSpotsDataArrays(Experiment exp)
@@ -209,12 +212,11 @@ public class DetectSpots extends BuildSeries
 		for (Spot spot: exp.spotsArray.spotsList) {
 			spot.sum.measureValues 			= new  double [nFrames+1];
 			spot.sumClean.measureValues 	= new  double [nFrames+1];
-			spot.flyPresent.measureBooleans = new  boolean [nFrames+1];
-//			spot.cntPix.measureValues  		= new  double [nFrames+1];		
+			spot.flyPresent.measureBooleans = new  boolean [nFrames+1];	
 		}
 	}
 	
-	private void initMasks2DToMeasureAreas(Experiment exp) 
+	private void initMasks2D(Experiment exp) 
 	{
 		SequenceCamData seqCamData = exp.seqCamData;
 		if (seqCamData.seq == null) 

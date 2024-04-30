@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.w3c.dom.Node;
 
+import icy.image.IcyBufferedImage;
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
@@ -44,6 +45,11 @@ public class Spot implements Comparable <Spot>
 	public int							versionInfos	= 0;
 	
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
+	private ArrayList<ROI2DAlongTime>	spot_RoisForKymo 	= new ArrayList<ROI2DAlongTime>();
+	private String						spot_KymographName 	= null;
+	public int							spot_KymographIndex = -1;
+	private String						spot_KymographPrefix= null;
+	public IcyBufferedImage 			spot_Image		= null;
 	 
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
 	public SpotMeasure					sumClean		= new SpotMeasure("sumClean"); 

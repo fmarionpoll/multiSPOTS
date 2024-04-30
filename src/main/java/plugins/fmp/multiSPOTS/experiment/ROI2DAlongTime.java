@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.w3c.dom.Node;
 
 import icy.file.xml.XMLPersistent;
+import icy.roi.BooleanMask2D;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
@@ -15,6 +16,8 @@ public class ROI2DAlongTime implements XMLPersistent
 	private ROI2D 	roi 			= null;	
 	private long 	start 			= 0;
 	private ArrayList<ArrayList<int[]>> masksList = null;
+	private BooleanMask2D			mask2D = null;
+	private int						mask2D_n_valid_points = 0;
 	
 	private final String ID_META 	= "metaT";
 	private final String ID_INDEX	= "indexT";
@@ -51,6 +54,29 @@ public class ROI2DAlongTime implements XMLPersistent
 	
 	public void setMasksList(ArrayList<ArrayList<int[]>> masksList) {
 		this.masksList = masksList;
+	}
+	
+	public void setBooleanMask2D() {
+		try {
+			mask2D = roi.getBooleanMask2D(0 , 0, 1, true );
+			int length = mask2D.mask.length;
+			mask2D_n_valid_points = 0;
+			for (int i = 0; i < length; i++) {
+				if (mask2D.mask[i])
+					mask2D_n_valid_points++;
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public int getMask2D_N_Valid_Points() {
+		return mask2D_n_valid_points;
+	}
+	
+	public BooleanMask2D getBooleanMask2D() {
+		return mask2D;
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Future;
 
 import javax.swing.SwingUtilities;
@@ -276,10 +275,8 @@ public class BuildKymographs extends BuildSeries
 	}
 	
 	private int buildMasks (ROI2DAlongTime capT, int sizex, int sizey) {
-		ArrayList<ArrayList<int[]>> masks = new ArrayList<ArrayList<int[]>>();
-		getPointsfromROIPolyLineUsingBresenham(
-				ROI2DUtilities.getPoints2DArrayFromROI2D(capT.getRoi()), 
-				masks, 
+		ArrayList<ArrayList<int[]>> masks = getPointsfromROIPolyLineUsingBresenham(
+				ROI2DUtilities.getPoints2DArrayFromROI2D(capT.getRoi()),  
 				options.diskRadius, 
 				sizex, 
 				sizey);
@@ -316,12 +313,14 @@ public class BuildKymographs extends BuildSeries
 		}
 	}
 	
-	private void getPointsfromROIPolyLineUsingBresenham (ArrayList<Point2D> pointsList, List<ArrayList<int[]>> masks, double diskRadius, int sizex, int sizey) 
+	private ArrayList<ArrayList<int[]>> getPointsfromROIPolyLineUsingBresenham (ArrayList<Point2D> pointsList, double diskRadius, int sizex, int sizey) 
 	{
+		ArrayList<ArrayList<int[]>> masks = new ArrayList<ArrayList<int[]>>();
 		ArrayList<int[]> pixels = Bresenham.getPixelsAlongLineFromROI2D (pointsList);
 		int idiskRadius = (int) diskRadius;
 		for (int[] pixel: pixels) 
 			masks.add(getAllPixelsAroundPixel(pixel, idiskRadius, sizex, sizey));
+		return masks;
 	}
 	
 	private ArrayList<int[]> getAllPixelsAroundPixel(int[] pixel, int diskRadius, int sizex, int sizey) 
