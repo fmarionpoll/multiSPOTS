@@ -15,6 +15,7 @@ import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
 import plugins.fmp.multiSPOTS.dlg.cages.DlgCages_;
 import plugins.fmp.multiSPOTS.dlg.excel.DlgExcel_;
 import plugins.fmp.multiSPOTS.dlg.experiment.DlgExperiment_;
+import plugins.fmp.multiSPOTS.dlg.kymos.DlgKymos_;
 import plugins.fmp.multiSPOTS.dlg.measureSpots.DlgMeasure_;
 import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
 
@@ -22,11 +23,12 @@ import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
 
 public class MultiSPOTS extends PluginActionable  
 {
-	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS April 28, 2024", true, true, true, true);
+	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS April 30, 2024", true, true, true, true);
 	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
 	
 	public DlgExperiment_ 	dlgExperiment 	= new DlgExperiment_();
 	public DlgSpots_ 		dlgSpots		= new DlgSpots_();
+	public DlgKymos_		dlgKymos		= new DlgKymos_();
 	public DlgMeasure_ 		dlgMeasure 		= new DlgMeasure_();
 	public DlgCages_ 		dlgCages 		= new DlgCages_();
 	public DlgExcel_		dlgExcel		= new DlgExcel_();
@@ -41,7 +43,8 @@ public class MultiSPOTS extends PluginActionable
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
 		dlgExperiment.init(mainPanel, "Experiments", this);
 		dlgSpots.init(mainPanel, "Spots", this);
-		dlgMeasure.init(mainPanel, "Measure", this);
+		dlgKymos.init(mainPanel, "KymoSpots", this);
+		dlgMeasure.init(mainPanel, "Measure spots", this);
 		dlgCages.init(mainPanel, "Cages", this);
 		dlgExcel.init(mainPanel, "Export", this);
 		
