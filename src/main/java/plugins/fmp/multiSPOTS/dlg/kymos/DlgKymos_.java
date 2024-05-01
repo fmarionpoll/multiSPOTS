@@ -14,6 +14,7 @@ import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
+import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 
 public class DlgKymos_  extends JPanel implements PropertyChangeListener, ChangeListener 
@@ -25,6 +26,7 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 	public	PopupPanel capPopupPanel	= null;
 	JTabbedPane 		tabsPane 		= new JTabbedPane();
 	public Create 		tabCreate 		= new Create();
+	public Display		tabDisplay		= new Display();
 	public LoadSave 	tabLoadSave 	= new LoadSave();
 	
 	private MultiSPOTS parent0 = null;
@@ -42,7 +44,11 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 		tabCreate.init(capLayout, this.parent0);
 		tabCreate.addPropertyChangeListener(this);
 		tabsPane.addTab("Build kymos", null, tabCreate, "Build pseudo-kymographs from ROIs");
-	
+		
+		tabDisplay.init(capLayout, parent0);
+		tabDisplay.addPropertyChangeListener(this);
+		tabsPane.addTab("Display", null, tabDisplay, "Display options of data & kymographs");
+
 		tabsPane.addChangeListener(this);
 		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		capPanel.add(tabsPane);
@@ -76,10 +82,10 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 //		}
 	}
 	
-//	public void updateDialogs(Experiment exp) 
-//	{
+	public void updateDialogs(Experiment exp) 
+	{
 //		tabIntervals.displayDlgKymoIntervals (exp);
-//	}
+	}
 
 //	void tabbedCapillariesAndKymosSelected() 
 //	{
