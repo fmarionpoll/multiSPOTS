@@ -32,7 +32,7 @@ public class DlgMeasure_ extends JPanel implements PropertyChangeListener, Chang
 			ThresholdColors colorsThreshold = new ThresholdColors();
 
 	public	Graphs 			tabGraphs 		= new Graphs();
-	public 	LoadSaveSpots 	tabFile  		= new LoadSaveSpots();
+	public 	LoadSaveSpotsMeasures 	tabFile  		= new LoadSaveSpotsMeasures();
 	
 //			Adjust 		tabAdjust 		= new Adjust();
 

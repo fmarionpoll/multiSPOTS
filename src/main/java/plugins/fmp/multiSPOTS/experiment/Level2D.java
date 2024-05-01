@@ -1,5 +1,6 @@
 package plugins.fmp.multiSPOTS.experiment;
 
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.List;
 
@@ -7,6 +8,10 @@ import icy.type.geom.Polyline2D;
 
 public class Level2D extends Polyline2D 
 {
+	boolean yNormalized = false;
+	Rectangle original_bounds = null;
+	Polyline2D original_polyline = null;
+	
 	
 	public Level2D() 
 	{
@@ -82,14 +87,14 @@ public class Level2D extends Polyline2D
 		return pol;
 	}
 	
-	Level2D expandPolylineToNewSize(int imageSize) 
+	Level2D expandPolylineToNewWidth(int imageWidth) 
 	{
-		double [] nxpoints = new double[imageSize];
-		double [] nypoints = new double [imageSize];
-		for (int j=0; j< npoints; j++) 
+		double [] nxpoints = new double[imageWidth];
+		double [] nypoints = new double [imageWidth];
+		for (int j = 0; j< npoints; j++) 
 		{
-			int i0 = j * imageSize / npoints;
-			int i1 = (j +1) * imageSize / npoints;
+			int i0 = j * imageWidth / npoints;
+			int i1 = (j +1) * imageWidth / npoints;
 			double y0 = ypoints[j];
 			double y1 = y0;
 			if ((j+1) < npoints)
@@ -100,27 +105,27 @@ public class Level2D extends Polyline2D
 				nypoints[i] = y0 + (y1-y0) * (i-i0)/(i1-i0);
 			}
 		}
-		return new Level2D (nxpoints, nypoints, imageSize);
+		return new Level2D (nxpoints, nypoints, imageWidth);
 	}
 	
-	Level2D contractPolylineToNewSize(int imageSize) 
+	Level2D contractPolylineToNewWidth(int imageWidth) 
 	{
-		double [] nxpoints = new double[imageSize];
-		double [] nypoints = new double[imageSize];
-		for (int i=0; i< imageSize; i++) 
+		double [] nxpoints = new double[imageWidth];
+		double [] nypoints = new double[imageWidth];
+		for (int i=0; i< imageWidth; i++) 
 		{
-			int j = i * npoints / imageSize;
+			int j = i * npoints / imageWidth;
 			nxpoints[i] = i;
 			nypoints[i] = ypoints[j];
 		}
-		return new Level2D (nxpoints, nypoints, imageSize);
+		return new Level2D (nxpoints, nypoints, imageWidth);
 	}
 
-	Level2D cropPolylineToNewSize(int imageSize) 
+	Level2D cropPolylineToNewWidth(int imageWidth) 
 	{
-		double [] nxpoints = new double[imageSize];
-		double [] nypoints = new double[imageSize];
-		for (int i=0; i< imageSize; i++) 
+		double [] nxpoints = new double[imageWidth];
+		double [] nypoints = new double[imageWidth];
+		for (int i=0; i< imageWidth; i++) 
 		{
 			int j = i ;
 			if (j < npoints)
@@ -129,52 +134,33 @@ public class Level2D extends Polyline2D
 				nypoints[i] = ypoints[npoints-1];
 			nxpoints[i] = i;
 		}
-		return new Level2D (nxpoints, nypoints, imageSize);
+		return new Level2D (nxpoints, nypoints, imageWidth);
 	}
 	
-	public void filterSpikes() 
+	public void normalizeYScale(int imageHeight) 
 	{
-		double previousValue = ypoints[0];
-		boolean goingdown = false;
-		for (int i = 0; i < npoints; i++) {
-			if (ypoints[i] < previousValue) 
-			{
-				previousValue = ypoints[i];
-				goingdown = true;
-				continue;
-			}
-			
-			else if (!goingdown)
-				continue;
-			
-			//search backwards find first point < current
-			int firstSpikeIndex = i;
-			int lastSpikeIndex = i;
-			double lastSpikeValue = ypoints[i];
-			double firstSpikeValue = ypoints[i];
-			boolean foundSpikeStart = false;
-			for (int j=i-1; j >=0; j--) 
-			{
-				if (ypoints[j] > lastSpikeValue) 
-				{
-					foundSpikeStart = true;
-					firstSpikeIndex = j;
-					firstSpikeValue = ypoints[j];
-					break;
-				}
-			}
-			
-			if (foundSpikeStart) 
-			{
-				double delta = (lastSpikeValue - firstSpikeValue)/(lastSpikeIndex - firstSpikeIndex + 1);
-				for (int k = firstSpikeIndex; k < lastSpikeIndex; k++)
-				{
-					ypoints[k] = firstSpikeValue + delta*(k-firstSpikeIndex);
-				}
-			}
-			
-			previousValue = ypoints[i];
-			goingdown = false;
+		if (original_polyline == null) {
+			original_polyline = this.clone();
+			original_bounds = this.getBounds();
 		}
+		
+		double dHeight = (double) imageHeight;
+		double dMax = original_bounds.getMaxY();
+		for (int i = 0; i < ypoints.length; i++) {
+			ypoints[i] = ypoints[i] * dHeight / dMax;
+		}
+		yNormalized = true;
 	}
+	
+	public void restoreOriginalYScale() 
+	{
+		if (!yNormalized)
+			return;
+		int npoints = ypoints.length;
+		for (int i = 0; i < npoints; i++)
+			ypoints[i] = original_polyline.ypoints[i];
+		
+		yNormalized = false;
+	}
+	
 }

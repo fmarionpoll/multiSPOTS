@@ -182,7 +182,6 @@ public class Display extends JPanel implements ViewerListener
 		}
 	}
 	
-//	@SuppressWarnings("deprecation")
 	void displayON()
 	{
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();

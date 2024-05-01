@@ -333,9 +333,7 @@ public class SpotsArray
 	{
 		ROI2DUtilities.removeRoisContainingString(-1, "spot", seq);
 		for (Spot spot: spotsList) 
-		{
 			seq.addROI(spot.getRoi());
-		}
 	}
 
 	public void initSpotsWith10Cages(int nflies)

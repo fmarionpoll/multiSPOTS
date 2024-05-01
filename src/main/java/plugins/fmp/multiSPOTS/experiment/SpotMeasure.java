@@ -288,9 +288,9 @@ public class SpotMeasure
 			int newSize = imageSize;
 			if (npoints < npoints_old)
 				newSize = 1 + imageSize *npoints / npoints_old;
-			polylineLevel = polylineLevel.contractPolylineToNewSize(newSize);
+			polylineLevel = polylineLevel.contractPolylineToNewWidth(newSize);
 			if (npoints_old != 0)
-				polyline_old = polyline_old.contractPolylineToNewSize(imageSize);
+				polyline_old = polyline_old.contractPolylineToNewWidth(imageSize);
 		}
 		// expand polyline npoints to imageSize
 		else 
@@ -298,9 +298,9 @@ public class SpotMeasure
 			int newSize = imageSize;
 			if (npoints < npoints_old)
 				newSize = imageSize *npoints / npoints_old;
-			polylineLevel = polylineLevel.expandPolylineToNewSize(newSize);
+			polylineLevel = polylineLevel.expandPolylineToNewWidth(newSize);
 			if (npoints_old != 0)
-				polyline_old = polyline_old.expandPolylineToNewSize(imageSize);
+				polyline_old = polyline_old.expandPolylineToNewWidth(imageSize);
 		}
 	}
 
@@ -320,7 +320,7 @@ public class SpotMeasure
 		
 		// reduce polyline npoints to imageSize
 		int newSize = imageSize;
-		polylineLevel = polylineLevel.cropPolylineToNewSize(newSize);		
+		polylineLevel = polylineLevel.cropPolylineToNewWidth(newSize);		
 	}
 	
 	// ----------------------------------------------------------------------

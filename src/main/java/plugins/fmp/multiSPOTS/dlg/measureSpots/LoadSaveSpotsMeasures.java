@@ -17,7 +17,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 
 
-public class LoadSaveSpots extends JPanel 
+public class LoadSaveSpotsMeasures extends JPanel 
 {
 	/**
 	 * 
@@ -56,8 +56,8 @@ public class LoadSaveSpots extends JPanel
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) 
 				{ 
-					loadCapillaries_File(exp);
-					loadSpotsArray_File(exp);
+					dlg_spotsmeasures_loadCapillaries_File(exp);
+					dlg_spotsmeasures_loadSpotsArray_File(exp);
 					firePropertyChange("CAP_ROIS_OPEN", false, true);
 				}
 			}}); 
@@ -76,7 +76,7 @@ public class LoadSaveSpots extends JPanel
 			}});	
 	}
 	
-	public boolean loadCapillaries_File(Experiment exp) 
+	public boolean dlg_spotsmeasures_loadCapillaries_File(Experiment exp) 
 	{	
 		boolean flag = exp.loadMCCapillaries_Only();
 		exp.capillaries.transferCapillaryRoiToSequence(exp.seqCamData.seq);
@@ -94,11 +94,12 @@ public class LoadSaveSpots extends JPanel
 		return exp.xmlSave_MCCapillaries_Only();
 	}
 
-	public boolean loadSpotsArray_File(Experiment exp) 
+	public boolean dlg_spotsmeasures_loadSpotsArray_File(Experiment exp) 
 	{	
 		boolean flag = exp.loadMCSpots_Only();
 		exp.loadSpotsMeasures(); 
 		exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
+		exp.seqKymos.getSpotsMeasuresAsRois(exp.spotsArray);
 		return flag;
 	}
 	
