@@ -387,16 +387,16 @@ public class Capillary implements Comparable <Capillary>
 	public List<ROI2D> transferMeasuresToROIs() 
 	{
 		List<ROI2D> listrois = new ArrayList<ROI2D> ();
-		getROIFromCapillaryLevel(ptsTop, listrois);
-		getROIFromCapillaryLevel(ptsBottom, listrois);
-		getROIFromCapillaryLevel(ptsDerivative, listrois);
+		listrois.add(measureToRoi(ptsTop));
+		listrois.add(measureToRoi(ptsBottom));
+		listrois.add(measureToRoi(ptsDerivative));
 		return listrois;
 	}
 	
-	private void getROIFromCapillaryLevel(CapillaryLevel capLevel, List<ROI2D> listrois) 
+	private ROI2D measureToRoi(CapillaryLevel capLevel) 
 	{
 		if (capLevel.polylineLevel == null || capLevel.polylineLevel.npoints == 0)
-			return;
+			return null;
 		
 		ROI2D roi = new ROI2DPolyLine(capLevel.polylineLevel);
 		String name = kymographPrefix + "_" + capLevel.capName;
@@ -406,7 +406,8 @@ public class Capillary implements Comparable <Capillary>
 			roi.setColor(Color.yellow);
 			roi.setStroke(1);
 		}
-		listrois.add( roi);
+		
+		return roi;
 	}
 	
 	public void transferROIsToMeasures(List<ROI> listRois) 

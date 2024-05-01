@@ -1,5 +1,6 @@
 package plugins.fmp.multiSPOTS.experiment;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -13,6 +14,7 @@ import icy.image.IcyBufferedImage;
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
+import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
@@ -511,6 +513,29 @@ public class Spot implements Comparable <Spot>
 			
 		}
 	}
+	
+	public List<ROI2D> transferMeasuresToROIs() 
+	{
+		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
+		measuresRoisList.add(measureToRoi(sum, Color.green));
+		measuresRoisList.add(measureToRoi(sumClean, Color.red));
+		measuresRoisList.add(measureToRoi(flyPresent, Color.blue));
+		return measuresRoisList;
+	}
+	
+	private ROI2D measureToRoi(SpotMeasure spotMeasure, Color color) 
+	{
+		if (spotMeasure.polylineLevel == null || spotMeasure.polylineLevel.npoints == 0)
+			return null;
+		
+		ROI2D measuredRoi = new ROI2DPolyLine(spotMeasure.polylineLevel);
+		String name = spotRoi.getName() + "_" + spotMeasure.name;
+		measuredRoi.setName(name);
+		measuredRoi.setT(spot_KymographIndex);
+		measuredRoi.setColor(color);
+		return measuredRoi;
+	}
+	
 	
 	// -----------------------------------------------------------------------------
 	

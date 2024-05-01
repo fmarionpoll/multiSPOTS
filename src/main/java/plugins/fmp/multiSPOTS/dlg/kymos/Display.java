@@ -50,7 +50,6 @@ public class Display extends JPanel implements ViewerListener
 			JButton		nextButton				= new JButton(">");
 			JCheckBox 	viewLevelsCheckbox 		= new JCheckBox("top/bottom level (green)", true);
 
-
 	private MultiSPOTS 	parent0 				= null;
 	private boolean		isActionEnabled			= true;	
 	
