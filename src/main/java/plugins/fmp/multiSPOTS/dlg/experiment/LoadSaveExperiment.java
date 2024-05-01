@@ -203,15 +203,13 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			exp.load_Spots();
 			
 			parent0.dlgKymos.tabLoadSave.loadDefaultKymos(exp);
-			
-//			if (exp.seqKymos != null) {	
-//				parent0.paneLevels.tabFileLevels.dlg_levels_loadCapillaries_Measures(exp);
-//				if (parent0.paneExperiment.tabOptions.graphsCheckBox.isSelected())
-//					parent0.paneLevels.tabGraphs.displayGraphsPanels(exp);
-//			}
 			exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
 			if (parent0.dlgExperiment.tabOptions.graphsCheckBox.isSelected())
 				parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
+			
+			if (exp.seqKymos != null) {	
+				parent0.dlgMeasure.tabFile.dlg_spotsmeasures_loadSpotsArray_File(exp);
+			}
 			
 			exp.loadCagesMeasures();
 			progressFrame.setMessage("Load data: update dialogs");

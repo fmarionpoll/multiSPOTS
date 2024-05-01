@@ -519,7 +519,7 @@ public class Spot implements Comparable <Spot>
 		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
 		measuresRoisList.add(measureToRoi(sum, Color.green, height));
 		measuresRoisList.add(measureToRoi(sumClean, Color.red, height));
-		measuresRoisList.add(measureToRoi(flyPresent, Color.blue, height));
+		measuresRoisList.add(measureToRoi(flyPresent, Color.blue, 10));
 		return measuresRoisList;
 	}
 	
@@ -620,9 +620,6 @@ public class Spot implements Comparable <Spot>
 			case AREA_FLYPRESENT:
 				flyPresent.cvsExportYDataToRow(sbf, csvSep); 
 				break;
-//			case AREA_CNTPIX:  	
-//				cntPix.cvsExportYDataToRow(sbf, csvSep); 
-//				break;	
 			default:
 				break;
 		}
@@ -653,7 +650,6 @@ public class Spot implements Comparable <Spot>
 			{
 			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN:	sumClean.csvImportXYDataFromRow( data, 2); break;
-//			case AREA_CNTPIX:  	cntPix.csvImportXYDataFromRow( data, 2); break;
 			case AREA_FLYPRESENT:  flyPresent.csvImportXYDataFromRow( data, 2); break;
 			default:
 				break;
@@ -665,7 +661,6 @@ public class Spot implements Comparable <Spot>
 			{
 			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
 			case AREA_SUMCLEAN: sumClean.csvImportYDataFromRow( data, 2); break;
-//			case AREA_CNTPIX:  	cntPix.csvImportYDataFromRow( data, 2); break;
 			case AREA_FLYPRESENT: flyPresent.csvImportYDataFromRow( data, 2); break;
 			default:
 				break;

@@ -349,9 +349,12 @@ public class Display extends JPanel implements ViewerListener
 			if (exp != null) 
 			{
 				Viewer v = exp.seqKymos.seq.getFirstViewer();
-				int t = v.getPositionT();
-				t = selectKymographImage(t);
-				if (t>= 0) selectKymographComboItem(t);
+				if (v != null) {
+					int t = v.getPositionT();
+					t = selectKymographImage(t);
+					if (t >= 0) 
+						selectKymographComboItem(t);
+				}
 			}
 		}
 	}
