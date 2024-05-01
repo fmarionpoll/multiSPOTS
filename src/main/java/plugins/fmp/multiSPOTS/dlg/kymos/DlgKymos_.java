@@ -13,6 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
+import icy.gui.viewer.Viewer;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
@@ -65,21 +66,21 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 				parent0.mainFrame.revalidate();
 				parent0.mainFrame.pack();
 				parent0.mainFrame.repaint();
-//				tabbedCapillariesAndKymosSelected();
+				tabbedCapillariesAndKymosSelected();
 			}});
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) 
 	{
-//		if (event.getPropertyName().equals("KYMOS_OPEN")) 
-//		{
-//			tabsPane.setSelectedIndex(2);
-//		}
-//		else if (event.getPropertyName().equals("KYMOS_SAVE")) 
-//		{
-//			tabsPane.setSelectedIndex(1);
-//		}
+		if (event.getPropertyName().equals("KYMOS_OPEN")) 
+		{
+			tabsPane.setSelectedIndex(2);
+		}
+		else if (event.getPropertyName().equals("KYMOS_SAVE")) 
+		{
+			tabsPane.setSelectedIndex(1);
+		}
 	}
 	
 	public void updateDialogs(Experiment exp) 
@@ -87,30 +88,30 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 //		tabIntervals.displayDlgKymoIntervals (exp);
 	}
 
-//	void tabbedCapillariesAndKymosSelected() 
-//	{
-//		Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
-//		if (exp == null || exp.seqCamData == null)
-//			return;
-//		int iselected = tabsPane.getSelectedIndex();
-//		if (iselected == 0) {
-//			Viewer v = exp.seqCamData.seq.getFirstViewer();
-//			if (v != null)
-//				v.toFront();
-//			parent0.paneExperiment.capPopupPanel.expand();
-//			parent0.paneExperiment.tabsPane.setSelectedIndex(0);
-//		} 
-//		else if (iselected == 1) 
-//		{
-//			parent0.paneKymos.tabDisplay.displayUpdateOnSwingThread();
-//		}
-//	}
+	void tabbedCapillariesAndKymosSelected() 
+	{
+		Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
+		if (exp == null || exp.seqCamData == null)
+			return;
+		int iselected = tabsPane.getSelectedIndex();
+		if (iselected == 0) {
+			Viewer v = exp.seqCamData.seq.getFirstViewer();
+			if (v != null)
+				v.toFront();
+			parent0.dlgExperiment.capPopupPanel.expand();
+			parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
+		} 
+		else if (iselected == 1) 
+		{
+			parent0.dlgKymos.tabDisplay.displayUpdateOnSwingThread();
+		}
+	}
 	
 	@Override
 	public void stateChanged(ChangeEvent event) 
 	{
-//		if (event.getSource() == tabsPane)
-//			tabbedCapillariesAndKymosSelected();
+		if (event.getSource() == tabsPane)
+			tabbedCapillariesAndKymosSelected();
 	}
 
 }

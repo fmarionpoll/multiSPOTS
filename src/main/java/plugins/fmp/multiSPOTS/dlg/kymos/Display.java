@@ -163,8 +163,8 @@ public class Display extends JPanel implements ViewerListener
 			int nspotsArray = exp.spotsArray.spotsList.size();
 			for (int i = 0; i < nspotsArray; i++)
 			{
-				Spot cap = exp.spotsArray.spotsList.get(i);
-				kymographsCombo.addItem(cap.getRoiName());
+				Spot spot = exp.spotsArray.spotsList.get(i);
+				kymographsCombo.addItem(spot.getRoiName());
 			}
 		}});	
 	}
@@ -217,7 +217,6 @@ public class Display extends JPanel implements ViewerListener
 				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);
 				KymosCanvas2D kymoCanvas2D = new KymosCanvas2D(viewerKymographs);
 				viewerKymographs.setCanvas(kymoCanvas2D);
-//				viewerKymographs.setCanvas(KymosCanvas2DPlugin.getCanvasClassName());
 				viewerKymographs.setRepeat(false);
 				viewerKymographs.addListener(this);
 

@@ -23,7 +23,7 @@ import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
 
 public class MultiSPOTS extends PluginActionable  
 {
-	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS April 30, 2024", true, true, true, true);
+	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS May 1, 2024", true, true, true, true);
 	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
 	
 	public DlgExperiment_ 	dlgExperiment 	= new DlgExperiment_();
