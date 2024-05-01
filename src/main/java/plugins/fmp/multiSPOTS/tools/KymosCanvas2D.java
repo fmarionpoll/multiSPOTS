@@ -47,13 +47,13 @@ public class KymosCanvas2D extends Canvas2D
 		IcyButton previousButton = new IcyButton(ResourceUtilFMP.ICON_PREVIOUS_IMAGE);
 		previousButton.setSelected(false);
 		previousButton.setFocusable(false);
-		previousButton.setToolTipText("Select previous capillary (to the left or lower index)");
+		previousButton.setToolTipText("Previous");
         toolBar.add(previousButton); 
 		
         IcyButton nextButton = new IcyButton(ResourceUtilFMP.ICON_NEXT_IMAGE);
         nextButton.setSelected(false);
         nextButton.setFocusable(false);
-        nextButton.setToolTipText("Select next capillary (to the right or higher index)");
+        nextButton.setToolTipText("Next");
 		toolBar.add(nextButton);
 		
 		IcyIcon fitY = ResourceUtilFMP.ICON_FIT_YAXIS;

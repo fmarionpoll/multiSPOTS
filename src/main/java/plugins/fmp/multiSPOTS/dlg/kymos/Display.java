@@ -33,7 +33,7 @@ import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Directories;
-import plugins.fmp.multiSPOTS.tools.KymosCanvas2D;
+
 
 
 public class Display extends JPanel implements ViewerListener
@@ -49,8 +49,6 @@ public class Display extends JPanel implements ViewerListener
 			JButton  	previousButton		 	= new JButton("<");
 			JButton		nextButton				= new JButton(">");
 			JCheckBox 	viewLevelsCheckbox 		= new JCheckBox("top/bottom level (green)", true);
-			JCheckBox 	viewDerivativeCheckbox 	= new JCheckBox("derivative (yellow)", true);
-			JCheckBox 	viewGulpsCheckbox 		= new JCheckBox("gulps (red)", true);
 
 
 	private MultiSPOTS 	parent0 				= null;
@@ -81,8 +79,7 @@ public class Display extends JPanel implements ViewerListener
 		
 		JPanel panel2 = new JPanel (layout);
 		panel2.add(viewLevelsCheckbox);
-		panel2.add(viewDerivativeCheckbox);
-		panel2.add(viewGulpsCheckbox);
+
 		add(panel2);
 		
 		defineActionListeners();
@@ -98,19 +95,6 @@ public class Display extends JPanel implements ViewerListener
 					displayUpdateOnSwingThread();
 			}});
 		
-		viewDerivativeCheckbox.addActionListener(new ActionListener ()
-		{ 
-			@Override public void actionPerformed( final ActionEvent e )
-			{ 
-			displayROIs("deriv", viewDerivativeCheckbox.isSelected());
-			}});
-
-		viewGulpsCheckbox.addActionListener(new ActionListener ()
-		{ 
-			@Override public void actionPerformed( final ActionEvent e )
-			{ 
-			displayROIs("gulp", viewGulpsCheckbox.isSelected());
-			}});
 		
 		viewLevelsCheckbox.addActionListener(new ActionListener ()
 		{ 
@@ -171,8 +155,6 @@ public class Display extends JPanel implements ViewerListener
 	
 	public void displayROIsAccordingToUserSelection()
 	{
-		displayROIs("deriv", viewDerivativeCheckbox.isSelected());
-		displayROIs("gulp", viewGulpsCheckbox.isSelected());
 		displayROIs("level", viewLevelsCheckbox.isSelected());
 	}
 	
@@ -201,7 +183,7 @@ public class Display extends JPanel implements ViewerListener
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
+//	@SuppressWarnings("deprecation")
 	void displayON()
 	{
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
@@ -214,9 +196,13 @@ public class Display extends JPanel implements ViewerListener
 			ArrayList<Viewer>vList = seqKymographs.seq.getViewers();
 			if (vList.size() == 0)
 			{
-				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);
-				KymosCanvas2D kymoCanvas2D = new KymosCanvas2D(viewerKymographs);
-				viewerKymographs.setCanvas(kymoCanvas2D);
+				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);				
+				List<String> list = IcyCanvas.getCanvasPluginNames();
+				String pluginName = list.stream()
+						  .filter(s -> s.contains("Kymo"))
+						  .findFirst()
+						  .orElse(null);
+				viewerKymographs.setCanvas(pluginName);
 				viewerKymographs.setRepeat(false);
 				viewerKymographs.addListener(this);
 
@@ -348,11 +334,11 @@ public class Display extends JPanel implements ViewerListener
 	private void selectSpot(Experiment exp, int isel)
 	{
 		SpotsArray spotsArray = exp.spotsArray;
-		for (Spot cap : spotsArray.spotsList) 
+		for (Spot spot : spotsArray.spotsList) 
 		{
-			cap.getRoi().setSelected(false);
-			Spot capSel = spotsArray.spotsList.get(isel);
-			capSel.getRoi().setSelected(true);
+			spot.getRoi().setSelected(false);
+			Spot selectedSpot = spotsArray.spotsList.get(isel);
+			selectedSpot.getRoi().setFocused(true);
 		}
 	}
 	

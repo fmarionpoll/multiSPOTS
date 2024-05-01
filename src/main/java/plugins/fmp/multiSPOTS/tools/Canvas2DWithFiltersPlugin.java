@@ -10,8 +10,7 @@ public class Canvas2DWithFiltersPlugin extends Plugin implements PluginCanvas
 {
 	@Override
 	public String getCanvasClassName() {
-//		return KymosCanvas2DPlugin.class.getName();
-		return "KymosView";
+		return Canvas2DWithFiltersPlugin.class.getName();
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -12,6 +13,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import icy.canvas.IcyCanvas;
 import icy.gui.component.PopupPanel;
 import icy.gui.frame.IcyFrame;
 import icy.gui.viewer.Viewer;
@@ -23,7 +25,7 @@ import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
+
 
 
 
@@ -117,8 +119,14 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 			Viewer v = seq.getFirstViewer();
 			if (v == null) {
 				v = new Viewer(exp.seqCamData.seq, true);
-				Canvas2DWithFilters camCanvas2D = new Canvas2DWithFilters(v);
-				v.setCanvas(camCanvas2D);
+//				Canvas2DWithFilters camCanvas2D = new Canvas2DWithFilters(v);
+//				v.setCanvas(camCanvas2D);
+				List<String> list = IcyCanvas.getCanvasPluginNames();
+				String pluginName = list.stream()
+						  .filter(s -> s.contains("Canvas2DWithFilters"))
+						  .findFirst()
+						  .orElse(null);
+				v.setCanvas(pluginName);
 			}
 			
 			if (v != null) {
