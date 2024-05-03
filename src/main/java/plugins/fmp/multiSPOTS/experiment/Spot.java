@@ -53,7 +53,7 @@ public class Spot implements Comparable <Spot>
 	public IcyBufferedImage 			spot_Image		= null;
 	 
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
-	public SpotMeasure					sumClean		= new SpotMeasure("sumClean"); 
+	public SpotMeasure					sumClean		= new SpotMeasure("clean"); 
 	public SpotMeasure					flyPresent		= new SpotMeasure("flyPresent"); 
 	public boolean						valid			= true;
 
@@ -115,7 +115,7 @@ public class Spot implements Comparable <Spot>
 		spotNFlies		= spotFrom.spotNFlies;
 		spotIndex		= spotFrom.spotIndex;
 		spotVolume 		= spotFrom.spotVolume;
-		spotNPixels 			= spotFrom.spotNPixels;
+		spotNPixels 	= spotFrom.spotNPixels;
 		radius 			= spotFrom.radius;
 		
 		limitsOptions	= spotFrom.limitsOptions;
@@ -270,9 +270,6 @@ public class Spot implements Comparable <Spot>
 			return sumClean;
 		case AREA_FLYPRESENT:
 			return flyPresent;
-//		case AREA_CNTPIX:
-//		case AREA_CNTPIX_LR:
-//			return cntPix;
 		default:
 			return null;
 		}
@@ -300,7 +297,6 @@ public class Spot implements Comparable <Spot>
 	{
 		cropSpotAreaToNPoints(sum , npoints);
 		cropSpotAreaToNPoints(sumClean , npoints);
-//		cropSpotAreaToNPoints(cntPix , npoints);
 		cropSpotAreaToNPoints(flyPresent , npoints);
 	}
 	
@@ -314,7 +310,6 @@ public class Spot implements Comparable <Spot>
 	{
 		restoreSpotAreaClippedMeasures( sum );
 		restoreSpotAreaClippedMeasures( sumClean );
-//		restoreSpotAreaClippedMeasures( cntPix );
 		restoreSpotAreaClippedMeasures( flyPresent );
 	}
 	
@@ -340,7 +335,7 @@ public class Spot implements Comparable <Spot>
 	        spotNFlies 		= XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
 	        spotIndex 		= XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
 	        spotVolume 		= XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
-			spotNPixels 			= XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
+			spotNPixels 	= XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
 			radius			= XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
 			spotStim 		= XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
 			spotConc		= XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
@@ -470,7 +465,6 @@ public class Spot implements Comparable <Spot>
 	{
 		sum.adjustToImageWidth(imageWidth);
 		sumClean.adjustToImageWidth(imageWidth);
-//		cntPix.adjustToImageWidth(imageWidth);
 		flyPresent.adjustToImageWidth(imageWidth);
 	}
 
@@ -478,7 +472,6 @@ public class Spot implements Comparable <Spot>
 	{
 		sum.cropToImageWidth(imageWidth);
 		sumClean.cropToImageWidth(imageWidth);
-//		cntPix.cropToImageWidth(imageWidth);
 		flyPresent.cropToImageWidth(imageWidth);
 	}
 	
@@ -486,7 +479,6 @@ public class Spot implements Comparable <Spot>
 	{
 		sum.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
 		sumClean.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
-//		cntPix.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
 		flyPresent.setPolylineLevelFromMeasureBoolean(getRoi().getName(), cageIndex);
 	}
 	

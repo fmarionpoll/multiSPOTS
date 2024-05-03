@@ -16,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import icy.canvas.Canvas2D;
@@ -32,7 +33,9 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotsArray;
+import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
 import plugins.fmp.multiSPOTS.tools.Directories;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 
 
 
@@ -44,12 +47,18 @@ public class Display extends JPanel implements ViewerListener
 	private static final long serialVersionUID = -2103052112476748890L;
 	
 	public 	int			indexImagesCombo 		= -1;
-	 		JComboBox<String> kymographsCombo 	= new JComboBox <String> (new String[] {"none"});
-			JComboBox<String> viewsCombo		= new JComboBox <String>();
-			JButton  	previousButton		 	= new JButton("<");
-			JButton		nextButton				= new JButton(">");
-			JCheckBox 	viewLevelsCheckbox 		= new JCheckBox("top/bottom level (green)", true);
-
+	private	JComboBox<String> kymographsCombo 	= new JComboBox <String> (new String[] {"none"});
+	private JComboBox<String> viewsCombo		= new JComboBox <String>();
+	private JButton  	previousButton		 	= new JButton("<");
+	private JButton		nextButton				= new JButton(">");
+	private JCheckBox 	sumCheckbox 			= new JCheckBox("sum (green)", true);
+	private JCheckBox 	sumCleanCheckbox 		= new JCheckBox("sumCLEAN (red)", true);
+	private JCheckBox 	flyPresentCheckbox 		= new JCheckBox("fly present (blue)", true);
+	private ImageTransformEnums[] transforms 	= new ImageTransformEnums[] {
+				ImageTransformEnums.SORT_REDCOL0
+			};
+	private JComboBox<ImageTransformEnums> spotsTransformsComboBox = new JComboBox<ImageTransformEnums> (transforms);
+	private JToggleButton spotsViewButton 		= new JToggleButton("View");
 	private MultiSPOTS 	parent0 				= null;
 	private boolean		isActionEnabled			= true;	
 	
@@ -77,9 +86,16 @@ public class Display extends JPanel implements ViewerListener
 		add(panel1);
 		
 		JPanel panel2 = new JPanel (layout);
-		panel2.add(viewLevelsCheckbox);
-
+		panel2.add(sumCheckbox);
+		panel2.add(sumCleanCheckbox);
+		panel2.add(flyPresentCheckbox);
 		add(panel2);
+		
+		JPanel panel3 = new JPanel (layout);
+		panel3.add(new JLabel("transform image"));
+		panel3.add(spotsTransformsComboBox);
+		panel3.add(spotsViewButton);
+		add(panel3);
 		
 		defineActionListeners();
 	}
@@ -95,33 +111,47 @@ public class Display extends JPanel implements ViewerListener
 			}});
 		
 		
-		viewLevelsCheckbox.addActionListener(new ActionListener ()
+		sumCheckbox.addActionListener(new ActionListener ()
 		{ 
 			@Override public void actionPerformed( final ActionEvent e )
 			{ 
-			displayROIs("level", viewLevelsCheckbox.isSelected());
+				displayROIs("sum", sumCheckbox.isSelected());
+			}});
+		
+		sumCleanCheckbox.addActionListener(new ActionListener ()
+		{ 
+			@Override public void actionPerformed( final ActionEvent e )
+			{ 
+				displayROIs("clean", sumCleanCheckbox.isSelected());
+			}});
+		
+		flyPresentCheckbox.addActionListener(new ActionListener ()
+		{ 
+			@Override public void actionPerformed( final ActionEvent e )
+			{ 
+				displayROIs("flyPresent", flyPresentCheckbox.isSelected());
 			}});
 		
 		nextButton.addActionListener(new ActionListener ()
 		{ 
 			@Override public void actionPerformed( final ActionEvent e )
 			{ 
-			int isel = kymographsCombo.getSelectedIndex()+1;
-			if (isel < kymographsCombo.getItemCount()) {
-				isel = selectKymographImage(isel);
-				selectKymographComboItem(isel);
-			}
+				int isel = kymographsCombo.getSelectedIndex()+1;
+				if (isel < kymographsCombo.getItemCount()) {
+					isel = selectKymographImage(isel);
+					selectKymographComboItem(isel);
+				}
 			}});
 		
 		previousButton.addActionListener(new ActionListener ()
 		{ 
 			@Override public void actionPerformed( final ActionEvent e )
 			{ 
-			int isel = kymographsCombo.getSelectedIndex()-1;
-			if (isel < kymographsCombo.getItemCount()) {
-				isel = selectKymographImage(isel);
-				selectKymographComboItem(isel);
-			}
+				int isel = kymographsCombo.getSelectedIndex()-1;
+				if (isel < kymographsCombo.getItemCount()) {
+					isel = selectKymographImage(isel);
+					selectKymographComboItem(isel);
+				}
 			}});
 		
 		viewsCombo.addActionListener(new ActionListener ()
@@ -135,6 +165,14 @@ public class Display extends JPanel implements ViewerListener
 					changeBinSubdirectory(localString);
 			}});
 		
+		spotsViewButton.addActionListener(new ActionListener () 
+		{ 
+			@Override public void actionPerformed( final ActionEvent e ) 
+			{ 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) 
+					displayTransform(exp);
+			}});
 	}
 	
 	public void transferSpotNamesToComboBox(Experiment exp )
@@ -154,7 +192,7 @@ public class Display extends JPanel implements ViewerListener
 	
 	public void displayROIsAccordingToUserSelection()
 	{
-		displayROIs("level", viewLevelsCheckbox.isSelected());
+		displayROIs("level", sumCheckbox.isSelected());
 	}
 	
 	private void displayROIs(String filter, boolean visible)
@@ -409,6 +447,39 @@ public class Display extends JPanel implements ViewerListener
 		exp.seqKymos.seq.close();
 		exp.loadKymographs();
 		parent0.dlgKymos.updateDialogs(exp);
+	}
+	
+	private void displayTransform (Experiment exp)
+	{
+//		boolean displayCheckOverlay = false;
+		if (spotsViewButton.isSelected()) {
+			updateTransformFunctionsOfCanvas( exp);
+//			displayCheckOverlay = true;
+		}
+		else
+		{
+//			removeOverlay(exp);
+//			spotsOverlayCheckBox.setSelected(false);
+			getCanvas2DWithFilters(exp).imageTransformFunctionsCombo.setSelectedIndex(0);
+			
+		}
+//		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
+	}
+	
+	private void updateTransformFunctionsOfCanvas(Experiment exp)
+	{
+		Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
+		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
+		{
+			canvas.updateListOfImageTransformFunctions(transforms);
+		}
+		int index = spotsTransformsComboBox.getSelectedIndex();
+		canvas.selectImageTransformFunction(index +1);
+	}
+	
+	protected Canvas2DWithFilters getCanvas2DWithFilters(Experiment exp) 
+	{
+		return (Canvas2DWithFilters) exp.seqKymos.seq.getFirstViewer().getCanvas();
 	}
 
 }
