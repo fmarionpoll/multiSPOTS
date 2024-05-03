@@ -31,14 +31,6 @@ import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
 
 
-/*use SequenceUtil scale
- *  
- *   Return a copy of the sequence with specified size.<br>
- *  By default the FilterType.BILINEAR is used as filter method.
- *  
-    public static Sequence scale(Sequence source, int width, int height)
- *  
- */
 
 public class BuildKymosSpots extends BuildSeries  
 {
@@ -60,14 +52,12 @@ public class BuildKymosSpots extends BuildSeries
 		exp.seqKymos.closeSequence();
 	}
 	
-	
 	private boolean loadExperimentDataToBuildKymos(Experiment exp) 
 	{
 		boolean flag = exp.loadMCSpots_Only();
 		exp.seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 		return flag;
 	}
-	
 	
 	private void getTimeLimitsOfSequence(Experiment exp)
 	{
@@ -83,8 +73,7 @@ public class BuildKymosSpots extends BuildSeries
 			exp.binFirst_ms = 0;
 			exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
 		}
-	}
-			
+	}		
 	
 	private void saveComputation(Experiment exp) 
 	{	
@@ -130,7 +119,6 @@ public class BuildKymosSpots extends BuildSeries
 		progressBar.close();
 		exp.saveXML_MCExperiment();
 	}
-	
 	
 	private boolean buildKymo (Experiment exp) 
 	{
@@ -223,7 +211,6 @@ public class BuildKymosSpots extends BuildSeries
 	private void exportSpotImages_to_Kymograph(Experiment exp, Sequence seqKymo, final int sizeC)
 	{
 		seqKymo.beginUpdate();
-		
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildKymograph");
 	    processor.setPriority(Processor.NORM_PRIORITY);
@@ -249,7 +236,6 @@ public class BuildKymosSpots extends BuildSeries
 		}
 		
 		waitFuturesCompletion(processor, tasks, null);
-		
 		seqKymo.endUpdate();
 	}
 		
@@ -282,7 +268,7 @@ public class BuildKymosSpots extends BuildSeries
 			}
 			spot.spot_Image = new IcyBufferedImage(kymoImageWidth, imageHeight, numC, dataType);
 		}
-	
+
 	}
 		
 	private void adjustImage(IcyBufferedImage workImage, IcyBufferedImage referenceImage) 
