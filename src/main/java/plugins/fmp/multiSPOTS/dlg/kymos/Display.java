@@ -235,7 +235,7 @@ public class Display extends JPanel implements ViewerListener
 				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);				
 				List<String> list = IcyCanvas.getCanvasPluginNames();
 				String pluginName = list.stream()
-						  .filter(s -> s.contains("Kymo"))
+						  .filter(s -> s.contains("Filters"))
 						  .findFirst()
 						  .orElse(null);
 				viewerKymographs.setCanvas(pluginName);
@@ -469,10 +469,10 @@ public class Display extends JPanel implements ViewerListener
 	private void updateTransformFunctionsOfCanvas(Experiment exp)
 	{
 		Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
-		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
-		{
+//		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
+//		{
 			canvas.updateListOfImageTransformFunctions(transforms);
-		}
+//		}
 		int index = spotsTransformsComboBox.getSelectedIndex();
 		canvas.selectImageTransformFunction(index +1);
 	}
