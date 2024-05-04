@@ -335,6 +335,28 @@ public class SpotsArray
 		for (Spot spot: spotsList) 
 			seq.addROI(spot.getRoi());
 	}
+	
+	public void transferSpotsMeasuresToSequence(Sequence seq) 
+	{
+		List<ROI2D> seqRoisList = seq.getROI2Ds(false);
+		ROI2DUtilities.removeROIsMissingChar(seqRoisList, '_');
+		
+		List<ROI2D> newRoisList = new ArrayList<ROI2D>();
+		int nspots = spotsList.size();
+		int height = seq.getHeight();
+		for (int i = 0; i < nspots; i++) 
+		{
+			List<ROI2D> listOfRois = spotsList.get(i).transferMeasuresToROIs(height);
+			for (ROI2D roi: listOfRois) {
+				if (roi != null) 
+					roi.setT(i);
+			}
+			newRoisList.addAll(listOfRois);
+		}
+		ROI2DUtilities.mergeROIsListNoDuplicate(seqRoisList, newRoisList, seq);
+		seq.removeAllROI();
+		seq.addROIs(seqRoisList, false);
+	}
 
 	public void initSpotsWith10Cages(int nflies)
 	{

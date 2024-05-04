@@ -161,7 +161,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		{
 			if (exp.seqCamData != null) {
 				exp.saveXML_MCExperiment();
-				exp.saveSpotsMeasures();
+				exp.save_SpotsMeasures();
 				exp.saveCapillariesMeasures(exp.getKymosBinFullDirectory());
 			}
 			exp.closeSequences();
@@ -201,17 +201,18 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		if (exp.seqCamData != null) 
 		{
 			exp.load_Spots();
-			
-			parent0.dlgKymos.tabLoadSave.loadDefaultKymos(exp);
+			exp.load_SpotsMeasures();
 			exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
+			
 			if (parent0.dlgExperiment.tabOptions.graphsCheckBox.isSelected())
 				parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
 			
 			if (exp.seqKymos != null) {	
-				parent0.dlgMeasure.tabFile.dlg_spotsmeasures_loadSpotsArray_File(exp);
+				parent0.dlgKymos.tabLoadSave.loadDefaultKymos(exp);
+				exp.spotsArray.transferSpotsMeasuresToSequence(exp.seqKymos.seq);
 			}
 			
-			exp.loadCagesMeasures();
+			exp.load_CagesMeasures();
 			progressFrame.setMessage("Load data: update dialogs");
 			
 			parent0.dlgExperiment.updateDialogs(exp);
@@ -352,7 +353,8 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	}
 
 	@Override
-	public void sequenceClosed(Sequence sequence) {
+	public void sequenceClosed(Sequence sequence) 
+	{
 		sequence.removeListener(this);
 	}
 

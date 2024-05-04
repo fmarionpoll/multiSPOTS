@@ -177,30 +177,9 @@ public class SequenceKymos extends SequenceCamData
 	{
 		exp.seqKymos.validateRois();
 		exp.seqKymos.transferKymosRoisToCapillaries_Measures(exp.capillaries);
-		exp.saveCapillariesMeasures();
+		exp.save_CapillariesMeasures();
 	}
 	
-	public void getSpotsMeasuresAsRois(SpotsArray spotsArray) 
-	{
-		List<ROI2D> seqRoisList = seq.getROI2Ds(false);
-		ROI2DUtilities.removeROIsMissingChar(seqRoisList, '_');
-		
-		List<ROI2D> newRoisList = new ArrayList<ROI2D>();
-		int nspots = spotsArray.spotsList.size();
-		int height = seq.getHeight();
-		for (int i = 0; i < nspots; i++) 
-		{
-			List<ROI2D> listOfRois = spotsArray.spotsList.get(i).transferMeasuresToROIs(height);
-			for (ROI2D roi: listOfRois) {
-				roi.setT(i);
-			}
-			newRoisList.addAll(listOfRois);
-		}
-		ROI2DUtilities.mergeROIsListNoDuplicate(seqRoisList, newRoisList, seq);
-		seq.removeAllROI();
-		seq.addROIs(seqRoisList, false);
-	}
-
 	// ----------------------------
 
 	public List <ImageFileDescriptor> loadListOfPotentialKymographsFromCapillaries(String dir, CapillariesArray capillaries) 

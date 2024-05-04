@@ -649,7 +649,7 @@ public class Experiment
 		if (capillaries.xmlLoadOldCapillaries_Only(filename)) 
 		{
 			xmlSave_MCCapillaries_Only();
-			saveCapillariesMeasures();
+			save_CapillariesMeasures();
 			try {
 		        Files.delete(Paths.get(filename));
 		    } catch (IOException e) {
@@ -717,32 +717,32 @@ public class Experiment
 		return spotsArray.xmlSave_Spots_Descriptors(xmlSpotFileName);
 	}
 
- 	public boolean loadCapillariesMeasures() 
+ 	public boolean load_CapillariesMeasures() 
  	{
  		return capillaries.load_Measures(getKymosBinFullDirectory());
  	}
  	
- 	public boolean saveCapillariesMeasures() 
+ 	public boolean save_CapillariesMeasures() 
  	{
  		return capillaries.save_Measures(getKymosBinFullDirectory());
  	}
  	
- 	public boolean loadSpotsMeasures() 
+ 	public boolean load_SpotsMeasures() 
  	{
  		return spotsArray.load_Measures(getExperimentDirectory());
  	}
  	
- 	public boolean saveSpotsMeasures() 
+ 	public boolean save_SpotsMeasures() 
  	{
  		return spotsArray.save_Measures(getExperimentDirectory());
  	}
  	
- 	public boolean loadCagesMeasures() 
+ 	public boolean load_CagesMeasures() 
 	{
 		return xmlReadDrosoTrack(null);
 	}
 	
-	public boolean saveCagesMeasures() 
+	public boolean save_CagesMeasures() 
 	{
 		return cages.saveCagesMeasures(getExperimentDirectory());
 	}

@@ -18,7 +18,7 @@ public class CurvesRestoreLength extends BuildSeries
 				Capillary cap = exp.capillaries.capillariesList.get(t);
 				cap.restoreClippedMeasures();
 			}
-			exp.saveCapillariesMeasures();
+			exp.save_CapillariesMeasures();
 		}
 		exp.seqCamData.closeSequence();
 		exp.seqKymos.closeSequence();

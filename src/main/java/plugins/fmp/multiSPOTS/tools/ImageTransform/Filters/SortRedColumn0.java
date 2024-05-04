@@ -10,7 +10,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 
 
-public class SortRedColumn extends ImageTransformFunctionAbstract implements ImageTransformInterface
+public class SortRedColumn0 extends ImageTransformFunctionAbstract implements ImageTransformInterface
 {
 	@Override
 	public IcyBufferedImage getTransformedImage(IcyBufferedImage sourceImage, ImageTransformOptions options) 
@@ -40,7 +40,7 @@ public class SortRedColumn extends ImageTransformFunctionAbstract implements Ima
 	private int[][] getSortOrderForColumn(IcyBufferedImage sourceImage, int columnIndex, int channel) 
 	{
 		int[][] sorted = getImageColumnValues(sourceImage, columnIndex, channel);
-		Arrays.sort(sorted, (a, b) -> b[1] - a[1]);
+		Arrays.sort(sorted, (a, b) -> a[1] - b[1]);
 		return sorted;
 	}
 	

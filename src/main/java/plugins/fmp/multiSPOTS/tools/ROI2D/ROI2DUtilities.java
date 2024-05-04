@@ -86,15 +86,19 @@ public class ROI2DUtilities
 	
 	public static void mergeROIsListNoDuplicate(List<ROI2D> seqList, List<ROI2D> listRois, Sequence seq) 
 	{
-		if (seqList.isEmpty()) 
-			seqList.addAll(listRois);
+		if (seqList.isEmpty()) {
+			for (ROI2D roi : listRois)
+				if (roi != null)
+					seqList.add(roi);
+		}
+		
 		for (ROI2D seqRoi: seqList) 
 		{
 			Iterator <ROI2D> iterator = listRois.iterator();
 			while(iterator.hasNext()) 
 			{
 				ROI2D roi = iterator.next();
-				if (seqRoi == roi)
+				if (seqRoi == roi )
 					iterator.remove();
 				else if (seqRoi.getName().equals (roi.getName() )) 
 				{

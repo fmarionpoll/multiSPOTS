@@ -509,16 +509,16 @@ public class Spot implements Comparable <Spot>
 	public List<ROI2D> transferMeasuresToROIs(int height) 
 	{
 		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
-		measuresRoisList.add(measureToRoi(sum, Color.green, height));
-		measuresRoisList.add(measureToRoi(sumClean, Color.red, height));
-		measuresRoisList.add(measureToRoi(flyPresent, Color.blue, 10));
+		measureToRoi(sum, Color.green, height, measuresRoisList);
+		measureToRoi(sumClean, Color.red, height, measuresRoisList);
+		measureToRoi(flyPresent, Color.blue, 10, measuresRoisList);
 		return measuresRoisList;
 	}
 	
-	private ROI2D measureToRoi(SpotMeasure spotMeasure, Color color, int imageHeight) 
+	private void measureToRoi(SpotMeasure spotMeasure, Color color, int imageHeight, List<ROI2D> measuresRoisList) 
 	{
 		if (spotMeasure.polylineLevel == null || spotMeasure.polylineLevel.npoints == 0)
-			return null;
+			return;
 		
 		spotMeasure.polylineLevel.normalizeYScale(imageHeight);
 		ROI2D measuredRoi = new ROI2DPolyLine(spotMeasure.polylineLevel);
@@ -527,7 +527,7 @@ public class Spot implements Comparable <Spot>
 		measuredRoi.setT(spot_KymographIndex);
 		measuredRoi.setColor(color);
 		measuredRoi.setStroke(1);
-		return measuredRoi;
+		measuresRoisList.add(measuredRoi);
 	}
 	
 	

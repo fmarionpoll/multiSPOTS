@@ -81,7 +81,7 @@ public class LoadSaveCages extends JPanel
 			return false;
 		ProgressFrame progress = new ProgressFrame("load fly positions");
 		
-		boolean flag = exp.loadCagesMeasures();
+		boolean flag = exp.load_CagesMeasures();
 		if (flag) 
 		{
 //			parent0.paneCages.tabGraphics.moveCheckbox.setEnabled(true);
@@ -97,7 +97,7 @@ public class LoadSaveCages extends JPanel
 		if (exp != null) 
 		{
 			exp.cages.cagesFromROIs(exp.seqCamData);
-			exp.saveCagesMeasures();
+			exp.save_CagesMeasures();
 		}
 	}
 	

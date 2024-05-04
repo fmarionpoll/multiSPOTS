@@ -82,7 +82,7 @@ public class DetectSpots extends BuildSeries
 		exp.spotsArray.transferSumToSumClean();
 		exp.spotsArray.transferLimitMeasuresToPolyline(); 
 		exp.saveXML_MCExperiment();
-		exp.saveSpotsMeasures();
+		exp.save_SpotsMeasures();
 	}
 	
 	private boolean measureSpots (Experiment exp) 

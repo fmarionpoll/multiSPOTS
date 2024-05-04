@@ -97,9 +97,11 @@ public class LoadSaveSpotsMeasures extends JPanel
 	public boolean dlg_spotsmeasures_loadSpotsArray_File(Experiment exp) 
 	{	
 		boolean flag = exp.loadMCSpots_Only();
-		exp.loadSpotsMeasures(); 
-		exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
-		exp.seqKymos.getSpotsMeasuresAsRois(exp.spotsArray);
+		if (flag) {
+			exp.load_SpotsMeasures(); 
+			exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
+			exp.spotsArray.transferSpotsMeasuresToSequence(exp.seqKymos.seq);
+		}
 		return flag;
 	}
 	
@@ -112,7 +114,7 @@ public class LoadSaveSpotsMeasures extends JPanel
 		boolean flag = exp.saveXML_MCExperiment ();
 		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
 		flag &= exp.xmlSave_MCSpots_Only();
-		flag &= exp.saveSpotsMeasures();
+		flag &= exp.save_SpotsMeasures();
 		return flag;
 	}
 

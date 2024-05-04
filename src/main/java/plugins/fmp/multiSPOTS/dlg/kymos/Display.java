@@ -55,6 +55,7 @@ public class Display extends JPanel implements ViewerListener
 	private JCheckBox 	sumCleanCheckbox 		= new JCheckBox("sumCLEAN (red)", true);
 	private JCheckBox 	flyPresentCheckbox 		= new JCheckBox("fly present (blue)", true);
 	private ImageTransformEnums[] transforms 	= new ImageTransformEnums[] {
+				ImageTransformEnums.SORT_REDCOLS,
 				ImageTransformEnums.SORT_REDCOL0
 			};
 	private JComboBox<ImageTransformEnums> spotsTransformsComboBox = new JComboBox<ImageTransformEnums> (transforms);
