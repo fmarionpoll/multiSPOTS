@@ -79,7 +79,7 @@ public class LoadSave extends JPanel
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
 				if (exp != null) 
 				{
-					String path = exp.getExperimentDirectory();
+					String path = exp.getResultsDirectory();
 					saveKymographFiles(path);
 					firePropertyChange("KYMOS_SAVE", false, true);
 				}
@@ -147,10 +147,10 @@ public class LoadSave extends JPanel
 			return flag;
 		}
 		
-		String localString = parent0.expListCombo.expListBinSubDirectory;
+		String localString = parent0.expListCombo.stringExpBinSubDirectory;
 		if (localString == null) {
 			exp.checkKymosDirectory(exp.getBinSubDirectory());
-			parent0.expListCombo.expListBinSubDirectory = exp.getBinSubDirectory();
+			parent0.expListCombo.stringExpBinSubDirectory = exp.getBinSubDirectory();
 		}
 		else
 			exp.setBinSubDirectory(localString);

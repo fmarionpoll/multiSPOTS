@@ -50,7 +50,6 @@ public class Filter  extends JPanel
 	private JButton				clearButton		= new JButton("Clear");
 	
 	private MultiSPOTS 			parent0 		= null;
-			boolean 			disableChangeFile 	= false;
 			ExperimentCombo 	filterExpList 	= new ExperimentCombo();
 	
 	

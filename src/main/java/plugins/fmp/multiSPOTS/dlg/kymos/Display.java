@@ -414,7 +414,7 @@ public class Display extends JPanel implements ViewerListener
 		// see https://stackoverflow.com/questions/13434688/calling-additem-on-an-empty-jcombobox-triggers-actionperformed-event 
 		// when JComboBox is empty, adding the first item will trigger setSelected(0)
 		viewsCombo.removeAllItems();
-		List<String> list = Directories.getSortedListOfSubDirectoriesWithTIFF(exp.getExperimentDirectory());
+		List<String> list = Directories.getSortedListOfSubDirectoriesWithTIFF(exp.getResultsDirectory());
 		for (int i = 0; i < list.size(); i++)
 		{
 			String dirName = list.get(i);
@@ -446,7 +446,7 @@ public class Display extends JPanel implements ViewerListener
 			|| exp.getBinSubDirectory() .contains(localString))
 			return;
 		
-		parent0.expListCombo.expListBinSubDirectory = localString;
+		parent0.expListCombo.stringExpBinSubDirectory = localString;
 		exp.setBinSubDirectory(localString);
 		exp.seqKymos.seq.close();
 		exp.loadKymographs();

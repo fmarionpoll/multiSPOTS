@@ -63,7 +63,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 			Experiment exp = expList.getItemAt(index);
 			
 			progress.setMessage("Processing file: " + (index +1) + "//" + (expList.index1+1));
-			System.out.println("BuildSeries:doInBackground "+(index+1)+": " + exp.getExperimentDirectory());
+			System.out.println("BuildSeries:doInBackground "+(index+1)+": " + exp.getResultsDirectory());
 			exp.setBinSubDirectory(options.binSubDirectory);
 			boolean flag = exp.createDirectoryIfDoesNotExist(exp.getKymosBinFullDirectory());
 			if (flag) 
@@ -170,7 +170,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 		boolean flag = true;
 		if (exp.cages.cagesList.size() < 1 ) 
 		{
-			System.out.println("BuildSeries:checkBoundsForCages ! skipped experiment with no cage: " + exp.getExperimentDirectory());
+			System.out.println("BuildSeries:checkBoundsForCages ! skipped experiment with no cage: " + exp.getResultsDirectory());
 			flag = false;
 		}
 		return flag;

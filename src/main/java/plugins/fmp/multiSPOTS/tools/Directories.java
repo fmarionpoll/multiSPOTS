@@ -109,8 +109,7 @@ public class Directories
 	public static List<String> getSortedListOfSubDirectoriesWithTIFF(String parentDirectory) 
 	{
 		HashSet <String> hSet = getDirectoriesWithFilesType (parentDirectory, ".tiff");
-		List<String> list = reduceFullNameToLastDirectory(new ArrayList<String>(hSet));
-		
+		List<String> list = reduceFullNameToLastDirectory(new ArrayList<String>(hSet));	
 		Collections.sort(list, new Comparator<String>(){
 		    @Override
 		    public int compare(String s1, String s2){	
@@ -132,8 +131,6 @@ public class Directories
 		        return tokens1.compareToIgnoreCase(tokens2);
 		    }
 		});
-
-		
 		return list;
 	}
 

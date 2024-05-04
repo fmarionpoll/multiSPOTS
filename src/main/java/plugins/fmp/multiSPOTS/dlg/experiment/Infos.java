@@ -50,7 +50,6 @@ public class Infos  extends JPanel
 	private JButton				duplicateButton = new JButton("Get previous");
 	
 	private MultiSPOTS 			parent0 		= null;
-	boolean 					disableChangeFile = false;
 	
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 

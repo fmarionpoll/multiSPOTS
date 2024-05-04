@@ -155,7 +155,7 @@ public class Cages
 	public boolean xmlReadCagesFromFile(Experiment exp) 
 	{
 		String [] filedummy = null;
-		String filename = exp.getExperimentDirectory();
+		String filename = exp.getResultsDirectory();
 		File file = new File(filename);
 		String directory = file.getParentFile().getAbsolutePath();
 		filedummy = Dialog.selectFiles(directory, "xml");

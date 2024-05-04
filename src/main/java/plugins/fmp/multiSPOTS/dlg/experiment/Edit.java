@@ -42,7 +42,6 @@ public class Edit   extends JPanel
 	private JTextField			newValueTextField 	= new JTextField (10);
 	private JButton				applyButton 		= new JButton("Apply");
 	private MultiSPOTS 			parent0 			= null;
-			boolean 			disableChangeFile 	= false;
 			ExperimentCombo 	editExpList 		= new ExperimentCombo();
 	
 	

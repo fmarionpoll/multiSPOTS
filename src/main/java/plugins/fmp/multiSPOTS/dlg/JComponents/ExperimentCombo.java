@@ -25,8 +25,8 @@ public class ExperimentCombo extends JComboBox<Experiment>
 	private static final long serialVersionUID = 1L;
 	public 	int 	index0 						= 0;
 	public 	int 	index1 						= 0;
-	public	int		maxSizeOfSpotsArrays 	= 0;
-	public 	String 	expListBinSubDirectory 		= null; 
+	public	int		maxSizeOfSpotsArrays 		= 0;
+	public 	String 	stringExpBinSubDirectory 	= null; 
 	
 
 	public ExperimentCombo () 
@@ -37,7 +37,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 	public void removeAllItems() 
 	{
 		super.removeAllItems();
-		expListBinSubDirectory = null;
+		stringExpBinSubDirectory = null;
 	}
 	
 	public Experiment get_MsTime_of_StartAndEnd_AllExperiments(XLSExportOptions options) 
@@ -131,8 +131,8 @@ public class ExperimentCombo extends JComboBox<Experiment>
 				public void run() 
 				{
 					progress.setMessage("Load experiment "+ it +" of "+ nexpts);
-					exp.setBinSubDirectory(expListBinSubDirectory);
-					if (expListBinSubDirectory == null)
+					exp.setBinSubDirectory(stringExpBinSubDirectory);
+					if (stringExpBinSubDirectory == null)
 						exp.checkKymosDirectory(exp.getBinSubDirectory());
 					if (loadCapillaries) exp.openCapillarieMeasures();
 					if (loadSpots) exp.openSpotsMeasures();
@@ -242,7 +242,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 					continue;
 				}
 				// it should never arrive here
-				System.out.println("ExperimentCombo:chainExperimentsUsingCamIndexes() error in chaining "+ expi.getExperimentDirectory() +" with ->" + expj.getExperimentDirectory());
+				System.out.println("ExperimentCombo:chainExperimentsUsingCamIndexes() error in chaining "+ expi.getResultsDirectory() +" with ->" + expj.getResultsDirectory());
 			}
 		}
 	}

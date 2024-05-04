@@ -113,7 +113,7 @@ public class XLSExportMoveResults extends XLSExport
 		expAll.capillaries.copy(exp.capillaries);
 		expAll.firstImage_FileTime 	= exp.firstImage_FileTime;
 		expAll.lastImage_FileTime 	= exp.lastImage_FileTime;
-		expAll.setExperimentDirectory( exp.getExperimentDirectory());
+		expAll.setResultsDirectory( exp.getResultsDirectory());
 		expAll.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_BOXID, exp.getExperimentField(EnumXLSColumnHeader.EXP_BOXID));
 		expAll.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_EXPT, exp.getExperimentField(EnumXLSColumnHeader.EXP_EXPT));
 		expAll.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_STIM, exp.getExperimentField(EnumXLSColumnHeader.EXP_STIM));

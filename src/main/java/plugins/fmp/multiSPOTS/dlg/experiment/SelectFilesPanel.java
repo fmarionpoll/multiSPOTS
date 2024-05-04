@@ -121,10 +121,10 @@ public class SelectFilesPanel extends JPanel
     			String pattern = (String) filterCombo.getSelectedItem();
     			
     			// ugly patch to cope with one of the previous versions of multicafe that saved files under an other name
-    			if (pattern.contains("MCexperiment"))
-    				pattern = "MCexpe";
-    			else if (pattern.contains("MCcapillaries"))
-    				pattern = "MCcapi";
+//    			if (pattern.contains("MCexperiment"))
+//    				pattern = "MCexpe";
+//    			else if (pattern.contains("MCcapillaries"))
+//    				pattern = "MCcapi";
     			boolean isFileName = rbFile.isSelected();
     			if (pattern.contains("grabs") || pattern.contains("cam")) 
     				isFileName = false;
@@ -209,6 +209,7 @@ public class SelectFilesPanel extends JPanel
         } catch (IOException e) {
 			e.printStackTrace();
 		}
+        
         boolean flag = false;
         if (result != null && result.size() > 0) 
         {
@@ -259,7 +260,7 @@ public class SelectFilesPanel extends JPanel
 			return null;
 		
 		Experiment exp = new Experiment(eADF);
-		return exp.getExperimentDirectory();
+		return exp.getResultsDirectory();
 	}
 	
  	private void getListofFilesMatchingPattern(String pattern, boolean isFileName) 
@@ -332,8 +333,7 @@ public class SelectFilesPanel extends JPanel
 //		HashSet <String> hSet = Directories.getDirectoriesWithFilesType (imageDirectory, ".jpg");
 		File dir = new File(imageDirectory);
 		File[] files = dir.listFiles((d, name) -> name.endsWith(".jpg"));
-		boolean flag = (files.length > 0);
-		return flag;
+		return (files.length > 0);
 	}
 
 }

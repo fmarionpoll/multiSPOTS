@@ -56,7 +56,7 @@ public class XLSExport
 		}
 		pt.x = colseries;
 		
-		String filename = exp.getExperimentDirectory();
+		String filename = exp.getResultsDirectory();
 		if (filename == null)
 			filename = exp.seqCamData.getImagesDirectory();
 		Path path = Paths.get(filename);
@@ -353,7 +353,7 @@ public class XLSExport
 		expAll.spotsArray.copy(exp.spotsArray);
 		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
 		expAll.copyExperimentFields(exp);
-		expAll.setExperimentDirectory(exp.getExperimentDirectory());
+		expAll.setResultsDirectory(exp.getResultsDirectory());
 		
 		Experiment expi = exp.chainToNextExperiment;
 		while (expi != null ) 
@@ -388,7 +388,7 @@ public class XLSExport
 		expAll.spotsArray.copy(exp.spotsArray);
 		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
 		expAll.copyExperimentFields(exp);
-		expAll.setExperimentDirectory(exp.getExperimentDirectory());
+		expAll.setResultsDirectory(exp.getResultsDirectory());
 		
 		Experiment expi = exp.chainToNextExperiment;
 		while (expi != null ) 
@@ -433,7 +433,7 @@ public class XLSExport
 	
 	private void exportError (Experiment expi, int nOutputFrames) 
 	{
-		String error = "XLSExport:ExportError() ERROR in "+ expi.getExperimentDirectory() 
+		String error = "XLSExport:ExportError() ERROR in "+ expi.getResultsDirectory() 
 		+ "\n nOutputFrames="+ nOutputFrames 
 		+ " kymoFirstCol_Ms=" + expi.binFirst_ms 
 		+ " kymoLastCol_Ms=" + expi.binLast_ms;

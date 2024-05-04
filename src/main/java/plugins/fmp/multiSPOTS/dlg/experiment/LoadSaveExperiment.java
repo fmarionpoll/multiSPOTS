@@ -93,38 +93,33 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	}
 	
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) 
+	public void propertyChange(PropertyChangeEvent evt) // TODO
 	{
 		if (evt.getPropertyName().equals("SELECT1_CLOSED")) 
 		{
-			parent0.dlgExperiment.tabInfos.disableChangeFile = true;
 			if (selectedNames.size() < 1)
 				return;
 			
 			ExperimentDirectories experimentDirectories = new ExperimentDirectories(); 
-			if (experimentDirectories.getDirectoriesFromExptPath(parent0.expListCombo, selectedNames.get(0), null))
+			if (experimentDirectories.getDirectoriesFromExptPath(parent0.expListCombo.stringExpBinSubDirectory, selectedNames.get(0)))
 			{
 				final int item = addExperimentFrom3NamesAnd2Lists(experimentDirectories);
-	        	final String binSubDirectory = parent0.expListCombo.expListBinSubDirectory;
+//	        	final String binSubDirectory = parent0.expListCombo.stringExpBinSubDirectory;
 	        	
-	        	SwingUtilities.invokeLater(new Runnable() { public void run() 
-				{	
-	        		parent0.dlgExperiment.tabInfos.disableChangeFile = false;
+//	        	SwingUtilities.invokeLater(new Runnable() { public void run() 
+//				{	
+	        		ExperimentDirectories eDAF = new ExperimentDirectories();
 		        	for (int i = 1; i < selectedNames.size(); i++) 
 					{
-						ExperimentDirectories eDAF = new ExperimentDirectories(); 
-						if (eDAF.getDirectoriesFromExptPath(parent0.expListCombo, selectedNames.get(i), binSubDirectory))
+						if (eDAF.getDirectoriesFromExptPath(parent0.expListCombo.stringExpBinSubDirectory, selectedNames.get(i)))
 							addExperimentFrom3NamesAnd2Lists(eDAF);
 					}
 					selectedNames.clear();
+					
 					updateBrowseInterface();
-					parent0.dlgExperiment.tabInfos.disableChangeFile = true;
 					parent0.dlgExperiment.tabInfos.initInfosCombos(); 
 			     	parent0.expListCombo.setSelectedIndex(item);
-			     	Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-					if (exp != null)
-						parent0.dlgExperiment.tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
-				}});
+//				}});
 			}
 		}
 	}
@@ -275,7 +270,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
             public void actionPerformed(ActionEvent arg0) 
             {
             	ExperimentDirectories eDAF = new ExperimentDirectories(); 
-            	if (eDAF.getDirectoriesFromDialog(parent0.expListCombo, null, true)) 
+            	if (eDAF.getDirectoriesFromDialog(parent0.expListCombo.stringExpBinSubDirectory, null, true)) 
             	{
 	            	int item = addExperimentFrom3NamesAnd2Lists(eDAF);
 	            	parent0.dlgExperiment.tabInfos.initInfosCombos();
@@ -289,10 +284,9 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
             public void actionPerformed(ActionEvent arg0) 
             {
             	ExperimentDirectories eDAF = new ExperimentDirectories(); 
-            	if (eDAF.getDirectoriesFromDialog(parent0.expListCombo, null, false)) 
+            	if (eDAF.getDirectoriesFromDialog(parent0.expListCombo.stringExpBinSubDirectory, null, false)) 
             	{
             		int item = addExperimentFrom3NamesAnd2Lists(eDAF);
-            		parent0.dlgExperiment.tabInfos.initInfosCombos();
             		parent0.expListCombo.setSelectedIndex(item);
             	}
             }});
@@ -320,6 +314,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	{
 		Experiment exp = new Experiment (eDAF);
 		int item = parent0.expListCombo.addExperiment(exp, false);
+		parent0.dlgExperiment.tabInfos.initInfosCombos();
 		return item;
 	}
 
@@ -343,10 +338,10 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 					&& sequenceEvent.getSequence() == exp.seqKymos.seq)
 				{
 					Viewer v = exp.seqKymos.seq.getFirstViewer();
+					v.setTitle("dummy");
 //					int t = v.getPositionT(); 
 //					String title = parent0.paneKymos.tabDisplay.getKymographTitle();
-//					v.setTitle(title);
-					v.setTitle("dummy");
+//					v.setTitle(title);	
 				}
 			}
 		}
