@@ -72,6 +72,9 @@ public class ExperimentDirectories
 	
 	public static List<String> getImagesListFromPathV2(String dir, String extension) 
 	{
+		if( !new File(dir).exists()) 
+			return null;  
+		
 		try (Stream<Path> stream = Files.list(Paths.get(dir))) {
 	        return new ArrayList<> (stream
 	          .filter(file -> !Files.isDirectory(file))
