@@ -374,6 +374,9 @@ public class Display extends JPanel implements ViewerListener
 		for (Spot spot : spotsArray.spotsList) 
 		{
 			spot.getRoi().setSelected(false);
+			spot.getRoi().setFocused(false);
+		}
+		if (isel >= 0) {
 			Spot selectedSpot = spotsArray.spotsList.get(isel);
 			selectedSpot.getRoi().setFocused(true);
 		}

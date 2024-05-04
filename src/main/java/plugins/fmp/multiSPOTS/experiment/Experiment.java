@@ -145,8 +145,11 @@ public class Experiment
 		strBinSubDirectory = lastSubPath.toString();
 		
 		seqCamData = new SequenceCamData(eADF.cameraImagesList);
-		getFileIntervalsFromSeqCamData();
-		seqKymos = new SequenceKymos(eADF.kymosImagesList);
+		if (eADF.cameraImagesList.size() > 0) 
+		{
+			getFileIntervalsFromSeqCamData();
+			seqKymos = new SequenceKymos(eADF.kymosImagesList);
+		}
 		
 		xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML));
 	}
@@ -409,7 +412,8 @@ public class Experiment
 			{
 				camImageFirst_ms = firstImage_FileTime.toMillis();
 				camImageLast_ms = lastImage_FileTime.toMillis();
-				camImageBin_ms = (camImageLast_ms - camImageFirst_ms)/(seqCamData.nTotalFrames-1);
+				if (seqCamData.nTotalFrames > 1)
+					camImageBin_ms = (camImageLast_ms - camImageFirst_ms)/(seqCamData.nTotalFrames-1);
 				if (camImageBin_ms == 0)
 					System.out.println("Experiment:loadFileIntervalsFromSeqCamData() error / file interval size");
 			}
