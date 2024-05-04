@@ -34,7 +34,7 @@ public class Experiment
 	public final static String 	RESULTS				= "results";
 	public final static String 	BIN					= "bin_";
 	
-	private String			cameraImagesDirectory	= null;
+	private String			imagesDirectory			= null;
 	private String			resultsDirectory		= null;
 	private String			binSubDirectory			= null;
 		
@@ -134,24 +134,14 @@ public class Experiment
 	
 	public Experiment(ExperimentDirectories eADF) 
 	{
-//		String imgDir = null;
-//		if (eADF.cameraImagesList.size() > 0)
-//			imgDir = eADF.cameraImagesList.get(0);
-//		cameraImagesDirectory = Directories.getDirectoryFromName(imgDir);
-		cameraImagesDirectory = eADF.cameraImagesDirectory;
+		imagesDirectory = eADF.cameraImagesDirectory;
 		resultsDirectory = eADF.resultsDirectory;
-//		String binDirectory = resultsDirectory + File.separator + eADF.binSubDirectory;
-//		Path binDirectoryPath = Paths.get(binDirectory);
-//		Path lastSubPath = binDirectoryPath.getName(binDirectoryPath.getNameCount()-1);
-//		binSubDirectory = lastSubPath.toString();
 		binSubDirectory = eADF.binSubDirectory;
-		
 		seqCamData = new SequenceCamData(eADF.cameraImagesList);
-		if (eADF.cameraImagesList.size() > 0) 
-		{
+		if (eADF.cameraImagesList.size() > 1) 
 			getFileIntervalsFromSeqCamData();
+		if(eADF.kymosImagesList!= null && eADF.kymosImagesList.size() > 0)
 			seqKymos = new SequenceKymos(eADF.kymosImagesList);
-		}
 		xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML));
 	}
 	
@@ -251,12 +241,12 @@ public class Experiment
 		
 	public void setCameraImagesDirectory(String name) 
 	{
-		cameraImagesDirectory = name;
+		imagesDirectory = name;
 	}
 	
 	public String getCameraImagesDirectory() 
 	{
-		return cameraImagesDirectory;
+		return imagesDirectory;
 	}
 	
 	public void closeSequences() 
@@ -327,10 +317,8 @@ public class Experiment
 	
 	private SequenceCamData loadImagesForSequenceCamData(String filename) 
 	{
-		cameraImagesDirectory = ExperimentDirectories.getImagesDirectoryAsParentFromFileName(filename);			
-//		List<String> imagesList = ExperimentDirectories.getImagesListFromPath(strImagesDirectory);
-//		imagesList = ExperimentDirectories.keepOnlyAcceptedNames_List(imagesList, "jpg");
-		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(cameraImagesDirectory, "jpg");
+		imagesDirectory = ExperimentDirectories.getImagesDirectoryAsParentFromFileName(filename);			
+		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(imagesDirectory, "jpg");
 		seqCamData = null;
 		if (imagesList.size() >0) 
 		{
@@ -383,7 +371,7 @@ public class Experiment
 		
 	public SequenceCamData openSequenceCamData() 
 	{
-		loadImagesForSequenceCamData(cameraImagesDirectory);
+		loadImagesForSequenceCamData(imagesDirectory);
 		if (seqCamData != null) 
 		{
 			loadXML_MCExperiment();
@@ -404,7 +392,7 @@ public class Experiment
 	{
 		if (seqCamData != null)
 		{	
-			seqCamData.setImagesDirectory(cameraImagesDirectory);
+			seqCamData.setImagesDirectory(imagesDirectory);
 			firstImage_FileTime = seqCamData.getFileTimeFromStructuredName(0);
 			lastImage_FileTime = seqCamData.getFileTimeFromStructuredName(seqCamData.nTotalFrames-1);
 			if (firstImage_FileTime != null && lastImage_FileTime != null)
@@ -510,8 +498,8 @@ public class Experiment
 	{
 		if (resultsDirectory == null && seqCamData != null) 
 		{
-			cameraImagesDirectory = seqCamData.getImagesDirectory() ;
-			resultsDirectory = cameraImagesDirectory + File.separator + RESULTS;
+			imagesDirectory = seqCamData.getImagesDirectory() ;
+			resultsDirectory = imagesDirectory + File.separator + RESULTS;
 		}
 		boolean found = xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML));
 		return found;
@@ -545,9 +533,9 @@ public class Experiment
 	        XMLUtil.setElementValue(node, ID_COND1, field_cond1); 
 	        XMLUtil.setElementValue(node, ID_COND2, field_cond2);
 	        
-	        if (cameraImagesDirectory == null ) 
-	        	cameraImagesDirectory = seqCamData.getImagesDirectory();
-	        XMLUtil.setElementValue(node, ID_IMAGESDIRECTORY, cameraImagesDirectory);
+	        if (imagesDirectory == null ) 
+	        	imagesDirectory = seqCamData.getImagesDirectory();
+	        XMLUtil.setElementValue(node, ID_IMAGESDIRECTORY, imagesDirectory);
 
 	        String tempname = concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML) ;
 	        return XMLUtil.saveDocument(doc, tempname);
@@ -1106,8 +1094,8 @@ public class Experiment
 		switch (item) 
 		{
 		case IMG_DIRECTORY:
-			cameraImagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
-			xmlFullFileName = cameraImagesDirectory + File.separator + xmlFileName;
+			imagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
+			xmlFullFileName = imagesDirectory + File.separator + xmlFileName;
 			break;
 			
 		case BIN_DIRECTORY:
@@ -1139,8 +1127,8 @@ public class Experiment
 		if(xmlFullFileName != null && fileExists (xmlFullFileName)) 
 		{
 			if (item == IMG_DIRECTORY) {
-				cameraImagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
-				ExperimentDirectories.moveAndRename(xmlFileName, cameraImagesDirectory, xmlFileName,resultsDirectory);
+				imagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
+				ExperimentDirectories.moveAndRename(xmlFileName, imagesDirectory, xmlFileName,resultsDirectory);
 				xmlFullFileName = resultsDirectory + xmlFullFileName;
 			}
 			return xmlFullFileName;

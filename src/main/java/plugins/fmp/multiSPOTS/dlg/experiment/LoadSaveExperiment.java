@@ -106,8 +106,8 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 				final int item = addExperimentFrom3NamesAnd2Lists(experimentDirectories);
 //	        	final String binSubDirectory = parent0.expListCombo.stringExpBinSubDirectory;
 	        	
-//	        	SwingUtilities.invokeLater(new Runnable() { public void run() 
-//				{	
+	        	SwingUtilities.invokeLater(new Runnable() { public void run() 
+				{	
 	        		ExperimentDirectories eDAF = new ExperimentDirectories();
 		        	for (int i = 1; i < selectedNames.size(); i++) 
 					{
@@ -119,7 +119,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 					updateBrowseInterface();
 					parent0.dlgExperiment.tabInfos.initInfosCombos(); 
 			     	parent0.expListCombo.setSelectedIndex(item);
-//				}});
+				}});
 			}
 		}
 	}

@@ -75,17 +75,20 @@ public class ExperimentDirectories
 		if( !new File(dir).exists()) 
 			return null;  
 		
-		try (Stream<Path> stream = Files.list(Paths.get(dir))) {
+		Path pDir = Paths.get(dir); //.toAbsolutePath();
+		try (Stream<Path> stream = Files.list(pDir)) {
 	        return new ArrayList<> (stream
 	          .filter(file -> !Files.isDirectory(file))
 	          .filter(s -> s.toString().endsWith(extension))
 	          .map(Path::getFileName)
+	          .map(Path::toAbsolutePath)
 	          .map(Path::toString)
 	          .collect(Collectors.toSet()));
 	    } catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return null;
 	}
 	
@@ -149,7 +152,6 @@ public class ExperimentDirectories
 			return false;
 		
 		this.cameraImagesDirectory = Directories.getDirectoryFromName(cameraImagesList.get(0));
-		
 		this.resultsDirectory = getResultsDirectoryDialog(cameraImagesDirectory, Experiment.RESULTS, createResults);
 		this.binSubDirectory = getBinSubDirectoryFromTIFFLocation(binSubDirectory, resultsDirectory);
 		
@@ -158,8 +160,7 @@ public class ExperimentDirectories
 		// TODO wrong if any bin
 		return true;
 	}
-	
-// TODO is binSubDirectory useful?	
+		
 	public boolean getDirectoriesFromExptPath(String expListBinSubDirectory, String exptDirectory)
 	{
 		String grabDirectory = getImagesDirectoryAsParentFromFileName(exptDirectory);

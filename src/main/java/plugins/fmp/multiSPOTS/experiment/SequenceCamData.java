@@ -145,8 +145,6 @@ public class SequenceCamData
 	
 	private void loadImageList()
 	{
-//		List<String> imagesList = ExperimentDirectories.getImagesListFromPath(imagesDirectory);
-//		imagesList = ExperimentDirectories.keepOnlyAcceptedNames_List(imagesList, "jpg");
 		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(imagesDirectory, "jpg");
 		if (imagesList.size() > 0) 
 		{

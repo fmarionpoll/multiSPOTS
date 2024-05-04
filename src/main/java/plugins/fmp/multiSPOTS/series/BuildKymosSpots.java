@@ -126,6 +126,8 @@ public class BuildKymosSpots extends BuildSeries
 			System.out.println("BuildKymoSpots:buildKymo Abort (1): nb spots = 0");
 			return false;
 		}
+		if (exp.seqKymos == null)
+			exp.seqKymos = new SequenceKymos();
 		SequenceKymos seqKymos = exp.seqKymos;
 		seqKymos.seq = new Sequence();
 		initArraysToBuildKymographImages(exp);
