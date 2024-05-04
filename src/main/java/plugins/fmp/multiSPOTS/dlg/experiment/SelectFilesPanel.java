@@ -37,7 +37,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentDirectories;
 
 
-public class SelectFiles1 extends JPanel 
+public class SelectFilesPanel extends JPanel 
 {
 	/**
 	 * 
@@ -54,15 +54,17 @@ public class SelectFiles1 extends JPanel
 	private JRadioButton rbDirectory			= new JRadioButton("directory");
 	private JList<String> directoriesJList		= new JList<String>(new DefaultListModel<String>());
 	private MultiSPOTS 	parent0 				= null;
-	private LoadSaveExperiment 	parent1 				= null;
+			List<String> selectedNames 			= null;
+//	private LoadSaveExperiment 	parent1 		= null;
 
 	
 	
-	public void initialize (MultiSPOTS parent0) 
+	public void initialize (MultiSPOTS parent0, List<String> stringList) 
 	{
 		this.parent0 = parent0;
-		this.parent1 = parent0.dlgExperiment.panelLoadSave;
-		addPropertyChangeListener(parent1);
+//		this.parent1 = parent0.dlgExperiment.panelLoadSave;
+		addPropertyChangeListener(parent0.dlgExperiment.panelLoadSave);
+		selectedNames = stringList;
 		
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
 		dialogFrame = new IcyFrame ("Select files", true, true);
@@ -320,9 +322,9 @@ public class SelectFiles1 extends JPanel
 		{
 			String directoryName = Paths.get(name).getParent().toString();
 			if (isDirectoryWithJpg(directoryName))
-				parent1.selectedNames.add(directoryName);
+				selectedNames.add(directoryName);
 		}
-		Collections.sort(parent1.selectedNames);
+		Collections.sort(selectedNames);
 	}
 
 	private boolean isDirectoryWithJpg(String directoryName) {

@@ -46,7 +46,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	protected JCheckBox		filteredCheck	= new JCheckBox("List filtered");
 	
 	public List<String> 	selectedNames 	= new ArrayList<String> ();
-	private SelectFiles1 	dialogSelect 	= null;
+	private SelectFilesPanel dialogSelect 	= null;
 	
 	private JButton  		previousButton	= new JButton("<");
 	private JButton			nextButton		= new JButton(">");
@@ -265,8 +265,8 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
             public void actionPerformed(ActionEvent arg0) 
             {
             	selectedNames = new ArrayList<String> ();
-            	dialogSelect = new SelectFiles1();
-            	dialogSelect.initialize(parent0);
+            	dialogSelect = new SelectFilesPanel();
+            	dialogSelect.initialize(parent0, selectedNames);
             }});
 		
 		createButton.addActionListener(new ActionListener()  
