@@ -13,7 +13,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxMs;
+import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxMs;
 
 
 

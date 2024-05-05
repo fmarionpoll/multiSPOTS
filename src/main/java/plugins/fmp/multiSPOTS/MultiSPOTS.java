@@ -11,13 +11,13 @@ import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
 import icy.plugin.abstract_.PluginActionable;
 import icy.preferences.GeneralPreferences;
-import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
 import plugins.fmp.multiSPOTS.dlg.cages.DlgCages_;
 import plugins.fmp.multiSPOTS.dlg.excel.DlgExcel_;
 import plugins.fmp.multiSPOTS.dlg.experiment.DlgExperiment_;
 import plugins.fmp.multiSPOTS.dlg.kymos.DlgKymos_;
 import plugins.fmp.multiSPOTS.dlg.measureSpots.DlgMeasure_;
 import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
+import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 
 

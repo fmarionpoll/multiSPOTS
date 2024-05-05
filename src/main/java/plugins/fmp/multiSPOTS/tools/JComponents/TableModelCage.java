@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.dlg.JComponents;
+package plugins.fmp.multiSPOTS.tools.JComponents;
 
 
 import javax.swing.table.AbstractTableModel;

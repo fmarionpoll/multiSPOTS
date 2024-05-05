@@ -1,6 +1,6 @@
 package plugins.fmp.multiSPOTS.tools.toExcel;
 
-import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
+import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 public class XLSExportOptions 
 {	

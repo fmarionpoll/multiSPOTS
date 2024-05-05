@@ -18,8 +18,8 @@ import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.system.thread.Processor;
-import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;
 
 

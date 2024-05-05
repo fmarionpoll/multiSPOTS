@@ -24,9 +24,9 @@ import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
 import icy.sequence.SequenceEvent.SequenceEventSourceType;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.SequenceNameListRenderer;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentDirectories;
+import plugins.fmp.multiSPOTS.tools.JComponents.SequenceNameListRenderer;
 import icy.gui.frame.progress.ProgressFrame;
 
 

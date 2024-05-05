@@ -21,9 +21,8 @@ import icy.util.XMLUtil;
 import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
-
-import plugins.fmp.multiSPOTS.dlg.JComponents.Dialog;
 import plugins.fmp.multiSPOTS.tools.Comparators;
+import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
 
 
 

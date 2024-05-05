@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.dlg.JComponents;
+package plugins.fmp.multiSPOTS.tools.JComponents;
 
 import java.util.Arrays;
 import java.util.Collections;

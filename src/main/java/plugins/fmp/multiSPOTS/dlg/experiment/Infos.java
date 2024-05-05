@@ -13,8 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxModelSorted;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxModelSorted;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 
 

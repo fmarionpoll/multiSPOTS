@@ -20,11 +20,11 @@ import javax.swing.SwingConstants;
 
 import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxMs;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.series.BuildKymosSpots;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.EnumStatusComputation;
+import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxMs;
 
 
 public class Create extends JPanel implements PropertyChangeListener 
