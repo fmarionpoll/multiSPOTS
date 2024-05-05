@@ -26,10 +26,10 @@ public class Canvas2DWithFilters extends Canvas2D
 	 */
 	private static final long serialVersionUID = 8827595503996677250L;
 	public ImageTransformEnums[] imageTransform = new ImageTransformEnums[] {ImageTransformEnums.NONE,
-			ImageTransformEnums.R_RGB, ImageTransformEnums.G_RGB, ImageTransformEnums.B_RGB 
-//			, ImageTransformEnums.R2MINUS_GB, ImageTransformEnums.G2MINUS_RB, ImageTransformEnums.B2MINUS_RG, ImageTransformEnums.RGB
-//			, ImageTransformEnums.GBMINUS_2R, ImageTransformEnums.RBMINUS_2G, ImageTransformEnums.RGMINUS_2B, ImageTransformEnums.RGB_DIFFS
-//			, ImageTransformEnums.H_HSB, ImageTransformEnums.S_HSB, ImageTransformEnums.B_HSB
+			ImageTransformEnums.R_RGB, ImageTransformEnums.G_RGB, ImageTransformEnums.B_RGB, 
+			ImageTransformEnums.R2MINUS_GB, ImageTransformEnums.G2MINUS_RB, ImageTransformEnums.B2MINUS_RG, ImageTransformEnums.RGB,
+			ImageTransformEnums.GBMINUS_2R, ImageTransformEnums.RBMINUS_2G, ImageTransformEnums.RGMINUS_2B, ImageTransformEnums.RGB_DIFFS,
+			ImageTransformEnums.H_HSB, ImageTransformEnums.S_HSB, ImageTransformEnums.B_HSB
 			};
 	public JComboBox<ImageTransformEnums> imageTransformFunctionsCombo = new JComboBox<ImageTransformEnums> (imageTransform);
 	ImageTransformInterface transform = ImageTransformEnums.NONE.getFunction();
@@ -44,19 +44,7 @@ public class Canvas2DWithFilters extends Canvas2D
     {
     	toolBar.addSeparator();
         toolBar.add(imageTransformFunctionsCombo);
-        
-//		IcyButton previousButton = new IcyButton(ResourceUtilFMP.ICON_PREVIOUS_IMAGE);
-//		previousButton.setSelected(false);
-//		previousButton.setFocusable(false);
-//		previousButton.setToolTipText("Select previous capillary (to the left or lower index)");
-//        toolBar.add(previousButton); 
-//		
-//        IcyButton nextButton = new IcyButton(ResourceUtilFMP.ICON_NEXT_IMAGE);
-//        nextButton.setSelected(false);
-//        nextButton.setFocusable(false);
-//        nextButton.setToolTipText("Select next capillary (to the right or higher index)");
-//		toolBar.add(nextButton);
-		
+
 		IcyIcon fitY = ResourceUtilFMP.ICON_FIT_YAXIS;
 		IcyButton fitYAxisButton = new IcyButton(fitY);
 		fitYAxisButton.setSelected(false);
@@ -72,19 +60,7 @@ public class Canvas2DWithFilters extends Canvas2D
 		toolBar.add(fitXAxisButton);
         
 		super.customizeToolbar(toolBar);
-        
-//        previousButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent arg0) {
-//                setPositionT( getPositionT()-1);
-//            }});
-//        
-//        nextButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent arg0) {
-//            	setPositionT( getPositionT()+1);
-//            }});
-        
+       
         fitYAxisButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -175,14 +151,14 @@ public class Canvas2DWithFilters extends Canvas2D
 		IcyButton previousButton = new IcyButton(ResourceUtilFMP.ICON_PREVIOUS_IMAGE);
 		previousButton.setSelected(false);
 		previousButton.setFocusable(false);
-		previousButton.setToolTipText("Select previous capillary (to the left or lower index)");
-        toolBar.add(previousButton); 
+		previousButton.setToolTipText("Previous");
+        toolBar.add(previousButton, 0); 
 		
         IcyButton nextButton = new IcyButton(ResourceUtilFMP.ICON_NEXT_IMAGE);
         nextButton.setSelected(false);
         nextButton.setFocusable(false);
-        nextButton.setToolTipText("Select next capillary (to the right or higher index)");
-		toolBar.add(nextButton);
+        nextButton.setToolTipText("Next");
+		toolBar.add(nextButton, 1);
 		
 		super.customizeToolbar(toolBar);
         

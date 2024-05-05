@@ -44,7 +44,8 @@ public class Graphs extends JPanel implements SequenceListener
 
     private JRadioButton displayAllButton = new JRadioButton("all cages");
     private JRadioButton displaySelectedButton = new JRadioButton("cage selected");
-	
+
+	//----------------------------------------
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 
 	{	

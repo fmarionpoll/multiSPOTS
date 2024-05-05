@@ -10,6 +10,8 @@ public class ChartData
 	public MaxMinDouble xMaxMin = null;
 	public XYSeriesCollection xyDataset = null;
 
+	//----------------------------------------
+	
 	public ChartData () 
 	{
 	}

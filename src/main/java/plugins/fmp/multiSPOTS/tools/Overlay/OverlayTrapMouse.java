@@ -24,6 +24,8 @@ public class OverlayTrapMouse extends Overlay
 	private JComboBox<Color> 	colorPickCombo 	= null;
 	private String 				textPickAPixel 	= null;
 
+	//----------------------------------------
+	
     public OverlayTrapMouse() 
     {
         super("Simple overlay");

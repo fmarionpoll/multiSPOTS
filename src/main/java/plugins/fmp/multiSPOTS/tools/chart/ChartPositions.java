@@ -35,6 +35,8 @@ public class ChartPositions extends IcyFrame
 	private Point 	pt = new Point (0,0);
 	private double globalXMax = 0;
 	
+	//----------------------------------------
+	
 	public void createPanel(String cstitle) 
 	{
 		title = cstitle; 

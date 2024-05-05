@@ -62,7 +62,6 @@ public class ChartSpots extends IcyFrame
 	private double xmax = 0;
 	private List<JFreeChart> xyChartList  = new ArrayList <JFreeChart>();
 
-
 	//----------------------------------------
 	
 	public void createChartPanel(MultiSPOTS parent, String cstitle) 
@@ -169,7 +168,10 @@ public class ChartSpots extends IcyFrame
         		true, true, true, false, true); // boolean properties, boolean save, boolean print, boolean zoom, boolean tooltips)
         panel.addChartMouseListener(new ChartMouseListener() {
 		    public void chartMouseClicked(ChartMouseEvent e) {
-		    	selectSpot(getClickedSpot(e)); }
+		    	Spot spot = getClickedSpot(e);
+		    	selectSpot(spot); 
+		    	selectKymograph(spot);
+		    	}
 		    public void chartMouseMoved(ChartMouseEvent e) {}
 		});
     	
@@ -226,6 +228,17 @@ public class ChartSpots extends IcyFrame
         	ROI2D roi = spot.getRoi();
         	exp.seqCamData.seq.setFocusedROI(roi);
         }
+	}
+	
+	private void selectKymograph(Spot spot)
+	{
+		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+		if (exp.seqKymos != null) {
+	        Viewer v = exp.seqKymos.seq.getFirstViewer();
+	        if (v != null && spot != null) {
+	        	v.setPositionT(spot.spotIndex);
+	        }
+		}
 	}
 
 	private List<XYSeriesCollection> getDataArrays(Experiment exp, XLSExportOptions xlsExportOptions) 
