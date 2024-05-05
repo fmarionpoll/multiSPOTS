@@ -20,10 +20,10 @@ public class SortRedColumns extends ImageTransformFunctionAbstract implements Im
 		int channel = 0;		// RED
 		int[][] sorted = new int[sourceImage.getHeight()][2]; 
 		try {
-			for (int y = 0; y < sourceImage.getHeight(); y++) 
+			for (int x = 0; x < sourceImage.getWidth(); x++) 
 			{
-				getSortOrderForColumn(sourceImage, y, channel, sorted); 
-				for (int x = 0; x < sourceImage.getWidth(); x++) {
+				getSortOrderForColumn(sourceImage, x, channel, sorted); 
+				for (int y = 0; y < sourceImage.getHeight(); y++) {
 					int ySourceIndex = sorted[y][0];
 					for (int chan= 0; chan < 3; chan++)
 						destinationCursor.set(x, y, chan, sourceCursor.get(x, ySourceIndex, chan));
