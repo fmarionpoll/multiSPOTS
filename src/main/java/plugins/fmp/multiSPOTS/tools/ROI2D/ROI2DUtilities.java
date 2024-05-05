@@ -283,7 +283,8 @@ public class ROI2DUtilities
 		}
 	}
 
-	public static Polygon2D getPolygonEnclosingROI2DArray(ArrayList<ROI2D> listRois) {
+	public static Polygon2D getPolygonEnclosingROI2DArray(ArrayList<ROI2D> listRois) 
+	{
 		ROI2D roi1 = listRois.get(0);
 		Point2D pt1 = getROI2DFirstPoint(roi1);
 		Point2D pt2 = getROI2DLastPoint(roi1);

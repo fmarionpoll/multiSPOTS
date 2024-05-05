@@ -468,11 +468,8 @@ public class CapillariesArray
 		if (capillariesListTimeIntervals == null) 
 		{
 			capillariesListTimeIntervals = new KymoIntervals();
-			
-			for (Capillary cap: capillariesList) 
-			{
-				for (ROI2DAlongTime roiFK: cap.getROIsForKymo()) 
-				{
+			for (Capillary cap: capillariesList) {
+				for (ROI2DAlongTime roiFK: cap.getROIsForKymo()) {
 					Long[] interval = {roiFK.getStart(), (long) -1}; 
 					capillariesListTimeIntervals.addIfNew(interval);
 				}

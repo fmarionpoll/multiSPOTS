@@ -15,7 +15,6 @@ import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.measureSpots.ThresholdColors;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 
@@ -28,17 +27,15 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 	 */
 	private static final long serialVersionUID = 853047648249832145L;
 	public	PopupPanel 		capPopupPanel	= null;
-			JTabbedPane 	tabsPane 		= new JTabbedPane();		
+			JTabbedPane 	tabbedPane 		= new JTabbedPane();		
+
+//			ThresholdColors colorsThreshold = new ThresholdColors();
 			CreateSpots		tabCreateSpots 	= new CreateSpots();
-
-			ThresholdColors colorsThreshold = new ThresholdColors();
-
 			Infos			tabInfos		= new Infos();
+			Shape			tabShape		= new Shape();
 			Edit			tabEdit			= new Edit();
-
 	public 	LoadSaveSpots 	tabFile  		= new LoadSaveSpots();
 	
-//			Adjust 		tabAdjust 		= new Adjust();
 
 	private int			id_infos		= 1;
 	private int 		id_create 		= 0;
@@ -59,29 +56,34 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 		
 		tabCreateSpots.init(gridLayout, parent0);
 		tabCreateSpots.addPropertyChangeListener(this);
-		tabsPane.addTab("Create", null, tabCreateSpots, "Create spots defining liquid drops");
+		tabbedPane.addTab("Create", null, tabCreateSpots, "Create spots defining liquid drops");
 		id_create = order;
 		order++;
 		
 		tabInfos.init(gridLayout, parent0);
 		tabInfos.addPropertyChangeListener(this);
-		tabsPane.addTab("Infos", null, tabInfos, "Edit infos");
+		tabbedPane.addTab("Infos", null, tabInfos, "Edit infos");
 		id_infos = order;
+		order++;
+		
+		tabShape.init(gridLayout, parent0);
+		tabShape.addPropertyChangeListener(this);
+		tabbedPane.addTab("Shape", null, tabShape, "Edit spots shape");
 		order++;
 		
 		tabEdit.init(gridLayout, parent0);
 		tabEdit.addPropertyChangeListener(this);
-		tabsPane.addTab("Edit", null, tabEdit, "Edit spots shape");
+		tabbedPane.addTab("Edit", null, tabEdit, "Edit spots position with time");
 		order++;
 		
 		tabFile.init(gridLayout, parent0);
 		tabFile.addPropertyChangeListener(this);
-		tabsPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with spots descriptors");
+		tabbedPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with spots descriptors");
 		order++;
 		
-		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		capPanel.add(tabsPane);
-		tabsPane.addChangeListener(this );
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		capPanel.add(tabbedPane);
+		tabbedPane.addChangeListener(this );
 		
 		capPopupPanel.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -100,12 +102,12 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (exp != null) {
 				displayCapillariesInformation(exp);
-			  	tabsPane.setSelectedIndex(id_infos);
+			  	tabbedPane.setSelectedIndex(id_infos);
 			  	parent0.dlgExperiment.tabIntervals.displayCamDataIntervals(exp);
 			}
 		}			  
 		else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
-			tabsPane.setSelectedIndex(id_infos);
+			tabbedPane.setSelectedIndex(id_infos);
 		}
 
 	}

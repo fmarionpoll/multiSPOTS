@@ -32,7 +32,7 @@ public class SpotsArray
 	public SpotsDescription 	spotsDescription	= new SpotsDescription();
 	public SpotsDescription 	desc_old			= new SpotsDescription();
 	public ArrayList <Spot> 	spotsList			= new ArrayList <Spot>();
-//	private	KymoIntervals 		spotsListTimeIntervals = null;
+	private	KymoIntervals 		spotsListTimeIntervals = null;
 		
 	private final static String ID_SPOTTRACK 		= "spotTrack";
 	private final static String ID_NSPOTS			= "N_spots";
@@ -460,6 +460,49 @@ public class SpotsArray
 		for (Spot spot: spotsList) {
 			spot.transferToPolyline();	
 		}
+	}
+	
+	public KymoIntervals getKymoIntervalsFromSpots() 
+	{
+		if (spotsListTimeIntervals == null) 
+		{
+			spotsListTimeIntervals = new KymoIntervals();
+			for (Spot spot: spotsList) {
+				for (ROI2DAlongTime roiFK: spot.getROIsForKymo()) {
+					Long[] interval = {roiFK.getStart(), (long) -1}; 
+					spotsListTimeIntervals.addIfNew(interval);
+				}
+			}
+		}
+		return spotsListTimeIntervals;
+	}
+	
+	public int findKymoROI2DIntervalStart(long intervalT) 
+	{
+		return spotsListTimeIntervals.findStartItem(intervalT);
+	}
+	
+	public int addKymoROI2DInterval(long start) 
+	{
+		Long[] interval = {start, (long) -1};
+		int item = spotsListTimeIntervals.addIfNew(interval);
+		
+		for (Spot spot: spotsList) 
+		{
+			List<ROI2DAlongTime> listROI2DForKymo = spot.getROIsForKymo();
+			ROI2D roi = spot.getRoi();
+			if (item>0 ) 
+				roi = (ROI2D) listROI2DForKymo.get(item-1).getRoi().getCopy();
+			listROI2DForKymo.add(item, new ROI2DAlongTime(start, roi));
+		}
+		return item;
+	}
+	
+	public void deleteKymoROI2DInterval(long start) 
+	{
+		spotsListTimeIntervals.deleteIntervalStartingAt(start);
+		for (Spot spot: spotsList) 
+			spot.removeROI2DIntervalStartingAt(start);
 	}
 	
 	// --------------------------------
