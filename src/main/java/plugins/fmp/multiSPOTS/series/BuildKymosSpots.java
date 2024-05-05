@@ -102,8 +102,6 @@ public class BuildKymosSpots extends BuildSeries
 					String filename = directory + File.separator + spot.getRoiName() + ".tiff";
 					File file = new File (filename);
 					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
-//					IcyBufferedImage image = spot.spot_Image;
-					
 					try {
 						Saver.saveImage(image, file, true);
 					} 
@@ -126,10 +124,7 @@ public class BuildKymosSpots extends BuildSeries
 			System.out.println("BuildKymoSpots:buildKymo Abort (1): nb spots = 0");
 			return false;
 		}
-		if (exp.seqKymos == null)
-			exp.seqKymos = new SequenceKymos();
-		SequenceKymos seqKymos = exp.seqKymos;
-		seqKymos.seq = new Sequence();
+		
 		initArraysToBuildKymographImages(exp);
 		
 		threadRunning = true;
@@ -148,8 +143,7 @@ public class BuildKymosSpots extends BuildSeries
 		
 	    tasks.clear();
 	    int binT0 = (int) exp.binT0;
-	    for (int ii = binT0; ii < nFrames; ii++)  
-		{
+	    for (int ii = binT0; ii < nFrames; ii++) {
 			final int fromSourceImageIndex = ii;
 			final int t =  ii;	
 			final IcyBufferedImage sourceImage = loadImageFromIndex(exp, fromSourceImageIndex);
@@ -173,7 +167,7 @@ public class BuildKymosSpots extends BuildSeries
 		
 		ProgressFrame progressBar2 = new ProgressFrame("Combine results into kymograph");
 		int sizeC = seqData.getSizeC();
-		exportSpotImages_to_Kymograph(exp, seqKymos.seq, sizeC);
+		exportSpotImages_to_Kymograph(exp, sizeC);
         progressBar2.close();
         
 		return true;
@@ -182,12 +176,10 @@ public class BuildKymosSpots extends BuildSeries
 	private void analyzeImageWithSpot(IcyBufferedImageCursor cursorSource, Spot spot, int t, int sizeC)
 	{
 		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);		
-		for (int chan = 0; chan < sizeC; chan++) 
-		{
+		for (int chan = 0; chan < sizeC; chan++) {
 			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
 			try {
-				for (int y = 0; y < roiT.cPoints.length; y++) 
-				{
+				for (int y = 0; y < roiT.cPoints.length; y++) {
 					Point pt = roiT.cPoints[y];
 					cursor.set(t, y, chan, cursorSource.get((int)pt.getX(), (int)pt.getY(), chan));
 				}
@@ -210,8 +202,9 @@ public class BuildKymosSpots extends BuildSeries
 		return sourceImage;
 	}
 	
-	private void exportSpotImages_to_Kymograph(Experiment exp, Sequence seqKymo, final int sizeC)
+	private void exportSpotImages_to_Kymograph(Experiment exp, final int sizeC)
 	{
+		Sequence seqKymo = exp.seqKymos.seq ;
 		seqKymo.beginUpdate();
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildKymograph");
@@ -221,11 +214,9 @@ public class BuildKymosSpots extends BuildSeries
 		tasks.clear();
 		int vertical_resolution = 512;
 		 
-		for (int ispot = 0; ispot < nbspots; ispot++) 
-		{
+		for (int ispot = 0; ispot < nbspots; ispot++) {
 			final Spot spot = exp.spotsArray.spotsList.get(ispot);
 			final int indexSpot = ispot;
-			
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
@@ -243,6 +234,11 @@ public class BuildKymosSpots extends BuildSeries
 		
 	private void initArraysToBuildKymographImages(Experiment exp) 
 	{
+		if (exp.seqKymos == null)
+			exp.seqKymos = new SequenceKymos();
+		SequenceKymos seqKymos = exp.seqKymos;
+		seqKymos.seq = new Sequence();
+		
 		SequenceCamData seqCamData = exp.seqCamData;
 		if (seqCamData.seq == null) 
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
@@ -257,11 +253,9 @@ public class BuildKymosSpots extends BuildSeries
 		if (dataType.toString().equals("undefined"))
 			dataType = DataType.UBYTE;
 
-		for (Spot spot: exp.spotsArray.spotsList) 
-		{
+		for (Spot spot: exp.spotsArray.spotsList) {
 			int imageHeight = 0;
-			for (ROI2DAlongTime roiT : spot.getROIsForKymo()) 
-			{
+			for (ROI2DAlongTime roiT : spot.getROIsForKymo()) {
 				roiT.setBooleanMask2D();
 				
 				int imageHeight_i = roiT.cPoints.length;
@@ -270,7 +264,6 @@ public class BuildKymosSpots extends BuildSeries
 			}
 			spot.spot_Image = new IcyBufferedImage(kymoImageWidth, imageHeight, numC, dataType);
 		}
-
 	}
 		
 	private void adjustImage(IcyBufferedImage workImage, IcyBufferedImage referenceImage) 

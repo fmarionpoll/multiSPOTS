@@ -132,7 +132,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 				if (exp != null && exp.seqKymos != null) 
 				{				
 					int index = spotsTransformsComboBox.getSelectedIndex();
-					Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
+					Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
 					updateTransformFunctionsOfCanvas(exp);
 					if (!spotsViewButton.isSelected()) {
 						spotsViewButton.setSelected(true);
@@ -195,11 +195,6 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	{
 		if (exp.seqCamData != null && exp.seqCamData.seq != null)
 			exp.seqCamData.seq.removeOverlay(overlayThreshold);
-	}
-	
-	protected Canvas2DWithFilters getCanvas2DWithFilters(Experiment exp) 
-	{
-		return (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
 	}
 	
 	void updateOverlayThreshold() 
@@ -285,7 +280,8 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		{
 			removeOverlay(exp);
 			spotsOverlayCheckBox.setSelected(false);
-			getCanvas2DWithFilters(exp).imageTransformFunctionsCombo.setSelectedIndex(0);
+			Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
+			canvas.imageTransformFunctionsCombo.setSelectedIndex(0);
 			
 		}
 		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
@@ -293,7 +289,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	
 	private void updateTransformFunctionsOfCanvas(Experiment exp)
 	{
-		Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
+		Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
 		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
 		{
 			canvas.updateListOfImageTransformFunctions(transforms);

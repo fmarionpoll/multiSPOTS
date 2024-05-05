@@ -131,7 +131,7 @@ public class Shape extends JPanel
 				if (exp != null && exp.seqKymos != null) 
 				{				
 					int index = spotsTransformsComboBox.getSelectedIndex();
-					Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
+					Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
 					updateTransformFunctionsOfCanvas(exp);
 					if (!spotsViewButton.isSelected()) {
 						spotsViewButton.setSelected(true);
@@ -219,11 +219,6 @@ public class Shape extends JPanel
 			exp.seqCamData.seq.removeOverlay(overlayThreshold);
 	}
 	
-	protected Canvas2DWithFilters getCanvas2DWithFilters(Experiment exp) 
-	{
-		return (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
-	}
-	
 	void updateOverlayThreshold() 
 	{
 		if (overlayThreshold == null)
@@ -256,9 +251,9 @@ public class Shape extends JPanel
 		options.spotThresholdUp 	= (spotsDirectionComboBox.getSelectedIndex() == 0);
 		options.spotThreshold		= (int) spotsThresholdSpinner.getValue();				
 		options.analyzePartOnly		= false; //fromCheckBox.isSelected();
-		options.overlayTransform = (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem(); 
-		options.overlayIfGreater = (spotsDirectionComboBox.getSelectedIndex() == 0);
-		options.overlayThreshold = (int) spotsThresholdSpinner.getValue();
+		options.overlayTransform 	= (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem(); 
+		options.overlayIfGreater 	= (spotsDirectionComboBox.getSelectedIndex() == 0);
+		options.overlayThreshold 	= (int) spotsThresholdSpinner.getValue();
 		
 		return options;
 	}
@@ -274,7 +269,8 @@ public class Shape extends JPanel
 		{
 			removeOverlay(exp);
 			spotsOverlayCheckBox.setSelected(false);
-			getCanvas2DWithFilters(exp).imageTransformFunctionsCombo.setSelectedIndex(0);
+			Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
+			canvas.imageTransformFunctionsCombo.setSelectedIndex(0);
 			
 		}
 		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
@@ -282,7 +278,7 @@ public class Shape extends JPanel
 	
 	private void updateTransformFunctionsOfCanvas(Experiment exp)
 	{
-		Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
+		Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
 		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
 		{
 			canvas.updateListOfImageTransformFunctions(transforms);

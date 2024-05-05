@@ -249,7 +249,7 @@ public class EditPositionWithTime  extends JPanel implements ListSelectionListen
 		if (exp == null) return;
 		Sequence seq = exp.seqCamData.seq;
 		
-		int intervalT =  (int) exp.capillaries.getKymoROI2DIntervalsStartAt(selectedRow);
+		int intervalT =  (int) exp.spotsArray.getKymoROI2DIntervalsStartAt(selectedRow);
 		seq.removeAllROI();	
 		List<ROI2D> listRois = new ArrayList<ROI2D>();
 		for (Spot spot : exp.spotsArray.spotsList)
@@ -266,7 +266,7 @@ public class EditPositionWithTime  extends JPanel implements ListSelectionListen
 			return;
 		Sequence seq = exp.seqCamData.seq;
 		
-		int intervalT =  (int) exp.capillaries.getKymoROI2DIntervalsStartAt(selectedRow);
+		int intervalT =  (int) exp.spotsArray.getKymoROI2DIntervalsStartAt(selectedRow);
 		List<ROI2D> listRois = seq.getROI2Ds();
 		for (ROI2D roi: listRois) {
 			if (!roi.getName().contains("line")) 

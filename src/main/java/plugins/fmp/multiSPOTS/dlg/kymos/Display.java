@@ -465,7 +465,8 @@ public class Display extends JPanel implements ViewerListener
 		{
 //			removeOverlay(exp);
 //			spotsOverlayCheckBox.setSelected(false);
-			getCanvas2DWithFilters(exp).imageTransformFunctionsCombo.setSelectedIndex(0);
+			Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqKymos.seq.getFirstViewer().getCanvas();
+			canvas.imageTransformFunctionsCombo.setSelectedIndex(0);
 			
 		}
 //		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
@@ -473,7 +474,7 @@ public class Display extends JPanel implements ViewerListener
 	
 	private void updateTransformFunctionsOfCanvas(Experiment exp)
 	{
-		Canvas2DWithFilters canvas = getCanvas2DWithFilters(exp);
+		Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqKymos.seq.getFirstViewer().getCanvas();
 //		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
 //		{
 			canvas.updateListOfImageTransformFunctions(transforms);
@@ -482,9 +483,6 @@ public class Display extends JPanel implements ViewerListener
 		canvas.selectImageTransformFunction(index +1);
 	}
 	
-	protected Canvas2DWithFilters getCanvas2DWithFilters(Experiment exp) 
-	{
-		return (Canvas2DWithFilters) exp.seqKymos.seq.getFirstViewer().getCanvas();
-	}
+
 
 }

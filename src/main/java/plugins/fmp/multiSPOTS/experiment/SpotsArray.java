@@ -482,6 +482,11 @@ public class SpotsArray
 		return spotsListTimeIntervals.findStartItem(intervalT);
 	}
 	
+	public long getKymoROI2DIntervalsStartAt(int selectedItem) 
+	{
+		return spotsListTimeIntervals.get(selectedItem)[0];
+	}
+	
 	public int addKymoROI2DInterval(long start) 
 	{
 		Long[] interval = {start, (long) -1};
