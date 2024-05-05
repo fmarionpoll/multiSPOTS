@@ -140,34 +140,29 @@ public class ExperimentDirectories
 		return isOK;
 	}
 
-	public boolean getDirectoriesFromDialog(String binSubDirectory, String rootDirectory, boolean createResults)
+	public boolean getDirectoriesFromDialog(String expListBinSubDirectory, String rootDirectory, boolean createResults)
 	{
-		cameraImagesList = getImagesListFromDialog(rootDirectory);
+		cameraImagesList = getImagesListFromDialog(rootDirectory);  // *
 		if (!checkCameraImagesList()) 
 			return false;
+		cameraImagesDirectory = Directories.getDirectoryFromName(cameraImagesList.get(0)); // *
+		resultsDirectory = getResultsDirectoryDialog(cameraImagesDirectory, Experiment.RESULTS, createResults); // *
 		
-		this.cameraImagesDirectory = Directories.getDirectoryFromName(cameraImagesList.get(0));
-		this.resultsDirectory = getResultsDirectoryDialog(cameraImagesDirectory, Experiment.RESULTS, createResults);
-		this.binSubDirectory = getBinSubDirectoryFromTIFFLocation(binSubDirectory, resultsDirectory);
-		
+		binSubDirectory = getBinSubDirectoryFromTIFFLocation(expListBinSubDirectory, resultsDirectory);
 		String kymosDir = resultsDirectory + File.separator + this.binSubDirectory;
-		this.kymosImagesList = ExperimentDirectories.getImagesListFromPathV2(kymosDir, "tiff");
-		// TODO wrong if any bin
+		kymosImagesList = ExperimentDirectories.getImagesListFromPathV2(kymosDir, "tiff");
 		return true;
 	}
 		
 	public boolean getDirectoriesFromExptPath(String expListBinSubDirectory, String exptDirectory)
 	{
-		String grabDirectory = getImagesDirectoryAsParentFromFileName(exptDirectory);
-		this.cameraImagesList = ExperimentDirectories.getImagesListFromPathV2(grabDirectory, "jpg");
-		this.cameraImagesDirectory = grabDirectory; 
+		cameraImagesDirectory  = getImagesDirectoryAsParentFromFileName(exptDirectory); // *
+		cameraImagesList = ExperimentDirectories.getImagesListFromPathV2(cameraImagesDirectory, "jpg");  // *
+		resultsDirectory =  getResultsDirectory(cameraImagesDirectory, exptDirectory); // *
 		
-		this.resultsDirectory =  getResultsDirectory(cameraImagesDirectory, exptDirectory);
-		this.binSubDirectory = getBinSubDirectoryFromTIFFLocation(expListBinSubDirectory, resultsDirectory);
-		
+		binSubDirectory = getBinSubDirectoryFromTIFFLocation(expListBinSubDirectory, resultsDirectory);
 		String kymosDir = resultsDirectory + File.separator + this.binSubDirectory;
-		this.kymosImagesList = ExperimentDirectories.getImagesListFromPathV2(kymosDir, "tiff");
-		// TODO wrong if any bin
+		kymosImagesList = ExperimentDirectories.getImagesListFromPathV2(kymosDir, "tiff");
 		return true;
 	}
 	

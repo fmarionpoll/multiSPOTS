@@ -134,9 +134,14 @@ public class ExperimentCombo extends JComboBox<Experiment>
 					exp.setBinSubDirectory(stringExpBinSubDirectory);
 					if (stringExpBinSubDirectory == null)
 						exp.checkKymosDirectory(exp.getBinSubDirectory());
-					if (loadCapillaries) exp.openCapillarieMeasures();
-					if (loadSpots) exp.openSpotsMeasures();
-					if (loadDrosoTrack) exp.openPositionsMeasures();
+					
+					if (loadCapillaries) 
+						exp.openCapillarieMeasures();
+					if (loadSpots) 
+						exp.openSpotsMeasures();
+					if (loadDrosoTrack) 
+						exp.openPositionsMeasures();
+					
 					if (maxSizeOfSpotsArrays < exp.capillaries.capillariesList.size())
 					{
 						maxSizeOfSpotsArrays = exp.capillaries.capillariesList.size();
@@ -309,9 +314,9 @@ public class ExperimentCombo extends JComboBox<Experiment>
 		int position = -1;
 		if (filename != null) 
 		{
-			for (int i=0; i< getItemCount(); i++) 
+			for (int i = 0; i < getItemCount(); i++) 
 			{
-				if (filename.compareTo(getItemAt(i).toString()) == 0) 
+				if (filename.equals(getItemAt(i).toString())) 
 				{
 					position = i;
 					break;
@@ -324,9 +329,9 @@ public class ExperimentCombo extends JComboBox<Experiment>
 	public Experiment getExperimentFromExptName(String filename) 
 	{
 		Experiment exp = null;
-		for (int i=0; i < getItemCount(); i++) {
+		for (int i = 0; i < getItemCount(); i++) {
 			String expString = getItemAt(i).toString();
-			if (filename.compareTo(expString) == 0) 
+			if (filename.equals(expString)) 
 			{
 				exp = getItemAt(i);
 				break;
@@ -373,7 +378,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 	{
 		int nitems = getItemCount();
 		List<Experiment> expList = new ArrayList<Experiment>(nitems);
-		for (int i=0; i< nitems; i++) 
+		for (int i = 0; i < nitems; i++) 
 			expList.add(getItemAt(i));
 		return expList;
 	}
@@ -381,7 +386,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 	public void setExperimentsFromList (List<Experiment> listExp)
 	{
 		removeAllItems();
-		for (Experiment exp: listExp)
+		for (Experiment exp : listExp)
 			addItem(exp);
 	}
 
