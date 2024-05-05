@@ -4,6 +4,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -283,75 +284,27 @@ public class ROI2DUtilities
 		}
 	}
 
-	public static Polygon2D getPolygonEnclosingROI2DArray(ArrayList<ROI2D> listRois) 
+	public static Polygon2D getPolygonEnclosingSpots(ArrayList<ROI2D> listRois) 
 	{
 		ROI2D roi1 = listRois.get(0);
-		Point2D pt1 = getROI2DFirstPoint(roi1);
-		Point2D pt2 = getROI2DLastPoint(roi1);
-		double [] xpoints = {pt1.getX(), pt1.getX(), pt2.getX(), pt2.getX()};
-		double [] ypoints = {pt1.getY(), pt1.getY(), pt2.getY(), pt2.getY()};
+		Rectangle rect0 = roi1.getBounds();
+		int x0 = (int) rect0.getX();
+		int y0 = (int) rect0.getY();
+		int width0 = (int) rect0.getWidth();
+		int height0 = (int) rect0.getHeight();
 		
 		for (ROI2D roi : listRois) {
-			if (!roi.getName().contains("line")) 
+			if (!roi.getName().contains("spot")) 
 				continue;
-			
-			pt1 = getROI2DFirstPoint(roi);
-			updateUpperLeftCorner(pt1, xpoints, ypoints);
-			updateUpperRightCorner(pt1, xpoints, ypoints);
-			
-			pt2 = getROI2DLastPoint(roi);
-			updateLowerLeftCorner(pt2, xpoints, ypoints);
-			updateLowerRightCorner(pt2, xpoints, ypoints);
+			Rectangle rect1 = roi.getBounds();
+			int x1 = (int) rect1.getX();
+			int y1 = (int) rect1.getY();
+			int width1 = x1 - x0 +(int) rect1.getWidth();
+			int height1 = y1 - y0 + (int) rect1.getHeight();
+			if (width1 > width0) width0 = width1;
+			if (height1 > height0) height0 = height1;
 		}
-		return new Polygon2D(xpoints, ypoints, 4); 
-	}
-	
-	private static void updateUpperLeftCorner(Point2D pt, double [] xpoints, double [] ypoints)
-	{
-		final int i = 0;
-		if (pt.getX() < xpoints[i]) { 
-			xpoints[i] = pt.getX();
-			if (pt.getY() < ypoints[i]) 
-				ypoints[i] = pt.getY();
-		}
-	}
-	
-	private static void updateUpperRightCorner(Point2D pt, double [] xpoints, double [] ypoints)
-	{
-		final int i = 1;
-		if (pt.getX() > xpoints[i]) { 
-			xpoints[i] = pt.getX();
-			if (pt.getY() < ypoints[i]) 
-				ypoints[i] = pt.getY();
-		}
-	}
-	
-	private static void updateLowerLeftCorner(Point2D pt, double [] xpoints, double [] ypoints)
-	{
-		final int i = 3;
-		if (pt.getX() < xpoints[i]) {
-			xpoints[i] = pt.getX();
-			if (pt.getY() > ypoints[i]) ypoints[i] = pt.getY();
-		}
-	}
-	
-	private static void updateLowerRightCorner(Point2D pt, double [] xpoints, double [] ypoints)
-	{
-		final int i = 2;
-		if (pt.getX() > xpoints[i]) {
-			xpoints[i] = pt.getX();
-			if (pt.getY() > ypoints[i]) ypoints[i] = pt.getY();
-		}
-	}
-	
-	private static Point2D getROI2DFirstPoint(ROI2D roi) {
-		Rectangle rect = roi.getBounds();
-		return new Point2D.Double(rect.getX(), rect.getY());
-	}
-	
-	private static Point2D getROI2DLastPoint(ROI2D roi) {
-		Rectangle rect = roi.getBounds();
-		return new Point2D.Double(rect.getX() + rect.getWidth(), rect.getY()+rect.getHeight());
+		return new Polygon2D(new Rectangle2D.Double(x0, y0, width0, height0)); 
 	}
 
 	public static ArrayList<Point2D> getPoints2DArrayFromROI2D (ROI2D roi) 

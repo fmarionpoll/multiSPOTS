@@ -169,7 +169,7 @@ public class EditPositionWithTime  extends JPanel implements ListSelectionListen
 		Sequence seq = exp.seqCamData.seq;
 		ArrayList<ROI2D> listRois = seq.getROI2Ds();
 		for (ROI2D roi : listRois) {
-			if (!roi.getName().contains("line")) 
+			if (!roi.getName().contains("spot")) 
 				continue;
 			Point2D point2d = roi.getPosition2D();
 			roi.setPosition2D(new Point2D.Double(point2d.getX()+deltaX, point2d.getY()+ deltaY));
@@ -200,7 +200,7 @@ public class EditPositionWithTime  extends JPanel implements ListSelectionListen
 			ROI2DAlongTime kymoROI2D = spot.getROI2DKymoAtIntervalT(t);
 			listRoisAtT.add(kymoROI2D.getRoi());
 		}
-		Polygon2D polygon = ROI2DUtilities.getPolygonEnclosingROI2DArray(listRoisAtT);
+		Polygon2D polygon = ROI2DUtilities.getPolygonEnclosingSpots(listRoisAtT);
  
 		removeFrameAroundSpots(exp.seqCamData.seq) ;
 		envelopeRoi_initial = new ROI2DPolygon (polygon);
