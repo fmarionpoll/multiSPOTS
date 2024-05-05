@@ -237,7 +237,7 @@ public class Display extends JPanel implements ViewerListener
 				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);				
 				List<String> list = IcyCanvas.getCanvasPluginNames();
 				String pluginName = list.stream()
-						  .filter(s -> s.contains("Filters"))
+						  .filter(s -> s.contains("Canvas2DWithFilters"))
 						  .findFirst()
 						  .orElse(null);
 				viewerKymographs.setCanvas(pluginName);
