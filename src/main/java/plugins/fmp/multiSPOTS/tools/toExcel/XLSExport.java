@@ -13,7 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
 import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -32,7 +32,7 @@ public class XLSExport
     XSSFFont 					font_blue 			= null;
     XSSFWorkbook 				workbook			= null;		
     
-	ExperimentCombo 			expList 			= null;
+	JComboBoxExperiment 			expList 			= null;
 //	XLSResultsArray 			rowListForOneExp 	= new XLSResultsArray ();
 
 

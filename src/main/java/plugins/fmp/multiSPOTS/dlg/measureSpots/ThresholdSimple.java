@@ -26,7 +26,7 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.series.DetectSpots;
-import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
+import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2DWithFilters;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 

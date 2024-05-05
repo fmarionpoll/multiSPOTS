@@ -20,7 +20,7 @@ import javax.swing.table.TableColumnModel;
 
 import icy.gui.frame.IcyFrame;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.SpotTableModel;
+import plugins.fmp.multiSPOTS.dlg.JComponents.TableModelSpot;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 
@@ -32,7 +32,7 @@ public class SpotTable extends JPanel
 	private static final long serialVersionUID 		= -8611587540329642259L;
 	IcyFrame 					dialogFrame 		= null;
     private JTable 				jTable 			= new JTable();
-	private SpotTableModel 		spotTableModel 		= null;
+	private TableModelSpot 		spotTableModel 		= null;
 	private JButton				copyButton 			= new JButton("Copy table");
 	private JButton				pasteButton 		= new JButton("Paste");
 	private JButton				duplicateLRButton 	= new JButton("Duplicate cell to L/R");
@@ -54,7 +54,7 @@ public class SpotTable extends JPanel
 		this.parent0 = parent0;
 		spotsArrayCopy = spotCopy;
 		
-		spotTableModel = new SpotTableModel(parent0.expListCombo);
+		spotTableModel = new TableModelSpot(parent0.expListCombo);
 	    jTable.setModel(spotTableModel);
 	    jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    jTable.setPreferredScrollableViewportSize(new Dimension(500, 400));

@@ -6,15 +6,15 @@ import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 
-public class SortedComboBoxModel extends DefaultComboBoxModel<String> {
+public class JComboBoxModelSorted extends DefaultComboBoxModel<String> {
 
 	private static final long serialVersionUID = -729889390560323340L;
 	
-	public SortedComboBoxModel() {
+	public JComboBoxModelSorted() {
 	    super();
 	}
 	
-	public SortedComboBoxModel(String[] items) {
+	public JComboBoxModelSorted(String[] items) {
 		Arrays.sort(items);
 	    int size = items.length;
 	    for (int i = 0; i < size; i++) {
@@ -23,7 +23,7 @@ public class SortedComboBoxModel extends DefaultComboBoxModel<String> {
 	    setSelectedItem(items[0]);
 	}
 
-	public SortedComboBoxModel(Vector<String> items) {
+	public JComboBoxModelSorted(Vector<String> items) {
 		Collections.sort(items);
 	    int size = items.size();
 	    for (int i = 0; i < size; i++) {

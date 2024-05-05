@@ -1,6 +1,6 @@
 package plugins.fmp.multiSPOTS.tools.toExcel;
 
-import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
 
 public class XLSExportOptions 
 {	
@@ -51,7 +51,7 @@ public class XLSExportOptions
 	
 	public int 		expIndexFirst 			= -1;
 	public int 		expIndexLast 			= -1;
-	public ExperimentCombo expList 		= null;
+	public JComboBoxExperiment expList 		= null;
 
 	// internal parameters
 	public	boolean	trim_alive			= false;

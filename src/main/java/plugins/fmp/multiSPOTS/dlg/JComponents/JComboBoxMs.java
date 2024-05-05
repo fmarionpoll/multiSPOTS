@@ -2,7 +2,7 @@ package plugins.fmp.multiSPOTS.dlg.JComponents;
 
 import javax.swing.JComboBox;
 
-public class JComboMs extends JComboBox<String>  
+public class JComboBoxMs extends JComboBox<String>  
 {
 	/**
 	 * 
@@ -11,7 +11,7 @@ public class JComboMs extends JComboBox<String>
 	
 	String [] scale = new String[] {"ms", "s", "min", "h", "day"};
 	
-	public JComboMs() 
+	public JComboBoxMs() 
 	{
 		super ();
 		for (int i=0; i < scale.length; i++)

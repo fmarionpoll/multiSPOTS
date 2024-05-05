@@ -28,7 +28,7 @@ import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.SpotsWithTimeTableModel;
+import plugins.fmp.multiSPOTS.dlg.JComponents.TableModelSpotWithTime;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ROI2DAlongTime;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -56,14 +56,14 @@ public class EditPositionWithTime  extends JPanel implements ListSelectionListen
 	private ROI2DPolygon 		envelopeRoi_initial	= null;
 	private MultiSPOTS 			parent0 			= null; 
 	
-	private SpotsWithTimeTableModel spotsWithTimeTablemodel = null;
+	private TableModelSpotWithTime spotsWithTimeTablemodel = null;
 	
 		
 	
 	public void initialize (MultiSPOTS parent0, Point pt) 
 	{
 		this.parent0 = parent0;
-		spotsWithTimeTablemodel = new SpotsWithTimeTableModel(parent0.expListCombo);
+		spotsWithTimeTablemodel = new TableModelSpotWithTime(parent0.expListCombo);
 		
 		JPanel topPanel = new JPanel(new GridLayout(3, 1));
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT); 

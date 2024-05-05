@@ -2,20 +2,21 @@ package plugins.fmp.multiSPOTS.dlg.JComponents;
 
 import javax.swing.table.AbstractTableModel;
 
+import plugins.fmp.multiSPOTS.experiment.Capillary;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Spot;
 
-public class SpotTableModel extends AbstractTableModel  
+
+public class TableModelCapillary extends AbstractTableModel  
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6325792669154093747L;
-	private ExperimentCombo expList 	= null;
-	String columnNames[] = { "Name", "Cage", "N flies", "N pixels", "Volume", "Stimulus", "Concentration"};
+	private JComboBoxExperiment expList 	= null;
+	String columnNames[] = { "Name", "Cage", "N flies", "Volume", "Stimulus", "Concentration"};
 	
 	
-	public SpotTableModel (ExperimentCombo expList) {
+	public TableModelCapillary (JComboBoxExperiment expList) {
 		super();
 		this.expList = expList;
 	}
@@ -31,10 +32,9 @@ public class SpotTableModel extends AbstractTableModel
     	case 0: return String.class;
     	case 1: return Integer.class;
     	case 2: return Integer.class;
-    	case 3: return Integer.class;
-    	case 4:	return Double.class;
+    	case 3:	return Double.class;
+    	case 4: return String.class;
     	case 5: return String.class;
-    	case 6: return String.class;
         }
     	return String.class;
     }
@@ -48,23 +48,22 @@ public class SpotTableModel extends AbstractTableModel
     public int getRowCount() {
     	if (expList != null && expList.getSelectedIndex() >= 0 ) {
     		Experiment exp = (Experiment) expList.getSelectedItem();
-			return exp.spotsArray.spotsList.size();
+			return exp.capillaries.capillariesList.size();
     	}
         return 0;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-    	Spot spot = getSpotAt(rowIndex);
-    	if (spot != null) {
+    	Capillary cap = getCapillaryAt(rowIndex);
+    	if (cap != null) {
         	switch (columnIndex) {
-            case 0: return spot.getRoiName();
-            case 1: return spot.cageIndex;
-            case 2: return spot.spotNFlies;
-            case 3: return spot.spotNPixels;
-            case 4: return spot.spotVolume;
-            case 5: return spot.spotStim;
-            case 6: return spot.spotConc;
+            case 0: return cap.getRoiName();
+            case 1: return cap.cageID;
+            case 2: return cap.nFlies;
+            case 3: return cap.volume;
+            case 4: return cap.stimulus;
+            case 5: return cap.concentration;
         	}
     	}
     	return null;
@@ -82,26 +81,26 @@ public class SpotTableModel extends AbstractTableModel
     
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-    	Spot spot = getSpotAt(rowIndex);
-    	if (spot != null) {
+    	Capillary cap = getCapillaryAt(rowIndex);
+    	if (cap != null) {
         	switch (columnIndex) {
-            case 0: spot.setRoiName(aValue.toString()); break;
-            case 1: spot.cageIndex = (int) aValue; break;
-            case 2: spot.spotNFlies = (int) aValue; break;
-            case 3: spot.spotNPixels = (int) aValue; break;
-            case 4: spot.spotVolume = (double) aValue; break;
-            case 5: spot.spotStim = aValue.toString(); break;
-            case 6: spot.spotConc = aValue.toString(); break;
+            case 0: cap.setRoiName(aValue.toString()); break;
+            case 1: cap.cageID = (int) aValue; break;
+            case 2: cap.nFlies = (int) aValue; break;
+            case 3: cap.volume = (double) aValue; break;
+            case 4: cap.stimulus = aValue.toString(); break;
+            case 5: cap.concentration = aValue.toString(); break;
         	}
     	}
     }
     
-    private Spot getSpotAt(int rowIndex) {
-		Spot spot = null;
+    private Capillary getCapillaryAt(int rowIndex) {
+		Capillary cap = null;
     	if (expList != null && expList.getSelectedIndex() >=0 ) {
     		Experiment exp = (Experiment) expList.getSelectedItem();
-    		spot = exp.spotsArray.spotsList.get(rowIndex);
+    		cap = exp.capillaries.capillariesList.get(rowIndex);
     	}
-    	return spot;
+    	return cap;
 	}
+
 }

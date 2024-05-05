@@ -11,7 +11,7 @@ import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
 import icy.plugin.abstract_.PluginActionable;
 import icy.preferences.GeneralPreferences;
-import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
 import plugins.fmp.multiSPOTS.dlg.cages.DlgCages_;
 import plugins.fmp.multiSPOTS.dlg.excel.DlgExcel_;
 import plugins.fmp.multiSPOTS.dlg.experiment.DlgExperiment_;
@@ -24,7 +24,7 @@ import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
 public class MultiSPOTS extends PluginActionable  
 {
 	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS May 5, 2024", true, true, true, true);
-	public ExperimentCombo 	expListCombo 	= new ExperimentCombo();
+	public JComboBoxExperiment 	expListCombo 	= new JComboBoxExperiment();
 	
 	public DlgExperiment_ 	dlgExperiment 	= new DlgExperiment_();
 	public DlgSpots_ 		dlgSpots		= new DlgSpots_();

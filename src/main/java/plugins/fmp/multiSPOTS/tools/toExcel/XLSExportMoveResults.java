@@ -11,7 +11,7 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import icy.gui.frame.progress.ProgressFrame;
-import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
 import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.FlyPosition;
@@ -24,7 +24,7 @@ import plugins.fmp.multiSPOTS.tools.Comparators;
 
 public class XLSExportMoveResults extends XLSExport 
 {
-	ExperimentCombo expList = null;
+	JComboBoxExperiment expList = null;
 	List <FlyPositions> rowsForOneExp = new ArrayList <FlyPositions> ();
 	
 	public void exportToFile(String filename, XLSExportOptions opt) 

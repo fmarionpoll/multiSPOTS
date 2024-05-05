@@ -5,18 +5,18 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
-public class SpotsWithTimeTableModel extends AbstractTableModel {
+public class TableModelSpotWithTime extends AbstractTableModel {
 
 	/**
 	 * 
 	 */
 	private static final long 	serialVersionUID 	= 1L;
-	private ExperimentCombo 	expList 			= null;
+	private JComboBoxExperiment 	expList 			= null;
 	private final String 		columnNames[] 		= { "Starting at frame", "End frame" };
 	private ArrayList<Long[]> 	intervals 			= null;
 	
 	
-	public SpotsWithTimeTableModel (ExperimentCombo expList) {
+	public TableModelSpotWithTime (JComboBoxExperiment expList) {
 		super();
 		this.expList = expList;
 	}

@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.tools;
+package plugins.fmp.multiSPOTS.tools.Canvas2D;
 
 
 import java.awt.Rectangle;

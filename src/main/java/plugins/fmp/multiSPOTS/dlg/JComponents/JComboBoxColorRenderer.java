@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.tools;
+package plugins.fmp.multiSPOTS.dlg.JComponents;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -10,13 +10,13 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 
-public class ComboBoxColorRenderer extends JPanel implements ListCellRenderer<Object>
+public class JComboBoxColorRenderer extends JPanel implements ListCellRenderer<Object>
 {
     private static final long serialVersionUID = -1L;
     JPanel textPanel;
     JLabel text;
 
-    public ComboBoxColorRenderer(JComboBox<Color> combo) {
+    public JComboBoxColorRenderer(JComboBox<Color> combo) {
 
         textPanel = new JPanel();
         textPanel.add(this);

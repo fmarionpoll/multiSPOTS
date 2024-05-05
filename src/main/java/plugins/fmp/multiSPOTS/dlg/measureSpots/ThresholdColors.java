@@ -21,7 +21,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.tools.ComboBoxColorRenderer;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxColorRenderer;
 
 
 
@@ -32,7 +32,7 @@ public class ThresholdColors extends JPanel implements PropertyChangeListener {
 	 */
 	private static final long serialVersionUID = -4359876050505295400L;
 	JComboBox<Color> colorPickCombo = new JComboBox<Color>();
-	private ComboBoxColorRenderer colorPickComboRenderer = new ComboBoxColorRenderer(colorPickCombo);
+	private JComboBoxColorRenderer colorPickComboRenderer = new JComboBoxColorRenderer(colorPickCombo);
 	
 	private String textPickAPixel 		= "Pick a pixel";
 	private JButton pickColorButton		= new JButton(textPickAPixel);

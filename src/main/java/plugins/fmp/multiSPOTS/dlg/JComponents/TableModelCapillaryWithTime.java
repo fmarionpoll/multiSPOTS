@@ -10,18 +10,18 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 
 
-public class CapillariesWithTimeTableModel extends AbstractTableModel {
+public class TableModelCapillaryWithTime extends AbstractTableModel {
 
 	/**
 	 * 
 	 */
 	private static final long 	serialVersionUID 	= 1L;
-	private ExperimentCombo 	expList 			= null;
+	private JComboBoxExperiment 	expList 			= null;
 	private final String 		columnNames[] 		= { "Starting at frame", "End frame" };
 	private ArrayList<Long[]> 	intervals 			= null;
 	
 	
-	public CapillariesWithTimeTableModel (ExperimentCombo expList) {
+	public TableModelCapillaryWithTime (JComboBoxExperiment expList) {
 		super();
 		this.expList = expList;
 	}

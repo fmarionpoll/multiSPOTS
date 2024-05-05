@@ -33,8 +33,8 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotsArray;
-import plugins.fmp.multiSPOTS.tools.Canvas2DWithFilters;
 import plugins.fmp.multiSPOTS.tools.Directories;
+import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2DWithFilters;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 
 

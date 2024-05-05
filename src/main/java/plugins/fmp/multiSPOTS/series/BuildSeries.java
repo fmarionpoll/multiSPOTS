@@ -18,7 +18,7 @@ import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.system.thread.Processor;
-import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;
 
@@ -48,7 +48,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 		System.out.println("BuildSeries:doInBackground loop over experiments");
         threadRunning = true;
 		int nbiterations = 0;
-		ExperimentCombo expList = options.expList;
+		JComboBoxExperiment expList = options.expList;
 		ProgressFrame progress = new ProgressFrame("Analyze series");
 		selectedExperimentIndex = expList.getSelectedIndex();
 		
@@ -84,7 +84,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 		return nbiterations;
 	}
 
-	private void selectList(ExperimentCombo expList, int index) {
+	private void selectList(JComboBoxExperiment expList, int index) {
 		try 
 		{
 			SwingUtilities.invokeAndWait(new Runnable() 

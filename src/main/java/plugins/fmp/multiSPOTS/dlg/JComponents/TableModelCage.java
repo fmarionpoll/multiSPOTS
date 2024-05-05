@@ -9,17 +9,17 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 
 
-public class CageTableModel extends AbstractTableModel
+public class TableModelCage extends AbstractTableModel
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3501225818220221949L;
-	private ExperimentCombo expList 	= null;
+	private JComboBoxExperiment expList 	= null;
 	
 	
 	
-	public CageTableModel (ExperimentCombo expList) 
+	public TableModelCage (JComboBoxExperiment expList) 
 	{
 		super();
 		this.expList = expList;

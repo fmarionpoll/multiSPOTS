@@ -16,8 +16,8 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
-import plugins.fmp.multiSPOTS.dlg.JComponents.SortedComboBoxModel;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxModelSorted;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 
@@ -29,14 +29,14 @@ public class Filter  extends JPanel
 	 */
 	private static final long serialVersionUID = 2190848825783418962L;
 
-	private JComboBox<String>	cmt1Combo		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String>	comt2Combo		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	boxIDCombo		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	exptCombo 		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	strainCombo 	= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	sexCombo 		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	cond1Combo 		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	cond2Combo 		= new JComboBox<String>(new SortedComboBoxModel());
+	private JComboBox<String>	cmt1Combo		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String>	comt2Combo		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	boxIDCombo		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	exptCombo 		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	strainCombo 	= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	sexCombo 		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	cond1Combo 		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	cond2Combo 		= new JComboBox<String>(new JComboBoxModelSorted());
 	
 	private JCheckBox			experimentCheck	= new JCheckBox(EnumXLSColumnHeader.EXP_EXPT.toString());
 	private JCheckBox			boxIDCheck		= new JCheckBox(EnumXLSColumnHeader.EXP_BOXID.toString());
@@ -50,7 +50,7 @@ public class Filter  extends JPanel
 	private JButton				clearButton		= new JButton("Clear");
 	
 	private MultiSPOTS 			parent0 		= null;
-			ExperimentCombo 	filterExpList 	= new ExperimentCombo();
+			JComboBoxExperiment 	filterExpList 	= new JComboBoxExperiment();
 	
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 

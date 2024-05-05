@@ -14,7 +14,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.JComboMs;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxMs;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 
@@ -33,7 +33,7 @@ public class Intervals extends JPanel
 	JSpinner 	frameFirstJSpinner	= new JSpinner(new SpinnerNumberModel(val, min, max, step)); 
 	JSpinner 	frameLastJSpinner	= new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
 	JSpinner 	binSizeJSpinner		= new JSpinner(new SpinnerNumberModel(1., 0., 1000., 1.));
-	JComboMs 	binUnit 			= new JComboMs();
+	JComboBoxMs 	binUnit 			= new JComboBoxMs();
 	JButton		applyButton 		= new JButton("Apply changes");
 	JButton		refreshButton 		= new JButton("Refresh");
 	private MultiSPOTS 	parent0 	= null;

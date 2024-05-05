@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
 
 import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.JComboMs;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxMs;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.series.BuildKymosSpots;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
@@ -42,13 +42,13 @@ public class Create extends JPanel implements PropertyChangeListener
 	JLabel		startFrameLabel			= new JLabel ("starting at frame");
 	JSpinner	startFrameSpinner 		= new JSpinner(new SpinnerNumberModel(0, 0, 100000, 1));
 	JSpinner 	binSize					= new JSpinner(new SpinnerNumberModel(1., 1., 1000., 1.));
-	JComboMs 	binUnit 				= new JComboMs();
+	JComboBoxMs 	binUnit 				= new JComboBoxMs();
 			
 	JRadioButton isFloatingFrameButton	= new JRadioButton("all", true);
 	JRadioButton isFixedFrameButton		= new JRadioButton("from ", false);
 	JSpinner 	startJSpinner			= new JSpinner(new SpinnerNumberModel(0., 0., 10000., 1.)); 
 	JSpinner 	endJSpinner				= new JSpinner(new SpinnerNumberModel(240., 1., 99999999., 1.));
-	JComboMs 	intervalsUnit 			= new JComboMs();
+	JComboBoxMs 	intervalsUnit 			= new JComboBoxMs();
 
 	EnumStatusComputation 	sComputation 			= EnumStatusComputation.START_COMPUTATION; 
 	private MultiSPOTS 		parent0					= null;

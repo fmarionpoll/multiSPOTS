@@ -16,7 +16,7 @@ import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 
-public class ExperimentCombo extends JComboBox<Experiment>
+public class JComboBoxExperiment extends JComboBox<Experiment>
 {
 	
 	/**
@@ -29,7 +29,7 @@ public class ExperimentCombo extends JComboBox<Experiment>
 	public 	String 	stringExpBinSubDirectory 	= null; 
 	
 
-	public ExperimentCombo () 
+	public JComboBoxExperiment () 
 	{
 	}
 	

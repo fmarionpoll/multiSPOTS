@@ -9,7 +9,7 @@ import org.w3c.dom.Node;
 import icy.file.xml.XMLPersistent;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
-import plugins.fmp.multiSPOTS.dlg.JComponents.ExperimentCombo;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxExperiment;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 
 
@@ -23,7 +23,7 @@ public class BuildSeriesOptions implements XMLPersistent
 	public long			t_Ms_BinDuration		= 1;
 	
 	public ArrayList<ROI2D> listROIStoBuildKymos= new ArrayList<ROI2D> ();
-	public ExperimentCombo	expList;
+	public JComboBoxExperiment	expList;
 	
 	public Rectangle 	parent0Rect 			= null;
 	public String 		binSubDirectory 		= null;

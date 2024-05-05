@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.dlg.JComponents.SortedComboBoxModel;
+import plugins.fmp.multiSPOTS.dlg.JComponents.JComboBoxModelSorted;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 
@@ -25,14 +25,14 @@ public class Infos  extends JPanel
 	 */
 	private static final long serialVersionUID = 2190848825783418962L;
 
-	private JComboBox<String>	cmt1Combo		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String>	comt2Combo		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	boxIDCombo		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	exptCombo 		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	strainCombo 	= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	sexCombo 		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	cond1Combo 		= new JComboBox<String>(new SortedComboBoxModel());
-	private JComboBox<String> 	cond2Combo 		= new JComboBox<String>(new SortedComboBoxModel());
+	private JComboBox<String>	cmt1Combo		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String>	comt2Combo		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	boxIDCombo		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	exptCombo 		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	strainCombo 	= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	sexCombo 		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	cond1Combo 		= new JComboBox<String>(new JComboBoxModelSorted());
+	private JComboBox<String> 	cond2Combo 		= new JComboBox<String>(new JComboBoxModelSorted());
 	
 	
 	private JLabel				experimentCheck	= new JLabel(EnumXLSColumnHeader.EXP_EXPT.toString());
@@ -203,7 +203,7 @@ public class Infos  extends JPanel
 	{
 		if (toAdd == null)
 			return;
-		SortedComboBoxModel model = (SortedComboBoxModel) combo.getModel();
+		JComboBoxModelSorted model = (JComboBoxModelSorted) combo.getModel();
 		if (model.getIndexOf(toAdd) == -1 )
 			model.addElement(toAdd);
     }	
