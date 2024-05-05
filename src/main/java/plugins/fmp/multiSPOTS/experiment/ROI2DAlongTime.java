@@ -13,13 +13,13 @@ import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 
 public class ROI2DAlongTime implements XMLPersistent 
 {
-	private int		index			= 0;
-	private ROI2D 	roi 			= null;	
-	private long 	start 			= 0;
-	private ArrayList<ArrayList<int[]>> masksList = null;
-	private BooleanMask2D mask2D = null;
-	private int		mask2D_n_valid_points = 0;
-	public	Point[] cPoints = null;
+	private int							index			= 0;
+	private ROI2D 						roi 			= null;	
+	private long 						start 			= 0;
+	private ArrayList<ArrayList<int[]>> masksList 		= null;
+	private BooleanMask2D 				mask2D 			= null;
+	private int							mask2D_n_valid_points = 0;
+	public	Point[] 					cPoints 		= null;
 	
 	private final String ID_META 	= "metaT";
 	private final String ID_INDEX	= "indexT";
@@ -58,7 +58,7 @@ public class ROI2DAlongTime implements XMLPersistent
 		this.masksList = masksList;
 	}
 	
-	public void setBooleanMask2D() {
+	public void buildMask2DFromRoi() {
 		try {
 			mask2D = roi.getBooleanMask2D(0, 0, 1, true ); // z, t, c, inclusive
 			cPoints = mask2D.getPoints();
@@ -78,7 +78,7 @@ public class ROI2DAlongTime implements XMLPersistent
 		return mask2D_n_valid_points;
 	}
 	
-	public BooleanMask2D getBooleanMask2D() {
+	public BooleanMask2D getMask2D() {
 		return mask2D;
 	}
 

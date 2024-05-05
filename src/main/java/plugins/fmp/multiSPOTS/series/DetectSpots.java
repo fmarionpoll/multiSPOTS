@@ -16,6 +16,7 @@ import icy.system.thread.Processor;
 import icy.type.collection.array.ArrayUtil;
 
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.ROI2DAlongTime;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
@@ -143,8 +144,13 @@ public class DetectSpots extends BuildSeries
         
         IcyBufferedImage subSourceImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
         int[] sourceData = (int[]) ArrayUtil.arrayToIntArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
-        int flyFound = 0;    
-        boolean[] mask = spot.mask2D.mask;
+        int flyFound = 0;  
+        
+        ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
+        if (roiT.getMask2D() == null) {
+        	roiT.buildMask2DFromRoi();
+        }
+        boolean[] mask = roiT.getMask2D().mask;
         
         if (options.flyThresholdUp) { 
 	        for (int offset = 0; offset < sourceData.length; offset++) {
@@ -168,12 +174,15 @@ public class DetectSpots extends BuildSeries
 	private void measureSpotArea(IcyBufferedImage workImage, Spot spot, int t  )
 	{
 		int sum = 0;
-        
         boolean spotThresholdUp = options.spotThresholdUp;
         int spotThreshold = options.spotThreshold;
+        ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
+        if (roiT.getMask2D() == null) {
+        	roiT.buildMask2DFromRoi();
+        }
         
-        IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, spot.mask2D.bounds);
-        boolean[] mask = spot.mask2D.mask;
+        IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, roiT.getMask2D().bounds);
+        boolean[] mask = roiT.getMask2D().mask;
         int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());  
         
         if (spotThresholdUp) 
