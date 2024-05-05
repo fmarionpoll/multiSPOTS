@@ -74,21 +74,16 @@ public class ExperimentDirectories
 	{
 		if( !new File(dir).exists()) 
 			return null;  
-		
-		Path pDir = Paths.get(dir); //.toAbsolutePath();
+		Path pDir = Paths.get(dir).toAbsolutePath();
 		try (Stream<Path> stream = Files.list(pDir)) {
-	        return new ArrayList<> (stream
-	          .filter(file -> !Files.isDirectory(file))
-	          .filter(s -> s.toString().endsWith(extension))
-	          .map(Path::getFileName)
-	          .map(Path::toAbsolutePath)
-	          .map(Path::toString)
-	          .collect(Collectors.toSet()));
+	        return  stream
+		          .filter(file -> !Files.isDirectory(file))
+		          .filter(s -> s.toString().endsWith(extension))
+		          .map(Path::toString)
+		          .collect(Collectors.toList());
 	    } catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return null;
 	}
 	
