@@ -167,74 +167,36 @@ public class Canvas2DWithFilters extends Canvas2D
     {
 		imageTransformFunctionsCombo.setSelectedIndex(iselected);
     }
-  /* 
-    public void addButtons()
+  
+    public void addButtons(JToolBar toolBar)
     {
     	toolBar.addSeparator();
-        toolBar.add(imageTransformFunctionsCombo);
         
-//		IcyButton previousButton = new IcyButton(ResourceUtilFMP.ICON_PREVIOUS_IMAGE);
-//		previousButton.setSelected(false);
-//		previousButton.setFocusable(false);
-//		previousButton.setToolTipText("Select previous capillary (to the left or lower index)");
-//        toolBar.add(previousButton); 
-//		
-//        IcyButton nextButton = new IcyButton(ResourceUtilFMP.ICON_NEXT_IMAGE);
-//        nextButton.setSelected(false);
-//        nextButton.setFocusable(false);
-//        nextButton.setToolTipText("Select next capillary (to the right or higher index)");
-//		toolBar.add(nextButton);
+		IcyButton previousButton = new IcyButton(ResourceUtilFMP.ICON_PREVIOUS_IMAGE);
+		previousButton.setSelected(false);
+		previousButton.setFocusable(false);
+		previousButton.setToolTipText("Select previous capillary (to the left or lower index)");
+        toolBar.add(previousButton); 
 		
-		IcyIcon fitY = ResourceUtilFMP.ICON_FIT_YAXIS;
-		IcyButton fitYAxisButton = new IcyButton(fitY);
-		fitYAxisButton.setSelected(false);
-		fitYAxisButton.setFocusable(false);
-		fitYAxisButton.setToolTipText("Set image scale ratio to 1:1 and fit Y axis to the window height");
-		toolBar.add(fitYAxisButton);
+        IcyButton nextButton = new IcyButton(ResourceUtilFMP.ICON_NEXT_IMAGE);
+        nextButton.setSelected(false);
+        nextButton.setFocusable(false);
+        nextButton.setToolTipText("Select next capillary (to the right or higher index)");
+		toolBar.add(nextButton);
 		
-		IcyIcon fitX = ResourceUtilFMP.ICON_FIT_XAXIS;
-		IcyButton fitXAxisButton = new IcyButton(fitX);
-		fitXAxisButton.setSelected(false);
-		fitXAxisButton.setFocusable(false);
-		fitXAxisButton.setToolTipText("Fit X and Y axis to the window size");
-		toolBar.add(fitXAxisButton);
-        
 		super.customizeToolbar(toolBar);
         
-//        previousButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent arg0) {
-//                setPositionT( getPositionT()-1);
-//            }});
-//        
-//        nextButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent arg0) {
-//            	setPositionT( getPositionT()+1);
-//            }});
-        
-        fitYAxisButton.addActionListener(new ActionListener() {
+        previousButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-            	zoomImage_1_1();
+                setPositionT( getPositionT()-1);
             }});
         
-        fitXAxisButton.addActionListener(new ActionListener() {
+        nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-            	shrinkImage_to_fit() ;
+            	setPositionT( getPositionT()+1);
             }});
-        
-        imageTransformFunctionsCombo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-            	ImageTransformEnums transformEnum = (ImageTransformEnums) imageTransformFunctionsCombo.getSelectedItem();
-            	transform = transformEnum.getFunction();
-            	refresh();
-            }});
-        
-        imageTransformFunctionsCombo.setSelectedIndex(0);
-        refresh();
     }  
-    */ 	
+ 	
 }

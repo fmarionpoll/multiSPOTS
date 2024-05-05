@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
 import icy.canvas.Canvas2D;
@@ -243,7 +244,11 @@ public class Display extends JPanel implements ViewerListener
 				viewerKymographs.setCanvas(pluginName);
 				viewerKymographs.setRepeat(false);
 				viewerKymographs.addListener(this);
-
+				
+				JToolBar toolBar = viewerKymographs.getToolBar();
+				Canvas2DWithFilters canvas = (Canvas2DWithFilters) viewerKymographs.getCanvas();
+				canvas.addButtons(toolBar);
+				
 				placeKymoViewerNextToCamViewer(exp);
 				
 				int isel = seqKymographs.currentFrame;
