@@ -468,7 +468,7 @@ public class SpotsArray
 		{
 			spotsListTimeIntervals = new KymoIntervals();
 			for (Spot spot: spotsList) {
-				for (ROI2DAlongTime roiFK: spot.getROIsForKymo()) {
+				for (ROI2DAlongTime roiFK: spot.getROIsAlongTime()) {
 					Long[] interval = {roiFK.getStart(), (long) -1}; 
 					spotsListTimeIntervals.addIfNew(interval);
 				}
@@ -494,7 +494,7 @@ public class SpotsArray
 		
 		for (Spot spot: spotsList) 
 		{
-			List<ROI2DAlongTime> listROI2DForKymo = spot.getROIsForKymo();
+			List<ROI2DAlongTime> listROI2DForKymo = spot.getROIsAlongTime();
 			ROI2D roi = spot.getRoi();
 			if (item>0 ) 
 				roi = (ROI2D) listROI2DForKymo.get(item-1).getRoi().getCopy();

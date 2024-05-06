@@ -17,10 +17,10 @@ import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 
 public class SpotMeasure 
 {
-	public Level2D 	polylineLevel 	= new Level2D();
-	public Level2D 	polyline_old 	= new Level2D();
+	public Level2D 	level2D 		= new Level2D();
+	public Level2D 	leve2D_old		= new Level2D();
 	public double [] measureValues	= null;
-	public boolean [] measureBooleans	= null;
+	public boolean [] measureBooleans = null;
 	
 	public String	name 			= "noname";
 	public int		index 			= -1;
@@ -43,12 +43,12 @@ public class SpotMeasure
 	{
 		this.name = name;
 		this.index = indexImage;
-		polylineLevel = new Level2D(limit);
+		level2D = new Level2D(limit);
 	}
 	
 	public void clear() 
 	{
-		polylineLevel = new Level2D();
+		level2D = new Level2D();
 	}
 	
 	public void setPolylineLevelFromTempData(String name, int indexImage, int xStart, int xEnd) 
@@ -64,7 +64,7 @@ public class SpotMeasure
 			xpoints[j] = i;
 			ypoints[j] = measureValues[j];
 		}
-		polylineLevel = new Level2D(xpoints, ypoints, npoints);
+		level2D = new Level2D(xpoints, ypoints, npoints);
 	}
 	
 	public void setPolylineLevelFromMeasureValues(String name, int indexImage) 
@@ -82,7 +82,7 @@ public class SpotMeasure
 			xpoints[j] = i;
 			ypoints[j] = measureValues[j];
 		}
-		polylineLevel = new Level2D(xpoints, ypoints, npoints);
+		level2D = new Level2D(xpoints, ypoints, npoints);
 	}
 	
 	public void setPolylineLevelFromMeasureBoolean(String name, int indexImage) 
@@ -100,70 +100,70 @@ public class SpotMeasure
 			xpoints[j] = i;
 			ypoints[j] = measureBooleans[j] ? 1d : 0d;
 		}
-		polylineLevel = new Level2D(xpoints, ypoints, npoints);
+		level2D = new Level2D(xpoints, ypoints, npoints);
 	}
 	
 	public void setTempDataFromPolylineLevel() 
 	{
-		int npoints = polylineLevel.npoints;
+		int npoints = level2D.npoints;
 		measureValues = new double [npoints];
 		for (int j = 0; j < npoints; j++) 
 		{
-			measureValues[j] = polylineLevel.ypoints[j];
+			measureValues[j] = level2D.ypoints[j];
 		}
 	}
 	
 	int getNPoints() 
 	{
-		if (polylineLevel == null)
+		if (level2D == null)
 			return 0;
-		return polylineLevel.npoints;
+		return level2D.npoints;
 	}
 
 	int restoreNPoints()  
 	{
-		if (polyline_old != null) 
-			polylineLevel = polyline_old.clone();
-		return polylineLevel.npoints;
+		if (leve2D_old != null) 
+			level2D = leve2D_old.clone();
+		return level2D.npoints;
 	}
 	
 	void cropToNPoints(int npoints) 
 	{
-		if (npoints > polylineLevel.npoints)
+		if (npoints > level2D.npoints)
 			return;
 		
-		if (polyline_old == null) 
-			polyline_old = polylineLevel.clone();
+		if (leve2D_old == null) 
+			leve2D_old = level2D.clone();
         
 		Polyline2D pol = new Polyline2D();
         for (int i = 0; i < npoints; i++)
-            pol.addPoint(polylineLevel.xpoints[i], polylineLevel.ypoints[i]);
+            pol.addPoint(level2D.xpoints[i], level2D.ypoints[i]);
 
-		polylineLevel = new Level2D(pol); 
+		level2D = new Level2D(pol); 
 	}
 	
 	void copy(SpotMeasure sourceSpotArea) 
 	{
-		if (sourceSpotArea.polylineLevel != null)
-			polylineLevel = sourceSpotArea.polylineLevel.clone(); 
+		if (sourceSpotArea.level2D != null)
+			level2D = sourceSpotArea.level2D.clone(); 
 	}
 	
 	boolean isThereAnyMeasuresDone() 
 	{
-		return (polylineLevel != null && polylineLevel.npoints > 0);
+		return (level2D != null && level2D.npoints > 0);
 	}
 	
 	ArrayList<Double> getMeasures(long seriesBinMs, long outputBinMs) 
 	{
-		if (polylineLevel == null || polylineLevel.npoints == 0)
+		if (level2D == null || level2D.npoints == 0)
 			return null;
-		long maxMs = (polylineLevel.ypoints.length -1) * seriesBinMs;
+		long maxMs = (level2D.ypoints.length -1) * seriesBinMs;
 		long npoints = (maxMs / outputBinMs)+1;
 		ArrayList<Double> arrayDouble = new ArrayList<Double>((int) npoints);
 		for (double iMs = 0; iMs <= maxMs; iMs += outputBinMs) 
 		{
 			int index = (int) (iMs  / seriesBinMs);
-			arrayDouble.add(polylineLevel.ypoints[index]);
+			arrayDouble.add(level2D.ypoints[index]);
 		}
 		return arrayDouble;
 	}
@@ -180,7 +180,7 @@ public class SpotMeasure
 			String roiname = roi.getName();
 			if (roi instanceof ROI2DPolyLine && roiname .contains (name)) 
 			{
-				polylineLevel = new Level2D(((ROI2DPolyLine)roi).getPolyline2D());
+				level2D = new Level2D(((ROI2DPolyLine)roi).getPolyline2D());
 				return true;
 			}
 		}
@@ -189,10 +189,10 @@ public class SpotMeasure
 
 	List<Double> getDoubleArrayFromPolyline2D() 
 	{
-		if (polylineLevel == null || polylineLevel.npoints == 0)
+		if (level2D == null || level2D.npoints == 0)
 			return null;
-		List<Double> arrayDouble = new ArrayList<Double>(polylineLevel.ypoints.length);
-		for (double i: polylineLevel.ypoints)
+		List<Double> arrayDouble = new ArrayList<Double>(level2D.ypoints.length);
+		for (double i: level2D.ypoints)
 			arrayDouble.add(i);
 		return arrayDouble;
 	}
@@ -203,7 +203,7 @@ public class SpotMeasure
 	{
 		final Node nodeMeta = XMLUtil.getElement(node, nodename);
 		int npoints = 0;
-		polylineLevel = null;
+		level2D = null;
 	    if (nodeMeta != null)  
 	    {
 	    	name =  XMLUtil.getElementValue(nodeMeta, ID_NAME, nodename);
@@ -212,13 +212,13 @@ public class SpotMeasure
 	    		this.header = header;
 	    		name = header + name;
 	    	} 
-	    	polylineLevel = loadPolyline2DFromXML(nodeMeta);
-		    if (polylineLevel != null)
-		    	npoints = polylineLevel.npoints;
+	    	level2D = loadPolyline2DFromXML(nodeMeta);
+		    if (level2D != null)
+		    	npoints = level2D.npoints;
 	    }
 		final Node nodeMeta_old = XMLUtil.getElement(node, nodename+"old");
 		if (nodeMeta_old != null) 
-			polyline_old = loadPolyline2DFromXML(nodeMeta_old);
+			leve2D_old = loadPolyline2DFromXML(nodeMeta_old);
 	    return npoints;
 	}
 
@@ -246,16 +246,16 @@ public class SpotMeasure
 	
 	public void saveCapillaryLimit2XML(Node node, String nodename) 
 	{
-		if (polylineLevel == null || polylineLevel.npoints == 0)
+		if (level2D == null || level2D.npoints == 0)
 			return;
 		final Node nodeMeta = XMLUtil.setElement(node, nodename);
 	    if (nodeMeta != null) 
 	    {
 	    	XMLUtil.setElementValue(nodeMeta, ID_NAME, name);
-	    	saveLevel2XML(nodeMeta, polylineLevel);
+	    	saveLevel2XML(nodeMeta, level2D);
 	    	final Node nodeMeta_old = XMLUtil.setElement(node, nodename+"old");
-		    if (polyline_old != null && polyline_old.npoints != polylineLevel.npoints) 
-		    	saveLevel2XML(nodeMeta_old,  polyline_old);
+		    if (leve2D_old != null && leve2D_old.npoints != level2D.npoints) 
+		    	saveLevel2XML(nodeMeta_old,  leve2D_old);
 	    }
 	}
 	
@@ -273,12 +273,12 @@ public class SpotMeasure
 	
 	public void adjustToImageWidth(int imageSize) 
 	{
-		if (polylineLevel == null || polylineLevel.npoints == 0)
+		if (level2D == null || level2D.npoints == 0)
 			return;
-		int npoints = polylineLevel.npoints;
+		int npoints = level2D.npoints;
 		int npoints_old = 0;
-		if (polyline_old != null && polyline_old.npoints > npoints) 
-			npoints_old = polyline_old.npoints;
+		if (leve2D_old != null && leve2D_old.npoints > npoints) 
+			npoints_old = leve2D_old.npoints;
 		if (npoints == imageSize || npoints_old == imageSize)
 			return;
 		
@@ -288,9 +288,9 @@ public class SpotMeasure
 			int newSize = imageSize;
 			if (npoints < npoints_old)
 				newSize = 1 + imageSize *npoints / npoints_old;
-			polylineLevel = polylineLevel.contractPolylineToNewWidth(newSize);
+			level2D = level2D.contractPolylineToNewWidth(newSize);
 			if (npoints_old != 0)
-				polyline_old = polyline_old.contractPolylineToNewWidth(imageSize);
+				leve2D_old = leve2D_old.contractPolylineToNewWidth(imageSize);
 		}
 		// expand polyline npoints to imageSize
 		else 
@@ -298,29 +298,29 @@ public class SpotMeasure
 			int newSize = imageSize;
 			if (npoints < npoints_old)
 				newSize = imageSize *npoints / npoints_old;
-			polylineLevel = polylineLevel.expandPolylineToNewWidth(newSize);
+			level2D = level2D.expandPolylineToNewWidth(newSize);
 			if (npoints_old != 0)
-				polyline_old = polyline_old.expandPolylineToNewWidth(imageSize);
+				leve2D_old = leve2D_old.expandPolylineToNewWidth(imageSize);
 		}
 	}
 
 	public void cropToImageWidth(int imageSize) 
 	{
-		if (polylineLevel == null || polylineLevel.npoints == 0)
+		if (level2D == null || level2D.npoints == 0)
 			return;
-		int npoints = polylineLevel.npoints;
+		int npoints = level2D.npoints;
 		if (npoints == imageSize)
 			return;
 		
 		int npoints_old = 0;
-		if (polyline_old != null && polyline_old.npoints > npoints) 
-			npoints_old = polyline_old.npoints;
+		if (leve2D_old != null && leve2D_old.npoints > npoints) 
+			npoints_old = leve2D_old.npoints;
 		if (npoints == imageSize || npoints_old == imageSize)
 			return;
 		
 		// reduce polyline npoints to imageSize
 		int newSize = imageSize;
-		polylineLevel = polylineLevel.cropPolylineToNewWidth(newSize);		
+		level2D = level2D.cropPolylineToNewWidth(newSize);		
 	}
 	
 	// ----------------------------------------------------------------------
@@ -329,16 +329,16 @@ public class SpotMeasure
 	public boolean cvsExportXYDataToRow(StringBuffer sbf, String sep) 
 	{
 		int npoints = 0;
-		if (polylineLevel != null && polylineLevel.npoints > 0)
-			npoints = polylineLevel.npoints; 
+		if (level2D != null && level2D.npoints > 0)
+			npoints = level2D.npoints; 
 			
 		sbf.append(Integer.toString(npoints)+ sep);
 		if (npoints > 0) {
-			for (int i = 0; i < polylineLevel.npoints; i++)
+			for (int i = 0; i < level2D.npoints; i++)
 	        {
-	            sbf.append(StringUtil.toString((double) polylineLevel.xpoints[i]));
+	            sbf.append(StringUtil.toString((double) level2D.xpoints[i]));
 	            sbf.append(sep);
-	            sbf.append(StringUtil.toString((double) polylineLevel.ypoints[i]));
+	            sbf.append(StringUtil.toString((double) level2D.ypoints[i]));
 	            sbf.append(sep);
 	        }
 		}
@@ -348,14 +348,14 @@ public class SpotMeasure
 	public boolean cvsExportYDataToRow(StringBuffer sbf, String sep) 
 	{
 		int npoints = 0;
-		if (polylineLevel != null && polylineLevel.npoints > 0)
-			npoints = polylineLevel.npoints; 
+		if (level2D != null && level2D.npoints > 0)
+			npoints = level2D.npoints; 
 			
 		sbf.append(Integer.toString(npoints)+ sep);
 		if (npoints > 0) {
-			for (int i = 0; i < polylineLevel.npoints; i++)
+			for (int i = 0; i < level2D.npoints; i++)
 	        {
-	            sbf.append(StringUtil.toString((double) polylineLevel.ypoints[i]));
+	            sbf.append(StringUtil.toString((double) level2D.ypoints[i]));
 	            sbf.append(sep);
 	        }
 		}
@@ -378,7 +378,7 @@ public class SpotMeasure
 				y[i] = Double.valueOf(data[offset]);
 				offset++;
 			}
-			polylineLevel = new Level2D(x, y, npoints);
+			level2D = new Level2D(x, y, npoints);
 		}
 		return true;
 	}
@@ -398,7 +398,7 @@ public class SpotMeasure
 				y[i] = Double.valueOf(data[offset]);
 				offset++;
 			}
-			polylineLevel = new Level2D(x, y, npoints);
+			level2D = new Level2D(x, y, npoints);
 		}
 		return true;
 	}

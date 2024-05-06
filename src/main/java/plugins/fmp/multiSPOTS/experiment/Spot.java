@@ -302,7 +302,7 @@ public class Spot implements Comparable <Spot>
 	
 	private void cropSpotAreaToNPoints(SpotMeasure spotArea, int npoints) 
 	{
-		if (spotArea.polylineLevel != null)
+		if (spotArea.level2D != null)
 			spotArea.cropToNPoints(npoints);
 	}
 	
@@ -315,7 +315,7 @@ public class Spot implements Comparable <Spot>
 	
 	private void restoreSpotAreaClippedMeasures(SpotMeasure spotArea)
 	{
-		if (spotArea.polylineLevel != null)
+		if (spotArea.level2D != null)
 			spotArea.restoreNPoints();
 	}
 
@@ -416,20 +416,13 @@ public class Spot implements Comparable <Spot>
 	
 	// --------------------------------------------
 	
-	public List<ROI2DAlongTime> getROIsForKymo() 
+	public List<ROI2DAlongTime> getROIsAlongTime() 
 	{
 		if (listRoiAlongTime.size() < 1) 
 			initROI2DForKymoList();
 		return listRoiAlongTime;
 	}
-	
- 	public ROI2DAlongTime getROI2DKymoAt(int i) 
- 	{
-		if (listRoiAlongTime.size() < 1) 
-			initROI2DForKymoList();
-		return listRoiAlongTime.get(i);
-	}
- 	
+		
  	public ROI2DAlongTime getROI2DKymoAtIntervalT(long t) 
  	{
 		if (listRoiAlongTime.size() < 1) 
@@ -517,11 +510,11 @@ public class Spot implements Comparable <Spot>
 	
 	private void measureToRoi(SpotMeasure spotMeasure, Color color, int imageHeight, List<ROI2D> measuresRoisList) 
 	{
-		if (spotMeasure.polylineLevel == null || spotMeasure.polylineLevel.npoints == 0)
+		if (spotMeasure.level2D == null || spotMeasure.level2D.npoints == 0)
 			return;
 		
-		spotMeasure.polylineLevel.normalizeYScale(imageHeight);
-		ROI2D measuredRoi = new ROI2DPolyLine(spotMeasure.polylineLevel);
+		spotMeasure.level2D.normalizeYScale(imageHeight);
+		ROI2D measuredRoi = new ROI2DPolyLine(spotMeasure.level2D);
 		String name = spotRoi.getName() + "_" + spotMeasure.name;
 		measuredRoi.setName(name);
 		measuredRoi.setT(spot_KymographIndex);
@@ -530,9 +523,7 @@ public class Spot implements Comparable <Spot>
 		measuresRoisList.add(measuredRoi);
 	}
 	
-	
 	// -----------------------------------------------------------------------------
-	
 	
 	public String csvExportSpotArrayHeader(String csvSep) 
 	{

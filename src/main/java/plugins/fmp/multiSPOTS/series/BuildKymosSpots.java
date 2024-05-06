@@ -255,7 +255,7 @@ public class BuildKymosSpots extends BuildSeries
 
 		for (Spot spot: exp.spotsArray.spotsList) {
 			int imageHeight = 0;
-			for (ROI2DAlongTime roiT : spot.getROIsForKymo()) {
+			for (ROI2DAlongTime roiT : spot.getROIsAlongTime()) {
 				roiT.buildMask2DFromRoi();
 				
 				int imageHeight_i = roiT.cPoints.length;
