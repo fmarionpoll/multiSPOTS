@@ -825,7 +825,6 @@ public class Experiment
 			break;
 		case CAP_STIM:
 		case CAP_CONC:
-			addCapillariesValues(fieldEnumCode, textList);
 			addSpotsValues(fieldEnumCode, textList);
 			break;
 		default:
@@ -914,49 +913,7 @@ public class Experiment
 	}
 	
 	// --------------------------------------------
-	
-	public boolean adjustCapillaryMeasuresDimensions() 
-	{
-		if (seqKymos.imageWidthMax < 1) 
-		{
-			seqKymos.imageWidthMax = seqKymos.seq.getSizeX();
-			if (seqKymos.imageWidthMax < 1)
-				return false;
-		}
-		int imageWidth = seqKymos.imageWidthMax;
-		capillaries.adjustToImageWidth(imageWidth);
-		seqKymos.seq.removeAllROI();
-		seqKymos.transferCapillariesMeasuresToKymos(capillaries);
-		return true;
-	}
-	
-	public boolean cropCapillaryMeasuresDimensions() 
-	{
-		if (seqKymos.imageWidthMax < 1) 
-		{
-			seqKymos.imageWidthMax = seqKymos.seq.getSizeX();
-			if (seqKymos.imageWidthMax < 1)
-				return false;
-		}
-		int imageWidth = seqKymos.imageWidthMax;
-		capillaries.cropToImageWidth(imageWidth);
-		seqKymos.seq.removeAllROI();
-		seqKymos.transferCapillariesMeasuresToKymos(capillaries);
-		return true;
-	}
-	
-	public boolean saveCapillariesMeasures(String directory) 
-	{
-		boolean flag = false;
-		if (seqKymos != null && seqKymos.seq != null) 
-		{
-			seqKymos.validateRois();
-			seqKymos.transferKymosRoisToCapillaries_Measures(capillaries);
-			flag = capillaries.save_Measures(directory);
-		}
-		return flag;
-	}
-	
+		
 	public void kymosBuildFiltered01(int zChannelSource, int zChannelDestination, ImageTransformEnums transformop1, int spanDiff) 
 	{
 		int nimages = seqKymos.seq.getSizeT();
@@ -1236,14 +1193,6 @@ public class Experiment
 		
 		if (binDuration_ms < 0)
 			binDuration_ms = 60000;
-	}
-	
-	private void addCapillariesValues(EnumXLSColumnHeader fieldEnumCode, List<String> textList)
-	{
-		if (capillaries.capillariesList.size() == 0)
-			loadMCCapillaries_Only();
-		for (Capillary cap:  capillaries.capillariesList) 
-			addValue(cap.getCapillaryField(fieldEnumCode), textList);
 	}
 	
 	private void addSpotsValues(EnumXLSColumnHeader fieldEnumCode, List<String> textList)
