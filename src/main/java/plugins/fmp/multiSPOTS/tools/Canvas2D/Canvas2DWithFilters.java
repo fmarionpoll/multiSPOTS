@@ -42,6 +42,8 @@ public class Canvas2DWithFilters extends Canvas2D
     @Override
     public void customizeToolbar(JToolBar toolBar)
     {
+    	for (int i = 3; i >= 0; i--)
+    		toolBar.remove(i);
     	toolBar.addSeparator();
         toolBar.add(imageTransformFunctionsCombo);
 

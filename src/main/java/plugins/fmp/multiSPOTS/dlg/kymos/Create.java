@@ -30,14 +30,14 @@ public class Create extends JPanel implements PropertyChangeListener
 	private String 		detectString 	= "Start";
 	
 	JButton 	startComputationButton 	= new JButton("Start");
+	JCheckBox	allSeriesCheckBox 		= new JCheckBox("ALL series (current to last)", false);
+	
 //	JSpinner	diskRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(3, 1, 100, 1));
 //	JCheckBox 	doRegistrationCheckBox 	= new JCheckBox("registration", false);
-	JCheckBox	allSeriesCheckBox 		= new JCheckBox("ALL series (current to last)", false);
 //	JLabel		startFrameLabel			= new JLabel ("starting at frame");
 //	JSpinner	startFrameSpinner 		= new JSpinner(new SpinnerNumberModel(0, 0, 100000, 1));
 //	JSpinner 	binSizeSpinner			= new JSpinner(new SpinnerNumberModel(1., 1., 1000., 1.));
-//	JComboBoxMs binUnitSpinner 			= new JComboBoxMs();
-			
+//	JComboBoxMs binUnitSpinner 			= new JComboBoxMs();		
 //	JRadioButton isFloatingFrameButton	= new JRadioButton("all", true);
 //	JRadioButton isFixedFrameButton		= new JRadioButton("from ", false);
 //	JSpinner 	startJSpinner			= new JSpinner(new SpinnerNumberModel(0., 0., 10000., 1.)); 
@@ -66,17 +66,17 @@ public class Create extends JPanel implements PropertyChangeListener
 //		panel0.add(startFrameSpinner);
 		add(panel0);
 		
-		JPanel panel2 = new JPanel(layoutLeft);
+//		JPanel panel2 = new JPanel(layoutLeft);
 //		panel2.add(new JLabel("area around ROIs", SwingConstants.RIGHT));
 //		panel2.add(diskRadiusSpinner);  
 //		panel2.add(new JLabel("bin size "));
 //		panel2.add(binSizeSpinner);
 //		panel2.add(binUnitSpinner);
-		add(panel2);
+//		add(panel2);
 		
 //		binUnitSpinner.setSelectedIndex(2);
 		
-		JPanel panel1 = new JPanel(layoutLeft);
+//		JPanel panel1 = new JPanel(layoutLeft);
 //		panel1.add(new JLabel("Analyze "));
 //		panel1.add(isFloatingFrameButton);
 //		panel1.add(isFixedFrameButton);
@@ -85,7 +85,7 @@ public class Create extends JPanel implements PropertyChangeListener
 //		panel1.add(endJSpinner);
 //		panel1.add(intervalsUnit);
 //		intervalsUnit.setSelectedIndex(2);
-		add(panel1);
+//		add(panel1);
 		
 //		startFrameLabel.setVisible(false);
 //		startFrameSpinner.setVisible(false);
@@ -163,12 +163,10 @@ public class Create extends JPanel implements PropertyChangeListener
 			options.expList.index1 = parent0.expListCombo.getItemCount()-1;
 		else
 			options.expList.index1 = options.expList.index0; 
-		
 //		options.isFrameFixed 	= getIsFixedFrame();
 //		options.t_Ms_First 		= getStartMs(); 
 //		options.t_Ms_Last 		= getEndMs();
-//		options.t_Ms_BinDuration= (long)((double) binSizeSpinner.getValue() * (double) binUnit.getMsUnitValue());
-				
+//		options.t_Ms_BinDuration= (long)((double) binSizeSpinner.getValue() * (double) binUnit.getMsUnitValue());		
 //		options.diskRadius 		= (int) diskRadiusSpinner.getValue();
 //		options.doRegistration 	= doRegistrationCheckBox.isSelected();
 //		options.referenceFrame  = (int) startFrameSpinner.getValue();

@@ -211,12 +211,14 @@ public class ChartSpots extends IcyFrame
 		   String description = (String) xyDataset.getSeriesKey(isel); 
 		   spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 		}
-		else 
+		else if (subplotindex >= 0) 
 		{
 			XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
 			String description = (String) xyDataset.getSeriesKey(0); 
 			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 		}
+		else
+			System.out.println("Graph clicked but source not found");
 		return spotFound;
 	}
 
