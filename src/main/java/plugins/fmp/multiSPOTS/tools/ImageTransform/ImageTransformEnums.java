@@ -10,7 +10,6 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.None;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RGBtoHSB;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RGBtoHSV;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RemoveHorizontalAverage;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SortRedColumn0;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SortRedColumns;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SortSumDiffColumns;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SubtractColumn;
@@ -62,7 +61,6 @@ public enum ImageTransformEnums
 	MINUSHORIZAVG	("remove Hz traces", 		new RemoveHorizontalAverage()),
 	THRESHOLD_SINGLE("threshold 1 value",		new ThresholdSingleValue()),
 	THRESHOLD_COLORS("threshold colors",		new ThresholdColors()),
-	SORT_REDCOL0	("sort red column 0", 		new SortRedColumn0()),
 	SORT_REDCOLS	("sort red columns", 		new SortRedColumns()),
 	SORT_SUMDIFFCOLS("sort cols / SumDiff",    	new SortSumDiffColumns()),
 	ZIGZAG			("remove spikes",			new None()),
