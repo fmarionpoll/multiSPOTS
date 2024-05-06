@@ -27,7 +27,7 @@ public class ResourceUtilFMP {
     
 	private static Image getImage(String fileName) 
 	{
-		String name = "plugins/fmp/multispots/" + ICON_PATH + ALPHA_PATH + fileName;
+		String name = "plugins/fmp/multiSPOTS/" + ICON_PATH + ALPHA_PATH + fileName;
 		InputStream url = MultiSPOTS.class.getClassLoader().getResourceAsStream(name);
 		if (url == null) {
 			System.out.println("ResourceUtilFMP:getImage resource not found: at: "+ name);
