@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 
 import javax.swing.SwingUtilities;
 
+import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageUtil;
@@ -95,6 +96,7 @@ public class DetectSpots extends BuildSeries
 		stopFlag = false;
 		
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
+		
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildSpots");
@@ -104,6 +106,8 @@ public class DetectSpots extends BuildSeries
 	    tasks.clear();
 	    
 	    int nFrames = exp.seqCamData.nTotalFrames;
+	    ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
+		
 	    initMasks2D(exp);
 		initSpotsDataArrays(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
@@ -113,15 +117,14 @@ public class DetectSpots extends BuildSeries
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		
 		int binT0 = (int) exp.binT0;
-		for (int ii = binT0; ii < nFrames; ii++) 
-		{
+		for (int ii = binT0; ii < nFrames; ii++) {
 			final int t = ii;
-
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
-					String title = "Frame #"+ t + " /" + exp.seqCamData.nTotalFrames;
+					progressBar1.setMessage("Analyze frame: " + t + "//" + nFrames);
 					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+					String title = "Frame #"+ t + " /" + nFrames;
 					vData.setTitle(title);
 //					seqData.setImage(0, 0, sourceImage); 
 					final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
