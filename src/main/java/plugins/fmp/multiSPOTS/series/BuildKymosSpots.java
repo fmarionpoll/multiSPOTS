@@ -152,7 +152,7 @@ public class BuildKymosSpots extends BuildSeries
 		stopFlag = false;
 
 		int nFrames = exp.seqCamData.nTotalFrames;
-//		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
+
 		String vDataTitle = new String(" / " + nFrames);
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
@@ -162,28 +162,28 @@ public class BuildKymosSpots extends BuildSeries
 	    int ntasks =  exp.spotsArray.spotsList.size(); //
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
 		
-	    tasks.clear();
 	    int binT0 = (int) exp.binT0;
+	    tasks.clear();
+	    
 	    for (int ii = binT0; ii < nFrames; ii++) {
 			final int fromSourceImageIndex = ii;
 			final int t =  ii;	
-			final IcyBufferedImage sourceImage = loadImageFromIndex(exp, fromSourceImageIndex);
-			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
-			seqData.setImage(0, 0, sourceImage); 
-			
 			tasks.add(processor.submit(new Runnable () {
-				@Override
-				public void run() {	
-					int sizeC = sourceImage.getSizeC();
-					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
-					for (Spot spot: exp.spotsArray.spotsList) 
-						analyzeImageWithSpot(cursorSource, spot, t, sizeC);
-				}}));
-			
+			@Override
+			public void run() {	
+				IcyBufferedImage sourceImage = loadImageFromIndex(exp, fromSourceImageIndex);
+				vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
+				seqData.setImage(0, 0, sourceImage); 
+				int sizeC = sourceImage.getSizeC();
+				IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
+				for (Spot spot: exp.spotsArray.spotsList) {
+					analyzeImageWithSpot(cursorSource, spot, t, sizeC);
+				}
+			}}));
+
 			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nFrames);	
 		}
-
-		waitFuturesCompletion(processor, tasks, null);
+	    waitFuturesCompletion(processor, tasks, null);
 		progressBar1.close();
 		
 		ProgressFrame progressBar2 = new ProgressFrame("Combine results into kymograph");
