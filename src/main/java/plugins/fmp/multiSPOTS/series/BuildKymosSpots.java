@@ -173,15 +173,14 @@ public class BuildKymosSpots extends BuildSeries
 			public void run() {	
 				IcyBufferedImage sourceImage = loadImageFromIndex(exp, fromSourceImageIndex);
 				vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
-				seqData.setImage(0, 0, sourceImage); 
+//				seqData.setImage(0, 0, sourceImage); 
 				int sizeC = sourceImage.getSizeC();
 				IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 				for (Spot spot: exp.spotsArray.spotsList) {
 					analyzeImageWithSpot(cursorSource, spot, t, sizeC);
 				}
+				progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nFrames);	
 			}}));
-
-			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nFrames);	
 		}
 	    waitFuturesCompletion(processor, tasks, null);
 		progressBar1.close();

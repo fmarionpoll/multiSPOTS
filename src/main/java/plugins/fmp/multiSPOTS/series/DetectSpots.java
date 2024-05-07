@@ -119,14 +119,14 @@ public class DetectSpots extends BuildSeries
 		for (int ii = binT0; ii < nFrames; ii++) 
 		{
 			final int t = ii;
-			String title = "Frame #"+ t + " /" + exp.seqCamData.nTotalFrames;
-			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
-			vData.setTitle(title);
-			seqData.setImage(0, 0, sourceImage); 
-		
+
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
+					String title = "Frame #"+ t + " /" + exp.seqCamData.nTotalFrames;
+					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+					vData.setTitle(title);
+//					seqData.setImage(0, 0, sourceImage); 
 					final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 					for (Spot spot: exp.spotsArray.spotsList)  {
 						measureSpotArea (workImage, spot, t);
