@@ -29,6 +29,27 @@ import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
 
+/*
+ * 
+ * 
+BuildSeries:doInBackground loop over experiments
+BuildSeries:doInBackground 1: C:\data\gouttes\charline\Manip\2024-02-20\cam01\grabs\results
+BuildSeries:doInBackground process ended - duration: 33.893856 s
+BuildSeries:doInBackground 2: C:\data\gouttes\charline\Manip\2024-02-20\cam03\grabs\results
+BuildSeries:doInBackground process ended - duration: 103.16204 s
+BuildSeries:doInBackground 3: C:\data\gouttes\charline\Manip\2024-02-20\cam04\grabs\results
+BuildSeries:doInBackground process ended - duration: 30.288916 s
+BuildSeries:doInBackground 4: C:\data\gouttes\charline\Manip\2024-02-20\cam05\grabs\results
+BuildSeries:doInBackground process ended - duration: 28.841043 s
+BuildSeries:doInBackground 5: C:\data\gouttes\charline\Manip\2024-02-20\cam06\grabs\results
+BuildSeries:doInBackground process ended - duration: 21.996662 s
+BuildSeries:doInBackground 6: C:\data\gouttes\charline\Manip\2024-02-20\cam07\grabs\results
+BuildSeries:doInBackground process ended - duration: 21.462254 s
+BuildSeries:doInBackground 7: C:\data\gouttes\charline\Manip\2024-02-20\cam08\grabs\results
+BuildSeries:doInBackground process ended - duration: 24.028915 s
+
+ * 
+ */
 
 
 public class BuildKymosSpots extends BuildSeries  
