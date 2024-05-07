@@ -71,13 +71,13 @@ public class SpotMeasure
 	{
 		this.name = name;
 		this.index = indexImage;
-		int xStart = 0;
-		int xEnd = measureValues.length-1;
-		int npoints = xEnd-xStart+1;
+		int ii_start = 0;
+		int ii_end = measureValues.length;
+		int npoints = ii_end-ii_start+1;
 		double [] xpoints = new double [npoints];
 		double [] ypoints = new double [npoints];
 		int j= 0;
-		for (int i = xStart; i <= xEnd; i++, j++) 
+		for (int i = ii_start; i < ii_end; i++, j++) 
 		{
 			xpoints[j] = i;
 			ypoints[j] = measureValues[j];
@@ -90,12 +90,12 @@ public class SpotMeasure
 		this.name = name;
 		this.index = indexImage;
 		int xStart = 0;
-		int xEnd = measureBooleans.length-1;
+		int xEnd = measureBooleans.length;
 		int npoints = xEnd-xStart+1;
 		double [] xpoints = new double [npoints];
 		double [] ypoints = new double [npoints];
 		int j= 0;
-		for (int i = xStart; i <= xEnd; i++, j++) 
+		for (int i = xStart; i < xEnd; i++, j++) 
 		{
 			xpoints[j] = i;
 			ypoints[j] = measureBooleans[j] ? 1d : 0d;
@@ -225,12 +225,12 @@ public class SpotMeasure
 	Level2D loadPolyline2DFromXML(Node nodeMeta) 
 	{
 		Level2D line = null;
-    	int npoints1 = XMLUtil.getElementIntValue(nodeMeta, ID_NPOINTS, 0);
-    	if (npoints1 > 0) 
+    	int npoints = XMLUtil.getElementIntValue(nodeMeta, ID_NPOINTS, 0);
+    	if (npoints > 0) 
     	{
-	    	double[] xpoints = new double [npoints1];
-	    	double[] ypoints = new double [npoints1];
-	    	for (int i=0; i< npoints1; i++) 
+	    	double[] xpoints = new double [npoints];
+	    	double[] ypoints = new double [npoints];
+	    	for (int i=0; i< npoints; i++) 
 	    	{
 	    		Element elmt = XMLUtil.getElement(nodeMeta, ID_N+i);
 	    		if (i ==0)
@@ -239,7 +239,7 @@ public class SpotMeasure
 	    			xpoints[i] = i+xpoints[0];
 	    		ypoints[i] = XMLUtil.getAttributeDoubleValue(elmt, ID_Y, 0);
 			}
-	    	line = new Level2D(xpoints, ypoints, npoints1);
+	    	line = new Level2D(xpoints, ypoints, npoints);
     	}
     	return line;
     }

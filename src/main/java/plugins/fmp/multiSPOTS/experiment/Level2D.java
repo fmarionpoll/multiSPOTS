@@ -1,15 +1,14 @@
 package plugins.fmp.multiSPOTS.experiment;
 
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.List;
-
 import icy.type.geom.Polyline2D;
+
+
 
 public class Level2D extends Polyline2D 
 {
 	boolean yNormalized = false;
-	Rectangle original_bounds = null;
 	Polyline2D original_polyline = null;
 	
 	
@@ -23,8 +22,7 @@ public class Level2D extends Polyline2D
         this.npoints = npoints;
         this.xpoints = new double[npoints];
         this.ypoints = new double[npoints];
-        for (int i = 0; i <
-        		npoints; i++)
+        for (int i = 0; i < npoints; i++)
         	xpoints[i] = i;
 	}
 	
@@ -141,11 +139,10 @@ public class Level2D extends Polyline2D
 	{
 		if (original_polyline == null) {
 			original_polyline = this.clone();
-			original_bounds = this.getBounds();
 		}
 		
 		double dHeight = (double) imageHeight;
-		double dMax = original_bounds.getMaxY();
+		double dMax = this.getBounds().getMaxY();
 		for (int i = 0; i < ypoints.length; i++) {
 			ypoints[i] = ypoints[i] * dHeight / dMax;
 		}

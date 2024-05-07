@@ -19,7 +19,7 @@ import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.DataType;
-
+import icy.type.collection.array.Array1DUtil;
 import loci.formats.FormatException;
 
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -31,7 +31,7 @@ import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
 
 
 
-public class BuildKymosSpots extends BuildSeries  
+public class BuildKymosSpots2 extends BuildSeries  
 {
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
@@ -87,7 +87,7 @@ public class BuildKymosSpots extends BuildSeries
 		int nframes = exp.seqKymos.seq.getSizeT();
 		int nCPUs = SystemUtil.getNumberOfCPUs();
 	    final Processor processor = new Processor(nCPUs);
-	    processor.setThreadName("buildkymo2");
+	    processor.setThreadName("savekymos");
 	    processor.setPriority(Processor.NORM_PRIORITY);
         ArrayList<Future<?>> futuresArray = new ArrayList<Future<?>>(nframes);
 		futuresArray.clear();
@@ -136,7 +136,7 @@ public class BuildKymosSpots extends BuildSeries
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
-	    processor.setThreadName("buildKymograph");
+	    processor.setThreadName("build Kymos");
 	    processor.setPriority(Processor.NORM_PRIORITY);
 	    int ntasks =  exp.spotsArray.spotsList.size(); //
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
@@ -177,7 +177,9 @@ public class BuildKymosSpots extends BuildSeries
 	{
 		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);		
 		for (int chan = 0; chan < sizeC; chan++) {
-			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
+//			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
+			Object dataArray = spot.spot_Image.getDataXY(chan);
+			int[] intDataArray = Array1DUtil.arrayToIntArray(dataArray, spot.spot_Image.isSignedDataType());
 			try {
 				for (int y = 0; y < roiT.cPoints.length; y++) {
 					Point pt = roiT.cPoints[y];
@@ -185,7 +187,7 @@ public class BuildKymosSpots extends BuildSeries
 				}
 			}
 			finally {
-				cursor.commitChanges();
+				Array1DUtil.intArrayToSafeIntArray(intDataArray, spot.spot_Image.getDataXY(chan), spot.spot_Image.isSignedDataType());
 			}
 		}
 	}
