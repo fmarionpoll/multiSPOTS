@@ -21,7 +21,6 @@ import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
-import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
 
 
@@ -29,7 +28,6 @@ public class DetectSpots extends BuildSeries
 {
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
-	private OverlayThreshold overlayThreshold 	= null;
 	
 	// --------------------------------------------
 	
@@ -113,7 +111,6 @@ public class DetectSpots extends BuildSeries
 		transformOptions.setSingleThreshold (options.spotThreshold, options.spotThresholdUp) ;
 
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
-		seqData.addOverlay(overlayThreshold);
 		
 		int binT0 = (int) exp.binT0;
 		for (int ii = binT0; ii < nFrames; ii++) 
