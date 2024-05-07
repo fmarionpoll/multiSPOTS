@@ -179,8 +179,8 @@ public class BuildKymosSpots extends BuildSeries
 		for (int chan = 0; chan < sizeC; chan++) {
 			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
 			try {
-				for (int y = 0; y < roiT.cPoints.length; y++) {
-					Point pt = roiT.cPoints[y];
+				for (int y = 0; y < roiT.mask2DPoints.length; y++) {
+					Point pt = roiT.mask2DPoints[y];
 					cursor.set(t, y, chan, cursorSource.get((int)pt.getX(), (int)pt.getY(), chan));
 				}
 			}
@@ -225,6 +225,7 @@ public class BuildKymosSpots extends BuildSeries
 							spot.spot_Image.getWidth(),
 							vertical_resolution);
 					seqKymo.setImage(indexSpot, 0, kymoImage);
+					spot.spot_Image = null;
 				}}));
 		}
 		
@@ -258,7 +259,7 @@ public class BuildKymosSpots extends BuildSeries
 			for (ROI2DAlongTime roiT : spot.getROIsAlongTime()) {
 				roiT.buildMask2DFromRoi();
 				
-				int imageHeight_i = roiT.cPoints.length;
+				int imageHeight_i = roiT.mask2DPoints.length;
 				if (imageHeight_i > imageHeight) 
 					imageHeight = imageHeight_i;
 			}

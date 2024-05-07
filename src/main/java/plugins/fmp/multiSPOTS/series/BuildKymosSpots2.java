@@ -13,7 +13,6 @@ import icy.file.Saver;
 import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
-import icy.image.IcyBufferedImageCursor;
 import icy.image.IcyBufferedImageUtil;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
@@ -146,17 +145,15 @@ public class BuildKymosSpots2 extends BuildSeries
 	    for (int ii = binT0; ii < nFrames; ii++) {
 			final int fromSourceImageIndex = ii;
 			final int t =  ii;	
-			final IcyBufferedImage sourceImage = loadImageFromIndex(exp, fromSourceImageIndex);
-			vData.setTitle("Analyzing frame: " + (fromSourceImageIndex +1)+ vDataTitle);
+			final IcyBufferedImage sourceImage = loadImageFromIndex(exp, ii);
+			vData.setTitle("Analyzing: " + (ii +1)+ vDataTitle);
 			seqData.setImage(0, 0, sourceImage); 
 			
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
-					int sizeC = sourceImage.getSizeC();
-					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 					for (Spot spot: exp.spotsArray.spotsList) 
-						analyzeImageWithSpot(cursorSource, spot, t, sizeC);
+						getSpotAreaFromImageAtT(sourceImage, spot, t);
 				}}));
 			
 			progressBar1.setMessage("Analyze frame: " + fromSourceImageIndex + "//" + nFrames);	
@@ -173,21 +170,27 @@ public class BuildKymosSpots2 extends BuildSeries
 		return true;
 	}
 	
-	private void analyzeImageWithSpot(IcyBufferedImageCursor cursorSource, Spot spot, int t, int sizeC)
+	private void getSpotAreaFromImageAtT(IcyBufferedImage sourceImage, Spot spot, int t)
 	{
-		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);		
-		for (int chan = 0; chan < sizeC; chan++) {
-//			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
-			Object dataArray = spot.spot_Image.getDataXY(chan);
-			int[] intDataArray = Array1DUtil.arrayToIntArray(dataArray, spot.spot_Image.isSignedDataType());
-			try {
-				for (int y = 0; y < roiT.cPoints.length; y++) {
-					Point pt = roiT.cPoints[y];
-					cursor.set(t, y, chan, cursorSource.get((int)pt.getX(), (int)pt.getY(), chan));
-				}
-			}
-			finally {
-				Array1DUtil.intArrayToSafeIntArray(intDataArray, spot.spot_Image.getDataXY(chan), spot.spot_Image.isSignedDataType());
+		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);	
+		int width = spot.spot_Image.getSizeX();
+//		int height = spot.spot_Image.getSizeY();
+		int sizeC = sourceImage.getSizeC();
+		
+		
+		for (int chan = 0; chan < sizeC; chan++) {	
+			Object imageDataArray = sourceImage.getDataXY(chan);
+			int[] intImageDataArray = Array1DUtil.arrayToIntArray(imageDataArray, sourceImage.isSignedDataType());
+			
+			Object spotDataArray = spot.spot_Image.getDataXY(chan);
+			int[] intSpotDataArray = Array1DUtil.arrayToIntArray(spotDataArray, spot.spot_Image.isSignedDataType());
+			int spotwidth = spot.spot_Image.getSizeX(); 
+			int spotIndex = t;
+
+			for (int y = 0; y < roiT.mask2DPoints.length; y++, spotIndex += spotwidth) {
+				Point pt = roiT.mask2DPoints[y];
+				int sourceIndex = (int)pt.getX() + (int)pt.getY() * width;
+				intSpotDataArray[spotIndex] = intImageDataArray[sourceIndex];
 			}
 		}
 	}
@@ -227,6 +230,7 @@ public class BuildKymosSpots2 extends BuildSeries
 							spot.spot_Image.getWidth(),
 							vertical_resolution);
 					seqKymo.setImage(indexSpot, 0, kymoImage);
+					spot.spot_Image = null;
 				}}));
 		}
 		
@@ -260,7 +264,7 @@ public class BuildKymosSpots2 extends BuildSeries
 			for (ROI2DAlongTime roiT : spot.getROIsAlongTime()) {
 				roiT.buildMask2DFromRoi();
 				
-				int imageHeight_i = roiT.cPoints.length;
+				int imageHeight_i = roiT.mask2DPoints.length;
 				if (imageHeight_i > imageHeight) 
 					imageHeight = imageHeight_i;
 			}

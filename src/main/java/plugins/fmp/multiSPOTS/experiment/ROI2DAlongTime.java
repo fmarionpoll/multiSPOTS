@@ -19,7 +19,7 @@ public class ROI2DAlongTime implements XMLPersistent
 	private ArrayList<ArrayList<int[]>> masksList 		= null;
 	private BooleanMask2D 				mask2D 			= null;
 	private int							mask2D_n_valid_points = 0;
-	public	Point[] 					cPoints 		= null;
+	public	Point[] 					mask2DPoints 	= null;
 	
 	private final String ID_META 	= "metaT";
 	private final String ID_INDEX	= "indexT";
@@ -61,8 +61,8 @@ public class ROI2DAlongTime implements XMLPersistent
 	public void buildMask2DFromRoi() {
 		try {
 			mask2D = roi.getBooleanMask2D(0, 0, 1, true ); // z, t, c, inclusive
-			cPoints = mask2D.getPoints();
-			int length = cPoints.length;
+			mask2DPoints = mask2D.getPoints();
+			int length = mask2DPoints.length;
 			mask2D_n_valid_points = 0;
 			for (int i = 0; i < length; i++) {
 				if (mask2D.mask[i])
