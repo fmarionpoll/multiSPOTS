@@ -192,9 +192,6 @@ public class Shape extends JPanel
 
 	void updateOverlay (Experiment exp) 
 	{
-		if (exp.seqKymos == null)
-			return;
-		
 		if (overlayThreshold == null) 
 			overlayThreshold = new OverlayThreshold(exp.seqCamData.seq);
 		else 
@@ -213,18 +210,20 @@ public class Shape extends JPanel
 	
 	void updateOverlayThreshold() 
 	{
-		boolean ifGreater = true; 
-		int threshold = 0;
-		ImageTransformEnums transform = ImageTransformEnums.NONE;
-	
-		ifGreater = (spotsDirectionComboBox.getSelectedIndex() == 0); 
-		threshold = (int) spotsThresholdSpinner.getValue();
-		transform = (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem();
+		if (!spotsOverlayCheckBox.isSelected())
+			return;
 		
-		if (overlayThreshold != null) {
-			overlayThreshold.setThresholdSingle(threshold, transform, ifGreater);
-			overlayThreshold.painterChanged();
+		if (overlayThreshold == null) {
+			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+			if (exp != null) 
+				updateOverlay (exp) ;
 		}
+		
+		boolean ifGreater = (spotsDirectionComboBox.getSelectedIndex() == 0); 
+		int threshold = (int) spotsThresholdSpinner.getValue();
+		ImageTransformEnums transform = (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem();
+		overlayThreshold.setThresholdSingle(threshold, transform, ifGreater);
+		overlayThreshold.painterChanged();
 	}
 	
 	private BuildSeriesOptions initDetectOptions(Experiment exp) 
@@ -243,6 +242,7 @@ public class Shape extends JPanel
 		options.spotThresholdUp 	= (spotsDirectionComboBox.getSelectedIndex() == 0);
 		options.spotThreshold		= (int) spotsThresholdSpinner.getValue();				
 		options.analyzePartOnly		= false; //fromCheckBox.isSelected();
+		
 		options.overlayTransform 	= (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem(); 
 		options.overlayIfGreater 	= (spotsDirectionComboBox.getSelectedIndex() == 0);
 		options.overlayThreshold 	= (int) spotsThresholdSpinner.getValue();
@@ -287,7 +287,6 @@ public class Shape extends JPanel
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		
 		Sequence seq = exp.seqCamData.seq;
-		seq.addOverlay(overlayThreshold);
 		int t = seq.getFirstViewer().getPositionT();
 		
 		IcyBufferedImage sourceImage = seq.getImage(t, 0);
