@@ -1,6 +1,7 @@
 package plugins.fmp.multiSPOTS.series;
 
 
+import java.awt.Point;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.concurrent.Future;
@@ -10,11 +11,10 @@ import javax.swing.SwingUtilities;
 import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
-import icy.image.IcyBufferedImageUtil;
+import icy.image.IcyBufferedImageCursor;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
-import icy.type.collection.array.ArrayUtil;
 
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ROI2DAlongTime;
@@ -94,9 +94,7 @@ public class DetectSpots extends BuildSeries
 		
 		threadRunning = true;
 		stopFlag = false;
-		
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
-		
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildSpots");
@@ -128,41 +126,43 @@ public class DetectSpots extends BuildSeries
 					vData.setTitle(title);
 //					seqData.setImage(0, 0, sourceImage); 
 					final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
+					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
+					IcyBufferedImageCursor cursorWork = new IcyBufferedImageCursor(workImage);
 					for (Spot spot: exp.spotsArray.spotsList)  {
-						measureSpotArea (workImage, spot, t);
-						spot.flyPresent.measureBooleans[t] = isFlyPresentInSpotArea (sourceImage, spot, t) > 0;
+						measureSpotArea (cursorWork, spot, t);
+						spot.flyPresent.measureBooleans[t] = isFlyPresentInSpotArea (cursorSource, spot, t) > 0;
 					}
 				}}));
 		}
 		waitFuturesCompletion(processor, tasks, null);
+		progressBar1.close();
 		return true;
 	}
 	
-	private int isFlyPresentInSpotArea(IcyBufferedImage sourceImage, Spot spot, int t  )
+	private int isFlyPresentInSpotArea(IcyBufferedImageCursor cursorSource, Spot spot, int t)
 	{
 		int flyThreshold = options.flyThreshold;
-        
-        IcyBufferedImage subSourceImage = IcyBufferedImageUtil.getSubImage(sourceImage, spot.mask2D.bounds);
-        int[] sourceData = (int[]) ArrayUtil.arrayToIntArray(subSourceImage.getDataXY(2), sourceImage.isSignedDataType());
         int flyFound = 0;  
         
         ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
-        if (roiT.getMask2D() == null) {
+        if (roiT.getMask2D() == null) 
         	roiT.buildMask2DFromRoi();
-        }
-        boolean[] mask = roiT.getMask2D().mask;
         
         if (options.flyThresholdUp) { 
-	        for (int offset = 0; offset < sourceData.length; offset++) {
-	            if (mask[offset] && (sourceData[offset] > flyThreshold)) {
+	        for (int offset = 0; offset < roiT.mask2DPoints.length; offset++) {
+	        	Point pt = roiT.mask2DPoints[offset];
+		        int value = (int) cursorSource.get((int)pt.getX(), (int)pt.getY(), 0);  
+	            if (value > flyThreshold) {
 	            	flyFound ++;
 	            	break;
 	            }
 	        }
         }
         else {
-        	for (int offset = 0; offset < sourceData.length; offset++) {
-	            if (mask[offset] && (sourceData[offset] < flyThreshold)) {
+        	 for (int offset = 0; offset < roiT.mask2DPoints.length; offset++) {
+ 	        	Point pt = roiT.mask2DPoints[offset];
+ 		        int value = (int) cursorSource.get((int)pt.getX(), (int)pt.getY(), 0); 
+	            if (value < flyThreshold) {
 	            	flyFound++;
 	            	break;
 	            }
@@ -171,44 +171,30 @@ public class DetectSpots extends BuildSeries
         return flyFound;
 	}
 	
-	private void measureSpotArea(IcyBufferedImage workImage, Spot spot, int t  )
+	private void measureSpotArea(IcyBufferedImageCursor cursorWorkImage, Spot spot, int t )
 	{
 		int sum = 0;
         boolean spotThresholdUp = options.spotThresholdUp;
         int spotThreshold = options.spotThreshold;
         ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
-        if (roiT.getMask2D() == null) {
+        if (roiT.getMask2D() == null) 
         	roiT.buildMask2DFromRoi();
-        }
-        
-        IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, roiT.getMask2D().bounds);
-        boolean[] mask = roiT.getMask2D().mask;
-        int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());  
-        
+                
         if (spotThresholdUp) 
         {
-	        for (int offset = 0; offset < workData.length; offset++) 
-	        {
-	            if (mask[offset])  
-	            {
-	                int value = workData[offset];    
-                    if (value < spotThreshold) 
-                    {
-                        sum += value;
-                    }
-	            }
+	        for (int offset = 0; offset < roiT.mask2DPoints.length; offset++) {
+	            Point pt = roiT.mask2DPoints[offset];
+	            int value = (int) cursorWorkImage.get((int)pt.getX(), (int)pt.getY(), 0);  
+                if (value < spotThreshold) 
+                    sum += value;
 	        } 
         }
         else  {
-	        for (int offset = 0; offset < workData.length; offset++) 
-	        {
-	            if (mask[offset]) {
-	                int value = workData[offset];
-	                if (value > spotThreshold) 
-	                {
-                        sum += value;
-	                }
-	            }
+        	for (int offset = 0; offset < roiT.mask2DPoints.length; offset++) {
+	            Point pt = roiT.mask2DPoints[offset];
+	            int value = (int) cursorWorkImage.get((int)pt.getX(), (int)pt.getY(), 0);
+                if (value > spotThreshold) 
+                    sum += value;
 	        }
         }
         spot.sum.measureValues[t] = sum ;
@@ -231,14 +217,12 @@ public class DetectSpots extends BuildSeries
 		if (seqCamData.seq == null) 
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
+		int t = 0;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			try {
-				spot.mask2D = spot.getRoi().getBooleanMask2D( 0 , 0, 1, true );
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
+			if (roiT.getMask2D() == null) 
+				roiT.buildMask2DFromRoi();
 		}
 	}
 
