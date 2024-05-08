@@ -52,7 +52,6 @@ public class Shape extends JPanel
 	private static final long 	serialVersionUID 	= 4950182090521600937L;
 	
 	private JButton 			outlineSpotsButton 		= new JButton("Detect spots contours");
-	private JButton 			useContoursButton 		= new JButton("Replace ellipses with contours");
 	private JButton 			cutAndInterpolateButton = new JButton("Cut");
 	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
@@ -83,7 +82,6 @@ public class Shape extends JPanel
 		
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(outlineSpotsButton);
-		panel0.add(useContoursButton);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -119,7 +117,10 @@ public class Shape extends JPanel
 					  updateOverlayThreshold();
 				  }
 				  else
+				  {
 					  removeOverlay(exp);
+					  overlayThreshold = null;
+				  }
 			  }
 		  }});
 		
@@ -172,20 +173,11 @@ public class Shape extends JPanel
 				if (exp != null) {
 					ROI2DUtilities.removeRoisContainingString(-1, "mask", exp.seqCamData.seq);
 					reduceSpotArea(exp) ;
-					}
-			}});
-		
-		useContoursButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
-				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) {
 					transferContoursToSpotsRois(exp) ;
 					parent0.dlgSpots.tabFile.saveSpotsArray_file(exp);
 					}
 			}});
-		
+				
 		cutAndInterpolateButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
@@ -221,9 +213,6 @@ public class Shape extends JPanel
 	
 	void updateOverlayThreshold() 
 	{
-		if (overlayThreshold == null)
-			return;
-		
 		boolean ifGreater = true; 
 		int threshold = 0;
 		ImageTransformEnums transform = ImageTransformEnums.NONE;
@@ -232,13 +221,16 @@ public class Shape extends JPanel
 		threshold = (int) spotsThresholdSpinner.getValue();
 		transform = (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem();
 		
-		overlayThreshold.setThresholdSingle(threshold, transform, ifGreater);
-		overlayThreshold.painterChanged();
+		if (overlayThreshold != null) {
+			overlayThreshold.setThresholdSingle(threshold, transform, ifGreater);
+			overlayThreshold.painterChanged();
+		}
 	}
 	
 	private BuildSeriesOptions initDetectOptions(Experiment exp) 
 	{	
 		BuildSeriesOptions options = new BuildSeriesOptions();
+		
 		// list of stack experiments
 		options.expList = parent0.expListCombo; 
 		options.expList.index0 = parent0.expListCombo.getSelectedIndex();
@@ -271,7 +263,6 @@ public class Shape extends JPanel
 			spotsOverlayCheckBox.setSelected(false);
 			Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
 			canvas.imageTransformFunctionsCombo.setSelectedIndex(0);
-			
 		}
 		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
 	}
@@ -293,14 +284,13 @@ public class Shape extends JPanel
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = options.transform01;
 		transformOptions.setSingleThreshold (options.spotThreshold, options.spotThresholdUp) ;
-	
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		
-		Sequence seqData = exp.seqCamData.seq;
-		seqData.addOverlay(overlayThreshold);
+		Sequence seq = exp.seqCamData.seq;
+		seq.addOverlay(overlayThreshold);
+		int t = seq.getFirstViewer().getPositionT();
 		
-		int t = seqData.getFirstViewer().getPositionT();
-		IcyBufferedImage sourceImage = seqData.getImage(t, 0);
+		IcyBufferedImage sourceImage = seq.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 		for (Spot spot: exp.spotsArray.spotsList)  {
 			try {
@@ -310,12 +300,11 @@ public class Shape extends JPanel
 				e.printStackTrace();
 			}
 			ROI2DPolygon roi0 = ROI2DMeasures.getContourOfDetectedSpot (workImage, spot, options);
-			 List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());
-		    
+			List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());  
 			ROI2DPolygon roi = new ROI2DPolygon(listPoints);
 		    roi.setName(spot.getRoi().getName()+"_mask");
 		    roi.setColor(Color.RED);
-		    seqData.addROI(roi);
+		    seq.addROI(roi);
 		}
 	}
 	

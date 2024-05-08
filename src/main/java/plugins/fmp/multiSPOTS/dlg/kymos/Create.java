@@ -154,7 +154,7 @@ public class Create extends JPanel implements PropertyChangeListener
 //        intervalsUnit.setEnabled(isSelected);
 //	}
 		
-	private BuildSeriesOptions initBuildParameters() 
+	private BuildSeriesOptions initBuildParameters(Experiment exp) 
 	{
 		BuildSeriesOptions options  = new BuildSeriesOptions();
 		options.expList = parent0.expListCombo; 
@@ -163,10 +163,11 @@ public class Create extends JPanel implements PropertyChangeListener
 			options.expList.index1 = parent0.expListCombo.getItemCount()-1;
 		else
 			options.expList.index1 = options.expList.index0; 
-//		options.isFrameFixed 	= getIsFixedFrame();
-//		options.t_Ms_First 		= getStartMs(); 
-//		options.t_Ms_Last 		= getEndMs();
-//		options.t_Ms_BinDuration= (long)((double) binSizeSpinner.getValue() * (double) binUnit.getMsUnitValue());		
+		options.isFrameFixed 	= false; //getIsFixedFrame();
+		exp.loadFileIntervalsFromSeqCamData();
+		options.t_Ms_First 		= exp.camImageFirst_ms; //getStartMs(); 
+		options.t_Ms_Last 		= exp.camImageLast_ms ;// getEndMs();		
+		options.t_Ms_BinDuration= exp.camImageBin_ms;
 //		options.diskRadius 		= (int) diskRadiusSpinner.getValue();
 //		options.doRegistration 	= doRegistrationCheckBox.isSelected();
 //		options.referenceFrame  = (int) startFrameSpinner.getValue();
@@ -184,7 +185,7 @@ public class Create extends JPanel implements PropertyChangeListener
 			parent0.dlgSpots.tabFile.saveSpotsArray_file(exp);
 		
 		threadBuildKymo = new BuildKymosSpots();	
-		threadBuildKymo.options = initBuildParameters();
+		threadBuildKymo.options = initBuildParameters(exp);
 		
 		threadBuildKymo.addPropertyChangeListener(this);
 		threadBuildKymo.execute();

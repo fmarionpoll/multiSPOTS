@@ -36,7 +36,7 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 			Edit			tabEdit			= new Edit();
 	public 	LoadSaveSpots 	tabFile  		= new LoadSaveSpots();
 	
-
+	private int			id_shape		= 1;
 	private int			id_infos		= 1;
 	private int 		id_create 		= 0;
 	private MultiSPOTS 	parent0 		= null;
@@ -69,6 +69,7 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 		tabShape.init(gridLayout, parent0);
 		tabShape.addPropertyChangeListener(this);
 		tabbedPane.addTab("Shape", null, tabShape, "Edit spots shape");
+		id_shape= order;
 		order++;
 		
 		tabEdit.init(gridLayout, parent0);
@@ -107,9 +108,8 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 			}
 		}			  
 		else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
-			tabbedPane.setSelectedIndex(id_infos);
+			tabbedPane.setSelectedIndex(id_shape);
 		}
-
 	}
 	
 	public void displayCapillariesInformation(Experiment exp) 
@@ -126,7 +126,6 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 		if (exp != null) {
 			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 			exp.capillaries.desc_old.copy(exp.capillaries.capillariesDescription);
-	
 			ExperimentUtils.transferCamDataROIStoSpots(exp);
 			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 		}
