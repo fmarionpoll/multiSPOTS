@@ -291,12 +291,12 @@ public class SpotsArray
 		for (Spot spot: spotsList) 
 		{
 			spot.valid = false;
-			String spotName = Spot.replace_LR_with_12(spot.getRoiName());
+			String spotName = spot.getRoiName();
 			Iterator <ROI2DShape> iterator = listROISSpot.iterator();
 			while(iterator.hasNext()) 
 			{ 
 				ROI2D roi = iterator.next();
-				String roiName = Spot.replace_LR_with_12(roi.getName());
+				String roiName = roi.getName();
 				if (roiName.equals (spotName) && (roi instanceof ROI2DShape) )
 				{
 					spot.setRoi((ROI2DShape) roi);

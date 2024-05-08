@@ -51,7 +51,7 @@ public class EditPositionWithTime  extends JPanel implements ListSelectionListen
     private JButton				fitToFrameButton	= new JButton("Fit spots to frame");
     private JTable 				tableView 			= new JTable();    
     
-	private final String 		dummyname 			= "perimeter_enclosing_spots";
+	private final String 		dummyname 			= "perimeter_enclosing";
 	private ROI2DPolygon 		envelopeRoi 		= null;
 	private ROI2DPolygon 		envelopeRoi_initial	= null;
 	private MultiSPOTS 			parent0 			= null; 
@@ -172,7 +172,7 @@ public class EditPositionWithTime  extends JPanel implements ListSelectionListen
 			if (!roi.getName().contains("spot")) 
 				continue;
 			Point2D point2d = roi.getPosition2D();
-			roi.setPosition2D(new Point2D.Double(point2d.getX()+deltaX, point2d.getY()+ deltaY));
+			roi.setPosition2D(new Point2D.Double(point2d.getX()+deltaX, point2d.getY()+deltaY));
 		}
 	}
 	

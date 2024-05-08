@@ -168,7 +168,7 @@ public class Spot implements Comparable <Spot>
 		return spotRoi.getName().substring(spotRoi.getName().length() -2);
 	}
 	
-	public static String replace_LR_with_12(String name) 
+	public static String xreplace_LR_with_12(String name) 
 	{
 		String newname = name;
 		if (name .contains("R"))

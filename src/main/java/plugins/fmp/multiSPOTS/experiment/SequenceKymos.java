@@ -223,7 +223,7 @@ public class SequenceKymos extends SequenceCamData
 			if (name.toLowerCase().endsWith(".tiff") 
 				|| name.toLowerCase().startsWith("line")) 
 			{
-				String destinationName = Spot.replace_LR_with_12(name);
+				String destinationName = Capillary.replace_LR_with_12(name);
 				if (!name .contains(destinationName))
 					file.renameTo (new File(directory + File.separator + destinationName));
 			}
