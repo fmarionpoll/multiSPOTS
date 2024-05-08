@@ -145,14 +145,16 @@ public class BuildKymosSpots extends BuildSeries
 	    
 	    for (int ii = binT0; ii < nFrames; ii++) {
 			final int t =  ii;	
+			IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+			String title = "Frame #"+ t + " /" + nFrames;
+			vData.setTitle(title);
+			seqData.setImage(0, 0, sourceImage0); 
+			
 			tasks.add(processor.submit(new Runnable () {
 			@Override
 			public void run() {	
 				progressBar1.setMessage("Analyze frame: " + t + "//" + nFrames);
 				IcyBufferedImage sourceImage = loadImageFromIndex(exp, t);
-				String title = "Frame #"+ t + " /" + nFrames;
-				vData.setTitle(title);
-//				seqData.setImage(0, 0, sourceImage); 
 				int sizeC = sourceImage.getSizeC();
 				IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 				for (Spot spot: exp.spotsArray.spotsList) {
