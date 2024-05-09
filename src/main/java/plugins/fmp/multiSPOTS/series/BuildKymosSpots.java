@@ -145,7 +145,7 @@ public class BuildKymosSpots extends BuildSeries
 	    
 	    for (int ii = binT0; ii < nFrames; ii++) {
 			final int t =  ii;	
-			String title = "Frame #"+ t + " /" + nFrames;
+			String title = "Frame #"+ ii + " /" + nFrames;
 			vData.setTitle(title);
 			if (options.concurrentDisplay) {
 				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
