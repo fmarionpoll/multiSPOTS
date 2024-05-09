@@ -31,6 +31,7 @@ public class Create extends JPanel implements PropertyChangeListener
 	
 	JButton 	startComputationButton 	= new JButton("Start");
 	JCheckBox	allSeriesCheckBox 		= new JCheckBox("ALL series (current to last)", false);
+	JCheckBox	concurrentDisplayCheckBox = new JCheckBox("concurrent display", true);
 	
 //	JSpinner	diskRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(3, 1, 100, 1));
 //	JCheckBox 	doRegistrationCheckBox 	= new JCheckBox("registration", false);
@@ -64,6 +65,7 @@ public class Create extends JPanel implements PropertyChangeListener
 //		panel0.add(doRegistrationCheckBox);
 //		panel0.add(startFrameLabel);
 //		panel0.add(startFrameSpinner);
+		panel0.add(concurrentDisplayCheckBox);
 		add(panel0);
 		
 //		JPanel panel2 = new JPanel(layoutLeft);
@@ -174,6 +176,7 @@ public class Create extends JPanel implements PropertyChangeListener
 		options.doCreateBinDir 	= true;
 		options.parent0Rect 	= parent0.mainFrame.getBoundsInternal();
 		options.binSubDirectory = Experiment.BIN+options.t_Ms_BinDuration/1000 ;
+		options.concurrentDisplay = concurrentDisplayCheckBox.isSelected();
 		return options;
 	}
 		

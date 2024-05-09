@@ -43,6 +43,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private String 				detectString 			= "        Detect     ";
 	private JButton 			detectButton 			= new JButton(detectString);
 	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
+	private JCheckBox			concurrentDisplayCheckBox = new JCheckBox("concurrent display", true);
 	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
 	private String[]  			directions 				= new String[] {" threshold >", " threshold <" };
@@ -79,6 +80,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(detectButton);
 		panel0.add(allSeriesCheckBox);
+		panel0.add(concurrentDisplayCheckBox);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -244,14 +246,14 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		else
 			options.expList.index1 = parent0.expListCombo.getSelectedIndex();
 		options.detectAllSeries = allSeriesCheckBox.isSelected();
-		if (!allSeriesCheckBox.isSelected()) 
-		{
+		if (!allSeriesCheckBox.isSelected())  {
 			options.seriesLast = options.seriesFirst;
 		}
-		else
-		{
+		else {
 			options.seriesFirst = 0;
 		}
+		options.concurrentDisplay = concurrentDisplayCheckBox.isSelected();
+
 		// other parameters
 		options.transform01 		= (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem();
 		options.spotThresholdUp 	= (spotsDirectionComboBox.getSelectedIndex() == 0);

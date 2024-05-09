@@ -116,10 +116,12 @@ public class DetectSpots extends BuildSeries
 		int binT0 = (int) exp.binT0;
 		for (int ii = binT0; ii < nFrames; ii++) {
 			final int t = ii;
-			IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
 			String title = "Frame #"+ t + " /" + nFrames;
 			vData.setTitle(title);
-			seqData.setImage(0, 0, sourceImage0); 
+			if (options.concurrentDisplay) {
+				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+				seqData.setImage(0, 0, sourceImage0); 
+			}
 			
 			tasks.add(processor.submit(new Runnable () {
 				@Override

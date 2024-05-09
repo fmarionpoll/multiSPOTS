@@ -71,6 +71,7 @@ public class BuildSeriesOptions implements XMLPersistent
 	public boolean		pass1 					= true;
 	public boolean 		pass2 					= false;
 	public boolean		directionUp2			= true;
+	public boolean		concurrentDisplay		= true;
 	
 	public Rectangle 	searchArea				= new Rectangle();
 	public  int			spanDiffTop				= 3;
