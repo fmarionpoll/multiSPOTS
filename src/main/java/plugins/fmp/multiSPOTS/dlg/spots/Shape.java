@@ -1,6 +1,5 @@
 package plugins.fmp.multiSPOTS.dlg.spots;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -51,7 +50,7 @@ public class Shape extends JPanel
 	 */
 	private static final long 	serialVersionUID 	= 4950182090521600937L;
 	
-	private JButton 			outlineSpotsButton 		= new JButton("Detect spots contours");
+	private JButton 			detectSpotsContoursButton = new JButton("Detect spots contours");
 	private JButton 			cutAndInterpolateButton = new JButton("Cut");
 	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
@@ -81,7 +80,7 @@ public class Shape extends JPanel
 		layoutLeft.setVgap(0);
 		
 		JPanel panel0 = new JPanel(layoutLeft);
-		panel0.add(outlineSpotsButton);
+		panel0.add(detectSpotsContoursButton);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -106,18 +105,14 @@ public class Shape extends JPanel
 	{
 		spotsOverlayCheckBox.addItemListener(new ItemListener() 
 		{
-		  public void itemStateChanged(ItemEvent e) 
-		  {
+		  public void itemStateChanged(ItemEvent e) {
 			  Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-			  if (exp != null) 
-			  {
-				  if (spotsOverlayCheckBox.isSelected()) 
-				  {
+			  if (exp != null) {
+				  if (spotsOverlayCheckBox.isSelected()) {
 					  updateOverlay(exp);
 					  updateOverlayThreshold();
 				  }
-				  else
-				  {
+				  else  {
 					  removeOverlay(exp);
 					  overlayThreshold = null;
 				  }
@@ -129,8 +124,7 @@ public class Shape extends JPanel
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
-				if (exp != null && exp.seqKymos != null) 
-				{				
+				if (exp != null && exp.seqKymos != null) {				
 					int index = spotsTransformsComboBox.getSelectedIndex();
 					Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
 					updateTransformFunctionsOfCanvas(exp);
@@ -165,15 +159,14 @@ public class Shape extends JPanel
 					displayTransform(exp);
 			}});	
 		
-		outlineSpotsButton.addActionListener(new ActionListener () 
+		detectSpotsContoursButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					ROI2DUtilities.removeRoisContainingString(-1, "mask", exp.seqCamData.seq);
-					reduceSpotArea(exp) ;
-					transferContoursToSpotsRois(exp) ;
+					ROI2DUtilities.removeRoisContainingString(-1, "_mask", exp.seqCamData.seq);
+					detectSpotsContours(exp) ;
 					parent0.dlgSpots.tabFile.saveSpotsArray_file(exp);
 					}
 			}});
@@ -194,8 +187,7 @@ public class Shape extends JPanel
 	{
 		if (overlayThreshold == null) 
 			overlayThreshold = new OverlayThreshold(exp.seqCamData.seq);
-		else 
-		{
+		else {
 			exp.seqCamData.seq.removeOverlay(overlayThreshold);
 			overlayThreshold.setSequence(exp.seqCamData.seq);
 		}
@@ -257,8 +249,7 @@ public class Shape extends JPanel
 			updateTransformFunctionsOfCanvas( exp);
 			displayCheckOverlay = true;
 		}
-		else
-		{
+		else {
 			removeOverlay(exp);
 			spotsOverlayCheckBox.setSelected(false);
 			Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
@@ -270,15 +261,14 @@ public class Shape extends JPanel
 	private void updateTransformFunctionsOfCanvas(Experiment exp)
 	{
 		Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqCamData.seq.getFirstViewer().getCanvas();
-		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
-		{
+		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) {
 			canvas.updateListOfImageTransformFunctions(transforms);
 		}
 		int index = spotsTransformsComboBox.getSelectedIndex();
 		canvas.selectImageTransformFunction(index +1);
 	}
 	
-	private void reduceSpotArea(Experiment exp) 
+	private void detectSpotsContours(Experiment exp) 
 	{
 		BuildSeriesOptions options = initDetectOptions(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
@@ -291,7 +281,9 @@ public class Shape extends JPanel
 		
 		IcyBufferedImage sourceImage = seq.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
-		for (Spot spot: exp.spotsArray.spotsList)  {
+		for (Spot spot: exp.spotsArray.spotsList) {
+			
+			exp.seqCamData.seq.removeROI(spot.getRoi());
 			try {
 				spot.mask2D = spot.getRoi().getBooleanMask2D( 0 , 0, 1, true );
 			} catch (InterruptedException e) {
@@ -300,26 +292,15 @@ public class Shape extends JPanel
 			}
 			ROI2DPolygon roi0 = ROI2DMeasures.getContourOfDetectedSpot (workImage, spot, options);
 			List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());  
-			ROI2DPolygon roi = new ROI2DPolygon(listPoints);
-		    roi.setName(spot.getRoi().getName()+"_mask");
-		    roi.setColor(Color.RED);
-		    seq.addROI(roi);
+			ROI2DPolygon roi_new = new ROI2DPolygon(listPoints);
+			
+			roi_new.setName(spot.getRoi().getName());
+			spot.setRoi_old((ROI2DShape) spot.getRoi().getCopy());
+			spot.setRoi(roi_new);
+			exp.seqCamData.seq.addROI(spot.getRoi());
 		}
 	}
-	
-	private void transferContoursToSpotsRois(Experiment exp) 
-	{
-		List<ROI2D> contoursList = ROI2DUtilities.getROIs2DContainingString ("mask", exp.seqCamData.seq);
-		for (ROI2D contour: contoursList)
-		{
-			int length = contour.getName().length();
-			String name = contour.getName().substring(0, length-5);
-			Spot spot = exp.spotsArray.getSpotFromName(name);			
-			ROI2D roi_old = spot.getRoi();
-			replaceRoi(exp, spot, roi_old, contour);
-		}
-	}
-	
+		
 	private void replaceRoi(Experiment exp, Spot spot, ROI2D roi_old, ROI2D roi_new) 
 	{
 		spot.setRoi_old((ROI2DShape) roi_old);
@@ -341,8 +322,7 @@ public class Shape extends JPanel
 		ROI2D roi = exp.seqCamData.seq.getSelectedROI2D();
 		if (roi == null)
 			return;
-		for (Spot spot: exp.spotsArray.spotsList)  {
-			
+		for (Spot spot: exp.spotsArray.spotsList) {		
 			ROI2D spotRoi = spot.getRoi();
 			try {
 				if (!spotRoi.intersects(roi))
@@ -355,7 +335,6 @@ public class Shape extends JPanel
 			}
 			break;			
 		}
-		
 	}
 
 			

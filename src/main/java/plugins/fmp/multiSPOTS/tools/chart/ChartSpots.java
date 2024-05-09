@@ -211,14 +211,14 @@ public class ChartSpots extends IcyFrame
 		   String description = (String) xyDataset.getSeriesKey(isel); 
 		   spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 		}
-		else if (subplotindex >= 0) 
-		{
+		else if (subplotindex >= 0)	{
 			XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
 			String description = (String) xyDataset.getSeriesKey(0); 
 			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 		}
 		else
 			System.out.println("Graph clicked but source not found");
+		
 		return spotFound;
 	}
 
@@ -275,15 +275,13 @@ public class ChartSpots extends IcyFrame
 
 	private void updateGlobalMaxMin() 
 	{
-		if (!flagMaxMinSet) 
-		{
+		if (!flagMaxMinSet) {
 			globalYMax = ymax;
 			globalYMin = ymin;
 			globalXMax = xmax;
 			flagMaxMinSet = true;
 		}
-		else 
-		{
+		else {
 			if (globalYMax < ymax) globalYMax = ymax;
 			if (globalYMin >= ymin) globalYMin = ymin;
 			if (globalXMax < xmax) globalXMax = xmax;
@@ -293,8 +291,7 @@ public class ChartSpots extends IcyFrame
 	private XYSeries getXYSeries(XLSResults results, String name) 
 	{
 		XYSeries seriesXY = new XYSeries(name, false);
-		if (results.valuesOut != null && results.valuesOut.length > 0) 
-		{
+		if (results.valuesOut != null && results.valuesOut.length > 0) {
 			xmax = results.valuesOut.length;
 			ymax = results.valuesOut[0];
 			ymin = ymax;
@@ -307,8 +304,7 @@ public class ChartSpots extends IcyFrame
 	{
 		int x = 0;
 		int npoints = results.valuesOut.length;
-		for (int j = 0; j < npoints; j++) 
-		{
+		for (int j = 0; j < npoints; j++) {
 			double y = results.valuesOut[j];
 			seriesXY.add( x+startFrame , y );
 			if (ymax < y) ymax = y;

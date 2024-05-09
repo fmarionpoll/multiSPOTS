@@ -113,7 +113,7 @@ public class LoadSaveSpotsMeasures extends JPanel
 	
 		boolean flag = exp.saveXML_MCExperiment ();
 		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
-		flag &= exp.xmlSave_MCSpots_Only();
+		flag &= exp.save_MCSpots_Only();
 		flag &= exp.save_SpotsMeasures();
 		return flag;
 	}

@@ -556,7 +556,7 @@ public class Experiment
  	
 	public boolean loadMCCapillaries_Only() 
 	{
-		String mcCapillaryFileName = findFile_3Locations(capillaries.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
+		String mcCapillaryFileName = findFile_3Locations(capillaries.getXMLCapillariesName(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
 		if (mcCapillaryFileName == null && seqCamData != null) 
 			return xmlLoad_OldCapillaries();
 		
@@ -586,13 +586,13 @@ public class Experiment
 	
 	public boolean loadMCSpots_Only() 
 	{
-		String mcSpotsFileName = findFile_3Locations(spotsArray.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
+		String mcSpotsFileName = findFile_3Locations(spotsArray.getXMLSpotsName(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
 		if (mcSpotsFileName == null && seqCamData != null) 
 			return false;
 		
 		boolean flag = spotsArray.xmlLoad_MCSpots_Descriptors(mcSpotsFileName);
 		
-		// load MCcapillaries description of experiment
+		// load description of experiment
 		if (field_boxID .contentEquals("..")
 				&& field_experiment.contentEquals("..") 
 				&& field_comment1.contentEquals("..")
@@ -612,9 +612,17 @@ public class Experiment
 		return flag;
 	}
 	
+	public boolean save_MCSpots_Only() 
+	{
+		String mcSpotsFileName = resultsDirectory + File.separator + spotsArray.getXMLSpotsName();
+		transferExpDescriptorsToSpotsDescriptors();
+		boolean flag = spotsArray.xmlSave_MCSpots_Descriptors(mcSpotsFileName);
+		return flag;
+	}
+	
 	public boolean loadMCCapillaries() 
 	{
-		String xmlCapillariesFileName = findFile_3Locations(capillaries.getXMLNameToAppend(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
+		String xmlCapillariesFileName = findFile_3Locations(capillaries.getXMLCapillariesName(), EXPT_DIRECTORY, BIN_DIRECTORY, IMG_DIRECTORY);
 		boolean flag1 = capillaries.loadMCCapillaries_Descriptors(xmlCapillariesFileName);
 		String kymosImagesDirectory = getKymosBinFullDirectory();
 		boolean flag2 = capillaries.load_Measures(kymosImagesDirectory);
@@ -696,16 +704,9 @@ public class Experiment
 	
 	public boolean xmlSave_MCCapillaries_Only() 
 	{
-		String xmlCapillaryFileName = resultsDirectory + File.separator + capillaries.getXMLNameToAppend();
+		String xmlCapillaryFileName = resultsDirectory + File.separator + capillaries.getXMLCapillariesName();
 		transferExpDescriptorsToCapillariesDescriptors();
 		return capillaries.xmlSaveCapillaries_Descriptors(xmlCapillaryFileName);
-	}
-	
-	public boolean xmlSave_MCSpots_Only() 
-	{
-		String xmlSpotFileName = resultsDirectory + File.separator + spotsArray.getXMLNameToAppend();
-		transferExpDescriptorsToSpotsDescriptors();
-		return spotsArray.xmlSave_Spots_Descriptors(xmlSpotFileName);
 	}
 
  	public boolean load_CapillariesMeasures() 
@@ -777,58 +778,56 @@ public class Experiment
 	public String getExperimentField(EnumXLSColumnHeader fieldEnumCode)
 	{
 		String strField = null;
-		switch (fieldEnumCode)
-		{
-		case EXP_STIM:
-			strField = field_comment1;
-			break;
-		case EXP_CONC:
-			strField = field_comment2;
-			break;
-		case EXP_EXPT:
-			strField = field_experiment;
-			break;
-		case EXP_BOXID:
-			strField = field_boxID;
-			break;
-		case EXP_STRAIN:
-			strField = field_strain;
-			break;
-		case EXP_SEX:
-			strField = field_sex;
-			break;
-		case EXP_COND1:
-			strField = field_cond1;
-			break;
-		case EXP_COND2:
-			strField = field_cond2;
-			break;
-		default:
-			break;
+		switch (fieldEnumCode) {
+			case EXP_STIM:
+				strField = field_comment1;
+				break;
+			case EXP_CONC:
+				strField = field_comment2;
+				break;
+			case EXP_EXPT:
+				strField = field_experiment;
+				break;
+			case EXP_BOXID:
+				strField = field_boxID;
+				break;
+			case EXP_STRAIN:
+				strField = field_strain;
+				break;
+			case EXP_SEX:
+				strField = field_sex;
+				break;
+			case EXP_COND1:
+				strField = field_cond1;
+				break;
+			case EXP_COND2:
+				strField = field_cond2;
+				break;
+			default:
+				break;
 		}
 		return strField;
 	}
 	
 	public void getFieldValues(EnumXLSColumnHeader fieldEnumCode, List<String> textList)
 	{
-		switch (fieldEnumCode)
-		{
-		case EXP_STIM:
-		case EXP_CONC:
-		case EXP_EXPT:
-		case EXP_BOXID:
-		case EXP_STRAIN:
-		case EXP_SEX:
-		case EXP_COND1:
-		case EXP_COND2:
-			addValue(getExperimentField(fieldEnumCode), textList);
-			break;
-		case CAP_STIM:
-		case CAP_CONC:
-			addSpotsValues(fieldEnumCode, textList);
-			break;
-		default:
-			break;
+		switch (fieldEnumCode) {
+			case EXP_STIM:
+			case EXP_CONC:
+			case EXP_EXPT:
+			case EXP_BOXID:
+			case EXP_STRAIN:
+			case EXP_SEX:
+			case EXP_COND1:
+			case EXP_COND2:
+				addValue(getExperimentField(fieldEnumCode), textList);
+				break;
+			case CAP_STIM:
+			case CAP_CONC:
+				addSpotsValues(fieldEnumCode, textList);
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -855,60 +854,58 @@ public class Experiment
 	
 	public void setExperimentFieldNoTest (EnumXLSColumnHeader fieldEnumCode, String newValue)
 	{
-		switch (fieldEnumCode)
-		{
-		case EXP_STIM:
-			field_comment1 = newValue;
-			break;
-		case EXP_CONC:
-			field_comment2  = newValue;
-			break;
-		case EXP_EXPT:
-			field_experiment = newValue;
-			break;
-		case EXP_BOXID:
-			field_boxID  = newValue; 
-			break;
-		case EXP_STRAIN:
-			field_strain  = newValue; 
-			break;
-		case EXP_SEX:
-			field_sex  = newValue; 
-			break;
-		case EXP_COND1:
-			field_cond1 = newValue;
-			break;
-		case EXP_COND2:
-			field_cond2 = newValue;
-			break;
-		default:
-			break;
+		switch (fieldEnumCode) {
+			case EXP_STIM:
+				field_comment1 = newValue;
+				break;
+			case EXP_CONC:
+				field_comment2  = newValue;
+				break;
+			case EXP_EXPT:
+				field_experiment = newValue;
+				break;
+			case EXP_BOXID:
+				field_boxID  = newValue; 
+				break;
+			case EXP_STRAIN:
+				field_strain  = newValue; 
+				break;
+			case EXP_SEX:
+				field_sex  = newValue; 
+				break;
+			case EXP_COND1:
+				field_cond1 = newValue;
+				break;
+			case EXP_COND2:
+				field_cond2 = newValue;
+				break;
+			default:
+				break;
 		}
 	}
 	
 	public void replaceFieldValue(EnumXLSColumnHeader fieldEnumCode, String oldValue, String newValue) 
 	{
-		switch (fieldEnumCode)
-		{
-		case EXP_STIM:
-		case EXP_CONC:
-		case EXP_EXPT:
-		case EXP_BOXID:
-		case EXP_STRAIN:
-		case EXP_SEX:
-		case EXP_COND1:
-		case EXP_COND2:
-			replaceExperimentFieldIfEqualOld(fieldEnumCode, oldValue, newValue);
-			break;
-		case CAP_STIM:
-		case CAP_CONC:
-			if(replaceCapillariesValuesIfEqualOld(fieldEnumCode, oldValue, newValue));
-				xmlSave_MCCapillaries_Only();
-			if(replaceSpotsValuesIfEqualOld(fieldEnumCode, oldValue, newValue));
-				xmlSave_MCSpots_Only();	
-			break;
-		default:
-			break;
+		switch (fieldEnumCode) {
+			case EXP_STIM:
+			case EXP_CONC:
+			case EXP_EXPT:
+			case EXP_BOXID:
+			case EXP_STRAIN:
+			case EXP_SEX:
+			case EXP_COND1:
+			case EXP_COND2:
+				replaceExperimentFieldIfEqualOld(fieldEnumCode, oldValue, newValue);
+				break;
+			case CAP_STIM:
+			case CAP_CONC:
+				if(replaceCapillariesValuesIfEqualOld(fieldEnumCode, oldValue, newValue));
+					xmlSave_MCCapillaries_Only();
+				if(replaceSpotsValuesIfEqualOld(fieldEnumCode, oldValue, newValue));
+					save_MCSpots_Only();	
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -926,8 +923,7 @@ public class Experiment
 		if (capillaries.capillariesList.size() != nimages) 
 			SequenceKymosUtils.transferCamDataROIStoKymo(this);
 		
-		for (int t= 0; t < nimages; t++) 
-		{
+		for (int t= 0; t < nimages; t++) {
 			Capillary cap = capillaries.capillariesList.get(t);
 			cap.kymographIndex = t;
 			IcyBufferedImage img = seqKymos.getSeqImage(t, zChannelSource);
@@ -970,8 +966,7 @@ public class Experiment
 	public void cleanPreviousDetectedFliesROIs() 
 	{
 		ArrayList<ROI2D> list = seqCamData.seq.getROI2Ds();
-		for (ROI2D roi: list) 
-		{
+		for (ROI2D roi: list) {
 			if (roi.getName().contains("det")) 
 				seqCamData.seq.removeROI(roi);
 		}
@@ -986,8 +981,7 @@ public class Experiment
 	{
 		seqCamData.seq.beginUpdate();
 		List<ROI2D> rois = seqCamData.seq.getROI2Ds();
-		for (ROI2D roi: rois) 
-		{
+		for (ROI2D roi: rois) {
 		    if (roi.getName().contains("det") ) 
 		    	seqCamData.seq.removeROI(roi);
 		}
@@ -998,8 +992,7 @@ public class Experiment
 	public void saveDetRoisToPositions() 
 	{
 		List<ROI2D> detectedROIsList= seqCamData.seq.getROI2Ds();
-		for (Cage cage : cages.cagesList) 
-		{
+		for (Cage cage : cages.cagesList) {
 			cage.transferRoisToPositions(detectedROIsList);
 		}
 	}
@@ -1012,21 +1005,16 @@ public class Experiment
 		if (resultsPath.contains(BIN)) 
 		{
 			if (resultsPath.length() < (BIN.length() +1)) 
-			{
 				step = (int) binDuration_ms;
-			} 
 			else 
-			{
 				step = Integer.valueOf(resultsPath.substring(BIN.length()))*1000;
-			}
 		}
 		return step;
 	}
 	
 	private boolean xmlReadDrosoTrack(String filename) 
 	{
-		if (filename == null) 
-		{
+		if (filename == null) {
 			filename = getXMLDrosoTrackLocation();
 			if (filename == null)
 				return false;
@@ -1048,41 +1036,39 @@ public class Experiment
 	private String findFile_1Location(String xmlFileName, int item) 
 	{
 		String xmlFullFileName = File.separator + xmlFileName;
-		switch (item) 
-		{
-		case IMG_DIRECTORY:
-			imagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
-			xmlFullFileName = imagesDirectory + File.separator + xmlFileName;
-			break;
-			
-		case BIN_DIRECTORY:
-			// any directory (below)
-			Path dirPath = Paths.get(resultsDirectory);
-			List<Path> subFolders = Directories.getAllSubPathsOfDirectory(resultsDirectory, 1);
-			if (subFolders == null)
-				return null;
-			List<String> resultsDirList = Directories.getPathsContainingString(subFolders, RESULTS);
-			List<String> binDirList = Directories.getPathsContainingString(subFolders, BIN);
-			resultsDirList.addAll(binDirList);
-			for (String resultsSub : resultsDirList) 
-			{
-				Path dir = dirPath.resolve(resultsSub+ File.separator + xmlFileName);
-				if (Files.notExists(dir))
-					continue;
-				xmlFullFileName = dir.toAbsolutePath().toString();	
+		switch (item) {
+			case IMG_DIRECTORY:
+				imagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
+				xmlFullFileName = imagesDirectory + File.separator + xmlFileName;
 				break;
-			}
-			break;
-			
-		case EXPT_DIRECTORY:
-		default:
-			xmlFullFileName = resultsDirectory + xmlFullFileName;
-			break;	
+				
+			case BIN_DIRECTORY:
+				// any directory (below)
+				Path dirPath = Paths.get(resultsDirectory);
+				List<Path> subFolders = Directories.getAllSubPathsOfDirectory(resultsDirectory, 1);
+				if (subFolders == null)
+					return null;
+				List<String> resultsDirList = Directories.getPathsContainingString(subFolders, RESULTS);
+				List<String> binDirList = Directories.getPathsContainingString(subFolders, BIN);
+				resultsDirList.addAll(binDirList);
+				for (String resultsSub : resultsDirList) 
+				{
+					Path dir = dirPath.resolve(resultsSub+ File.separator + xmlFileName);
+					if (Files.notExists(dir))
+						continue;
+					xmlFullFileName = dir.toAbsolutePath().toString();	
+					break;
+				}
+				break;
+				
+			case EXPT_DIRECTORY:
+			default:
+				xmlFullFileName = resultsDirectory + xmlFullFileName;
+				break;	
 		}
 		
 		// current directory
-		if(xmlFullFileName != null && fileExists (xmlFullFileName)) 
-		{
+		if(xmlFullFileName != null && fileExists (xmlFullFileName)) {
 			if (item == IMG_DIRECTORY) {
 				imagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
 				ExperimentDirectories.moveAndRename(xmlFileName, imagesDirectory, xmlFileName,resultsDirectory);
@@ -1104,10 +1090,8 @@ public class Experiment
 		if (capillaries.capillariesList.size() == 0)
 			loadMCCapillaries_Only();
 		boolean flag = false;
-		for (Capillary cap:  capillaries.capillariesList) 
-		{
-			if (cap.getCapillaryField(fieldEnumCode) .equals(oldValue))
-			{
+		for (Capillary cap:  capillaries.capillariesList) {
+			if (cap.getCapillaryField(fieldEnumCode) .equals(oldValue)) {
 				cap.setCapillaryField(fieldEnumCode, newValue);
 				flag = true;
 			}
@@ -1120,10 +1104,8 @@ public class Experiment
 		if (spotsArray.spotsList.size() == 0)
 			loadMCSpots_Only();
 		boolean flag = false;
-		for (Spot spot:  spotsArray.spotsList) 
-		{
-			if (spot.getSpotField(fieldEnumCode) .equals(oldValue))
-			{
+		for (Spot spot:  spotsArray.spotsList) {
+			if (spot.getSpotField(fieldEnumCode) .equals(oldValue)) {
 				spot.setSpotField(fieldEnumCode, newValue);
 				flag = true;
 			}
@@ -1151,10 +1133,10 @@ public class Experiment
 		String version = XMLUtil.getElementValue(node, ID_VERSION, ID_VERSIONNUM);
 		if (!version .equals(ID_VERSIONNUM))
 			return false;
+		
 		camImageFirst_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGEMS, 0);
-		camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGEMS, 0);
-		if (camImageLast_ms <= 0) 
-		{
+		camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGEMS, 0);		
+		if (camImageLast_ms <= 0) {
 			camImageFirst_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGE, 0)*60000;
 			camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0)*60000;
 		}
@@ -1166,8 +1148,7 @@ public class Experiment
 		
 		ugly_checkOffsetValues();
 		
-		if (field_boxID != null && field_boxID .contentEquals("..")) 
-		{
+		if (field_boxID != null && field_boxID .contentEquals("..")) {
 			field_boxID		= XMLUtil.getElementValue(node, ID_BOXID, "..");
 	        field_experiment= XMLUtil.getElementValue(node, ID_EXPERIMENT, "..");
 	        field_comment1 	= XMLUtil.getElementValue(node, ID_COMMENT1, "..");
@@ -1211,10 +1192,8 @@ public class Experiment
 	private boolean isFound (String pattern, List<String> names) 
 	{
 		boolean found = false;
-		if (names.size() > 0) 
-		{
-			for (String name: names) 
-			{
+		if (names.size() > 0) {
+			for (String name: names) {
 				found = name.equals(pattern);
 				if (found)
 					break;

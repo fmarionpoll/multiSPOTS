@@ -71,7 +71,7 @@ public class CapillariesArray
 	
 	// ---------------------------------
 	
-	public String getXMLNameToAppend() 
+	public String getXMLCapillariesName() 
 	{
 		return ID_MCCAPILLARIES_XML;
 	}

@@ -54,8 +54,7 @@ public class ROI2DUtilities
 		double ylast = polyline.ypoints[roiLine_npoints-1];
 		int xfirst0 = (int) polyline.xpoints[0];
 		
-		for (int i=1; i< roiLine_npoints; i++) 
-		{			
+		for (int i=1; i< roiLine_npoints; i++) {			
 			int xfirst = (int) polyline.xpoints[i-1];
 			if (xfirst < 0)
 				xfirst = 0;
@@ -64,8 +63,7 @@ public class ROI2DUtilities
 				xlast = xfirst0 + nintervals -1;
 			double yfirst = polyline.ypoints[i-1];
 			ylast = polyline.ypoints[i]; 
-			for (int j = xfirst; j< xlast; j++) 
-			{
+			for (int j = xfirst; j< xlast; j++) {
 				int val = (int) (yfirst + (ylast-yfirst)*(j-xfirst)/(xlast-xfirst));
 				Point2D pt = new Point2D.Double(j, val);
 				pts.add(pt);
@@ -93,16 +91,13 @@ public class ROI2DUtilities
 					seqList.add(roi);
 		}
 		
-		for (ROI2D seqRoi: seqList) 
-		{
+		for (ROI2D seqRoi: seqList) {
 			Iterator <ROI2D> iterator = listRois.iterator();
-			while(iterator.hasNext()) 
-			{
+			while(iterator.hasNext()) {
 				ROI2D roi = iterator.next();
 				if (seqRoi == roi )
 					iterator.remove();
-				else if (seqRoi.getName().equals (roi.getName() )) 
-				{
+				else if (seqRoi.getName().equals (roi.getName() )) {
 					seqRoi.copyFrom(roi);
 					iterator.remove();
 				}
@@ -113,8 +108,7 @@ public class ROI2DUtilities
 	public static void removeROIsMissingChar(List<ROI2D> listRois, char character) 
 	{
 		Iterator <ROI2D> iterator = listRois.iterator();
-		while(iterator.hasNext()) 
-		{
+		while(iterator.hasNext()) {
 			ROI2D roi = iterator.next();
 			if (roi.getName().indexOf(character ) < 0) 
 				iterator.remove();
@@ -124,8 +118,7 @@ public class ROI2DUtilities
 	public static ROI2DPolyLine transfertDataArrayToROI(List<Integer> intArray) 
 	{
 		Polyline2D line = new Polyline2D();
-		for (int i =0; i< intArray.size(); i++) 
-		{
+		for (int i =0; i< intArray.size(); i++) {
 			Point2D pt = new Point2D.Double(i, intArray.get(i));
 			line.addPoint(pt);
 		}
@@ -136,8 +129,7 @@ public class ROI2DUtilities
 	{
 		List<ROI2D> listRois = seqKymos.seq.getROI2Ds();
 		int width = seqKymos.seq.getWidth();
-		for (ROI2D roi: listRois) 
-		{
+		for (ROI2D roi: listRois)  {
 			if (roi.getName().contains(filter)) 
 			{ 
 				interpolateMissingPointsAlongXAxis ((ROI2DPolyLine)roi, width);
@@ -165,20 +157,16 @@ public class ROI2DUtilities
 		Rectangle rect1 = new Rectangle(rect);
 		// find upper left
 		rect1.setSize(rect.width/2, rect.height/2);
-		for (int i = 0; i< roiPolygon.npoints; i++) 
-		{
-			if (rect1.contains(roiPolygon.xpoints[i], roiPolygon.ypoints[i])) 
-			{
+		for (int i = 0; i< roiPolygon.npoints; i++) {
+			if (rect1.contains(roiPolygon.xpoints[i], roiPolygon.ypoints[i])) {
 				extFrame.addPoint(roiPolygon.xpoints[i], roiPolygon.ypoints[i]);
 				break;
 			}
 		}
 		// find lower left
 		rect1.translate(0, rect.height/2 +2);
-		for (int i = 0; i< roiPolygon.npoints; i++) 
-		{
-			if (rect1.contains(roiPolygon.xpoints[i], roiPolygon.ypoints[i])) 
-			{
+		for (int i = 0; i< roiPolygon.npoints; i++) {
+			if (rect1.contains(roiPolygon.xpoints[i], roiPolygon.ypoints[i])) {
 				extFrame.addPoint(roiPolygon.xpoints[i], roiPolygon.ypoints[i]);
 				break;
 			}
@@ -186,18 +174,15 @@ public class ROI2DUtilities
 		// find lower right
 		rect1.translate(rect.width/2+2, 0);
 		for (int i = 0; i< roiPolygon.npoints; i++) {
-			if (rect1.contains(roiPolygon.xpoints[i], roiPolygon.ypoints[i])) 
-			{
+			if (rect1.contains(roiPolygon.xpoints[i], roiPolygon.ypoints[i])) {
 				extFrame.addPoint(roiPolygon.xpoints[i], roiPolygon.ypoints[i]);
 				break;
 			}
 		}
 		// find upper right
 		rect1.translate(0, -rect.height/2 - 2);
-		for (int i = 0; i< roiPolygon.npoints; i++) 
-		{
-			if (rect1.contains(roiPolygon.xpoints[i], roiPolygon.ypoints[i])) 
-			{
+		for (int i = 0; i< roiPolygon.npoints; i++) {
+			if (rect1.contains(roiPolygon.xpoints[i], roiPolygon.ypoints[i])) {
 				extFrame.addPoint(roiPolygon.xpoints[i], roiPolygon.ypoints[i]);
 				break;
 			}
@@ -252,8 +237,7 @@ public class ROI2DUtilities
 		List<ROI2D> roiList = seq.getROI2Ds();
 		Collections.sort(roiList, new Comparators.ROI2D_Name_Comparator());
 		List<ROI2D> listROIsMatchingString = new ArrayList<ROI2D>();
-		for ( ROI2D roi : roiList ) 
-		{
+		for ( ROI2D roi : roiList ) {
 			if ((roi instanceof ROI2DShape) && roi.getName().contains(string)) 
 				listROIsMatchingString.add(roi);
 		}
@@ -265,8 +249,7 @@ public class ROI2DUtilities
 		List<ROI2D> roiList = seq.getROI2Ds();
 		Collections.sort(roiList, new Comparators.ROI2D_Name_Comparator());
 		List<ROI2DShape> listROIsMatchingString = new ArrayList<ROI2DShape>();
-		for ( ROI2D roi : roiList ) 
-		{
+		for ( ROI2D roi : roiList ) {
 			if ((roi instanceof ROI2DShape) && roi.getName().contains(string)) 
 				listROIsMatchingString.add((ROI2DShape) roi);
 		}
@@ -275,8 +258,7 @@ public class ROI2DUtilities
 	
 	public static void removeRoisContainingString(int t, String string, Sequence seq) 
 	{
-		for (ROI roi: seq.getROIs()) 
-		{
+		for (ROI roi: seq.getROIs()) {
 			if (roi instanceof ROI2D 
 					&& roi.getName().contains(string)
 					&&  (t < 0 || ((ROI2D) roi).getT() == t ))
@@ -310,16 +292,14 @@ public class ROI2DUtilities
 	public static ArrayList<Point2D> getPoints2DArrayFromROI2D (ROI2D roi) 
 	{
 		ArrayList<Point2D> points = new ArrayList<Point2D>();		
-		if (roi instanceof ROI2DPolyLine) 
-		{
+		if (roi instanceof ROI2DPolyLine) {
 			Polyline2D line = ((ROI2DPolyLine) roi).getPolyline2D();
 			for (int i = 0; i < line.npoints; i++) {
 				Point2D pt = new Point2D.Double(line.xpoints[i],  line.ypoints[i]);
 				points.add(pt);
 			}
 		} 
-		else if (roi instanceof ROI2DLine) 
-		{
+		else if (roi instanceof ROI2DLine) {
 			Line2D line = ((ROI2DLine) roi).getLine();
 			Point2D pt = new Point2D.Double(line.getP1().getX(),  line.getP1().getY());
 			points.add(pt);
@@ -332,8 +312,7 @@ public class ROI2DUtilities
 	public static void saveToXML_ROI(Node node, ROI2D roi) 
 	{
 		final Node nodeROI = XMLUtil.setElement(node, ID_ROIMC);
-        if (!roi.saveToXML(nodeROI)) 
-        {
+        if (!roi.saveToXML(nodeROI)) {
             XMLUtil.removeNode(node, nodeROI);
             System.err.println("Error: the roi " + roi.getName() + " was not correctly saved to XML !");
         }
@@ -342,8 +321,7 @@ public class ROI2DUtilities
 	public static ROI2D loadFromXML_ROI(Node node) 
 	{
 		final Node nodeROI = XMLUtil.getElement(node, ID_ROIMC);
-        if (nodeROI != null) 
-        {
+        if (nodeROI != null) {
 			ROI2D roi = (ROI2D) ROI2D.createFromXML(nodeROI);
 	        return roi;
         }

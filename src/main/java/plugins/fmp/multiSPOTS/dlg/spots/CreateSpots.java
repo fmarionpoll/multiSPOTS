@@ -153,9 +153,8 @@ public class CreateSpots extends JPanel
 		    }});
 	}
 	
-	// set/ get	
-	
 	// ---------------------------------
+	
 	private void create2DPolygon() 
 	{
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
@@ -172,12 +171,10 @@ public class CreateSpots extends JPanel
 		seqCamData.seq.setSelectedROI(roi);
 	}
 	
-	
 	private boolean isRoiPresent(SequenceCamData seqCamData, String dummyname) 
 	{
 		ArrayList<ROI2D> listRois = seqCamData.seq.getROI2Ds();
-		for (ROI2D roi: listRois) 
-		{
+		for (ROI2D roi: listRois) {
 			if (roi.getName() .equals(dummyname))
 				return true;
 		}
@@ -186,8 +183,7 @@ public class CreateSpots extends JPanel
 	
 	private Polygon2D getCapillariesPolygon(SequenceCamData seqCamData)
 	{
-		if (spotsLocationPolygon == null)
-		{		
+		if (spotsLocationPolygon == null) {		
 			Rectangle rect = seqCamData.seq.getBounds2D();
 			List<Point2D> points = new ArrayList<Point2D>();
 			points.add(new Point2D.Double(rect.x + rect.width /5, rect.y + rect.height /5));
@@ -206,8 +202,7 @@ public class CreateSpots extends JPanel
 			return;
 		
 		Polygon2D roiPolygon_orig = (Polygon2D) roiPolygon.clone();
-		for (int i=0; i<roiPolygon.npoints; i++) 
-		{
+		for (int i=0; i<roiPolygon.npoints; i++) {
 			int j = (i + isel) % 4;
 			roiPolygon.xpoints[j] = roiPolygon_orig.xpoints[i];
 			roiPolygon.ypoints[j] = roiPolygon_orig.ypoints[i];
@@ -225,45 +220,34 @@ public class CreateSpots extends JPanel
 		int nbcapillaries = 20;
 		int width_between_capillaries = 1;	
 		int width_interval = 0;
-
-		try 
-		{ 
+		try { 
 			nbcapillaries = (int) nCagesPerRowSpinner.getValue();
 		} 
-		catch( Exception e ) 
-		{ 
+		catch( Exception e ) { 
 			new AnnounceFrame("Can't interpret one of the ROI parameters value"); 
 		}
 
 		ROI2D roi = seqCamData.seq.getSelectedROI2D();
-		if ( ! ( roi instanceof ROI2DPolygon ) ) 
-		{
+		if ( ! (roi instanceof ROI2DPolygon)) {
 			new AnnounceFrame("The frame must be a ROI2D POLYGON");
 			return;
 		}
 		
 		spotsLocationPolygon = ROI2DUtilities.orderVerticesofPolygon (((ROI2DPolygon) roi).getPolygon());
-	
 		rotate(spotsLocationPolygon);
-		
 		seqCamData.seq.removeROI(roi);
-
-		if (statusGroup2Mode) 
-		{	
+		if (statusGroup2Mode) {	
 			double span = (nbcapillaries/2)* (width_between_capillaries + width_interval) - width_interval;
-			for (int i = 0; i < nbcapillaries; i += 2) 
-			{
+			for (int i = 0; i < nbcapillaries; i += 2) {
 				double span0 = (width_between_capillaries + width_interval)*i/2;
 				addROILine(seqCamData, "line"+i/2+"L", spotsLocationPolygon, span0, span);
 				span0 += width_between_capillaries ;
 				addROILine(seqCamData, "line"+i/2+"R", spotsLocationPolygon, span0, span);
 			}
 		}
-		else 
-		{
+		else {
 			double span = nbcapillaries-1;
-			for (int i=0; i< nbcapillaries; i++) 
-			{
+			for (int i=0; i< nbcapillaries; i++) {
 				double span0 = width_between_capillaries*i;
 				addROILine(seqCamData, "line"+ String.format("%02d", i), spotsLocationPolygon, span0, span);
 			}
@@ -288,7 +272,8 @@ public class CreateSpots extends JPanel
 		seqCamData.seq.addROI(roiL1, true);
 	}
 	
-	private Polyline2D createPolyline2D(double x0, double y0, double x1, double y1, int npoints) {
+	private Polyline2D createPolyline2D(double x0, double y0, double x1, double y1, int npoints) 
+	{
 		double [] xpoints = new double[npoints];
 		double [] ypoints = new double [npoints];
 		double deltax = (x1-x0)/(npoints-1);

@@ -54,8 +54,7 @@ public class LoadSaveSpots extends JPanel
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) 
-				{ 
+				if (exp != null) { 
 					loadCapillaries_File(exp);
 					loadSpotsArray_File(exp);
 					firePropertyChange("CAP_ROIS_OPEN", false, true);
@@ -67,8 +66,7 @@ public class LoadSaveSpots extends JPanel
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) 
-				{
+				if (exp != null) {
 					saveCapillaries_file(exp);
 					saveSpotsArray_file(exp); 
 					firePropertyChange("CAP_ROIS_SAVE", false, true);
@@ -108,7 +106,7 @@ public class LoadSaveSpots extends JPanel
 	
 		boolean flag = exp.saveXML_MCExperiment ();
 		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
-		flag &= exp.xmlSave_MCSpots_Only();
+		flag &= exp.save_MCSpots_Only();
 		flag &= exp.save_SpotsMeasures();
 		return flag;
 	}
