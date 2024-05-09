@@ -654,7 +654,7 @@ public class Capillary implements Comparable <Capillary>
 		
 		ROI2DAlongTime capRoi = null;
 		for (ROI2DAlongTime item : roisForKymo) {
-			if (t < item.getStart())
+			if (t < item.getT())
 				break;
 			capRoi = item;
 		}
@@ -665,7 +665,7 @@ public class Capillary implements Comparable <Capillary>
  	{
  		ROI2DAlongTime itemFound = null;
  		for (ROI2DAlongTime item : roisForKymo) {
-			if (start != item.getStart())
+			if (start != item.getT())
 				continue;
 			itemFound = item;
 		}

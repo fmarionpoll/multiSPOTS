@@ -50,7 +50,7 @@ public class Shape extends JPanel
 	 */
 	private static final long 	serialVersionUID 	= 4950182090521600937L;
 	
-	private JButton 			detectSpotsContoursButton = new JButton("Detect spots contours");
+	private JButton 			detectContoursButton 	= new JButton("Detect spots contours");
 	private JButton 			cutAndInterpolateButton = new JButton("Cut");
 	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
@@ -80,7 +80,7 @@ public class Shape extends JPanel
 		layoutLeft.setVgap(0);
 		
 		JPanel panel0 = new JPanel(layoutLeft);
-		panel0.add(detectSpotsContoursButton);
+		panel0.add(detectContoursButton);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -159,14 +159,14 @@ public class Shape extends JPanel
 					displayTransform(exp);
 			}});	
 		
-		detectSpotsContoursButton.addActionListener(new ActionListener () 
+		detectContoursButton.addActionListener(new ActionListener () 
 		{ 
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					ROI2DUtilities.removeRoisContainingString(-1, "_mask", exp.seqCamData.seq);
-					detectSpotsContours(exp) ;
+					detectContours(exp) ;
 					parent0.dlgSpots.tabFile.saveSpotsArray_file(exp);
 					}
 			}});
@@ -268,7 +268,7 @@ public class Shape extends JPanel
 		canvas.selectImageTransformFunction(index +1);
 	}
 	
-	private void detectSpotsContours(Experiment exp) 
+	private void detectContours(Experiment exp) 
 	{
 		BuildSeriesOptions options = initDetectOptions(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
@@ -282,7 +282,6 @@ public class Shape extends JPanel
 		IcyBufferedImage sourceImage = seq.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 		for (Spot spot: exp.spotsArray.spotsList) {
-			
 			exp.seqCamData.seq.removeROI(spot.getRoi());
 			try {
 				spot.mask2D = spot.getRoi().getBooleanMask2D( 0 , 0, 1, true );
@@ -297,6 +296,7 @@ public class Shape extends JPanel
 			roi_new.setName(spot.getRoi().getName());
 			spot.setRoi_old((ROI2DShape) spot.getRoi().getCopy());
 			spot.setRoi(roi_new);
+//			spot.deleteSpotMeasures();
 			exp.seqCamData.seq.addROI(spot.getRoi());
 		}
 	}

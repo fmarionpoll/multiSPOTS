@@ -11,11 +11,12 @@ import icy.roi.ROI2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 
+
 public class ROI2DAlongTime implements XMLPersistent 
 {
 	private int							index			= 0;
 	private ROI2D 						roi 			= null;	
-	private long 						start 			= 0;
+	private long 						t 				= 0;
 	private ArrayList<ArrayList<int[]>> masksList 		= null;
 	private BooleanMask2D 				mask2D 			= null;
 	private int							mask2D_n_valid_points = 0;
@@ -26,16 +27,16 @@ public class ROI2DAlongTime implements XMLPersistent
 	private final String ID_START 	= "startT";
 	
 	
-	public ROI2DAlongTime(long start, ROI2D roi) {
+	public ROI2DAlongTime(long t, ROI2D roi) {
 		setRoi(roi);
-		this.start = start;
+		this.t = t;
 	}
 	
 	public ROI2DAlongTime() {
 	}
 
-	public long getStart() {
-		return start;
+	public long getT() {
+		return t;
 	}
 	
 	public ROI2D getRoi() {
@@ -46,8 +47,8 @@ public class ROI2DAlongTime implements XMLPersistent
 		return masksList;
 	}
 	
-	public void setStart(long start) {
-		this.start = start;
+	public void setT(long t) {
+		this.t = t;
 	}
 	
 	public void setRoi(ROI2D roi) {
@@ -89,7 +90,7 @@ public class ROI2DAlongTime implements XMLPersistent
 	    	return false;
 	    
     	index 	= XMLUtil.getElementIntValue(nodeMeta, ID_INDEX, 0);
-        start 	= XMLUtil.getElementLongValue(nodeMeta, ID_START, 0);
+        t 	= XMLUtil.getElementLongValue(nodeMeta, ID_START, 0);
         roi 	= ROI2DUtilities.loadFromXML_ROI(nodeMeta);
         return true;    
 	}
@@ -100,8 +101,9 @@ public class ROI2DAlongTime implements XMLPersistent
 	    if (nodeMeta == null) 
 	    	return false;
 	    XMLUtil.setElementIntValue(nodeMeta, ID_INDEX, index);
-        XMLUtil.setElementLongValue(nodeMeta, ID_START, start);
+        XMLUtil.setElementLongValue(nodeMeta, ID_START, t);
         ROI2DUtilities.saveToXML_ROI(nodeMeta, roi);
 		return true;
 	}
+
 }

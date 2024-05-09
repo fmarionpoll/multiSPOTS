@@ -103,7 +103,7 @@ public class Spot implements Comparable <Spot>
 	
 	// ------------------------------------------
 	
-	public void copy(Spot spotFrom) 
+	public void copySpot(Spot spotFrom) 
 	{
 		cageIndex 		= spotFrom.cageIndex;
 		version 		= spotFrom.version;
@@ -120,9 +120,8 @@ public class Spot implements Comparable <Spot>
 		
 		limitsOptions	= spotFrom.limitsOptions;
 		
-		sum .copy(spotFrom.sum);
+		sum.copy(spotFrom.sum);
 		sumClean .copy(spotFrom.sumClean);
-//		cntPix .copy(spotFrom.cntPix);	
 		flyPresent.copy(spotFrom.flyPresent);	
 	}
 	
@@ -138,7 +137,14 @@ public class Spot implements Comparable <Spot>
 	
 	public void setRoi(ROI2DShape roi) 
 	{
-		this.spotRoi = roi;
+		this.spotRoi = roi; 
+		listRoiAlongTime.clear();
+	}
+	
+	public void deleteSpotMeasures() {
+		sum = null;
+		sumClean = null;
+		flyPresent = null;
 	}
 	
 	public void setRoi_old(ROI2DShape roi) 
@@ -419,29 +425,29 @@ public class Spot implements Comparable <Spot>
 	public List<ROI2DAlongTime> getROIsAlongTime() 
 	{
 		if (listRoiAlongTime.size() < 1) 
-			initROI2DForKymoList();
+			initROI2DListAlongTime();
 		return listRoiAlongTime;
 	}
 		
  	public ROI2DAlongTime getROI2DKymoAtIntervalT(long t) 
  	{
 		if (listRoiAlongTime.size() < 1) 
-			initROI2DForKymoList();
+			initROI2DListAlongTime();
 		
 		ROI2DAlongTime capRoi = null;
 		for (ROI2DAlongTime item : listRoiAlongTime) {
-			if (t < item.getStart())
+			if (t < item.getT())
 				break;
 			capRoi = item;
 		}
 		return capRoi;
 	}
  	
- 	public void removeROI2DIntervalStartingAt(long start) 
+ 	public void removeROI2DIntervalStartingAtT(long t) 
  	{
  		ROI2DAlongTime itemFound = null;
  		for (ROI2DAlongTime item : listRoiAlongTime) {
-			if (start != item.getStart())
+			if (t != item.getT())
 				continue;
 			itemFound = item;
 		}
@@ -449,7 +455,7 @@ public class Spot implements Comparable <Spot>
  			listRoiAlongTime.remove(itemFound);
 	}
 	
-	private void initROI2DForKymoList() 
+	private void initROI2DListAlongTime() 
 	{ 
 		listRoiAlongTime.add(new ROI2DAlongTime(0, spotRoi));		
 	}

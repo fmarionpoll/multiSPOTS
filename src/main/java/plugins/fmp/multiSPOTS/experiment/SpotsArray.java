@@ -167,7 +167,7 @@ public class SpotsArray
 		spotsList.clear();
 		for (Spot sourceSpot: sourceSpotArray.spotsList) {
 			Spot spot = new Spot();
-			spot.copy(sourceSpot);
+			spot.copySpot(sourceSpot);
 			spotsList.add(spot);
 		}
 	}
@@ -417,7 +417,7 @@ public class SpotsArray
 			spotsListTimeIntervals = new KymoIntervals();
 			for (Spot spot: spotsList) {
 				for (ROI2DAlongTime roiFK: spot.getROIsAlongTime()) {
-					Long[] interval = {roiFK.getStart(), (long) -1}; 
+					Long[] interval = {roiFK.getT(), (long) -1}; 
 					spotsListTimeIntervals.addIfNew(interval);
 				}
 			}
@@ -454,7 +454,7 @@ public class SpotsArray
 	{
 		spotsListTimeIntervals.deleteIntervalStartingAt(start);
 		for (Spot spot: spotsList) 
-			spot.removeROI2DIntervalStartingAt(start);
+			spot.removeROI2DIntervalStartingAtT(start);
 	}
 	
 	// --------------------------------
