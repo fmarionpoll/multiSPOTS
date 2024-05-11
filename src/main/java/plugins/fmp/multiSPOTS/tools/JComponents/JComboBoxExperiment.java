@@ -94,7 +94,9 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 					long diff = lastOffset_Ms - firstOffset_Ms;
 					if (diff < 1) 
 					{
-						System.out.println("ExperimentCombo:get_MsTime_of_StartAndEnd_AllExperiments() Expt # " + i + ": FileTime difference between last and first image < 1; set dt between images = 1 ms");
+						System.out.println("ExperimentCombo:get_MsTime_of_StartAndEnd_AllExperiments() Expt # " 
+											+ i 
+											+ ": FileTime difference between last and first image < 1; set dt between images = 1 ms");
 						diff = exp.seqCamData.seq.getSizeT();
 					}
 					if (expAll.camImageLast_ms < diff) 
@@ -105,7 +107,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 		return expAll;
 	}
 		
-	public boolean loadListOfMeasuresFromAllExperiments(boolean loadCapillaries, boolean loadSpots, boolean loadDrosoTrack) 
+	public boolean loadListOfMeasuresFromAllExperiments( boolean loadSpots, boolean loadDrosoTrack) 
 	{
 		ProgressFrame progress = new ProgressFrame("Load experiment(s) parameters");
 		int nexpts = getItemCount();
@@ -120,31 +122,24 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
         ArrayList<Future<?>> futuresArray = new ArrayList<Future<?>>(nexpts);
 		futuresArray.clear();
 		
-		for (int i = 0; i < getItemCount(); i++) 
-		{
+		for (int i = 0; i < nexpts; i++) {
 			final int it = i;
 			final Experiment exp = getItemAt(it);
 			
-			futuresArray.add(processor.submit(new Runnable () 
-			{
+			futuresArray.add(processor.submit(new Runnable () {
 				@Override
-				public void run() 
-				{
+				public void run() {
 					progress.setMessage("Load experiment "+ it +" of "+ nexpts);
 					exp.setBinSubDirectory(stringExpBinSubDirectory);
 					if (stringExpBinSubDirectory == null)
 						exp.checkKymosDirectory(exp.getBinSubDirectory());
-					
-					if (loadCapillaries) 
-						exp.openCapillarieMeasures();
 					if (loadSpots) 
 						exp.openSpotsMeasures();
 					if (loadDrosoTrack) 
 						exp.openPositionsMeasures();
 					
-					if (maxSizeOfSpotsArrays < exp.capillaries.capillariesList.size())
-					{
-						maxSizeOfSpotsArrays = exp.capillaries.capillariesList.size();
+					if (maxSizeOfSpotsArrays < exp.spotsArray.spotsList.size()) {
+						maxSizeOfSpotsArrays = exp.spotsArray.spotsList.size();
 						if (maxSizeOfSpotsArrays % 2 != 0)
 							maxSizeOfSpotsArrays += 1;
 					}
@@ -161,21 +156,17 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
     {  	
   		 int frame= 1;
   		 int nframes = futuresArray.size();
-    	 while (!futuresArray.isEmpty())
-         {
+    	 while (!futuresArray.isEmpty()) {
              final Future<?> f = futuresArray.get(futuresArray.size() - 1);
              if (progressBar != null)
-   				 progressBar.setMessage("Analyze frame: " + (frame) + "//" + nframes);
-             try
-             {
+   				 progressBar.setMessage("Analyze experiment: " + (frame) + "//" + nframes);
+             try  {
                  f.get();
              }
-             catch (ExecutionException e)
-             {
+             catch (ExecutionException e) {
                  System.out.println("ExperimentCombo:waitFuturesCompletion() - Warning: " + e);
              }
-             catch (InterruptedException e)
-             {
+             catch (InterruptedException e) {
                  // ignore
              }
              futuresArray.remove(f);
@@ -185,8 +176,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 	
 	public void setFirstImageForAllExperiments(boolean collate)
 	{
-		for (int i = 0; i < getItemCount(); i++) 
-		{
+		for (int i = 0; i < getItemCount(); i++) {
 			Experiment expi = getItemAt(i);
 			Experiment expFirst = expi.getFirstChainedExperiment(collate);
 			expi.chainImageFirst_ms = expFirst.camImageFirst_ms + expFirst.binFirst_ms;
@@ -201,17 +191,14 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 	
 	public void chainExperimentsUsingCamIndexes(boolean collate) 
 	{
-		for (int i = 0; i < getItemCount(); i++) 
-		{
+		for (int i = 0; i < getItemCount(); i++) {
 			Experiment expi = getItemAt(i);
-			if (!collate) 
-			{
+			if (!collate) {
 				resetChaining(expi);
 				continue;
 			}
 			
-			for (int j = 0; j< getItemCount(); j++) 
-			{
+			for (int j = 0; j< getItemCount(); j++) {
 				if (i == j)
 					continue;
 				Experiment expj = getItemAt(j);
@@ -219,12 +206,10 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 					continue;
 				
 				// same exp series: if before, insert eventually
-				if (expj.camImageLast_ms < expi.camImageFirst_ms) 
-				{
+				if (expj.camImageLast_ms < expi.camImageFirst_ms) {
 					if (expi.chainToPreviousExperiment == null)
 						expi.chainToPreviousExperiment = expj;
-					else if (expj.camImageLast_ms > expi.chainToPreviousExperiment.camImageLast_ms ) 
-					{
+					else if (expj.camImageLast_ms > expi.chainToPreviousExperiment.camImageLast_ms ) {
 						(expi.chainToPreviousExperiment).chainToNextExperiment = expj;
 						expj.chainToPreviousExperiment = expi.chainToPreviousExperiment;
 						expj.chainToNextExperiment = expi;
@@ -233,12 +218,10 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 					continue;
 				}
 				// same exp series: if after, insert eventually
-				if (expj.camImageFirst_ms >= expi.camImageLast_ms) 
-				{
+				if (expj.camImageFirst_ms >= expi.camImageLast_ms) {
 					if (expi.chainToNextExperiment == null)
 						expi.chainToNextExperiment = expj;
-					else if (expj.camImageFirst_ms < expi.chainToNextExperiment.camImageFirst_ms ) 
-					{
+					else if (expj.camImageFirst_ms < expi.chainToNextExperiment.camImageFirst_ms ) {
 						(expi.chainToNextExperiment).chainToPreviousExperiment = expj;
 						expj.chainToNextExperiment = (expi.chainToNextExperiment);
 						expj.chainToPreviousExperiment = expi;
@@ -254,11 +237,9 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 	
 	public void chainExperimentsUsingKymoIndexes(boolean collate) 
 	{	
-		for (int i = 0; i < getItemCount(); i++) 
-		{
+		for (int i = 0; i < getItemCount(); i++) {
 			Experiment expi = getItemAt(i);
-			if (!collate) 
-			{
+			if (!collate) {
 				resetChaining(expi);
 				continue;
 			}
@@ -268,8 +249,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 			List <Experiment> list = new ArrayList<Experiment> ();
 			list.add(expi);
 			
-			for (int j = 0; j < getItemCount(); j++) 
-			{
+			for (int j = 0; j < getItemCount(); j++) {
 				if (i == j)
 					continue;
 				Experiment expj = getItemAt(j);
@@ -284,8 +264,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 				continue;
 			
 			Collections.sort(list, new Comparators.Experiment_Start_Comparator ());
-			for (int k = 0; k < list.size(); k++) 
-			{
+			for (int k = 0; k < list.size(); k++) {
 				Experiment expk = list.get(k);
 				if (k > 0)
 					expk.chainToPreviousExperiment = list.get(k-1);
@@ -312,12 +291,9 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 	public int getExperimentIndexFromExptName(String filename) 
 	{
 		int position = -1;
-		if (filename != null) 
-		{
-			for (int i = 0; i < getItemCount(); i++) 
-			{
-				if (filename.equals(getItemAt(i).toString())) 
-				{
+		if (filename != null) {
+			for (int i = 0; i < getItemCount(); i++) {
+				if (filename.equals(getItemAt(i).toString())) {
 					position = i;
 					break;
 				}
@@ -331,8 +307,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 		Experiment exp = null;
 		for (int i = 0; i < getItemCount(); i++) {
 			String expString = getItemAt(i).toString();
-			if (filename.equals(expString)) 
-			{
+			if (filename.equals(expString)) {
 				exp = getItemAt(i);
 				break;
 			}
@@ -346,8 +321,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 	{
 		String exptName = exp.toString();
 		int index = getExperimentIndexFromExptName(exptName);
-		if (allowDuplicates || index < 0)
-		{
+		if (allowDuplicates || index < 0) {
 			addItem(exp);
 			index = getExperimentIndexFromExptName(exptName);
 		}
@@ -357,8 +331,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment>
 	public List<String> getFieldValuesFromAllExperiments(EnumXLSColumnHeader field) 
 	{
 		List<String> textList = new ArrayList<>();
-		for (int i = 0; i < getItemCount(); i++) 
-		{
+		for (int i = 0; i < getItemCount(); i++) {
 			Experiment exp = getItemAt(i);
 			exp.getFieldValues(field, textList);
 		}

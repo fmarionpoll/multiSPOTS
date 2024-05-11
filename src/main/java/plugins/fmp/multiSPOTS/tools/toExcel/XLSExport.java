@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.poi.hssf.util.HSSFColor;
@@ -16,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
+import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 
@@ -32,8 +34,8 @@ public class XLSExport
     XSSFFont 					font_blue 			= null;
     XSSFWorkbook 				workbook			= null;		
     
-	JComboBoxExperiment 			expList 			= null;
-//	XLSResultsArray 			rowListForOneExp 	= new XLSResultsArray ();
+	JComboBoxExperiment 		expList 			= null;
+
 
 
 	// ------------------------------------------------
@@ -352,11 +354,11 @@ public class XLSExport
 			rowResults.cageID 			= spot.cageIndex;
 			rowListForOneExp.resultsList.add(rowResults);
 		}
-		rowListForOneExp.sortRowsByName();
+		Collections.sort(rowListForOneExp.resultsList, new Comparators.XLSResults_Name_Comparator());
 		return rowListForOneExp;
 	}
 	
-	private XLSResultsArray getSpotsDescriptorsForOneExperiment( Experiment exp, EnumXLSExportType xlsOption) 
+	private XLSResultsArray getSpotsDescriptorsForOneExperiment(Experiment exp, EnumXLSExportType xlsOption) 
 	{
 		if (expAll == null) 
 			return null;
@@ -385,7 +387,7 @@ public class XLSExport
 			rowResults.cageID 			= spot.cageIndex;
 			rowListForOneExp.resultsList.add(rowResults);
 		}
-		rowListForOneExp.sortRowsByName();
+		Collections.sort(rowListForOneExp.resultsList, new Comparators.XLSResults_Name_Comparator());
 		return rowListForOneExp;
 	}
 	

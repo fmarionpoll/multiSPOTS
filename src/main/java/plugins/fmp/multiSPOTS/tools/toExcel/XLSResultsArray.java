@@ -2,11 +2,9 @@ package plugins.fmp.multiSPOTS.tools.toExcel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotsArray;
-import plugins.fmp.multiSPOTS.tools.Comparators;
 
 
 public class XLSResultsArray 
@@ -47,8 +45,7 @@ public class XLSResultsArray
 		XLSResults rowL = resultsList.get(irow); 
 		int cageL = getCageFromKymoFileName(rowL.name);
 		XLSResults rowR = null;
-		if (irow+1 < resultsList.size()) 
-		{
+		if (irow+1 < resultsList.size()) {
 			rowR = resultsList.get(irow+1);
 			int cageR = getCageFromKymoFileName(rowR.name);
 			if (cageR != cageL) 
@@ -62,11 +59,6 @@ public class XLSResultsArray
 		if (!name .contains("line"))
 			return -1;
 		return Integer.valueOf(name.substring(4, 5));
-	}
-	
-	public void sortRowsByName() 
-	{
-		Collections.sort(resultsList, new Comparators.XLSResults_Name_Comparator());
 	}
 	
 	public void checkIfSameStimulusAndConcentration(Spot spot) 
@@ -84,8 +76,7 @@ public class XLSResultsArray
 	public void subtractEvaporation() 
 	{
 		int dimension = 0;
-		for (XLSResults result: resultsList) 
-		{
+		for (XLSResults result: resultsList) {
 			if (result.valuesOut == null)
 				continue;
 			if (result.valuesOut.length  > dimension)
@@ -105,8 +96,7 @@ public class XLSResultsArray
 		evapL.initValuesOutArray(dimension, 0.);
 		evapR.initValuesOutArray(dimension, 0.);
 		
-		for (XLSResults result: resultsList) 
-		{
+		for (XLSResults result: resultsList) {
 			if (result.valuesOut == null || result.nflies != 0)
 				continue;
 			String side = result.name.substring(result.name.length() -1);
@@ -121,8 +111,7 @@ public class XLSResultsArray
 	
 	private void subtractEvaporationLocal() 
 	{
-		for (XLSResults result: resultsList) 
-		{
+		for (XLSResults result: resultsList) {
 			String side = result.name.substring(result.name.length() -1);
 			if (sameLR || side.contains("L"))
 				result.subtractEvap(evapL);
@@ -147,8 +136,7 @@ public class XLSResultsArray
 	public void getPI_LR(XLSResults rowL, XLSResults rowR, double threshold) 
 	{
 		int len = getLen(rowL, rowR);
-		for (int index = 0; index < len; index++) 
-		{
+		for (int index = 0; index < len; index++) {
 			double dataL = rowL.valuesOut[index];
 			double dataR = rowR.valuesOut[index];
 			double delta = 0.; 
@@ -162,7 +150,6 @@ public class XLSResultsArray
 				pi = (dataL-dataR)/sum;				
 			if (pi > highestPiAllowed) pi = highestPiAllowed;
 			if (pi < lowestPiAllowed) pi = lowestPiAllowed;
-			
 			rowL.valuesOut[index] = sum;
 			rowR.valuesOut[index] = pi;
 		}
@@ -170,11 +157,8 @@ public class XLSResultsArray
 
 	// ---------------------------------------------------
 	
-	public void getSpotsArrayResults_T0(SpotsArray spotsArray, 
-			EnumXLSExportType exportType, 
-			int nOutputFrames, 
-			long kymoBinCol_Ms, 
-			XLSExportOptions xlsExportOptions) 
+	public void getSpotsArrayResults_T0(SpotsArray spotsArray, EnumXLSExportType exportType, 
+										int nOutputFrames,  long kymoBinCol_Ms, XLSExportOptions xlsExportOptions) 
 	{
 		xlsExportOptions.exportType = exportType;
 		buildSpotsDataForPass1(spotsArray, nOutputFrames, kymoBinCol_Ms, xlsExportOptions);
@@ -187,14 +171,10 @@ public class XLSResultsArray
 		buildDataForPass2(xlsExportOptions);
 	}
 		
-	private void buildSpotsDataForPass1(SpotsArray spotsArray,
-										int nOutputFrames, 
-										long kymoBinCol_Ms, 
-										XLSExportOptions xlsExportOptions)
+	private void buildSpotsDataForPass1(SpotsArray spotsArray,int nOutputFrames, long kymoBinCol_Ms, XLSExportOptions xlsExportOptions)
 	{
 		double scalingFactorToPhysicalUnits = spotsArray.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
-		for (Spot spot: spotsArray.spotsList) 
-		{
+		for (Spot spot: spotsArray.spotsList) {
 			checkIfSameStimulusAndConcentration(spot);
 			XLSResults results = new XLSResults(spot.getRoiName(), 
 												spot.spotNFlies, 
@@ -214,40 +194,36 @@ public class XLSResultsArray
 	
 	public void buildDataForPass2(XLSExportOptions xlsExportOptions)
 	{
-		switch (xlsExportOptions.exportType) 
-		{
-		case TOPLEVEL_LR:
-		case TOPLEVELDELTA_LR:
-//		case AREA_CNTPIX_LR:
-		case AREA_SUM_LR:
-		case AREA_SUMCLEAN_LR:
-			buildLR (xlsExportOptions.lrPIThreshold); 
-			break;
-		case AUTOCORREL:
-			buildAutocorrel(xlsExportOptions);
-			break;
-		case AUTOCORREL_LR:
-			buildAutocorrelLR(xlsExportOptions);
-			break;
-		case CROSSCORREL:
-			buildCrosscorrel(xlsExportOptions);
-			break;
-		case CROSSCORREL_LR:
-			buildCrosscorrelLR(xlsExportOptions);
-			break;
-		default:
-			break;
+		switch (xlsExportOptions.exportType) {
+			case TOPLEVEL_LR:
+			case TOPLEVELDELTA_LR:
+			case AREA_SUM_LR:
+			case AREA_SUMCLEAN_LR:
+				buildLR (xlsExportOptions.lrPIThreshold); 
+				break;
+			case AUTOCORREL:
+				buildAutocorrel(xlsExportOptions);
+				break;
+			case AUTOCORREL_LR:
+				buildAutocorrelLR(xlsExportOptions);
+				break;
+			case CROSSCORREL:
+				buildCrosscorrel(xlsExportOptions);
+				break;
+			case CROSSCORREL_LR:
+				buildCrosscorrelLR(xlsExportOptions);
+				break;
+			default:
+				break;
 		}
 	}
 	
 	private void buildLR(double threshold) 
 	{
-		for (int irow = 0; irow < resultsList.size(); irow ++) 
-		{
+		for (int irow = 0; irow < resultsList.size(); irow ++) {
 			XLSResults rowL = getRow(irow); 			
 			XLSResults rowR = getNextRow(irow);
-			if (rowR != null) 
-			{
+			if (rowR != null) {
 				irow++;
 				getPI_LR(rowL, rowR, threshold);
 			} 
@@ -256,8 +232,7 @@ public class XLSResultsArray
 	
 	private void buildAutocorrel(XLSExportOptions xlsExportOptions) 
 	{
-		for (int irow = 0; irow < resultsList.size(); irow ++) 
-		{
+		for (int irow = 0; irow < resultsList.size(); irow ++) {
 			XLSResults rowL = getRow(irow); 			
 			correl(rowL, rowL, rowL, xlsExportOptions.nbinscorrelation); 
 		}
@@ -265,21 +240,17 @@ public class XLSResultsArray
 	
 	private void buildCrosscorrel(XLSExportOptions xlsExportOptions) 
 	{
-		for (int irow = 0; irow < resultsList.size(); irow ++) 
-		{
+		for (int irow = 0; irow < resultsList.size(); irow ++) {
 			XLSResults rowL = getRow(irow); 			
 			XLSResults rowR = getNextRow(irow);
-			if (rowR != null) 
-			{
+			if (rowR != null) {
 				irow++;
 				XLSResults rowLtoR = new XLSResults("LtoR", 0, 0, null);
 				rowLtoR.initValuesOutArray(rowL.dimension, 0.);
 				correl(rowL, rowR, rowLtoR, xlsExportOptions.nbinscorrelation);
-				
 				XLSResults rowRtoL = new XLSResults("RtoL", 0, 0, null);
 				rowRtoL.initValuesOutArray(rowL.dimension, 0.);
 				correl(rowR, rowL, rowRtoL, xlsExportOptions.nbinscorrelation);
-				
 				rowL.copyValuesOut(rowLtoR);
 				rowR.copyValuesOut(rowRtoL);
 			} 
@@ -288,18 +259,14 @@ public class XLSResultsArray
 	
 	private void buildCrosscorrelLR(XLSExportOptions xlsExportOptions) 
 	{
-		for (int irow = 0; irow < resultsList.size(); irow ++) 
-		{
+		for (int irow = 0; irow < resultsList.size(); irow ++) {
 			XLSResults rowL = getRow(irow); 			
 			XLSResults rowR = getNextRow(irow);
-			if (rowR != null) 
-			{
+			if (rowR != null) {
 				irow++;
-				
 				XLSResults rowLR = new XLSResults("LR", 0, 0, null);
 				rowLR.initValuesOutArray(rowL.dimension, 0.);
 				combineIntervals(rowL, rowR, rowLR);
-				
 				correl(rowL, rowLR, rowL, xlsExportOptions.nbinscorrelation);
 				correl(rowR, rowLR, rowR, xlsExportOptions.nbinscorrelation);
 			} 
@@ -311,23 +278,18 @@ public class XLSResultsArray
 		double [] sumBins = new double [2*nbins +1];
 		Arrays.fill(sumBins, 0);
 		double nitems = 0;
-		for (int i1 = 0; i1 < row1.valuesOut.length; i1++)
-		{
+		for (int i1 = 0; i1 < row1.valuesOut.length; i1++) {
 			if (row1.valuesOut[i1] == 0.)
 				continue;
 			nitems ++;
-			for (int i2 = 0; i2 < row2.valuesOut.length; i2++)
-			{
+			for (int i2 = 0; i2 < row2.valuesOut.length; i2++) {
 				int ibin = i2-i1;
 				if (ibin < -nbins || ibin > nbins)
 					continue;
 				if (row2.valuesOut[i2] != 0.) 
-				{
 					sumBins[ibin + nbins]++;
-				}
 			}
 		}
-		
 		Arrays.fill(rowOut.valuesOut, Double.NaN);
 		for (int i = 0; i< 2*nbins; i++)
 			rowOut.valuesOut[i] = sumBins[i] / nitems;
@@ -335,8 +297,7 @@ public class XLSResultsArray
 	
 	private void combineIntervals(XLSResults row1, XLSResults row2, XLSResults rowOut) 
 	{
-		for (int i = 0; i < rowOut.valuesOut.length; i++)
-		{
+		for (int i = 0; i < rowOut.valuesOut.length; i++) {
 			if ((row2.valuesOut[i] + row1.valuesOut[i]) > 0.)
 				rowOut.valuesOut[i] = 1.;
 		}
@@ -344,18 +305,14 @@ public class XLSResultsArray
 	
 	private void buildAutocorrelLR(XLSExportOptions xlsExportOptions) 
 	{
-		for (int irow = 0; irow < resultsList.size(); irow ++) 
-		{
+		for (int irow = 0; irow < resultsList.size(); irow ++) {
 			XLSResults rowL = getRow(irow); 			
 			XLSResults rowR = getNextRow(irow);
-			if (rowR != null) 
-			{
+			if (rowR != null) {
 				irow++;
-				
 				XLSResults rowLR = new XLSResults("LR", 0, 0, null);
 				rowLR.initValuesOutArray(rowL.dimension, 0.);
 				combineIntervals(rowL, rowR, rowLR);
-				
 				correl(rowLR, rowLR, rowL, xlsExportOptions.nbinscorrelation);
 				correl(rowLR, rowLR, rowR, xlsExportOptions.nbinscorrelation);
 			} 

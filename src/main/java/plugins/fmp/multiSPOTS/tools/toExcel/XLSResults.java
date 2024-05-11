@@ -60,8 +60,7 @@ public class XLSResults
 	void clearValues (int fromindex) 
 	{
 		int toindex = valuesOut.length;
-		if (fromindex > 0 && fromindex < toindex) 
-		{
+		if (fromindex > 0 && fromindex < toindex) {
 			Arrays.fill(valuesOut, fromindex,  toindex, Double.NaN);
 			Arrays.fill(padded_out, fromindex,  toindex, false);
 		}
@@ -81,16 +80,13 @@ public class XLSResults
 		
 		boolean removeZeros = false;	
 		int len = Math.min(dimension,  dataValues.size());
-		if (removeZeros) 
-		{
-			for (int i = 0; i < len; i++) 
-			{
+		if (removeZeros)  {
+			for (int i = 0; i < len; i++) {
 				double ivalue = dataValues.get(i);
 				valuesOut[i] = (ivalue == 0? Double.NaN: ivalue) * scalingFactorToPhysicalUnits;
 			}
 		}
-		else
-		{
+		else {
 			for (int i = 0; i < len; i++)
 				valuesOut[i] = dataValues.get(i) * scalingFactorToPhysicalUnits;
 		}
@@ -98,8 +94,7 @@ public class XLSResults
 	
 	public void copyValuesOut(XLSResults sourceRow) 
 	{
-		if (sourceRow.valuesOut.length != valuesOut.length)
-		{
+		if (sourceRow.valuesOut.length != valuesOut.length) {
 			this.dimension = sourceRow.dimension; 
 			valuesOut = new double [dimension];
 		}
@@ -112,8 +107,7 @@ public class XLSResults
 		if (dataValues == null || dataValues.size() < 1)
 			return null;
 		double item0 = dataValues.get(0);
-		for (int index = 0; index < dataValues.size(); index++) 
-		{
+		for (int index = 0; index < dataValues.size(); index++) {
 			double value = dataValues.get(index);
 			dataValues.set(index, (value-item0));
 		}
@@ -127,8 +121,7 @@ public class XLSResults
 		
 		double value0 = dataValues.get(t);
 		if (value0 == 0.) {
-			for (int index = 0; index < dataValues.size(); index++) 
-			{
+			for (int index = 0; index < dataValues.size(); index++) {
 				if (dataValues.get(index) > 0) {
 					value0 = dataValues.get(index);
 					break;
@@ -136,20 +129,17 @@ public class XLSResults
 			}
 		}
 		
-		for (int index = 0; index < dataValues.size(); index++) 
-		{
+		for (int index = 0; index < dataValues.size(); index++) {
 			double value = dataValues.get(index);
 			dataValues.set(index, ((value0-value)/value0));
 		}
 		return dataValues;
 	}
 	
-	
 	boolean subtractDeltaT(int arrayStep, int binStep) {
 		if (valuesOut == null || valuesOut.length < 2)
 			return false;
-		for (int index=0; index < valuesOut.length; index++) 
-		{
+		for (int index=0; index < valuesOut.length; index++) {
 			int timeIndex = index * arrayStep + binStep;
 			int indexDelta = (int) (timeIndex/arrayStep);
 			if (indexDelta < valuesOut.length) 
@@ -162,23 +152,19 @@ public class XLSResults
 	
 	void addDataToValOutEvap(XLSResults result) 
 	{
-		if (result.valuesOut.length > valuesOut.length) 
-		{
+		if (result.valuesOut.length > valuesOut.length) {
 			System.out.println("XLSResults:addDataToValOutEvap() Error: from len="+result.valuesOut.length + " to len="+ valuesOut.length);
 			return;
 		}
-		
 		for (int i = 0; i < result.valuesOut.length; i++)
-		{
 			valuesOut[i] += result.valuesOut[i];
-		}
 		nflies ++;
 	}
 	
 	void averageEvaporation() 
 	{
-		if (nflies == 0) return;
-		
+		if (nflies == 0) 
+			return;
 		for (int i = 0; i < valuesOut.length; i++) 
 			valuesOut[i] = valuesOut[i] / nflies;
 		nflies = 1;
@@ -190,18 +176,14 @@ public class XLSResults
 			return;
 		int len = Math.min(valuesOut.length, evap.valuesOut.length);
 		for (int i = 0; i < len; i++) 
-		{
 			valuesOut[i] -= evap.valuesOut[i];			
-		}
 	}
 	
 	void sumValues_out (XLSResults dataToAdd) 
 	{
 		int len = Math.min(valuesOut.length, dataToAdd.valuesOut.length);
 		for (int i = 0; i < len; i++)  
-		{
 			valuesOut[i] += dataToAdd.valuesOut[i];			
-		}
 		nadded += 1;
 	}
 	

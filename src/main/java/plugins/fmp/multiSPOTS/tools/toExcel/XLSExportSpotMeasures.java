@@ -16,7 +16,7 @@ public class XLSExportSpotMeasures extends XLSExport
 		options = opt;
 		expList = options.expList;
 
-		expList.loadListOfMeasuresFromAllExperiments(false, true, options.onlyalive);
+		expList.loadListOfMeasuresFromAllExperiments(true, options.onlyalive);
 		expList.chainExperimentsUsingKymoIndexes(options.collateSeries);
 		expList.setFirstImageForAllExperiments(options.collateSeries);
 		expAll = expList.get_MsTime_of_StartAndEnd_AllExperiments(options);

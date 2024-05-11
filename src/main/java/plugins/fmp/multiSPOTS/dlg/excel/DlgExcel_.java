@@ -52,7 +52,7 @@ public class DlgExcel_  extends JPanel implements PropertyChangeListener
 		tabCommonOptions.addPropertyChangeListener(this);
 			
 		tabAreas.init(capLayout);
-		tabsPane.addTab("Areas", null, tabAreas, "Export areas of spots to file");
+		tabsPane.addTab("Spots", null, tabAreas, "Export measures made on spots to file");
 		tabAreas.addPropertyChangeListener(this);
 		
 		tabMove.init(capLayout);

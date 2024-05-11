@@ -33,9 +33,8 @@ public class XLSExportMoveResults extends XLSExport
 		options = opt;
 		expList = options.expList;
 
-		boolean loadCapillaries = true;
 		boolean loadDrosoTrack = true; 
-		expList.loadListOfMeasuresFromAllExperiments(loadCapillaries, false, loadDrosoTrack);
+		expList.loadListOfMeasuresFromAllExperiments(false, loadDrosoTrack);
 //		expList.chainExperimentsUsingCamIndexes(options.collateSeries);
 		expList.chainExperimentsUsingKymoIndexes(options.collateSeries);
 		expList.setFirstImageForAllExperiments(options.collateSeries);
