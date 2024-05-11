@@ -196,30 +196,29 @@ public class Spot implements Comparable <Spot>
 	{
 		String value = null;
 		spotCageSide = getSpotSide();
-		switch (xlsExportOption) 
-		{
-		case DISTANCE:
-		case ISALIVE:
-			value = spotCageSide + "(T=B)";
-			break;
-		case TOPLEVELDELTA_LR:
-		case TOPLEVEL_LR:
-			if (spotCageSide.equals("00"))
-				value = "sum";
-			else
-				value = "PI";
-			break;
-		case XYIMAGE:
-		case XYTOPCAGE:
-		case XYTIPCAPS:
-			if (spotCageSide .equals ("00"))
-				value = "x";
-			else
-				value = "y";
-			break;
-		default:
-			value = spotCageSide;
-			break;
+		switch (xlsExportOption) {
+			case DISTANCE:
+			case ISALIVE:
+				value = spotCageSide + "(T=B)";
+				break;
+			case TOPLEVELDELTA_LR:
+			case TOPLEVEL_LR:
+				if (spotCageSide.equals("00"))
+					value = "sum";
+				else
+					value = "PI";
+				break;
+			case XYIMAGE:
+			case XYTOPCAGE:
+			case XYTIPCAPS:
+				if (spotCageSide .equals ("00"))
+					value = "x";
+				else
+					value = "y";
+				break;
+			default:
+				value = spotCageSide;
+				break;
 		}
 		return value;
 	}
@@ -227,32 +226,30 @@ public class Spot implements Comparable <Spot>
 	public String getSpotField(EnumXLSColumnHeader fieldEnumCode)
 	{
 		String stringValue = null;
-		switch(fieldEnumCode) 
-		{
-		case CAP_STIM:
-			stringValue = spotStim;
-			break;
-		case CAP_CONC:
-			stringValue = spotConc;
-			break;
-		default:
-			break;
+		switch(fieldEnumCode) {
+			case CAP_STIM:
+				stringValue = spotStim;
+				break;
+			case CAP_CONC:
+				stringValue = spotConc;
+				break;
+			default:
+				break;
 		}
 		return stringValue;
 	}
 	
 	public void setSpotField(EnumXLSColumnHeader fieldEnumCode, String stringValue)
 	{
-		switch(fieldEnumCode) 
-		{
-		case CAP_STIM:
-			spotStim = stringValue;
-			break;
-		case CAP_CONC:
-			spotConc = stringValue;
-			break;
-		default:
-			break;
+		switch(fieldEnumCode) {
+			case CAP_STIM:
+				spotStim = stringValue;
+				break;
+			case CAP_CONC:
+				spotConc = stringValue;
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -266,18 +263,17 @@ public class Spot implements Comparable <Spot>
 
 	private SpotMeasure getSpotArea (EnumXLSExportType option)
 	{
-		switch (option) 
-		{
-		case AREA_SUM:		
-		case AREA_SUM_LR:
-			return sum;
-		case AREA_SUMCLEAN:
-		case AREA_SUMCLEAN_LR:
-			return sumClean;
-		case AREA_FLYPRESENT:
-			return flyPresent;
-		default:
-			return null;
+		switch (option) {
+			case AREA_SUM:		
+			case AREA_SUM_LR:
+				return sum;
+			case AREA_SUMCLEAN:
+			case AREA_SUMCLEAN_LR:
+				return sumClean;
+			case AREA_FLYPRESENT:
+				return flyPresent;
+			default:
+				return null;
 		}
 	}
 	
@@ -331,8 +327,7 @@ public class Spot implements Comparable <Spot>
 	{
 	    final Node nodeMeta = XMLUtil.getElement(node, ID_META);
 	    boolean flag = (nodeMeta != null); 
-	    if (flag) 
-	    {
+	    if (flag) {
 	    	version 		= XMLUtil.getElementValue(nodeMeta, ID_VERSION, "0.0.0");
 	    	cageIndex 		= XMLUtil.getElementIntValue(nodeMeta, ID_INDEXIMAGE, cageIndex);
      
@@ -369,9 +364,8 @@ public class Spot implements Comparable <Spot>
         		roiInterval.loadFromXML(node_i);
         		listRoiAlongTime.add(roiInterval);
         		
-        		if (i == 0) {
+        		if (i == 0) 
         			spotRoi = (ROI2DShape) listRoiAlongTime.get(0).getRoi();
-        		}
         	}
         }
         return true;
@@ -485,13 +479,14 @@ public class Spot implements Comparable <Spot>
 	{
 		int npoints = sum.measureValues.length;
 		
-		for (int i = 0; i <npoints; i++) 
-		{
+		for (int i = 0; i <npoints; i++) {
 			if(!flyPresent.measureBooleans[i]) {
 				sumClean.measureValues[i] = sum.measureValues[i];
-			} else if (i > 0) {
+			} 
+			else if (i > 0) {
 				sumClean.measureValues[i] = sumClean.measureValues[i-1];
-			} else {
+			} 
+			else {
 				double value = Double.NaN;
 				for (int j= i; j < npoints; j++) {
 					if (!flyPresent.measureBooleans[j]) {
@@ -501,7 +496,6 @@ public class Spot implements Comparable <Spot>
 				}
 				sumClean.measureValues[i] = value;
 			}
-			
 		}
 	}
 	
@@ -534,7 +528,6 @@ public class Spot implements Comparable <Spot>
 	public String csvExportSpotArrayHeader(String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
-		
 		sbf.append("#"+csvSep+"SPOTS"+csvSep+"describe each spot\n");
 		List<String> row2 = Arrays.asList(
 				"index", 
@@ -576,16 +569,13 @@ public class Spot implements Comparable <Spot>
 		StringBuffer sbf = new StringBuffer();
 		List<String> listExplanation1 =  Arrays.asList("\n name", "index", "npts", "yi","\n");		
 		String explanation1 = String.join(csvSep, listExplanation1);
-		
-		switch(measureType) 
-		{
+		switch(measureType) {
 			case AREA_SUM:
 			case AREA_SUMCLEAN:
 			case AREA_FLYPRESENT:
 //			case AREA_CNTPIX:	
 				sbf.append("#" + csvSep + measureType.toString() + csvSep + explanation1);
 				break;
-
 			default:
 				sbf.append("#" + csvSep + "UNDEFINED"+ csvSep + "------------\n");
 				break; 
@@ -597,9 +587,7 @@ public class Spot implements Comparable <Spot>
 	{
 		StringBuffer sbf = new StringBuffer();
 		sbf.append(spotRoi.getName() + csvSep + spotIndex + csvSep);
-		
-		switch(measureType) 
-		{
+		switch(measureType) {
 			case AREA_SUM:  	
 				sum.cvsExportYDataToRow(sbf, csvSep); 
 				break;
@@ -633,26 +621,22 @@ public class Spot implements Comparable <Spot>
 		
 	public void csvImportMeasures_OneType(EnumSpotMeasures measureType, String[] data, boolean x, boolean y) 
 	{
-		if (x && y) 
-		{
-			switch(measureType) 
-			{
-			case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
-			case AREA_SUMCLEAN:	sumClean.csvImportXYDataFromRow( data, 2); break;
-			case AREA_FLYPRESENT:  flyPresent.csvImportXYDataFromRow( data, 2); break;
-			default:
-				break;
+		if (x && y) {
+			switch(measureType) {
+				case AREA_SUM:  	sum.csvImportXYDataFromRow( data, 2); break;
+				case AREA_SUMCLEAN:	sumClean.csvImportXYDataFromRow( data, 2); break;
+				case AREA_FLYPRESENT:  flyPresent.csvImportXYDataFromRow( data, 2); break;
+				default:
+					break;
 			}
 		}
-		else if (!x && y) 
-		{
-			switch(measureType) 
-			{
-			case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
-			case AREA_SUMCLEAN: sumClean.csvImportYDataFromRow( data, 2); break;
-			case AREA_FLYPRESENT: flyPresent.csvImportYDataFromRow( data, 2); break;
-			default:
-				break;
+		else if (!x && y) {
+			switch(measureType) {
+				case AREA_SUM:  	sum.csvImportYDataFromRow( data, 2); break;
+				case AREA_SUMCLEAN: sumClean.csvImportYDataFromRow( data, 2); break;
+				case AREA_FLYPRESENT: flyPresent.csvImportYDataFromRow( data, 2); break;
+				default:
+					break;
 			}
 		}
 	}

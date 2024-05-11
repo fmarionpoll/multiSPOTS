@@ -25,13 +25,11 @@ public class XLSExportSpotAreasResults extends XLSExport
 		int nbexpts = expList.getItemCount();
 		progress.setLength(nbexpts);
 
-		try 
-		{ 
+		try { 
 			int column = 1;
 			int iSeries = 0;
 			workbook = xlsInitWorkbook();
-			for (int index = options.expIndexFirst; index <= options.expIndexLast; index++) 
-			{
+			for (int index = options.expIndexFirst; index <= options.expIndexLast; index++) {
 				Experiment exp = expList.getItemAt(index);
 				if (exp.chainToPreviousExperiment != null)
 					continue;
@@ -39,17 +37,13 @@ public class XLSExportSpotAreasResults extends XLSExport
 				String charSeries = CellReference.convertNumToColString(iSeries);
 				
 				int collast = column;
-				if (options.spotAreas) 
-				{	
+				if (options.spotAreas) {	
 					collast = getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_FLYPRESENT);
 					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUMCLEAN);
-//					getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX);
-					if (options.lrPI ) 
-					{
+					if (options.lrPI ) {
 						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUM_LR);
 						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_SUMCLEAN_LR);
-//						getDataAndExport(exp, column, charSeries, EnumXLSExportType.AREA_CNTPIX_LR);
 					}
 				}
 				column = collast +2;
@@ -63,8 +57,7 @@ public class XLSExportSpotAreasResults extends XLSExport
 	        workbook.close();
 	        progress.close();
 		} 
-		catch (IOException e) 
-		{
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		System.out.println("XLSExpoportSpotAreas:exportToFile() XLS output finished");

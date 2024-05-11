@@ -49,8 +49,7 @@ public class XLSExport
 		pt.x++;
 		int colseries = pt.x;
 		int len = EnumXLSColumnHeader.values().length;
-		for (int i = 0; i < len; i++) 
-		{
+		for (int i = 0; i < len; i++) {
 			XLSUtils.setValue(sheet, pt, transpose, "--");
 			pt.x++;
 		}
@@ -67,8 +66,7 @@ public class XLSExport
 		String name0 = path.toString();
 		int pos = name0.indexOf("cam");
 		String cam = "-"; 
-		if (pos > 0) 
-		{
+		if (pos > 0) {
 			int pos5 = pos+5;
 			if (pos5 >= name0.length())
 				pos5 = name0.length() -1;
@@ -78,15 +76,13 @@ public class XLSExport
 		String sheetName = sheet.getSheetName();
 		
 		int rowmax = -1;
-		for (EnumXLSColumnHeader dumb: EnumXLSColumnHeader.values()) 
-		{
+		for (EnumXLSColumnHeader dumb: EnumXLSColumnHeader.values()) {
 			if (rowmax < dumb.getValue())
 				rowmax = dumb.getValue();		
 		}
 		
 		List<Spot> spotsList = exp.spotsArray.spotsList;
-		for (int t = 0; t < spotsList.size(); t++) 
-		{ 
+		for (int t = 0; t < spotsList.size(); t++) { 
 			Spot spot = spotsList.get(t);
 			String	name = spot.getRoiName();
 			int col = getRowIndexFromSpotName(name);
@@ -120,8 +116,7 @@ public class XLSExport
 
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.DUM4.getValue(), transpose, sheetName);
 			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CHOICE_NOCHOICE.getValue(), transpose, desc_getChoiceTestType(spotsList, t));
-			if (exp.cages.cagesList.size() > t/2) 
-			{
+			if (exp.cages.cagesList.size() > t/2) {
 					Cage cage = exp.cages.cagesList.get(t/2); //cap.capCageID);
 					XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGE_STRAIN.getValue(), transpose, cage.strCageStrain );
 					XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAGE_SEX.getValue(), transpose, cage.strCageSex  );
@@ -146,8 +141,7 @@ public class XLSExport
 		if (t >= 0 && t < spotsList.size()) {
 			Spot othercap = spotsList.get(t);
 			String otherSide = othercap.getSpotSide();
-			if (!otherSide .contains(side))
-			{
+			if (!otherSide .contains(side)) {
 				if (spot.spotStim.equals(othercap.spotStim)
 					&& spot.spotConc.equals(othercap.spotConc))
 					choiceText  = "no-choice";
@@ -161,19 +155,19 @@ public class XLSExport
 	private void outputStimAndConc_according_to_DataOption(XSSFSheet sheet, EnumXLSExportType xlsExportOption, Spot spot, boolean transpose, int x, int y)
 	{
 		switch (xlsExportOption) {
-		case TOPLEVEL_LR:
-		case TOPLEVELDELTA_LR:
-			if (spot.getSpotSide().equals("00")) 
-				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "L+R");
-			else 
-				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "(L-R)/(L+R)");
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, spot.spotStim + ": "+ spot.spotConc);
-			break;
-						
-		default:
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, 	spot.spotStim);
-			XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, 	spot.spotConc);	
-			break;
+			case TOPLEVEL_LR:
+			case TOPLEVELDELTA_LR:
+				if (spot.getSpotSide().equals("00")) 
+					XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "L+R");
+				else 
+					XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, "(L-R)/(L+R)");
+				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, spot.spotStim + ": "+ spot.spotConc);
+				break;
+							
+			default:
+				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_STIM.getValue(), transpose, 	spot.spotStim);
+				XLSUtils.setValue(sheet, x, y+EnumXLSColumnHeader.CAP_CONC.getValue(), transpose, 	spot.spotConc);	
+				break;
 		}
 	}
 	
@@ -183,8 +177,7 @@ public class XLSExport
 		int x = 0;
 		boolean transpose = options.transpose;
 		int nextcol = -1;
-		for (EnumXLSColumnHeader dumb: EnumXLSColumnHeader.values()) 
-		{
+		for (EnumXLSColumnHeader dumb: EnumXLSColumnHeader.values()) {
 			XLSUtils.setValue(sheet, x, dumb.getValue(), transpose, dumb.getName());
 			if (nextcol < dumb.getValue())
 				nextcol = dumb.getValue();
@@ -195,15 +188,13 @@ public class XLSExport
 	
 	void writeTopRow_timeIntervals(XSSFSheet sheet, int row, EnumXLSExportType xlsExport) 
 	{
-		switch (xlsExport)
-		{
+		switch (xlsExport) {
 			case AUTOCORREL:
 			case CROSSCORREL:
 			case AUTOCORREL_LR:
 			case CROSSCORREL_LR:
 				writeTopRow_timeIntervals_Correl(sheet, row);
 				break;
-				
 			default:
 				writeTopRow_timeIntervals_Default(sheet, row);
 				break;
@@ -215,8 +206,7 @@ public class XLSExport
 		boolean transpose = options.transpose;
 		Point pt = new Point(0, row);
 		long interval = - options.nbinscorrelation;
-		while (interval < options.nbinscorrelation) 
-		{
+		while (interval < options.nbinscorrelation) {
 			int i = (int) interval;
 			XLSUtils.setValue(sheet, pt, transpose, "t"+i);
 			pt.y++;
@@ -230,8 +220,7 @@ public class XLSExport
 		Point pt = new Point(0, row);
 		long duration = expAll.camImageLast_ms - expAll.camImageFirst_ms;
 		long interval = 0;
-		while (interval < duration) 
-		{
+		while (interval < duration) {
 			int i = (int) (interval / options.buildExcelUnitMs);
 			XLSUtils.setValue(sheet, pt, transpose, "t"+i);
 			pt.y++;
@@ -254,12 +243,9 @@ public class XLSExport
 			return -1;
 		String num = name.substring(4, 6);
 		int numFromName = Integer.valueOf(num);
-		
 		String num2 = name.substring(7, 9);
 		int numFromName2 = Integer.valueOf(num2);
-		
 		numFromName = numFromName*2 + numFromName2;
-		
 		return numFromName;
 	}
 		
@@ -282,7 +268,7 @@ public class XLSExport
 	
 	protected int getCageFromKymoFileName(String name) 
 	{
-		if (!name .contains("line"))
+		if (!name .contains("line") || !name .contains("spot"))
 			return -1;
 		return Integer.valueOf(name.substring(4, 5));
 	}
@@ -306,8 +292,7 @@ public class XLSExport
 	XSSFSheet xlsInitSheet(String title, EnumXLSExportType xlsExport) 
 	{
 		XSSFSheet sheet = workbook.getSheet(title);
-		if (sheet == null) 
-		{
+		if (sheet == null)  {
 			sheet = workbook.createSheet(title);
 			int row = writeTopRow_descriptors(sheet);
 			writeTopRow_timeIntervals(sheet, row, xlsExport);
@@ -324,22 +309,17 @@ public class XLSExport
 				sheet, 
 				exportType, 
 				col0, 
-				charSeries);
-		
-		if (options.onlyalive) 
-		{
+				charSeries);	
+		if (options.onlyalive) {
 			trimDeadsFromArrayList(rowListForOneExp, exp);
 			sheet = xlsInitSheet(exportType.toString()+"_alive", exportType);
 			xlsExportResultsArrayToSheet(rowListForOneExp, sheet, exportType, col0, charSeries);
 		}
-		
-		if (options.sumPerCage) 
-		{
+		if (options.sumPerCage) {
 			combineDataForOneCage(rowListForOneExp, exp);
 			sheet = xlsInitSheet(exportType.toString()+"_cage", exportType);
 			xlsExportResultsArrayToSheet(rowListForOneExp, sheet, exportType, col0, charSeries);
 		}
-		
 		return colmax;
 	}
 		
@@ -356,8 +336,7 @@ public class XLSExport
 		expAll.setResultsDirectory(exp.getResultsDirectory());
 		
 		Experiment expi = exp.chainToNextExperiment;
-		while (expi != null ) 
-		{
+		while (expi != null ) {
 			expAll.spotsArray.mergeLists(expi.spotsArray);
 			expi = expi.chainToNextExperiment;
 		}
@@ -365,8 +344,7 @@ public class XLSExport
 		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms)/options.buildExcelStepMs  +1) ;
 		int nspots = expAll.spotsArray.spotsList.size();
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
-		for (int i = 0; i < nspots; i++) 
-		{
+		for (int i = 0; i < nspots; i++) {
 			Spot spot = expAll.spotsArray.spotsList.get(i);
 			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotIndex, xlsOption, nFrames);
 			rowResults.stimulus 		= spot.spotStim;
@@ -391,8 +369,7 @@ public class XLSExport
 		expAll.setResultsDirectory(exp.getResultsDirectory());
 		
 		Experiment expi = exp.chainToNextExperiment;
-		while (expi != null ) 
-		{
+		while (expi != null ) {
 			expAll.spotsArray.mergeLists(expi.spotsArray);
 			expi = expi.chainToNextExperiment;
 		}
@@ -400,8 +377,7 @@ public class XLSExport
 		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms)/options.buildExcelStepMs  +1) ;
 		int nspots = expAll.spotsArray.spotsList.size();
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
-		for (int i = 0; i < nspots; i++) 
-		{
+		for (int i = 0; i < nspots; i++) {
 			Spot spot = expAll.spotsArray.spotsList.get(i);
 			XLSResults rowResults 		= new XLSResults (spot.getRoiName(), spot.spotNFlies, spot.spotIndex, xlsOption, nFrames);
 			rowResults.stimulus 		= spot.spotStim;
@@ -443,17 +419,14 @@ public class XLSExport
 	private int getNOutputFrames (Experiment expi)
 	{
 		int nOutputFrames = (int) ((expi.binLast_ms - expi.binFirst_ms) / options.buildExcelStepMs +1);
-		if (nOutputFrames <= 1) 
-		{
+		if (nOutputFrames <= 1) {
 			if (expi.seqKymos.imageWidthMax == 0)
 				expi.loadKymographs();
 			expi.binLast_ms = expi.binFirst_ms + expi.seqKymos.imageWidthMax * expi.binDuration_ms;
 			if (expi.binLast_ms <= 0)
 				exportError(expi, -1);
 			nOutputFrames = (int) ((expi.binLast_ms - expi.binFirst_ms) / options.buildExcelStepMs +1);
-			
-			if (nOutputFrames <= 1) 
-			{
+			if (nOutputFrames <= 1) {
 				nOutputFrames = expi.seqCamData.nTotalFrames;
 				exportError(expi, nOutputFrames);
 			}
@@ -466,11 +439,9 @@ public class XLSExport
 		XLSResultsArray rowListForOneExp =  getSpotDescriptorsForOneExperiment (exp, xlsExportType);
 		Experiment expi = exp.getFirstChainedExperiment(true); 
 		
-		while (expi != null) 
-		{
+		while (expi != null) {
 			int nOutputFrames = getNOutputFrames(expi);
-			if (nOutputFrames > 1)
-			{
+			if (nOutputFrames > 1) {
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
 				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
@@ -479,14 +450,13 @@ public class XLSExport
 			expi = expi.chainToNextExperiment;
 		}
 		
-		switch (xlsExportType) 
-		{
+//		switch (xlsExportType) {
 //			case AREA_NPIXELS_DELTA: // TODO
 //				rowListForOneExp.subtractDeltaT(1, 1); //options.buildExcelStepMs);
 //				break;
-			default:
-				break;
-		}
+//			default:
+//				break;
+//		}
 		return rowListForOneExp;
 	}
 	
@@ -494,11 +464,9 @@ public class XLSExport
 	{	
 		XLSResultsArray rowListForOneExp =  getSpotsDescriptorsForOneExperiment (exp, options.exportType);
 		Experiment expi = exp.getFirstChainedExperiment(true); 
-		while (expi != null) 
-		{
+		while (expi != null) {
 			int nOutputFrames = getNOutputFrames(expi);
-			if (nOutputFrames > 1)
-			{
+			if (nOutputFrames > 1) {
 				XLSResultsArray resultsArrayList = new XLSResultsArray (expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
 				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
@@ -506,7 +474,6 @@ public class XLSExport
 			}
 			expi = expi.chainToNextExperiment;
 		}
-		
 		return rowListForOneExp;
 	}
 	
@@ -515,10 +482,8 @@ public class XLSExport
 			XLSResultsArray resultsArrayList) 
 	{
 		XLSResults resultsFound = null;
-		for (XLSResults results: resultsArrayList.resultsList) 
-		{
-			if (results.name.equals(testname)) 
-			{
+		for (XLSResults results: resultsArrayList.resultsList) {
+			if (results.name.equals(testname)) {
 				resultsFound = results;
 				break;
 			}
@@ -536,13 +501,11 @@ public class XLSExport
 		long offsetChain = expi.camImageFirst_ms - expi.chainImageFirst_ms;
 		long start_Ms = expi.binFirst_ms + offsetChain; // TODO check when collate?
 		long end_Ms = expi.binLast_ms + offsetChain;
-		if (options.fixedIntervals) 
-		{
+		if (options.fixedIntervals) {
 			if (start_Ms < options.startAll_Ms)
 				start_Ms = options.startAll_Ms;
 			if (start_Ms > expi.camImageLast_ms)
 				return;
-			
 			if (end_Ms > options.endAll_Ms)
 				end_Ms = options.endAll_Ms;
 			if (end_Ms > expi.camImageFirst_ms)
@@ -555,15 +518,12 @@ public class XLSExport
 		final int to_first_index = (int) (start_Ms / options.buildExcelStepMs) ;
 		final int to_nvalues = (int) ((end_Ms - start_Ms)/options.buildExcelStepMs)+1;
 		
-		for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) 
-		{
+		for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) {
 			XLSResults row = rowListForOneExp.getRow(iRow);
 			XLSResults results = getResultsArrayWithThatName(row.name, resultsArrayList);
-			if (results != null && results.valuesOut != null) 
-			{
+			if (results != null && results.valuesOut != null) {
 				double dvalue = 0.;
-				switch (xlsoption) 
-				{
+				switch (xlsoption) {
 					case TOPLEVEL:
 					case TOPLEVEL_LR:
 					case TOPLEVELDELTA:
@@ -578,8 +538,7 @@ public class XLSExport
 				int icolTo = 0;
 				if (options.collateSeries || options.absoluteTime)
 					icolTo = to_first_index;
-				for (long fromTime = from_first_Ms; fromTime <= from_lastMs; fromTime += options.buildExcelStepMs, icolTo++) 
-				{
+				for (long fromTime = from_first_Ms; fromTime <= from_lastMs; fromTime += options.buildExcelStepMs, icolTo++) {
 					int from_i = (int) Math.round(((double)(fromTime - from_first_Ms)) / ((double) options.buildExcelStepMs));
 					if (from_i >= results.valuesOut.length)
 						break;
@@ -593,10 +552,8 @@ public class XLSExport
 				}
 
 			} 
-			else 
-			{
-				if (options.collateSeries && options.padIntervals && expi.chainToPreviousExperiment != null) 
-				{
+			else {
+				if (options.collateSeries && options.padIntervals && expi.chainToPreviousExperiment != null) {
 					double dvalue = padWithLastPreviousValue(row, to_first_index);
 					int tofirst = (int) to_first_index;
 					int tolast = (int) (tofirst + to_nvalues);
@@ -616,11 +573,9 @@ public class XLSExport
 			return dvalue;
 		
 		int index = getIndexOfFirstNonEmptyValueBackwards(row, to_first_index);
-		if (index >= 0) 
-		{
+		if (index >= 0) {
 			dvalue = row.valuesOut[index];
-			for (int i = index+1; i < to_first_index; i++) 
-			{
+			for (int i = index+1; i < to_first_index; i++) {
 				row.valuesOut[i] = dvalue;
 				row.padded_out[i] = true;
 			}
@@ -632,10 +587,8 @@ public class XLSExport
 	{
 		int index = -1;
 		int ifrom = (int) fromindex;
-		for (int i= ifrom; i>= 0; i--) 
-		{
-			if (!Double.isNaN(row.valuesOut[i])) 
-			{
+		for (int i= ifrom; i>= 0; i--) {
+			if (!Double.isNaN(row.valuesOut[i])) {
 				index = i;
 				break;
 			}
@@ -645,8 +598,7 @@ public class XLSExport
 	
 	private void trimDeadsFromArrayList(XLSResultsArray rowListForOneExp, Experiment exp) 
 	{
-		for (Cage cage: exp.cages.cagesList) 
-		{
+		for (Cage cage: exp.cages.cagesList) {
 			String roiname = cage.cageRoi2D.getName();
 			if (roiname.length() < 4 || !roiname.substring( 0 , 4 ).contains("cage"))
 				continue;
@@ -654,11 +606,9 @@ public class XLSExport
 			String cagenumberString = roiname.substring(4);		
 			int cagenumber = Integer.valueOf(cagenumberString);
 			int ilastalive = 0;
-			if (cage.cageNFlies > 0) 
-			{
+			if (cage.cageNFlies > 0) {
 				Experiment expi = exp;
-				while (expi.chainToNextExperiment != null && expi.chainToNextExperiment.cages.isFlyAlive(cagenumber)) 
-				{
+				while (expi.chainToNextExperiment != null && expi.chainToNextExperiment.cages.isFlyAlive(cagenumber)) {
 					expi = expi.chainToNextExperiment;
 				}
 				int lastIntervalFlyAlive = expi.cages.getLastIntervalFlyAlive(cagenumber);
@@ -669,8 +619,7 @@ public class XLSExport
 			if (ilastalive > 0)
 				ilastalive += 1;
 			
-			for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) 
-			{
+			for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) {
 				XLSResults row = rowListForOneExp.getRow(iRow);
 				if (desc_getCageFromSpotRoiName (row.name) == cagenumber)
 					row.clearValues(ilastalive);
@@ -680,14 +629,12 @@ public class XLSExport
 	
 	private void combineDataForOneCage(XLSResultsArray rowListForOneExp, Experiment exp) 
 	{
-		for (int iRow0 = 0; iRow0 < rowListForOneExp.size(); iRow0++ ) 
-		{
+		for (int iRow0 = 0; iRow0 < rowListForOneExp.size(); iRow0++ ) {
 			XLSResults row_master = rowListForOneExp.getRow(iRow0);
 			if (row_master.nflies == 0 || row_master.valuesOut == null)
 				continue;
 			
-			for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) 
-			{
+			for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) {
 				XLSResults row = rowListForOneExp.getRow(iRow);
 				if (row.nflies == 0 || row.valuesOut == null)
 					continue;
@@ -695,8 +642,7 @@ public class XLSExport
 					continue;
 				if (row.name .equals(row_master.name))
 					continue;
-				if (row.stimulus .equals(row_master.stimulus) && row.concentration .equals(row_master.concentration)) 
-				{
+				if (row.stimulus .equals(row_master.stimulus) && row.concentration .equals(row_master.concentration)) {
 					row_master.sumValues_out(row);
 					row.clearAll();
 				}
@@ -732,8 +678,7 @@ public class XLSExport
 			int rowSeries, 
 			Point pt) 
 	{
-		for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) 
-		{
+		for (int iRow = 0; iRow < rowListForOneExp.size(); iRow++ ) {
 			XLSResults row = rowListForOneExp.getRow(iRow);
 			writeRow(sheet, column_dataArea, rowSeries, pt, row);
 		}
@@ -749,14 +694,12 @@ public class XLSExport
 		if (row.valuesOut == null)
 			return;
 		
-		for (long coltime = expAll.camImageFirst_ms; coltime < expAll.camImageLast_ms; coltime += options.buildExcelStepMs, pt.y++) 
-		{
+		for (long coltime = expAll.camImageFirst_ms; coltime < expAll.camImageLast_ms; coltime += options.buildExcelStepMs, pt.y++) {
 			int i_from = (int) ((coltime - expAll.camImageFirst_ms) / options.buildExcelStepMs);
 			if (i_from >= row.valuesOut.length) 
 				break;
 			double value = row.valuesOut[i_from];
-			if (!Double.isNaN(value)) 
-			{
+			if (!Double.isNaN(value)) {
 				XLSUtils.setValue(sheet, pt, transpose, value);
 				if (i_from < row.padded_out.length && row.padded_out[i_from])
 					XLSUtils.getCell(sheet, pt, transpose).setCellStyle(xssfCellStyle_red);
