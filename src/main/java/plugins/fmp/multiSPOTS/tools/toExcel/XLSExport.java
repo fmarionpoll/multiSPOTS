@@ -477,9 +477,7 @@ public class XLSExport
 		return rowListForOneExp;
 	}
 	
-	private XLSResults getResultsArrayWithThatName(
-			String testname, 
-			XLSResultsArray resultsArrayList) 
+	private XLSResults getResultsArrayWithThatName(String testname, XLSResultsArray resultsArrayList) 
 	{
 		XLSResults resultsFound = null;
 		for (XLSResults results: resultsArrayList.resultsList) {

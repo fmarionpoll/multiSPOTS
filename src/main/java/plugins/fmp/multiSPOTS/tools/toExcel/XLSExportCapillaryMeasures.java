@@ -8,7 +8,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 
 
-public class XLSExportCapillariesResults extends XLSExport 
+public class XLSExportCapillaryMeasures extends XLSExport 
 {	
 	public void exportToFile(String filename, XLSExportOptions opt) 
 	{	

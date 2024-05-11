@@ -8,7 +8,7 @@ import org.apache.poi.ss.util.CellReference;
 import icy.gui.frame.progress.ProgressFrame;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
-public class XLSExportSpotAreasResults extends XLSExport 
+public class XLSExportSpotMeasures extends XLSExport 
 {	
 	public void exportToFile(String filename, XLSExportOptions opt) 
 	{	

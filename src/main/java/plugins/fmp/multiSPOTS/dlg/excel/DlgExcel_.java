@@ -19,7 +19,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportMoveResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
-import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportSpotAreasResults;
+import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportSpotMeasures;
 
 
 public class DlgExcel_  extends JPanel implements PropertyChangeListener 
@@ -105,7 +105,7 @@ public class DlgExcel_  extends JPanel implements PropertyChangeListener
 			{ 
 				@Override public void run() 
 				{
-					XLSExportSpotAreasResults xlsExport2 = new XLSExportSpotAreasResults();
+					XLSExportSpotMeasures xlsExport2 = new XLSExportSpotMeasures();
 				xlsExport2.exportToFile(file, getLevelsOptions());
 			}});
 		}

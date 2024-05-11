@@ -67,10 +67,8 @@ public class ChartSpots extends IcyFrame
 	public void createChartPanel(MultiSPOTS parent, String cstitle) 
 	{
 		parent0 = parent;
-		
 		mainChartPanel = new JPanel(); 
-		mainChartPanel.setLayout( new BoxLayout( mainChartPanel, BoxLayout.LINE_AXIS ) );
-		
+		mainChartPanel.setLayout( new BoxLayout( mainChartPanel, BoxLayout.LINE_AXIS ) );		
 		mainChartFrame = GuiUtil.generateTitleFrame(cstitle, new JPanel(), new Dimension(300, 70), true, true, true, true);	    
 		mainChartFrame.add(mainChartPanel);
 	}
@@ -125,8 +123,7 @@ public class ChartSpots extends IcyFrame
 			int icolor = 0;
 			int maxcolor = 1; //color.length
 			Stroke stroke = new BasicStroke(0.5f,  BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[] { 2.0f, 4.0f }, 0.0f);
-			for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++ )
-			{
+			for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++ ) {
 				if (icolor > maxcolor) {
 					icolor = icolor+13; //0;
 					subPlotRenderer.setSeriesStroke(i, stroke);
@@ -141,8 +138,7 @@ public class ChartSpots extends IcyFrame
 				subplot.setDomainGridlinePaint(Color.WHITE);
 				subplot.setRangeGridlinePaint(Color.WHITE);
 			}
-			else
-			{
+			else {
 				subplot.setBackgroundPaint(Color.WHITE);
 				subplot.setDomainGridlinePaint(Color.GRAY);
 				subplot.setRangeGridlinePaint(Color.GRAY);
@@ -250,11 +246,9 @@ public class ChartSpots extends IcyFrame
 		int oldcage = -1;
 		
 		List<XYSeriesCollection> xyList = new ArrayList<XYSeriesCollection>();
-		for (int iRow = 0; iRow < xlsResultsArray.size(); iRow++ ) 
-		{
+		for (int iRow = 0; iRow < xlsResultsArray.size(); iRow++ ) {
 			XLSResults xlsResults = xlsResultsArray.getRow(iRow);
-			if (oldcage != xlsResults.cageID ) 
-			{
+			if (oldcage != xlsResults.cageID ) {
 				xySeriesCollection = new XYSeriesCollection();
 				oldcage = xlsResults.cageID; 
 				xyList.add(xySeriesCollection);
