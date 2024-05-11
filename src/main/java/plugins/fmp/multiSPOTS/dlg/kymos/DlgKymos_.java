@@ -98,7 +98,7 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 			Viewer v = exp.seqCamData.seq.getFirstViewer();
 			if (v != null)
 				v.toFront();
-			parent0.dlgExperiment.capPopupPanel.expand();
+//			parent0.dlgExperiment.capPopupPanel.expand();
 			parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
 		} 
 		else if (iselected == 1) 

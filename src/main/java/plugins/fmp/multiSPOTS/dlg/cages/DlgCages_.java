@@ -30,7 +30,7 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener
 
 			Detect2DetectFlies tabDetect2 = new Detect2DetectFlies();
 			Edit			tabEdit			= new Edit();
-	public 	LoadSaveCages 		tabFile 		= new LoadSaveCages();
+	public 	LoadSaveCages 	tabFile 		= new LoadSaveCages();
 	public 	PlotPositions 	tabGraphics 	= new PlotPositions();
 	public	PopupPanel 		capPopupPanel	= null;
 			JTabbedPane 	tabsPane		= new JTabbedPane();
@@ -66,34 +66,28 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener
 		
 		tabsPane.addChangeListener(new ChangeListener() {
 			@Override 
-	        public void stateChanged(ChangeEvent e) 
-			{
+	        public void stateChanged(ChangeEvent e) {
 	            int selectedIndex = tabsPane.getSelectedIndex();
 	            tabBuildCages.tabBuildCages2.overlayCheckBox.setSelected(selectedIndex == 0);
 	            	
 	            tabDetect1.overlayCheckBox.setSelected(selectedIndex == iTAB_DETECT1);
-	            if (selectedIndex == iTAB_DETECT1 || selectedIndex == iTAB_DETECT2) 
-	            {
-	            	parent0.dlgExperiment.capPopupPanel.expand();
+	            if (selectedIndex == iTAB_DETECT1 || selectedIndex == iTAB_DETECT2){
+//	            	parent0.dlgExperiment.capPopupPanel.expand();
 	    			parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
 	            }
 	            
-	            if (selectedIndex == iTAB_EDIT) 
-	            {
+	            if (selectedIndex == iTAB_EDIT) {
 	            	bTrapROIsEdit = true;
 	            	parent0.dlgExperiment.tabOptions.displayROIsCategory (false, "spot");
 	            	parent0.dlgExperiment.tabOptions.displayROIsCategory(false, "cage");
 	            } 
-	            else 
-	            {
-	            	if (bTrapROIsEdit) 
-	            	{
+	            else {
+	            	if (bTrapROIsEdit) {
 	            		parent0.dlgExperiment.tabOptions.displayROIsCategory (parent0.dlgExperiment.tabOptions.viewSpotsCheckBox.isSelected(), "spot");
 		            	parent0.dlgExperiment.tabOptions.displayROIsCategory(parent0.dlgExperiment.tabOptions.viewCagesCheckbox.isSelected(), "cage");
 	            	}
 	            	bTrapROIsEdit = false;
 	            }
-
 	            previouslySelected = selectedIndex;
 	        }});
 		
@@ -153,10 +147,8 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) 
 	{
-		if (evt.getPropertyName().equals("LOAD_DATA")) 
-		{
+		if (evt.getPropertyName().equals("LOAD_DATA"))
 			tabBuildCages.tabBuildCages1.updateNColumnsFieldFromSequence();
-		}
 	}
 	
 	

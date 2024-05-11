@@ -35,13 +35,13 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 	 */
 	private static final long serialVersionUID = -6826269677524125173L;
 	
-	public	PopupPanel 		capPopupPanel	= null;
-	public 	JTabbedPane 	tabsPane 		= new JTabbedPane();
-	public 	Options 		tabOptions 		= new Options();
-	public 	Infos			tabInfos		= new Infos();
-	public 	Filter			tabFilter		= new Filter();
-	public 	Edit			tabEdit			= new Edit();
-	public 	Intervals		tabIntervals	= new Intervals();
+		PopupPanel 		capPopupPanel	= null;
+	 	public JTabbedPane 	tabsPane 		= new JTabbedPane();
+	 	public Options 		tabOptions 		= new Options();
+	 	public Infos			tabInfos		= new Infos();
+	 	public Filter			tabFilter		= new Filter();
+	 	Edit			tabEdit			= new Edit();
+	 	public Intervals		tabIntervals	= new Intervals();
 	
 	private MultiSPOTS 		parent0 		= null;
 
