@@ -57,8 +57,6 @@ public class MultiSPOTS extends PluginActionable
 		mainFrame.center();
 		mainFrame.setVisible(true);
 		mainFrame.addToDesktopPane();
-		
-		dlgExperiment.capPopupPanel.expand();
 	}	 
 	
 	public static void main (String[] args)
