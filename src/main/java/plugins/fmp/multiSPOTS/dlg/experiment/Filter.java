@@ -50,7 +50,7 @@ public class Filter  extends JPanel
 	private JButton				clearButton		= new JButton("Clear");
 	
 	private MultiSPOTS 			parent0 		= null;
-			JComboBoxExperiment 	filterExpList 	= new JComboBoxExperiment();
+			public JComboBoxExperiment 	filterExpList 	= new JComboBoxExperiment();
 	
 	
 	void init(GridLayout capLayout, MultiSPOTS parent0) 
@@ -122,7 +122,7 @@ public class Filter  extends JPanel
 	
 	public void initFilterCombos() 
 	{
-		if (!parent0.dlgExperiment.panelLoadSave.filteredCheck.isSelected())
+		if (!parent0.dlgBrowse.panelLoadSave.filteredCheck.isSelected())
 			filterExpList.setExperimentsFromList(parent0.expListCombo.getExperimentsAsList());
 		filterExpList.getFieldValuesToCombo(exptCombo, EnumXLSColumnHeader.EXP_EXPT); 
 		filterExpList.getFieldValuesToCombo(cmt1Combo, EnumXLSColumnHeader.EXP_STIM);
@@ -136,41 +136,35 @@ public class Filter  extends JPanel
 	
 	private void defineActionListeners() 
 	{
-		applyButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		applyButton.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				filterExperimentList(true);
 				parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
 			}});
 		
-		clearButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		clearButton.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				filterExperimentList(false);
 			}});
 	}
 	
 	public void filterExperimentList(boolean setFilter)
 	{
-		if (setFilter)
-		{
+		if (setFilter) {
 			parent0.expListCombo.setExperimentsFromList (filterAllItems());
 		}
-		else 
-		{
+		else {
 			clearAllCheckBoxes ();
 			parent0.expListCombo.setExperimentsFromList (filterExpList.getExperimentsAsList());
 		}
 		
 		if (parent0.expListCombo.getItemCount() > 0)
 			parent0.expListCombo.setSelectedIndex(0);
-		if (setFilter != parent0.dlgExperiment.panelLoadSave.filteredCheck.isSelected())
-			parent0.dlgExperiment.panelLoadSave.filteredCheck.setSelected(setFilter);
+		if (setFilter != parent0.dlgBrowse.panelLoadSave.filteredCheck.isSelected())
+			parent0.dlgBrowse.panelLoadSave.filteredCheck.setSelected(setFilter);
 	}
 	
-	void clearAllCheckBoxes () 
+	public void clearAllCheckBoxes () 
 	{
 		boolean select = false;
 		experimentCheck.setSelected(select);
@@ -206,8 +200,7 @@ public class Filter  extends JPanel
 	void filterItem(List<Experiment> filteredList, EnumXLSColumnHeader header, String filter)
 	{
 		Iterator <Experiment> iterator = filteredList.iterator();
-		while (iterator.hasNext()) 
-		{
+		while (iterator.hasNext()) {
 			Experiment exp = iterator.next();
 			int compare = exp.getExperimentField(header).compareTo(filter);
 			if (compare != 0) 

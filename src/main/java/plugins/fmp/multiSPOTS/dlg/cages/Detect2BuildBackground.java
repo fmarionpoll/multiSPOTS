@@ -258,7 +258,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null)
 			return;
-		parent0.dlgExperiment.panelLoadSave.closeViewsForCurrentExperiment(exp);
+		parent0.dlgBrowse.panelLoadSave.closeViewsForCurrentExperiment(exp);
 		
 		buildBackground = new BuildBackground();		
 		buildBackground.options = initTrackParameters();

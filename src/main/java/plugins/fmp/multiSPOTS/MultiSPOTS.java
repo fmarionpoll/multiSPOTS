@@ -11,6 +11,7 @@ import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
 import icy.plugin.abstract_.PluginActionable;
 import icy.preferences.GeneralPreferences;
+import plugins.fmp.multiSPOTS.dlg.browse.DlgBrowse_;
 import plugins.fmp.multiSPOTS.dlg.cages.DlgCages_;
 import plugins.fmp.multiSPOTS.dlg.excel.DlgExcel_;
 import plugins.fmp.multiSPOTS.dlg.experiment.DlgExperiment_;
@@ -23,9 +24,10 @@ import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 public class MultiSPOTS extends PluginActionable  
 {
-	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS May 8, 2024", true, true, true, true);
+	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS May 11, 2024", true, true, true, true);
 	public JComboBoxExperiment 	expListCombo 	= new JComboBoxExperiment();
 	
+	public DlgBrowse_ 		dlgBrowse 		= new DlgBrowse_();
 	public DlgExperiment_ 	dlgExperiment 	= new DlgExperiment_();
 	public DlgSpots_ 		dlgSpots		= new DlgSpots_();
 	public DlgKymos_		dlgKymos		= new DlgKymos_();
@@ -41,6 +43,7 @@ public class MultiSPOTS extends PluginActionable
 	public void run() 
 	{		
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
+		dlgBrowse.init(mainPanel, "Browse", this);
 		dlgExperiment.init(mainPanel, "Experiments", this);
 		dlgSpots.init(mainPanel, "Spots", this);
 		dlgKymos.init(mainPanel, "KymoSpots", this);

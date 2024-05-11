@@ -28,8 +28,6 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 
 
-
-
 public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeListener
 {
 	/**
@@ -44,7 +42,6 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 	public 	Filter			tabFilter		= new Filter();
 	public 	Edit			tabEdit			= new Edit();
 	public 	Intervals		tabIntervals	= new Intervals();
-	public 	LoadSaveExperiment panelLoadSave = new LoadSaveExperiment();
 	
 	private MultiSPOTS 		parent0 		= null;
 
@@ -58,8 +55,6 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 		capPopupPanel.collapse();
 		mainPanel.add(capPopupPanel);
 		GridLayout tabsLayout = new GridLayout(3, 1);
-		
-		JPanel filesPanel = panelLoadSave.initPanel(parent0);
 		
 		tabInfos.init(tabsLayout, parent0);
 		tabsPane.addTab("Infos", null, tabInfos, "Define infos for this experiment/box");
@@ -80,7 +75,6 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 		
 		JPanel capPanel = capPopupPanel.getMainPanel();
 		capPanel.setLayout(new BorderLayout());
-		capPanel.add(filesPanel, BorderLayout.CENTER);
 		capPanel.add(tabsPane, BorderLayout.PAGE_END);	
 		
 		tabsPane.addChangeListener(this );

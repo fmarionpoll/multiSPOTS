@@ -208,7 +208,7 @@ public class Infos  extends JPanel
 			model.addElement(toAdd);
     }	
 		
-	void initInfosCombos()
+	public void initInfosCombos()
 	{
 		parent0.expListCombo.getFieldValuesToCombo(exptCombo, EnumXLSColumnHeader.EXP_EXPT); 
 		parent0.expListCombo.getFieldValuesToCombo(cmt1Combo, EnumXLSColumnHeader.EXP_STIM);
@@ -223,7 +223,7 @@ public class Infos  extends JPanel
 			transferPreviousExperimentInfosToDialog(exp, exp);
 	}
 	
-	void clearCombos()
+	public void clearCombos()
 	{
 		exptCombo.removeAllItems(); 
 		cmt1Combo.removeAllItems();

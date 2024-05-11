@@ -42,10 +42,10 @@ public class BuildKymosSpots extends BuildSeries
 	
 	void analyzeExperiment(Experiment exp) 
 	{
-		loadExperimentDataToBuildKymos(exp);
-		
+		if (!loadExperimentDataToBuildKymos(exp) || exp.spotsArray.spotsList.size() < 1)
+			return;
 		openKymoViewers(exp);
-		getTimeLimitsOfSequence(exp);
+		getTimeLimitsOfSeqCamData(exp);
 		if (buildKymo(exp)) 
 			saveComputation(exp);
 
@@ -60,7 +60,7 @@ public class BuildKymosSpots extends BuildSeries
 		return flag;
 	}
 	
-	private void getTimeLimitsOfSequence(Experiment exp)
+	private void getTimeLimitsOfSeqCamData(Experiment exp)
 	{
 		exp.getFileIntervalsFromSeqCamData();
 		exp.binDuration_ms = options.t_Ms_BinDuration;
@@ -86,6 +86,7 @@ public class BuildKymosSpots extends BuildSeries
 		
 		ProgressFrame progressBar = new ProgressFrame("Save kymographs");
 		int nframes = exp.seqKymos.seq.getSizeT();
+		
 		int nCPUs = SystemUtil.getNumberOfCPUs();
 	    final Processor processor = new Processor(nCPUs);
 	    processor.setThreadName("buildkymo2");

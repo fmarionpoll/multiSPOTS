@@ -21,7 +21,7 @@ public class Options extends JPanel
 
 	JCheckBox	cagesCheckBox			= new JCheckBox("cages", true);
 	JCheckBox	measuresCheckBox		= new JCheckBox("measures", true);
-	JCheckBox	graphsCheckBox			= new JCheckBox("graphs", true);
+	public JCheckBox	graphsCheckBox			= new JCheckBox("graphs", true);
 
 	public 	JCheckBox 	viewSpotsCheckBox = new JCheckBox("spots", true);
 	public 	JCheckBox 	viewCagesCheckbox = new JCheckBox("cages", true);

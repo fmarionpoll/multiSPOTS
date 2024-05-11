@@ -191,7 +191,7 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null)
 			return;
-		parent0.dlgExperiment.panelLoadSave.closeViewsForCurrentExperiment(exp);
+		parent0.dlgBrowse.panelLoadSave.closeViewsForCurrentExperiment(exp);
 		
 		flyDetect2 = new FlyDetect2();		
 		flyDetect2.options = initTrackParameters();

@@ -54,8 +54,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 		
 		selectList(expList, -1);
 		
-		for (int index = expList.index0; index <= expList.index1; index++, nbiterations++) 
-		{
+		for (int index = expList.index0; index <= expList.index1; index++, nbiterations++) {
 			if (stopFlag)
 				break;
 			long startTimeInNs = System.nanoTime();
@@ -66,14 +65,12 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 			System.out.println("BuildSeries:doInBackground "+(index+1)+": " + exp.getResultsDirectory());
 			exp.setBinSubDirectory(options.binSubDirectory);
 			boolean flag = exp.createDirectoryIfDoesNotExist(exp.getKymosBinFullDirectory());
-			if (flag) 
-			{
+			if (flag) {
 				analyzeExperiment(exp);
 				long endTime2InNs = System.nanoTime();
 				System.out.println("BuildSeries:doInBackground process ended - duration: "+((endTime2InNs-startTimeInNs)/ 1000000000f) + " s");
 			}
-			else 
-			{
+			else {
 				System.out.println("BuildSeries:doInBackground process aborted - subdirectory not created: "+ exp.getKymosBinFullDirectory());
 			}
 		}		
@@ -85,17 +82,13 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 	}
 
 	private void selectList(JComboBoxExperiment expList, int index) {
-		try 
-		{
-			SwingUtilities.invokeAndWait(new Runnable() 
-			{
-				public void run() 
-				{
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
 					expList.setSelectedIndex(index);
 				}});
 		}
-		catch (InvocationTargetException | InterruptedException e) 
-		{
+		catch (InvocationTargetException | InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -103,12 +96,10 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 	protected void done() 
 	{
 		int statusMsg = 0;
-		try 
-		{
+		try {
 			statusMsg = super.get();
 		} 
-		catch (InterruptedException | ExecutionException e) 
-		{
+		catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		} 
 		
@@ -116,60 +107,50 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 			firePropertyChange(THREAD_ENDED, null, statusMsg);
 		else 
 			firePropertyChange(THREAD_DONE, null, statusMsg);
-
     }
 	
 	abstract void analyzeExperiment(Experiment exp);
 	
     protected void waitFuturesCompletion(Processor processor, ArrayList<Future<?>> futuresArray,  ProgressFrame progressBar) 
     {  	
-  		 int frame= 1;
+  		 int frame = 1;
   		 nframescomputed = futuresArray.size();
   		 nframestotal = 0;
   		 
-    	 while (!futuresArray.isEmpty())
-         {
+    	 while (!futuresArray.isEmpty()) {
              final Future<?> f = futuresArray.get(futuresArray.size() - 1);
              if (progressBar != null)
    				 progressBar.setMessage("Analyze frame: " + nframestotal + "//" + nframescomputed);
-             
-             try
-             {
+             try  {
                  f.get();
              }
-             catch (ExecutionException e)
-             {
+             catch (ExecutionException e) {
                  System.out.println("BuildSeries:waitFuturesCompletion - frame:" + frame +" Execution exception: " + e);
              }
-             catch (InterruptedException e)
-             {
+             catch (InterruptedException e)  {
             	 System.out.println("BuildSeries:waitFuturesCompletion - Interrupted exception: " + e);
              }
              futuresArray.remove(f);
-           
          }
    }
 
     protected boolean checkBoundsForCages(Experiment exp) 
 	{
 		exp.cages.detectBin_Ms = options.t_Ms_BinDuration;
-		if (options.isFrameFixed) 
-		{
+		if (options.isFrameFixed) {
 			exp.cages.detectFirst_Ms = options.t_Ms_First;
 			exp.cages.detectLast_Ms = options.t_Ms_Last;
 			if (exp.cages.detectLast_Ms > exp.camImageLast_ms)
 				exp.cages.detectLast_Ms = exp.camImageLast_ms ;
 		} 
-		else 
-		{
+		else {
 			exp.cages.detectFirst_Ms = exp.camImageFirst_ms;
 			exp.cages.detectLast_Ms = exp.camImageLast_ms;
 		}
 		exp.cages.detect_threshold = options.threshold;
 		
 		boolean flag = true;
-		if (exp.cages.cagesList.size() < 1 ) 
-		{
+		if (exp.cages.cagesList.size() < 1) {
 			System.out.println("BuildSeries:checkBoundsForCages ! skipped experiment with no cage: " + exp.getResultsDirectory());
 			flag = false;
 		}
@@ -179,12 +160,10 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
     public IcyBufferedImage imageIORead(String name) 
 	{
     	BufferedImage image = null;
-		try 
-		{
+		try {
 	    	image = ImageIO.read(new File(name));
 		} 
-		catch (IOException e) 
-		{
+		catch (IOException e) {
 			 e.printStackTrace();
 		}
 		return IcyBufferedImage.createFrom(image);
@@ -199,8 +178,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 	
 	void closeSequence(Sequence seq) 
 	{
-		if (seq != null) 
-		{
+		if (seq != null) {
 			seq.close();
 			seq = null;
 		}
@@ -208,8 +186,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 	
 	void closeViewer (Viewer v)
 	{
-		if (v != null) 
-		{
+		if (v != null) {
 			v.close();
 			v = null;
 		}
@@ -228,8 +205,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 		if (eraseOldPoints)
 			seq.removeAllROI();
 		
-		for (Rectangle2D rectangle: listRectangles) 
- 		{
+		for (Rectangle2D rectangle: listRectangles) {
 			ROI2DRectangle flyPoint = new ROI2DRectangle(rectangle);
 			seq.addROI(flyPoint);
  		}
@@ -237,19 +213,15 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer>
 	
 	void openFlyDetectViewers(Experiment exp) 
 	{
-		try 
-		{
-			SwingUtilities.invokeAndWait(new Runnable() 
-			{
-				public void run() 
-				{
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
 					seqNegative = newSequence("detectionImage", exp.seqCamData.refImage);
 					vNegative = new Viewer (seqNegative, false);
 					vNegative.setVisible(true);
 				}});
 		} 
-		catch (InvocationTargetException | InterruptedException e) 
-		{
+		catch (InvocationTargetException | InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

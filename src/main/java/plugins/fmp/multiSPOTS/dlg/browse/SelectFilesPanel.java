@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.dlg.experiment;
+package plugins.fmp.multiSPOTS.dlg.browse;
 
 
 import java.awt.BorderLayout;
@@ -63,7 +63,7 @@ public class SelectFilesPanel extends JPanel
 	{
 		this.parent0 = parent0;
 //		this.parent1 = parent0.dlgExperiment.panelLoadSave;
-		addPropertyChangeListener(parent0.dlgExperiment.panelLoadSave);
+		addPropertyChangeListener(parent0.dlgBrowse.panelLoadSave);
 		selectedNames = stringList;
 		
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
