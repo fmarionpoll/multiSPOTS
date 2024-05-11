@@ -59,32 +59,24 @@ public class Options extends JPanel
 	
 	private void defineActionListeners() 
 	{
-		viewSpotsCheckBox.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		viewSpotsCheckBox.addActionListener(new ActionListener ()  { 
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				displayROIsCategory(viewSpotsCheckBox.isSelected(), "line");
 				displayROIsCategory(viewSpotsCheckBox.isSelected(), "spot");
 			}});
 		
-		viewCagesCheckbox.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		viewCagesCheckbox.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) { 
 			displayROIsCategory(viewCagesCheckbox.isSelected(), "cage");
 			}});
 		
-		viewFlyCheckbox.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		viewFlyCheckbox.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				displayROIsCategory(viewFlyCheckbox.isSelected(), "det");
 			}});
 		
-		viewFlyRectCheckbox.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		viewFlyRectCheckbox.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				displayROIsCategory(viewFlyRectCheckbox.isSelected(), "det");
 			}});
 	}

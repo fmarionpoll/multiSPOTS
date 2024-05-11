@@ -100,20 +100,16 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 	
 	private void defineActionListeners() 
 	{
-		startComputationButton.addActionListener(new ActionListener () 
-		{
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		startComputationButton.addActionListener(new ActionListener () {
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				if (startComputationButton.getText() .equals(detectString)) 
 					startComputation();
 				else
 					stopComputation();
 			}});
 		
-		allCheckBox.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{
+		allCheckBox.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) {
 				Color color = Color.BLACK;
 				if (allCheckBox.isSelected()) 
 					color = Color.RED;
@@ -125,8 +121,7 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 	@Override
 	public void stateChanged(ChangeEvent e) 
 	{
-		if (e.getSource() == thresholdDiffSpinner) 
-		{
+		if (e.getSource() == thresholdDiffSpinner) {
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (exp != null)
 				exp.cages.detect_threshold = (int) thresholdDiffSpinner.getValue();
@@ -142,8 +137,7 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 			overlayThreshold2 = new OverlayThreshold(seqCamData.seq);
 			exp.seqCamData.refImage = IcyBufferedImageUtil.getCopy(exp.seqCamData.getSeqImage(0, 0));
 		}
-		else 
-		{
+		else {
 			seqCamData.seq.removeOverlay(overlayThreshold2);
 			overlayThreshold2.setSequence(seqCamData.seq);
 		}
@@ -210,8 +204,7 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) 
 	{
-		 if (StringUtil.equals("thread_ended", evt.getPropertyName())) 
-		 {
+		 if (StringUtil.equals("thread_ended", evt.getPropertyName())) {
 			startComputationButton.setText(detectString);
 //			parent0.paneKymos.tabDisplay.selectKymographImage(parent0.paneKymos.tabDisplay.indexImagesCombo);
 //			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
@@ -225,14 +218,11 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null )	
 			nitems =  exp.cages.cagesList.size() +1;
-		if (allCagesComboBox.getItemCount() != nitems) 
-		{
+		if (allCagesComboBox.getItemCount() != nitems) {
 			allCagesComboBox.removeAllItems();
 			allCagesComboBox.addItem("all cages");
-			for (Cage cage: exp.cages.cagesList) 
-			{
+			for (Cage cage: exp.cages.cagesList)
 				allCagesComboBox.addItem(cage.getCageNumber());
-			}
 		}		
 	}
 

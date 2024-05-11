@@ -78,11 +78,9 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 		capPanel.add(tabsPane, BorderLayout.PAGE_END);	
 		
 		tabsPane.addChangeListener(this );
-		capPopupPanel.addComponentListener(new ComponentAdapter() 
-		{
+		capPopupPanel.addComponentListener(new ComponentAdapter() {
 			@Override
-			public void componentResized(ComponentEvent e) 
-			{
+			public void componentResized(ComponentEvent e) {
 				parent0.mainFrame.revalidate();
 				parent0.mainFrame.pack();
 				parent0.mainFrame.repaint();
@@ -108,8 +106,7 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 			return;
 		
 		final ViewerListener parent = this;
-		SwingUtilities.invokeLater(new Runnable() { public void run() 
-		{	
+		SwingUtilities.invokeLater(new Runnable() { public void run() {	
 			Viewer v = seq.getFirstViewer();
 			if (v == null) {
 				v = new Viewer(exp.seqCamData.seq, true);
@@ -136,8 +133,7 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 	{
 		Rectangle rectv = v.getBoundsInternal();
 		Rectangle rect0 = mainFrame.getBoundsInternal();
-		if (rect0.x+ rect0.width < Icy.getMainInterface().getMainFrame().getDesktopWidth()) 
-		{
+		if (rect0.x+ rect0.width < Icy.getMainInterface().getMainFrame().getDesktopWidth()) {
 			rectv.setLocation(rect0.x+ rect0.width, rect0.y);
 			v.setBounds(rectv);
 		}
@@ -146,18 +142,14 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 	@Override	
 	public void viewerChanged(ViewerEvent event) 
 	{
-		if ((event.getType() == ViewerEventType.POSITION_CHANGED)) 
-		{
-			if (event.getDim() == DimensionId.T) 
-			{
+		if ((event.getType() == ViewerEventType.POSITION_CHANGED)) {
+			if (event.getDim() == DimensionId.T) {
 				Viewer v = event.getSource(); 
 				int idViewer = v.getSequence().getId(); 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null)
-				{
+				if (exp != null) {
 					int idCurrentExp = exp.seqCamData.seq.getId();
-					if (idViewer == idCurrentExp) 
-					{
+					if (idViewer == idCurrentExp) {
 						int t = v.getPositionT(); 
 						v.setTitle(exp.seqCamData.getDecoratedImageName(t));
 						if (parent0.dlgCages.bTrapROIsEdit) 

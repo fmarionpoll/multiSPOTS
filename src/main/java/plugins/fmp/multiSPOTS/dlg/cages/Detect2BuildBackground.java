@@ -99,36 +99,28 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 	
 	private void defineActionListeners() 
 	{
-		startComputationButton.addActionListener(new ActionListener () 
-		{
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		startComputationButton.addActionListener(new ActionListener () {
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				if (startComputationButton.getText() .equals(detectString)) 
 					startComputation();
 				else
 					stopComputation();
 			}});
 		
-		saveButton.addActionListener(new ActionListener () 
-		{
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		saveButton.addActionListener(new ActionListener () {
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 					exp.saveReferenceImage(exp.seqCamData.refImage);
 			}});
 		
-		loadButton.addActionListener(new ActionListener () 
-		{
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		loadButton.addActionListener(new ActionListener () {
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				loadBackground();
 			}});
 		
-		allCheckBox.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{
+		allCheckBox.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) {
 				Color color = Color.BLACK;
 				if (allCheckBox.isSelected()) 
 					color = Color.RED;
@@ -136,15 +128,11 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 				startComputationButton.setForeground(color);
 		}});
 		
-		overlayCheckBox.addItemListener(new ItemListener() 
-		{
-		      public void itemStateChanged(ItemEvent e) 
-		      {
+		overlayCheckBox.addItemListener(new ItemListener() {
+		      public void itemStateChanged(ItemEvent e)  {
 		    	  Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		    	  if (exp != null) 
-		    	  {
-		    		  if (overlayCheckBox.isSelected()) 
-		    		  {
+		    	  if (exp != null) {
+		    		  if (overlayCheckBox.isSelected()) {
 		    			  if (ov == null)
 		    				  ov = new OverlayThreshold(exp.seqCamData.seq);
 		    			  exp.seqCamData.seq.addOverlay(ov);
@@ -159,8 +147,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 	@Override
 	public void stateChanged(ChangeEvent e) 
 	{
-		if (e.getSource() == backgroundThresholdSpinner) 
-		{
+		if (e.getSource() == backgroundThresholdSpinner) {
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (!overlayCheckBox.isSelected())
 				overlayCheckBox.setSelected(true);
@@ -169,19 +156,17 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		}
 	}
 	
-	void loadBackground() {
+	void loadBackground() 
+	{
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		if (exp != null) 
-		{ 
+		if (exp != null) { 
 			boolean flag = exp.loadReferenceImage(); 
-			if (flag) 
-			{
+			if (flag) {
 				Viewer v = new Viewer(exp.seqReference, true);
 				Rectangle rectv = exp.seqCamData.seq.getFirstViewer().getBoundsInternal();
 				v.setBounds(rectv);
 			} 
-			else 
-			{
+			else {
 				 MessageDialog.showDialog("Reference file not found on disk",
                             MessageDialog.ERROR_MESSAGE);
 			}
@@ -198,8 +183,7 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 			int t = exp.seqCamData.currentFrame;
 			exp.seqCamData.refImage = IcyBufferedImageUtil.getCopy(exp.seqCamData.getSeqImage(t, 0));
 		}
-		else 
-		{
+		else {
 			seqCamData.seq.removeOverlay(ov);
 			ov.setSequence(seqCamData.seq);
 		}

@@ -139,15 +139,11 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 	
 	private void defineActionListeners()
 	{
-		overlayCheckBox.addItemListener(new ItemListener() 
-		{
-		      public void itemStateChanged(ItemEvent e) 
-		      {
+		overlayCheckBox.addItemListener(new ItemListener() {
+		      public void itemStateChanged(ItemEvent e) {
 		    	  Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		    	  if (exp != null) 
-		    	  {
-		    		  if (overlayCheckBox.isSelected()) 
-		    		  {
+		    	  if (exp != null) {
+		    		  if (overlayCheckBox.isSelected()) {
 		    			  if (overlayThreshold1 == null)
 		    				  overlayThreshold1 = new OverlayThreshold(exp.seqCamData.seq);
 		    			  exp.seqCamData.seq.addOverlay(overlayThreshold1);
@@ -158,20 +154,16 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 		    	  }
 		      }});
 
-		startComputationButton.addActionListener(new ActionListener () 
-		{
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		startComputationButton.addActionListener(new ActionListener () {
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				if (startComputationButton.getText() .equals(detectString))
 					startComputation();
 				else
 					stopComputation();
 			}});
 		
-		allCheckBox.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{
+		allCheckBox.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) {
 				Color color = Color.BLACK;
 				if (allCheckBox.isSelected()) 
 					color = Color.RED;
@@ -187,8 +179,7 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 			return;
 		if (overlayThreshold1 == null) 
 			overlayThreshold1 = new OverlayThreshold(seqCamData.seq);
-		else 
-		{
+		else {
 			seqCamData.seq.removeOverlay(overlayThreshold1);
 			overlayThreshold1.setSequence(seqCamData.seq);
 		}
@@ -208,11 +199,9 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 	@Override
 	public void stateChanged(ChangeEvent e) 
 	{
-		if (e.getSource() == thresholdSpinner) 
-		{
+		if (e.getSource() == thresholdSpinner) {
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-			if (exp != null) 
-			{
+			if (exp != null) {
 				exp.cages.detect_threshold = (int) thresholdSpinner.getValue();
 				updateOverlay(exp);
 			}
@@ -283,8 +272,7 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) 
 	{
-		 if (StringUtil.equals("thread_ended", evt.getPropertyName())) 
-		 {
+		 if (StringUtil.equals("thread_ended", evt.getPropertyName())) {
 			startComputationButton.setText(detectString);
 //			parent0.paneKymos.tabDisplay.selectKymographImage(parent0.paneKymos.tabDisplay.indexImagesCombo);
 //			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
@@ -298,14 +286,11 @@ public class Detect1 extends JPanel implements ChangeListener, ItemListener, Pro
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null )	
 			nitems =  exp.cages.cagesList.size() +1;
-		if (allCagesComboBox.getItemCount() != nitems) 
-		{
+		if (allCagesComboBox.getItemCount() != nitems) {
 			allCagesComboBox.removeAllItems();
 			allCagesComboBox.addItem("all cages");
 			for (Cage cage: exp.cages.cagesList) 
-			{
 				allCagesComboBox.addItem(cage.getCageNumber());
-			}
 		}
 	}
 

@@ -113,46 +113,32 @@ public class SelectFilesPanel extends JPanel
 	
 	void addActionListeners() 
 	{
-		findButton.addActionListener(new ActionListener()  
-		{
+		findButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0)  
-            {	
+            public void actionPerformed(ActionEvent arg0) {	
     			String pattern = (String) filterCombo.getSelectedItem();
-    			
-    			// ugly patch to cope with one of the previous versions of multicafe that saved files under an other name
-//    			if (pattern.contains("MCexperiment"))
-//    				pattern = "MCexpe";
-//    			else if (pattern.contains("MCcapillaries"))
-//    				pattern = "MCcapi";
     			boolean isFileName = rbFile.isSelected();
     			if (pattern.contains("grabs") || pattern.contains("cam")) 
     				isFileName = false;
     			getListofFilesMatchingPattern(pattern, isFileName);
             }});
 
-		clearSelectedButton.addActionListener(new ActionListener()  
-		{
+		clearSelectedButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) 
-            {
+            public void actionPerformed(ActionEvent arg0) {
             	List<String> selectedItems = directoriesJList.getSelectedValuesList();
     		    removeListofNamesFromList (selectedItems);
             }});
 		
-		clearAllButton.addActionListener(new ActionListener()  
-		{
+		clearAllButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) 
-            {
+            public void actionPerformed(ActionEvent arg0) {
             	((DefaultListModel<String>) directoriesJList.getModel()).removeAllElements();
             }});
 		
-		addSelectedButton.addActionListener(new ActionListener()  
-		{
+		addSelectedButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) 
-            {
+            public void actionPerformed(ActionEvent arg0) {
             	List<String> selectedItems = directoriesJList.getSelectedValuesList();
     			addNamesToSelectedList(selectedItems);
     			removeListofNamesFromList(selectedItems);
@@ -160,11 +146,9 @@ public class SelectFilesPanel extends JPanel
     			close();
             }});
 		
-		addAllButton.addActionListener(new ActionListener()  
-		{
+		addAllButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) 
-            {
+            public void actionPerformed(ActionEvent arg0) {
     			List<String> allItems = new ArrayList <String> (directoriesJList.getModel().getSize());
     			for(int i = 0; i< directoriesJList.getModel().getSize();i++)  {
     			    String name = directoriesJList.getModel().getElementAt(i);
@@ -206,7 +190,8 @@ public class SelectFilesPanel extends JPanel
                     .filter(Files::isRegularFile)   // is a file
                     .filter(p -> p.getFileName().toString().contains(pattern))
                     .collect(Collectors.toList());
-        } catch (IOException e) {
+        } 
+        catch (IOException e) {
 			e.printStackTrace();
 		}
         
@@ -231,17 +216,15 @@ public class SelectFilesPanel extends JPanel
                     .filter(Files::isDirectory)   // is a directory
                     .filter(p -> p.getFileName().toString().contains(pattern))
                     .collect(Collectors.toList());
-        } catch (IOException e) {
+        } 
+        catch (IOException e) {
 			e.printStackTrace();
 		}
         
-        if (result != null) 
-        {
-        	for (Path path: result) 
-        	{
+        if (result != null) {
+        	for (Path path: result) {
         		File dir = path.toFile();
-        		if (!getListofFilesMatchingFileNamePattern("MCexpe", dir))
-        		{
+        		if (!getListofFilesMatchingFileNamePattern("MCexpe", dir)) {
         			String experimentName = createEmptyExperiment(path);
         			if (experimentName != null)
         				addNameToListIfNew(experimentName);
@@ -273,8 +256,7 @@ public class SelectFilesPanel extends JPanel
 
 		if (isFileName)
 			getListofFilesMatchingFileNamePattern(pattern, dir);
-		else 
-		{
+		else {
 			if (! getListofFilesMatchingDirectoryNamePattern(pattern, dir) && (pattern == "cam"))
 				getListofFilesMatchingDirectoryNamePattern("grab", dir);
 		}
@@ -284,11 +266,9 @@ public class SelectFilesPanel extends JPanel
 	{	
 		int ilast = ((DefaultListModel<String>) directoriesJList.getModel()).getSize();
 		boolean found = false;
-		for (int i=0; i < ilast; i++) 
-		{
+		for (int i=0; i < ilast; i++) {
 			String oo = ((DefaultListModel<String>) directoriesJList.getModel()).getElementAt(i);
-			if (oo.equalsIgnoreCase (fileName)) 
-			{
+			if (oo.equalsIgnoreCase (fileName)) {
 				found = true;
 				break;
 			}
@@ -306,12 +286,10 @@ public class SelectFilesPanel extends JPanel
 	    fc.setDialogTitle("Select a root directory...");
 	    fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 	    fc.setAcceptAllFileFilterUsed(false);
-	    if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) 
-	    { 
+	    if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { 
 	      dummy_selected = fc.getSelectedFile();
 	    }
-	    else 
-	    {
+	    else {
 	      System.out.println("SelectFiles:chooseDirectory() No directory selected ");
 	    }
 		return dummy_selected;
@@ -319,8 +297,7 @@ public class SelectFilesPanel extends JPanel
 	
 	private void addNamesToSelectedList(List<String> stringList) 
 	{
-		for (String name : stringList) 
-		{
+		for (String name : stringList) {
 			String directoryName = Paths.get(name).getParent().toString();
 			if (isDirectoryWithJpg(directoryName))
 				selectedNames.add(directoryName);
