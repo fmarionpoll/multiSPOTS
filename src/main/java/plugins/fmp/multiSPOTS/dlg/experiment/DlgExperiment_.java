@@ -54,7 +54,7 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 		capPopupPanel = new PopupPanel(string);			
 		capPopupPanel.collapse();
 		mainPanel.add(capPopupPanel);
-		GridLayout tabsLayout = new GridLayout(3, 1);
+		GridLayout tabsLayout = new GridLayout(4, 1);
 		
 		tabInfos.init(tabsLayout, parent0);
 		tabsPane.addTab("Infos", null, tabInfos, "Define infos for this experiment/box");

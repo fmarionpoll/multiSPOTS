@@ -48,9 +48,7 @@ public class DlgBrowse_ extends JPanel implements ViewerListener
 			}
 		});		
 	}
-		
 
-	
 	public void updateViewerForSequenceCam(Experiment exp) 
 	{
 		Sequence seq = exp.seqCamData.seq;
@@ -118,8 +116,6 @@ public class DlgBrowse_ extends JPanel implements ViewerListener
 	{
 		viewer.removeListener(this);
 	}
-
-
 
 	
 }
