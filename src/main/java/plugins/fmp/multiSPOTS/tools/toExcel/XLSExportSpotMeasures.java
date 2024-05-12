@@ -31,6 +31,7 @@ public class XLSExportSpotMeasures extends XLSExport
 			workbook = xlsInitWorkbook();
 			for (int index = options.expIndexFirst; index <= options.expIndexLast; index++) {
 				Experiment exp = expList.getItemAt(index);
+				exp.load_SpotsMeasures();
 				if (exp.chainToPreviousExperiment != null)
 					continue;
 				progress.setMessage("Export experiment "+ (index+1) +" of "+ nbexpts);

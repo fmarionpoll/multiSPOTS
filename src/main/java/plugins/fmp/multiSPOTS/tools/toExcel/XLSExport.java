@@ -307,11 +307,7 @@ public class XLSExport
 		options.exportType = exportType;
 		XLSResultsArray rowListForOneExp = getSpotsDataFromOneExperimentSeries(exp, options);
 		XSSFSheet sheet = xlsInitSheet(exportType.toString(), exportType);
-		int colmax = xlsExportResultsArrayToSheet(rowListForOneExp, 
-				sheet, 
-				exportType, 
-				col0, 
-				charSeries);	
+		int colmax = xlsExportResultsArrayToSheet(rowListForOneExp,  sheet,  exportType,  col0, charSeries);	
 		if (options.onlyalive) {
 			trimDeadsFromArrayList(rowListForOneExp, exp);
 			sheet = xlsInitSheet(exportType.toString()+"_alive", exportType);
@@ -650,11 +646,8 @@ public class XLSExport
 		}
 	}
 	
-	private int xlsExportResultsArrayToSheet(XLSResultsArray rowListForOneExp,
-			XSSFSheet sheet, 
-			EnumXLSExportType xlsExportOption, 
-			int col0, 
-			String charSeries) 
+	private int xlsExportResultsArrayToSheet(XLSResultsArray rowListForOneExp, XSSFSheet sheet, 
+			EnumXLSExportType xlsExportOption,  int col0, String charSeries) 
 	{
 		Point pt = new Point(col0, 0);
 		writeExperiment_descriptors(expAll, charSeries, sheet, pt, xlsExportOption);
@@ -664,7 +657,7 @@ public class XLSExport
 			
 	private Point writeExperiment_data (XLSResultsArray rowListForOneExp, XSSFSheet sheet, Point pt_main) 
 	{
-		int rowSeries = pt_main.x +2;
+		int rowSeries = pt_main.x + 2;
 		int column_dataArea = pt_main.y;
 		Point pt = new Point(pt_main);
 		writeExperiment_data_simpleRows(rowListForOneExp, sheet, column_dataArea, rowSeries, pt);			

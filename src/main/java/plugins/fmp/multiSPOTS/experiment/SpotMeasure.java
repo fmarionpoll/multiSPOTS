@@ -46,6 +46,12 @@ public class SpotMeasure
 		level2D = new Level2D(limit);
 	}
 	
+	void copy(SpotMeasure sourceSpotMeasure) 
+	{
+		if (sourceSpotMeasure.level2D != null)
+			level2D = sourceSpotMeasure.level2D.clone(); 
+	}
+	
 	public void clear() 
 	{
 		level2D = new Level2D();
@@ -140,12 +146,6 @@ public class SpotMeasure
             pol.addPoint(level2D.xpoints[i], level2D.ypoints[i]);
 
 		level2D = new Level2D(pol); 
-	}
-	
-	void copy(SpotMeasure sourceSpotArea) 
-	{
-		if (sourceSpotArea.level2D != null)
-			level2D = sourceSpotArea.level2D.clone(); 
 	}
 	
 	boolean isThereAnyMeasuresDone() 

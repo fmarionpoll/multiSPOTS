@@ -79,7 +79,7 @@ public class Level2D extends Polyline2D
 	@Override
 	public Level2D clone()
 	{
-		Level2D pol = new Level2D();
+		Level2D pol = new Level2D(npoints);
 		for (int i = 0; i < npoints; i++)
 			pol.addPoint(xpoints[i], ypoints[i]);
 		return pol;

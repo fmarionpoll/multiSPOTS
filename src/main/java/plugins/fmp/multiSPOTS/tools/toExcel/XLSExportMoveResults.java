@@ -35,7 +35,6 @@ public class XLSExportMoveResults extends XLSExport
 
 		boolean loadDrosoTrack = true; 
 		expList.loadListOfMeasuresFromAllExperiments(false, loadDrosoTrack);
-//		expList.chainExperimentsUsingCamIndexes(options.collateSeries);
 		expList.chainExperimentsUsingKymoIndexes(options.collateSeries);
 		expList.setFirstImageForAllExperiments(options.collateSeries);
 		expAll = expList.get_MsTime_of_StartAndEnd_AllExperiments(options);
@@ -52,6 +51,7 @@ public class XLSExportMoveResults extends XLSExport
 			for (int index = options.expIndexFirst; index <= options.expIndexLast; index++) 
 			{
 				Experiment exp = expList.getItemAt(index);
+				exp.load_SpotsMeasures();
 				if (exp.chainToPreviousExperiment != null)
 					continue;
 				progress.setMessage("Export experiment "+ (index+1) +" of "+ nbexpts);
