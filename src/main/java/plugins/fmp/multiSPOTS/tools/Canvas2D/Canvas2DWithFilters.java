@@ -122,9 +122,10 @@ public class Canvas2DWithFilters extends Canvas2D
     @Override
     public IcyBufferedImage getImage(int t, int z, int c)
     {
-    	IcyBufferedImage img = super.getImage(t, z, c);
-    	IcyBufferedImage img2 = transform1.getTransformedImage (img, null);
-        return img2;
+    	IcyBufferedImage img1 = transform1.getTransformedImage (super.getImage(t, z, c), null);
+    	if (transform2 != null)
+    		return transform2.getTransformedImage(img1, null);
+        return img1;
     }
     
     public void updateListOfImageTransformFunctions(ImageTransformEnums[] transformArray) 
@@ -184,6 +185,14 @@ public class Canvas2DWithFilters extends Canvas2D
             }});
         
         toolBar.add(imageTransformFunctionsCombo2, 5);
+        
+        imageTransformFunctionsCombo2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+            	ImageTransformEnums transformEnum = (ImageTransformEnums) imageTransformFunctionsCombo2.getSelectedItem();
+            	transform2 = transformEnum.getFunction();
+            	refresh();
+            }});
     }  
  	
 }
