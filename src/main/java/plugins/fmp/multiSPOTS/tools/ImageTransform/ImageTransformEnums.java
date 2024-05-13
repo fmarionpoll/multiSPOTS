@@ -10,7 +10,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.None;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RGBtoHSB;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RGBtoHSV;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RemoveHorizontalAverage;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SortRedColumns;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SortChan0Columns;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SortSumDiffColumns;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SubtractColumn;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SubtractReferenceImage;
@@ -61,8 +61,8 @@ public enum ImageTransformEnums
 	MINUSHORIZAVG	("remove Hz traces", 		new RemoveHorizontalAverage()),
 	THRESHOLD_SINGLE("threshold 1 value",		new ThresholdSingleValue()),
 	THRESHOLD_COLORS("threshold colors",		new ThresholdColors()),
-	SORT_REDCOLS	("sort red columns", 		new SortRedColumns()),
-	SORT_SUMDIFFCOLS("sort cols / SumDiff",    	new SortSumDiffColumns()),
+	SORT_CHAN0COLS	("sort col/chan0", 			new SortChan0Columns()),
+	SORT_SUMDIFFCOLS("sort col/SumDiff",    	new SortSumDiffColumns()),
 	ZIGZAG			("remove spikes",			new None()),
 	NONE			("none",					new None());
 
@@ -87,8 +87,7 @@ public enum ImageTransformEnums
 	
 	public static ImageTransformEnums findByText(String abbr)
 	{
-	    for(ImageTransformEnums v : values())
-	    { 
+	    for (ImageTransformEnums v : values()) { 
 	    	if ( v.toString().equals(abbr)) 
 	    		return v;  
 	    }

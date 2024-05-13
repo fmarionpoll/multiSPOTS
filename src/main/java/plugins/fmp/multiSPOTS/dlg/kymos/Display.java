@@ -57,7 +57,7 @@ public class Display extends JPanel implements ViewerListener
 	private JCheckBox 	flyPresentCheckbox 		= new JCheckBox("fly present (blue)", true);
 	private ImageTransformEnums[] transforms 	= new ImageTransformEnums[] {
 				ImageTransformEnums.SORT_SUMDIFFCOLS,
-				ImageTransformEnums.SORT_REDCOLS
+				ImageTransformEnums.SORT_CHAN0COLS
 			};
 	private JComboBox<ImageTransformEnums> spotsTransformsComboBox = new JComboBox<ImageTransformEnums> (transforms);
 	private JToggleButton spotsViewButton 		= new JToggleButton("View");
