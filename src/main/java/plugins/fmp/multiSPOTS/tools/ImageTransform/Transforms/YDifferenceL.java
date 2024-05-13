@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.tools.ImageTransform.Filters;
+package plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms;
 
 import icy.image.IcyBufferedImage;
 import icy.type.DataType;

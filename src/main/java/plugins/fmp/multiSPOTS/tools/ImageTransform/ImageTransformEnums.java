@@ -1,27 +1,27 @@
 package plugins.fmp.multiSPOTS.tools.ImageTransform;
 
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.Deriche;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.H1H2H3;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.L1DistanceToColumn;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.LinearCombination;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.LinearCombinationNormed;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.NegativeDifference;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.None;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RGBtoHSB;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RGBtoHSV;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.RemoveHorizontalAverage;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SortChan0Columns;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SortSumDiffColumns;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SubtractColumn;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SubtractReferenceImage;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.SumDiff;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.ThresholdColors;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.ThresholdSingleValue;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.XDiffn;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.XYDiffn;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.YDifferenceL;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.YDiffn;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.Filters.YDiffn1D;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.Deriche;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.H1H2H3;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.L1DistanceToColumn;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.LinearCombination;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.LinearCombinationNormed;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.NegativeDifference;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.None;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.RGBtoHSB;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.RGBtoHSV;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.RemoveHorizontalAverage;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.SortChan0Columns;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.SortSumDiffColumns;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.SubtractColumn;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.SubtractReferenceImage;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.SumDiff;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.ThresholdColors;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.ThresholdSingleValue;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.XDiffn;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.XYDiffn;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.YDifferenceL;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.YDiffn;
+import plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms.YDiffn1D;
 
 public enum ImageTransformEnums 
 {

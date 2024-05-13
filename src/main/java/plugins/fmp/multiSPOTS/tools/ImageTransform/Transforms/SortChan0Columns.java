@@ -1,5 +1,4 @@
-package plugins.fmp.multiSPOTS.tools.ImageTransform.Filters;
-
+package plugins.fmp.multiSPOTS.tools.ImageTransform.Transforms;
 
 import java.util.Arrays;
 
@@ -9,8 +8,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformFunctionAbstrac
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 
-
-public class SortRedColumn0 extends ImageTransformFunctionAbstract implements ImageTransformInterface
+public class SortChan0Columns extends ImageTransformFunctionAbstract implements ImageTransformInterface
 {
 	@Override
 	public IcyBufferedImage getTransformedImage(IcyBufferedImage sourceImage, ImageTransformOptions options) 
@@ -18,16 +16,18 @@ public class SortRedColumn0 extends ImageTransformFunctionAbstract implements Im
 		IcyBufferedImage destinationImage = new IcyBufferedImage(sourceImage.getWidth(), sourceImage.getHeight(), 3, sourceImage.getDataType_());
 		IcyBufferedImageCursor sourceCursor = new IcyBufferedImageCursor(sourceImage);
 		IcyBufferedImageCursor destinationCursor = new IcyBufferedImageCursor(destinationImage);
-		int columnIndex = 0; 	// column 0
+
 		int channel = 0;		// RED
-		int[][] sorted = getSortOrderForColumn(sourceImage, columnIndex, channel); 
+		int[][] sorted = new int[sourceImage.getHeight()][2]; 
 		try {
-			for (int y = 0; y < sourceImage.getHeight(); y++) 
+			for (int x = 0; x < sourceImage.getWidth(); x++) 
 			{
-				int ySourceIndex = sorted[y][0];
-				for (int x = 0; x < sourceImage.getWidth(); x++) 
+				getSortOrderForColumn(sourceImage, x, channel, sorted); 
+				for (int y = 0; y < sourceImage.getHeight(); y++) {
+					int ySourceIndex = sorted[y][0];
 					for (int chan= 0; chan < 3; chan++)
 						destinationCursor.set(x, y, chan, sourceCursor.get(x, ySourceIndex, chan));
+				}
 			}
 		}
 		finally {
@@ -37,16 +37,14 @@ public class SortRedColumn0 extends ImageTransformFunctionAbstract implements Im
 		return destinationImage; 
 	}
 	
-	private int[][] getSortOrderForColumn(IcyBufferedImage sourceImage, int columnIndex, int channel) 
+	private void getSortOrderForColumn(IcyBufferedImage sourceImage, int columnIndex, int channel, int[][] sorted) 
 	{
-		int[][] sorted = getImageColumnValues(sourceImage, columnIndex, channel);
+		getImageColumnValues(sourceImage, columnIndex, channel, sorted);
 		Arrays.sort(sorted, (a, b) -> a[1] - b[1]);
-		return sorted;
 	}
 	
-	private int[][] getImageColumnValues (IcyBufferedImage sourceImage, int columnIndex, int channel) 
+	private void getImageColumnValues (IcyBufferedImage sourceImage, int columnIndex, int channel, int[][] sorted) 
 	{
-		int[][] sorted = new int [sourceImage.getHeight()][2];
 		int x = columnIndex;
 		IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 		try {
@@ -59,7 +57,6 @@ public class SortRedColumn0 extends ImageTransformFunctionAbstract implements Im
 		finally {
 			cursorSource.commitChanges();
 		}
-		return sorted;
 	}
-	
+
 }
