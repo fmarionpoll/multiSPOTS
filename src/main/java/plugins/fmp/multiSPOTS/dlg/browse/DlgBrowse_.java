@@ -28,9 +28,9 @@ public class DlgBrowse_ extends JPanel implements ViewerListener
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6826269677524125173L;
-	public 	LoadSaveExperiment panelLoadSave = new LoadSaveExperiment();
-	private MultiSPOTS 		parent0 		= null;
+	private static final long serialVersionUID 	= -6826269677524125173L;
+	public 	LoadSaveExperiment panelLoadSave 	= new LoadSaveExperiment();
+	private MultiSPOTS 		parent0 			= null;
 
 
 
