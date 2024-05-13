@@ -20,7 +20,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import icy.resource.icon.IcyIcon;
 
 
-public class Canvas2DWithFilters extends Canvas2D
+public class Canvas2DWithTransforms extends Canvas2D
 {
     /**
 	 * 
@@ -42,7 +42,7 @@ public class Canvas2DWithFilters extends Canvas2D
 	public JComboBox<ImageTransformEnums> imageTransformFunctionsComboStep2 = new JComboBox<ImageTransformEnums> (imageTransformStep2);
 	ImageTransformInterface transformStep2 = ImageTransformEnums.NONE.getFunction();
 	
-    public Canvas2DWithFilters(Viewer viewer)
+    public Canvas2DWithTransforms(Viewer viewer)
     {
         super(viewer);
     }
@@ -172,7 +172,7 @@ public class Canvas2DWithFilters extends Canvas2D
 		imageTransformFunctionsComboStep2.setSelectedIndex(iselected);
     }
 
-    public void addButtons(JToolBar toolBar)
+    public void customizeToolbarStep2(JToolBar toolBar)
     {
     	toolBar.addSeparator();
         

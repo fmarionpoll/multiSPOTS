@@ -35,7 +35,7 @@ import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Directories;
-import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2DWithFilters;
+import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2DWithTransforms;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 
 
@@ -214,7 +214,7 @@ public class Display extends JPanel implements ViewerListener
 				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);				
 				List<String> list = IcyCanvas.getCanvasPluginNames();
 				String pluginName = list.stream()
-						  .filter(s -> s.contains("Canvas2DWithFilters"))
+						  .filter(s -> s.contains("Canvas2DWithTransforms"))
 						  .findFirst()
 						  .orElse(null);
 				viewerKymographs.setCanvas(pluginName);
@@ -222,8 +222,8 @@ public class Display extends JPanel implements ViewerListener
 				viewerKymographs.addListener(this);
 				
 				JToolBar toolBar = viewerKymographs.getToolBar();
-				Canvas2DWithFilters canvas = (Canvas2DWithFilters) viewerKymographs.getCanvas();
-				canvas.addButtons(toolBar);
+				Canvas2DWithTransforms canvas = (Canvas2DWithTransforms) viewerKymographs.getCanvas();
+				canvas.customizeToolbarStep2(toolBar);
 				
 				placeKymoViewerNextToCamViewer(exp);
 				
@@ -436,7 +436,7 @@ public class Display extends JPanel implements ViewerListener
 		else {
 //			removeOverlay(exp);
 //			spotsOverlayCheckBox.setSelected(false);
-			Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqKymos.seq.getFirstViewer().getCanvas();
+			Canvas2DWithTransforms canvas = (Canvas2DWithTransforms) exp.seqKymos.seq.getFirstViewer().getCanvas();
 			canvas.imageTransformFunctionsComboStep2.setSelectedIndex(0);
 			
 		}
@@ -445,7 +445,7 @@ public class Display extends JPanel implements ViewerListener
 	
 	private void updateTransformFunctionsOfCanvas(Experiment exp)
 	{
-		Canvas2DWithFilters canvas = (Canvas2DWithFilters) exp.seqKymos.seq.getFirstViewer().getCanvas();
+		Canvas2DWithTransforms canvas = (Canvas2DWithTransforms) exp.seqKymos.seq.getFirstViewer().getCanvas();
 //		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
 //		{
 			canvas.updateTransformsComboStep2(transforms);
