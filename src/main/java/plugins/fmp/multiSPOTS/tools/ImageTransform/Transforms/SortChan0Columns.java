@@ -20,12 +20,11 @@ public class SortChan0Columns extends ImageTransformFunctionAbstract implements 
 		int channel = 0;		// RED
 		int[][] sorted = new int[sourceImage.getHeight()][2]; 
 		try {
-			for (int x = 0; x < sourceImage.getWidth(); x++) 
-			{
+			for (int x = 0; x < sourceImage.getWidth(); x++) {
 				getSortOrderForColumn(sourceImage, x, channel, sorted); 
 				for (int y = 0; y < sourceImage.getHeight(); y++) {
 					int ySourceIndex = sorted[y][0];
-					for (int chan= 0; chan < 3; chan++)
+					for (int chan = 0; chan < 3; chan++)
 						destinationCursor.set(x, y, chan, sourceCursor.get(x, ySourceIndex, chan));
 				}
 			}
@@ -40,7 +39,7 @@ public class SortChan0Columns extends ImageTransformFunctionAbstract implements 
 	private void getSortOrderForColumn(IcyBufferedImage sourceImage, int columnIndex, int channel, int[][] sorted) 
 	{
 		getImageColumnValues(sourceImage, columnIndex, channel, sorted);
-		Arrays.sort(sorted, (a, b) -> a[1] - b[1]);
+		Arrays.sort(sorted, (a, b) -> Integer.compare(a[1],  b[1]));
 	}
 	
 	private void getImageColumnValues (IcyBufferedImage sourceImage, int columnIndex, int channel, int[][] sorted) 
@@ -48,8 +47,7 @@ public class SortChan0Columns extends ImageTransformFunctionAbstract implements 
 		int x = columnIndex;
 		IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 		try {
-			for (int y = 0; y < sourceImage.getHeight(); y++) 
-			{
+			for (int y = 0; y < sourceImage.getHeight(); y++) {
 				sorted[y][1] = (int) cursorSource.get(x, y, channel);
 				sorted[y][0] = y;
 			}

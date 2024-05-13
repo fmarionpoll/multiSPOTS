@@ -112,7 +112,7 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 				v = new Viewer(exp.seqCamData.seq, true);
 				List<String> list = IcyCanvas.getCanvasPluginNames();
 				String pluginName = list.stream()
-						  .filter(s -> s.contains("Canvas2DWithFilters"))
+						  .filter(s -> s.contains("Canvas2DWithTransforms"))
 						  .findFirst()
 						  .orElse(null);
 				v.setCanvas(pluginName);

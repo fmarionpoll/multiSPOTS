@@ -10,7 +10,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 
 
-public class SortRedColumn0 extends ImageTransformFunctionAbstract implements ImageTransformInterface
+public class SortChan0Column0 extends ImageTransformFunctionAbstract implements ImageTransformInterface
 {
 	@Override
 	public IcyBufferedImage getTransformedImage(IcyBufferedImage sourceImage, ImageTransformOptions options) 
