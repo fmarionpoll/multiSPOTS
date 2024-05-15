@@ -31,7 +31,7 @@ public class Create extends JPanel implements PropertyChangeListener
 	
 	JButton 	startComputationButton 	= new JButton("Start");
 	JCheckBox	allSeriesCheckBox 		= new JCheckBox("ALL series (current to last)", false);
-	JCheckBox	concurrentDisplayCheckBox = new JCheckBox("concurrent display", true);
+	JCheckBox	concurrentDisplayCheckBox = new JCheckBox("concurrent display", false);
 	
 //	JSpinner	diskRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(3, 1, 100, 1));
 //	JCheckBox 	doRegistrationCheckBox 	= new JCheckBox("registration", false);
