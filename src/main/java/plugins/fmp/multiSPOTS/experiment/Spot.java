@@ -272,13 +272,7 @@ public class Spot implements Comparable <Spot>
 	}
 	
 	// -----------------------------------------
-	
-//	public void clearMeasures() {
-//		sum = null;
-//		sumClean = null;
-//		flyPresent = null;
-//	}
-	
+
 	public boolean isThereAnyMeasuresDone(EnumXLSExportType option) 
 	{
 		SpotMeasure spotArea = getSpotArea(option);
@@ -501,30 +495,31 @@ public class Spot implements Comparable <Spot>
 	public List<ROI2D> transferMeasuresToROIs(int height) 
 	{
 		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
-		measureToROI(sum, Color.green, height, measuresRoisList);
-		measureToROI(sumClean, Color.red, height, measuresRoisList);
-		measureToROI(flyPresent, Color.blue, 10, measuresRoisList);
+		if (sum.getLevel2DNPoints() != 0) 
+			measuresRoisList.add(getROIFromMeasure(sum, Color.green, height));
+		if (sumClean.getLevel2DNPoints() != 0) 
+			measuresRoisList.add(getROIFromMeasure(sumClean, Color.red, height));
+		if (flyPresent.getLevel2DNPoints() != 0) 
+			measuresRoisList.add(getROIFromMeasure(flyPresent, Color.blue, 10));
 		return measuresRoisList;
 	}
-	
-	private void measureToROI(SpotMeasure spotMeasure, Color color, int imageHeight, List<ROI2D> measuresRoisList) 
+
+	private ROI2D getROIFromMeasure(SpotMeasure spotMeasure, Color color, int imageHeight)
 	{
-		if (spotMeasure.getLevel2DNPoints() == 0)
-			return;
-		
 		spotMeasure.getLevel2D().normalizeYScale(imageHeight);
 		ROI2D roi = new ROI2DPolyLine(spotMeasure.getLevel2D());
 		String name = spotRoi.getName() + "_" + spotMeasure.getName();
 		roi.setName(name);
 		roi.setT(spot_KymographIndex);
 		roi.setColor(color);
-		roi.setStroke(1);
-		measuresRoisList.add(roi);
-	}
+		roi.setStroke(1);  
+		return roi;
+    }
 	
 	// -----------------------------------------------------------------------------
 	
-	public String csvExportSpotArrayHeader(String csvSep) 
+	
+    public String csvExportSpotArrayHeader(String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		sbf.append("#"+csvSep+"SPOTS"+csvSep+"describe each spot\n");
