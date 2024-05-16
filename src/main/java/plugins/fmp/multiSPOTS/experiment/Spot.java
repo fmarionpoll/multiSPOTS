@@ -480,17 +480,14 @@ public class Spot implements Comparable <Spot>
 	public void buildSUMCLEANfromSUM()
 	{
 		int npoints = sum.measureValues.length;
-		
-		for (int i = 0; i <npoints; i++) {
-			if(!flyPresent.measureBooleans[i]) {
+		for (int i = 0; i < npoints; i++) {
+			if(!flyPresent.measureBooleans[i]) 
 				sumClean.measureValues[i] = sum.measureValues[i];
-			} 
-			else if (i > 0) {
+			else if (i > 0) 
 				sumClean.measureValues[i] = sumClean.measureValues[i-1];
-			} 
 			else {
 				double value = Double.NaN;
-				for (int j= i; j < npoints; j++) {
+				for (int j = i; j < npoints; j++) {
 					if (!flyPresent.measureBooleans[j]) {
 						value = sum.measureValues[j];
 						break;

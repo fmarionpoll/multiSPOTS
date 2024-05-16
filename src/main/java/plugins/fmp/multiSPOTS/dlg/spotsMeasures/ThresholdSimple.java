@@ -25,7 +25,7 @@ import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
-import plugins.fmp.multiSPOTS.series.DetectSpots;
+import plugins.fmp.multiSPOTS.series.BuildSpotsMeasures;
 import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2DWithTransforms;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
@@ -65,7 +65,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private JSpinner 			fliesThresholdSpinner 	= new JSpinner(new SpinnerNumberModel(15, 0, 255, 1));
 	
 	private OverlayThreshold 	overlayThreshold 		= null;
-	private DetectSpots 		threadDetectLevels 		= null;	
+	private BuildSpotsMeasures 		threadDetectLevels 		= null;	
 	private MultiSPOTS 			parent0 				= null;
 	
 	
@@ -205,7 +205,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();	
 		if (exp != null)
 		{
-			threadDetectLevels = new DetectSpots();
+			threadDetectLevels = new BuildSpotsMeasures();
 			threadDetectLevels.options = initDetectOptions(exp);
 			threadDetectLevels.addPropertyChangeListener(this);
 			threadDetectLevels.execute();

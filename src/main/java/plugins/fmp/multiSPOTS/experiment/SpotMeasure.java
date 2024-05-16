@@ -45,8 +45,9 @@ public class SpotMeasure
 	{
 		this.setName(name);
 		int ii_start = 0;
-		int ii_end = measureValues.length;
+		int ii_end = measureValues.length-1;
 		int npoints = ii_end-ii_start+1;
+
 		double [] xpoints = new double [npoints];
 		double [] ypoints = new double [npoints];
 		int j = 0;

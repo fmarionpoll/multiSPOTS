@@ -24,7 +24,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 
 
 
-public class DetectSpots extends BuildSeries  
+public class BuildSpotsMeasures extends BuildSeries  
 {
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
@@ -56,15 +56,13 @@ public class DetectSpots extends BuildSeries
 		exp.loadFileIntervalsFromSeqCamData();
 		exp.binDuration_ms = exp.camImageBin_ms;
 		System.out.println("sequence bin size = "+exp.binDuration_ms);
-		if (options.isFrameFixed) 
-		{
+		if (options.isFrameFixed) {
 			exp.binFirst_ms = options.t_Ms_First;
 			exp.binLast_ms = options.t_Ms_Last;
 			if (exp.binLast_ms + exp.camImageFirst_ms > exp.camImageLast_ms)
 				exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
 		} 
-		else 
-		{
+		else {
 			exp.binFirst_ms = 0;
 			exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
 		}
@@ -79,7 +77,7 @@ public class DetectSpots extends BuildSeries
 			return;
 
 		exp.spotsArray.transferSumToSumClean();
-		exp.spotsArray.transferLimitMeasuresToPolyline(); 
+		exp.spotsArray.initLevel2DMeasures(); 
 		exp.saveXML_MCExperiment();
 		exp.save_SpotsMeasures();
 	}
@@ -102,39 +100,39 @@ public class DetectSpots extends BuildSeries
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
 	    tasks.clear();
 	    
-	    int nFrames = exp.seqCamData.nTotalFrames;
-	    ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
+	    final int tFirst = (int) exp.binT0;
+	    int tLast = exp.seqCamData.nTotalFrames-1;
+	    vData.setTitle(exp.seqCamData.getCSCamFileName()+ ": "+tFirst+"-"+tLast);
+
+	    ProgressFrame progressBar1 = new ProgressFrame("Analyze stack");
 		
 	    initMasks2D(exp);
 		initSpotsDataArrays(exp);
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = options.transform01;
-		transformOptions.setSingleThreshold (options.spotThreshold, options.spotThresholdUp) ;
-
+		transformOptions.setSingleThreshold (options.spotThreshold, options.spotThresholdUp);
 		ImageTransformInterface transformFunction = options.transform01.getFunction();
 		
-		int binT0 = (int) exp.binT0;
-		for (int ii = binT0; ii < nFrames; ii++) {
-			final int t = ii;
-			String title = "Frame #"+ t + " /" + nFrames;
-			vData.setTitle(title);
+		for (int ii = tFirst; ii <= tLast; ii++) {
 			if (options.concurrentDisplay) {
-				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(ii));
 				seqData.setImage(0, 0, sourceImage0); 
+				vData.setTitle("Frame #"+ ii + " /" + tLast);
 			}
 			
+			final int t = ii;
 			tasks.add(processor.submit(new Runnable () {
 				@Override
 				public void run() {	
-					progressBar1.setMessage("Analyze frame: " + t + "//" + nFrames);
+					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
 					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
 					final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions); 
 	
 					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 					IcyBufferedImageCursor cursorWork = new IcyBufferedImageCursor(workImage);
 					for (Spot spot: exp.spotsArray.spotsList)  {
-						measureSpotArea (cursorWork, spot, t);
-						spot.flyPresent.measureBooleans[t] = isFlyPresentInSpotArea (cursorSource, spot, t) > 0;
+						spot.sum.measureValues[t-tFirst] = measureSpotSumAtT (cursorWork, spot, t);
+						spot.flyPresent.measureBooleans[t-tFirst] = isFlyPresentInSpotAreaAtT (cursorSource, spot, t) > 0;
 					}
 				}}));
 		}
@@ -143,7 +141,7 @@ public class DetectSpots extends BuildSeries
 		return true;
 	}
 	
-	private int isFlyPresentInSpotArea(IcyBufferedImageCursor cursorSource, Spot spot, int t)
+	private int isFlyPresentInSpotAreaAtT(IcyBufferedImageCursor cursorSource, Spot spot, int t)
 	{
 		int flyThreshold = options.flyThreshold;
         int flyFound = 0;  
@@ -175,7 +173,7 @@ public class DetectSpots extends BuildSeries
         return flyFound;
 	}
 	
-	private void measureSpotArea(IcyBufferedImageCursor cursorWorkImage, Spot spot, int t )
+	private int measureSpotSumAtT(IcyBufferedImageCursor cursorWorkImage, Spot spot, int t )
 	{
 		int sum = 0;
         boolean spotThresholdUp = options.spotThresholdUp;
@@ -184,8 +182,7 @@ public class DetectSpots extends BuildSeries
         if (roiT.getMask2D() == null) 
         	roiT.buildMask2DFromRoi();
                 
-        if (spotThresholdUp) 
-        {
+        if (spotThresholdUp) {
 	        for (int offset = 0; offset < roiT.mask2DPoints.length; offset++) {
 	            Point pt = roiT.mask2DPoints[offset];
 	            int value = (int) cursorWorkImage.get((int)pt.getX(), (int)pt.getY(), 0);  
@@ -193,7 +190,7 @@ public class DetectSpots extends BuildSeries
                     sum += value;
 	        } 
         }
-        else  {
+        else {
         	for (int offset = 0; offset < roiT.mask2DPoints.length; offset++) {
 	            Point pt = roiT.mask2DPoints[offset];
 	            int value = (int) cursorWorkImage.get((int)pt.getX(), (int)pt.getY(), 0);
@@ -201,7 +198,7 @@ public class DetectSpots extends BuildSeries
                     sum += value;
 	        }
         }
-        spot.sum.measureValues[t] = sum ;
+        return sum;
 	}
 	
 	private void initSpotsDataArrays(Experiment exp)
@@ -209,9 +206,9 @@ public class DetectSpots extends BuildSeries
 		//int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms + 1);
 		int nFrames = exp.seqCamData.nTotalFrames - (int) exp.binT0;
 		for (Spot spot: exp.spotsArray.spotsList) {
-			spot.sum.measureValues 			= new  double [nFrames+1];
-			spot.sumClean.measureValues 	= new  double [nFrames+1];
-			spot.flyPresent.measureBooleans = new  boolean [nFrames+1];	
+			spot.sum.measureValues 			= new double [nFrames];
+			spot.sumClean.measureValues 	= new double [nFrames];
+			spot.flyPresent.measureBooleans = new boolean [nFrames];	
 		}
 	}
 	
@@ -222,8 +219,7 @@ public class DetectSpots extends BuildSeries
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 		int t = 0;
-		for (Spot spot: exp.spotsArray.spotsList) 
-		{
+		for (Spot spot: exp.spotsArray.spotsList) {
 			ROI2DAlongTime roiT = spot.getROIAtT(t);
 			if (roiT.getMask2D() == null) 
 				roiT.buildMask2DFromRoi();
@@ -240,14 +236,12 @@ public class DetectSpots extends BuildSeries
 	{
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run() 
-				{			
-					seqData = newSequence("analyze stack starting with file " + exp.seqCamData.seq.getName(), exp.seqCamData.getSeqImage(0, 0));
+				public void run() {			
+					seqData = newSequence(exp.seqCamData.getCSCamFileName(), exp.seqCamData.getSeqImage(0, 0));
 					vData = new Viewer(seqData, true);
 				}});
 		} 
-		catch (InvocationTargetException | InterruptedException e) 
-		{
+		catch (InvocationTargetException | InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

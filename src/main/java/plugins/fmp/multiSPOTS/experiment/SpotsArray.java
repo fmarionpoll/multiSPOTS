@@ -405,7 +405,7 @@ public class SpotsArray
 			spot.buildSUMCLEANfromSUM();	
 	}
 	
-	public void transferLimitMeasuresToPolyline() 
+	public void initLevel2DMeasures() 
 	{
 		for (Spot spot: spotsList) 
 			spot.initLevel2DMeasures();	

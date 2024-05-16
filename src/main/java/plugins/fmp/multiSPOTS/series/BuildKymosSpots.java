@@ -85,8 +85,8 @@ public class BuildKymosSpots extends BuildSeries
 			return;
 		
 		ProgressFrame progressBar = new ProgressFrame("Save kymographs");
-		int nframes = exp.seqKymos.seq.getSizeT();
 		
+		int nframes = exp.seqKymos.seq.getSizeT();
 		int nCPUs = SystemUtil.getNumberOfCPUs();
 	    final Processor processor = new Processor(nCPUs);
 	    processor.setThreadName("buildkymo2");
@@ -94,8 +94,7 @@ public class BuildKymosSpots extends BuildSeries
         ArrayList<Future<?>> futuresArray = new ArrayList<Future<?>>(nframes);
 		futuresArray.clear();
 		
-		int t0 = (int) exp.binT0;
-		for (int t = t0; t < exp.seqKymos.seq.getSizeT(); t++) {
+		for (int t = 0; t < exp.seqKymos.seq.getSizeT(); t++) {
 			final int t_index = t;
 			futuresArray.add(processor.submit(new Runnable () {
 				@Override
@@ -132,6 +131,7 @@ public class BuildKymosSpots extends BuildSeries
 		threadRunning = true;
 		stopFlag = false;
 
+		int t0 = (int) exp.binT0;
 		int nFrames = exp.seqCamData.nTotalFrames;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
@@ -140,17 +140,17 @@ public class BuildKymosSpots extends BuildSeries
 	    processor.setPriority(Processor.NORM_PRIORITY);
 	    int ntasks =  exp.spotsArray.spotsList.size(); //
 	    ArrayList<Future<?>> tasks = new ArrayList<Future<?>>( ntasks);
-		
-	    int binT0 = (int) exp.binT0;
 	    tasks.clear();
 	    
-	    for (int ii = binT0; ii < nFrames; ii++) {
+	    vData.setTitle(exp.seqCamData.getCSCamFileName());
+	    
+	    for (int ii = t0; ii < nFrames; ii++) {
 			final int t =  ii;	
-			String title = "Frame #"+ ii + " /" + nFrames;
-			vData.setTitle(title);
+			
 			if (options.concurrentDisplay) {
 				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
 				seqData.setImage(0, 0, sourceImage0); 
+				vData.setTitle("Frame #"+ ii + " /" + nFrames);
 			}
 			
 			tasks.add(processor.submit(new Runnable () {
@@ -247,8 +247,8 @@ public class BuildKymosSpots extends BuildSeries
 		if (seqCamData.seq == null) 
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
-		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		kymoImageWidth = exp.seqCamData.nTotalFrames;
+//		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
+		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.binT0);
 		int numC = seqCamData.seq.getSizeC();
 		if (numC <= 0)
 			numC = 3;
