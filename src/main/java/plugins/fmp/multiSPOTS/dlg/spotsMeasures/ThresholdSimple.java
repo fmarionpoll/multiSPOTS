@@ -43,7 +43,7 @@ public class ThresholdSimple  extends JPanel implements PropertyChangeListener
 	private String 				detectString 			= "        Detect     ";
 	private JButton 			detectButton 			= new JButton(detectString);
 	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
-	private JCheckBox			concurrentDisplayCheckBox = new JCheckBox("concurrent display", true);
+	private JCheckBox			concurrentDisplayCheckBox = new JCheckBox("concurrent display", false);
 	
 	private JLabel 				spotsFilterLabel 		= new JLabel("Spots filter");
 	private String[]  			directions 				= new String[] {" threshold >", " threshold <" };
