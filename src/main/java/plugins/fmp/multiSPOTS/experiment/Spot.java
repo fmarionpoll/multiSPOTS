@@ -120,9 +120,9 @@ public class Spot implements Comparable <Spot>
 		
 		limitsOptions	= spotFrom.limitsOptions;
 		
-		sum.copy(spotFrom.sum);
-		sumClean .copy(spotFrom.sumClean);
-		flyPresent.copy(spotFrom.flyPresent);	
+		sum.copyLevel2D(spotFrom.sum);
+		sumClean .copyLevel2D(spotFrom.sumClean);
+		flyPresent.copyLevel2D(spotFrom.flyPresent);	
 	}
 	
 	public ROI2D getRoi() 
@@ -139,12 +139,6 @@ public class Spot implements Comparable <Spot>
 	{
 		this.spotRoi = roi; 
 		listRoiAlongTime.clear();
-	}
-	
-	public void deleteSpotMeasures() {
-		sum = null;
-		sumClean = null;
-		flyPresent = null;
 	}
 	
 	public void setRoi_old(ROI2DShape roi) 
@@ -279,6 +273,12 @@ public class Spot implements Comparable <Spot>
 	
 	// -----------------------------------------
 	
+//	public void clearMeasures() {
+//		sum = null;
+//		sumClean = null;
+//		flyPresent = null;
+//	}
+	
 	public boolean isThereAnyMeasuresDone(EnumXLSExportType option) 
 	{
 		SpotMeasure spotArea = getSpotArea(option);
@@ -291,34 +291,34 @@ public class Spot implements Comparable <Spot>
 	{
 		SpotMeasure spotArea = getSpotArea(option);
 		if (spotArea != null)
-			return spotArea.getMeasures(seriesBinMs, outputBinMs);
+			return spotArea.getLevel2D_Y_subsampled(seriesBinMs, outputBinMs);
 		return null;
 	}
 
-	public void cropMeasuresToNPoints (int npoints) 
+	public void cropSpotMeasuresToNPoints (int npoints) 
 	{
-		cropSpotAreaToNPoints(sum , npoints);
-		cropSpotAreaToNPoints(sumClean , npoints);
-		cropSpotAreaToNPoints(flyPresent , npoints);
+		cropSpotMeasureToNPoints(sum , npoints);
+		cropSpotMeasureToNPoints(sumClean , npoints);
+		cropSpotMeasureToNPoints(flyPresent , npoints);
 	}
 	
-	private void cropSpotAreaToNPoints(SpotMeasure spotArea, int npoints) 
+	private void cropSpotMeasureToNPoints(SpotMeasure spotMeasure, int npoints) 
 	{
-		if (spotArea.level2D != null)
-			spotArea.cropToNPoints(npoints);
+		if (spotMeasure.getLevel2DNPoints() > 0)
+			spotMeasure.cropLevel2DToNPoints(npoints);
 	}
 	
-	public void restoreClippedMeasures () 
+	public void restoreClippedSpotMeasures () 
 	{
-		restoreSpotAreaClippedMeasures( sum );
-		restoreSpotAreaClippedMeasures( sumClean );
-		restoreSpotAreaClippedMeasures( flyPresent );
+		restoreClippedMeasures( sum );
+		restoreClippedMeasures( sumClean );
+		restoreClippedMeasures( flyPresent );
 	}
 	
-	private void restoreSpotAreaClippedMeasures(SpotMeasure spotArea)
+	private void restoreClippedMeasures(SpotMeasure spotMeasure)
 	{
-		if (spotArea.level2D != null)
-			spotArea.restoreNPoints();
+		if (spotMeasure.getLevel2DNPoints() > 0)
+			spotMeasure.restoreCroppedLevel2D();
 	}
 
 	// -----------------------------------------------------------------------------
@@ -345,12 +345,12 @@ public class Spot implements Comparable <Spot>
 	        spotRoi = (ROI2DShape) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 	        limitsOptions.loadFromXML(nodeMeta);
 	        
-	        loadFromXML_intervals(node);
+	        loadFromXML_SpotAlongT(node);
 	    }
 	    return flag;
 	}
 	
-	private boolean loadFromXML_intervals(Node node) 
+	private boolean loadFromXML_SpotAlongT(Node node) 
 	{
 		listRoiAlongTime.clear();
 		final Node nodeMeta2 = XMLUtil.getElement(node, ID_INTERVALS);
@@ -394,11 +394,11 @@ public class Spot implements Comparable <Spot>
 
 		ROI2DUtilities.saveToXML_ROI(nodeMeta, spotRoi); 
 		
-		boolean flag = saveToXML_intervals(node);
+		boolean flag = saveToXML_SpotAlongT(node);
 	    return flag;
 	}
 	
-	private boolean saveToXML_intervals(Node node) 
+	private boolean saveToXML_SpotAlongT(Node node) 
 	{
 		final Node nodeMeta2 = XMLUtil.setElement(node, ID_INTERVALS);
 	    if (nodeMeta2 == null)
@@ -416,17 +416,17 @@ public class Spot implements Comparable <Spot>
 	
 	// --------------------------------------------
 	
-	public List<ROI2DAlongTime> getROIsAlongTime() 
+	public List<ROI2DAlongTime> getROIAlongTList() 
 	{
 		if (listRoiAlongTime.size() < 1) 
-			initROI2DListAlongTime();
+			initROIAlongTList();
 		return listRoiAlongTime;
 	}
 		
- 	public ROI2DAlongTime getROI2DKymoAtIntervalT(long t) 
+ 	public ROI2DAlongTime getROIAtT(long t) 
  	{
 		if (listRoiAlongTime.size() < 1) 
-			initROI2DListAlongTime();
+			initROIAlongTList();
 		
 		ROI2DAlongTime capRoi = null;
 		for (ROI2DAlongTime item : listRoiAlongTime) {
@@ -437,7 +437,7 @@ public class Spot implements Comparable <Spot>
 		return capRoi;
 	}
  	
- 	public void removeROI2DIntervalStartingAtT(long t) 
+ 	public void removeROIAlongTListItem(long t) 
  	{
  		ROI2DAlongTime itemFound = null;
  		for (ROI2DAlongTime item : listRoiAlongTime) {
@@ -449,33 +449,35 @@ public class Spot implements Comparable <Spot>
  			listRoiAlongTime.remove(itemFound);
 	}
 	
-	private void initROI2DListAlongTime() 
+	private void initROIAlongTList() 
 	{ 
 		listRoiAlongTime.add(new ROI2DAlongTime(0, spotRoi));		
 	}
 	
-	public void adjustToImageWidth (int imageWidth) 
+	// --------------------------------------------
+	
+	public void adjustLevel2DMeasuresToImageWidth (int imageWidth) 
 	{
-		sum.adjustToImageWidth(imageWidth);
-		sumClean.adjustToImageWidth(imageWidth);
-		flyPresent.adjustToImageWidth(imageWidth);
+		sum.adjustLevel2DToImageWidth(imageWidth);
+		sumClean.adjustLevel2DToImageWidth(imageWidth);
+		flyPresent.adjustLevel2DToImageWidth(imageWidth);
 	}
 
-	public void cropToImageWidth (int imageWidth) 
+	public void cropLevel2DMeasuresToImageWidth (int imageWidth) 
 	{
-		sum.cropToImageWidth(imageWidth);
-		sumClean.cropToImageWidth(imageWidth);
-		flyPresent.cropToImageWidth(imageWidth);
+		sum.cropLevel2DToNPoints(imageWidth);
+		sumClean.cropLevel2DToNPoints(imageWidth);
+		flyPresent.cropLevel2DToNPoints(imageWidth);
 	}
 	
-	public void transferToPolyline() 
+	public void initLevel2DMeasures() 
 	{
-		sum.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
-		sumClean.setPolylineLevelFromMeasureValues(getRoi().getName(), cageIndex);
-		flyPresent.setPolylineLevelFromMeasureBoolean(getRoi().getName(), cageIndex);
+		sum.initLevel2D_fromValues(getRoi().getName());
+		sumClean.initLevel2D_fromValues(getRoi().getName());
+		flyPresent.initLevel2D_fromBooleans(getRoi().getName());
 	}
 	
-	public void transferSumToSumClean()
+	public void buildSUMCLEANfromSUM()
 	{
 		int npoints = sum.measureValues.length;
 		
@@ -502,25 +504,25 @@ public class Spot implements Comparable <Spot>
 	public List<ROI2D> transferMeasuresToROIs(int height) 
 	{
 		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
-		measureToRoi(sum, Color.green, height, measuresRoisList);
-		measureToRoi(sumClean, Color.red, height, measuresRoisList);
-		measureToRoi(flyPresent, Color.blue, 10, measuresRoisList);
+		measureToROI(sum, Color.green, height, measuresRoisList);
+		measureToROI(sumClean, Color.red, height, measuresRoisList);
+		measureToROI(flyPresent, Color.blue, 10, measuresRoisList);
 		return measuresRoisList;
 	}
 	
-	private void measureToRoi(SpotMeasure spotMeasure, Color color, int imageHeight, List<ROI2D> measuresRoisList) 
+	private void measureToROI(SpotMeasure spotMeasure, Color color, int imageHeight, List<ROI2D> measuresRoisList) 
 	{
-		if (spotMeasure.level2D == null || spotMeasure.level2D.npoints == 0)
+		if (spotMeasure.getLevel2DNPoints() == 0)
 			return;
 		
-		spotMeasure.level2D.normalizeYScale(imageHeight);
-		ROI2D measuredRoi = new ROI2DPolyLine(spotMeasure.level2D);
-		String name = spotRoi.getName() + "_" + spotMeasure.name;
-		measuredRoi.setName(name);
-		measuredRoi.setT(spot_KymographIndex);
-		measuredRoi.setColor(color);
-		measuredRoi.setStroke(1);
-		measuresRoisList.add(measuredRoi);
+		spotMeasure.getLevel2D().normalizeYScale(imageHeight);
+		ROI2D roi = new ROI2DPolyLine(spotMeasure.getLevel2D());
+		String name = spotRoi.getName() + "_" + spotMeasure.getName();
+		roi.setName(name);
+		roi.setT(spot_KymographIndex);
+		roi.setColor(color);
+		roi.setStroke(1);
+		measuresRoisList.add(roi);
 	}
 	
 	// -----------------------------------------------------------------------------

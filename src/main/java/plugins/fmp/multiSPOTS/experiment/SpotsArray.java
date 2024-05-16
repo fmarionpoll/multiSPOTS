@@ -192,16 +192,16 @@ public class SpotsArray
 		}
 	}
 	
-	public void adjustToImageWidth (int imageWidth) 
+	public void adjustSpotsLevel2DMeasuresToImageWidth (int imageWidth) 
 	{
 		for (Spot spot: spotsList) 
-			spot.adjustToImageWidth(imageWidth);
+			spot.adjustLevel2DMeasuresToImageWidth(imageWidth);
 	}
 	
-	public void cropToImageWidth (int imageWidth) 
+	public void cropSpotsLevel2DMeasuresToImageWidth (int imageWidth) 
 	{
 		for (Spot spot: spotsList) 
-			spot.cropToImageWidth(imageWidth);
+			spot.cropLevel2DMeasuresToImageWidth(imageWidth);
 	}
 
 	public void transferDescriptionToSpots() 
@@ -402,13 +402,13 @@ public class SpotsArray
 	public void transferSumToSumClean() 
 	{
 		for (Spot spot: spotsList)
-			spot.transferSumToSumClean();	
+			spot.buildSUMCLEANfromSUM();	
 	}
 	
 	public void transferLimitMeasuresToPolyline() 
 	{
 		for (Spot spot: spotsList) 
-			spot.transferToPolyline();	
+			spot.initLevel2DMeasures();	
 	}
 	
 	public KymoIntervals getKymoIntervalsFromSpots() 
@@ -416,7 +416,7 @@ public class SpotsArray
 		if (spotsListTimeIntervals == null) {
 			spotsListTimeIntervals = new KymoIntervals();
 			for (Spot spot: spotsList) {
-				for (ROI2DAlongTime roiFK: spot.getROIsAlongTime()) {
+				for (ROI2DAlongTime roiFK: spot.getROIAlongTList()) {
 					Long[] interval = {roiFK.getT(), (long) -1}; 
 					spotsListTimeIntervals.addIfNew(interval);
 				}
@@ -441,7 +441,7 @@ public class SpotsArray
 		int item = spotsListTimeIntervals.addIfNew(interval);
 		
 		for (Spot spot: spotsList) {
-			List<ROI2DAlongTime> listROI2DForKymo = spot.getROIsAlongTime();
+			List<ROI2DAlongTime> listROI2DForKymo = spot.getROIAlongTList();
 			ROI2D roi = spot.getRoi();
 			if (item>0 ) 
 				roi = (ROI2D) listROI2DForKymo.get(item-1).getRoi().getCopy();
@@ -454,7 +454,7 @@ public class SpotsArray
 	{
 		spotsListTimeIntervals.deleteIntervalStartingAt(start);
 		for (Spot spot: spotsList) 
-			spot.removeROI2DIntervalStartingAtT(start);
+			spot.removeROIAlongTListItem(start);
 	}
 	
 	// --------------------------------

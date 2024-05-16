@@ -148,7 +148,7 @@ public class DetectSpots extends BuildSeries
 		int flyThreshold = options.flyThreshold;
         int flyFound = 0;  
         
-        ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
+        ROI2DAlongTime roiT = spot.getROIAtT(t);
         if (roiT.getMask2D() == null) 
         	roiT.buildMask2DFromRoi();
         
@@ -180,7 +180,7 @@ public class DetectSpots extends BuildSeries
 		int sum = 0;
         boolean spotThresholdUp = options.spotThresholdUp;
         int spotThreshold = options.spotThreshold;
-        ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
+        ROI2DAlongTime roiT = spot.getROIAtT(t);
         if (roiT.getMask2D() == null) 
         	roiT.buildMask2DFromRoi();
                 
@@ -224,7 +224,7 @@ public class DetectSpots extends BuildSeries
 		int t = 0;
 		for (Spot spot: exp.spotsArray.spotsList) 
 		{
-			ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);
+			ROI2DAlongTime roiT = spot.getROIAtT(t);
 			if (roiT.getMask2D() == null) 
 				roiT.buildMask2DFromRoi();
 		}

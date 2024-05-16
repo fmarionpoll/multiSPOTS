@@ -178,7 +178,7 @@ public class BuildKymosSpots extends BuildSeries
 	
 	private void analyzeImageWithSpot(IcyBufferedImageCursor cursorSource, Spot spot, int t, int sizeC)
 	{
-		ROI2DAlongTime roiT = spot.getROI2DKymoAtIntervalT(t);		
+		ROI2DAlongTime roiT = spot.getROIAtT(t);		
 		for (int chan = 0; chan < sizeC; chan++) {
 			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
 			try {
@@ -259,7 +259,7 @@ public class BuildKymosSpots extends BuildSeries
 
 		for (Spot spot: exp.spotsArray.spotsList) {
 			int imageHeight = 0;
-			for (ROI2DAlongTime roiT : spot.getROIsAlongTime()) {
+			for (ROI2DAlongTime roiT : spot.getROIAlongTList()) {
 				roiT.buildMask2DFromRoi();
 				
 				int imageHeight_i = roiT.mask2DPoints.length;
