@@ -13,6 +13,7 @@ import org.w3c.dom.Node;
 import icy.image.IcyBufferedImage;
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI2D;
+import icy.type.geom.Polyline2D;
 import icy.util.XMLUtil;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DShape;
@@ -492,13 +493,13 @@ public class Spot implements Comparable <Spot>
 		}
 	}
 	
-	public List<ROI2D> transferMeasuresToROIs(int height) 
+	public List<ROI2D> transferMeasuresToROIs(int imageHeight) 
 	{
 		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
 		if (sum.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(getROIFromMeasure(sum, Color.green, height));
+			measuresRoisList.add(getROIFromMeasure(sum, Color.green, imageHeight));
 		if (sumClean.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(getROIFromMeasure(sumClean, Color.red, height));
+			measuresRoisList.add(getROIFromMeasure(sumClean, Color.red, imageHeight));
 		if (flyPresent.getLevel2DNPoints() != 0) 
 			measuresRoisList.add(getROIFromMeasure(flyPresent, Color.blue, 10));
 		return measuresRoisList;
@@ -506,8 +507,7 @@ public class Spot implements Comparable <Spot>
 
 	private ROI2D getROIFromMeasure(SpotMeasure spotMeasure, Color color, int imageHeight)
 	{
-		spotMeasure.getLevel2D().normalizeYScale(imageHeight);
-		ROI2D roi = new ROI2DPolyLine(spotMeasure.getLevel2D());
+		ROI2D roi = getROI2DFromLevel2D(spotMeasure.getLevel2D(), imageHeight);
 		String name = spotRoi.getName() + "_" + spotMeasure.getName();
 		roi.setName(name);
 		roi.setT(spot_KymographIndex);
@@ -516,10 +516,21 @@ public class Spot implements Comparable <Spot>
 		return roi;
     }
 	
+	private ROI2DPolyLine getROI2DFromLevel2D (Level2D level2D, int imageHeight)
+	{
+		Polyline2D roiPolyline = new Polyline2D(level2D.xpoints, level2D.ypoints, level2D.npoints);
+		double dHeight = (double) imageHeight;
+		double dMax = level2D.getBounds().getMaxY();
+		for (int i = 0; i < level2D.npoints; i++) {
+			roiPolyline.xpoints[i] = level2D.xpoints[i];
+			roiPolyline.ypoints[i] = level2D.ypoints[i] * dHeight / dMax;
+		}
+		return new ROI2DPolyLine(roiPolyline);
+	}
+	
 	// -----------------------------------------------------------------------------
 	
-	
-    public String csvExportSpotArrayHeader(String csvSep) 
+	public String csvExportSpotArrayHeader(String csvSep) 
 	{
 		StringBuffer sbf = new StringBuffer();
 		sbf.append("#"+csvSep+"SPOTS"+csvSep+"describe each spot\n");
