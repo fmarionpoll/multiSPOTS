@@ -528,6 +528,38 @@ public class Spot implements Comparable <Spot>
 		return new ROI2DPolyLine(roiPolyline);
 	}
 	
+	public void transferROItoMeasures(ROI2D roi, int imageHeight) 
+	{
+		String name = roi.getName();
+		if (name .contains(sum.getName())) {
+			transferROItoMeasure(roi, imageHeight, sum);
+		}
+		else if (name .contains(sumClean.getName())) {
+			transferROItoMeasure(roi, imageHeight, sumClean);
+		}
+		else if (name .contains(flyPresent.getName())) {
+			transferROItoPresenceMeasure( roi, flyPresent);
+		}
+	}
+	
+	public void transferROItoMeasure(ROI2D roi, int imageHeight, SpotMeasure spotMeasure)
+	{
+		if (roi instanceof ROI2DPolyLine) {
+			Level2D level2D = new Level2D(((ROI2DPolyLine)roi).getPolyline2D());
+			level2D.multiply_Y(imageHeight);
+			spotMeasure.setLevel2D(level2D);
+		}
+	}
+
+	public void transferROItoPresenceMeasure(ROI2D roi, SpotMeasure spotMeasure)
+	{
+		if (roi instanceof ROI2DPolyLine) {
+			Level2D level2D = new Level2D(((ROI2DPolyLine)roi).getPolyline2D());
+			level2D.threshold_Y(1.);
+			spotMeasure.setLevel2D(level2D);
+		}
+	}
+	
 	// -----------------------------------------------------------------------------
 	
 	public String csvExportSpotArrayHeader(String csvSep) 

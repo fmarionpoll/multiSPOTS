@@ -8,10 +8,7 @@ import icy.type.geom.Polyline2D;
 
 public class Level2D extends Polyline2D 
 {
-//	boolean yNormalized = false;
-//	Polyline2D original_polyline = null;
-	
-	
+
 	public Level2D() 
 	{
 		super();
@@ -135,29 +132,17 @@ public class Level2D extends Polyline2D
 		return new Level2D (nxpoints, nypoints, imageWidth);
 	}
 	
-//	public void normalizeYScaleToImageHeight(int imageHeight) 
-//	{
-//		if (original_polyline == null) {
-//			original_polyline = this.clone();
-//		}
-//		
-//		double dHeight = (double) imageHeight;
-//		double dMax = this.getBounds().getMaxY();
-//		for (int i = 0; i < ypoints.length; i++) {
-//			ypoints[i] = ypoints[i] * dHeight / dMax;
-//		}
-//		yNormalized = true;
-//	}
+	void multiply_Y(double mult)
+	{
+		for (int i = 0; i < npoints; i++) {
+			ypoints[i] = ypoints[i] * mult;
+		}
+	}
 	
-//	public void restoreOriginalYScale() 
-//	{
-//		if (!yNormalized)
-//			return;
-//		int npoints = ypoints.length;
-//		for (int i = 0; i < npoints; i++)
-//			ypoints[i] = original_polyline.ypoints[i];
-//		
-//		yNormalized = false;
-//	}
-	
+	void threshold_Y(double value)
+	{
+		for (int i = 0; i < npoints; i++) {
+			if (ypoints[i] > 0)  ypoints[i] = 1;
+		}
+	}
 }
