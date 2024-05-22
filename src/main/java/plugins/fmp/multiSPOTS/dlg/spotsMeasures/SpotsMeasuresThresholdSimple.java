@@ -32,7 +32,7 @@ import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
 
 
-public class ThresholdSimple  extends JPanel implements PropertyChangeListener
+public class SpotsMeasuresThresholdSimple  extends JPanel implements PropertyChangeListener
 {
 
 	/**

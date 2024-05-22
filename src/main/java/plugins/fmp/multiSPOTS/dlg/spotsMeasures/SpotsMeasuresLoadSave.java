@@ -17,7 +17,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 
 
-public class LoadSaveSpotsMeasures extends JPanel 
+public class SpotsMeasuresLoadSave extends JPanel 
 {
 	/**
 	 * 

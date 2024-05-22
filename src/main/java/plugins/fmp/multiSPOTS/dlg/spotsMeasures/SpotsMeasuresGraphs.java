@@ -26,7 +26,7 @@ import plugins.fmp.multiSPOTS.tools.chart.ChartSpots;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 
-public class Graphs extends JPanel implements SequenceListener
+public class SpotsMeasuresGraphs extends JPanel implements SequenceListener
 {
 	/**
 	 * 

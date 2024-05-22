@@ -25,16 +25,14 @@ public class DlgMeasure_ extends JPanel implements PropertyChangeListener, Chang
 	 * 
 	 */
 	private static final long serialVersionUID = 853047648249832145L;
-	public	PopupPanel 		capPopupPanel	= null;
-			JTabbedPane 	tabsPane 		= new JTabbedPane();		
-
-			ThresholdSimple simpleThreshold = new ThresholdSimple();
-			ThresholdColors colorsThreshold = new ThresholdColors();
-
-	public	Graphs 					tabGraphs 		= new Graphs();
-	public 	LoadSaveSpotsMeasures 	tabFile  		= new LoadSaveSpotsMeasures();
-	
-//			Adjust 		tabAdjust 		= new Adjust();
+	public	PopupPanel 					capPopupPanel = null;
+			JTabbedPane 				tabsPane 	= new JTabbedPane();		
+			SpotsMeasuresThresholdSimple tabSimpleThreshold = new SpotsMeasuresThresholdSimple();
+//			ThresholdColors colorsThreshold = new ThresholdColors();
+			SpotsMeasuresEdit			tabEdit		= new SpotsMeasuresEdit();
+	public	SpotsMeasuresGraphs 		tabGraphs 	= new SpotsMeasuresGraphs();
+	public 	SpotsMeasuresLoadSave 		tabFile 	= new SpotsMeasuresLoadSave();
+//			Adjust 						tabAdjust	= new Adjust();
 
 	private int			id_threshold		= 1;
 	private MultiSPOTS 	parent0 		= null;
@@ -52,9 +50,9 @@ public class DlgMeasure_ extends JPanel implements PropertyChangeListener, Chang
 		GridLayout gridLayout = new GridLayout(3, 1);
 		int order = 0;
 		
-		simpleThreshold.init(gridLayout, parent0);
-		simpleThreshold.addPropertyChangeListener( this);
-		tabsPane.addTab("Simple threshold", null, simpleThreshold, "Measure area using a simple transform and threshold");
+		tabSimpleThreshold.init(gridLayout, parent0);
+		tabSimpleThreshold.addPropertyChangeListener( this);
+		tabsPane.addTab("Simple threshold", null, tabSimpleThreshold, "Measure area using a simple transform and threshold");
 		id_threshold = order;
 		order++;
 		
@@ -63,6 +61,11 @@ public class DlgMeasure_ extends JPanel implements PropertyChangeListener, Chang
 //		tabsPane.addTab("Colors threshold", null, colorsThreshold, "Measure area using colors defined by user");
 //		order++;
 		
+		tabEdit.init(gridLayout, parent0);
+		tabEdit.addPropertyChangeListener(this);
+		tabsPane.addTab("Edit", null, tabEdit, "Edit measures (move/cut/extrapolate)");
+		order++;
+
 		tabGraphs.init(gridLayout, parent0);
 		tabGraphs.addPropertyChangeListener(this);
 		tabsPane.addTab("Graphs", null, tabGraphs, "Display results as a graph");
