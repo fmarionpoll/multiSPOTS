@@ -1,6 +1,5 @@
 package plugins.fmp.multiSPOTS.dlg.spotsMeasures;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -12,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import icy.gui.util.GuiUtil;
 import icy.roi.ROI2D;
 import icy.type.geom.Polyline2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
@@ -21,6 +19,8 @@ import plugins.fmp.multiSPOTS.experiment.Level2D;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotMeasure;
+
+
 
 
 public class SpotsMeasuresEdit  extends JPanel 
@@ -78,19 +78,19 @@ public class SpotsMeasuresEdit  extends JPanel
 	void cutAndInterpolate(Experiment exp) 
 	{
 		SequenceKymos seqKymos = exp.seqKymos;
-		ROI2D roi = seqKymos.seq.getSelectedROI2D();
-		if (roi == null)
+		ROI2D roiRect = seqKymos.seq.getSelectedROI2D();
+		if (roiRect == null)
 			return;
 		
 		int t = seqKymos.seq.getFirstViewer().getPositionT();
 		Spot spot = exp.spotsArray.spotsList.get(t);
 		String optionSelected = (String) roiTypeCombo.getSelectedItem();
 		if (optionSelected .contains("sum")) 
-			removeAndUpdate(seqKymos, spot, spot.sum, roi);
+			removeAndUpdate(seqKymos, spot, spot.sum, roiRect);
 		else if (optionSelected.contains("clean"))
-			removeAndUpdate(seqKymos, spot, spot.sumClean, roi);
+			removeAndUpdate(seqKymos, spot, spot.sumClean, roiRect);
 		else if (optionSelected.contains("fly"))
-			removeAndUpdate(seqKymos, spot, spot.flyPresent, roi);
+			removeAndUpdate(seqKymos, spot, spot.flyPresent, roiRect);
 	}
 	
 	private void removeAndUpdate(SequenceKymos seqKymos, Spot spot, SpotMeasure spotMeasure, ROI2D roi) 

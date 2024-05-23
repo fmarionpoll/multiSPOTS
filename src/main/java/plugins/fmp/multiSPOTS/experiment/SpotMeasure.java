@@ -1,10 +1,14 @@
 package plugins.fmp.multiSPOTS.experiment;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import icy.type.geom.Polyline2D;
 import icy.util.StringUtil;
+import plugins.kernel.roi.roi2d.ROI2DPolyLine;
+
 
 
 
@@ -14,6 +18,7 @@ public class SpotMeasure
 	private Level2D		leve2D_old			= new Level2D();
 	public	double [] 	measureValues		= null;
 	public 	boolean [] 	measureBooleans 	= null;
+	public  ROI2DPolyLine roi				= null;
 	
 	private String		name 				= "noname";
 	
@@ -177,6 +182,49 @@ public class SpotMeasure
 			setLevel2D(leve2D_old.clone());
 		return getLevel2D().npoints;
 	}
+
+	// ----------------------------------------------------------------------
+	
+	public ROI2DPolyLine getROIForImage(String name, int t, int imageHeight)
+	{
+		roi = getROI2DFromLevel2D(getLevel2D(), imageHeight);
+		String roiname = name + "_" + getName();
+		roi.setName(roiname);
+		roi.setT(t);
+		roi.setColor(getROI2DColorFromName());
+		roi.setStroke(1);  
+		return roi;
+	}
+	
+	private ROI2DPolyLine getROI2DFromLevel2D (Level2D level2D, int imageHeight)
+	{
+		Polyline2D polyline = new Polyline2D(level2D.xpoints, level2D.ypoints, level2D.npoints);
+		
+		double factor = (double) imageHeight / level2D.getBounds().getMaxY();
+		for (int i = 0; i < level2D.npoints; i++) {
+			polyline.xpoints[i] = level2D.xpoints[i];
+			polyline.ypoints[i] = level2D.ypoints[i] * factor;
+		}
+		return new ROI2DPolyLine(polyline);
+	}
+	
+	private Color getROI2DColorFromName() 
+	{
+		Color color = null;
+		switch (name) {
+		case "sum":
+			color = Color.green;
+			break;
+		case "clean":
+			color = Color.red;
+			break;
+		default:
+			color = Color.blue;
+			break;
+		}
+		return color;
+	}
+	
 	
 	// ----------------------------------------------------------------------
 	
@@ -254,8 +302,6 @@ public class SpotMeasure
 		}
 		return true;
 	}
-
-
 
 	
 }

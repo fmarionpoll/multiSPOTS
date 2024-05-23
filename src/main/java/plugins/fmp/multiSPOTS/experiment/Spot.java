@@ -1,6 +1,5 @@
 package plugins.fmp.multiSPOTS.experiment;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -13,7 +12,6 @@ import org.w3c.dom.Node;
 import icy.image.IcyBufferedImage;
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI2D;
-import icy.type.geom.Polyline2D;
 import icy.util.XMLUtil;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DShape;
@@ -497,37 +495,14 @@ public class Spot implements Comparable <Spot>
 	{
 		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
 		if (sum.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(getROIFromMeasure(sum, Color.green, imageHeight));
+			measuresRoisList.add(sum.getROIForImage(spotRoi.getName(), spot_KymographIndex, imageHeight));
 		if (sumClean.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(getROIFromMeasure(sumClean, Color.red, imageHeight));
+			measuresRoisList.add(sumClean.getROIForImage(spotRoi.getName(), spot_KymographIndex, imageHeight));
 		if (flyPresent.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(getROIFromMeasure(flyPresent, Color.blue, 10));
+			measuresRoisList.add(flyPresent.getROIForImage(spotRoi.getName(), spot_KymographIndex, imageHeight));
 		return measuresRoisList;
 	}
 
-	private ROI2D getROIFromMeasure(SpotMeasure spotMeasure, Color color, int imageHeight)
-	{
-		ROI2D roi = getROI2DFromLevel2D(spotMeasure.getLevel2D(), imageHeight);
-		String name = spotRoi.getName() + "_" + spotMeasure.getName();
-		roi.setName(name);
-		roi.setT(spot_KymographIndex);
-		roi.setColor(color);
-		roi.setStroke(1);  
-		return roi;
-    }
-	
-	private ROI2DPolyLine getROI2DFromLevel2D (Level2D level2D, int imageHeight)
-	{
-		Polyline2D roiPolyline = new Polyline2D(level2D.xpoints, level2D.ypoints, level2D.npoints);
-		double dHeight = (double) imageHeight;
-		double dMax = level2D.getBounds().getMaxY();
-		for (int i = 0; i < level2D.npoints; i++) {
-			roiPolyline.xpoints[i] = level2D.xpoints[i];
-			roiPolyline.ypoints[i] = level2D.ypoints[i] * dHeight / dMax;
-		}
-		return new ROI2DPolyLine(roiPolyline);
-	}
-	
 	public void transferROItoMeasures(ROI2D roi, int imageHeight) 
 	{
 		String name = roi.getName();
