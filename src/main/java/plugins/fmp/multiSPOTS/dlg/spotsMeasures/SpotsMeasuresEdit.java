@@ -1,12 +1,10 @@
 package plugins.fmp.multiSPOTS.dlg.spotsMeasures;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,9 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import icy.gui.util.GuiUtil;
-import icy.roi.ROI;
 import icy.roi.ROI2D;
-import icy.sequence.Sequence;
 import icy.type.geom.Polyline2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
@@ -36,9 +32,10 @@ public class SpotsMeasuresEdit  extends JPanel
 	private MultiSPOTS 			parent0;
 	private boolean[] 			isInside		= null;
 	private JComboBox<String> 	roiTypeCombo 	= new JComboBox<String> (new String[] 
-			{"SUM", "sumCLEAN", "Present/absent", "all"});
-	private JButton 			cutAndInterpolateButton 	= new JButton("Cut & interpolate");
+			{"sum", "clean", "fly present/absent"});
+	private JButton 			cutAndInterpolateButton = new JButton("Cut & interpolate");
 	private JButton 			restoreButton 	= new JButton("Restore");
+	private JButton 			saveButton 	= new JButton("Save");
 	
 	
 	
@@ -46,112 +43,81 @@ public class SpotsMeasuresEdit  extends JPanel
 	{
 		setLayout(capLayout);	
 		this.parent0 = parent0;
+		FlowLayout layoutLeft = new FlowLayout(FlowLayout.LEFT);
+		layoutLeft.setVgap(0);
 		
-		JPanel panel1 = new JPanel();
-		panel1.setLayout(new BorderLayout());
-		panel1.add(new JLabel("Apply to ", SwingConstants.LEFT), BorderLayout.WEST); 
-		panel1.add(roiTypeCombo, BorderLayout.CENTER);
+		JPanel panel1 = new JPanel(layoutLeft);
+		panel1.add(new JLabel("Apply to ", SwingConstants.LEFT)); 
+		panel1.add(roiTypeCombo);
+		add(panel1);
 		
-		add(GuiUtil.besidesPanel(new JLabel(" "), panel1));
-		add(GuiUtil.besidesPanel(new JLabel(" "), cutAndInterpolateButton));
+		JPanel panel2 = new JPanel(layoutLeft);
+		panel2.add(cutAndInterpolateButton);
+		add(panel2);
 		
-		JPanel panel2 = new JPanel();
-		panel2.setLayout(new BorderLayout()); 
-		panel2.add(restoreButton, BorderLayout.EAST);
-		add(GuiUtil.besidesPanel(new JLabel(" "), panel2));
+		JPanel panel3 = new JPanel(layoutLeft);
+		panel3.add(restoreButton);
+		panel3.add(saveButton);
+		add( panel3);
 
+		restoreButton.setEnabled(false);
+		saveButton.setEnabled(false);
 		defineListeners();
 	}
 	
 	private void defineListeners() 
 	{
-		cutAndInterpolateButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+		cutAndInterpolateButton.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) { 
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 					cutAndInterpolate(exp);
 			}});
 	}
-
-	
-//	int findLastXLeftOfRoi(Spot spot, ROI2D roiRef) 
-//	{
-//		int lastX = -1;
-//		Rectangle2D rectRef = roiRef.getBounds2D();
-//		double xleft = rectRef.getX();
-//		
-//		Polyline2D polyline = spot.ptsTop.polylineLevel;
-//		for (int i=0; i < polyline.npoints; i++) 
-//		{
-//			if (polyline.xpoints[i] < xleft)
-//				continue;
-//			lastX = i-1;
-//			break;
-//		}
-//		return lastX;
-//	}
 	
 	void cutAndInterpolate(Experiment exp) 
 	{
 		SequenceKymos seqKymos = exp.seqKymos;
-		int t = seqKymos.seq.getFirstViewer().getPositionT();
 		ROI2D roi = seqKymos.seq.getSelectedROI2D();
 		if (roi == null)
 			return;
 		
-		seqKymos.transferKymosRoi_atT_ToCapillaries_Measures(t, exp.spotsArray);
+		int t = seqKymos.seq.getFirstViewer().getPositionT();
 		Spot spot = exp.spotsArray.spotsList.get(t);
 		String optionSelected = (String) roiTypeCombo.getSelectedItem();
-		if (optionSelected .contains("gulp")) 
-		{
-			seqKymos.removeROIsPolylineAtT(t);
-			List<ROI2D> listOfRois = spot.transferMeasuresToROIs();
-			seqKymos.seq.addROIs (listOfRois, false);
-			for (ROI lroi: listOfRois)
-				seqKymos.seq.roiChanged(lroi);
-		} 
-		else 
-		{
-			if (optionSelected .contains("SUM")) 
-				removeAndUpdate(seqKymos, spot, spot.sum, roi);
-			if (optionSelected.contains("CLEAN"))
-				removeAndUpdate(seqKymos, spot, spot.sumClean, roi);
-			if (optionSelected.contains("present"))
-				removeAndUpdate(seqKymos, spot, spot.flyPresent, roi);
-		}
+		if (optionSelected .contains("sum")) 
+			removeAndUpdate(seqKymos, spot, spot.sum, roi);
+		else if (optionSelected.contains("clean"))
+			removeAndUpdate(seqKymos, spot, spot.sumClean, roi);
+		else if (optionSelected.contains("fly"))
+			removeAndUpdate(seqKymos, spot, spot.flyPresent, roi);
 	}
 	
-	private void removeAndUpdate(SequenceKymos seqKymos, Spot cap, SpotMeasure caplimits, ROI2D roi) 
+	private void removeAndUpdate(SequenceKymos seqKymos, Spot spot, SpotMeasure spotMeasure, ROI2D roi) 
 	{
-		removeMeasuresEnclosedInRoi(caplimits, roi);
-		seqKymos.updateROIFromCapillaryMeasure(cap, caplimits);
+		removeMeasuresEnclosedInRoi(spotMeasure, roi);
+		seqKymos.updateROIFromSpotsMeasure(spot, spotMeasure);
 	}
 	
-	void removeMeasuresEnclosedInRoi(SpotMeasure caplimits, ROI2D roi) 
+	void removeMeasuresEnclosedInRoi(SpotMeasure spotMeasure, ROI2D roi) 
 	{
-		Polyline2D polyline = caplimits.polylineLevel;
+		Polyline2D polyline = spotMeasure.getLevel2D();
 		int npointsOutside = polyline.npoints - getPointsWithinROI(polyline, roi);
-		if (npointsOutside > 0) 
-		{
+		if (npointsOutside > 0) {
 			double [] xpoints = new double [npointsOutside];
 			double [] ypoints = new double [npointsOutside];
 			int index = 0;
-			for (int i = 0; i < polyline.npoints; i++) 
-			{
-				if (!isInside[i]) 
-				{
+			for (int i = 0; i < polyline.npoints; i++) {
+				if (!isInside[i]) {
 					xpoints[index] = polyline.xpoints[i];
 					ypoints[index] = polyline.ypoints[i];
 					index++;
 				}
 			}
-			caplimits.polylineLevel = new Level2D(xpoints, ypoints, npointsOutside);	
+			spotMeasure.setLevel2D(new Level2D(xpoints, ypoints, npointsOutside));	
 		} 
-		else 
-		{
-			caplimits.polylineLevel = null;
+		else {
+			spotMeasure.setLevel2D(null);
 		}
 	}
 	
@@ -159,8 +125,7 @@ public class SpotsMeasuresEdit  extends JPanel
 	{
 		isInside = new boolean [polyline.npoints];
 		int npointsInside= 0;
-		for (int i=0; i< polyline.npoints; i++) 
-		{
+		for (int i=0; i< polyline.npoints; i++) {
 			isInside[i] = (roi.contains(polyline.xpoints[i], polyline.ypoints[i]));
 			npointsInside += isInside[i]? 1: 0;
 		}

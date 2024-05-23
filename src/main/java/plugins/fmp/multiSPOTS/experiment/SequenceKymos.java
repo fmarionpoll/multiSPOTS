@@ -99,8 +99,7 @@ public class SequenceKymos extends SequenceCamData
 	{
 		int t = cap.kymographIndex;
 		List<ROI2D> listRois = seq.getROI2Ds();
-		for (ROI2D roi: listRois) 
-		{
+		for (ROI2D roi: listRois) {
 			if (!(roi instanceof ROI2DPolyLine))
 				continue;
 			if (roi.getT() != t)
@@ -111,6 +110,24 @@ public class SequenceKymos extends SequenceCamData
 			roi.setName(ptsTop.capName);
 			break;
 		}
+	}
+	
+	public void updateROIFromSpotsMeasure(Spot spot, SpotMeasure spotMeasure) 
+	{
+//		int t = spot.spotIndex;
+//		List<ROI2D> listRois = seq.getROI2Ds();
+//		for (ROI2D roi: listRois) {
+//			if (!(roi instanceof ROI2DPolyLine))
+//				continue;
+//			if (roi.getT() != t)
+//				continue;
+//			if (!roi.getName().contains(spotMeasure.getName()))
+//				continue;
+//			
+//			seq.removeROI(roi);
+//			seq.addROI(spot.);
+//			break;
+//		}
 	}
 	
 	public void validateRois() 

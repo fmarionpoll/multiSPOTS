@@ -532,17 +532,17 @@ public class Spot implements Comparable <Spot>
 	{
 		String name = roi.getName();
 		if (name .contains(sum.getName())) {
-			transferROItoMeasure(roi, imageHeight, sum);
+			transferROItoMeasureValue(roi, imageHeight, sum);
 		}
 		else if (name .contains(sumClean.getName())) {
-			transferROItoMeasure(roi, imageHeight, sumClean);
+			transferROItoMeasureValue(roi, imageHeight, sumClean);
 		}
 		else if (name .contains(flyPresent.getName())) {
-			transferROItoPresenceMeasure( roi, flyPresent);
+			transferROItoMeasureBoolean( roi, flyPresent);
 		}
 	}
 	
-	public void transferROItoMeasure(ROI2D roi, int imageHeight, SpotMeasure spotMeasure)
+	private void transferROItoMeasureValue(ROI2D roi, int imageHeight, SpotMeasure spotMeasure)
 	{
 		if (roi instanceof ROI2DPolyLine) {
 			Level2D level2D = new Level2D(((ROI2DPolyLine)roi).getPolyline2D());
@@ -551,7 +551,7 @@ public class Spot implements Comparable <Spot>
 		}
 	}
 
-	public void transferROItoPresenceMeasure(ROI2D roi, SpotMeasure spotMeasure)
+	private void transferROItoMeasureBoolean(ROI2D roi, SpotMeasure spotMeasure)
 	{
 		if (roi instanceof ROI2DPolyLine) {
 			Level2D level2D = new Level2D(((ROI2DPolyLine)roi).getPolyline2D());

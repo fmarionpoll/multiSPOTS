@@ -81,11 +81,11 @@ public class SpotMeasure
 		return getLevel2D().npoints;
 	}
 
-	Level2D getLevel2D() {
+	public Level2D getLevel2D() {
 		return level2D;
 	}
 
-	void setLevel2D(Level2D level2d) {
+	public void setLevel2D(Level2D level2d) {
 		level2D = level2d;
 	}
 
