@@ -18,7 +18,7 @@ public class SpotMeasure
 	private Level2D		leve2D_old			= new Level2D();
 	public	double [] 	measureValues		= null;
 	public 	boolean [] 	measureBooleans 	= null;
-	public  ROI2DPolyLine roi				= null;
+	private ROI2DPolyLine roi				= null;
 	
 	private String		name 				= "noname";
 	
@@ -100,6 +100,14 @@ public class SpotMeasure
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public ROI2DPolyLine getRoi() {
+		return roi;
+	}
+
+	public void setRoi(ROI2DPolyLine roi) {
+		this.roi = roi;
 	}
 
 	boolean isThereAnyMeasuresDone() 
@@ -192,7 +200,7 @@ public class SpotMeasure
 		roi.setName(roiname);
 		roi.setT(t);
 		roi.setColor(getROI2DColorFromName());
-		roi.setStroke(1);  
+//		roi.setStroke(.5);  
 		return roi;
 	}
 	

@@ -13,9 +13,9 @@ import javax.swing.SwingConstants;
 
 import icy.roi.ROI2D;
 import icy.type.geom.Polyline2D;
+
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Level2D;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotMeasure;
@@ -30,7 +30,6 @@ public class SpotsMeasuresEdit  extends JPanel
 	 */
 	private static final long serialVersionUID = 2580935598417087197L;
 	private MultiSPOTS 			parent0;
-	private boolean[] 			isInside		= null;
 	private JComboBox<String> 	roiTypeCombo 	= new JComboBox<String> (new String[] 
 			{"sum", "clean", "fly present/absent"});
 	private JButton 			cutAndInterpolateButton = new JButton("Cut & interpolate");
@@ -95,41 +94,43 @@ public class SpotsMeasuresEdit  extends JPanel
 	
 	private void removeAndUpdate(SequenceKymos seqKymos, Spot spot, SpotMeasure spotMeasure, ROI2D roi) 
 	{
-		removeMeasuresEnclosedInRoi(spotMeasure, roi);
-		seqKymos.updateROIFromSpotsMeasure(spot, spotMeasure);
+		cutAndInterpolatePointsEnclosedInSelectedRoi(spotMeasure, roi);
+		//seqKymos.updateROIFromSpotsMeasure(spot, spotMeasure);
 	}
 	
-	void removeMeasuresEnclosedInRoi(SpotMeasure spotMeasure, ROI2D roi) 
+	void cutAndInterpolatePointsEnclosedInSelectedRoi(SpotMeasure spotMeasure, ROI2D roi) 
 	{
-		Polyline2D polyline = spotMeasure.getLevel2D();
-		int npointsOutside = polyline.npoints - getPointsWithinROI(polyline, roi);
-		if (npointsOutside > 0) {
-			double [] xpoints = new double [npointsOutside];
-			double [] ypoints = new double [npointsOutside];
-			int index = 0;
-			for (int i = 0; i < polyline.npoints; i++) {
-				if (!isInside[i]) {
-					xpoints[index] = polyline.xpoints[i];
-					ypoints[index] = polyline.ypoints[i];
-					index++;
-				}
+		Polyline2D polyline = spotMeasure.getRoi().getPolyline2D();
+		int index0 = 0;
+		int index1 = -1;
+		for (int i = 0; i < polyline.npoints; i++) {
+			boolean isInside = roi.contains(polyline.xpoints[i], polyline.ypoints[i]);
+			if (index1 < 0 && !isInside) { 
+				index0 = i;
+				continue;
 			}
-			spotMeasure.setLevel2D(new Level2D(xpoints, ypoints, npointsOutside));	
-		} 
-		else {
-			spotMeasure.setLevel2D(null);
+			else if (isInside) { 
+				index1 = i;
+				continue;
+			}
+			else 
+				break;
 		}
+		if (index1 > 0) {
+			int npoints = index1 - index0 + 1;
+			double deltaX = (polyline.xpoints[index1] - polyline.xpoints[index0])/npoints;
+			double deltaY = (polyline.ypoints[index1] - polyline.ypoints[index0])/npoints;
+			double startX = polyline.xpoints[index0];
+			double startY = polyline.ypoints[index0];
+			int i = 0;
+			for (int j = index0; j < index1; j++, i++) {
+				polyline.xpoints[j] = startX + deltaX * i;
+				polyline.ypoints[j] = startY + deltaY * i;
+			}
+		}
+		spotMeasure.getRoi().setPolyline2D(polyline);	
 	}
 	
-	int getPointsWithinROI(Polyline2D polyline, ROI2D roi) 
-	{
-		isInside = new boolean [polyline.npoints];
-		int npointsInside= 0;
-		for (int i=0; i< polyline.npoints; i++) {
-			isInside[i] = (roi.contains(polyline.xpoints[i], polyline.ypoints[i]));
-			npointsInside += isInside[i]? 1: 0;
-		}
-		return npointsInside;
-	}
+	
 
 }

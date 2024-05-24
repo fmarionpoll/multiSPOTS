@@ -499,7 +499,7 @@ public class Spot implements Comparable <Spot>
 		if (sumClean.getLevel2DNPoints() != 0) 
 			measuresRoisList.add(sumClean.getROIForImage(spotRoi.getName(), spot_KymographIndex, imageHeight));
 		if (flyPresent.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(flyPresent.getROIForImage(spotRoi.getName(), spot_KymographIndex, imageHeight));
+			measuresRoisList.add(flyPresent.getROIForImage(spotRoi.getName(), spot_KymographIndex, 10));
 		return measuresRoisList;
 	}
 
