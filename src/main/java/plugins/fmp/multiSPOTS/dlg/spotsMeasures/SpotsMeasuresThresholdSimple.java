@@ -26,7 +26,7 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.series.BuildSpotsMeasures;
-import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2DWith2Transforms;
+import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2D_2Transforms;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
@@ -127,7 +127,7 @@ public class SpotsMeasuresThresholdSimple  extends JPanel implements PropertyCha
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
 				if (exp != null && exp.seqKymos != null) {				
 					int index = spotsTransformsComboBox.getSelectedIndex();
-					Canvas2DWith2Transforms canvas = (Canvas2DWith2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
+					Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
 					updateTransformFunctionsOfCanvas(exp);
 					if (!spotsViewButton.isSelected()) {
 						spotsViewButton.setSelected(true);
@@ -265,7 +265,7 @@ public class SpotsMeasuresThresholdSimple  extends JPanel implements PropertyCha
 		else {
 			removeOverlay(exp);
 			spotsOverlayCheckBox.setSelected(false);
-			Canvas2DWith2Transforms canvas = (Canvas2DWith2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
+			Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
 			canvas.imageTransformFunctionsComboStep1.setSelectedIndex(0);
 			
 		}
@@ -274,7 +274,7 @@ public class SpotsMeasuresThresholdSimple  extends JPanel implements PropertyCha
 	
 	private void updateTransformFunctionsOfCanvas(Experiment exp)
 	{
-		Canvas2DWith2Transforms canvas = (Canvas2DWith2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
+		Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
 		if (canvas.imageTransformFunctionsComboStep1.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) {
 			canvas.updateTransformsComboStep1(transforms);
 		}

@@ -22,7 +22,7 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 
 
 
-public class Canvas2DWith2Transforms extends Canvas2D
+public class Canvas2D_2Transforms extends Canvas2D
 {
     /**
 	 * 
@@ -44,7 +44,7 @@ public class Canvas2DWith2Transforms extends Canvas2D
 	public JComboBox<ImageTransformEnums> imageTransformFunctionsComboStep2 = new JComboBox<ImageTransformEnums> (imageTransformStep2);
 	ImageTransformInterface transformStep2 = ImageTransformEnums.NONE.getFunction();
 	
-    public Canvas2DWith2Transforms(Viewer viewer)
+    public Canvas2D_2Transforms(Viewer viewer)
     {
         super(viewer);
     }
