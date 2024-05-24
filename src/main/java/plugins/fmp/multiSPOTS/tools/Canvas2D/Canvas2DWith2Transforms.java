@@ -14,13 +14,15 @@ import icy.gui.component.button.IcyButton;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
+import icy.resource.icon.IcyIcon;
+
 import plugins.fmp.multiSPOTS.resource.ResourceUtilFMP;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
-import icy.resource.icon.IcyIcon;
 
 
-public class Canvas2DWithTransforms extends Canvas2D
+
+public class Canvas2DWith2Transforms extends Canvas2D
 {
     /**
 	 * 
@@ -42,7 +44,7 @@ public class Canvas2DWithTransforms extends Canvas2D
 	public JComboBox<ImageTransformEnums> imageTransformFunctionsComboStep2 = new JComboBox<ImageTransformEnums> (imageTransformStep2);
 	ImageTransformInterface transformStep2 = ImageTransformEnums.NONE.getFunction();
 	
-    public Canvas2DWithTransforms(Viewer viewer)
+    public Canvas2DWith2Transforms(Viewer viewer)
     {
         super(viewer);
     }

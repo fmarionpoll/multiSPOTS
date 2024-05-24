@@ -6,17 +6,17 @@ import icy.plugin.abstract_.Plugin;
 import icy.plugin.interface_.PluginCanvas;
 
 
-public class Canvas2DWithTransformsPlugin extends Plugin implements PluginCanvas
+public class Canvas2DWith2TransformsPlugin extends Plugin implements PluginCanvas
 {
 	@Override
 	public String getCanvasClassName() {
-		return Canvas2DWithTransformsPlugin.class.getName();
+		return Canvas2DWith2TransformsPlugin.class.getName();
 	}
 
 	@Override
 	public IcyCanvas createCanvas(Viewer viewer) 
 	{		
-		return new Canvas2DWithTransforms(viewer);
+		return new Canvas2DWith2Transforms(viewer);
 	}
 
 }
