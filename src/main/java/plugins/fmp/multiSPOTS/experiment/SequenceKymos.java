@@ -58,78 +58,7 @@ public class SequenceKymos extends SequenceCamData
 	}
 	
 	// ----------------------------
-	
-	public void validateRoisAtT(int t) 
-	{
-		List<ROI2D> listRois = seq.getROI2Ds();
-		int width = seq.getWidth();
-		for (ROI2D roi: listRois) 
-		{
-			if (!(roi instanceof ROI2DPolyLine))
-				continue;
-			if (roi.getT() == -1)
-				roi.setT(t);
-			if (roi.getT() != t)
-				continue;
-			// interpolate missing points if necessary
-			if (roi.getName().contains("level")) 
-			{
-				ROI2DUtilities.interpolateMissingPointsAlongXAxis ((ROI2DPolyLine) roi, width);
-				continue;
-			}
-			if (roi.getName().contains("deriv"))
-				continue;
-		}
-		Collections.sort(listRois, new Comparators.ROI2D_Name_Comparator());
-	}
-	
-	public void removeROIsPolylineAtT(int t) 
-	{
-		List<ROI2D> listRois = seq.getROI2Ds();
-		for (ROI2D roi: listRois) 
-		{
-			if (!(roi instanceof ROI2DPolyLine))
-				continue;
-			if (roi.getT() == t)
-				seq.removeROI(roi);
-		}
-	}
-	
-	public void updateROIFromCapillaryMeasure(Capillary cap, CapillaryLevel ptsTop) 
-	{
-		int t = cap.kymographIndex;
-		List<ROI2D> listRois = seq.getROI2Ds();
-		for (ROI2D roi: listRois) {
-			if (!(roi instanceof ROI2DPolyLine))
-				continue;
-			if (roi.getT() != t)
-				continue;
-			if (!roi.getName().contains(ptsTop.capName))
-				continue;
-			((ROI2DPolyLine) roi).setPolyline2D(ptsTop.polylineLevel);
-			roi.setName(ptsTop.capName);
-			break;
-		}
-	}
-	
-	public void updateROIFromSpotsMeasure(Spot spot, SpotMeasure spotMeasure) 
-	{
-//		int t = spot.spotIndex;
-//		List<ROI2D> listRois = seq.getROI2Ds();
-//		for (ROI2D roi: listRois) {
-//			if (!(roi instanceof ROI2DPolyLine))
-//				continue;
-//			if (roi.getT() != t)
-//				continue;
-//			if (!roi.getName().contains(spotMeasure.getName()))
-//				continue;
-//			
-//			seq.removeROI(roi);
-//			seq.addROI(spot.);
-//			break;
-//		}
-	}
-	
+			
 	public void validateRois() 
 	{
 		List<ROI2D> listRois = seq.getROI2Ds();
@@ -201,8 +130,6 @@ public class SequenceKymos extends SequenceCamData
 
 	public List <ImageFileDescriptor> loadListOfPotentialKymographsFromCapillaries(String dir, CapillariesArray capillaries) 
 	{
-		renameCapillary_Files(dir) ;
-		
 		String directoryFull = dir +File.separator ;
 		int ncapillaries = capillaries.capillariesList.size();
 		List<ImageFileDescriptor> myListOfFiles = new ArrayList<ImageFileDescriptor>(ncapillaries);
@@ -227,24 +154,6 @@ public class SequenceKymos extends SequenceCamData
 			myListOfFiles.add(temp);
 		}
 		return myListOfFiles;
-	}
-	
-	private void renameCapillary_Files(String directory) 
-	{
-		File folder = new File(directory);
-		File[] listFiles = folder.listFiles();
-		if (listFiles == null || listFiles.length < 1)
-			return;
-		for (File file : folder.listFiles()) {
-			String name = file.getName();
-			if (name.toLowerCase().endsWith(".tiff") 
-				|| name.toLowerCase().startsWith("line")) 
-			{
-				String destinationName = Capillary.replace_LR_with_12(name);
-				if (!name .contains(destinationName))
-					file.renameTo (new File(directory + File.separator + destinationName));
-			}
-		}
 	}
 	
 	// -------------------------

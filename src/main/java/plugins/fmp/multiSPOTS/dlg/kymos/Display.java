@@ -328,16 +328,15 @@ public class Display extends JPanel implements ViewerListener
 			isel = seqKymos.seq.getSizeT() -1;
 		
 		
-			seqKymos.seq.beginUpdate();
-			Viewer v = seqKymos.seq.getFirstViewer();
-			if (v != null) {
-				int icurrent = v.getPositionT();
-				if (icurrent != isel)
-					v.setPositionT(isel);
-				seqKymos.validateRoisAtT(seqKymos.currentFrame);
-				seqKymos.currentFrame = isel;
-			}
-			seqKymos.seq.endUpdate();
+		seqKymos.seq.beginUpdate();
+		Viewer v = seqKymos.seq.getFirstViewer();
+		if (v != null) {
+			int icurrent = v.getPositionT();
+			if (icurrent != isel)
+				v.setPositionT(isel);
+			seqKymos.currentFrame = isel;
+		}
+		seqKymos.seq.endUpdate();
 		
 		selectedImageIndex = seqKymos.currentFrame;
 		displayROIsAccordingToUserSelection();
