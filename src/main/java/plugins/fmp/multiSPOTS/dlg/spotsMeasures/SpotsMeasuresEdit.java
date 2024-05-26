@@ -28,13 +28,13 @@ public class SpotsMeasuresEdit  extends JPanel
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2580935598417087197L;
-	private MultiSPOTS 			parent0;
+	private static final long 	serialVersionUID = 2580935598417087197L;
 	private JComboBox<String> 	roiTypeCombo 	= new JComboBox<String> (new String[] 
-			{"sum", "clean", "fly present/absent"});
+								{"sum", "clean", "fly present/absent"});
 	private JButton 			cutAndInterpolateButton = new JButton("Cut & interpolate");
 	private JButton 			restoreButton 	= new JButton("Restore");
-	private JButton 			saveButton 	= new JButton("Save");
+	private JButton 			saveButton 		= new JButton("Save");
+	private MultiSPOTS 			parent0			= null;
 	
 	
 	

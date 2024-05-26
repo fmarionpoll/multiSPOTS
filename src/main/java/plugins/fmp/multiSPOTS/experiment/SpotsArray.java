@@ -287,6 +287,13 @@ public class SpotsArray
 		Collections.sort(spotsList);
 		return;
 	}
+	
+	public void updateSpotsMeasuresFromSequence() 
+	{
+		for (Spot spot: spotsList) {
+			spot.transferROIsMeasuresToLevel2D();
+		}
+	}
 
 	public void transferSpotRoiToSequence(Sequence seq) 
 	{

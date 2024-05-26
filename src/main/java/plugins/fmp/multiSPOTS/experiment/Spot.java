@@ -313,6 +313,13 @@ public class Spot implements Comparable <Spot>
 		if (spotMeasure.getLevel2DNPoints() > 0)
 			spotMeasure.restoreCroppedLevel2D();
 	}
+	
+	public void transferROIsMeasuresToLevel2D() 
+	{
+		sum.transferROItoLevel2D();
+		sumClean.transferROItoLevel2D();
+		flyPresent.transferROItoLevel2D();
+	}
 
 	// -----------------------------------------------------------------------------
 
