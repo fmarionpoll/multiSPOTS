@@ -235,7 +235,7 @@ public class ChartSpots extends IcyFrame
 		Viewer v = exp.seqCamData.seq.getFirstViewer();
         if (v != null && spot != null && spot.spot_CamData_T > 0) {
         	System.out.println("T="+spot.spot_CamData_T);
-        	int ii = (int) (spot.spot_CamData_T * exp.binDuration_ms / xlsExportOptions.buildExcelStepMs);
+        	int ii = (int) (spot.spot_CamData_T * xlsExportOptions.buildExcelStepMs / exp.binDuration_ms);
         	v.setPositionT(ii);
         }
 	}
