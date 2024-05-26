@@ -32,8 +32,8 @@ public class SpotsMeasuresEdit  extends JPanel
 	private JComboBox<String> 	roiTypeCombo 	= new JComboBox<String> (new String[] 
 								{"sum", "clean", "fly present/absent"});
 	private JButton 			cutAndInterpolateButton = new JButton("Cut & interpolate");
-	private JButton 			restoreButton 	= new JButton("Restore");
-	private JButton 			saveButton 		= new JButton("Save");
+//	private JButton 			restoreButton 	= new JButton("Restore");
+//	private JButton 			saveButton 		= new JButton("Save");
 	private MultiSPOTS 			parent0			= null;
 	
 	
@@ -55,12 +55,12 @@ public class SpotsMeasuresEdit  extends JPanel
 		add(panel2);
 		
 		JPanel panel3 = new JPanel(layoutLeft);
-		panel3.add(restoreButton);
-		panel3.add(saveButton);
+//		panel3.add(restoreButton);
+//		panel3.add(saveButton);
 		add( panel3);
 
-		restoreButton.setEnabled(false);
-		saveButton.setEnabled(false);
+//		restoreButton.setEnabled(false);
+//		saveButton.setEnabled(false);
 		defineListeners();
 	}
 	
@@ -101,35 +101,45 @@ public class SpotsMeasuresEdit  extends JPanel
 	void cutAndInterpolatePointsEnclosedInSelectedRoi(SpotMeasure spotMeasure, ROI2D roi) 
 	{
 		Polyline2D polyline = spotMeasure.getRoi().getPolyline2D();
-		int index0 = 0;
-		int index1 = -1;
+		int first_pt_inside = -1;
+		int last_pt_inside = -1;
 		for (int i = 0; i < polyline.npoints; i++) {
 			boolean isInside = roi.contains(polyline.xpoints[i], polyline.ypoints[i]);
-			if (index1 < 0 && !isInside) { 
-				index0 = i;
+			if (first_pt_inside < 0) {
+				if (!isInside)
+					continue; 
+				else
+					first_pt_inside = i;
 				continue;
 			}
-			else if (isInside) { 
-				index1 = i;
+			if (isInside) { 
+				last_pt_inside = i;
 				continue;
 			}
-			else 
-				break;
+			if (first_pt_inside >= 0 && last_pt_inside >= 0) {
+				int npoints = last_pt_inside - first_pt_inside + 1;
+				double deltaX = (polyline.xpoints[last_pt_inside+1] - polyline.xpoints[first_pt_inside-1])/npoints;
+				double deltaY = (polyline.ypoints[last_pt_inside+1] - polyline.ypoints[first_pt_inside-1])/npoints;
+				double startX = polyline.xpoints[first_pt_inside-1];
+				double startY = polyline.ypoints[first_pt_inside-1];
+				int k = 0;
+				for (int j = first_pt_inside; j < last_pt_inside+1; j++, k++) {
+					polyline.xpoints[j] = startX + deltaX * k;
+					polyline.ypoints[j] = startY + deltaY * k;
+				}
+				
+				first_pt_inside = -1;
+				last_pt_inside = -1;
+			}
 		}
-		if (index1 > 0) {
-			int npoints = index1 - index0 + 1;
-			double deltaX = (polyline.xpoints[index1] - polyline.xpoints[index0])/npoints;
-			double deltaY = (polyline.ypoints[index1] - polyline.ypoints[index0])/npoints;
-			double startX = polyline.xpoints[index0];
-			double startY = polyline.ypoints[index0];
-			int i = 0;
-			for (int j = index0; j < index1; j++, i++) {
-				polyline.xpoints[j] = startX + deltaX * i;
-				polyline.ypoints[j] = startY + deltaY * i;
-			}
+		
+		// here: deal with unfinished business (first > = 0 && last <0)
+		if (first_pt_inside >= 0 && last_pt_inside < 0) {
+			
 		}
 		spotMeasure.getRoi().setPolyline2D(polyline);	
 	}
+	
 	
 	
 
