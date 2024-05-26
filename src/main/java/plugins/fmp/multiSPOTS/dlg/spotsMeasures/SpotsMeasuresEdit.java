@@ -95,7 +95,7 @@ public class SpotsMeasuresEdit  extends JPanel
 	private void removeAndUpdate(SequenceKymos seqKymos, Spot spot, SpotMeasure spotMeasure, ROI2D roi) 
 	{
 		cutAndInterpolatePointsEnclosedInSelectedRoi(spotMeasure, roi);
-		//seqKymos.updateROIFromSpotsMeasure(spot, spotMeasure);
+		spotMeasure.transferROItoLevel2D();
 	}
 	
 	void cutAndInterpolatePointsEnclosedInSelectedRoi(SpotMeasure spotMeasure, ROI2D roi) 

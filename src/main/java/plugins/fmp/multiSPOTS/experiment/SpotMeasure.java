@@ -19,6 +19,7 @@ public class SpotMeasure
 	public	double [] 	measureValues		= null;
 	public 	boolean [] 	measureBooleans 	= null;
 	private ROI2DPolyLine roi				= null;
+	private double 		factor				= 1.;
 	
 	private String		name 				= "noname";
 	
@@ -208,7 +209,7 @@ public class SpotMeasure
 	{
 		Polyline2D polyline = new Polyline2D(level2D.xpoints, level2D.ypoints, level2D.npoints);
 		
-		double factor = (double) imageHeight / level2D.getBounds().getMaxY();
+		factor = (double) imageHeight / level2D.getBounds().getMaxY();
 		for (int i = 0; i < level2D.npoints; i++) {
 			polyline.xpoints[i] = level2D.xpoints[i];
 			polyline.ypoints[i] = level2D.ypoints[i] * factor;
@@ -233,7 +234,18 @@ public class SpotMeasure
 		return color;
 	}
 	
-	
+	public void transferROItoLevel2D()
+	{
+		Polyline2D polyline = roi.getPolyline2D();
+		if (polyline.npoints != level2D.npoints) {
+			System.out.println("polyline.npoints=" + polyline.npoints+ " level2D.npoints="+ level2D.npoints);
+			level2D = new Level2D(polyline.npoints);
+		}
+		for (int i = 0; i < polyline.npoints; i++) {
+			level2D.xpoints[i] = polyline.xpoints[i];
+			level2D.ypoints[i] = polyline.ypoints[i] / factor;
+		}
+	}
 	// ----------------------------------------------------------------------
 	
 	public boolean cvsExportXYDataToRow(StringBuffer sbf, String sep) 

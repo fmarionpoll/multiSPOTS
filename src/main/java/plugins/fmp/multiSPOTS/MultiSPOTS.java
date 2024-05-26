@@ -17,7 +17,7 @@ import plugins.fmp.multiSPOTS.dlg.excel.DlgExcel_;
 import plugins.fmp.multiSPOTS.dlg.experiment.DlgExperiment_;
 import plugins.fmp.multiSPOTS.dlg.kymos.DlgKymos_;
 import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
-import plugins.fmp.multiSPOTS.dlg.spotsMeasures.DlgMeasure_;
+import plugins.fmp.multiSPOTS.dlg.spotsMeasures.DlgSpotMeasure_;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 
@@ -31,7 +31,7 @@ public class MultiSPOTS extends PluginActionable
 	public DlgExperiment_ 	dlgExperiment 	= new DlgExperiment_();
 	public DlgSpots_ 		dlgSpots		= new DlgSpots_();
 	public DlgKymos_		dlgKymos		= new DlgKymos_();
-	public DlgMeasure_ 		dlgMeasure 		= new DlgMeasure_();
+	public DlgSpotMeasure_ 		dlgMeasure 		= new DlgSpotMeasure_();
 	public DlgCages_ 		dlgCages 		= new DlgCages_();
 	public DlgExcel_		dlgExcel		= new DlgExcel_();
 	
