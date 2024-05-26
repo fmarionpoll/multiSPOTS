@@ -92,7 +92,7 @@ public class LoadSave extends JPanel
 		Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
 		if (exp == null)
 			return;
-		SequenceKymos seqKymos = exp.seqKymos;
+		SequenceKymos seqKymos = exp.seqSpotKymos;
 		if (directory == null) {
 			directory = exp.getDirectoryToSaveResults();
 			try 
@@ -140,7 +140,7 @@ public class LoadSave extends JPanel
 	public boolean loadDefaultKymos(Experiment exp) 
 	{		
 		boolean flag = false;
-		SequenceKymos seqKymos = exp.seqKymos;
+		SequenceKymos seqKymos = exp.seqSpotKymos;
 		if (seqKymos == null || exp.spotsArray == null) 
 		{
 			System.out.println("LoadSaveKymos:loadDefaultKymos() no parent sequence or no capillaries found");
@@ -155,7 +155,7 @@ public class LoadSave extends JPanel
 		else
 			exp.setBinSubDirectory(localString);
 		
-		List<ImageFileDescriptor> myList = exp.seqKymos.loadListOfPotentialKymographsFromSpots(exp.getKymosBinFullDirectory(), exp.spotsArray);
+		List<ImageFileDescriptor> myList = exp.seqSpotKymos.loadListOfPotentialKymographsFromSpots(exp.getKymosBinFullDirectory(), exp.spotsArray);
 		int nItems = ImageFileDescriptor.getExistingFileNames(myList);
 		if (nItems > 0) 
 		{

@@ -13,7 +13,7 @@ public class SequenceKymosUtils
 {
 	public static void transferCamDataROIStoKymo (Experiment exp)
 	{
-		if (exp.seqKymos == null) 
+		if (exp.seqSpotKymos == null) 
 		{
 			System.out.println("SequenceKymosUtils:transferCamDataROIstoKymo seqkymos null - return");
 			return;

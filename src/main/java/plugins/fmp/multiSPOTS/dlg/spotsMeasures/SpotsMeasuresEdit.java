@@ -4,8 +4,11 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,29 +16,36 @@ import javax.swing.SwingConstants;
 
 import icy.roi.ROI2D;
 import icy.type.geom.Polyline2D;
-
+import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.SpotMeasure;
+import plugins.fmp.multiSPOTS.series.BuildMedianFromSpotMeasure;
+import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 
 
 
 
-public class SpotsMeasuresEdit  extends JPanel 
+
+public class SpotsMeasuresEdit  extends JPanel implements PropertyChangeListener
 {
 	/**
 	 * 
 	 */
-	private static final long 	serialVersionUID = 2580935598417087197L;
-	private JComboBox<String> 	roiTypeCombo 	= new JComboBox<String> (new String[] 
+	private static final long 	serialVersionUID 		= 2580935598417087197L;
+	private JComboBox<String> 	roiTypeCombo 			= new JComboBox<String> (new String[] 
 								{"sum", "clean", "fly present/absent"});
 	private JButton 			cutAndInterpolateButton = new JButton("Cut & interpolate");
-	private JButton 			buildMedianButton 	= new JButton("Build Median");
-//	private JButton 			restoreButton 	= new JButton("Restore");
-//	private JButton 			saveButton 		= new JButton("Save");
-	private MultiSPOTS 			parent0			= null;
+	private String 				buildMedianString 		= "Build median";
+	private JButton 			buildMedianButton 		= new JButton(buildMedianString);
+	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
+	
+	
+	private BuildMedianFromSpotMeasure 	threadbuildMedian = null;	
+	
+	private MultiSPOTS 			parent0					= null;
 	
 	
 	
@@ -54,15 +64,14 @@ public class SpotsMeasuresEdit  extends JPanel
 		
 		JPanel panel2 = new JPanel(layoutLeft);
 		panel2.add(buildMedianButton);
+		panel2.add(allSeriesCheckBox);
+//		panel2.add(concurrentDisplayCheckBox);
 		add(panel2);
 		
 		JPanel panel3 = new JPanel(layoutLeft);
-//		panel3.add(restoreButton);
-//		panel3.add(saveButton);
 		add( panel3);
 
-//		restoreButton.setEnabled(false);
-//		saveButton.setEnabled(false);
+		roiTypeCombo.setSelectedIndex(1);
 		defineListeners();
 	}
 	
@@ -77,19 +86,65 @@ public class SpotsMeasuresEdit  extends JPanel
 		
 		buildMedianButton.addActionListener(new ActionListener () { 
 			@Override public void actionPerformed( final ActionEvent e ) { 
-				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) {
-					int imageHeight = exp.seqKymos.seq.getHeight();
-					for (Spot spot: exp.spotsArray.spotsList) {
-						spot.buildRunningMedianFromSumLevel2D(imageHeight);
-					}
-				}
+//				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+//				if (exp != null) {
+//					int imageHeight = exp.seqKymos.seq.getHeight();
+//					for (Spot spot: exp.spotsArray.spotsList) {
+//						spot.buildRunningMedianFromSumLevel2D(imageHeight);
+//					}
+//				}
+				if (buildMedianButton.getText().equals(buildMedianString))
+					startDetection();
+				else 
+					stopDetection();
 			}});
 	}
 	
+	void startDetection() 
+	{
+		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();	
+		if (exp != null)
+		{
+			threadbuildMedian = new BuildMedianFromSpotMeasure();
+			threadbuildMedian.options = initDetectOptions(exp);
+			threadbuildMedian.addPropertyChangeListener(this);
+			threadbuildMedian.execute();
+			buildMedianButton.setText("STOP");
+		}
+	}
+	
+	private void stopDetection() 
+	{	
+		if (threadbuildMedian != null && !threadbuildMedian.stopFlag) 
+			threadbuildMedian.stopFlag = true;
+	}
+	
+	private BuildSeriesOptions initDetectOptions(Experiment exp) 
+	{	
+		BuildSeriesOptions options = new BuildSeriesOptions();
+		// list of stack experiments
+		options.expList = parent0.expListCombo; 
+		options.expList.index0 = parent0.expListCombo.getSelectedIndex();
+		if (allSeriesCheckBox.isSelected()) 
+			options.expList.index1 = options.expList.getItemCount()-1;
+		else
+			options.expList.index1 = parent0.expListCombo.getSelectedIndex();
+		options.detectAllSeries = allSeriesCheckBox.isSelected();
+		if (!allSeriesCheckBox.isSelected())  {
+			options.seriesLast = options.seriesFirst;
+		}
+		else {
+			options.seriesFirst = 0;
+		}
+//		options.concurrentDisplay = concurrentDisplayCheckBox.isSelected();
+
+		return options;
+	}
+
+	
 	void cutAndInterpolate(Experiment exp) 
 	{
-		SequenceKymos seqKymos = exp.seqKymos;
+		SequenceKymos seqKymos = exp.seqSpotKymos;
 		ROI2D roiRect = seqKymos.seq.getSelectedROI2D();
 		if (roiRect == null)
 			return;
@@ -163,6 +218,18 @@ public class SpotsMeasuresEdit  extends JPanel
 			polyline.xpoints[j] = startX + deltaX * k;
 			polyline.ypoints[j] = startY + deltaY * k;
 		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (StringUtil.equals("thread_ended", evt.getPropertyName())) {
+			buildMedianButton.setText(buildMedianString);
+			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+			if (exp != null) {
+				exp.load_SpotsMeasures();
+				parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
+			}
+		 }
 	}
 	
 

@@ -12,7 +12,7 @@ public class CurvesRestoreLength extends BuildSeries
 		exp.loadMCCapillaries();
 		if (exp.loadKymographs()) 
 		{
-			SequenceKymos seqKymos = exp.seqKymos;
+			SequenceKymos seqKymos = exp.seqSpotKymos;
 			for (int t= 0; t< seqKymos.nTotalFrames; t++) 
 			{
 				Capillary cap = exp.capillaries.capillariesList.get(t);
@@ -21,6 +21,6 @@ public class CurvesRestoreLength extends BuildSeries
 			exp.save_CapillariesMeasures();
 		}
 		exp.seqCamData.closeSequence();
-		exp.seqKymos.closeSequence();
+		exp.seqSpotKymos.closeSequence();
 	}
 }

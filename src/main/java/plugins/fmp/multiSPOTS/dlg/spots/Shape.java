@@ -124,7 +124,7 @@ public class Shape extends JPanel
 			@Override public void actionPerformed( final ActionEvent e ) 
 			{ 
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
-				if (exp != null && exp.seqKymos != null) {				
+				if (exp != null && exp.seqSpotKymos != null) {				
 					int index = spotsTransformsComboBox.getSelectedIndex();
 					Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
 					updateTransformFunctionsOfCanvas(exp);

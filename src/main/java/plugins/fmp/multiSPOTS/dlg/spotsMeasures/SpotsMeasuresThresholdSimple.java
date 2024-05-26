@@ -65,7 +65,7 @@ public class SpotsMeasuresThresholdSimple  extends JPanel implements PropertyCha
 	private JSpinner 			fliesThresholdSpinner 	= new JSpinner(new SpinnerNumberModel(15, 0, 255, 1));
 	
 	private OverlayThreshold 	overlayThreshold 		= null;
-	private BuildSpotsMeasures 		threadDetectLevels 		= null;	
+	private BuildSpotsMeasures 	threadDetectLevels 		= null;	
 	private MultiSPOTS 			parent0 				= null;
 	
 	
@@ -125,7 +125,7 @@ public class SpotsMeasuresThresholdSimple  extends JPanel implements PropertyCha
 		spotsTransformsComboBox.addActionListener(new ActionListener () { 
 			@Override public void actionPerformed( final ActionEvent e ) { 
 				Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
-				if (exp != null && exp.seqKymos != null) {				
+				if (exp != null && exp.seqSpotKymos != null) {				
 					int index = spotsTransformsComboBox.getSelectedIndex();
 					Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
 					updateTransformFunctionsOfCanvas(exp);
@@ -165,7 +165,7 @@ public class SpotsMeasuresThresholdSimple  extends JPanel implements PropertyCha
 
 	void updateOverlay (Experiment exp) 
 	{
-		if (exp.seqKymos == null)
+		if (exp.seqSpotKymos == null)
 			return;
 		
 		if (overlayThreshold == null) 

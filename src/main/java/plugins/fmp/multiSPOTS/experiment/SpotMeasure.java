@@ -48,7 +48,7 @@ public class SpotMeasure
 		setLevel2D(new Level2D());
 	}
 
-	void initLevel2D_fromValues(String name) 
+	void initLevel2D_fromMeasureValues(String name) 
 	{
 		this.setName(name);
 		int ii_start = 0;
@@ -261,7 +261,7 @@ public class SpotMeasure
 	
 	// ----------------------------------------------------------------------
 
-	public void buildRunningMedian(int span, SpotMeasure spotMeasure) 
+	public void buildRunningMedian(int span, double[] yvalues) 
 	{	
 
 		int nbspan = span/2;
@@ -269,7 +269,6 @@ public class SpotMeasure
 		double [] tempArraySorted = new double [sizeTempArray];
 		double [] tempArrayCircular = new double [sizeTempArray];
 		
-		double[] yvalues = spotMeasure.getLevel2D().ypoints;
 		int npoints = yvalues.length;
 		measureValues = new double[npoints];
 		for (int t = 0; t < sizeTempArray; t++) {	

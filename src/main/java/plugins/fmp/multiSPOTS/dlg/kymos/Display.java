@@ -184,7 +184,7 @@ public class Display extends JPanel implements ViewerListener
 		Experiment exp = (Experiment)  parent0.expListCombo.getSelectedItem();
 		if (exp == null) 
 			return;		
-		Viewer v = exp.seqKymos.seq.getFirstViewer();
+		Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
 		if (v == null)
 			return;
 		IcyCanvas canvas = v.getCanvas();
@@ -205,7 +205,7 @@ public class Display extends JPanel implements ViewerListener
 	{
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null) {
-			SequenceKymos seqKymographs = exp.seqKymos;
+			SequenceKymos seqKymographs = exp.seqSpotKymos;
 			if (seqKymographs == null || seqKymographs.seq == null )
 				return;
 			
@@ -242,7 +242,7 @@ public class Display extends JPanel implements ViewerListener
 			return;
 		
 		Rectangle rectViewerCamData = viewerCamData.getBounds();
-		Sequence seqKymograph = exp.seqKymos.seq;
+		Sequence seqKymograph = exp.seqSpotKymos.seq;
 
 		Rectangle rectViewerKymograph = (Rectangle) rectViewerCamData.clone();
 		Rectangle rectImageKymograph = seqKymograph.getBounds2D();
@@ -269,9 +269,9 @@ public class Display extends JPanel implements ViewerListener
 	void displayOFF()
 	{
 		Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
-		if (exp == null || exp.seqKymos == null) 
+		if (exp == null || exp.seqSpotKymos == null) 
 			return;
-		ArrayList<Viewer>vList =  exp.seqKymos.seq.getViewers();
+		ArrayList<Viewer>vList =  exp.seqSpotKymos.seq.getViewers();
 		if (vList.size() > 0) {
 			for (Viewer v: vList) 
 				v.close();
@@ -316,7 +316,7 @@ public class Display extends JPanel implements ViewerListener
 		if (exp == null) 
 			return selectedImageIndex;
 		
-		SequenceKymos seqKymos = exp.seqKymos;
+		SequenceKymos seqKymos = exp.seqSpotKymos;
 		if (seqKymos == null || seqKymos.seq == null)
 			return selectedImageIndex;
 		if (seqKymos.seq.isUpdating())
@@ -363,7 +363,7 @@ public class Display extends JPanel implements ViewerListener
 		if ( event.getType() == ViewerEvent.ViewerEventType.POSITION_CHANGED ) {
 			Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
 			if (exp != null) {
-				Viewer v = exp.seqKymos.seq.getFirstViewer();
+				Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
 				if (v != null) {
 					int t = v.getPositionT();
 					t = selectKymographImage(t);
@@ -420,7 +420,7 @@ public class Display extends JPanel implements ViewerListener
 		
 		parent0.expListCombo.stringExpBinSubDirectory = localString;
 		exp.setBinSubDirectory(localString);
-		exp.seqKymos.seq.close();
+		exp.seqSpotKymos.seq.close();
 		exp.loadKymographs();
 		parent0.dlgKymos.updateDialogs(exp);
 	}
@@ -435,7 +435,7 @@ public class Display extends JPanel implements ViewerListener
 		else {
 //			removeOverlay(exp);
 //			spotsOverlayCheckBox.setSelected(false);
-			Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqKymos.seq.getFirstViewer().getCanvas();
+			Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqSpotKymos.seq.getFirstViewer().getCanvas();
 			canvas.imageTransformFunctionsComboStep2.setSelectedIndex(0);
 			
 		}
@@ -444,7 +444,7 @@ public class Display extends JPanel implements ViewerListener
 	
 	private void updateTransformFunctionsOfCanvas(Experiment exp)
 	{
-		Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqKymos.seq.getFirstViewer().getCanvas();
+		Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqSpotKymos.seq.getFirstViewer().getCanvas();
 //		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
 //		{
 			canvas.updateTransformsComboStep2(transforms);

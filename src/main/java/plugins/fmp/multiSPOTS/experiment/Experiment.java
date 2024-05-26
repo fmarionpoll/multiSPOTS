@@ -39,7 +39,7 @@ public class Experiment
 	private String			binSubDirectory			= null;
 		
 	public SequenceCamData 	seqCamData 				= null;
-	public SequenceKymos 	seqKymos				= null;
+	public SequenceKymos 	seqSpotKymos			= null;
 	public Sequence 		seqReference			= null;
 	public CapillariesArray capillaries 			= new CapillariesArray();
 	public SpotsArray		spotsArray				= new SpotsArray();
@@ -112,20 +112,20 @@ public class Experiment
 	public Experiment() 
 	{
 		seqCamData = new SequenceCamData();
-		seqKymos   = new SequenceKymos();
+		seqSpotKymos   = new SequenceKymos();
 	}
 	
 	public Experiment(String expDirectory) 
 	{
 		seqCamData = new SequenceCamData();
-		seqKymos   = new SequenceKymos();
+		seqSpotKymos   = new SequenceKymos();
 		this.resultsDirectory = expDirectory;
 	}
 	
 	public Experiment(SequenceCamData seqCamData) 
 	{
 		this.seqCamData = seqCamData;
-		this.seqKymos   = new SequenceKymos();
+		this.seqSpotKymos   = new SequenceKymos();
 		resultsDirectory = this.seqCamData.getImagesDirectory() + File.separator + RESULTS;
 		getFileIntervalsFromSeqCamData();
 		
@@ -141,7 +141,7 @@ public class Experiment
 		if (eADF.cameraImagesList.size() > 1) 
 			getFileIntervalsFromSeqCamData();
 		if(eADF.kymosImagesList!= null && eADF.kymosImagesList.size() > 0)
-			seqKymos = new SequenceKymos(eADF.kymosImagesList);
+			seqSpotKymos = new SequenceKymos(eADF.kymosImagesList);
 		xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML));
 	}
 	
@@ -251,8 +251,8 @@ public class Experiment
 	
 	public void closeSequences() 
 	{
-		if (seqKymos != null) 
-			seqKymos.closeSequence();
+		if (seqSpotKymos != null) 
+			seqSpotKymos.closeSequence();
 		if (seqCamData != null) 
 			seqCamData.closeSequence();
 		if (seqReference != null) 
@@ -267,8 +267,8 @@ public class Experiment
 		
 		getFileIntervalsFromSeqCamData();
 		
-		if (seqKymos == null)
-			seqKymos = new SequenceKymos();
+		if (seqSpotKymos == null)
+			seqSpotKymos = new SequenceKymos();
 
 		loadMCCapillaries_Only();
 		if (!capillaries.load_Measures(getKymosBinFullDirectory())) 
@@ -285,8 +285,8 @@ public class Experiment
 		
 		getFileIntervalsFromSeqCamData();
 		
-		if (seqKymos == null)
-			seqKymos = new SequenceKymos();
+		if (seqSpotKymos == null)
+			seqSpotKymos = new SequenceKymos();
 
 
 		return xmlReadDrosoTrack(null);
@@ -364,9 +364,9 @@ public class Experiment
 	
 	public boolean loadKymosImages() 
 	{
-		if (seqKymos != null)
-			seqKymos.loadImages();
-		return (seqKymos != null && seqKymos.seq != null);
+		if (seqSpotKymos != null)
+			seqSpotKymos.loadImages();
+		return (seqSpotKymos != null && seqSpotKymos.seq != null);
 	}
 		
 	public SequenceCamData openSequenceCamData() 
@@ -545,11 +545,11 @@ public class Experiment
 	
  	public boolean loadKymographs() 
  	{
-		if (seqKymos == null) 
-			seqKymos = new SequenceKymos();
-		List<ImageFileDescriptor> myList = seqKymos.loadListOfPotentialKymographsFromCapillaries(getKymosBinFullDirectory(), capillaries);
+		if (seqSpotKymos == null) 
+			seqSpotKymos = new SequenceKymos();
+		List<ImageFileDescriptor> myList = seqSpotKymos.loadListOfPotentialKymographsFromCapillaries(getKymosBinFullDirectory(), capillaries);
 		ImageFileDescriptor.getExistingFileNames(myList);
-		return seqKymos.loadImagesFromList(myList, true);
+		return seqSpotKymos.loadImagesFromList(myList, true);
 	}
 	
  	// ------------------------------------------------
@@ -627,7 +627,7 @@ public class Experiment
 		String kymosImagesDirectory = getKymosBinFullDirectory();
 		boolean flag2 = capillaries.load_Measures(kymosImagesDirectory);
 		if (flag1 & flag2) 
-			seqKymos.loadListOfPotentialKymographsFromCapillaries(kymosImagesDirectory, capillaries);
+			seqSpotKymos.loadListOfPotentialKymographsFromCapillaries(kymosImagesDirectory, capillaries);
 		return flag1 & flag2;
 	}
 	
@@ -913,8 +913,8 @@ public class Experiment
 		
 	public void kymosBuildFiltered01(int zChannelSource, int zChannelDestination, ImageTransformEnums transformop1, int spanDiff) 
 	{
-		int nimages = seqKymos.seq.getSizeT();
-		seqKymos.seq.beginUpdate();
+		int nimages = seqSpotKymos.seq.getSizeT();
+		seqSpotKymos.seq.beginUpdate();
 
 		ImageTransformInterface transform = transformop1.getFunction();
 		if (transform == null)
@@ -926,16 +926,16 @@ public class Experiment
 		for (int t= 0; t < nimages; t++) {
 			Capillary cap = capillaries.capillariesList.get(t);
 			cap.kymographIndex = t;
-			IcyBufferedImage img = seqKymos.getSeqImage(t, zChannelSource);
+			IcyBufferedImage img = seqSpotKymos.getSeqImage(t, zChannelSource);
 			IcyBufferedImage img2 = transform.getTransformedImage (img, null);
-			if (seqKymos.seq.getSizeZ(0) < (zChannelDestination+1)) 
-				seqKymos.seq.addImage(t, img2);
+			if (seqSpotKymos.seq.getSizeZ(0) < (zChannelDestination+1)) 
+				seqSpotKymos.seq.addImage(t, img2);
 			else
-				seqKymos.seq.setImage(t, zChannelDestination, img2);
+				seqSpotKymos.seq.setImage(t, zChannelDestination, img2);
 		}
 		
-		seqKymos.seq.dataChanged();
-		seqKymos.seq.endUpdate();
+		seqSpotKymos.seq.dataChanged();
+		seqSpotKymos.seq.endUpdate();
 	}
 	
 	public boolean loadReferenceImage() 

@@ -47,7 +47,8 @@ public class Spot implements Comparable <Spot>
 	
 	public BuildSeriesOptions 			limitsOptions	= new BuildSeriesOptions();
 
-	public int							spot_KymographIndex = -1;
+	public int							spot_CamData_T	= -1;
+	public int							spot_Kymograph_T = -1;
 	public String						spot_filenameTIFF = null;
 	public IcyBufferedImage 			spot_Image		= null;
 	 
@@ -472,28 +473,31 @@ public class Spot implements Comparable <Spot>
 	
 	public void initLevel2DMeasures() 
 	{
-		sum.initLevel2D_fromValues(getRoi().getName());
-		sumClean.initLevel2D_fromValues(getRoi().getName());
+		sum.initLevel2D_fromMeasureValues(getRoi().getName());
+		sumClean.initLevel2D_fromMeasureValues(getRoi().getName());
 		flyPresent.initLevel2D_fromBooleans(getRoi().getName());
 	}
 	
 	public void buildRunningMedianFromSumLevel2D(int imageHeight)
 	{
 		int span = 10;
-		sumClean.buildRunningMedian(span, sum);
-		sumClean.initLevel2D_fromValues(sumClean.getName());
-		sumClean.getRoi().setPolyline2D(sumClean.getPolyline2DFromLevel2D(sumClean.getLevel2D(), imageHeight));
+		if (sum.measureValues != null)
+			sumClean.buildRunningMedian(span, sum.measureValues);	
+		else 
+			sumClean.buildRunningMedian(span, sum.getLevel2D().ypoints);
+		sumClean.initLevel2D_fromMeasureValues(sumClean.getName());
+//		sumClean.getRoi().setPolyline2D(sumClean.getPolyline2DFromLevel2D(sumClean.getLevel2D(), imageHeight));
 	}
 	
 	public List<ROI2D> transferSpotMeasuresToROIs(int imageHeight) 
 	{
 		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
 		if (sum.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(sum.getROIForImage(spotRoi.getName(), spot_KymographIndex, imageHeight));
+			measuresRoisList.add(sum.getROIForImage(spotRoi.getName(), spot_Kymograph_T, imageHeight));
 		if (sumClean.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(sumClean.getROIForImage(spotRoi.getName(), spot_KymographIndex, imageHeight));
+			measuresRoisList.add(sumClean.getROIForImage(spotRoi.getName(), spot_Kymograph_T, imageHeight));
 		if (flyPresent.getLevel2DNPoints() != 0) 
-			measuresRoisList.add(flyPresent.getROIForImage(spotRoi.getName(), spot_KymographIndex, 10));
+			measuresRoisList.add(flyPresent.getROIForImage(spotRoi.getName(), spot_Kymograph_T, 10));
 		return measuresRoisList;
 	}
 

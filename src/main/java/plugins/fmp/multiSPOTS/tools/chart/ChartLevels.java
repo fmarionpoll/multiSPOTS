@@ -175,7 +175,7 @@ public class ChartLevels extends IcyFrame
 	private void selectKymoImage(int isel)
 	{
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-        Viewer v = exp.seqKymos.seq.getFirstViewer();
+        Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
         if (v != null && isel >= 0)
         	v.setPositionT(isel);
 	}

@@ -121,8 +121,8 @@ public class SequenceKymos extends SequenceCamData
 	
 	public void saveKymosCurvesToCapillariesMeasures(Experiment exp) 
 	{
-		exp.seqKymos.validateRois();
-		exp.seqKymos.transferKymosRoisToCapillaries_Measures(exp.capillaries);
+		exp.seqSpotKymos.validateRois();
+		exp.seqSpotKymos.transferKymosRoisToCapillaries_Measures(exp.capillaries);
 		exp.save_CapillariesMeasures();
 	}
 	

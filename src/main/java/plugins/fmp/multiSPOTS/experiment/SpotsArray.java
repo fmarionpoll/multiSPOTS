@@ -408,8 +408,13 @@ public class SpotsArray
 	
 	public void transferSumToSumClean() 
 	{
-//		for (Spot spot: spotsList)
-//			spot.buildRunningMedianFromSumLevel2D();	
+		int span = 10;
+		for (Spot spot: spotsList) {
+			if (spot.sum.measureValues != null)
+				spot.sumClean.buildRunningMedian(span, spot.sum.measureValues);	
+			else 
+				spot.sumClean.buildRunningMedian(span, spot.sum.getLevel2D().ypoints);
+		}
 	}
 	
 	public void initLevel2DMeasures() 

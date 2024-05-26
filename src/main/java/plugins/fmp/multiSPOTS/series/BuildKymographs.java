@@ -50,7 +50,7 @@ public class BuildKymographs extends BuildSeries
 			saveComputation(exp);
 
 		closeKymoViewers();
-		exp.seqKymos.closeSequence();
+		exp.seqSpotKymos.closeSequence();
 	}
 	
 	private boolean loadExperimentDataToBuildKymos(Experiment exp) 
@@ -85,7 +85,7 @@ public class BuildKymographs extends BuildSeries
 			return;
 		
 		ProgressFrame progressBar = new ProgressFrame("Save kymographs");
-		int nframes = exp.seqKymos.seq.getSizeT();
+		int nframes = exp.seqSpotKymos.seq.getSizeT();
 		int nCPUs = SystemUtil.getNumberOfCPUs();
 	    final Processor processor = new Processor(nCPUs);
 	    processor.setThreadName("buildkymo2");
@@ -94,7 +94,7 @@ public class BuildKymographs extends BuildSeries
 		futuresArray.clear();
 		
 		int t0 = (int) exp.binT0;
-		for (int t = t0; t < exp.seqKymos.seq.getSizeT(); t++) {
+		for (int t = t0; t < exp.seqSpotKymos.seq.getSizeT(); t++) {
 			final int t_index = t;
 			futuresArray.add(processor.submit(new Runnable () {
 				@Override
@@ -102,7 +102,7 @@ public class BuildKymographs extends BuildSeries
 					Capillary cap = exp.capillaries.capillariesList.get(t_index);
 					String filename = directory + File.separator + cap.getKymographName() + ".tiff";
 					File file = new File (filename);
-					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
+					IcyBufferedImage image = exp.seqSpotKymos.getSeqImage(t_index, 0);
 					try {
 						Saver.saveImage(image, file, true);
 					} 
@@ -125,7 +125,7 @@ public class BuildKymographs extends BuildSeries
 			System.out.println("BuildKymographs:buildKymo Abort (1): nbcapillaries = 0");
 			return false;
 		}
-		SequenceKymos seqKymos = exp.seqKymos;
+		SequenceKymos seqKymos = exp.seqSpotKymos;
 		seqKymos.seq = new Sequence();
 		initArraysToBuildKymographImages(exp);
 		

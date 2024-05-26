@@ -50,7 +50,7 @@ public class BuildKymosSpots extends BuildSeries
 			saveComputation(exp);
 
 		closeKymoViewers();
-		exp.seqKymos.closeSequence();
+		exp.seqSpotKymos.closeSequence();
 	}
 	
 	private boolean loadExperimentDataToBuildKymos(Experiment exp) 
@@ -86,7 +86,7 @@ public class BuildKymosSpots extends BuildSeries
 		
 		ProgressFrame progressBar = new ProgressFrame("Save kymographs");
 		
-		int nframes = exp.seqKymos.seq.getSizeT();
+		int nframes = exp.seqSpotKymos.seq.getSizeT();
 		int nCPUs = SystemUtil.getNumberOfCPUs();
 	    final Processor processor = new Processor(nCPUs);
 	    processor.setThreadName("buildkymo2");
@@ -94,7 +94,7 @@ public class BuildKymosSpots extends BuildSeries
         ArrayList<Future<?>> futuresArray = new ArrayList<Future<?>>(nframes);
 		futuresArray.clear();
 		
-		for (int t = 0; t < exp.seqKymos.seq.getSizeT(); t++) {
+		for (int t = 0; t < exp.seqSpotKymos.seq.getSizeT(); t++) {
 			final int t_index = t;
 			futuresArray.add(processor.submit(new Runnable () {
 				@Override
@@ -102,7 +102,7 @@ public class BuildKymosSpots extends BuildSeries
 					Spot spot = exp.spotsArray.spotsList.get(t_index);
 					String filename = directory + File.separator + spot.getRoiName() + ".tiff";
 					File file = new File (filename);
-					IcyBufferedImage image = exp.seqKymos.getSeqImage(t_index, 0);
+					IcyBufferedImage image = exp.seqSpotKymos.getSeqImage(t_index, 0);
 					try {
 						Saver.saveImage(image, file, true);
 					} 
@@ -207,7 +207,7 @@ public class BuildKymosSpots extends BuildSeries
 	
 	private void exportSpotImages_to_Kymograph(Experiment exp, final int sizeC)
 	{
-		Sequence seqKymo = exp.seqKymos.seq ;
+		Sequence seqKymo = exp.seqSpotKymos.seq ;
 		seqKymo.beginUpdate();
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 	    processor.setThreadName("buildKymograph");
@@ -238,9 +238,9 @@ public class BuildKymosSpots extends BuildSeries
 		
 	private void initArraysToBuildKymographImages(Experiment exp) 
 	{
-		if (exp.seqKymos == null)
-			exp.seqKymos = new SequenceKymos();
-		SequenceKymos seqKymos = exp.seqKymos;
+		if (exp.seqSpotKymos == null)
+			exp.seqSpotKymos = new SequenceKymos();
+		SequenceKymos seqKymos = exp.seqSpotKymos;
 		seqKymos.seq = new Sequence();
 		
 		SequenceCamData seqCamData = exp.seqCamData;

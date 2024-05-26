@@ -47,20 +47,20 @@ import plugins.fmp.multiSPOTS.tools.toExcel.XLSResultsArray;
 
 public class ChartSpots extends IcyFrame
 {
-	public JPanel 	mainChartPanel 	= null;
-	public IcyFrame mainChartFrame 	= null;
-	private MultiSPOTS 	parent0 	= null;
+	public JPanel 		mainChartPanel 	= null;
+	public IcyFrame 	mainChartFrame 	= null;
+	private MultiSPOTS 	parent0 		= null;
 	
-	private Point pt = new Point (0,0);
-	private boolean flagMaxMinSet = false;
-	private double globalYMax = 0;
-	private double globalYMin = 0;
-	private double globalXMax = 0;
+	private Point 		pt 				= new Point (0,0);
+	private boolean 	flagMaxMinSet 	= false;
+	private double 		globalYMax 		= 0;
+	private double 		globalYMin		= 0;
+	private double 		globalXMax 		= 0;
 
-	private double ymax = 0;
-	private double ymin = 0;
-	private double xmax = 0;
-	private List<JFreeChart> xyChartList  = new ArrayList <JFreeChart>();
+	private double	 	ymax 			= 0;
+	private double 		ymin 			= 0;
+	private double 		xmax 			= 0;
+	private List<JFreeChart> xyChartList = new ArrayList <JFreeChart>();
 
 	//----------------------------------------
 	
@@ -165,8 +165,9 @@ public class ChartSpots extends IcyFrame
         panel.addChartMouseListener(new ChartMouseListener() {
 		    public void chartMouseClicked(ChartMouseEvent e) {
 		    	Spot spot = getClickedSpot(e);
-		    	selectSpot(spot); 
-		    	selectKymograph(spot);
+		    	selectSpot(exp, spot); 
+		    	selectT(exp, xlsExportOptions, spot);
+		    	selectKymograph(exp, spot);
 		    	}
 		    public void chartMouseMoved(ChartMouseEvent e) {}
 		});
@@ -185,7 +186,6 @@ public class ChartSpots extends IcyFrame
         	return null;
         
 		JFreeChart chart = e.getChart();
-		ChartEntity chartEntity = e.getEntity();
 		MouseEvent mouseEvent = e.getTrigger();
 		ChartPanel panel = (ChartPanel) mainChartPanel.getComponent(0);
 		PlotRenderingInfo plotInfo = panel.getChartRenderingInfo().getPlotInfo();
@@ -200,12 +200,15 @@ public class ChartSpots extends IcyFrame
 		
 		// get item in the chart
 		Spot spotFound = null;
+		ChartEntity chartEntity = e.getEntity();
 		if (chartEntity != null && chartEntity instanceof XYItemEntity) {
-		   XYItemEntity xyItemEntity = ((XYItemEntity) e.getEntity());
+		   XYItemEntity xyItemEntity = (XYItemEntity) chartEntity;
 		   int isel = xyItemEntity.getSeriesIndex();
 		   XYDataset xyDataset = xyItemEntity.getDataset();
 		   String description = (String) xyDataset.getSeriesKey(isel); 
 		   spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
+		   
+		   spotFound.spot_CamData_T = xyItemEntity.getItem();
 		}
 		else if (subplotindex >= 0)	{
 			XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
@@ -218,9 +221,8 @@ public class ChartSpots extends IcyFrame
 		return spotFound;
 	}
 
-	private void selectSpot(Spot spot)
+	private void selectSpot(Experiment exp, Spot spot)
 	{
-		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
         Viewer v = exp.seqCamData.seq.getFirstViewer();
         if (v != null && spot != null) {
         	ROI2D roi = spot.getRoi();
@@ -228,11 +230,20 @@ public class ChartSpots extends IcyFrame
         }
 	}
 	
-	private void selectKymograph(Spot spot)
+	private void selectT(Experiment exp, XLSExportOptions xlsExportOptions, Spot spot)
 	{
-		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		if (exp.seqKymos != null) {
-	        Viewer v = exp.seqKymos.seq.getFirstViewer();
+		Viewer v = exp.seqCamData.seq.getFirstViewer();
+        if (v != null && spot != null && spot.spot_CamData_T > 0) {
+        	System.out.println("T="+spot.spot_CamData_T);
+        	int ii = (int) (spot.spot_CamData_T * exp.binDuration_ms / xlsExportOptions.buildExcelStepMs);
+        	v.setPositionT(ii);
+        }
+	}
+	
+	private void selectKymograph(Experiment exp, Spot spot)
+	{
+		if (exp.seqSpotKymos != null) {
+	        Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
 	        if (v != null && spot != null) {
 	        	v.setPositionT(spot.spotIndex);
 	        }

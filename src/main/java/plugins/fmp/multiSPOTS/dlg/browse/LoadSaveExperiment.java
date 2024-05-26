@@ -215,9 +215,9 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 					v.setTitle(exp.seqCamData.getDecoratedImageName(t));
 				}
 				// TODO: check if the lines below are necessary
-				if (exp.seqKymos.seq != null 
-					&& sequenceEvent.getSequence() == exp.seqKymos.seq) {
-					Viewer v = exp.seqKymos.seq.getFirstViewer();
+				if (exp.seqSpotKymos.seq != null 
+					&& sequenceEvent.getSequence() == exp.seqSpotKymos.seq) {
+					Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
 					v.setTitle("dummy");
 //					int t = v.getPositionT(); 
 //					String title = parent0.paneKymos.tabDisplay.getKymographTitle();
@@ -295,9 +295,9 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			if (parent0.dlgExperiment.tabOptions.graphsCheckBox.isSelected())
 				parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
 			
-			if (exp.seqKymos != null) {	
+			if (exp.seqSpotKymos != null) {	
 				parent0.dlgKymos.tabLoadSave.loadDefaultKymos(exp);
-				exp.spotsArray.transferSpotsMeasuresToSequence(exp.seqKymos.seq);
+				exp.spotsArray.transferSpotsMeasuresToSequence(exp.seqSpotKymos.seq);
 			}
 			
 			exp.load_CagesMeasures();

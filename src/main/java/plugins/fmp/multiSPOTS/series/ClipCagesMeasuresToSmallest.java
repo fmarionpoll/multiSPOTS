@@ -16,7 +16,7 @@ public class ClipCagesMeasuresToSmallest extends BuildSeries
 		exp.loadMCCapillaries();
 		if (exp.loadKymographs()) 
 		{
-			SequenceKymos seqKymos = exp.seqKymos;
+			SequenceKymos seqKymos = exp.seqSpotKymos;
 			ArrayList<Integer> listCageID = new ArrayList<Integer> (seqKymos.nTotalFrames);
 			for (int t= 0; t< seqKymos.nTotalFrames; t++) 
 			{
@@ -37,7 +37,7 @@ public class ClipCagesMeasuresToSmallest extends BuildSeries
 			exp.save_CapillariesMeasures();
 		}
 		exp.seqCamData.closeSequence();
-		exp.seqKymos.closeSequence();
+		exp.seqSpotKymos.closeSequence();
 	}
 	
 	boolean findCageID(int cageID, ArrayList<Integer> listCageID) 
