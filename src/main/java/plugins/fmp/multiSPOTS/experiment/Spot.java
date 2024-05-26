@@ -477,28 +477,15 @@ public class Spot implements Comparable <Spot>
 		flyPresent.initLevel2D_fromBooleans(getRoi().getName());
 	}
 	
-	public void buildSUMCLEANfromSUM()
+	public void buildRunningMedianFromSumLevel2D(int imageHeight)
 	{
-		int npoints = sum.measureValues.length;
-		for (int i = 0; i < npoints; i++) {
-			if(!flyPresent.measureBooleans[i]) 
-				sumClean.measureValues[i] = sum.measureValues[i];
-			else if (i > 0) 
-				sumClean.measureValues[i] = sumClean.measureValues[i-1];
-			else {
-				double value = Double.NaN;
-				for (int j = i; j < npoints; j++) {
-					if (!flyPresent.measureBooleans[j]) {
-						value = sum.measureValues[j];
-						break;
-					}
-				}
-				sumClean.measureValues[i] = value;
-			}
-		}
+		int span = 10;
+		sumClean.buildRunningMedian(span, sum);
+		sumClean.initLevel2D_fromValues(sumClean.getName());
+		sumClean.getRoi().setPolyline2D(sumClean.getPolyline2DFromLevel2D(sumClean.getLevel2D(), imageHeight));
 	}
 	
-	public List<ROI2D> transferMeasuresToROIs(int imageHeight) 
+	public List<ROI2D> transferSpotMeasuresToROIs(int imageHeight) 
 	{
 		List<ROI2D> measuresRoisList = new ArrayList<ROI2D> ();
 		if (sum.getLevel2DNPoints() != 0) 

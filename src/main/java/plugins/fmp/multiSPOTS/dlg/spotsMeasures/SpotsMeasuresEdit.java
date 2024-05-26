@@ -32,6 +32,7 @@ public class SpotsMeasuresEdit  extends JPanel
 	private JComboBox<String> 	roiTypeCombo 	= new JComboBox<String> (new String[] 
 								{"sum", "clean", "fly present/absent"});
 	private JButton 			cutAndInterpolateButton = new JButton("Cut & interpolate");
+	private JButton 			buildMedianButton 	= new JButton("Build Median");
 //	private JButton 			restoreButton 	= new JButton("Restore");
 //	private JButton 			saveButton 		= new JButton("Save");
 	private MultiSPOTS 			parent0			= null;
@@ -46,12 +47,13 @@ public class SpotsMeasuresEdit  extends JPanel
 		layoutLeft.setVgap(0);
 		
 		JPanel panel1 = new JPanel(layoutLeft);
+		panel1.add(cutAndInterpolateButton);
 		panel1.add(new JLabel("Apply to ", SwingConstants.LEFT)); 
 		panel1.add(roiTypeCombo);
 		add(panel1);
 		
 		JPanel panel2 = new JPanel(layoutLeft);
-		panel2.add(cutAndInterpolateButton);
+		panel2.add(buildMedianButton);
 		add(panel2);
 		
 		JPanel panel3 = new JPanel(layoutLeft);
@@ -71,6 +73,17 @@ public class SpotsMeasuresEdit  extends JPanel
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 					cutAndInterpolate(exp);
+			}});
+		
+		buildMedianButton.addActionListener(new ActionListener () { 
+			@Override public void actionPerformed( final ActionEvent e ) { 
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) {
+					int imageHeight = exp.seqKymos.seq.getHeight();
+					for (Spot spot: exp.spotsArray.spotsList) {
+						spot.buildRunningMedianFromSumLevel2D(imageHeight);
+					}
+				}
 			}});
 	}
 	
@@ -116,31 +129,41 @@ public class SpotsMeasuresEdit  extends JPanel
 				last_pt_inside = i;
 				continue;
 			}
+			else
+				last_pt_inside = i-1;
 			if (first_pt_inside >= 0 && last_pt_inside >= 0) {
-				int npoints = last_pt_inside - first_pt_inside + 1;
-				double deltaX = (polyline.xpoints[last_pt_inside+1] - polyline.xpoints[first_pt_inside-1])/npoints;
-				double deltaY = (polyline.ypoints[last_pt_inside+1] - polyline.ypoints[first_pt_inside-1])/npoints;
-				double startX = polyline.xpoints[first_pt_inside-1];
-				double startY = polyline.ypoints[first_pt_inside-1];
-				int k = 0;
-				for (int j = first_pt_inside; j < last_pt_inside+1; j++, k++) {
-					polyline.xpoints[j] = startX + deltaX * k;
-					polyline.ypoints[j] = startY + deltaY * k;
-				}
-				
+				extrapolateBetweenLimits(polyline, first_pt_inside, last_pt_inside);
 				first_pt_inside = -1;
 				last_pt_inside = -1;
 			}
 		}
 		
-		// here: deal with unfinished business (first > = 0 && last <0)
 		if (first_pt_inside >= 0 && last_pt_inside < 0) {
-			
+			extrapolateBetweenLimits(polyline, first_pt_inside, last_pt_inside);
 		}
 		spotMeasure.getRoi().setPolyline2D(polyline);	
 	}
 	
-	
+	void extrapolateBetweenLimits(Polyline2D polyline, int first_pt_inside, int last_pt_inside)
+	{
+		int first = first_pt_inside - 1;
+		if (first < 0) first = 0;
+		int last = last_pt_inside + 1;
+		if (last >= polyline.npoints)
+			last = polyline.npoints -1;
+		if (last == 0)
+			last = first;
+		int npoints = last_pt_inside - first_pt_inside + 1;
+		double deltaX = (polyline.xpoints[last] - polyline.xpoints[first])/npoints;
+		double deltaY = (polyline.ypoints[last] - polyline.ypoints[first])/npoints;
+		double startX = polyline.xpoints[first];
+		double startY = polyline.ypoints[first];
+		int k = 0;
+		for (int j = first_pt_inside; j < last_pt_inside+1; j++, k++) {
+			polyline.xpoints[j] = startX + deltaX * k;
+			polyline.ypoints[j] = startY + deltaY * k;
+		}
+	}
 	
 
 }

@@ -3,6 +3,7 @@ package plugins.fmp.multiSPOTS.experiment;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import icy.type.geom.Polyline2D;
@@ -217,6 +218,17 @@ public class SpotMeasure
 		return new ROI2DPolyLine(polyline);
 	}
 	
+	public Polyline2D getPolyline2DFromLevel2D (Level2D level2D, int imageHeight)
+	{
+		Polyline2D polyline = new Polyline2D(level2D.xpoints, level2D.ypoints, level2D.npoints);
+		factor = (double) imageHeight / level2D.getBounds().getMaxY();
+		for (int i = 0; i < level2D.npoints; i++) {
+			polyline.xpoints[i] = level2D.xpoints[i];
+			polyline.ypoints[i] = level2D.ypoints[i] * factor;
+		}
+		return polyline;
+	}	
+	
 	private Color getROI2DColorFromName() 
 	{
 		Color color = null;
@@ -246,6 +258,44 @@ public class SpotMeasure
 			level2D.ypoints[i] = polyline.ypoints[i] / factor;
 		}
 	}
+	
+	// ----------------------------------------------------------------------
+
+	public void buildRunningMedian(int span, SpotMeasure spotMeasure) 
+	{	
+
+		int nbspan = span/2;
+		int sizeTempArray = nbspan*2+1;
+		double [] tempArraySorted = new double [sizeTempArray];
+		double [] tempArrayCircular = new double [sizeTempArray];
+		
+		double[] yvalues = spotMeasure.getLevel2D().ypoints;
+		int npoints = yvalues.length;
+		measureValues = new double[npoints];
+		for (int t = 0; t < sizeTempArray; t++) {	
+			double value = yvalues[t];
+			tempArrayCircular[t] = value;
+			measureValues[t] = value;
+		}
+
+		int iarraycircular = sizeTempArray -1;
+		for (int t = nbspan; t < npoints-nbspan; t++) {
+			int bin = t + nbspan ;
+			double newvalue = yvalues[t];
+			tempArrayCircular[iarraycircular]= newvalue;
+			tempArraySorted = tempArrayCircular.clone();
+			Arrays.sort(tempArraySorted);
+			double median = tempArraySorted[nbspan];
+			bin = t ;
+			measureValues[bin] = median;
+			
+			iarraycircular++;
+			if (iarraycircular >= sizeTempArray)
+				iarraycircular = 0;
+		}
+	}
+
+	
 	// ----------------------------------------------------------------------
 	
 	public boolean cvsExportXYDataToRow(StringBuffer sbf, String sep) 

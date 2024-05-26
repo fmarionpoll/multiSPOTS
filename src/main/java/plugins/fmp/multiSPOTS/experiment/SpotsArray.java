@@ -311,7 +311,7 @@ public class SpotsArray
 		int nspots = spotsList.size();
 		int height = seq.getHeight();
 		for (int i = 0; i < nspots; i++) {
-			List<ROI2D> listOfRois = spotsList.get(i).transferMeasuresToROIs(height);
+			List<ROI2D> listOfRois = spotsList.get(i).transferSpotMeasuresToROIs(height);
 			for (ROI2D roi: listOfRois) {
 				if (roi != null) 
 					roi.setT(i);
@@ -408,8 +408,8 @@ public class SpotsArray
 	
 	public void transferSumToSumClean() 
 	{
-		for (Spot spot: spotsList)
-			spot.buildSUMCLEANfromSUM();	
+//		for (Spot spot: spotsList)
+//			spot.buildRunningMedianFromSumLevel2D();	
 	}
 	
 	public void initLevel2DMeasures() 
