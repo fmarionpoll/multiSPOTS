@@ -162,6 +162,7 @@ public class ChartSpots extends IcyFrame
         		width, height, minimumDrawWidth, minimumDrawHeight, maximumDrawWidth, maximumDrawHeight, 
         		useBuffer,
         		true, true, true, false, true); // boolean properties, boolean save, boolean print, boolean zoom, boolean tooltips)
+        
         panel.addChartMouseListener(new ChartMouseListener() {
 		    public void chartMouseClicked(ChartMouseEvent e) {
 		    	Spot clikedSpot = getClickedSpot(e);
@@ -200,23 +201,36 @@ public class ChartSpots extends IcyFrame
 		
 		// get item in the chart
 		Spot spotFound = null;
+		String description = null;
 		ChartEntity chartEntity = e.getEntity();
 		if (chartEntity != null && chartEntity instanceof XYItemEntity) {
 		   XYItemEntity xyItemEntity = (XYItemEntity) chartEntity;
 		   int isel = xyItemEntity.getSeriesIndex();
 		   XYDataset xyDataset = xyItemEntity.getDataset();
-		   String description = (String) xyDataset.getSeriesKey(isel); 
+		   description = (String) xyDataset.getSeriesKey(isel); 
+
 		   spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 		   spotFound.spot_CamData_T = xyItemEntity.getItem();
 		}
 		else if (subplotindex >= 0)	{
 			XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
-			String description = (String) xyDataset.getSeriesKey(0); 
+			description = (String) xyDataset.getSeriesKey(0); 
+			
 			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 		}
-		else
+		else {
 			System.out.println("Graph clicked but source not found");
-		
+			return null;
+		}
+		String lastN = description.substring(4, 5);
+		int foo;
+		try {
+		   foo = Integer.parseInt(lastN);
+		}
+		catch (NumberFormatException e1) {
+		   foo = 0;
+		}
+		spotFound.spot_Kymograph_T = 2 * spotFound.cageIndex + foo;
 		return spotFound;
 	}
 
@@ -243,7 +257,7 @@ public class ChartSpots extends IcyFrame
 		if (exp.seqSpotKymos != null) {
 	        Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
 	        if (v != null && spot != null) {
-	        	v.setPositionT(spot.spotIndex);
+	        	v.setPositionT(spot.spot_Kymograph_T);
 	        }
 		}
 	}
