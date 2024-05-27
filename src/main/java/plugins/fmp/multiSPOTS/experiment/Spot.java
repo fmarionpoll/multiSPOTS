@@ -486,7 +486,6 @@ public class Spot implements Comparable <Spot>
 		else 
 			sumClean.buildRunningMedian(span, sum.getLevel2D().ypoints);
 		sumClean.initLevel2D_fromMeasureValues(sumClean.getName());
-//		sumClean.getRoi().setPolyline2D(sumClean.getPolyline2DFromLevel2D(sumClean.getLevel2D(), imageHeight));
 	}
 	
 	public List<ROI2D> transferSpotMeasuresToROIs(int imageHeight) 
@@ -583,7 +582,6 @@ public class Spot implements Comparable <Spot>
 			case AREA_SUM:
 			case AREA_SUMCLEAN:
 			case AREA_FLYPRESENT:
-//			case AREA_CNTPIX:	
 				sbf.append("#" + csvSep + measureType.toString() + csvSep + explanation1);
 				break;
 			default:

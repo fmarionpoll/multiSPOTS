@@ -201,7 +201,7 @@ public class SpotMeasure
 		String roiname = name + "_" + getName();
 		roi.setName(roiname);
 		roi.setT(t);
-		roi.setColor(getROI2DColorFromName());
+		setROI2DColorAndStrokeFromName();
 //		roi.setStroke(.5);  
 		return roi;
 	}
@@ -229,21 +229,24 @@ public class SpotMeasure
 		return polyline;
 	}	
 	
-	private Color getROI2DColorFromName() 
+	private void setROI2DColorAndStrokeFromName() 
 	{
 		Color color = null;
+		Double stroke = 1.;
 		switch (name) {
 		case "sum":
-			color = Color.green;
+			color = Color.red;
+			stroke = .5;
 			break;
 		case "clean":
-			color = Color.red;
+			color = Color.green;
 			break;
 		default:
 			color = Color.blue;
 			break;
 		}
-		return color;
+		roi.setColor(color); 
+		roi.setStroke(stroke);
 	}
 	
 	public void transferROItoLevel2D()

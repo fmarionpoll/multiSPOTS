@@ -41,10 +41,7 @@ public class SpotsMeasuresEdit  extends JPanel implements PropertyChangeListener
 	private String 				buildMedianString 		= "Build median";
 	private JButton 			buildMedianButton 		= new JButton(buildMedianString);
 	private JCheckBox 			allSeriesCheckBox 		= new JCheckBox("ALL (current to last)", false);
-	
-	
 	private BuildMedianFromSpotMeasure 	threadbuildMedian = null;	
-	
 	private MultiSPOTS 			parent0					= null;
 	
 	
@@ -65,7 +62,6 @@ public class SpotsMeasuresEdit  extends JPanel implements PropertyChangeListener
 		JPanel panel2 = new JPanel(layoutLeft);
 		panel2.add(buildMedianButton);
 		panel2.add(allSeriesCheckBox);
-//		panel2.add(concurrentDisplayCheckBox);
 		add(panel2);
 		
 		JPanel panel3 = new JPanel(layoutLeft);
@@ -86,13 +82,6 @@ public class SpotsMeasuresEdit  extends JPanel implements PropertyChangeListener
 		
 		buildMedianButton.addActionListener(new ActionListener () { 
 			@Override public void actionPerformed( final ActionEvent e ) { 
-//				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-//				if (exp != null) {
-//					int imageHeight = exp.seqKymos.seq.getHeight();
-//					for (Spot spot: exp.spotsArray.spotsList) {
-//						spot.buildRunningMedianFromSumLevel2D(imageHeight);
-//					}
-//				}
 				if (buildMedianButton.getText().equals(buildMedianString))
 					startDetection();
 				else 
@@ -136,7 +125,6 @@ public class SpotsMeasuresEdit  extends JPanel implements PropertyChangeListener
 		else {
 			options.seriesFirst = 0;
 		}
-//		options.concurrentDisplay = concurrentDisplayCheckBox.isSelected();
 
 		return options;
 	}
@@ -174,18 +162,18 @@ public class SpotsMeasuresEdit  extends JPanel implements PropertyChangeListener
 		for (int i = 0; i < polyline.npoints; i++) {
 			boolean isInside = roi.contains(polyline.xpoints[i], polyline.ypoints[i]);
 			if (first_pt_inside < 0) {
-				if (!isInside)
-					continue; 
-				else
+				if (isInside)
 					first_pt_inside = i;
 				continue;
 			}
+			
 			if (isInside) { 
 				last_pt_inside = i;
 				continue;
 			}
 			else
 				last_pt_inside = i-1;
+			
 			if (first_pt_inside >= 0 && last_pt_inside >= 0) {
 				extrapolateBetweenLimits(polyline, first_pt_inside, last_pt_inside);
 				first_pt_inside = -1;
@@ -202,17 +190,21 @@ public class SpotsMeasuresEdit  extends JPanel implements PropertyChangeListener
 	void extrapolateBetweenLimits(Polyline2D polyline, int first_pt_inside, int last_pt_inside)
 	{
 		int first = first_pt_inside - 1;
-		if (first < 0) first = 0;
+		if (first <= 0) 
+			first = 0;
 		int last = last_pt_inside + 1;
 		if (last >= polyline.npoints)
 			last = polyline.npoints -1;
 		if (last == 0)
 			last = first;
+		double startY = polyline.ypoints[first];
+		if (first == 0)
+			startY = 512.;
+		double startX = polyline.xpoints[first];
 		int npoints = last_pt_inside - first_pt_inside + 1;
 		double deltaX = (polyline.xpoints[last] - polyline.xpoints[first])/npoints;
-		double deltaY = (polyline.ypoints[last] - polyline.ypoints[first])/npoints;
-		double startX = polyline.xpoints[first];
-		double startY = polyline.ypoints[first];
+		double deltaY = (polyline.ypoints[last] - startY)/npoints;
+		
 		int k = 0;
 		for (int j = first_pt_inside; j < last_pt_inside+1; j++, k++) {
 			polyline.xpoints[j] = startX + deltaX * k;
