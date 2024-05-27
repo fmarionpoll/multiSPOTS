@@ -164,10 +164,10 @@ public class ChartSpots extends IcyFrame
         		true, true, true, false, true); // boolean properties, boolean save, boolean print, boolean zoom, boolean tooltips)
         panel.addChartMouseListener(new ChartMouseListener() {
 		    public void chartMouseClicked(ChartMouseEvent e) {
-		    	Spot spot = getClickedSpot(e);
-		    	selectSpot(exp, spot); 
-		    	selectT(exp, xlsExportOptions, spot);
-		    	selectKymograph(exp, spot);
+		    	Spot clikedSpot = getClickedSpot(e);
+		    	selectSpot(exp, clikedSpot); 
+		    	selectT(exp, xlsExportOptions, clikedSpot);
+		    	selectKymograph(exp, clikedSpot);
 		    	}
 		    public void chartMouseMoved(ChartMouseEvent e) {}
 		});
@@ -207,7 +207,6 @@ public class ChartSpots extends IcyFrame
 		   XYDataset xyDataset = xyItemEntity.getDataset();
 		   String description = (String) xyDataset.getSeriesKey(isel); 
 		   spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
-		   
 		   spotFound.spot_CamData_T = xyItemEntity.getItem();
 		}
 		else if (subplotindex >= 0)	{
