@@ -24,7 +24,7 @@ import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 public class MultiSPOTS extends PluginActionable  
 {
-	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS May 26, 2024", true, true, true, true);
+	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS May 28, 2024", true, true, true, true);
 	public JComboBoxExperiment 	expListCombo 	= new JComboBoxExperiment();
 	
 	public DlgBrowse_ 		dlgBrowse 		= new DlgBrowse_();
@@ -44,7 +44,7 @@ public class MultiSPOTS extends PluginActionable
 	{		
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
 		dlgBrowse.init(mainPanel, "Browse", this);
-		dlgExperiment.init(mainPanel, "Experiments", this);
+		dlgExperiment.init(mainPanel, "Experiment", this);
 		dlgSpots.init(mainPanel, "Spots", this);
 		dlgKymos.init(mainPanel, "KymoSpots", this);
 		dlgMeasure.init(mainPanel, "Measure spots", this);
