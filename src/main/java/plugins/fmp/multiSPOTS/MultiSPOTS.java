@@ -24,14 +24,14 @@ import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 public class MultiSPOTS extends PluginActionable  
 {
-	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS May 28, 2024", true, true, true, true);
-	public JComboBoxExperiment 	expListCombo 	= new JComboBoxExperiment();
+	public IcyFrame 		mainFrame 		= new IcyFrame("multiSPOTS May 29, 2024", true, true, true, true);
+	public JComboBoxExperiment 	expListCombo= new JComboBoxExperiment();
 	
 	public DlgBrowse_ 		dlgBrowse 		= new DlgBrowse_();
 	public DlgExperiment_ 	dlgExperiment 	= new DlgExperiment_();
 	public DlgSpots_ 		dlgSpots		= new DlgSpots_();
 	public DlgKymos_		dlgKymos		= new DlgKymos_();
-	public DlgSpotMeasure_ 		dlgMeasure 		= new DlgSpotMeasure_();
+	public DlgSpotMeasure_ 	dlgMeasure 		= new DlgSpotMeasure_();
 	public DlgCages_ 		dlgCages 		= new DlgCages_();
 	public DlgExcel_		dlgExcel		= new DlgExcel_();
 	
