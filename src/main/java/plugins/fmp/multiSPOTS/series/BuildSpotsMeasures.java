@@ -174,6 +174,8 @@ public class BuildSpotsMeasures extends BuildSeries {
 		return measureSpotSumAtTFromMask(cursorWorkImage, roiT.mask2DPoints, spotThresholdUp, spotThreshold);
 	}
 
+	//Icy MathArray.median(double[] input, boolean preserveData)
+	
 	private int measureSpotSumAtTFromMask(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints,
 			boolean spotThresholdUp, int spotThreshold) {
 		int sum = 0;

@@ -266,7 +266,7 @@ public class Shape extends JPanel {
 		for (Spot spot : exp.spotsArray.spotsList) {
 			exp.seqCamData.seq.removeROI(spot.getRoi());
 			try {
-				spot.mask2D = spot.getRoi().getBooleanMask2D(0, 0, 1, true);
+				spot.mask2DSpot = spot.getRoi().getBooleanMask2D(0, 0, 1, true);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

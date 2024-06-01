@@ -27,9 +27,8 @@ public class Spot implements Comparable<Spot> {
 	private ROI2DShape spotRoi_outer = null;
 	private ROI2DShape spotRoi_old = null;
 	private ArrayList<ROI2DAlongT> listRoiAlongT = new ArrayList<ROI2DAlongT>();
-	
-	public BooleanMask2D mask2D = null;
-	public BooleanMask2D mask2D_outer = null;
+
+	public BooleanMask2D mask2DSpot = null;
 
 	public int cageIndex = -1;
 	public String version = null;
@@ -428,7 +427,6 @@ public class Spot implements Comparable<Spot> {
 		listRoiAlongT.add(new ROI2DAlongT(0, spotRoi));
 	}
 
-	
 	// --------------------------------------------
 
 	public void adjustLevel2DMeasuresToImageWidth(int imageWidth) {

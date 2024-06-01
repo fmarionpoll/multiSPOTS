@@ -317,9 +317,9 @@ public class ROI2DMeasures {
 			BuildSeriesOptions options) {
 		boolean spotThresholdUp = options.spotThresholdUp;
 		int spotThreshold = options.spotThreshold;
-		Rectangle rectSpot = spot.mask2D.bounds;
+		Rectangle rectSpot = spot.mask2DSpot.bounds;
 		IcyBufferedImage subWorkImage = IcyBufferedImageUtil.getSubImage(workImage, rectSpot);
-		boolean[] mask = spot.mask2D.mask;
+		boolean[] mask = spot.mask2DSpot.mask;
 		int[] workData = (int[]) ArrayUtil.arrayToIntArray(subWorkImage.getDataXY(0), workImage.isSignedDataType());
 
 		if (spotThresholdUp) {
