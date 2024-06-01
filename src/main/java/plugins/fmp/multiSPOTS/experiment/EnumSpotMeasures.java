@@ -6,6 +6,8 @@ public enum EnumSpotMeasures {
 
 	AREA_SUM("AREA_SUM", "sum grey over threshold"),
 	AREA_SUMCLEAN("AREA_SUMCLEAN", "sum grey values of pixels over threshold with no fly"),
+	AREA_OUT("AREA_OUT", "median grey value background"),
+	AREA_DIFF("AREA_DIFF", "grey value -background"),
 	AREA_FLYPRESENT("AREA_FLYPRESENT", "fly is present or not over the spot"), ALL("ALL", "all options");
 
 	private String label;

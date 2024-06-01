@@ -343,12 +343,12 @@ public class Display extends JPanel implements ViewerListener {
 	private void selectSpot(Experiment exp, int isel) {
 		SpotsArray spotsArray = exp.spotsArray;
 		for (Spot spot : spotsArray.spotsList) {
-			spot.getRoi().setSelected(false);
-			spot.getRoi().setFocused(false);
+			spot.getRoi_in().setSelected(false);
+			spot.getRoi_in().setFocused(false);
 		}
 		if (isel >= 0) {
 			Spot selectedSpot = spotsArray.spotsList.get(isel);
-			selectedSpot.getRoi().setFocused(true);
+			selectedSpot.getRoi_in().setFocused(true);
 		}
 	}
 

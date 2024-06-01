@@ -21,6 +21,9 @@ public enum EnumXLSExportType {
 
 	AREA_SUM("AREA_SUM", "grey value", "Consumption (sum of grey values over threshold)"),
 	AREA_SUMCLEAN("AREA_SUMCLEAN", "grey value - no fly", "Consumption (sum of grey values over threshold corrected)"),
+	AREA_OUT("AREA_OUT", "median grey value background", "background"),
+	AREA_DIFF("AREA_DIFF", "grey value - background", "diff"),
+	
 	AREA_FLYPRESENT("AREA_FLYPRESENT", "boolean value", "Fly is present or not over the spot"),
 //	AREA_CNTPIX("AREA_CNTPIX", "n pixels", "Spot n pixels over threshold"),
 	AREA_SUM_LR("area sum_L+R", "sum grey", "SUM and PI"),

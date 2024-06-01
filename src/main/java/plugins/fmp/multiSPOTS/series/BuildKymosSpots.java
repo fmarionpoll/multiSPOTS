@@ -171,8 +171,8 @@ public class BuildKymosSpots extends BuildSeries {
 		for (int chan = 0; chan < sizeC; chan++) {
 			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
 			try {
-				for (int y = 0; y < roiT.mask2DPoints.length; y++) {
-					Point pt = roiT.mask2DPoints[y];
+				for (int y = 0; y < roiT.mask2DPoints_in.length; y++) {
+					Point pt = roiT.mask2DPoints_in[y];
 					cursor.set(t, y, chan, cursorSource.get((int) pt.getX(), (int) pt.getY(), chan));
 				}
 			} finally {
@@ -242,14 +242,15 @@ public class BuildKymosSpots extends BuildSeries {
 
 		for (Spot spot : exp.spotsArray.spotsList) {
 			int imageHeight = 0;
-			double scale = 2.;
+//			double scale = 2.;
 			for (ROI2DAlongT roiT : spot.getROIAlongTList()) {
-				roiT.buildMask2DFromRoi(scale);
+//				roiT.buildRoi_outAndMask2D(scale);
+				roiT.buildMask2DFromRoi_in();
 				
 				// TODO transform into ROIT and add to outer
 				// subtract booleanmap from booleantmap of roiT
 				
-				int imageHeight_i = roiT.mask2DPoints.length;
+				int imageHeight_i = roiT.mask2DPoints_in.length;
 				if (imageHeight_i > imageHeight)
 					imageHeight = imageHeight_i;
 			}

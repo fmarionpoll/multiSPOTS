@@ -241,7 +241,7 @@ public class SpotsArray {
 				ROI2D roi = iterator.next();
 				String roiName = roi.getName();
 				if (roiName.equals(spotName) && (roi instanceof ROI2DShape)) {
-					spot.setRoi((ROI2DShape) roi);
+					spot.setRoi_in((ROI2DShape) roi);
 					spot.valid = true;
 				}
 				if (spot.valid) {
@@ -276,7 +276,7 @@ public class SpotsArray {
 	public void transferSpotRoiToSequence(Sequence seq) {
 		ROI2DUtilities.removeRoisContainingString(-1, "spot", seq);
 		for (Spot spot : spotsList)
-			seq.addROI(spot.getRoi());
+			seq.addROI(spot.getRoi_in());
 	}
 
 	public void transferSpotsMeasuresToSequence(Sequence seq) {
@@ -357,7 +357,7 @@ public class SpotsArray {
 	public Polygon2D get2DPolygonEnclosingSpots() {
 		Rectangle outerRectangle = null;
 		for (Spot spot : spotsList) {
-			Rectangle rect = spot.getRoi().getBounds();
+			Rectangle rect = spot.getRoi_in().getBounds();
 			if (outerRectangle == null) {
 				outerRectangle = rect;
 			} else
@@ -376,10 +376,10 @@ public class SpotsArray {
 	public void transferSumToSumClean() {
 		int span = 10;
 		for (Spot spot : spotsList) {
-			if (spot.sum.measureValues != null)
-				spot.sumClean.buildRunningMedian(span, spot.sum.measureValues);
+			if (spot.sum_in.measureValues != null)
+				spot.sum_clean.buildRunningMedian(span, spot.sum_in.measureValues);
 			else
-				spot.sumClean.buildRunningMedian(span, spot.sum.getLevel2D().ypoints);
+				spot.sum_clean.buildRunningMedian(span, spot.sum_in.getLevel2D().ypoints);
 		}
 	}
 
@@ -415,7 +415,7 @@ public class SpotsArray {
 
 		for (Spot spot : spotsList) {
 			List<ROI2DAlongT> listROI2DForKymo = spot.getROIAlongTList();
-			ROI2D roi = spot.getRoi();
+			ROI2D roi = spot.getRoi_in();
 			if (item > 0)
 				roi = (ROI2D) listROI2DForKymo.get(item - 1).getRoi().getCopy();
 			listROI2DForKymo.add(item, new ROI2DAlongT(start, roi));
@@ -457,6 +457,12 @@ public class SpotsArray {
 					break;
 				case "AREA_SUM":
 					csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUM, sep);
+					break;
+				case "AREA_OUT":
+					csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_OUT, sep);
+					break;
+				case "AREA_DIFF":
+					csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_DIFF, sep);
 					break;
 				case "AREA_SUMCLEAN":
 					csvLoadSpotsMeasures(bufferedReader, EnumSpotMeasures.AREA_SUMCLEAN, sep);
@@ -560,6 +566,8 @@ public class SpotsArray {
 			csvSave_DescriptionSection(csvWriter);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUM);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_SUMCLEAN);
+			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_OUT);
+			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_DIFF);
 			csvSave_MeasuresSection(csvWriter, EnumSpotMeasures.AREA_FLYPRESENT);
 			csvWriter.flush();
 			csvWriter.close();

@@ -129,9 +129,13 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 		Spot spot = exp.spotsArray.spotsList.get(t);
 		String optionSelected = (String) roiTypeCombo.getSelectedItem();
 		if (optionSelected.contains("sum"))
-			removeAndUpdate(seqKymos, spot, spot.sum, roiRect);
+			removeAndUpdate(seqKymos, spot, spot.sum_in, roiRect);
 		else if (optionSelected.contains("clean"))
-			removeAndUpdate(seqKymos, spot, spot.sumClean, roiRect);
+			removeAndUpdate(seqKymos, spot, spot.sum_clean, roiRect);
+		else if (optionSelected.contains("out"))
+			removeAndUpdate(seqKymos, spot, spot.sum_out, roiRect);
+		else if (optionSelected.contains("diff"))
+			removeAndUpdate(seqKymos, spot, spot.sum_diff, roiRect);
 		else if (optionSelected.contains("fly"))
 			removeAndUpdate(seqKymos, spot, spot.flyPresent, roiRect);
 	}

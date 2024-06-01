@@ -264,9 +264,9 @@ public class Shape extends JPanel {
 		IcyBufferedImage sourceImage = seq.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions);
 		for (Spot spot : exp.spotsArray.spotsList) {
-			exp.seqCamData.seq.removeROI(spot.getRoi());
+			exp.seqCamData.seq.removeROI(spot.getRoi_in());
 			try {
-				spot.mask2DSpot = spot.getRoi().getBooleanMask2D(0, 0, 1, true);
+				spot.mask2DSpot = spot.getRoi_in().getBooleanMask2D(0, 0, 1, true);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -275,11 +275,11 @@ public class Shape extends JPanel {
 			List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());
 			ROI2DPolygon roi_new = new ROI2DPolygon(listPoints);
 
-			roi_new.setName(spot.getRoi().getName());
-			spot.setRoi_old((ROI2DShape) spot.getRoi().getCopy());
-			spot.setRoi(roi_new);
+			roi_new.setName(spot.getRoi_in().getName());
+			spot.setRoi_old((ROI2DShape) spot.getRoi_in().getCopy());
+			spot.setRoi_in(roi_new);
 //			spot.deleteSpotMeasures();
-			exp.seqCamData.seq.addROI(spot.getRoi());
+			exp.seqCamData.seq.addROI(spot.getRoi_in());
 		}
 	}
 
@@ -289,7 +289,7 @@ public class Shape extends JPanel {
 		exp.seqCamData.seq.removeROI(roi_old);
 		roi_new.setName(roi_old.getName());
 		roi_new.setColor(roi_old.getColor());
-		spot.setRoi((ROI2DShape) roi_new);
+		spot.setRoi_in((ROI2DShape) roi_new);
 		try {
 			spot.spotNPixels = (int) roi_new.getNumberOfPoints();
 		} catch (InterruptedException e) {
@@ -303,7 +303,7 @@ public class Shape extends JPanel {
 		if (roi == null)
 			return;
 		for (Spot spot : exp.spotsArray.spotsList) {
-			ROI2D spotRoi = spot.getRoi();
+			ROI2D spotRoi = spot.getRoi_in();
 			try {
 				if (!spotRoi.intersects(roi))
 					continue;

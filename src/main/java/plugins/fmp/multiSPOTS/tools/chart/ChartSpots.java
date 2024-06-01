@@ -232,7 +232,7 @@ public class ChartSpots extends IcyFrame {
 	private void selectSpot(Experiment exp, Spot spot) {
 		Viewer v = exp.seqCamData.seq.getFirstViewer();
 		if (v != null && spot != null) {
-			ROI2D roi = spot.getRoi();
+			ROI2D roi = spot.getRoi_in();
 			exp.seqCamData.seq.setFocusedROI(roi);
 		}
 	}

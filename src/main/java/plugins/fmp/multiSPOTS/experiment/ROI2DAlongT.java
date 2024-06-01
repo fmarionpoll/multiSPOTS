@@ -13,16 +13,15 @@ import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 
 public class ROI2DAlongT implements XMLPersistent {
 	private int index = 0;
-	private ROI2D roi = null;
 	private long t = 0;
 	private ArrayList<ArrayList<int[]>> masksList = null;
 	
-	private BooleanMask2D mask2D = null;
-	public Point[] mask2DPoints = null;
-	
-	public ROI2D expandedRoi = null;
-	private BooleanMask2D expandedMask2D = null;
-	public Point[] expandedMask2DPoints = null;
+	private ROI2D roi_in = null;
+	private ROI2D roi_out = null;
+	private BooleanMask2D mask2D_in = null;
+	private BooleanMask2D mask2D_out = null;
+	public Point[] mask2DPoints_in = null;
+	public Point[] mask2DPoints_out = null;
 	
 	private final String ID_META = "metaT";
 	private final String ID_INDEX = "indexT";
@@ -41,7 +40,7 @@ public class ROI2DAlongT implements XMLPersistent {
 	}
 
 	public ROI2D getRoi() {
-		return roi;
+		return roi_in;
 	}
 
 	public ArrayList<ArrayList<int[]>> getMasksList() {
@@ -53,41 +52,43 @@ public class ROI2DAlongT implements XMLPersistent {
 	}
 
 	public void setRoi(ROI2D roi) {
-		this.roi = (ROI2D) roi.getCopy();
+		this.roi_in = (ROI2D) roi.getCopy();
 	}
 
 	public void setMasksList(ArrayList<ArrayList<int[]>> masksList) {
 		this.masksList = masksList;
 	}
 
-	public void buildMask2DFromRoi() {
+	public void buildMask2DFromRoi_in() {
 		try {
-			mask2D = roi.getBooleanMask2D(0, 0, 1, true); // z, t, c, inclusive
-			mask2DPoints = mask2D.getPoints();
+			mask2D_in = roi_in.getBooleanMask2D(0, 0, 1, true); // z, t, c, inclusive
+			mask2DPoints_in = mask2D_in.getPoints();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	public void buildMask2DFromRoi(double scale) {
+	public void buildRoi_outAndMask2D(double scale) {
 		try {
-			mask2D = roi.getBooleanMask2D(0, 0, 1, true); // z, t, c, inclusive
-			mask2DPoints = mask2D.getPoints();
-			if (expandedRoi == null) {
-				expandedRoi = ROI2DUtilities.rescaleROI(roi, scale);
+			if (roi_out == null) {
+				roi_out = ROI2DUtilities.rescaleROI(roi_in, scale);
 			}
-			expandedMask2D = expandedRoi.getBooleanMask2D(0, 0, 1, true);
-			expandedMask2D.getSubtraction(mask2D);
-			expandedMask2DPoints = expandedMask2D.getPoints();
+			mask2D_out = roi_out.getBooleanMask2D(0, 0, 1, true);
+			mask2D_out.getSubtraction(mask2D_in);
+			mask2DPoints_out = mask2D_out.getPoints();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public BooleanMask2D getMask2D() {
-		return mask2D;
+	public BooleanMask2D getMask2D_in() {
+		return mask2D_in;
+	}
+	
+	public BooleanMask2D getMask2D_out() {
+		return mask2D_out;
 	}
 
 	@Override
@@ -98,7 +99,7 @@ public class ROI2DAlongT implements XMLPersistent {
 
 		index = XMLUtil.getElementIntValue(nodeMeta, ID_INDEX, 0);
 		t = XMLUtil.getElementLongValue(nodeMeta, ID_START, 0);
-		roi = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
+		roi_in = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
 		return true;
 	}
 
@@ -109,7 +110,7 @@ public class ROI2DAlongT implements XMLPersistent {
 			return false;
 		XMLUtil.setElementIntValue(nodeMeta, ID_INDEX, index);
 		XMLUtil.setElementLongValue(nodeMeta, ID_START, t);
-		ROI2DUtilities.saveToXML_ROI(nodeMeta, roi);
+		ROI2DUtilities.saveToXML_ROI(nodeMeta, roi_in);
 		return true;
 	}
 
