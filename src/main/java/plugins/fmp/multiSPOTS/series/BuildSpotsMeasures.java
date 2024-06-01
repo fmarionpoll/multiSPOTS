@@ -166,23 +166,27 @@ public class BuildSpotsMeasures extends BuildSeries {
 	}
 
 	private int measureSpotSumAtT(IcyBufferedImageCursor cursorWorkImage, Spot spot, int t) {
-		int sum = 0;
 		boolean spotThresholdUp = options.spotThresholdUp;
 		int spotThreshold = options.spotThreshold;
 		ROI2DAlongTime roiT = spot.getROIAtT(t);
 		if (roiT.getMask2D() == null)
 			roiT.buildMask2DFromRoi();
+		return measureSpotSumAtTFromMask(cursorWorkImage, roiT.mask2DPoints, spotThresholdUp, spotThreshold);
+	}
 
+	private int measureSpotSumAtTFromMask(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints,
+			boolean spotThresholdUp, int spotThreshold) {
+		int sum = 0;
 		if (spotThresholdUp) {
-			for (int offset = 0; offset < roiT.mask2DPoints.length; offset++) {
-				Point pt = roiT.mask2DPoints[offset];
+			for (int offset = 0; offset < mask2DPoints.length; offset++) {
+				Point pt = mask2DPoints[offset];
 				int value = (int) cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
 				if (value < spotThreshold)
 					sum += value;
 			}
 		} else {
-			for (int offset = 0; offset < roiT.mask2DPoints.length; offset++) {
-				Point pt = roiT.mask2DPoints[offset];
+			for (int offset = 0; offset < mask2DPoints.length; offset++) {
+				Point pt = mask2DPoints[offset];
 				int value = (int) cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
 				if (value > spotThreshold)
 					sum += value;

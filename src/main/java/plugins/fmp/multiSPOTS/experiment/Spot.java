@@ -27,6 +27,8 @@ public class Spot implements Comparable<Spot> {
 	private ROI2DShape spotRoi_outer = null;
 	private ROI2DShape spotRoi_old = null;
 	private ArrayList<ROI2DAlongTime> listRoiAlongTime = new ArrayList<ROI2DAlongTime>();
+	private ArrayList<ROI2DAlongTime> listOuterRoiAlongTime = new ArrayList<ROI2DAlongTime>();
+	
 	public BooleanMask2D mask2D = null;
 	public BooleanMask2D mask2D_outer = null;
 

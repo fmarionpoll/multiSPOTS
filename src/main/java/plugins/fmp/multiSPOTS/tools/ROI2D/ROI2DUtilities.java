@@ -25,123 +25,87 @@ import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DRectShape;
 import plugins.kernel.roi.roi2d.ROI2DShape;
-import plugins.adufour.roi.RescaleROI.ROIFilter;
+
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 
 public class ROI2DUtilities {
 	private static final String ID_ROIMC = "roiMC";
 
-	public static ROI2D rescaleROI(double factor, ROI2D roiIn) {
-		ROI2D rescaledROI = null;
+	public static ROI2D rescaleROI(ROI2D roi, double scale) {
+		ROI2D out = (ROI2D) roi.getCopy();
+		out.setName(roi.getName() + " x" + scale);
 
-		double scale = factor;
+		if (out instanceof ROI2DRectShape || out instanceof ROI2DLine) {
+			out = rescaleRectROI(roi, scale);
+		} else if (out instanceof ROI2DShape) {
+			out = rescaleShape2DROI(roi, scale);
+		} else {
+			out.setName(roi.getName());
+			new FailedAnnounceFrame("Cannot rescale a " + roi.getSimpleClassName());
+		}
+		return out;
+	}
+	
+	private static ROI2D rescaleRectROI(ROI2D out, double scale) {
+		
+		Rectangle2D b2 = ((ROI2D) out).getBounds2D();
+		// translate to origin
+		double oldX = b2.getCenterX();
+		double oldY = b2.getCenterY();
+		b2.setFrame(b2.getX() - oldX, b2.getY() - oldY, b2.getWidth(), b2.getHeight());
+		// scale
+		b2.setFrame(b2.getX() * scale, b2.getY() * scale, b2.getWidth() * scale, b2.getHeight() * scale);
+		// translate back to initial position
+		b2.setFrame(b2.getX() + oldX, b2.getY() + oldY, b2.getWidth(), b2.getHeight());
 
-		ROI[] rois = inROI.getValue(true);
-		if (!isHeadLess()) {
-			List<ROI> list = input.getValue(true).getROIs();
+		((ROI2D) out).setBounds2D(b2);
+		return out;
+	}
+	
+	private static ROI2D rescaleShape2DROI(ROI2D out, double scale) {
+		ROI2DShape shape = (ROI2DShape) out;
 
-			for (int i = 0; i < list.size(); i++) {
-				ROI roi = list.get(i);
-				if (roi.isSelected() && roiFilter.getValue() == ROIFilter.NON_SELECTED)
-					list.remove(i--);
-				else if (!roi.isSelected() && roiFilter.getValue() == ROIFilter.SELECTED)
-					list.remove(i--);
-			}
+		// determine the mass center
+		Point2D.Double oldCenter = new Point2D.Double();
+		List<Point2D> pts = shape.getPoints();
+		for (Point2D pt : pts) {
+			oldCenter.x += pt.getX();
+			oldCenter.y += pt.getY();
+		}
+		oldCenter.x /= pts.size();
+		oldCenter.y /= pts.size();
 
-			rois = list.toArray(new ROI[list.size()]);
+		// scale the ROI via its anchor points
+		for (Point2D pt : pts) {
+			double x = pt.getX(), y = pt.getY();
+			// translate to the origin
+			x -= oldCenter.x;
+			y -= oldCenter.y;
+			x *= scale;
+			y *= scale;
+			x += oldCenter.x;
+			y += oldCenter.y;
+			// set the final point location
+			pt.setLocation(x, y);
 		}
 
-		for (ROI roi : rois) {
-			boolean roiOK = true;
-
-			ROI out = roi.getCopy();
-			out.setName(roi.getName() + " x" + scale);
-
-			if (out instanceof ROI2DRectShape || out instanceof ROI2DLine) {
-				Rectangle2D b2 = ((ROI2D) out).getBounds2D();
-				// translate to origin
-				double oldX = b2.getCenterX();
-				double oldY = b2.getCenterY();
-				b2.setFrame(b2.getX() - oldX, b2.getY() - oldY, b2.getWidth(), b2.getHeight());
-				// scale
-				b2.setFrame(b2.getX() * scale, b2.getY() * scale, b2.getWidth() * scale, b2.getHeight() * scale);
-				// translate back to initial position
-				b2.setFrame(b2.getX() + oldX, b2.getY() + oldY, b2.getWidth(), b2.getHeight());
-
-				((ROI2D) out).setBounds2D(b2);
-			} else if (out instanceof ROI2DShape) {
-				ROI2DShape shape = (ROI2DShape) out;
-
-				// determine the mass center
-				Point2D.Double oldCenter = new Point2D.Double();
-				List<Point2D> pts = shape.getPoints();
-				for (Point2D pt : pts) {
-					oldCenter.x += pt.getX();
-					oldCenter.y += pt.getY();
-				}
-				oldCenter.x /= pts.size();
-				oldCenter.y /= pts.size();
-
-				// scale the ROI via its anchor points
-				for (Point2D pt : pts) {
-					double x = pt.getX(), y = pt.getY();
-
-					// translate to the origin
-					x -= oldCenter.x;
-					y -= oldCenter.y;
-
-					// scale
-					x *= scale;
-					y *= scale;
-
-					// translate back to the center
-					x += oldCenter.x;
-					y += oldCenter.y;
-
-					// set the final point location
-					pt.setLocation(x, y);
-				}
-
-				if (out instanceof ROI2DPolygon) {
-					ROI2DPolygon poly = (ROI2DPolygon) out;
-
-					poly.setPoints(pts);
-				} else if (out instanceof ROI2DPolyLine) {
-					ROI2DPolyLine poly = (ROI2DPolyLine) out;
-
-					poly.setPoints(pts);
-				} else
-					try {
-						shape.getClass().getMethod("removeAllPoint").invoke(shape);
-						for (Point2D pt : pts)
-							shape.addPoint(pt, true);
-					} catch (Exception e) {
-						roiOK = false;
-						out.setName(roi.getName());
-						if (!isHeadLess())
-							new FailedAnnounceFrame("Cannot rescale a " + roi.getSimpleClassName());
-					}
-			} else {
-				roiOK = false;
-				out.setName(roi.getName());
-				if (!isHeadLess())
-					new FailedAnnounceFrame("Cannot rescale a " + roi.getSimpleClassName());
+		if (out instanceof ROI2DPolygon) {
+			ROI2DPolygon poly = (ROI2DPolygon) out;
+			poly.setPoints(pts);
+		} else if (out instanceof ROI2DPolyLine) {
+			ROI2DPolyLine poly = (ROI2DPolyLine) out;
+			poly.setPoints(pts);
+		} else
+			try {
+				shape.getClass().getMethod("removeAllPoint").invoke(shape);
+				for (Point2D pt : pts)
+					shape.addNewPoint(pt, true);
+			} catch (Exception e) {
+				shape.setName(out.getName());
+				new FailedAnnounceFrame("Cannot rescale a " + out.getSimpleClassName());
 			}
-
-			if (isHeadLess()) {
-				rescaledROI.add(out);
-			} else {
-				if (roiOK) {
-					rescaledROI.add(out);
-					if (overwrite.getValue())
-						input.getValue(true).removeROI(roi);
-					input.getValue(true).addROI(out);
-					out.setSelected(true);
-				}
-			}
-
-		}
+		return shape;
 	}
 
 	public static void interpolateMissingPointsAlongXAxis(ROI2DPolyLine roiLine, int nintervals) {
