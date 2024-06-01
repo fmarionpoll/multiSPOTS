@@ -11,25 +11,29 @@ import icy.roi.ROI2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 
-public class ROI2DAlongTime implements XMLPersistent {
+public class ROI2DAlongT implements XMLPersistent {
 	private int index = 0;
 	private ROI2D roi = null;
 	private long t = 0;
 	private ArrayList<ArrayList<int[]>> masksList = null;
+	
 	private BooleanMask2D mask2D = null;
-	private int mask2D_n_valid_points = 0;
 	public Point[] mask2DPoints = null;
-
+	
+	public ROI2D expandedRoi = null;
+	private BooleanMask2D expandedMask2D = null;
+	public Point[] expandedMask2DPoints = null;
+	
 	private final String ID_META = "metaT";
 	private final String ID_INDEX = "indexT";
 	private final String ID_START = "startT";
 
-	public ROI2DAlongTime(long t, ROI2D roi) {
+	public ROI2DAlongT(long t, ROI2D roi) {
 		setRoi(roi);
 		this.t = t;
 	}
 
-	public ROI2DAlongTime() {
+	public ROI2DAlongT() {
 	}
 
 	public long getT() {
@@ -60,20 +64,26 @@ public class ROI2DAlongTime implements XMLPersistent {
 		try {
 			mask2D = roi.getBooleanMask2D(0, 0, 1, true); // z, t, c, inclusive
 			mask2DPoints = mask2D.getPoints();
-			int length = mask2DPoints.length;
-			mask2D_n_valid_points = 0;
-			for (int i = 0; i < length; i++) {
-				if (mask2D.mask[i])
-					mask2D_n_valid_points++;
-			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-	public int getMask2D_N_Valid_Points() {
-		return mask2D_n_valid_points;
+	
+	public void buildMask2DFromRoi(double scale) {
+		try {
+			mask2D = roi.getBooleanMask2D(0, 0, 1, true); // z, t, c, inclusive
+			mask2DPoints = mask2D.getPoints();
+			if (expandedRoi == null) {
+				expandedRoi = ROI2DUtilities.rescaleROI(roi, scale);
+			}
+			expandedMask2D = expandedRoi.getBooleanMask2D(0, 0, 1, true);
+			expandedMask2D.getSubtraction(mask2D);
+			expandedMask2DPoints = expandedMask2D.getPoints();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public BooleanMask2D getMask2D() {

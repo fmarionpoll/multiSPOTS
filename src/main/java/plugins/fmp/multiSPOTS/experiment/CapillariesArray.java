@@ -401,7 +401,7 @@ public class CapillariesArray {
 		if (capillariesListTimeIntervals == null) {
 			capillariesListTimeIntervals = new KymoIntervals();
 			for (Capillary cap : capillariesList) {
-				for (ROI2DAlongTime roiFK : cap.getROIsForKymo()) {
+				for (ROI2DAlongT roiFK : cap.getROIsForKymo()) {
 					Long[] interval = { roiFK.getT(), (long) -1 };
 					capillariesListTimeIntervals.addIfNew(interval);
 				}
@@ -415,11 +415,11 @@ public class CapillariesArray {
 		int item = capillariesListTimeIntervals.addIfNew(interval);
 
 		for (Capillary cap : capillariesList) {
-			List<ROI2DAlongTime> listROI2DForKymo = cap.getROIsForKymo();
+			List<ROI2DAlongT> listROI2DForKymo = cap.getROIsForKymo();
 			ROI2D roi = cap.getRoi();
 			if (item > 0)
 				roi = (ROI2D) listROI2DForKymo.get(item - 1).getRoi().getCopy();
-			listROI2DForKymo.add(item, new ROI2DAlongTime(start, roi));
+			listROI2DForKymo.add(item, new ROI2DAlongT(start, roi));
 		}
 		return item;
 	}

@@ -16,7 +16,7 @@ import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.ROI2DAlongTime;
+import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
@@ -139,7 +139,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 		int flyThreshold = options.flyThreshold;
 		int flyFound = 0;
 
-		ROI2DAlongTime roiT = spot.getROIAtT(t);
+		ROI2DAlongT roiT = spot.getROIAtT(t);
 		if (roiT.getMask2D() == null)
 			roiT.buildMask2DFromRoi();
 
@@ -168,7 +168,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 	private int measureSpotSumAtT(IcyBufferedImageCursor cursorWorkImage, Spot spot, int t) {
 		boolean spotThresholdUp = options.spotThresholdUp;
 		int spotThreshold = options.spotThreshold;
-		ROI2DAlongTime roiT = spot.getROIAtT(t);
+		ROI2DAlongT roiT = spot.getROIAtT(t);
 		if (roiT.getMask2D() == null)
 			roiT.buildMask2DFromRoi();
 		return measureSpotSumAtTFromMask(cursorWorkImage, roiT.mask2DPoints, spotThresholdUp, spotThreshold);
@@ -213,7 +213,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 
 		int t = 0;
 		for (Spot spot : exp.spotsArray.spotsList) {
-			ROI2DAlongTime roiT = spot.getROIAtT(t);
+			ROI2DAlongT roiT = spot.getROIAtT(t);
 			if (roiT.getMask2D() == null)
 				roiT.buildMask2DFromRoi();
 		}

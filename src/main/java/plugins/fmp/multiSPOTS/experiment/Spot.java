@@ -26,8 +26,7 @@ public class Spot implements Comparable<Spot> {
 	private ROI2DShape spotRoi = null;
 	private ROI2DShape spotRoi_outer = null;
 	private ROI2DShape spotRoi_old = null;
-	private ArrayList<ROI2DAlongTime> listRoiAlongTime = new ArrayList<ROI2DAlongTime>();
-	private ArrayList<ROI2DAlongTime> listOuterRoiAlongTime = new ArrayList<ROI2DAlongTime>();
+	private ArrayList<ROI2DAlongT> listRoiAlongT = new ArrayList<ROI2DAlongT>();
 	
 	public BooleanMask2D mask2D = null;
 	public BooleanMask2D mask2D_outer = null;
@@ -135,7 +134,7 @@ public class Spot implements Comparable<Spot> {
 
 	public void setRoi(ROI2DShape roi) {
 		this.spotRoi = roi;
-		listRoiAlongTime.clear();
+		listRoiAlongT.clear();
 	}
 
 	public void setRoi_old(ROI2DShape roi) {
@@ -333,7 +332,7 @@ public class Spot implements Comparable<Spot> {
 	}
 
 	private boolean loadFromXML_SpotAlongT(Node node) {
-		listRoiAlongTime.clear();
+		listRoiAlongT.clear();
 		final Node nodeMeta2 = XMLUtil.getElement(node, ID_INTERVALS);
 		if (nodeMeta2 == null)
 			return false;
@@ -341,12 +340,12 @@ public class Spot implements Comparable<Spot> {
 		if (nitems > 0) {
 			for (int i = 0; i < nitems; i++) {
 				Node node_i = XMLUtil.setElement(nodeMeta2, ID_INTERVAL + i);
-				ROI2DAlongTime roiInterval = new ROI2DAlongTime();
+				ROI2DAlongT roiInterval = new ROI2DAlongT();
 				roiInterval.loadFromXML(node_i);
-				listRoiAlongTime.add(roiInterval);
+				listRoiAlongT.add(roiInterval);
 
 				if (i == 0)
-					spotRoi = (ROI2DShape) listRoiAlongTime.get(0).getRoi();
+					spotRoi = (ROI2DShape) listRoiAlongT.get(0).getRoi();
 			}
 		}
 		return true;
@@ -382,12 +381,12 @@ public class Spot implements Comparable<Spot> {
 		final Node nodeMeta2 = XMLUtil.setElement(node, ID_INTERVALS);
 		if (nodeMeta2 == null)
 			return false;
-		int nitems = listRoiAlongTime.size();
+		int nitems = listRoiAlongT.size();
 		XMLUtil.setElementIntValue(nodeMeta2, ID_NINTERVALS, nitems);
 		if (nitems > 0) {
 			for (int i = 0; i < nitems; i++) {
 				Node node_i = XMLUtil.setElement(nodeMeta2, ID_INTERVAL + i);
-				listRoiAlongTime.get(i).saveToXML(node_i);
+				listRoiAlongT.get(i).saveToXML(node_i);
 			}
 		}
 		return true;
@@ -395,18 +394,18 @@ public class Spot implements Comparable<Spot> {
 
 	// --------------------------------------------
 
-	public List<ROI2DAlongTime> getROIAlongTList() {
-		if (listRoiAlongTime.size() < 1)
+	public List<ROI2DAlongT> getROIAlongTList() {
+		if (listRoiAlongT.size() < 1)
 			initROIAlongTList();
-		return listRoiAlongTime;
+		return listRoiAlongT;
 	}
 
-	public ROI2DAlongTime getROIAtT(long t) {
-		if (listRoiAlongTime.size() < 1)
+	public ROI2DAlongT getROIAtT(long t) {
+		if (listRoiAlongT.size() < 1)
 			initROIAlongTList();
 
-		ROI2DAlongTime capRoi = null;
-		for (ROI2DAlongTime item : listRoiAlongTime) {
+		ROI2DAlongT capRoi = null;
+		for (ROI2DAlongT item : listRoiAlongT) {
 			if (t < item.getT())
 				break;
 			capRoi = item;
@@ -415,20 +414,21 @@ public class Spot implements Comparable<Spot> {
 	}
 
 	public void removeROIAlongTListItem(long t) {
-		ROI2DAlongTime itemFound = null;
-		for (ROI2DAlongTime item : listRoiAlongTime) {
+		ROI2DAlongT itemFound = null;
+		for (ROI2DAlongT item : listRoiAlongT) {
 			if (t != item.getT())
 				continue;
 			itemFound = item;
 		}
 		if (itemFound != null)
-			listRoiAlongTime.remove(itemFound);
+			listRoiAlongT.remove(itemFound);
 	}
 
 	private void initROIAlongTList() {
-		listRoiAlongTime.add(new ROI2DAlongTime(0, spotRoi));
+		listRoiAlongT.add(new ROI2DAlongT(0, spotRoi));
 	}
 
+	
 	// --------------------------------------------
 
 	public void adjustLevel2DMeasuresToImageWidth(int imageWidth) {

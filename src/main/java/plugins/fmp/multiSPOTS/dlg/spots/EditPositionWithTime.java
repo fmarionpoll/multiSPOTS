@@ -29,7 +29,7 @@ import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.ROI2DAlongTime;
+import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.JComponents.TableModelSpotWithTime;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
@@ -196,7 +196,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 	private void addFrameAroundSpots(int t, Experiment exp) {
 		ArrayList<ROI2D> listRoisAtT = new ArrayList<ROI2D>();
 		for (Spot spot : exp.spotsArray.spotsList) {
-			ROI2DAlongTime kymoROI2D = spot.getROIAtT(t);
+			ROI2DAlongT kymoROI2D = spot.getROIAtT(t);
 			listRoisAtT.add(kymoROI2D.getRoi());
 		}
 		Polygon2D polygon = ROI2DUtilities.getPolygonEnclosingSpots(listRoisAtT);

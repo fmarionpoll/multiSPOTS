@@ -15,7 +15,6 @@ import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageCursor;
 import icy.image.IcyBufferedImageUtil;
-import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
@@ -25,11 +24,10 @@ import loci.formats.FormatException;
 
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.ROI2DAlongTime;
+import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 
 public class BuildKymosSpots extends BuildSeries {
 	public Sequence seqData = new Sequence();
@@ -169,7 +167,7 @@ public class BuildKymosSpots extends BuildSeries {
 	}
 
 	private void analyzeImageWithSpot(IcyBufferedImageCursor cursorSource, Spot spot, int t, int sizeC) {
-		ROI2DAlongTime roiT = spot.getROIAtT(t);
+		ROI2DAlongT roiT = spot.getROIAtT(t);
 		for (int chan = 0; chan < sizeC; chan++) {
 			IcyBufferedImageCursor cursor = new IcyBufferedImageCursor(spot.spot_Image);
 			try {
@@ -245,9 +243,9 @@ public class BuildKymosSpots extends BuildSeries {
 		for (Spot spot : exp.spotsArray.spotsList) {
 			int imageHeight = 0;
 			double scale = 2.;
-			for (ROI2DAlongTime roiT : spot.getROIAlongTList()) {
-				roiT.buildMask2DFromRoi();
-				ROI2D roiT_expanded = ROI2DUtilities.rescaleROI(roiT.getRoi(), scale);
+			for (ROI2DAlongT roiT : spot.getROIAlongTList()) {
+				roiT.buildMask2DFromRoi(scale);
+				
 				// TODO transform into ROIT and add to outer
 				// subtract booleanmap from booleantmap of roiT
 				
