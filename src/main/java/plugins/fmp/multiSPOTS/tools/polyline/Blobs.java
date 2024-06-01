@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.tools;
+package plugins.fmp.multiSPOTS.tools.polyline;
 
 import java.awt.Point;
 import java.awt.Rectangle;

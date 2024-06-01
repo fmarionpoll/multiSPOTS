@@ -28,9 +28,11 @@ public class Spot implements Comparable <Spot>
 {
 
 	private ROI2DShape 					spotRoi			= null;
+	private ROI2DShape 					spotRoi_outer	= null;
 	private ROI2DShape 					spotRoi_old		= null;
 	private ArrayList<ROI2DAlongTime>	listRoiAlongTime= new ArrayList<ROI2DAlongTime>();
 	public BooleanMask2D 				mask2D			= null;
+	public BooleanMask2D 				mask2D_outer	= null;
 
 	public int							cageIndex 		= -1;
 	public String 						version 		= null;
@@ -54,6 +56,7 @@ public class Spot implements Comparable <Spot>
 	 
 	public SpotMeasure					sum  			= new SpotMeasure("sum"); 
 	public SpotMeasure					sumClean		= new SpotMeasure("clean"); 
+	public SpotMeasure					sum_outer  		= new SpotMeasure("outer"); 
 	public SpotMeasure					flyPresent		= new SpotMeasure("flyPresent"); 
 	public boolean						valid			= true;
 
@@ -135,6 +138,11 @@ public class Spot implements Comparable <Spot>
 		return spotRoi_old;
 	}
 	
+	public ROI2D getRoi_outer() 
+	{
+		return spotRoi_outer;
+	}
+	
 	public void setRoi(ROI2DShape roi) 
 	{
 		this.spotRoi = roi; 
@@ -144,6 +152,11 @@ public class Spot implements Comparable <Spot>
 	public void setRoi_old(ROI2DShape roi) 
 	{
 		this.spotRoi_old = roi;
+	}
+	
+	public void setRoi_outer(ROI2DShape roi) 
+	{
+		this.spotRoi_outer = roi;
 	}
 	
 	public void setRoiName(String name) 

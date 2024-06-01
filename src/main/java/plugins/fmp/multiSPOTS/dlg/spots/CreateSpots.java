@@ -23,13 +23,16 @@ import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI2D;
 import icy.type.geom.Polygon2D;
 import icy.type.geom.Polyline2D;
+
+import plugins.kernel.roi.roi2d.ROI2DPolyLine;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
+
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
-import plugins.kernel.roi.roi2d.ROI2DPolyLine;
-import plugins.kernel.roi.roi2d.ROI2DPolygon;
+import plugins.fmp.multiSPOTS.tools.polyline.PolygonUtilities;
+
 
 
 public class CreateSpots extends JPanel 
@@ -233,7 +236,7 @@ public class CreateSpots extends JPanel
 			return;
 		}
 		
-		spotsLocationPolygon = ROI2DUtilities.orderVerticesofPolygon (((ROI2DPolygon) roi).getPolygon());
+		spotsLocationPolygon = PolygonUtilities.orderVerticesofPolygon (((ROI2DPolygon) roi).getPolygon());
 		rotate(spotsLocationPolygon);
 		seqCamData.seq.removeROI(roi);
 		if (statusGroup2Mode) {	
