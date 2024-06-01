@@ -20,7 +20,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 import icy.gui.dialog.MessageDialog;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImageUtil;
@@ -33,44 +32,42 @@ import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
-public class Detect2BuildBackground extends JPanel implements ChangeListener, PropertyChangeListener
-{
+public class Detect2BuildBackground extends JPanel implements ChangeListener, PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 
-	private MultiSPOTS 	parent0					= null;
-	
-	private String 		detectString 			= "Build background...";
-	private JButton 	startComputationButton 	= new JButton(detectString);
+	private MultiSPOTS parent0 = null;
 
-	private JSpinner 	backgroundThresholdSpinner	= new JSpinner(new SpinnerNumberModel(60, 0, 255, 1));
-	private JSpinner 	backgroundNFramesSpinner 	= new JSpinner(new SpinnerNumberModel(20, 0, 255, 1));
-	private JSpinner 	backgroundJitterSpinner 	= new JSpinner(new SpinnerNumberModel(1, 0, 255, 1));
-	private JSpinner 	backgroundDeltaSpinner 	= new JSpinner(new SpinnerNumberModel(20, 0, 255, 1));
+	private String detectString = "Build background...";
+	private JButton startComputationButton = new JButton(detectString);
 
-	//private JCheckBox 	viewsCheckBox 			= new JCheckBox("view ref img", true);
-	private JButton 	loadButton 				= new JButton("Load...");
-	private JButton 	saveButton 				= new JButton("Save...");
-	private JCheckBox 	allCheckBox 			= new JCheckBox("ALL (current to last)", false);
-	private	JCheckBox 	overlayCheckBox 		= new JCheckBox("overlay");
+	private JSpinner backgroundThresholdSpinner = new JSpinner(new SpinnerNumberModel(60, 0, 255, 1));
+	private JSpinner backgroundNFramesSpinner = new JSpinner(new SpinnerNumberModel(20, 0, 255, 1));
+	private JSpinner backgroundJitterSpinner = new JSpinner(new SpinnerNumberModel(1, 0, 255, 1));
+	private JSpinner backgroundDeltaSpinner = new JSpinner(new SpinnerNumberModel(20, 0, 255, 1));
 
-	private BuildBackground buildBackground 	= null;
-	private OverlayThreshold ov 				= null;
-	
+	// private JCheckBox viewsCheckBox = new JCheckBox("view ref img", true);
+	private JButton loadButton = new JButton("Load...");
+	private JButton saveButton = new JButton("Save...");
+	private JCheckBox allCheckBox = new JCheckBox("ALL (current to last)", false);
+	private JCheckBox overlayCheckBox = new JCheckBox("overlay");
+
+	private BuildBackground buildBackground = null;
+	private OverlayThreshold ov = null;
+
 	// ----------------------------------------------------
-	
-	void init(GridLayout capLayout, MultiSPOTS parent0) 
-	{
+
+	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
 		this.parent0 = parent0;
-		
+
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);
 		flowLayout.setVgap(0);
-		
+
 		JPanel panel1 = new JPanel(flowLayout);
 		panel1.add(startComputationButton);
 		panel1.add(allCheckBox);
 		add(panel1);
-		
+
 		JPanel panel2 = new JPanel(flowLayout);
 		panel2.add(new JLabel("threshold/fly "));
 		panel2.add(backgroundThresholdSpinner);
@@ -79,102 +76,104 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		panel2.add(overlayCheckBox);
 		panel2.validate();
 		add(panel2);
-		
+
 		JPanel panel3 = new JPanel(flowLayout);
-		panel3.add(new JLabel ("min delta fly/background "));
+		panel3.add(new JLabel("min delta fly/background "));
 		panel3.add(backgroundDeltaSpinner);
-		panel3.add(new JLabel ("jitter around fly "));
+		panel3.add(new JLabel("jitter around fly "));
 		panel3.add(backgroundJitterSpinner);
 		add(panel3);
-		
+
 		JPanel panel4 = new JPanel(flowLayout);
 		panel4.add(loadButton);
 		panel4.add(saveButton);
-		add( panel4);
-		
+		add(panel4);
+
 		defineActionListeners();
 
 		backgroundThresholdSpinner.addChangeListener(this);
 	}
-	
-	private void defineActionListeners() 
-	{
-		startComputationButton.addActionListener(new ActionListener () {
-			@Override public void actionPerformed( final ActionEvent e ) { 
-				if (startComputationButton.getText() .equals(detectString)) 
+
+	private void defineActionListeners() {
+		startComputationButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (startComputationButton.getText().equals(detectString))
 					startComputation();
 				else
 					stopComputation();
-			}});
-		
-		saveButton.addActionListener(new ActionListener () {
-			@Override public void actionPerformed( final ActionEvent e ) { 
+			}
+		});
+
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 					exp.saveReferenceImage(exp.seqCamData.refImage);
-			}});
-		
-		loadButton.addActionListener(new ActionListener () {
-			@Override public void actionPerformed( final ActionEvent e ) { 
+			}
+		});
+
+		loadButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				loadBackground();
-			}});
-		
-		allCheckBox.addActionListener(new ActionListener () { 
-			@Override public void actionPerformed( final ActionEvent e ) {
+			}
+		});
+
+		allCheckBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				Color color = Color.BLACK;
-				if (allCheckBox.isSelected()) 
+				if (allCheckBox.isSelected())
 					color = Color.RED;
 				allCheckBox.setForeground(color);
 				startComputationButton.setForeground(color);
-		}});
-		
+			}
+		});
+
 		overlayCheckBox.addItemListener(new ItemListener() {
-		      public void itemStateChanged(ItemEvent e)  {
-		    	  Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		    	  if (exp != null) {
-		    		  if (overlayCheckBox.isSelected()) {
-		    			  if (ov == null)
-		    				  ov = new OverlayThreshold(exp.seqCamData.seq);
-		    			  exp.seqCamData.seq.addOverlay(ov);
-		    			  updateOverlay(exp);
-		    		  }
-		    		  else
-		    			  removeOverlay(exp);
-		    	  }
-		      }});
+			public void itemStateChanged(ItemEvent e) {
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) {
+					if (overlayCheckBox.isSelected()) {
+						if (ov == null)
+							ov = new OverlayThreshold(exp.seqCamData.seq);
+						exp.seqCamData.seq.addOverlay(ov);
+						updateOverlay(exp);
+					} else
+						removeOverlay(exp);
+				}
+			}
+		});
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent e) 
-	{
+	public void stateChanged(ChangeEvent e) {
 		if (e.getSource() == backgroundThresholdSpinner) {
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (!overlayCheckBox.isSelected())
 				overlayCheckBox.setSelected(true);
-			if (exp != null) 
+			if (exp != null)
 				updateOverlay(exp);
 		}
 	}
-	
-	void loadBackground() 
-	{
+
+	void loadBackground() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		if (exp != null) { 
-			boolean flag = exp.loadReferenceImage(); 
+		if (exp != null) {
+			boolean flag = exp.loadReferenceImage();
 			if (flag) {
 				Viewer v = new Viewer(exp.seqReference, true);
 				Rectangle rectv = exp.seqCamData.seq.getFirstViewer().getBoundsInternal();
 				v.setBounds(rectv);
-			} 
-			else {
-				 MessageDialog.showDialog("Reference file not found on disk",
-                            MessageDialog.ERROR_MESSAGE);
+			} else {
+				MessageDialog.showDialog("Reference file not found on disk", MessageDialog.ERROR_MESSAGE);
 			}
 		}
 	}
-	
-	private void updateOverlay (Experiment exp) 
-	{
+
+	private void updateOverlay(Experiment exp) {
 		SequenceCamData seqCamData = exp.seqCamData;
 		if (seqCamData == null)
 			return;
@@ -182,69 +181,65 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 			ov = new OverlayThreshold(seqCamData.seq);
 			int t = exp.seqCamData.currentFrame;
 			exp.seqCamData.refImage = IcyBufferedImageUtil.getCopy(exp.seqCamData.getSeqImage(t, 0));
-		}
-		else {
+		} else {
 			seqCamData.seq.removeOverlay(ov);
 			ov.setSequence(seqCamData.seq);
 		}
 		ov.setReferenceImage(exp.seqCamData.refImage);
-		seqCamData.seq.addOverlay(ov);	
-		
-		boolean ifGreater = true; 
-		ImageTransformEnums transformOp = ImageTransformEnums.NONE; //SUBTRACT; //SUBTRACT_REF;
+		seqCamData.seq.addOverlay(ov);
+
+		boolean ifGreater = true;
+		ImageTransformEnums transformOp = ImageTransformEnums.NONE; // SUBTRACT; //SUBTRACT_REF;
 		int threshold = (int) backgroundThresholdSpinner.getValue();
 		ov.setThresholdSingle(threshold, transformOp, ifGreater);
-		ov.painterChanged();	
+		ov.painterChanged();
 	}
-	
-	private void removeOverlay(Experiment exp) 
-	{
+
+	private void removeOverlay(Experiment exp) {
 		if (exp.seqCamData != null && exp.seqCamData.seq != null)
 			exp.seqCamData.seq.removeOverlay(ov);
 	}
-	
-	private BuildSeriesOptions initTrackParameters() 
-	{
+
+	private BuildSeriesOptions initTrackParameters() {
 		BuildSeriesOptions options = buildBackground.options;
-		options.expList 		= parent0.expListCombo;	
-		options.expList.index0 	= parent0.expListCombo.getSelectedIndex();
+		options.expList = parent0.expListCombo;
+		options.expList.index0 = parent0.expListCombo.getSelectedIndex();
 		if (allCheckBox.isSelected())
-			options.expList.index1 = options.expList.getItemCount()-1;
+			options.expList.index1 = options.expList.getItemCount() - 1;
 		else
 			options.expList.index1 = parent0.expListCombo.getSelectedIndex();
 //		parent0.paneKymos.tabDisplay.indexImagesCombo = parent0.paneKymos.tabDisplay.kymographsCombo.getSelectedIndex();
-		
-		options.btrackWhite 	= true;
-		options.backgroundThreshold	= (int) backgroundThresholdSpinner.getValue();		
-		options.backgroundNFrames = (int) backgroundNFramesSpinner.getValue();	
+
+		options.btrackWhite = true;
+		options.backgroundThreshold = (int) backgroundThresholdSpinner.getValue();
+		options.backgroundNFrames = (int) backgroundNFramesSpinner.getValue();
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		options.backgroundFirst = (int) exp.seqCamData.currentFrame;
-		
+
 		options.forceBuildBackground = true;
-		options.detectFlies		= false;
-		
-		options.parent0Rect 	= parent0.mainFrame.getBoundsInternal();
+		options.detectFlies = false;
+
+		options.parent0Rect = parent0.mainFrame.getBoundsInternal();
 //		options.binSubDirectory = parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
-		
-		options.isFrameFixed 	= parent0.dlgExcel.tabCommonOptions.getIsFixedFrame();
-		options.t_Ms_First 		= parent0.dlgExcel.tabCommonOptions.getStartMs();
-		options.t_Ms_Last 		= parent0.dlgExcel.tabCommonOptions.getEndMs();
-		options.t_Ms_BinDuration= parent0.dlgExcel.tabCommonOptions.getBinMs();
-		
+
+		options.isFrameFixed = parent0.dlgExcel.tabCommonOptions.getIsFixedFrame();
+		options.t_Ms_First = parent0.dlgExcel.tabCommonOptions.getStartMs();
+		options.t_Ms_Last = parent0.dlgExcel.tabCommonOptions.getEndMs();
+		options.t_Ms_BinDuration = parent0.dlgExcel.tabCommonOptions.getBinMs();
+
 		options.background_jitter = (int) backgroundJitterSpinner.getValue();
-		options.background_delta = 	(int) backgroundDeltaSpinner.getValue();
+		options.background_delta = (int) backgroundDeltaSpinner.getValue();
 
 		return options;
 	}
-	
-	void startComputation() 
-	{
+
+	void startComputation() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null)
 			return;
 		parent0.dlgBrowse.panelLoadSave.closeViewsForCurrentExperiment(exp);
-		
-		buildBackground = new BuildBackground();		
+
+		buildBackground = new BuildBackground();
 		buildBackground.options = initTrackParameters();
 		buildBackground.stopFlag = false;
 
@@ -252,23 +247,20 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		buildBackground.execute();
 		startComputationButton.setText("STOP");
 	}
-	
-	private void stopComputation() 
-	{	
-		if (buildBackground != null && !buildBackground.stopFlag) 
+
+	private void stopComputation() {
+		if (buildBackground != null && !buildBackground.stopFlag)
 			buildBackground.stopFlag = true;
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) 
-	{
-		 if (StringUtil.equals("thread_ended", evt.getPropertyName())) 
-		 {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (StringUtil.equals("thread_ended", evt.getPropertyName())) {
 			startComputationButton.setText(detectString);
 //			parent0.paneKymos.tabDisplay.selectKymographImage(parent0.paneKymos.tabDisplay.indexImagesCombo);
 //			parent0.paneKymos.tabDisplay.indexImagesCombo = -1;
 			loadBackground();
-		 }
+		}
 	}
 
 }

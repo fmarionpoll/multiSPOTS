@@ -17,23 +17,20 @@ import icy.gui.viewer.Viewer;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
-
-public class DlgKymos_  extends JPanel implements PropertyChangeListener, ChangeListener 
-{
+public class DlgKymos_ extends JPanel implements PropertyChangeListener, ChangeListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1122367183829360097L;
-	public	PopupPanel capPopupPanel	= null;
-	JTabbedPane 		tabsPane 		= new JTabbedPane();
-	public Create 		tabCreate 		= new Create();
-	public Display		tabDisplay		= new Display();
-	public LoadSave 	tabLoadSave 	= new LoadSave();
-	
+	public PopupPanel capPopupPanel = null;
+	JTabbedPane tabsPane = new JTabbedPane();
+	public Create tabCreate = new Create();
+	public Display tabDisplay = new Display();
+	public LoadSave tabLoadSave = new LoadSave();
+
 	private MultiSPOTS parent0 = null;
 
-	public void init (JPanel mainPanel, String string, MultiSPOTS parent0) 
-	{
+	public void init(JPanel mainPanel, String string, MultiSPOTS parent0) {
 		this.parent0 = parent0;
 		capPopupPanel = new PopupPanel(string);
 		JPanel capPanel = capPopupPanel.getMainPanel();
@@ -41,11 +38,11 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 		capPopupPanel.collapse();
 		mainPanel.add(capPopupPanel);
 		GridLayout capLayout = new GridLayout(3, 1);
-		
+
 		tabCreate.init(capLayout, this.parent0);
 		tabCreate.addPropertyChangeListener(this);
 		tabsPane.addTab("Build kymos", null, tabCreate, "Build pseudo-kymographs from ROIs");
-		
+
 		tabDisplay.init(capLayout, parent0);
 		tabDisplay.addPropertyChangeListener(this);
 		tabsPane.addTab("Display", null, tabDisplay, "Display options of data & kymographs");
@@ -53,44 +50,37 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 		tabsPane.addChangeListener(this);
 		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		capPanel.add(tabsPane);
-		
+
 		tabLoadSave.init(capLayout, parent0);
 		tabLoadSave.addPropertyChangeListener(this);
 		tabsPane.addTab("Load/Save", null, tabLoadSave, "Load/Save xml file with capillaries descriptors");
-		
-		capPopupPanel.addComponentListener(new ComponentAdapter() 
-		{
+
+		capPopupPanel.addComponentListener(new ComponentAdapter() {
 			@Override
-			public void componentResized(ComponentEvent e) 
-			{
+			public void componentResized(ComponentEvent e) {
 				parent0.mainFrame.revalidate();
 				parent0.mainFrame.pack();
 				parent0.mainFrame.repaint();
 				tabbedCapillariesAndKymosSelected();
-			}});
+			}
+		});
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent event) 
-	{
-		if (event.getPropertyName().equals("KYMOS_OPEN")) 
-		{
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getPropertyName().equals("KYMOS_OPEN")) {
 			tabsPane.setSelectedIndex(2);
-		}
-		else if (event.getPropertyName().equals("KYMOS_SAVE")) 
-		{
+		} else if (event.getPropertyName().equals("KYMOS_SAVE")) {
 			tabsPane.setSelectedIndex(1);
 		}
 	}
-	
-	public void updateDialogs(Experiment exp) 
-	{
+
+	public void updateDialogs(Experiment exp) {
 //		tabIntervals.displayDlgKymoIntervals (exp);
 	}
 
-	void tabbedCapillariesAndKymosSelected() 
-	{
-		Experiment exp =(Experiment)  parent0.expListCombo.getSelectedItem();
+	void tabbedCapillariesAndKymosSelected() {
+		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null || exp.seqCamData == null)
 			return;
 		int iselected = tabsPane.getSelectedIndex();
@@ -100,16 +90,13 @@ public class DlgKymos_  extends JPanel implements PropertyChangeListener, Change
 				v.toFront();
 //			parent0.dlgExperiment.capPopupPanel.expand();
 			parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
-		} 
-		else if (iselected == 1) 
-		{
+		} else if (iselected == 1) {
 			parent0.dlgKymos.tabDisplay.displayUpdateOnSwingThread();
 		}
 	}
-	
+
 	@Override
-	public void stateChanged(ChangeEvent event) 
-	{
+	public void stateChanged(ChangeEvent event) {
 		if (event.getSource() == tabsPane)
 			tabbedCapillariesAndKymosSelected();
 	}

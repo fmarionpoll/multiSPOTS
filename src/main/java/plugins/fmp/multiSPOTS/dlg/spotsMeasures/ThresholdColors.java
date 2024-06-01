@@ -23,8 +23,6 @@ import javax.swing.SpinnerNumberModel;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxColorRenderer;
 
-
-
 public class ThresholdColors extends JPanel implements PropertyChangeListener {
 
 	/**
@@ -33,38 +31,36 @@ public class ThresholdColors extends JPanel implements PropertyChangeListener {
 	private static final long serialVersionUID = -4359876050505295400L;
 	JComboBox<Color> colorPickCombo = new JComboBox<Color>();
 	private JComboBoxColorRenderer colorPickComboRenderer = new JComboBoxColorRenderer(colorPickCombo);
-	
-	private String textPickAPixel 		= "Pick a pixel";
-	private JButton pickColorButton		= new JButton(textPickAPixel);
-	private JButton	deleteColorButton	= new JButton("Delete color");
-		JRadioButton rbL1 				= new JRadioButton("L1");
-		JRadioButton rbL2 				= new JRadioButton("L2");
-		JSpinner distanceSpinner 		= new JSpinner(new SpinnerNumberModel(10, 0, 800, 1));
-		JRadioButton rbRGB 				= new JRadioButton("RGB");
-		JRadioButton rbHSV 				= new JRadioButton("HSV");
-		JRadioButton rbH1H2H3 			= new JRadioButton("H1H2H3");
-	private JLabel distanceLabel 		= new JLabel("Distance  ");
-	private JLabel colorspaceLabel 		= new JLabel("Color space ");
-	
-	boolean	isUpdatingDataFromComboAllowed = true;
-	MultiSPOTS multiSpots 				= null;
 
+	private String textPickAPixel = "Pick a pixel";
+	private JButton pickColorButton = new JButton(textPickAPixel);
+	private JButton deleteColorButton = new JButton("Delete color");
+	JRadioButton rbL1 = new JRadioButton("L1");
+	JRadioButton rbL2 = new JRadioButton("L2");
+	JSpinner distanceSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 800, 1));
+	JRadioButton rbRGB = new JRadioButton("RGB");
+	JRadioButton rbHSV = new JRadioButton("HSV");
+	JRadioButton rbH1H2H3 = new JRadioButton("H1H2H3");
+	private JLabel distanceLabel = new JLabel("Distance  ");
+	private JLabel colorspaceLabel = new JLabel("Color space ");
 
+	boolean isUpdatingDataFromComboAllowed = true;
+	MultiSPOTS multiSpots = null;
 
 	public void init(GridLayout capLayout, MultiSPOTS parent0) {
-		
+
 		this.multiSpots = parent0;
 		JComponent panel = new JPanel(false);
 		panel.setLayout(capLayout);
-		
+
 		colorPickCombo.setRenderer(colorPickComboRenderer);
-		FlowLayout layoutLeft = new FlowLayout(FlowLayout.LEFT); 
+		FlowLayout layoutLeft = new FlowLayout(FlowLayout.LEFT);
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(pickColorButton);
 		panel0.add(colorPickCombo);
 		panel0.add(deleteColorButton);
-		panel.add( panel0);
-		
+		panel.add(panel0);
+
 		JPanel panel1 = new JPanel(layoutLeft);
 		ButtonGroup bgd = new ButtonGroup();
 		bgd.add(rbL1);
@@ -73,8 +69,8 @@ public class ThresholdColors extends JPanel implements PropertyChangeListener {
 		panel1.add(rbL1);
 		panel1.add(rbL2);
 		panel1.add(distanceSpinner);
-		panel.add( panel1);
-		
+		panel.add(panel1);
+
 		ButtonGroup bgcs = new ButtonGroup();
 		bgcs.add(rbRGB);
 		bgcs.add(rbHSV);
@@ -84,100 +80,111 @@ public class ThresholdColors extends JPanel implements PropertyChangeListener {
 		panel2.add(rbRGB);
 		panel2.add(rbHSV);
 		panel2.add(rbH1H2H3);
-		panel.add( panel2);
-	
+		panel.add(panel2);
+
 		rbL1.setSelected(true);
 		rbRGB.setSelected(true);
-		
+
 //		distanceSpinner.addChangeListener(this);
 		declareActionListeners();
 	}
-	
+
 	private void declareActionListeners() {
-		rbRGB.addActionListener(new ActionListener () { 
-			@Override public void actionPerformed( final ActionEvent e ) { 
+		rbRGB.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 //				multiSpots.detectionParameters.colortransformop = EnumImageOp.NONE;
 				updateThresholdOverlayParameters();
-			} } );
-		
-		rbHSV.addActionListener(new ActionListener () { 
-			@Override public void actionPerformed( final ActionEvent e ) { 
+			}
+		});
+
+		rbHSV.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 //				multiSpots.detectionParameters.colortransformop = EnumImageOp.RGB_TO_HSV;
 				updateThresholdOverlayParameters();
-			} } );
-		
-		rbH1H2H3.addActionListener(new ActionListener () { 
-			@Override public void actionPerformed( final ActionEvent e ) { 
+			}
+		});
+
+		rbH1H2H3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 //				multiSpots.detectionParameters.colortransformop = EnumImageOp.RGB_TO_H1H2H3;
 				updateThresholdOverlayParameters();
-			} } );
-		
-		rbL1.addActionListener(new ActionListener () { 
-			@Override public void actionPerformed( final ActionEvent e ) { 
+			}
+		});
+
+		rbL1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 //				multiSpots.detectionParameters.colordistanceType = EnumColorDistanceType.L1;
 				updateThresholdOverlayParameters();
-			} } );
-		
-		rbL2.addActionListener(new ActionListener () { 
-			@Override public void actionPerformed( final ActionEvent e ) { 
+			}
+		});
+
+		rbL2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				updateThresholdOverlayParameters();
-			} } );
-		
-		deleteColorButton.addActionListener(new ActionListener () { 
-			@Override public void actionPerformed( final ActionEvent e ) { 
+			}
+		});
+
+		deleteColorButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				if (colorPickCombo.getItemCount() > 0 && colorPickCombo.getSelectedIndex() >= 0)
 					colorPickCombo.removeItemAt(colorPickCombo.getSelectedIndex());
 				updateThresholdOverlayParameters();
-			} } );
-		
-		pickColorButton.addActionListener(new ActionListener () { 
-			@Override public void actionPerformed( final ActionEvent e ) { 
-				pickColor(); 
-			} } );
-		
+			}
+		});
+
+		pickColorButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				pickColor();
+			}
+		});
+
 		class ItemChangeListener implements ItemListener {
-		    @Override
-		    public void itemStateChanged(ItemEvent event) {
-		       if (event.getStateChange() == ItemEvent.SELECTED && isUpdatingDataFromComboAllowed) {
-		    	   updateThresholdOverlayParameters();
-		       }
-		    }       
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED && isUpdatingDataFromComboAllowed) {
+					updateThresholdOverlayParameters();
+				}
+			}
 		}
 		colorPickCombo.addItemListener(new ItemChangeListener());
 	}
 
-		
-    void updateThresholdOverlayParameters() {
-    	
+	void updateThresholdOverlayParameters() {
+
 //		areatrack.detectionParameters.areaDetectionMode = EnumAreaDetection.COLORARRAY;
 //		transferDialogToParameters(multiSpots.detectionParameters);
 //		multiSpots.setOverlay(multiSpots.detectionParameters.displayOverlay);
 	}
-	
+
 	private void pickColor() {
-		
+
 //		boolean bActiveTrapOverlay = false;
-		
+
 		if (pickColorButton.getText().contains("*") || pickColorButton.getText().contains(":")) {
 			pickColorButton.setBackground(Color.LIGHT_GRAY);
 			pickColorButton.setText(textPickAPixel);
 //			bActiveTrapOverlay = false;
-		}
-		else
-		{
-			pickColorButton.setText("*"+textPickAPixel+"*");
+		} else {
+			pickColorButton.setText("*" + textPickAPixel + "*");
 			pickColorButton.setBackground(Color.DARK_GRAY);
 //			bActiveTrapOverlay = true;
-		}	
+		}
 //		multiSpots.vSequence.setMouseTrapOverlay(bActiveTrapOverlay, pickColorButton, colorPickCombo);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 //	public void transferParametersToDialog(DetectionParameters detectionParameters) {
 //		
 //		isUpdatingDataFromComboAllowed = false;

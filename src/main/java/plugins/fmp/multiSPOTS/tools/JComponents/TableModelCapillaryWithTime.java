@@ -7,35 +7,31 @@ import javax.swing.table.AbstractTableModel;
 import plugins.fmp.multiSPOTS.experiment.CapillariesArray;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
-
-
-
 public class TableModelCapillaryWithTime extends AbstractTableModel {
 
 	/**
 	 * 
 	 */
-	private static final long 	serialVersionUID 	= 1L;
-	private JComboBoxExperiment 	expList 			= null;
-	private final String 		columnNames[] 		= { "Starting at frame", "End frame" };
-	private ArrayList<Long[]> 	intervals 			= null;
-	
-	
-	public TableModelCapillaryWithTime (JComboBoxExperiment expList) {
+	private static final long serialVersionUID = 1L;
+	private JComboBoxExperiment expList = null;
+	private final String columnNames[] = { "Starting at frame", "End frame" };
+	private ArrayList<Long[]> intervals = null;
+
+	public TableModelCapillaryWithTime(JComboBoxExperiment expList) {
 		super();
 		this.expList = expList;
 	}
-	
+
 	@Override
 	public int getRowCount() {
-		if (expList != null && expList.getSelectedIndex() >= 0 ) {
-    		CapillariesArray capillaries = getCapillariesOfSelectedExperiment();
-    		intervals = capillaries.getKymoIntervalsFromCapillaries().intervals;
+		if (expList != null && expList.getSelectedIndex() >= 0) {
+			CapillariesArray capillaries = getCapillariesOfSelectedExperiment();
+			intervals = capillaries.getKymoIntervalsFromCapillaries().intervals;
 			return intervals.size();
-    	}
-        return 0;
+		}
+		return 0;
 	}
-	
+
 	private CapillariesArray getCapillariesOfSelectedExperiment() {
 		Experiment exp = (Experiment) expList.getSelectedItem();
 		return exp.capillaries;
@@ -48,39 +44,39 @@ public class TableModelCapillaryWithTime extends AbstractTableModel {
 	}
 
 	@Override
-    public Class<?> getColumnClass(int columnIndex) {
+	public Class<?> getColumnClass(int columnIndex) {
 //    	switch (columnIndex) {
 //    	case 0: return Integer.class;
 //    	case 1: return Integer.class;
 //        }
-    	return Integer.class;
-    }
-	
+		return Integer.class;
+	}
+
 	@Override
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
-	
+
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Long[] interval = intervals.get(rowIndex);
-    	return interval[columnIndex];
+		return interval[columnIndex];
 	}
-	
+
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return true;
 	}
-	
+
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		Long[] interval = intervals.get(rowIndex);
 //		switch (columnIndex) {
 //		case 0:  
 //		case 1: 
-			interval[columnIndex] = (long) aValue; 
+		interval[columnIndex] = (long) aValue;
 //			break;
 //	    }
 	}
-	
+
 }

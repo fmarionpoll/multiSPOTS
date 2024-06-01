@@ -20,38 +20,31 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
-
-
-public class Infos extends JPanel 
-{
+public class Infos extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3325915033686366985L;
-	private JButton		editCagesButton		= new JButton("Edit cages infos...");
-	private MultiSPOTS 	parent0 			= null;
-	private Table 		dialog 				= null;
-	private List <Cage> cagesArrayCopy 		= new ArrayList<Cage>();
-	
+	private JButton editCagesButton = new JButton("Edit cages infos...");
+	private MultiSPOTS parent0 = null;
+	private Table dialog = null;
+	private List<Cage> cagesArrayCopy = new ArrayList<Cage>();
+
 	JRadioButton useCages = new JRadioButton("cages");
 	JRadioButton useManual = new JRadioButton("manual entry");
 	ButtonGroup useGroup = new ButtonGroup();
-	
-	private JSpinner 	lengthSpinner	= new JSpinner(new SpinnerNumberModel(78., 0., 100., 1.));
-	private JSpinner 	pixelsSpinner	= new JSpinner(new SpinnerNumberModel(5, 0, 1000, 1));
-	private JButton		measureButton = new JButton ("get 1rst capillary");
-	
-	
-  
-	
-	void init(GridLayout capLayout, MultiSPOTS parent0) 
-	{
+
+	private JSpinner lengthSpinner = new JSpinner(new SpinnerNumberModel(78., 0., 100., 1.));
+	private JSpinner pixelsSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 1000, 1));
+	private JButton measureButton = new JButton("get 1rst capillary");
+
+	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
 		this.parent0 = parent0;
-		
+
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);
 		flowLayout.setVgap(0);
-		
+
 		JPanel panel0a = new JPanel(flowLayout);
 		panel0a.add(new JLabel("Use as reference: "));
 		panel0a.add(useCages);
@@ -60,78 +53,73 @@ public class Infos extends JPanel
 		useGroup.add(useCages);
 		useGroup.add(useManual);
 		useCages.setSelected(true);
-		
+
 		JPanel panel00 = new JPanel(flowLayout);
 		panel00.add(new JLabel("length in mm:", SwingConstants.RIGHT));
 		panel00.add(lengthSpinner);
 		add(panel00);
-		
+
 		JPanel panel0 = new JPanel(flowLayout);
 		panel0.add(new JLabel("length in pixels:", SwingConstants.RIGHT));
 		panel0.add(pixelsSpinner);
 		panel0.add(measureButton);
 		add(panel0);
-		
+
 		JPanel panel1 = new JPanel(flowLayout);
-		panel1.add( editCagesButton);
+		panel1.add(editCagesButton);
 		add(panel1);
 
 		defineActionListeners();
 	}
-	
-	private void defineActionListeners() 
-	{		
-		editCagesButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+
+	private void defineActionListeners() {
+		editCagesButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null)
-				{
+				if (exp != null) {
 					exp.capillaries.transferDescriptionToCapillaries();
 					exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.capillariesList);
 					dialog = new Table();
-	            	dialog.initialize(parent0, cagesArrayCopy);
+					dialog.initialize(parent0, cagesArrayCopy);
 				}
-			}});
-		
-		useCages.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+			}
+		});
+
+		useCages.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				lengthSpinner.setValue(78.);
 				measureButton.setText("get span between 1rst and last cage");
 				measureButton.setVisible(true);
-			}});
-		
-		useManual.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
+			}
+		});
+
+		useManual.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				measureButton.setVisible(false);
-			}});
-		
-		measureButton.addActionListener(new ActionListener () 
-		{ 
-			@Override public void actionPerformed( final ActionEvent e ) 
-			{ 
-					measureCagesSpan();
-			}});
+			}
+		});
+
+		measureButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				measureCagesSpan();
+			}
+		});
 	}
-	
+
 	void measureCagesSpan() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		if (exp != null)
-		{
+		if (exp != null) {
 			exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
-			if (exp.capillaries.capillariesList.size() > 0) 
-			{
+			if (exp.capillaries.capillariesList.size() > 0) {
 				int npixels = exp.cages.getHorizontalSpanOfCages();
-				if (npixels > 0) 
+				if (npixels > 0)
 					pixelsSpinner.setValue(npixels);
 			}
 		}
 	}
-	
 
 }
