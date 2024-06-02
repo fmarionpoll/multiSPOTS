@@ -376,8 +376,8 @@ public class SpotsArray {
 	public void transferSumToSumClean() {
 		int span = 10;
 		for (Spot spot : spotsList) {
-			if (spot.sum_in.measureValues != null)
-				spot.sum_clean.buildRunningMedian(span, spot.sum_in.measureValues);
+			if (spot.sum_in.values != null)
+				spot.sum_clean.buildRunningMedian(span, spot.sum_in.values);
 			else
 				spot.sum_clean.buildRunningMedian(span, spot.sum_in.getLevel2D().ypoints);
 		}

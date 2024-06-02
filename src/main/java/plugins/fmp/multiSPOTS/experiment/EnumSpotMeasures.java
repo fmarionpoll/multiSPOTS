@@ -4,9 +4,9 @@ public enum EnumSpotMeasures {
 	SPOTS_DESCRIPTION("DESCRIPTION", "experiment description fields"), SPOTS_ARRAY("SPOTS", "array of spots"),
 	SPOTS_MEASURES("MEASURES", "spot measures"),
 
-	AREA_SUM("AREA_SUM", "sum grey over threshold"),
-	AREA_SUMCLEAN("AREA_SUMCLEAN", "sum grey values of pixels over threshold with no fly"),
-	AREA_OUT("AREA_OUT", "median grey value background"),
+	AREA_SUM("AREA_SUM", "Sum grey values of pixels over threshold"),
+	AREA_SUMCLEAN("AREA_SUMCLEAN", "Ratio grey values of pixels over threshold"),
+	AREA_OUT("AREA_OUT", "pixel grey value background"),
 	AREA_DIFF("AREA_DIFF", "grey value -background"),
 	AREA_FLYPRESENT("AREA_FLYPRESENT", "fly is present or not over the spot"), ALL("ALL", "all options");
 

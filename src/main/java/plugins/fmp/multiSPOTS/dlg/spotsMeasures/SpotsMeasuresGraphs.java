@@ -18,7 +18,6 @@ import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
-
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.Spot;
@@ -37,7 +36,7 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 	private EnumXLSExportType[] measures = new EnumXLSExportType[] { EnumXLSExportType.AREA_SUM,
 			EnumXLSExportType.AREA_SUMCLEAN, EnumXLSExportType.AREA_OUT, EnumXLSExportType.AREA_DIFF };
 	private JComboBox<EnumXLSExportType> exportTypeComboBox = new JComboBox<EnumXLSExportType>(measures);
-	private JCheckBox t0Checkbox = new JCheckBox("relative to t0", true);
+	private JCheckBox t0Checkbox = new JCheckBox("relative to t0", false);
 
 	private JRadioButton displayAllButton = new JRadioButton("all cages");
 	private JRadioButton displaySelectedButton = new JRadioButton("cage selected");

@@ -13,8 +13,8 @@ import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 public class SpotMeasure {
 	private Level2D level2D = new Level2D();
 	private Level2D leve2D_old = new Level2D();
-	public double[] measureValues = null;
-	public boolean[] measureBooleans = null;
+	public double[] values = null;
+	public boolean[] isPresent = null;
 	private ROI2DPolyLine roi = null;
 	private double factor = 1.;
 
@@ -43,15 +43,15 @@ public class SpotMeasure {
 	void initLevel2D_fromMeasureValues(String name) {
 		this.setName(name);
 		int ii_start = 0;
-		int ii_end = measureValues.length - 1;
-		int npoints = measureValues.length;
+		int ii_end = values.length - 1;
+		int npoints = values.length;
 
 		double[] xpoints = new double[npoints];
 		double[] ypoints = new double[npoints];
 		int j = 0;
 		for (int i = ii_start; i < ii_end; i++, j++) {
 			xpoints[j] = i;
-			ypoints[j] = measureValues[j];
+			ypoints[j] = values[j];
 		}
 		setLevel2D(new Level2D(xpoints, ypoints, npoints));
 	}
@@ -59,14 +59,14 @@ public class SpotMeasure {
 	void initLevel2D_fromBooleans(String name) {
 		this.setName(name);
 		int xStart = 0;
-		int xEnd = measureBooleans.length - 1;
-		int npoints = measureBooleans.length;
+		int xEnd = isPresent.length - 1;
+		int npoints = isPresent.length;
 		double[] xpoints = new double[npoints];
 		double[] ypoints = new double[npoints];
 		int j = 0;
 		for (int i = xStart; i < xEnd; i++, j++) {
 			xpoints[j] = i;
-			ypoints[j] = measureBooleans[j] ? 1d : 0d;
+			ypoints[j] = isPresent[j] ? 1d : 0d;
 		}
 		setLevel2D(new Level2D(xpoints, ypoints, npoints));
 	}
@@ -249,11 +249,11 @@ public class SpotMeasure {
 		double[] tempArrayCircular = new double[sizeTempArray];
 
 		int npoints = yvalues.length;
-		measureValues = new double[npoints];
+		values = new double[npoints];
 		for (int t = 0; t < sizeTempArray; t++) {
 			double value = yvalues[t];
 			tempArrayCircular[t] = value;
-			measureValues[t] = value;
+			values[t] = value;
 		}
 
 		int iarraycircular = sizeTempArray - 1;
@@ -265,7 +265,7 @@ public class SpotMeasure {
 			Arrays.sort(tempArraySorted);
 			double median = tempArraySorted[nbspan];
 			bin = t;
-			measureValues[bin] = median;
+			values[bin] = median;
 
 			iarraycircular++;
 			if (iarraycircular >= sizeTempArray)
