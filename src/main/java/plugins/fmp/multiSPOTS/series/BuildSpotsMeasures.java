@@ -12,7 +12,6 @@ import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageCursor;
-import icy.math.ArrayMath;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
@@ -126,18 +125,15 @@ public class BuildSpotsMeasures extends BuildSeries {
 					ResultsThreshold results = new ResultsThreshold();
 					for (Spot spot : exp.spotsArray.spotsList) {
 						ROI2DAlongT roiT = spot.getROIAtT(t);
-
-						spot.sum_out.values[ii] = measureMedianBackgroundAroundSpotAtT(cursorWork,
-								roiT.mask2DPoints_out);
+//						spot.sum_out.values[ii] = measureMedianBackgroundAroundSpotAtT(cursorWork,
+//								roiT.mask2DPoints_out);
 //						spot.sum_out.values[ii] = measureAverageBackgroundAroundSpotAtT(cursorWork,
 //								roiT.mask2DPoints_out);
-
 						results = measureSpotOverThresholdAtT(cursorWork, roiT.mask2DPoints_in);
 						spot.sum_in.values[ii] = results.sum / results.npoints_in;
 //						spot.sum_diff.measureValues[ii] = spot.sum_in.measureValues[ii]
 //								- spot.sum_out.measureValues[ii] * results.nPointsOverThreshold /results.npoints_in;
-						spot.sum_diff.values[ii] = results.sumTot / results.npoints_in - spot.sum_out.values[ii];
-
+//						spot.sum_diff.values[ii] = results.sumTot / results.npoints_in - spot.sum_out.values[ii];
 						spot.flyPresent.isPresent[ii] = isFlyPresentInSpotAreaAtT(cursorSource,
 								roiT.mask2DPoints_in) > 0;
 					}
@@ -206,23 +202,23 @@ public class BuildSpotsMeasures extends BuildSeries {
 		return new ResultsThreshold(sum, sumTot, nPointsOverThreshold, (double) mask2DPoints.length);
 	}
 
-	private double measureMedianBackgroundAroundSpotAtT(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints) {
-		double[] values = new double[mask2DPoints.length];
-		for (int offset = 0; offset < mask2DPoints.length; offset++) {
-			Point pt = mask2DPoints[offset];
-			values[offset] = cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
-		}
-		return ArrayMath.median(values, false);
-	}
+//	private double measureMedianBackgroundAroundSpotAtT(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints) {
+//		double[] values = new double[mask2DPoints.length];
+//		for (int offset = 0; offset < mask2DPoints.length; offset++) {
+//			Point pt = mask2DPoints[offset];
+//			values[offset] = cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
+//		}
+//		return ArrayMath.median(values, false);
+//	}
 
-	private double measureAverageBackgroundAroundSpotAtT(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints) {
-		double sum = 0;
-		for (int offset = 0; offset < mask2DPoints.length; offset++) {
-			Point pt = mask2DPoints[offset];
-			sum += cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
-		}
-		return sum / mask2DPoints.length;
-	}
+//	private double measureAverageBackgroundAroundSpotAtT(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints) {
+//		double sum = 0;
+//		for (int offset = 0; offset < mask2DPoints.length; offset++) {
+//			Point pt = mask2DPoints[offset];
+//			sum += cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
+//		}
+//		return sum / mask2DPoints.length;
+//	}
 
 	private void initSpotsDataArrays(Experiment exp) {
 		// int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) /
@@ -231,8 +227,8 @@ public class BuildSpotsMeasures extends BuildSeries {
 		for (Spot spot : exp.spotsArray.spotsList) {
 			spot.sum_in.values = new double[nFrames];
 			spot.sum_clean.values = new double[nFrames];
-			spot.sum_out.values = new double[nFrames];
-			spot.sum_diff.values = new double[nFrames];
+//			spot.sum_out.values = new double[nFrames];
+//			spot.sum_diff.values = new double[nFrames];
 			spot.flyPresent.isPresent = new boolean[nFrames];
 		}
 	}
@@ -242,16 +238,13 @@ public class BuildSpotsMeasures extends BuildSeries {
 		if (seqCamData.seq == null)
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
-		double scale = 2.;
+//		double scale = 2.;
 		for (Spot spot : exp.spotsArray.spotsList) {
 			List<ROI2DAlongT> listRoiT = spot.getROIAlongTList();
 			for (ROI2DAlongT roiT : listRoiT) {
 				if (roiT.getMask2D_in() == null)
 					roiT.buildMask2DFromRoi_in();
-				roiT.buildRoi_outAndMask2D(scale);
-//				System.out.println("roi=" + roiT.getRoi_out().getName() + " n points in=" + roiT.mask2DPoints_in.length
-//						+ " out=" + roiT.mask2DPoints_out.length + " ratio="
-//						+ roiT.mask2DPoints_out.length / roiT.mask2DPoints_in.length);
+//				roiT.buildRoi_outAndMask2D(scale);
 			}
 		}
 	}

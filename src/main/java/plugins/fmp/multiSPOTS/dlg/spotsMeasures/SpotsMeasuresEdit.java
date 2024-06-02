@@ -132,10 +132,10 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 			removeAndUpdate(seqKymos, spot, spot.sum_in, roiRect);
 		else if (optionSelected.contains("clean"))
 			removeAndUpdate(seqKymos, spot, spot.sum_clean, roiRect);
-		else if (optionSelected.contains("out"))
-			removeAndUpdate(seqKymos, spot, spot.sum_out, roiRect);
-		else if (optionSelected.contains("diff"))
-			removeAndUpdate(seqKymos, spot, spot.sum_diff, roiRect);
+//		else if (optionSelected.contains("out"))
+//			removeAndUpdate(seqKymos, spot, spot.sum_out, roiRect);
+//		else if (optionSelected.contains("diff"))
+//			removeAndUpdate(seqKymos, spot, spot.sum_diff, roiRect);
 		else if (optionSelected.contains("fly"))
 			removeAndUpdate(seqKymos, spot, spot.flyPresent, roiRect);
 	}
