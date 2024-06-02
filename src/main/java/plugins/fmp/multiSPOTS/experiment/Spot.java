@@ -357,7 +357,7 @@ public class Spot implements Comparable<Spot> {
 				listRoiAlongT.add(roiInterval);
 
 				if (i == 0)
-					spotRoi_in = (ROI2DShape) listRoiAlongT.get(0).getRoi();
+					spotRoi_in = (ROI2DShape) listRoiAlongT.get(0).getRoi_in();
 			}
 		}
 		return true;

@@ -264,7 +264,7 @@ public class BuildKymographs extends BuildSeries {
 
 	private int buildMasks(ROI2DAlongT capT, int sizex, int sizey) {
 		ArrayList<ArrayList<int[]>> masks = getPointsfromROIPolyLineUsingBresenham(
-				ROI2DUtilities.getPoints2DArrayFromROI2D(capT.getRoi()), options.diskRadius, sizex, sizey);
+				ROI2DUtilities.getPoints2DArrayFromROI2D(capT.getRoi_in()), options.diskRadius, sizex, sizey);
 		capT.setMasksList(masks);
 		return masks.size();
 	}

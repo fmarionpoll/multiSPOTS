@@ -417,7 +417,7 @@ public class SpotsArray {
 			List<ROI2DAlongT> listROI2DForKymo = spot.getROIAlongTList();
 			ROI2D roi = spot.getRoi_in();
 			if (item > 0)
-				roi = (ROI2D) listROI2DForKymo.get(item - 1).getRoi().getCopy();
+				roi = (ROI2D) listROI2DForKymo.get(item - 1).getRoi_in().getCopy();
 			listROI2DForKymo.add(item, new ROI2DAlongT(start, roi));
 		}
 		return item;

@@ -231,7 +231,6 @@ public class SpotMeasure {
 	public void transferROItoLevel2D() {
 		Polyline2D polyline = roi.getPolyline2D();
 		if (polyline.npoints != level2D.npoints) {
-			System.out.println("polyline.npoints=" + polyline.npoints + " level2D.npoints=" + level2D.npoints);
 			level2D = new Level2D(polyline.npoints);
 		}
 		for (int i = 0; i < polyline.npoints; i++) {

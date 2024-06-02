@@ -28,7 +28,7 @@ public class ROI2DAlongT implements XMLPersistent {
 	private final String ID_START = "startT";
 
 	public ROI2DAlongT(long t, ROI2D roi) {
-		setRoi(roi);
+		setRoi_in(roi);
 		this.t = t;
 	}
 
@@ -38,21 +38,29 @@ public class ROI2DAlongT implements XMLPersistent {
 	public long getT() {
 		return t;
 	}
-
-	public ROI2D getRoi() {
-		return roi_in;
-	}
-
-	public ArrayList<ArrayList<int[]>> getMasksList() {
-		return masksList;
-	}
-
+	
 	public void setT(long t) {
 		this.t = t;
 	}
 
-	public void setRoi(ROI2D roi) {
+	public ROI2D getRoi_in() {
+		return roi_in;
+	}
+	
+	public void setRoi_in(ROI2D roi) {
 		this.roi_in = (ROI2D) roi.getCopy();
+	}
+	
+	public ROI2D getRoi_out() {
+		return roi_out;
+	}
+	
+	public void setRoi_out(ROI2D roi) {
+		this.roi_out = (ROI2D) roi.getCopy();
+	}
+	
+	public ArrayList<ArrayList<int[]>> getMasksList() {
+		return masksList;
 	}
 
 	public void setMasksList(ArrayList<ArrayList<int[]>> masksList) {
@@ -75,7 +83,7 @@ public class ROI2DAlongT implements XMLPersistent {
 				roi_out = ROI2DUtilities.rescaleROI(roi_in, scale);
 			}
 			mask2D_out = roi_out.getBooleanMask2D(0, 0, 1, true);
-			mask2D_out.getSubtraction(mask2D_in);
+			mask2D_out = mask2D_out.getSubtraction(mask2D_in);
 			mask2DPoints_out = mask2D_out.getPoints();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

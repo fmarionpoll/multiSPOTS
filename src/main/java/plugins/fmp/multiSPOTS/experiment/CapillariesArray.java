@@ -418,7 +418,7 @@ public class CapillariesArray {
 			List<ROI2DAlongT> listROI2DForKymo = cap.getROIsForKymo();
 			ROI2D roi = cap.getRoi();
 			if (item > 0)
-				roi = (ROI2D) listROI2DForKymo.get(item - 1).getRoi().getCopy();
+				roi = (ROI2D) listROI2DForKymo.get(item - 1).getRoi_in().getCopy();
 			listROI2DForKymo.add(item, new ROI2DAlongT(start, roi));
 		}
 		return item;

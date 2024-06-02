@@ -197,7 +197,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 		ArrayList<ROI2D> listRoisAtT = new ArrayList<ROI2D>();
 		for (Spot spot : exp.spotsArray.spotsList) {
 			ROI2DAlongT kymoROI2D = spot.getROIAtT(t);
-			listRoisAtT.add(kymoROI2D.getRoi());
+			listRoisAtT.add(kymoROI2D.getRoi_in());
 		}
 		Polygon2D polygon = ROI2DUtilities.getPolygonEnclosingSpots(listRoisAtT);
 
@@ -252,7 +252,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 		seq.removeAllROI();
 		List<ROI2D> listRois = new ArrayList<ROI2D>();
 		for (Spot spot : exp.spotsArray.spotsList)
-			listRois.add(spot.getROIAtT((int) intervalT).getRoi());
+			listRois.add(spot.getROIAtT((int) intervalT).getRoi_in());
 		seq.addROIs(listRois, false);
 
 		Viewer v = seq.getFirstViewer();
@@ -273,7 +273,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 			Spot spot = exp.spotsArray.getSpotFromName(roi.getName());
 			if (spot != null) {
 				ROI2D roilocal = (ROI2D) roi.getCopy();
-				spot.getROIAtT(intervalT).setRoi(roilocal);
+				spot.getROIAtT(intervalT).setRoi_in(roilocal);
 			}
 		}
 	}

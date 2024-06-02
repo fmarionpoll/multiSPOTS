@@ -417,7 +417,7 @@ public class Capillary implements Comparable<Capillary> {
 				roisForKymo.add(roiInterval);
 
 				if (i == 0) {
-					roi = roisForKymo.get(0).getRoi();
+					roi = roisForKymo.get(0).getRoi_in();
 				}
 			}
 		}
