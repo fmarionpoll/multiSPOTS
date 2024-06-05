@@ -51,9 +51,9 @@ public class Spot implements Comparable<Spot> {
 
 	public SpotMeasure sum_in = new SpotMeasure("sum");
 	public SpotMeasure sum_clean = new SpotMeasure("clean");
+	public SpotMeasure flyPresent = new SpotMeasure("flyPresent");
 //	public SpotMeasure sum_out = new SpotMeasure("out");
 //	public SpotMeasure sum_diff = new SpotMeasure("diff");
-	public SpotMeasure flyPresent = new SpotMeasure("flyPresent");
 	public boolean valid = true;
 
 	private final String ID_META = "metaMC";
@@ -67,13 +67,10 @@ public class Spot implements Comparable<Spot> {
 	private final String ID_SIDE = "side";
 	private final String ID_DESCOK = "descriptionOK";
 	private final String ID_VERSIONINFOS = "versionInfos";
-
 	private final String ID_INTERVALS = "INTERVALS";
 	private final String ID_NINTERVALS = "nintervals";
 	private final String ID_INTERVAL = "interval_";
-
 	private final String ID_INDEXIMAGE = "indexImageMC";
-
 	private final String ID_VERSION = "version";
 	private final String ID_VERSIONNUM = "1.0.0";
 

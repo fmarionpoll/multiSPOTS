@@ -1,7 +1,6 @@
 package plugins.fmp.multiSPOTS.experiment;
 
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import org.w3c.dom.Node;
@@ -18,11 +17,13 @@ public class ROI2DAlongT implements XMLPersistent {
 	private ArrayList<ArrayList<int[]>> masksList = null;
 
 	private ROI2D roi_in = null;
-	private ROI2D roi_out = null;
-	private BooleanMask2D mask2D_in = null;
-	private BooleanMask2D mask2D_out = null;
+	public BooleanMask2D mask2D_in = null;
+	public BooleanMask2D mask2D_in_nofly = null;
 	public Point[] mask2DPoints_in = null;
-	public Point[] mask2DPoints_out = null;
+
+//	private ROI2D roi_out = null;	
+//	private BooleanMask2D mask2D_out = null;	
+//	public Point[] mask2DPoints_out = null;
 
 	private final String ID_META = "metaT";
 	private final String ID_INDEX = "indexT";
@@ -52,14 +53,6 @@ public class ROI2DAlongT implements XMLPersistent {
 		this.roi_in = (ROI2D) roi.getCopy();
 	}
 
-	public ROI2D getRoi_out() {
-		return roi_out;
-	}
-
-	public void setRoi_out(ROI2D roi) {
-		this.roi_out = (ROI2D) roi.getCopy();
-	}
-
 	public ArrayList<ArrayList<int[]>> getMasksList() {
 		return masksList;
 	}
@@ -78,30 +71,38 @@ public class ROI2DAlongT implements XMLPersistent {
 		}
 	}
 
-	public void buildRoi_outAndMask2D(double scale) {
-		try {
-			if (roi_out == null) {
-				roi_out = ROI2DUtilities.rescaleROI(roi_in, scale);
-				Point2D pt = roi_out.getPosition2D();
-				pt.setLocation(pt.getX(), pt.getY() + 300.);
-				roi_out.setPosition2D(pt);
-			}
-			mask2D_out = roi_out.getBooleanMask2D(0, 0, 1, true);
-			mask2D_out = mask2D_out.getSubtraction(mask2D_in);
-			mask2DPoints_out = mask2D_out.getPoints();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public BooleanMask2D getMask2D_in() {
 		return mask2D_in;
 	}
 
-	public BooleanMask2D getMask2D_out() {
-		return mask2D_out;
-	}
+//	public ROI2D getRoi_out() {
+//		return roi_out;
+//	}
+
+//	public void setRoi_out(ROI2D roi) {
+//		this.roi_out = (ROI2D) roi.getCopy();
+//	}
+
+//	public void buildRoi_outAndMask2D(double scale) {
+//		try {
+//			if (roi_out == null) {
+//				roi_out = ROI2DUtilities.rescaleROI(roi_in, scale);
+//				Point2D pt = roi_out.getPosition2D();
+//				pt.setLocation(pt.getX(), pt.getY() + 300.);
+//				roi_out.setPosition2D(pt);
+//			}
+//			mask2D_out = roi_out.getBooleanMask2D(0, 0, 1, true);
+//			mask2D_out = mask2D_out.getSubtraction(mask2D_in);
+//			mask2DPoints_out = mask2D_out.getPoints();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+
+//	public BooleanMask2D getMask2D_out() {
+//		return mask2D_out;
+//	}
 
 	@Override
 	public boolean loadFromXML(Node node) {
