@@ -50,8 +50,8 @@ public class BuildSeriesOptions implements XMLPersistent {
 	public int overlayThreshold = 0;
 
 	public ImageTransformEnums transform01 = ImageTransformEnums.R_RGB;
-	public ImageTransformEnums overlayTransform = ImageTransformEnums.NONE;
 	public ImageTransformEnums transform02 = ImageTransformEnums.L1DIST_TO_1RSTCOL;
+	public ImageTransformEnums overlayTransform = ImageTransformEnums.NONE;
 	public ImageTransformEnums transformop = ImageTransformEnums.NONE;
 
 	public boolean overlayIfGreater = true;

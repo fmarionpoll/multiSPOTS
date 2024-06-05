@@ -14,7 +14,7 @@ public class SpotMeasure {
 	private Level2D level2D = new Level2D();
 	private Level2D leve2D_old = new Level2D();
 	public double[] values = null;
-	public boolean[] isPresent = null;
+	public int[] isPresent = null;
 	private ROI2DPolyLine roi = null;
 	private double factor = 1.;
 
@@ -66,7 +66,7 @@ public class SpotMeasure {
 		int j = 0;
 		for (int i = xStart; i < xEnd; i++, j++) {
 			xpoints[j] = i;
-			ypoints[j] = isPresent[j] ? 1d : 0d;
+			ypoints[j] = isPresent[j]>0 ? 1d : 0d;
 		}
 		setLevel2D(new Level2D(xpoints, ypoints, npoints));
 	}

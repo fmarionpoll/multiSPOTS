@@ -12,10 +12,10 @@ import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageCursor;
-import icy.roi.BooleanMask2D;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
+
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
@@ -103,39 +103,38 @@ public class BuildSpotsMeasures extends BuildSeries {
 		ImageTransformOptions transformOptions = new ImageTransformOptions();
 		transformOptions.transformOption = options.transform01;
 		transformOptions.setSingleThreshold(options.spotThreshold, options.spotThresholdUp);
-		ImageTransformInterface transformFunction = options.transform01.getFunction();
+		ImageTransformInterface transformFunctionSpot = options.transform01.getFunction();
+		ImageTransformInterface transformFunctionFly = options.transform02.getFunction();
 
-		for (int ii = tFirst; ii <= tLast; ii++) {
+		for (int ti = tFirst; ti <= tLast; ti++) {
 			if (options.concurrentDisplay) {
-				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(ii));
+				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(ti));
 				seqData.setImage(0, 0, sourceImage0);
-				vData.setTitle("Frame #" + ii + " /" + tLast);
+				vData.setTitle("Frame #" + ti + " /" + tLast);
 			}
 
-			final int t = ii;
+			final int t = ti;
 			tasks.add(processor.submit(new Runnable() {
 				@Override
 				public void run() {
 					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
 					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
-					final IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage,
-							transformOptions);
-					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
-					IcyBufferedImageCursor cursorWork = new IcyBufferedImageCursor(workImage);
+					final IcyBufferedImage spotImage = transformFunctionSpot.getTransformedImage(sourceImage, transformOptions);
+					final IcyBufferedImage flyImage = transformFunctionFly.getTransformedImage(sourceImage, transformOptions);
+					IcyBufferedImageCursor cursorFlyImage = new IcyBufferedImageCursor(flyImage);
+					IcyBufferedImageCursor cursorSpotImage = new IcyBufferedImageCursor(spotImage);
 					int ii = t - tFirst;
 					ResultsThreshold results = new ResultsThreshold();
 					for (Spot spot : exp.spotsArray.spotsList) {
 						ROI2DAlongT roiT = spot.getROIAtT(t);
-						spot.flyPresent.isPresent[ii] = isFlyPresentInSpotAreaAtT(cursorSource, roiT) > 0;
-						results = measureSpotOverThresholdAtT(cursorWork, roiT.mask2DPoints_in);
-						spot.sum_in.values[ii] = results.sum / results.npoints_in;
+						results = measureSpotOverThresholdAtT(cursorSpotImage, cursorFlyImage, roiT);
+						spot.flyPresent.isPresent[ii] = results.nPoints_fly_present;
+						spot.sum_in.values[ii] = results.sumOverThreshold / results.npoints_in;
 
-//						spot.sum_out.values[ii] = measureMedianBackgroundAroundSpotAtT(cursorWork,
-//						roiT.mask2DPoints_out);
-//						spot.sum_out.values[ii] = measureAverageBackgroundAroundSpotAtT(cursorWork,
-//						roiT.mask2DPoints_out);//						spot.sum_diff.measureValues[ii] = spot.sum_in.measureValues[ii]
-//								- spot.sum_out.measureValues[ii] * results.nPointsOverThreshold /results.npoints_in;
-//						spot.sum_diff.values[ii] = results.sumTot / results.npoints_in - spot.sum_out.values[ii];
+						if (results.nPoints_no_fly != results.npoints_in) {
+							spot.sum_in.values[ii] = results.sumTot_no_fly_over_threshold
+									/ results.nPoints_no_fly;
+						}
 					}
 				}
 			}));
@@ -145,84 +144,48 @@ public class BuildSpotsMeasures extends BuildSeries {
 		return true;
 	}
 
-	private int isFlyPresentInSpotAreaAtT(IcyBufferedImageCursor cursorSource, ROI2DAlongT roiT) {
-		int flyThreshold = options.flyThreshold;
-		int flyFound = 0;
-		Point[] mask2DPoints_in = roiT.mask2DPoints_in;
-		roiT.mask2D_in_nofly = (BooleanMask2D) roiT.mask2D_in.clone();
+	private ResultsThreshold measureSpotOverThresholdAtT(IcyBufferedImageCursor cursorWork,
+			IcyBufferedImageCursor cursorSource, ROI2DAlongT roiT) {
 
-		if (options.flyThresholdUp) {
-			for (int offset = 0; offset < mask2DPoints_in.length; offset++) {
-				Point pt = mask2DPoints_in[offset];
-				int value = (int) cursorSource.get((int) pt.getX(), (int) pt.getY(), 0);
-				if (value > flyThreshold) {
-					flyFound++;
-					roiT.mask2D_in_nofly.mask[offset] = false;
-//					break;
-				}
-			}
-		} else {
-			for (int offset = 0; offset < mask2DPoints_in.length; offset++) {
-				Point pt = mask2DPoints_in[offset];
-				int value = (int) cursorSource.get((int) pt.getX(), (int) pt.getY(), 0);
-				if (value < flyThreshold) {
-					flyFound++;
-					roiT.mask2D_in_nofly.mask[offset] = false;
-//					break;
-				}
-			}
-		}
-		return flyFound;
-	}
+		ResultsThreshold result = new ResultsThreshold();
+		result.npoints_in = roiT.mask2DPoints_in.length;
 
-	private ResultsThreshold measureSpotOverThresholdAtT(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints) {
-		boolean spotThresholdUp = options.spotThresholdUp;
-		int spotThreshold = options.spotThreshold;
+		for (int offset = 0; offset < roiT.mask2DPoints_in.length; offset++) {
+			Point pt = roiT.mask2DPoints_in[offset];
+			int value = (int) cursorWork.get((int) pt.getX(), (int) pt.getY(), 0);
+			int value2 = (int) cursorSource.get((int) pt.getX(), (int) pt.getY(), 0);
 
-		double sum = 0;
-		double sumTot = 0.;
-		int nPointsOverThreshold = 0;
-		if (spotThresholdUp) {
-			for (int offset = 0; offset < mask2DPoints.length; offset++) {
-				Point pt = mask2DPoints[offset];
-				int value = (int) cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
-				sumTot += value;
-				if (value < spotThreshold) {
-					sum += value;
-					nPointsOverThreshold++;
-				}
-			}
-		} else {
-			for (int offset = 0; offset < mask2DPoints.length; offset++) {
-				Point pt = mask2DPoints[offset];
-				int value = (int) cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
-				sumTot += value;
-				if (value > spotThreshold) {
-					sum += value;
-					nPointsOverThreshold++;
+			boolean isFlyThere = isFlyPresent(value2);
+			if (!isFlyThere) {
+				result.nPoints_no_fly++;
+			} 
+			else
+				result.nPoints_fly_present++;
+
+			if (isOverThreshold(value)) {
+				result.sumOverThreshold += value;
+				result.nPointsOverThreshold++;
+				if (!isFlyThere) {
+					result.sumTot_no_fly_over_threshold += value;
 				}
 			}
 		}
-		return new ResultsThreshold(sum, sumTot, nPointsOverThreshold, (double) mask2DPoints.length);
+		return result;
 	}
 
-//	private double measureMedianBackgroundAroundSpotAtT(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints) {
-//		double[] values = new double[mask2DPoints.length];
-//		for (int offset = 0; offset < mask2DPoints.length; offset++) {
-//			Point pt = mask2DPoints[offset];
-//			values[offset] = cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
-//		}
-//		return ArrayMath.median(values, false);
-//	}
+	private boolean isFlyPresent(double value) {
+		boolean flag = value > options.flyThreshold;
+		if (!options.flyThresholdUp) 
+			flag = !flag;
+		return flag;
+	}
 
-//	private double measureAverageBackgroundAroundSpotAtT(IcyBufferedImageCursor cursorWorkImage, Point[] mask2DPoints) {
-//		double sum = 0;
-//		for (int offset = 0; offset < mask2DPoints.length; offset++) {
-//			Point pt = mask2DPoints[offset];
-//			sum += cursorWorkImage.get((int) pt.getX(), (int) pt.getY(), 0);
-//		}
-//		return sum / mask2DPoints.length;
-//	}
+	private boolean isOverThreshold(double value) {
+
+		boolean flag =value > options.spotThreshold;
+		if (!options.spotThresholdUp) flag = !flag;
+		return flag;
+	}
 
 	private void initSpotsDataArrays(Experiment exp) {
 		// int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) /
@@ -231,9 +194,8 @@ public class BuildSpotsMeasures extends BuildSeries {
 		for (Spot spot : exp.spotsArray.spotsList) {
 			spot.sum_in.values = new double[nFrames];
 			spot.sum_clean.values = new double[nFrames];
-//			spot.sum_out.values = new double[nFrames];
 //			spot.sum_diff.values = new double[nFrames];
-			spot.flyPresent.isPresent = new boolean[nFrames];
+			spot.flyPresent.isPresent = new int[nFrames];
 		}
 	}
 
@@ -242,13 +204,11 @@ public class BuildSpotsMeasures extends BuildSeries {
 		if (seqCamData.seq == null)
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
-//		double scale = 2.;
 		for (Spot spot : exp.spotsArray.spotsList) {
 			List<ROI2DAlongT> listRoiT = spot.getROIAlongTList();
 			for (ROI2DAlongT roiT : listRoiT) {
 				if (roiT.getMask2D_in() == null)
 					roiT.buildMask2DFromRoi_in();
-//				roiT.buildRoi_outAndMask2D(scale);
 			}
 		}
 	}
