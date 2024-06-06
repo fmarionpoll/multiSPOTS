@@ -49,7 +49,7 @@ public class YDifferenceL extends ImageTransformFunctionAbstract implements Imag
 			}
 		}
 
-		copyExGDoubleToIcyBufferedImage(outValues, img2);
+		copyExGDoubleToIcyBufferedImage(outValues, img2, options.copyResultsToThe3planes);
 		return img2;
 	}
 

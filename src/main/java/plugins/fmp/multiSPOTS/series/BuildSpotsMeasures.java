@@ -15,7 +15,6 @@ import icy.image.IcyBufferedImageCursor;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
-
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
@@ -26,6 +25,10 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 public class BuildSpotsMeasures extends BuildSeries {
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
+	private ImageTransformOptions transformOptions01 = null;
+	ImageTransformInterface transformFunctionSpot = null;
+	ImageTransformOptions transformOptions02 = null;
+	ImageTransformInterface transformFunctionFly = null;
 
 	// --------------------------------------------
 
@@ -100,11 +103,19 @@ public class BuildSpotsMeasures extends BuildSeries {
 
 		initMasks2D(exp);
 		initSpotsDataArrays(exp);
-		ImageTransformOptions transformOptions = new ImageTransformOptions();
-		transformOptions.transformOption = options.transform01;
-		transformOptions.setSingleThreshold(options.spotThreshold, options.spotThresholdUp);
-		ImageTransformInterface transformFunctionSpot = options.transform01.getFunction();
-		ImageTransformInterface transformFunctionFly = options.transform02.getFunction();
+
+		if (transformFunctionSpot == null) {
+			transformOptions01 = new ImageTransformOptions();
+			transformOptions01.transformOption = options.transform01;
+			transformOptions01.copyResultsToThe3planes = false;
+			transformOptions01.setSingleThreshold(options.spotThreshold, options.spotThresholdUp);
+			transformFunctionSpot = options.transform01.getFunction();
+
+			transformOptions02 = new ImageTransformOptions();
+			transformOptions02.transformOption = options.transform02;
+			transformOptions02.copyResultsToThe3planes = false;
+			transformFunctionFly = options.transform02.getFunction();
+		}
 
 		for (int ti = tFirst; ti <= tLast; ti++) {
 			if (options.concurrentDisplay) {
@@ -119,8 +130,10 @@ public class BuildSpotsMeasures extends BuildSeries {
 				public void run() {
 					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
 					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
-					final IcyBufferedImage spotImage = transformFunctionSpot.getTransformedImage(sourceImage, transformOptions);
-					final IcyBufferedImage flyImage = transformFunctionFly.getTransformedImage(sourceImage, transformOptions);
+					final IcyBufferedImage spotImage = transformFunctionSpot.getTransformedImage(sourceImage,
+							transformOptions01);
+					final IcyBufferedImage flyImage = transformFunctionFly.getTransformedImage(sourceImage,
+							transformOptions02);
 					IcyBufferedImageCursor cursorFlyImage = new IcyBufferedImageCursor(flyImage);
 					IcyBufferedImageCursor cursorSpotImage = new IcyBufferedImageCursor(spotImage);
 					int ii = t - tFirst;
@@ -132,8 +145,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 						spot.sum_in.values[ii] = results.sumOverThreshold / results.npoints_in;
 
 						if (results.nPoints_no_fly != results.npoints_in) {
-							spot.sum_in.values[ii] = results.sumTot_no_fly_over_threshold
-									/ results.nPoints_no_fly;
+							spot.sum_in.values[ii] = results.sumTot_no_fly_over_threshold / results.nPoints_no_fly;
 						}
 					}
 				}
@@ -158,8 +170,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 			boolean isFlyThere = isFlyPresent(value2);
 			if (!isFlyThere) {
 				result.nPoints_no_fly++;
-			} 
-			else
+			} else
 				result.nPoints_fly_present++;
 
 			if (isOverThreshold(value)) {
@@ -175,15 +186,16 @@ public class BuildSpotsMeasures extends BuildSeries {
 
 	private boolean isFlyPresent(double value) {
 		boolean flag = value > options.flyThreshold;
-		if (!options.flyThresholdUp) 
+		if (!options.flyThresholdUp)
 			flag = !flag;
 		return flag;
 	}
 
 	private boolean isOverThreshold(double value) {
 
-		boolean flag =value > options.spotThreshold;
-		if (!options.spotThresholdUp) flag = !flag;
+		boolean flag = value > options.spotThreshold;
+		if (!options.spotThresholdUp)
+			flag = !flag;
 		return flag;
 	}
 

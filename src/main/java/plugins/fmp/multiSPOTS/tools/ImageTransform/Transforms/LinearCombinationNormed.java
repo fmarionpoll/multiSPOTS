@@ -20,10 +20,11 @@ public class LinearCombinationNormed extends ImageTransformFunctionAbstract impl
 
 	@Override
 	public IcyBufferedImage getTransformedImage(IcyBufferedImage sourceImage, ImageTransformOptions options) {
-		return functionRGBtoLinearCombination(sourceImage);
+		return functionRGBtoLinearCombination(sourceImage, options.copyResultsToThe3planes);
 	}
 
-	protected IcyBufferedImage functionRGBtoLinearCombination(IcyBufferedImage sourceImage) {
+	protected IcyBufferedImage functionRGBtoLinearCombination(IcyBufferedImage sourceImage,
+			boolean copyResultsToThe3planes) {
 		IcyBufferedImage img2 = new IcyBufferedImage(sourceImage.getWidth(), sourceImage.getHeight(), 3,
 				sourceImage.getDataType_());
 		double[] Rn = Array1DUtil.arrayToDoubleArray(sourceImage.getDataXY(0), sourceImage.isSignedDataType());
@@ -35,7 +36,7 @@ public class LinearCombinationNormed extends ImageTransformFunctionAbstract impl
 			ExG[i] = ((Rn[i] * w0 / 255 / sum) + (Gn[i] * w1 / 255 / sum) + (Bn[i] * w2 / 255 / sum)) * 255;
 		}
 
-		copyExGDoubleToIcyBufferedImage(ExG, img2);
+		copyExGDoubleToIcyBufferedImage(ExG, img2, copyResultsToThe3planes);
 		return img2;
 	}
 }

@@ -10,6 +10,7 @@ public class ImageTransformOptions {
 	public IcyBufferedImage backgroundImage = null;
 	public IcyBufferedImage secondImage = null;
 	public int npixels_changed = 0;
+	public boolean copyResultsToThe3planes = true;
 
 	public int xfirst;
 	public int xlast;

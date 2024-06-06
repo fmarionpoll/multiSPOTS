@@ -31,7 +31,7 @@ public class SumDiff extends ImageTransformFunctionAbstract implements ImageTran
 			ExG[i] = diff1 + diff2 + diff3; // Math.max(diff3, Math.max(diff1, diff2));
 		}
 
-		copyExGIntToIcyBufferedImage(ExG, img2);
+		copyExGIntToIcyBufferedImage(ExG, img2, options.copyResultsToThe3planes);
 		return img2;
 	}
 

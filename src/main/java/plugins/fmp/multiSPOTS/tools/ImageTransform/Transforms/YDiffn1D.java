@@ -39,7 +39,7 @@ public class YDiffn1D extends ImageTransformFunctionAbstract implements ImageTra
 				outValues[kx] = (int) Math.abs(outVal);
 			}
 		}
-		copyExGDoubleToIcyBufferedImage(outValues, img2);
+		copyExGDoubleToIcyBufferedImage(outValues, img2, options.copyResultsToThe3planes);
 		return img2;
 	}
 }

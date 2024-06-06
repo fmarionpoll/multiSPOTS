@@ -36,7 +36,7 @@ public class L1DistanceToColumn extends ImageTransformFunctionAbstract implement
 			}
 		}
 
-		copyExGIntToIcyBufferedImage(ExG, img2);
+		copyExGIntToIcyBufferedImage(ExG, img2, options.copyResultsToThe3planes);
 		return img2;
 	}
 }

@@ -19,7 +19,7 @@ public class Deriche extends ImageTransformFunctionAbstract implements ImageTran
 	public IcyBufferedImage getTransformedImage(IcyBufferedImage sourceImage, ImageTransformOptions options) {
 		IcyBufferedImage img2 = doDeriche(sourceImage, this.alpha);
 		if (transformToGrey)
-			img2 = transformToGrey(img2);
+			img2 = transformToGrey(img2, options.copyResultsToThe3planes);
 		return img2;
 	}
 
