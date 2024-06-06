@@ -91,7 +91,6 @@ public class Cages {
 			cage.xmlSaveCage(xmlVal, index);
 			index++;
 		}
-
 		return XMLUtil.saveDocument(doc, tempname);
 	}
 
@@ -103,14 +102,13 @@ public class Cages {
 		try {
 			FileWriter csvWriter = new FileWriter(directory + File.separator + "CagesMeasures.csv");
 			csvSaveDescriptionSection(csvWriter);
-//			csvSaveMeasuresSection(csvWriter, EnumCageMeasures.POSITION);
+			csvSaveMeasuresSection(csvWriter, EnumCageMeasures.POSITION);
 			csvWriter.flush();
 			csvWriter.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return true;
 	}
 
@@ -122,6 +120,22 @@ public class Cages {
 				for (Cage cage : cagesList)
 					csvWriter.append(cage.csvExportCageDescription(csvSep));
 
+			csvWriter.append("#" + csvSep + "#\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	
+	private boolean csvSaveMeasuresSection(FileWriter csvWriter, EnumCageMeasures measuresType) {
+		try {
+//			csvWriter.append("#" + csvSep + "DESCRIPTION" + csvSep + "Cages data\n");
+//			csvWriter.append("n cages=" + csvSep + Integer.toString(cagesList.size()) + "\n");
+//			if (cagesList.size() > 0) {
+//				for (Cage cage : cagesList)
+//					csvWriter.append(cage.csvExportCageDescription(csvSep));
+//			}
 			csvWriter.append("#" + csvSep + "#\n");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -309,7 +323,6 @@ public class Cages {
 		for (ROI2D roi : roiList) {
 			String csName = roi.getName();
 			if ((roi instanceof ROI2DPolygon) || (roi instanceof ROI2DArea)) {
-//				if (( csName.contains( "cage") 
 				if ((csName.length() > 4 && csName.substring(0, 4).contains("cage") || csName.contains("Polygon2D")))
 					cageList.add(roi);
 			}

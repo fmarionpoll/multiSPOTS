@@ -23,7 +23,7 @@ public class DlgDetectFlies_ extends JPanel implements PropertyChangeListener {
 	Detect2Background tabDetect2Background = new Detect2Background();
 	Detect2Flies tabDetect2Flies = new Detect2Flies();
 	Edit tabEdit = new Edit();
-//	public LoadSaveCages tabFile = new LoadSaveCages();
+	public LoadSavePositions tabFile = new LoadSavePositions();
 	public PlotPositions tabGraphics = new PlotPositions();
 	public PopupPanel capPopupPanel = null;
 	JTabbedPane tabsPane = new JTabbedPane();
@@ -125,10 +125,10 @@ public class DlgDetectFlies_ extends JPanel implements PropertyChangeListener {
 		tabGraphics.addPropertyChangeListener(this);
 		tabsPane.addTab("Graphs", null, tabGraphics, "Display results as graphics");
 
-//		iTab++;
-//		tabFile.init(capLayout, parent0);
-//		tabFile.addPropertyChangeListener(this);
-//		tabsPane.addTab("Load/Save", null, tabFile, "Load/save flies position");
+		iTab++;
+		tabFile.init(capLayout, parent0);
+		tabFile.addPropertyChangeListener(this);
+		tabsPane.addTab("Load/Save", null, tabFile, "Load/save flies position");
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.dlg.cages;
+package plugins.fmp.multiSPOTS.dlg.flies;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -16,7 +16,7 @@ import icy.gui.util.FontUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
-public class LoadSaveCages extends JPanel {
+public class LoadSavePositions extends JPanel {
 	/**
 	 * 
 	 */
@@ -51,7 +51,7 @@ public class LoadSaveCages extends JPanel {
 				if (exp != null) {
 					loadCages(exp);
 					firePropertyChange("LOAD_DATA", false, true);
-					parent0.dlgCages.tabsPane.setSelectedIndex(3);
+					parent0.dlgDetectFlies.tabsPane.setSelectedIndex(3);
 				}
 			}
 		});
@@ -61,8 +61,8 @@ public class LoadSaveCages extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					saveCages(exp);
-					parent0.dlgCages.tabsPane.setSelectedIndex(3);
+					saveMeasures(exp);
+					parent0.dlgDetectFlies.tabsPane.setSelectedIndex(3);
 				}
 			}
 		});
@@ -71,7 +71,7 @@ public class LoadSaveCages extends JPanel {
 	public boolean loadCages(Experiment exp) {
 		if (exp == null)
 			return false;
-		ProgressFrame progress = new ProgressFrame("load cages");
+		ProgressFrame progress = new ProgressFrame("load fly positions");
 		boolean flag = exp.load_CagesMeasures();
 		if (flag) {
 //			parent0.paneCages.tabGraphics.moveCheckbox.setEnabled(true);
@@ -82,11 +82,9 @@ public class LoadSaveCages extends JPanel {
 		return flag;
 	}
 
-	public void saveCages(Experiment exp) {
+	public void saveMeasures(Experiment exp) {
 		if (exp != null) {
-			exp.cages.cagesFromROIs(exp.seqCamData);
 			exp.save_CagesMeasures();
 		}
 	}
-
 }
