@@ -9,8 +9,6 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
@@ -21,24 +19,19 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener {
 	 */
 	private static final long serialVersionUID = 3457738144388946607L;
 
-	BuildCages_ tabBuildCages = new BuildCages_();
+	BuildCagesAsArray tabBuildCagesAsArray = new BuildCagesAsArray();
+	BuildCagesFromContours tabBuildCagesAsContours = new BuildCagesFromContours();
 	Infos tabInfos = new Infos();
-	Detect1 tabDetect1 = new Detect1();
-
-	Detect2_ tabDetect2 = new Detect2_();
-	Edit tabEdit = new Edit();
 	public LoadSaveCages tabFile = new LoadSaveCages();
-	public PlotPositions tabGraphics = new PlotPositions();
 	public PopupPanel capPopupPanel = null;
 	JTabbedPane tabsPane = new JTabbedPane();
 	int previouslySelected = -1;
 	public boolean bTrapROIsEdit = false;
 
-	int iTAB_CAGE2 = 1;
-	int iTAB_INFOS = iTAB_CAGE2 + 1;
-	int iTAB_DETECT1 = iTAB_INFOS + 1;
-	int iTAB_DETECT2 = iTAB_DETECT1 + 1;
-	int iTAB_EDIT = iTAB_DETECT2 + 1;
+	int iTAB_CAGES1 = 0;
+	int iTAB_CAGES2 = 1;
+	int iTAB_INFOS = 2;
+	int iTAB_EDIT = 3;
 
 	MultiSPOTS parent0 = null;
 
@@ -52,40 +45,33 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener {
 
 		mainPanel.add(capPopupPanel);
 		GridLayout capLayout = new GridLayout(4, 1);
-		createTabs(capLayout);
+
+		int iTab = 0;
+		iTAB_CAGES1 = iTab;
+		tabBuildCagesAsArray.init(capLayout, parent0);
+		tabBuildCagesAsArray.addPropertyChangeListener(this);
+		tabsPane.addTab("Define array cols/rows", null, tabBuildCagesAsArray, "Build cages as an array of cells");
+
+		iTab++;
+		iTAB_CAGES2 = iTab;
+		tabBuildCagesAsContours.init(capLayout, parent0);
+		tabBuildCagesAsContours.addPropertyChangeListener(this);
+		tabsPane.addTab("Detect contours of cages", null, tabBuildCagesAsContours, "Detect contours to build cages");
+
+		iTab++;
+		iTAB_INFOS = iTab;
+		tabInfos.init(capLayout, parent0);
+		tabInfos.addPropertyChangeListener(this);
+		tabsPane.addTab("Infos", null, tabInfos, "Display infos about cages and flies positions");
+
+		iTab++;
+		tabFile.init(capLayout, parent0);
+		tabFile.addPropertyChangeListener(this);
+		tabsPane.addTab("Load/Save", null, tabFile, "Load/save cages and flies position");
 
 		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		capPanel.add(tabsPane);
 		tabsPane.setSelectedIndex(0);
-
-		tabsPane.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				int selectedIndex = tabsPane.getSelectedIndex();
-				tabBuildCages.tabBuildCagesAsContours.overlayCheckBox.setSelected(selectedIndex == 0);
-
-				tabDetect1.overlayCheckBox.setSelected(selectedIndex == iTAB_DETECT1);
-				if (selectedIndex == iTAB_DETECT1 || selectedIndex == iTAB_DETECT2) {
-//	            	parent0.dlgExperiment.capPopupPanel.expand();
-					parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
-				}
-
-				if (selectedIndex == iTAB_EDIT) {
-					bTrapROIsEdit = true;
-					parent0.dlgExperiment.tabOptions.displayROIsCategory(false, "spot");
-					parent0.dlgExperiment.tabOptions.displayROIsCategory(false, "cage");
-				} else {
-					if (bTrapROIsEdit) {
-						parent0.dlgExperiment.tabOptions.displayROIsCategory(
-								parent0.dlgExperiment.tabOptions.viewSpotsCheckBox.isSelected(), "spot");
-						parent0.dlgExperiment.tabOptions.displayROIsCategory(
-								parent0.dlgExperiment.tabOptions.viewCagesCheckbox.isSelected(), "cage");
-					}
-					bTrapROIsEdit = false;
-				}
-				previouslySelected = selectedIndex;
-			}
-		});
 
 		capPopupPanel.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -97,51 +83,10 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener {
 		});
 	}
 
-	void createTabs(GridLayout capLayout) {
-		int iTab = 0;
-		tabBuildCages.init(capLayout, parent0);
-		tabBuildCages.addPropertyChangeListener(this);
-		tabsPane.addTab("Cages", null, tabBuildCages, "Define cages");
-
-		iTab++;
-		iTAB_INFOS = iTab;
-		tabInfos.init(capLayout, parent0);
-		tabInfos.addPropertyChangeListener(this);
-		tabsPane.addTab("Infos", null, tabInfos, "Display infos about cages and flies positions");
-
-		iTab++;
-		iTAB_DETECT1 = iTab;
-		tabDetect1.init(capLayout, parent0);
-		tabDetect1.addPropertyChangeListener(this);
-		tabsPane.addTab("Detect1", null, tabDetect1, "Detect flies position using thresholding on image overlay");
-
-		iTab++;
-		iTAB_DETECT2 = iTab;
-		tabDetect2.init(capLayout, parent0);
-		tabDetect2.addPropertyChangeListener(this);
-		tabsPane.addTab("Detect2", null, tabDetect2, "Detect flies position using thresholding on image overlay");
-
-		iTab++;
-		iTAB_EDIT = iTab;
-		tabEdit.init(capLayout, parent0);
-		tabEdit.addPropertyChangeListener(this);
-		tabsPane.addTab("Edit", null, tabEdit, "Edit flies detection");
-
-		iTab++;
-		tabGraphics.init(capLayout, parent0);
-		tabGraphics.addPropertyChangeListener(this);
-		tabsPane.addTab("Graphs", null, tabGraphics, "Display results as graphics");
-
-		iTab++;
-		tabFile.init(capLayout, parent0);
-		tabFile.addPropertyChangeListener(this);
-		tabsPane.addTab("Load/Save", null, tabFile, "Load/save cages and flies position");
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("LOAD_DATA"))
-			tabBuildCages.tabBuildCagesAsArray.updateNColumnsFieldFromSequence();
+			tabBuildCagesAsArray.updateNColumnsFieldFromSequence();
 	}
 
 }

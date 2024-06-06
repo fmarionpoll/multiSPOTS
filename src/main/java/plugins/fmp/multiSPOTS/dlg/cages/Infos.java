@@ -27,7 +27,7 @@ public class Infos extends JPanel {
 	private static final long serialVersionUID = -3325915033686366985L;
 	private JButton editCagesButton = new JButton("Edit cages infos...");
 	private MultiSPOTS parent0 = null;
-	private Table dialog = null;
+	private InfosTable dialog = null;
 	private List<Cage> cagesArrayCopy = new ArrayList<Cage>();
 
 	JRadioButton useCages = new JRadioButton("cages");
@@ -80,7 +80,7 @@ public class Infos extends JPanel {
 				if (exp != null) {
 					exp.spotsArray.transferDescriptionToSpots();
 					exp.cages.transferNFliesFromSpotsToCages(exp.spotsArray.spotsList);
-					dialog = new Table();
+					dialog = new InfosTable();
 					dialog.initialize(parent0, cagesArrayCopy);
 				}
 			}

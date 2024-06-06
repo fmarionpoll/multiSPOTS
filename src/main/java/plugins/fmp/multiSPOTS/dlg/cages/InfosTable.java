@@ -21,7 +21,7 @@ import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.tools.JComponents.TableModelCage;
 
-public class Table extends JPanel {
+public class InfosTable extends JPanel {
 	/**
 	 * 
 	 */

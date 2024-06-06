@@ -16,6 +16,7 @@ import plugins.fmp.multiSPOTS.dlg.browse.DlgBrowse_;
 import plugins.fmp.multiSPOTS.dlg.cages.DlgCages_;
 import plugins.fmp.multiSPOTS.dlg.excel.DlgExcel_;
 import plugins.fmp.multiSPOTS.dlg.experiment.DlgExperiment_;
+import plugins.fmp.multiSPOTS.dlg.flies.DlgDetectFlies_;
 import plugins.fmp.multiSPOTS.dlg.kymos.DlgKymos_;
 import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
 import plugins.fmp.multiSPOTS.dlg.spotsMeasures.DlgSpotMeasure_;
@@ -31,6 +32,7 @@ public class MultiSPOTS extends PluginActionable {
 	public DlgKymos_ dlgKymos = new DlgKymos_();
 	public DlgSpotMeasure_ dlgMeasure = new DlgSpotMeasure_();
 	public DlgCages_ dlgCages = new DlgCages_();
+	public DlgDetectFlies_ dlgDetectFlies = new DlgDetectFlies_();
 	public DlgExcel_ dlgExcel = new DlgExcel_();
 
 	public JTabbedPane tabsPane = new JTabbedPane();
@@ -46,6 +48,7 @@ public class MultiSPOTS extends PluginActionable {
 		dlgKymos.init(mainPanel, "KymoSpots", this);
 		dlgMeasure.init(mainPanel, "Measure spots", this);
 		dlgCages.init(mainPanel, "Cages", this);
+		dlgDetectFlies.init(mainPanel, "Detect flies", this);
 		dlgExcel.init(mainPanel, "Export", this);
 
 		mainFrame.setLayout(new BorderLayout());
