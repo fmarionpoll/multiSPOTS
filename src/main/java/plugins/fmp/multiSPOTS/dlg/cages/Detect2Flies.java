@@ -15,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.PopupMenuEvent;
@@ -32,11 +31,11 @@ import plugins.fmp.multiSPOTS.series.FlyDetect2;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
-public class Detect2 extends JPanel implements ChangeListener, PropertyChangeListener, PopupMenuListener {
+public class Detect2Flies extends JPanel implements ChangeListener, PropertyChangeListener, PopupMenuListener {
 	private static final long serialVersionUID = -5257698990389571518L;
 	private MultiSPOTS parent0 = null;
 
-	private String detectString = "Detect..";
+	private String detectString = "Detect...";
 	private JButton startComputationButton = new JButton(detectString);
 	private JCheckBox allCheckBox = new JCheckBox("ALL (current to last)", false);
 
@@ -70,21 +69,21 @@ public class Detect2 extends JPanel implements ChangeListener, PropertyChangeLis
 
 		allCagesComboBox.addPopupMenuListener(this);
 
-		objectLowsizeCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-		objectUpsizeCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
+//		objectLowsizeCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
+//		objectUpsizeCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		JPanel panel3 = new JPanel(flowLayout);
 		panel3.add(objectLowsizeCheckBox);
 		panel3.add(objectLowsizeSpinner);
 		panel3.add(objectUpsizeCheckBox);
 		panel3.add(objectUpsizeSpinner);
-		panel3.add(new JLabel("threshold ", SwingConstants.RIGHT));
+		panel3.add(new JLabel("threshold"));
 		panel3.add(thresholdDiffSpinner);
 		add(panel3);
 
 		JPanel panel4 = new JPanel(flowLayout);
-		panel4.add(new JLabel("length/width<", SwingConstants.RIGHT));
+		panel4.add(new JLabel("ratio L/W <"));
 		panel4.add(limitRatioSpinner);
-		panel4.add(new JLabel("         jitter <= ", SwingConstants.RIGHT));
+		panel4.add(new JLabel("jitter <="));
 		panel4.add(jitterTextField);
 		add(panel4);
 

@@ -21,11 +21,11 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener {
 	 */
 	private static final long serialVersionUID = 3457738144388946607L;
 
-	BuildCages tabBuildCages = new BuildCages();
+	BuildCages_ tabBuildCages = new BuildCages_();
 	Infos tabInfos = new Infos();
 	Detect1 tabDetect1 = new Detect1();
 
-	Detect2DetectFlies tabDetect2 = new Detect2DetectFlies();
+	Detect2_ tabDetect2 = new Detect2_();
 	Edit tabEdit = new Edit();
 	public LoadSaveCages tabFile = new LoadSaveCages();
 	public PlotPositions tabGraphics = new PlotPositions();
@@ -62,7 +62,7 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				int selectedIndex = tabsPane.getSelectedIndex();
-				tabBuildCages.tabBuildCages2.overlayCheckBox.setSelected(selectedIndex == 0);
+				tabBuildCages.tabBuildCagesAsContours.overlayCheckBox.setSelected(selectedIndex == 0);
 
 				tabDetect1.overlayCheckBox.setSelected(selectedIndex == iTAB_DETECT1);
 				if (selectedIndex == iTAB_DETECT1 || selectedIndex == iTAB_DETECT2) {
@@ -141,7 +141,7 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("LOAD_DATA"))
-			tabBuildCages.tabBuildCages1.updateNColumnsFieldFromSequence();
+			tabBuildCages.tabBuildCagesAsArray.updateNColumnsFieldFromSequence();
 	}
 
 }

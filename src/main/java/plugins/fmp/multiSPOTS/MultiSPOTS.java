@@ -1,6 +1,7 @@
 package plugins.fmp.multiSPOTS;
 
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -21,7 +22,7 @@ import plugins.fmp.multiSPOTS.dlg.spotsMeasures.DlgSpotMeasure_;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 public class MultiSPOTS extends PluginActionable {
-	public IcyFrame mainFrame = new IcyFrame("multiSPOTS June 2, 2024", true, true, true, true);
+	public IcyFrame mainFrame = new IcyFrame("multiSPOTS June 6, 2024", true, true, true, true);
 	public JComboBoxExperiment expListCombo = new JComboBoxExperiment();
 
 	public DlgBrowse_ dlgBrowse = new DlgBrowse_();

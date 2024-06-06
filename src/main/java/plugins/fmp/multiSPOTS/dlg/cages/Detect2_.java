@@ -11,14 +11,14 @@ import javax.swing.event.ChangeListener;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 
-public class Detect2DetectFlies extends JPanel implements PropertyChangeListener {
+public class Detect2_ extends JPanel implements PropertyChangeListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	Detect2 tabDetect2 = new Detect2();
-	Detect2BuildBackground tabBackground = new Detect2BuildBackground();
+	Detect2Flies tabDetect2 = new Detect2Flies();
+	Detect2Background tabBackground = new Detect2Background();
 	JTabbedPane tabsPane = new JTabbedPane();
 	int previouslySelected = -1;
 
@@ -30,7 +30,7 @@ public class Detect2DetectFlies extends JPanel implements PropertyChangeListener
 	public void init(GridLayout capLayout, MultiSPOTS parent0) {
 		this.parent0 = parent0;
 
-		createTabs();
+		createTabs(capLayout);
 		tabsPane.setSelectedIndex(0);
 		add(tabsPane);
 
@@ -43,8 +43,8 @@ public class Detect2DetectFlies extends JPanel implements PropertyChangeListener
 		});
 	}
 
-	void createTabs() {
-		GridLayout capLayout = new GridLayout(4, 1);
+	void createTabs(GridLayout capLayout) {
+//		GridLayout capLayout = new GridLayout(4, 1);
 //		tabsPane.setTabPlacement(JTabbedPane.LEFT);
 		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
@@ -52,7 +52,7 @@ public class Detect2DetectFlies extends JPanel implements PropertyChangeListener
 		iTAB_BACKGND = iTab;
 		tabBackground.init(capLayout, parent0);
 		tabBackground.addPropertyChangeListener(this);
-		tabsPane.addTab("Build background" + "", null, tabBackground, "Build background without flies");
+		tabsPane.addTab("Build background", null, tabBackground, "Build background without flies");
 
 		iTab++;
 		iTAB_DETECT2 = iTab;

@@ -36,7 +36,7 @@ public class Infos extends JPanel {
 
 	private JSpinner lengthSpinner = new JSpinner(new SpinnerNumberModel(78., 0., 100., 1.));
 	private JSpinner pixelsSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 1000, 1));
-	private JButton measureButton = new JButton("get 1rst capillary");
+	private JButton measureButton = new JButton("get 1rst spot");
 
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
@@ -78,8 +78,8 @@ public class Infos extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					exp.capillaries.transferDescriptionToCapillaries();
-					exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.capillariesList);
+					exp.spotsArray.transferDescriptionToSpots();
+					exp.cages.transferNFliesFromSpotsToCages(exp.spotsArray.spotsList);
 					dialog = new Table();
 					dialog.initialize(parent0, cagesArrayCopy);
 				}
@@ -113,8 +113,8 @@ public class Infos extends JPanel {
 	void measureCagesSpan() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null) {
-			exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
-			if (exp.capillaries.capillariesList.size() > 0) {
+			exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
+			if (exp.spotsArray.spotsList.size() > 0) {
 				int npixels = exp.cages.getHorizontalSpanOfCages();
 				if (npixels > 0)
 					pixelsSpinner.setValue(npixels);

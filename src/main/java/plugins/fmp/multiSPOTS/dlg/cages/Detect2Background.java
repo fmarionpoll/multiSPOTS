@@ -32,7 +32,7 @@ import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
-public class Detect2BuildBackground extends JPanel implements ChangeListener, PropertyChangeListener {
+public class Detect2Background extends JPanel implements ChangeListener, PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 
 	private MultiSPOTS parent0 = null;
@@ -66,6 +66,8 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		JPanel panel1 = new JPanel(flowLayout);
 		panel1.add(startComputationButton);
 		panel1.add(allCheckBox);
+		panel1.add(loadButton);
+		panel1.add(saveButton);
 		add(panel1);
 
 		JPanel panel2 = new JPanel(flowLayout);
@@ -84,10 +86,10 @@ public class Detect2BuildBackground extends JPanel implements ChangeListener, Pr
 		panel3.add(backgroundJitterSpinner);
 		add(panel3);
 
-		JPanel panel4 = new JPanel(flowLayout);
-		panel4.add(loadButton);
-		panel4.add(saveButton);
-		add(panel4);
+//		JPanel panel4 = new JPanel(flowLayout);
+//		panel4.add(loadButton);
+//		panel4.add(saveButton);
+//		add(panel4);
 
 		defineActionListeners();
 
