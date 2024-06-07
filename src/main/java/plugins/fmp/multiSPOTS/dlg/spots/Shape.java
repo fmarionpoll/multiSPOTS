@@ -121,7 +121,7 @@ public class Shape extends JPanel {
 					if (!spotsViewButton.isSelected()) {
 						spotsViewButton.setSelected(true);
 					}
-					canvas.imageTransformFunctionsComboStep1.setSelectedIndex(index + 1);
+					canvas.transformsComboStep1.setSelectedIndex(index + 1);
 					updateOverlayThreshold();
 				}
 			}
@@ -237,14 +237,14 @@ public class Shape extends JPanel {
 			removeOverlay(exp);
 			spotsOverlayCheckBox.setSelected(false);
 			Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
-			canvas.imageTransformFunctionsComboStep1.setSelectedIndex(0);
+			canvas.transformsComboStep1.setSelectedIndex(0);
 		}
 		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
 	}
 
 	private void updateTransformFunctionsOfCanvas(Experiment exp) {
 		Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
-		if (canvas.imageTransformFunctionsComboStep1.getItemCount() < (spotsTransformsComboBox.getItemCount() + 1)) {
+		if (canvas.transformsComboStep1.getItemCount() < (spotsTransformsComboBox.getItemCount() + 1)) {
 			canvas.updateTransformsComboStep1(transforms);
 		}
 		int index = spotsTransformsComboBox.getSelectedIndex();

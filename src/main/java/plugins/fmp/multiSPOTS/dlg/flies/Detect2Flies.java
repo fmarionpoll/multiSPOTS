@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -28,6 +30,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.series.FlyDetect2;
+import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2D_2Transforms;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 
@@ -49,6 +52,10 @@ public class Detect2Flies extends JPanel implements ChangeListener, PropertyChan
 	private JSpinner limitRatioSpinner = new JSpinner(new SpinnerNumberModel(4, 0, 1000, 1));
 	private JComboBox<String> allCagesComboBox = new JComboBox<String>(new String[] { "all cages" });
 
+	private JCheckBox spotsOverlayCheckBox = new JCheckBox("overlay");
+//	private JToggleButton spotsViewButton = new JToggleButton("View");
+	ImageTransformEnums[] transforms = new ImageTransformEnums[] { ImageTransformEnums.SUBTRACT_REF };
+
 	private FlyDetect2 flyDetect2 = null;
 	private OverlayThreshold overlayThreshold2 = null;
 
@@ -64,20 +71,22 @@ public class Detect2Flies extends JPanel implements ChangeListener, PropertyChan
 		JPanel panel1 = new JPanel(flowLayout);
 		panel1.add(startComputationButton);
 		panel1.add(allCagesComboBox);
+		allCagesComboBox.addPopupMenuListener(this);
 		panel1.add(allCheckBox);
 		add(panel1);
 
-		allCagesComboBox.addPopupMenuListener(this);
+		JPanel panel2 = new JPanel(flowLayout);
+		panel2.add(new JLabel("threshold"));
+		panel2.add(thresholdDiffSpinner);
+//		panel2.add(spotsViewButton);
+		panel2.add(spotsOverlayCheckBox);
+		add(panel2);
 
-//		objectLowsizeCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-//		objectUpsizeCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		JPanel panel3 = new JPanel(flowLayout);
 		panel3.add(objectLowsizeCheckBox);
 		panel3.add(objectLowsizeSpinner);
 		panel3.add(objectUpsizeCheckBox);
 		panel3.add(objectUpsizeSpinner);
-		panel3.add(new JLabel("threshold"));
-		panel3.add(thresholdDiffSpinner);
 		add(panel3);
 
 		JPanel panel4 = new JPanel(flowLayout);
@@ -112,6 +121,19 @@ public class Detect2Flies extends JPanel implements ChangeListener, PropertyChan
 				startComputationButton.setForeground(color);
 			}
 		});
+
+		spotsOverlayCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) {
+					if (spotsOverlayCheckBox.isSelected()) {
+						updateOverlay(exp, (int) thresholdDiffSpinner.getValue());
+					} else {
+						removeOverlay(exp);
+					}
+				}
+			}
+		});
 	}
 
 	@Override
@@ -123,10 +145,13 @@ public class Detect2Flies extends JPanel implements ChangeListener, PropertyChan
 		}
 	}
 
-	public void updateOverlay(Experiment exp, int threshold) {
+	private void updateOverlay(Experiment exp, int threshold) {
 		SequenceCamData seqCamData = exp.seqCamData;
 		if (seqCamData == null)
 			return;
+
+		updateTransformFunctionsOfCanvas(exp);
+
 		if (overlayThreshold2 == null) {
 			overlayThreshold2 = new OverlayThreshold(seqCamData.seq);
 			exp.seqCamData.refImage = IcyBufferedImageUtil.getCopy(exp.seqCamData.getSeqImage(0, 0));
@@ -139,6 +164,17 @@ public class Detect2Flies extends JPanel implements ChangeListener, PropertyChan
 		ImageTransformEnums transformOp = ImageTransformEnums.SUBTRACT_REF;
 		overlayThreshold2.setThresholdSingle(threshold, transformOp, ifGreater);
 		overlayThreshold2.painterChanged();
+	}
+
+	void removeOverlay(Experiment exp) {
+		if (exp.seqCamData != null && exp.seqCamData.seq != null)
+			exp.seqCamData.seq.removeOverlay(overlayThreshold2);
+	}
+
+	private void updateTransformFunctionsOfCanvas(Experiment exp) {
+		Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqCamData.seq.getFirstViewer().getCanvas();
+		canvas.updateTransformsComboStep1(transforms);
+		canvas.selectImageTransformFunctionStep1(1);
 	}
 
 	private BuildSeriesOptions initTrackParameters() {

@@ -99,20 +99,20 @@ public class DlgDetectFlies_ extends JPanel implements PropertyChangeListener {
 		iTAB_DETECT1 = iTab;
 		tabDetect1.init(capLayout, parent0);
 		tabDetect1.addPropertyChangeListener(this);
-		tabsPane.addTab("Detect1", null, tabDetect1, "Detect flies position using thresholding on image overlay");
+		tabsPane.addTab("Detect (option 1)", null, tabDetect1,
+				"Detect flies position using thresholding on image overlay");
 
 		iTab++;
 		iTAB_DETECT2BCKGND = iTab;
 		tabDetect2Background.init(capLayout, parent0);
 		tabDetect2Background.addPropertyChangeListener(this);
-		tabsPane.addTab("Build background", null, tabDetect2Background, "Build background image");
+		tabsPane.addTab("Background", null, tabDetect2Background, "Build background image");
 
 		iTab++;
 		iTAB_DETECT2FLIES = iTab;
 		tabDetect2Flies.init(capLayout, parent0);
 		tabDetect2Flies.addPropertyChangeListener(this);
-		tabsPane.addTab("Detect flies over background", null, tabDetect2Flies,
-				"Detect flies position from subtracted background");
+		tabsPane.addTab("Detect (option 2)", null, tabDetect2Flies, "Detect flies position from subtracted background");
 
 		iTab++;
 		iTAB_EDIT = iTab;

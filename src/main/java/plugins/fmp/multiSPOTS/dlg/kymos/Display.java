@@ -424,7 +424,7 @@ public class Display extends JPanel implements ViewerListener {
 //			removeOverlay(exp);
 //			spotsOverlayCheckBox.setSelected(false);
 			Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqSpotKymos.seq.getFirstViewer().getCanvas();
-			canvas.imageTransformFunctionsComboStep2.setSelectedIndex(0);
+			canvas.transformsComboStep2.setSelectedIndex(0);
 
 		}
 //		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
