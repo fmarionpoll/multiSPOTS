@@ -44,7 +44,7 @@ public class DlgCages_ extends JPanel implements PropertyChangeListener {
 		capPopupPanel.collapse();
 
 		mainPanel.add(capPopupPanel);
-		GridLayout capLayout = new GridLayout(4, 1);
+		GridLayout capLayout = new GridLayout(3, 1);
 
 		int iTab = 0;
 		iTAB_CAGES1 = iTab;

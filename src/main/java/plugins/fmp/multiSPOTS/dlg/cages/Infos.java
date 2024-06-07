@@ -36,7 +36,8 @@ public class Infos extends JPanel {
 
 	private JSpinner lengthSpinner = new JSpinner(new SpinnerNumberModel(78., 0., 100., 1.));
 	private JSpinner pixelsSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 1000, 1));
-	private JButton measureButton = new JButton("get 1rst spot");
+	String measureString = "get span between 1rst and last cage";
+	private JButton measureButton = new JButton(measureString);
 
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
@@ -46,9 +47,10 @@ public class Infos extends JPanel {
 		flowLayout.setVgap(0);
 
 		JPanel panel0a = new JPanel(flowLayout);
-		panel0a.add(new JLabel("Use as reference: "));
-		panel0a.add(useCages);
 		panel0a.add(useManual);
+		panel0a.add(useCages);
+
+		panel0a.add(measureButton);
 		add(panel0a);
 		useGroup.add(useCages);
 		useGroup.add(useManual);
@@ -57,13 +59,10 @@ public class Infos extends JPanel {
 		JPanel panel00 = new JPanel(flowLayout);
 		panel00.add(new JLabel("length in mm:", SwingConstants.RIGHT));
 		panel00.add(lengthSpinner);
-		add(panel00);
+		panel00.add(new JLabel("length in pixels:", SwingConstants.RIGHT));
+		panel00.add(pixelsSpinner);
 
-		JPanel panel0 = new JPanel(flowLayout);
-		panel0.add(new JLabel("length in pixels:", SwingConstants.RIGHT));
-		panel0.add(pixelsSpinner);
-		panel0.add(measureButton);
-		add(panel0);
+		add(panel00);
 
 		JPanel panel1 = new JPanel(flowLayout);
 		panel1.add(editCagesButton);
@@ -90,7 +89,7 @@ public class Infos extends JPanel {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				lengthSpinner.setValue(78.);
-				measureButton.setText("get span between 1rst and last cage");
+				measureButton.setText(measureString);
 				measureButton.setVisible(true);
 			}
 		});
