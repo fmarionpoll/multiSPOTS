@@ -51,7 +51,8 @@ public class Experiment {
 	public long camImageBin_ms = -1;
 	public long[] camImages_ms = null;
 
-	public long binT0 = 0;
+	public long frameFirst = 0;
+	public long frameLast = 0;
 	public long binFirst_ms = 0;
 	public long binLast_ms = 0;
 	public long binDuration_ms = 60000;
@@ -79,6 +80,8 @@ public class Experiment {
 	private final static String ID_TIMELASTIMAGE = "fileTimeImageLastMinute";
 
 	private final static String ID_BINT0 = "indexBinT0";
+	private final static String ID_FRAMEFIRST = "indexFrameFirst";
+	private final static String ID_FRAMELAST = "indexFrameLast";
 	private final static String ID_TIMEFIRSTIMAGEMS = "fileTimeImageFirstMs";
 	private final static String ID_TIMELASTIMAGEMS = "fileTimeImageLastMs";
 	private final static String ID_FIRSTKYMOCOLMS = "firstKymoColMs";
@@ -460,7 +463,9 @@ public class Experiment {
 			XMLUtil.setElementLongValue(node, ID_TIMEFIRSTIMAGEMS, camImageFirst_ms);
 			XMLUtil.setElementLongValue(node, ID_TIMELASTIMAGEMS, camImageLast_ms);
 
-			XMLUtil.setElementLongValue(node, ID_BINT0, binT0);
+			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, frameFirst);
+			XMLUtil.setElementLongValue(node, ID_FRAMELAST, frameLast);
+//			XMLUtil.setElementLongValue(node, ID_BINT0, frameFirst);
 			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, binFirst_ms);
 			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, binLast_ms);
 			XMLUtil.setElementLongValue(node, ID_BINKYMOCOLMS, binDuration_ms);
@@ -1040,7 +1045,13 @@ public class Experiment {
 			camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0) * 60000;
 		}
 
-		binT0 = XMLUtil.getElementLongValue(node, ID_BINT0, 0);
+		
+		frameFirst = XMLUtil.getElementLongValue(node, ID_FRAMEFIRST, -1);
+		if (frameFirst < 0)
+			frameFirst = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
+		if (frameFirst < 0)
+			frameFirst = 0;
+		frameLast = XMLUtil.getElementLongValue(node, ID_FRAMELAST, -1);
 		binFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1);
 		binLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);
 		binDuration_ms = XMLUtil.getElementLongValue(node, ID_BINKYMOCOLMS, -1);

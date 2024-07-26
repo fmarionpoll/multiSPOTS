@@ -98,7 +98,7 @@ public class DlgSpots_ extends JPanel implements PropertyChangeListener, ChangeL
 			if (exp != null) {
 				displayCapillariesInformation(exp);
 				tabbedPane.setSelectedIndex(id_infos);
-				parent0.dlgExperiment.tabIntervals.displayCamDataIntervals(exp);
+				parent0.dlgExperiment.tabIntervals.getExptParms(exp);
 			}
 		} else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
 			tabbedPane.setSelectedIndex(id_shape);

@@ -83,7 +83,7 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 	}
 
 	public void updateDialogs(Experiment exp) {
-		tabIntervals.displayCamDataIntervals(exp);
+		tabIntervals.getExptParms(exp);
 		tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
 	}
 

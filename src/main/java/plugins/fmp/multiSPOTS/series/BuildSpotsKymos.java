@@ -29,7 +29,7 @@ import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
 
-public class BuildKymosSpots extends BuildSeries {
+public class BuildSpotsKymos extends BuildSeries {
 	public Sequence seqData = new Sequence();
 	private Viewer vData = null;
 	private int kymoImageWidth = 0;
@@ -120,8 +120,8 @@ public class BuildKymosSpots extends BuildSeries {
 		threadRunning = true;
 		stopFlag = false;
 
-		int t0 = (int) exp.binT0;
-		int nFrames = exp.seqCamData.nTotalFrames;
+		final int tFirst = (int) exp.frameFirst;
+		int tLast = exp.seqCamData.nTotalFrames;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
@@ -133,24 +133,24 @@ public class BuildKymosSpots extends BuildSeries {
 
 		vData.setTitle(exp.seqCamData.getCSCamFileName());
 
-		for (int ii = t0; ii < nFrames; ii++) {
+		for (int ii = tFirst; ii < tLast; ii++) {
 			final int t = ii;
 
 			if (options.concurrentDisplay) {
 				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
 				seqData.setImage(0, 0, sourceImage0);
-				vData.setTitle("Frame #" + ii + " /" + nFrames);
+				vData.setTitle("Frame #" + ii + " /" + tLast);
 			}
 
 			tasks.add(processor.submit(new Runnable() {
 				@Override
 				public void run() {
-					progressBar1.setMessage("Analyze frame: " + t + "//" + nFrames);
+					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
 					IcyBufferedImage sourceImage = loadImageFromIndex(exp, t);
 					int sizeC = sourceImage.getSizeC();
 					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 					for (Spot spot : exp.spotsArray.spotsList) {
-						analyzeImageWithSpot(cursorSource, spot, t, sizeC);
+						analyzeImageWithSpot(cursorSource, spot, t-tFirst, sizeC);
 					}
 				}
 			}));
@@ -231,7 +231,7 @@ public class BuildKymosSpots extends BuildSeries {
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 //		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.binT0);
+		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.frameFirst);
 		int numC = seqCamData.seq.getSizeC();
 		if (numC <= 0)
 			numC = 3;

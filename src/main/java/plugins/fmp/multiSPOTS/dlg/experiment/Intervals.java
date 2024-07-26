@@ -71,7 +71,7 @@ public class Intervals extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
-					setExptParmsFromDialog(exp);
+					setExptParms(exp);
 			}
 		});
 
@@ -85,18 +85,18 @@ public class Intervals extends JPanel {
 		});
 	}
 
-	private void setExptParmsFromDialog(Experiment exp) {
+	private void setExptParms(Experiment exp) {
 		exp.camImageBin_ms = (long) (((double) binSizeJSpinner.getValue()) * binUnit.getMsUnitValue());
 		long bin_ms = exp.camImageBin_ms;
-		exp.binT0 = (long) frameFirstJSpinner.getValue();
-		exp.binFirst_ms = exp.binT0 * bin_ms;
+		exp.frameFirst = (long) frameFirstJSpinner.getValue();
+		exp.binFirst_ms = exp.frameFirst * bin_ms;
 		exp.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
 	}
 
-	public void displayCamDataIntervals(Experiment exp) {
+	public void getExptParms(Experiment exp) {
 		refreshBinSize(exp);
 		long bin_ms = exp.camImageBin_ms;
-		long dFirst = (long) exp.binFirst_ms / bin_ms;
+		long dFirst = exp.frameFirst;
 		frameFirstJSpinner.setValue(dFirst);
 		if (exp.binLast_ms <= 0)
 			exp.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);

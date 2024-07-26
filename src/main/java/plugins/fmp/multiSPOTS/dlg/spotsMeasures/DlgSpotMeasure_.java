@@ -95,7 +95,7 @@ public class DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, C
 			if (exp != null) {
 				displayCapillariesInformation(exp);
 				tabsPane.setSelectedIndex(id_threshold);
-				parent0.dlgExperiment.tabIntervals.displayCamDataIntervals(exp);
+				parent0.dlgExperiment.tabIntervals.getExptParms(exp);
 			}
 		} else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
 			tabsPane.setSelectedIndex(id_threshold);
