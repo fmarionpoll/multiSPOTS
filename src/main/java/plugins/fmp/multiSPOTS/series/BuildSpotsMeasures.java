@@ -203,7 +203,6 @@ public class BuildSpotsMeasures extends BuildSeries {
 		for (Spot spot : exp.spotsArray.spotsList) {
 			spot.sum_in.values = new double[nFrames];
 			spot.sum_clean.values = new double[nFrames];
-//			spot.sum_diff.values = new double[nFrames];
 			spot.flyPresent.isPresent = new int[nFrames];
 		}
 	}
