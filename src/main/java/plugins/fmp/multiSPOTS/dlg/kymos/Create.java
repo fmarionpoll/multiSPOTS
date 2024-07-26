@@ -10,7 +10,11 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
@@ -29,17 +33,14 @@ public class Create extends JPanel implements PropertyChangeListener {
 	JCheckBox allSeriesCheckBox = new JCheckBox("ALL series (current to last)", false);
 	JCheckBox concurrentDisplayCheckBox = new JCheckBox("concurrent display", false);
 
-//	JSpinner	diskRadiusSpinner 		= new JSpinner(new SpinnerNumberModel(3, 1, 100, 1));
-//	JCheckBox 	doRegistrationCheckBox 	= new JCheckBox("registration", false);
-//	JLabel		startFrameLabel			= new JLabel ("starting at frame");
-//	JSpinner	startFrameSpinner 		= new JSpinner(new SpinnerNumberModel(0, 0, 100000, 1));
-//	JSpinner 	binSizeSpinner			= new JSpinner(new SpinnerNumberModel(1., 1., 1000., 1.));
-//	JComboBoxMs binUnitSpinner 			= new JComboBoxMs();		
-//	JRadioButton isFloatingFrameButton	= new JRadioButton("all", true);
-//	JRadioButton isFixedFrameButton		= new JRadioButton("from ", false);
-//	JSpinner 	startJSpinner			= new JSpinner(new SpinnerNumberModel(0., 0., 10000., 1.)); 
-//	JSpinner 	endJSpinner				= new JSpinner(new SpinnerNumberModel(240., 1., 99999999., 1.));
-//	JComboBoxMs intervalsUnit 			= new JComboBoxMs();
+	Long val = 0L; // set your own value, I used to check if it works
+	Long min = 0L;
+	Long max = 10000L;
+	Long step = 1L;
+	Long maxLast = 99999999L;
+	JSpinner frameFirstJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
+	JSpinner frameLastJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
+
 
 	EnumStatusComputation sComputation = EnumStatusComputation.START_COMPUTATION;
 	private MultiSPOTS parent0 = null;
@@ -57,40 +58,15 @@ public class Create extends JPanel implements PropertyChangeListener {
 		((FlowLayout) panel0.getLayout()).setVgap(1);
 		panel0.add(startComputationButton);
 		panel0.add(allSeriesCheckBox);
-//		panel0.add(doRegistrationCheckBox);
-//		panel0.add(startFrameLabel);
-//		panel0.add(startFrameSpinner);
 		panel0.add(concurrentDisplayCheckBox);
 		add(panel0);
-
-//		JPanel panel2 = new JPanel(layoutLeft);
-//		panel2.add(new JLabel("area around ROIs", SwingConstants.RIGHT));
-//		panel2.add(diskRadiusSpinner);  
-//		panel2.add(new JLabel("bin size "));
-//		panel2.add(binSizeSpinner);
-//		panel2.add(binUnitSpinner);
-//		add(panel2);
-
-//		binUnitSpinner.setSelectedIndex(2);
-
-//		JPanel panel1 = new JPanel(layoutLeft);
-//		panel1.add(new JLabel("Analyze "));
-//		panel1.add(isFloatingFrameButton);
-//		panel1.add(isFixedFrameButton);
-//		panel1.add(startJSpinner);
-//		panel1.add(new JLabel(" to "));
-//		panel1.add(endJSpinner);
-//		panel1.add(intervalsUnit);
-//		intervalsUnit.setSelectedIndex(2);
-//		add(panel1);
-
-//		startFrameLabel.setVisible(false);
-//		startFrameSpinner.setVisible(false);
-
-//		enableIntervalButtons(false);
-//		ButtonGroup group = new ButtonGroup();
-//		group.add(isFloatingFrameButton);
-//		group.add(isFixedFrameButton);
+		
+		JPanel panel1 = new JPanel(layoutLeft);
+		panel1.add(new JLabel("Frame ", SwingConstants.RIGHT));
+		panel1.add(frameFirstJSpinner);
+		panel1.add(new JLabel(" to "));
+		panel1.add(frameLastJSpinner);
+		add(panel1);
 
 		defineActionListeners();
 	}
@@ -117,40 +93,28 @@ public class Create extends JPanel implements PropertyChangeListener {
 			}
 		});
 
-//		doRegistrationCheckBox.addActionListener(new ActionListener () 
-//		{ 
-//			@Override public void actionPerformed( final ActionEvent e ) 
-//			{
-//				boolean flag = doRegistrationCheckBox.isSelected();
-//				startFrameLabel.setVisible(flag);
-//				startFrameSpinner.setVisible(flag);
-//				if (flag)
-//					allSeriesCheckBox.setSelected(false);
-//		}});
-
-//		isFixedFrameButton.addActionListener(new ActionListener () 
-//		{ 
-//			@Override public void actionPerformed( final ActionEvent e ) 
-//			{
-//				enableIntervalButtons(true);
-//			}});
-//	
-//		isFloatingFrameButton.addActionListener(new ActionListener () 
-//		{ 
-//			@Override public void actionPerformed( final ActionEvent e ) 
-//			{
-//				enableIntervalButtons(false);
-//			}});
 	}
 
-//	private void enableIntervalButtons(boolean isSelected) 
-//	{
-//		startJSpinner.setEnabled(isSelected);
-//        endJSpinner.setEnabled(isSelected);
-//        intervalsUnit.setEnabled(isSelected);
-//	}
+	private void setExptParms(Experiment exp) {
+		long bin_ms = exp.camImageBin_ms;
+		exp.frameFirst = (long) frameFirstJSpinner.getValue();
+		exp.binFirst_ms = exp.frameFirst * bin_ms;
+		exp.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
+	}
 
+	public void getExptParms(Experiment exp) {
+		long bin_ms = exp.camImageBin_ms;
+		long dFirst = exp.frameFirst;
+		frameFirstJSpinner.setValue(dFirst);
+		if (exp.binLast_ms <= 0)
+			exp.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
+		long dLast = (long) exp.binLast_ms / bin_ms;
+		frameLastJSpinner.setValue(dLast);
+		exp.getFileIntervalsFromSeqCamData();
+	}
+	
 	private BuildSeriesOptions initBuildParameters(Experiment exp) {
+		setExptParms(exp);
 		BuildSeriesOptions options = new BuildSeriesOptions();
 		options.expList = parent0.expListCombo;
 		options.expList.index0 = parent0.expListCombo.getSelectedIndex();
@@ -163,9 +127,6 @@ public class Create extends JPanel implements PropertyChangeListener {
 		options.t_Ms_First = exp.camImageFirst_ms; // getStartMs();
 		options.t_Ms_Last = exp.camImageLast_ms;// getEndMs();
 		options.t_Ms_BinDuration = exp.camImageBin_ms;
-//		options.diskRadius 		= (int) diskRadiusSpinner.getValue();
-//		options.doRegistration 	= doRegistrationCheckBox.isSelected();
-//		options.referenceFrame  = (int) startFrameSpinner.getValue();
 		options.doCreateBinDir = true;
 		options.parent0Rect = parent0.mainFrame.getBoundsInternal();
 		options.binSubDirectory = Experiment.BIN + options.t_Ms_BinDuration / 1000;
@@ -193,20 +154,6 @@ public class Create extends JPanel implements PropertyChangeListener {
 		}
 	}
 
-//	boolean getIsFixedFrame() 
-//	{
-//		return isFixedFrameButton.isSelected();
-//	}
-
-//	long	getStartMs() 
-//	{
-//		return (long) ((double)startJSpinner.getValue() * binUnitSpinner.getMsUnitValue());
-//	}
-//	
-//	long	getEndMs() 
-//	{
-//		return (long) ((double)endJSpinner.getValue() * binUnitSpinner.getMsUnitValue());
-//	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

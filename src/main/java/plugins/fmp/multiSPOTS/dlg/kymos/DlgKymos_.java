@@ -53,7 +53,7 @@ public class DlgKymos_ extends JPanel implements PropertyChangeListener, ChangeL
 
 		tabLoadSave.init(capLayout, parent0);
 		tabLoadSave.addPropertyChangeListener(this);
-		tabsPane.addTab("Load/Save", null, tabLoadSave, "Load/Save xml file with capillaries descriptors");
+		tabsPane.addTab("Load/Save", null, tabLoadSave, "Load/Save  kymographs");
 
 		capPopupPanel.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -61,7 +61,7 @@ public class DlgKymos_ extends JPanel implements PropertyChangeListener, ChangeL
 				parent0.mainFrame.revalidate();
 				parent0.mainFrame.pack();
 				parent0.mainFrame.repaint();
-				tabbedCapillariesAndKymosSelected();
+				tabsPaneSelected();
 			}
 		});
 	}
@@ -79,7 +79,7 @@ public class DlgKymos_ extends JPanel implements PropertyChangeListener, ChangeL
 //		tabIntervals.displayDlgKymoIntervals (exp);
 	}
 
-	void tabbedCapillariesAndKymosSelected() {
+	void tabsPaneSelected() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null || exp.seqCamData == null)
 			return;
@@ -88,8 +88,8 @@ public class DlgKymos_ extends JPanel implements PropertyChangeListener, ChangeL
 			Viewer v = exp.seqCamData.seq.getFirstViewer();
 			if (v != null)
 				v.toFront();
-//			parent0.dlgExperiment.capPopupPanel.expand();
 			parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
+			tabCreate.getExptParms(exp);
 		} else if (iselected == 1) {
 			parent0.dlgKymos.tabDisplay.displayUpdateOnSwingThread();
 		}
@@ -98,7 +98,7 @@ public class DlgKymos_ extends JPanel implements PropertyChangeListener, ChangeL
 	@Override
 	public void stateChanged(ChangeEvent event) {
 		if (event.getSource() == tabsPane)
-			tabbedCapillariesAndKymosSelected();
+			tabsPaneSelected();
 	}
 
 }
