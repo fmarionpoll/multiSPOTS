@@ -84,6 +84,7 @@ public class DlgExperiment_ extends JPanel implements ViewerListener, ChangeList
 
 	public void updateDialogs(Experiment exp) {
 		tabIntervals.getExptParms(exp);
+		parent0.dlgKymos.tabCreate.getExptParms(exp);
 		tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
 	}
 

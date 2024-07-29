@@ -53,6 +53,7 @@ public class Experiment {
 
 	public long frameFirst = 0;
 	public long frameLast = 0;
+	public long frameDelta = 1;
 	public long binFirst_ms = 0;
 	public long binLast_ms = 0;
 	public long binDuration_ms = 60000;
@@ -82,6 +83,7 @@ public class Experiment {
 	private final static String ID_BINT0 = "indexBinT0";
 	private final static String ID_FRAMEFIRST = "indexFrameFirst";
 	private final static String ID_FRAMELAST = "indexFrameLast";
+	private final static String ID_FRAMEDELTA = "indexFrameDelta";
 	private final static String ID_TIMEFIRSTIMAGEMS = "fileTimeImageFirstMs";
 	private final static String ID_TIMELASTIMAGEMS = "fileTimeImageLastMs";
 	private final static String ID_FIRSTKYMOCOLMS = "firstKymoColMs";
@@ -427,6 +429,7 @@ public class Experiment {
 	}
 
 	public String getBinNameFromKymoFrameStep() {
+		
 		return BIN + binDuration_ms / 1000;
 	}
 
@@ -465,6 +468,7 @@ public class Experiment {
 
 			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, frameFirst);
 			XMLUtil.setElementLongValue(node, ID_FRAMELAST, frameLast);
+			XMLUtil.setElementLongValue(node, ID_FRAMEDELTA, frameDelta);
 //			XMLUtil.setElementLongValue(node, ID_BINT0, frameFirst);
 			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, binFirst_ms);
 			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, binLast_ms);
@@ -1052,6 +1056,7 @@ public class Experiment {
 		if (frameFirst < 0)
 			frameFirst = 0;
 		frameLast = XMLUtil.getElementLongValue(node, ID_FRAMELAST, -1);
+		frameDelta = XMLUtil.getElementLongValue(node, ID_FRAMEDELTA, 1);
 		binFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1);
 		binLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);
 		binDuration_ms = XMLUtil.getElementLongValue(node, ID_BINKYMOCOLMS, -1);

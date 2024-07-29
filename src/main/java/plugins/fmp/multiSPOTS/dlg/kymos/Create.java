@@ -40,7 +40,7 @@ public class Create extends JPanel implements PropertyChangeListener {
 	Long maxLast = 99999999L;
 	JSpinner frameFirstJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
 	JSpinner frameLastJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
-
+	JSpinner frameDeltaJSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
 	EnumStatusComputation sComputation = EnumStatusComputation.START_COMPUTATION;
 	private MultiSPOTS parent0 = null;
@@ -67,6 +67,13 @@ public class Create extends JPanel implements PropertyChangeListener {
 		panel1.add(new JLabel(" to "));
 		panel1.add(frameLastJSpinner);
 		add(panel1);
+		
+		JPanel panel2 = new JPanel(layoutLeft);
+		panel2.add(new JLabel("Ratio: 1 to ", SwingConstants.RIGHT));
+		panel2.add(frameDeltaJSpinner);
+		panel2.add(new JLabel(" image(s)"));
+		add(panel2);
+
 
 		defineActionListeners();
 	}
@@ -98,6 +105,7 @@ public class Create extends JPanel implements PropertyChangeListener {
 	private void setExptParms(Experiment exp) {
 		long bin_ms = exp.camImageBin_ms;
 		exp.frameFirst = (long) frameFirstJSpinner.getValue();
+		exp.frameDelta = (long) frameDeltaJSpinner.getValue();
 		exp.binFirst_ms = exp.frameFirst * bin_ms;
 		exp.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
 	}
@@ -106,6 +114,7 @@ public class Create extends JPanel implements PropertyChangeListener {
 		long bin_ms = exp.camImageBin_ms;
 		long dFirst = exp.frameFirst;
 		frameFirstJSpinner.setValue(dFirst);
+		frameDeltaJSpinner.setValue(exp.frameDelta);
 		if (exp.binLast_ms <= 0)
 			exp.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
 		long dLast = (long) exp.binLast_ms / bin_ms;

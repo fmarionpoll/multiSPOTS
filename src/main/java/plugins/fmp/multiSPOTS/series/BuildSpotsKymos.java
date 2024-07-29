@@ -121,7 +121,8 @@ public class BuildSpotsKymos extends BuildSeries {
 		stopFlag = false;
 
 		final int tFirst = (int) exp.frameFirst;
-		int tLast = exp.seqCamData.nTotalFrames;
+		final int tLast = exp.seqCamData.nTotalFrames;
+		final int tDelta = (int) exp.frameDelta;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
@@ -133,7 +134,7 @@ public class BuildSpotsKymos extends BuildSeries {
 
 		vData.setTitle(exp.seqCamData.getCSCamFileName());
 
-		for (int ii = tFirst; ii < tLast; ii++) {
+		for (int ii = tFirst; ii < tLast; ii += tDelta) {
 			final int t = ii;
 
 			if (options.concurrentDisplay) {
