@@ -19,8 +19,8 @@ import javax.swing.SwingConstants;
 import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.series.BuildSpotsKymos;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
+import plugins.fmp.multiSPOTS.series.BuildSpotsKymos;
 
 public class Create extends JPanel implements PropertyChangeListener {
 	/**
@@ -40,7 +40,7 @@ public class Create extends JPanel implements PropertyChangeListener {
 	Long maxLast = 99999999L;
 	JSpinner frameFirstJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
 	JSpinner frameLastJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
-	JSpinner frameDeltaJSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+	JSpinner frameDeltaJSpinner = new JSpinner(new SpinnerNumberModel((Long) 1L, (Long) 1L, (Long) 100L, (Long) 1L));
 
 	EnumStatusComputation sComputation = EnumStatusComputation.START_COMPUTATION;
 	private MultiSPOTS parent0 = null;
@@ -60,20 +60,19 @@ public class Create extends JPanel implements PropertyChangeListener {
 		panel0.add(allSeriesCheckBox);
 		panel0.add(concurrentDisplayCheckBox);
 		add(panel0);
-		
+
 		JPanel panel1 = new JPanel(layoutLeft);
 		panel1.add(new JLabel("Frame ", SwingConstants.RIGHT));
 		panel1.add(frameFirstJSpinner);
 		panel1.add(new JLabel(" to "));
 		panel1.add(frameLastJSpinner);
 		add(panel1);
-		
+
 		JPanel panel2 = new JPanel(layoutLeft);
 		panel2.add(new JLabel("Ratio: 1 to ", SwingConstants.RIGHT));
 		panel2.add(frameDeltaJSpinner);
 		panel2.add(new JLabel(" image(s)"));
 		add(panel2);
-
 
 		defineActionListeners();
 	}
@@ -121,7 +120,7 @@ public class Create extends JPanel implements PropertyChangeListener {
 		frameLastJSpinner.setValue(dLast);
 		exp.getFileIntervalsFromSeqCamData();
 	}
-	
+
 	private BuildSeriesOptions initBuildParameters(Experiment exp) {
 		setExptParms(exp);
 		BuildSeriesOptions options = new BuildSeriesOptions();
@@ -162,7 +161,6 @@ public class Create extends JPanel implements PropertyChangeListener {
 			threadBuildKymo.stopFlag = true;
 		}
 	}
-
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

@@ -116,7 +116,7 @@ public class XLSExport {
 					spot.getSideDescriptor(xlsExportOption));
 			outputStimAndConc_according_to_DataOption(sheet, xlsExportOption, spot, transpose, x, y);
 
-			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.spotIndex);
+			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.cageIndex);
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAGEID.getValue(), transpose,
 					charSeries + spot.cageIndex);
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, spot.spotNFlies);
