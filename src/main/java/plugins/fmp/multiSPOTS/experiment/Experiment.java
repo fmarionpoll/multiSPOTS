@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -429,7 +428,7 @@ public class Experiment {
 	}
 
 	public String getBinNameFromKymoFrameStep() {
-		
+
 		return BIN + binDuration_ms / 1000;
 	}
 
@@ -467,9 +466,10 @@ public class Experiment {
 			XMLUtil.setElementLongValue(node, ID_TIMELASTIMAGEMS, camImageLast_ms);
 
 			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, frameFirst);
+			XMLUtil.setElementLongValue(node, ID_BINT0, frameFirst);
 			XMLUtil.setElementLongValue(node, ID_FRAMELAST, frameLast);
 			XMLUtil.setElementLongValue(node, ID_FRAMEDELTA, frameDelta);
-//			XMLUtil.setElementLongValue(node, ID_BINT0, frameFirst);
+
 			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, binFirst_ms);
 			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, binLast_ms);
 			XMLUtil.setElementLongValue(node, ID_BINKYMOCOLMS, binDuration_ms);
@@ -1049,7 +1049,6 @@ public class Experiment {
 			camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0) * 60000;
 		}
 
-		
 		frameFirst = XMLUtil.getElementLongValue(node, ID_FRAMEFIRST, -1);
 		if (frameFirst < 0)
 			frameFirst = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
