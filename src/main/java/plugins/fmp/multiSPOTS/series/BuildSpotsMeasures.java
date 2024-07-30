@@ -130,16 +130,18 @@ public class BuildSpotsMeasures extends BuildSeries {
 				public void run() {
 					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
 					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
-					final IcyBufferedImage spotImage = transformFunctionSpot.getTransformedImage(sourceImage,
+					final IcyBufferedImage transformToMeasureArea = transformFunctionSpot.getTransformedImage(sourceImage,
 							transformOptions01);
-					final IcyBufferedImage flyImage = transformFunctionFly.getTransformedImage(sourceImage,
+					final IcyBufferedImage transformToDetectFly = transformFunctionFly.getTransformedImage(sourceImage,
 							transformOptions02);
-					IcyBufferedImageCursor cursorFlyImage = new IcyBufferedImageCursor(flyImage);
-					IcyBufferedImageCursor cursorSpotImage = new IcyBufferedImageCursor(spotImage);
+					
+					IcyBufferedImageCursor cursorToDetectFly = new IcyBufferedImageCursor(transformToDetectFly);
+					IcyBufferedImageCursor cursorToMeasureArea = new IcyBufferedImageCursor(transformToMeasureArea);
+					
 					int ii = t - tFirst;
 					for (Spot spot : exp.spotsArray.spotsList) {
 						ROI2DAlongT roiT = spot.getROIAtT(t);
-						ResultsThreshold results = measureSpotOverThreshold(cursorSpotImage, cursorFlyImage, roiT);
+						ResultsThreshold results = measureSpotOverThreshold(cursorToMeasureArea, cursorToDetectFly, roiT);
 						spot.flyPresent.isPresent[ii] = results.nPoints_fly_present;
 						spot.sum_in.values[ii] = results.sumOverThreshold / results.npoints_in;
 						if (results.nPoints_no_fly != results.npoints_in) 
@@ -153,18 +155,20 @@ public class BuildSpotsMeasures extends BuildSeries {
 		return true;
 	}
 
-	private ResultsThreshold measureSpotOverThreshold(IcyBufferedImageCursor cursorWork,
-			IcyBufferedImageCursor cursorSource, ROI2DAlongT roiT) {
+	private ResultsThreshold measureSpotOverThreshold(
+			IcyBufferedImageCursor cursorToMeasureArea,
+			IcyBufferedImageCursor cursorToDetectFly, 
+			ROI2DAlongT roiT) {
 
 		ResultsThreshold result = new ResultsThreshold();
 		result.npoints_in = roiT.mask2DPoints_in.length;
 
 		for (int offset = 0; offset < roiT.mask2DPoints_in.length; offset++) {
 			Point pt = roiT.mask2DPoints_in[offset];
-			int value = (int) cursorWork.get((int) pt.getX(), (int) pt.getY(), 0);
-			int value2 = (int) cursorSource.get((int) pt.getX(), (int) pt.getY(), 0);
+			int value = (int) cursorToMeasureArea.get((int) pt.getX(), (int) pt.getY(), 0);
+			int value_to_detect_fly = (int) cursorToDetectFly.get((int) pt.getX(), (int) pt.getY(), 0);
 
-			boolean isFlyThere = isFlyPresent(value2);
+			boolean isFlyThere = isFlyPresent(value_to_detect_fly);
 			if (!isFlyThere) {
 				result.nPoints_no_fly++;
 			} else

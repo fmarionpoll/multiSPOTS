@@ -250,6 +250,12 @@ public class SpotMeasure {
 
 		int npoints = yvalues.length;
 		values = new double[npoints];
+		int t2 = npoints-1;
+		for (int t1 = 0; t1 < nbspan; t1++, t2--) {
+			values[t1] = yvalues[t1];
+			values[t2] = yvalues[t2];
+		}
+		
 		for (int t = 0; t < sizeTempArray; t++) {
 			double value = yvalues[t];
 			tempArrayCircular[t] = value;

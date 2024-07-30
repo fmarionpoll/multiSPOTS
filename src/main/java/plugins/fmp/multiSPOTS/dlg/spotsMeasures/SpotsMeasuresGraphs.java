@@ -72,6 +72,7 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		group.add(displayAllButton);
 		group.add(displaySelectedButton);
 		displayAllButton.setSelected(true);
+		exportTypeComboBox.setSelectedIndex(1);
 		defineActionListeners();
 	}
 
