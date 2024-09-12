@@ -1,5 +1,6 @@
 package plugins.fmp.multiSPOTS.tools.chart;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -7,7 +8,6 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-import java.awt.BasicStroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -93,7 +93,10 @@ public class ChartSpots extends IcyFrame {
 			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
 		}
 
-		final NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
+		NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
+		if (xlsExportOptions.relativeToT0) {
+			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
+		}
 		yAxis.setAutoRangeIncludesZero(false);
 
 		final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);

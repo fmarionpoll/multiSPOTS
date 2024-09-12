@@ -75,13 +75,15 @@
 </section>
 <section name="export"/>
 </section>
-<key name="lastUpdateCheckTime" value="1722270905078"/>
+<key name="lastUpdateCheckTime" value="1726144778484"/>
 <key name="sequencePersistence" value="false"/>
 <key name="virtualMode" value="true"/>
 <key name="loaderFolder" value="\\comportement-egce.ideev.universite-paris-saclay.fr\MultiCAFE\2024 Beatrice\multispot fmp juillet 24\dose reponse denatonium\26-07-24"/>
 </section>
 <section name="canvas">
-<section name="Canvas2D"/>
+<section name="Canvas2D">
+<key name="fitCanvas" value="true"/>
+</section>
 </section>
 <section name="magicWand"/>
 <section name="network"/>
@@ -134,7 +136,7 @@
 </section>
 </section>
 <key name="version" value="2.5.1.0"/>
-<key name="lastUploadDate" value="1722271945136"/>
+<key name="lastUploadDate" value="1726144781689"/>
 <section name="frame">
 <section name="imageLoader">
 <key name="loadtype" value="0"/>
@@ -159,7 +161,7 @@
 <section name="multiSPOTS">
 <section name="MultiSPOTS">
 <section name="gui">
-<key name="lastUsedPath" value="\\comportement-egce.ideev.universite-paris-saclay.fr\MultiCAFE\2024 Beatrice\multispot fmp juillet 24\dose reponse denatonium\26-07-24"/>
+<key name="lastUsedPath" value="C:\Users\fred\Desktop\multispot fmp juillet 24\dose reponse berberine"/>
 </section>
 </section>
 </section>
@@ -167,21 +169,21 @@
 </section>
 <section name="frame">
 <section name="main">
-<key name="XE" value="3598"/>
-<key name="YE" value="32"/>
-<key name="WidthE" value="1514"/>
-<key name="HeightE" value="1184"/>
+<key name="XE" value="3451"/>
+<key name="YE" value="21"/>
+<key name="WidthE" value="1793"/>
+<key name="HeightE" value="1033"/>
 <key name="MaximizedE" value="false"/>
 </section>
 <section name="inspector">
-<key name="XC" value="1001"/>
+<key name="XC" value="1785"/>
 <key name="YC" value="0"/>
 <key name="XE" value="600"/>
 <key name="YE" value="140"/>
 <key name="XI" value="600"/>
 <key name="YI" value="140"/>
-<key name="WidthC" value="505"/>
-<key name="HeightC" value="1022"/>
+<key name="WidthC" value="0"/>
+<key name="HeightC" value="871"/>
 <key name="WidthE" value="300"/>
 <key name="HeightE" value="600"/>
 <key name="WidthI" value="300"/>
@@ -198,8 +200,8 @@
 <key name="YE" value="100"/>
 <key name="XI" value="100"/>
 <key name="YI" value="100"/>
-<key name="WidthC" value="497"/>
-<key name="HeightC" value="932"/>
+<key name="WidthC" value="-8"/>
+<key name="HeightC" value="781"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="600"/>
 <key name="WidthI" value="400"/>
@@ -216,8 +218,8 @@
 <key name="YE" value="200"/>
 <key name="XI" value="200"/>
 <key name="YI" value="200"/>
-<key name="WidthC" value="497"/>
-<key name="HeightC" value="932"/>
+<key name="WidthC" value="-8"/>
+<key name="HeightC" value="781"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="300"/>
 <key name="WidthI" value="400"/>
