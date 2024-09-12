@@ -287,6 +287,19 @@ public class Display extends JPanel implements ViewerListener {
 		});
 	}
 
+	public void displayUpdateOnSwingThread2(int isel, int imethod) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				selectKymographImage(isel);
+				selectKymographComboItem(isel);
+				spotsTransformsComboBox.setSelectedIndex(imethod);
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+					updateTransformFunctionsOfCanvas(exp);
+			}
+		});
+	}
+
 	int displayUpdate() {
 		int item = -1;
 		if (kymographsCombo.getItemCount() < 1)
