@@ -24,8 +24,6 @@ import icy.image.IcyBufferedImage;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.sequence.Sequence;
-import plugins.kernel.roi.roi2d.ROI2DPolygon;
-import plugins.kernel.roi.roi2d.ROI2DShape;
 import plugins.adufour.quickhull.QuickHull2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
@@ -38,14 +36,19 @@ import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DMeasures;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
+import plugins.kernel.roi.roi2d.ROI2DShape;
 
-public class Shape extends JPanel {
+public class DetectContours extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4950182090521600937L;
 
 	private JButton detectContoursButton = new JButton("Detect spots contours");
+	private JCheckBox topSpotCheckBox = new JCheckBox("top (uneven)", true);
+	private JCheckBox bottomSpotCheckBox = new JCheckBox("bottom (even spot nb)", true);
+
 	private JButton cutAndInterpolateButton = new JButton("Cut");
 
 	private JLabel spotsFilterLabel = new JLabel("Spots filter");
@@ -73,6 +76,8 @@ public class Shape extends JPanel {
 
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(detectContoursButton);
+		panel0.add(topSpotCheckBox);
+		panel0.add(bottomSpotCheckBox);
 		add(panel0);
 
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -225,6 +230,9 @@ public class Shape extends JPanel {
 		options.overlayIfGreater = (spotsDirectionComboBox.getSelectedIndex() == 0);
 		options.overlayThreshold = (int) spotsThresholdSpinner.getValue();
 
+		options.detectL = topSpotCheckBox.isSelected();
+		options.detectR = bottomSpotCheckBox.isSelected();
+
 		return options;
 	}
 
@@ -264,7 +272,13 @@ public class Shape extends JPanel {
 		IcyBufferedImage sourceImage = seq.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions);
 		for (Spot spot : exp.spotsArray.spotsList) {
-			exp.seqCamData.seq.removeROI(spot.getRoi_in());
+			int i = spot.spotIndex % 2;
+			if (0 == i && !options.detectL)
+				continue;
+			if (1 == i && !options.detectR)
+				continue;
+			ROI2D roi_in = spot.getRoi_in();
+			exp.seqCamData.seq.removeROI(roi_in);
 			try {
 				spot.mask2DSpot = spot.getRoi_in().getBooleanMask2D(0, 0, 1, true);
 			} catch (InterruptedException e) {
@@ -276,9 +290,9 @@ public class Shape extends JPanel {
 			ROI2DPolygon roi_new = new ROI2DPolygon(listPoints);
 
 			roi_new.setName(spot.getRoi_in().getName());
+			roi_new.setColor(spot.getRoi_in().getColor());
 			spot.setRoi_old((ROI2DShape) spot.getRoi_in().getCopy());
 			spot.setRoi_in(roi_new);
-//			spot.deleteSpotMeasures();
 			exp.seqCamData.seq.addROI(spot.getRoi_in());
 		}
 	}
@@ -302,11 +316,13 @@ public class Shape extends JPanel {
 		ROI2D roi = exp.seqCamData.seq.getSelectedROI2D();
 		if (roi == null)
 			return;
+
 		for (Spot spot : exp.spotsArray.spotsList) {
 			ROI2D spotRoi = spot.getRoi_in();
 			try {
 				if (!spotRoi.intersects(roi))
 					continue;
+
 				ROI newRoi = spotRoi.getSubtraction(roi);
 				replaceRoi(exp, spot, spotRoi, (ROI2D) newRoi);
 			} catch (InterruptedException e) {

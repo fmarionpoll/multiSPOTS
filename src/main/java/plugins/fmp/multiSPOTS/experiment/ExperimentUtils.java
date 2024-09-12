@@ -1,11 +1,13 @@
 package plugins.fmp.multiSPOTS.experiment;
 
+import java.awt.Color;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import icy.roi.ROI2D;
 import icy.type.geom.Polyline2D;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
@@ -160,7 +162,10 @@ public class ExperimentUtils {
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2 * radius, 2 * radius);
 				ROI2DEllipse roiEllipse = new ROI2DEllipse(ellipse);
 				roiEllipse.setName("spot" + substring + String.format("%02d", i));
+				Color value = ((i % 2) == 0) ? Color.red : Color.blue;
+				roiEllipse.setColor(value);
 				i++;
+
 				Spot spot = new Spot(roiEllipse);
 				spot.spotIndex = spotIndex;
 				spot.cageIndex = cageIndex;
