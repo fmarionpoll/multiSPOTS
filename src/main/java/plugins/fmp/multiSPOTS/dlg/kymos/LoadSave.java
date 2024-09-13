@@ -145,6 +145,9 @@ public class LoadSave extends JPanel {
 		if (nItems > 0) {
 			flag = seqKymos.loadImagesFromList(myList, true);
 			parent0.dlgKymos.tabDisplay.transferSpotNamesToComboBox(exp);
+			parent0.dlgKymos.tabDisplay.selectKymographImage(0);
+			parent0.dlgKymos.tabDisplay.displayCanvasTransformCombo2(exp, 1);
+			
 		} else
 			seqKymos.closeSequence();
 		return flag;

@@ -440,4 +440,14 @@ public class Display extends JPanel implements ViewerListener {
 		canvas.selectImageTransformFunctionStep2(index + 1);
 	}
 
+	public void displayCanvasTransformCombo2(Experiment exp, int isel) {
+		Viewer viewer = exp.seqSpotKymos.seq.getFirstViewer();
+		if (viewer != null)
+		{
+			Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) viewer.getCanvas();
+			canvas.updateTransformsComboStep2(transforms);
+			canvas.selectImageTransformFunctionStep2(isel + 1);
+			spotsTransformsComboBox.setSelectedIndex(isel);
+		}
+	}
 }
