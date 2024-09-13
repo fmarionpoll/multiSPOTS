@@ -18,16 +18,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
-import icy.sequence.SequenceListener;
 import icy.sequence.SequenceEvent.SequenceEventSourceType;
+import icy.sequence.SequenceListener;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentDirectories;
 import plugins.fmp.multiSPOTS.tools.JComponents.SequenceNameListRenderer;
-import icy.gui.frame.progress.ProgressFrame;
 
 public class LoadSaveExperiment extends JPanel implements PropertyChangeListener, ItemListener, SequenceListener {
 	/**
@@ -289,7 +289,6 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 
 			if (exp.seqSpotKymos != null) {
 				parent0.dlgKymos.tabLoadSave.loadDefaultKymos(exp);
-				exp.spotsArray.transferSpotsMeasuresToSequence(exp.seqSpotKymos.seq);
 			}
 
 			exp.load_CagesMeasures();

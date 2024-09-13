@@ -23,7 +23,6 @@ import icy.gui.util.FontUtil;
 import icy.image.IcyBufferedImage;
 import icy.system.thread.ThreadUtil;
 import loci.formats.FormatException;
-
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ImageFileDescriptor;
@@ -144,10 +143,8 @@ public class LoadSave extends JPanel {
 		int nItems = ImageFileDescriptor.getExistingFileNames(myList);
 		if (nItems > 0) {
 			flag = seqKymos.loadImagesFromList(myList, true);
+			exp.spotsArray.transferSpotsMeasuresToSequence(exp.seqSpotKymos.seq);
 			parent0.dlgKymos.tabDisplay.transferSpotNamesToComboBox(exp);
-			parent0.dlgKymos.tabDisplay.selectKymographImage(0);
-			parent0.dlgKymos.tabDisplay.displayCanvasTransformCombo2(exp, 1);
-			
 		} else
 			seqKymos.closeSequence();
 		return flag;

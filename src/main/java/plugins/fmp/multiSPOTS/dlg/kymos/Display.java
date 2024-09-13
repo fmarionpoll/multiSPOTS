@@ -54,8 +54,8 @@ public class Display extends JPanel implements ViewerListener {
 	private JCheckBox flyPresentCheckbox = new JCheckBox("fly present (blue)", true);
 	private ImageTransformEnums[] transforms = new ImageTransformEnums[] { ImageTransformEnums.SORT_SUMDIFFCOLS,
 			ImageTransformEnums.SORT_CHAN0COLS };
-	private JComboBox<ImageTransformEnums> spotsTransformsComboBox = new JComboBox<ImageTransformEnums>(transforms);
-	private JToggleButton spotsViewButton = new JToggleButton("View");
+	JComboBox<ImageTransformEnums> spotsTransformsComboBox = new JComboBox<ImageTransformEnums>(transforms);
+	JToggleButton spotsViewButton = new JToggleButton("View");
 	private MultiSPOTS parent0 = null;
 	private boolean isActionEnabled = true;
 
@@ -232,6 +232,9 @@ public class Display extends JPanel implements ViewerListener {
 				int isel = seqKymographs.currentFrame;
 				isel = selectKymographImage(isel);
 				selectKymographComboItem(isel);
+
+//				int index = spotsTransformsComboBox.getSelectedIndex();
+				canvas.selectImageTransformFunctionStep2(2);
 			}
 		}
 	}
@@ -293,6 +296,8 @@ public class Display extends JPanel implements ViewerListener {
 				selectKymographImage(isel);
 				selectKymographComboItem(isel);
 				spotsTransformsComboBox.setSelectedIndex(imethod);
+				parent0.dlgKymos.tabDisplay.spotsTransformsComboBox.setSelectedIndex(1);
+				parent0.dlgKymos.tabDisplay.spotsViewButton.setSelected(true);
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 					updateTransformFunctionsOfCanvas(exp);
@@ -304,6 +309,7 @@ public class Display extends JPanel implements ViewerListener {
 		int item = -1;
 		if (kymographsCombo.getItemCount() < 1)
 			return item;
+
 		displayON();
 
 		item = kymographsCombo.getSelectedIndex();
@@ -429,38 +435,22 @@ public class Display extends JPanel implements ViewerListener {
 	}
 
 	private void displayTransform(Experiment exp) {
-//		boolean displayCheckOverlay = false;
 		if (spotsViewButton.isSelected()) {
 			updateTransformFunctionsOfCanvas(exp);
-//			displayCheckOverlay = true;
 		} else {
-//			removeOverlay(exp);
-//			spotsOverlayCheckBox.setSelected(false);
 			Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqSpotKymos.seq.getFirstViewer().getCanvas();
 			canvas.transformsComboStep2.setSelectedIndex(0);
-
 		}
-//		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
 	}
 
 	private void updateTransformFunctionsOfCanvas(Experiment exp) {
-		Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) exp.seqSpotKymos.seq.getFirstViewer().getCanvas();
-//		if (canvas.imageTransformFunctionsCombo.getItemCount() < (spotsTransformsComboBox.getItemCount()+1)) 
-//		{
-		canvas.updateTransformsComboStep2(transforms);
-//		}
-		int index = spotsTransformsComboBox.getSelectedIndex();
-		canvas.selectImageTransformFunctionStep2(index + 1);
-	}
-
-	public void displayCanvasTransformCombo2(Experiment exp, int isel) {
 		Viewer viewer = exp.seqSpotKymos.seq.getFirstViewer();
-		if (viewer != null)
-		{
+		if (viewer != null) {
 			Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) viewer.getCanvas();
 			canvas.updateTransformsComboStep2(transforms);
-			canvas.selectImageTransformFunctionStep2(isel + 1);
-			spotsTransformsComboBox.setSelectedIndex(isel);
+			int index = spotsTransformsComboBox.getSelectedIndex();
+			canvas.selectImageTransformFunctionStep2(index + 1);
 		}
 	}
+
 }

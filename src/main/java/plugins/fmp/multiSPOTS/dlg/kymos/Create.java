@@ -166,8 +166,6 @@ public class Create extends JPanel implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (StringUtil.equals("thread_ended", evt.getPropertyName())) {
 			startComputationButton.setText(detectString);
-			// TODO: select first image
-			// TODO: display sorted according to chan0
 			parent0.dlgKymos.tabDisplay.displayUpdateOnSwingThread2(0, 1);
 		}
 	}
