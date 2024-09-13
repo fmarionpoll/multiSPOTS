@@ -1,5 +1,6 @@
 package plugins.fmp.multiSPOTS.experiment;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -52,8 +53,6 @@ public class Spot implements Comparable<Spot> {
 	public SpotMeasure sum_in = new SpotMeasure("sum");
 	public SpotMeasure sum_clean = new SpotMeasure("clean");
 	public SpotMeasure flyPresent = new SpotMeasure("flyPresent");
-//	public SpotMeasure sum_out = new SpotMeasure("out");
-//	public SpotMeasure sum_diff = new SpotMeasure("diff");
 	public boolean valid = true;
 
 	private final String ID_META = "metaMC";
@@ -332,11 +331,17 @@ public class Spot implements Comparable<Spot> {
 			spotCageSide = XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 
 			spotRoi_in = (ROI2DShape) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
+			setSpotRoi_InColorAccordingToSpotIndex();
 			limitsOptions.loadFromXML(nodeMeta);
 
 			loadFromXML_SpotAlongT(node);
 		}
 		return flag;
+	}
+
+	public void setSpotRoi_InColorAccordingToSpotIndex() {
+		Color value = ((spotIndex % 2) == 0) ? Color.red : Color.blue;
+		spotRoi_in.setColor(value);
 	}
 
 	private boolean loadFromXML_SpotAlongT(Node node) {
@@ -352,8 +357,9 @@ public class Spot implements Comparable<Spot> {
 				roiInterval.loadFromXML(node_i);
 				listRoiAlongT.add(roiInterval);
 
-				if (i == 0)
+				if (i == 0) {
 					spotRoi_in = (ROI2DShape) listRoiAlongT.get(0).getRoi_in();
+				}
 			}
 		}
 		return true;
