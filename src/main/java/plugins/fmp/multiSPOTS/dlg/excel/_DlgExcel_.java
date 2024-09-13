@@ -21,7 +21,7 @@ import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportMoveResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportSpotMeasures;
 
-public class DlgExcel_ extends JPanel implements PropertyChangeListener {
+public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 	/**
 	 * 
 	 */

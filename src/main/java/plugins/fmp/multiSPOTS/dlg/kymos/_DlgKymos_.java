@@ -17,7 +17,7 @@ import icy.gui.viewer.Viewer;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
-public class DlgKymos_ extends JPanel implements PropertyChangeListener, ChangeListener {
+public class _DlgKymos_ extends JPanel implements PropertyChangeListener, ChangeListener {
 	/**
 	 * 
 	 */

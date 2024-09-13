@@ -12,28 +12,28 @@ import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
 import icy.plugin.abstract_.PluginActionable;
 import icy.preferences.GeneralPreferences;
-import plugins.fmp.multiSPOTS.dlg.browse.DlgBrowse_;
-import plugins.fmp.multiSPOTS.dlg.cages.DlgCages_;
-import plugins.fmp.multiSPOTS.dlg.excel.DlgExcel_;
-import plugins.fmp.multiSPOTS.dlg.experiment.DlgExperiment_;
-import plugins.fmp.multiSPOTS.dlg.flies.DlgDetectFlies_;
-import plugins.fmp.multiSPOTS.dlg.kymos.DlgKymos_;
-import plugins.fmp.multiSPOTS.dlg.spots.DlgSpots_;
-import plugins.fmp.multiSPOTS.dlg.spotsMeasures.DlgSpotMeasure_;
+import plugins.fmp.multiSPOTS.dlg.browse._DlgBrowse_;
+import plugins.fmp.multiSPOTS.dlg.cages._DlgCages_;
+import plugins.fmp.multiSPOTS.dlg.excel._DlgExcel_;
+import plugins.fmp.multiSPOTS.dlg.experiment._DlgExperiment_;
+import plugins.fmp.multiSPOTS.dlg.flies._DlgDetectFlies_;
+import plugins.fmp.multiSPOTS.dlg.kymos._DlgKymos_;
+import plugins.fmp.multiSPOTS.dlg.spots._DlgSpots_;
+import plugins.fmp.multiSPOTS.dlg.spotsMeasures._DlgSpotMeasure_;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 public class MultiSPOTS extends PluginActionable {
 	public IcyFrame mainFrame = new IcyFrame("multiSPOTS Sept 12, 2024", true, true, true, true);
 	public JComboBoxExperiment expListCombo = new JComboBoxExperiment();
 
-	public DlgBrowse_ dlgBrowse = new DlgBrowse_();
-	public DlgExperiment_ dlgExperiment = new DlgExperiment_();
-	public DlgSpots_ dlgSpots = new DlgSpots_();
-	public DlgKymos_ dlgKymos = new DlgKymos_();
-	public DlgSpotMeasure_ dlgMeasure = new DlgSpotMeasure_();
-	public DlgCages_ dlgCages = new DlgCages_();
-	public DlgDetectFlies_ dlgDetectFlies = new DlgDetectFlies_();
-	public DlgExcel_ dlgExcel = new DlgExcel_();
+	public _DlgBrowse_ dlgBrowse = new _DlgBrowse_();
+	public _DlgExperiment_ dlgExperiment = new _DlgExperiment_();
+	public _DlgSpots_ dlgSpots = new _DlgSpots_();
+	public _DlgKymos_ dlgKymos = new _DlgKymos_();
+	public _DlgSpotMeasure_ dlgMeasure = new _DlgSpotMeasure_();
+	public _DlgCages_ dlgCages = new _DlgCages_();
+	public _DlgDetectFlies_ dlgDetectFlies = new _DlgDetectFlies_();
+	public _DlgExcel_ dlgExcel = new _DlgExcel_();
 
 	public JTabbedPane tabsPane = new JTabbedPane();
 

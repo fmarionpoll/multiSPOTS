@@ -13,7 +13,7 @@ import javax.swing.JTabbedPane;
 import icy.gui.component.PopupPanel;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 
-public class DlgCages_ extends JPanel implements PropertyChangeListener {
+public class _DlgCages_ extends JPanel implements PropertyChangeListener {
 	/**
 	 * 
 	 */

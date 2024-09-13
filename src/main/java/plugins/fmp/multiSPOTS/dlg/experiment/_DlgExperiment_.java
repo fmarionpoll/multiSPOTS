@@ -1,40 +1,78 @@
-package plugins.fmp.multiSPOTS.dlg.browse;
+package plugins.fmp.multiSPOTS.dlg.experiment;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import icy.canvas.IcyCanvas;
+import icy.gui.component.PopupPanel;
 import icy.gui.frame.IcyFrame;
 import icy.gui.viewer.Viewer;
 import icy.gui.viewer.ViewerEvent;
 import icy.gui.viewer.ViewerListener;
-import icy.gui.viewer.ViewerEvent.ViewerEventType;
 import icy.main.Icy;
+import icy.gui.viewer.ViewerEvent.ViewerEventType;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 
-public class DlgBrowse_ extends JPanel implements ViewerListener {
+public class _DlgExperiment_ extends JPanel implements ViewerListener, ChangeListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6826269677524125173L;
-	public LoadSaveExperiment panelLoadSave = new LoadSaveExperiment();
+
+	PopupPanel capPopupPanel = null;
+	public JTabbedPane tabsPane = new JTabbedPane();
+	public Options tabOptions = new Options();
+	public Infos tabInfos = new Infos();
+	public Filter tabFilter = new Filter();
+	Edit tabEdit = new Edit();
+	public Intervals tabIntervals = new Intervals();
+
 	private MultiSPOTS parent0 = null;
 
 	public void init(JPanel mainPanel, String string, MultiSPOTS parent0) {
 		this.parent0 = parent0;
-		JPanel filesPanel = panelLoadSave.initPanel(parent0);
-		mainPanel.add(filesPanel, BorderLayout.CENTER);
-		mainPanel.addComponentListener(new ComponentAdapter() {
+
+		capPopupPanel = new PopupPanel(string);
+		capPopupPanel.collapse();
+		mainPanel.add(capPopupPanel);
+		GridLayout tabsLayout = new GridLayout(4, 1);
+
+		tabInfos.init(tabsLayout, parent0);
+		tabsPane.addTab("Infos", null, tabInfos, "Define infos for this experiment/box");
+
+		tabFilter.init(tabsLayout, parent0);
+		tabsPane.addTab("Filter", null, tabFilter, "Filter experiments based on descriptors");
+
+		tabEdit.init(tabsLayout, parent0);
+		tabsPane.addTab("Edit", null, tabEdit, "Edit descriptors");
+
+		tabIntervals.init(tabsLayout, parent0);
+		tabsPane.addTab("Intervals", null, tabIntervals, "View/edit time-lapse intervals");
+
+		tabOptions.init(tabsLayout, parent0);
+		tabsPane.addTab("Options", null, tabOptions, "Options to display data");
+
+		tabsPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+
+		JPanel capPanel = capPopupPanel.getMainPanel();
+		capPanel.setLayout(new BorderLayout());
+		capPanel.add(tabsPane, BorderLayout.PAGE_END);
+
+		tabsPane.addChangeListener(this);
+		capPopupPanel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				parent0.mainFrame.revalidate();
@@ -42,6 +80,16 @@ public class DlgBrowse_ extends JPanel implements ViewerListener {
 				parent0.mainFrame.repaint();
 			}
 		});
+	}
+
+	public void updateDialogs(Experiment exp) {
+		tabIntervals.getExptParms(exp);
+		parent0.dlgKymos.tabCreate.getExptParms(exp);
+		tabInfos.transferPreviousExperimentInfosToDialog(exp, exp);
+	}
+
+	public void getExperimentInfosFromDialog(Experiment exp) {
+		tabInfos.getExperimentInfosFromDialog(exp);
 	}
 
 	public void updateViewerForSequenceCam(Experiment exp) {
@@ -56,7 +104,7 @@ public class DlgBrowse_ extends JPanel implements ViewerListener {
 				if (v == null) {
 					v = new Viewer(exp.seqCamData.seq, true);
 					List<String> list = IcyCanvas.getCanvasPluginNames();
-					String pluginName = list.stream().filter(s -> s.contains("Canvas2DWithFilters")).findFirst()
+					String pluginName = list.stream().filter(s -> s.contains("Canvas2D_2Transforms")).findFirst()
 							.orElse(null);
 					v.setCanvas(pluginName);
 				}
@@ -106,6 +154,17 @@ public class DlgBrowse_ extends JPanel implements ViewerListener {
 	@Override
 	public void viewerClosed(Viewer viewer) {
 		viewer.removeListener(this);
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
+		if (tabbedPane.getSelectedIndex() == 0)
+			tabInfos.initInfosCombos();
+		else if (tabbedPane.getSelectedIndex() == 1)
+			tabFilter.initFilterCombos();
+		else if (tabbedPane.getSelectedIndex() == 2)
+			tabEdit.initEditCombos();
 	}
 
 }
