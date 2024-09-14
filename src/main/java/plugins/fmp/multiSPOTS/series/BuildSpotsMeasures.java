@@ -44,7 +44,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 	}
 
 	private boolean loadExperimentDataToMeasureSpots(Experiment exp) {
-		boolean flag = exp.loadMCSpots_Only();
+		boolean flag = exp.load_Spots();
 		exp.seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 		return flag;
 	}
