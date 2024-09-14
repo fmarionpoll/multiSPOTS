@@ -21,7 +21,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.util.StringUtil;
-
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
@@ -40,6 +39,8 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 	private String detectString = "        Detect     ";
 	private JButton detectButton = new JButton(detectString);
 	private JCheckBox allSeriesCheckBox = new JCheckBox("ALL (current to last)", false);
+	private JCheckBox topSpotCheckBox = new JCheckBox("top (red)", true);
+	private JCheckBox bottomSpotCheckBox = new JCheckBox("bottom (blue)", true);
 	private JCheckBox concurrentDisplayCheckBox = new JCheckBox("concurrent display", false);
 
 	private JLabel spotsFilterLabel = new JLabel("Spots filter");
@@ -75,6 +76,8 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(detectButton);
 		panel0.add(allSeriesCheckBox);
+		panel0.add(topSpotCheckBox);
+		panel0.add(bottomSpotCheckBox);
 		panel0.add(concurrentDisplayCheckBox);
 		add(panel0);
 
@@ -159,7 +162,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 				updateOverlayThreshold();
 			}
 		});
-		
+
 		fliesDirectionComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -187,7 +190,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 					displayTransform1(exp);
 			}
 		});
-		
+
 		viewButton2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -233,13 +236,12 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 		ImageTransformEnums transform = ImageTransformEnums.NONE;
 		boolean ifGreater = true;
 		int threshold = 0;
-		
+
 		if (viewButton1.isSelected()) {
 			transform = (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem();
 			threshold = (int) spotsThresholdSpinner.getValue();
 			ifGreater = (spotsDirectionComboBox.getSelectedIndex() == 0);
-		}
-		else {
+		} else {
 			transform = (ImageTransformEnums) fliesTransformsComboBox.getSelectedItem();
 			threshold = (int) fliesThresholdSpinner.getValue();
 			ifGreater = (fliesDirectionComboBox.getSelectedIndex() == 0);
@@ -296,6 +298,9 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 		options.flyThreshold = (int) fliesThresholdSpinner.getValue();
 		options.flyThresholdUp = (fliesDirectionComboBox.getSelectedIndex() == 1);
 
+		options.detectL = topSpotCheckBox.isSelected();
+		options.detectR = bottomSpotCheckBox.isSelected();
+
 		return options;
 	}
 
@@ -313,7 +318,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 		}
 		spotsOverlayCheckBox.setEnabled(displayCheckOverlay);
 	}
-	
+
 	private void displayTransform2(Experiment exp) {
 		boolean displayCheckOverlay = false;
 		if (viewButton2.isSelected()) {
@@ -346,7 +351,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 		int index = fliesDirectionComboBox.getSelectedIndex();
 		canvas.selectImageTransformFunctionStep1(index + 1);
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (StringUtil.equals("thread_ended", evt.getPropertyName())) {

@@ -46,8 +46,8 @@ public class DetectContours extends JPanel {
 	private static final long serialVersionUID = 4950182090521600937L;
 
 	private JButton detectContoursButton = new JButton("Detect spots contours");
-	private JCheckBox topSpotCheckBox = new JCheckBox("top (uneven)", true);
-	private JCheckBox bottomSpotCheckBox = new JCheckBox("bottom (even spot nb)", true);
+	private JCheckBox topSpotCheckBox = new JCheckBox("top (red)", true);
+	private JCheckBox bottomSpotCheckBox = new JCheckBox("bottom (blue)", true);
 
 	private JButton cutAndInterpolateButton = new JButton("Cut");
 

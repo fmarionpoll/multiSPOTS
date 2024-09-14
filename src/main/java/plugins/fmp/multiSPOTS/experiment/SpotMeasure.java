@@ -43,6 +43,8 @@ public class SpotMeasure {
 	void initLevel2D_fromMeasureValues(String name) {
 		this.setName(name);
 		int ii_start = 0;
+		if (values == null)
+			return;
 		int ii_end = values.length - 1;
 		int npoints = values.length;
 
@@ -59,6 +61,8 @@ public class SpotMeasure {
 	void initLevel2D_fromBooleans(String name) {
 		this.setName(name);
 		int xStart = 0;
+		if (isPresent == null)
+			return;
 		int xEnd = isPresent.length - 1;
 		int npoints = isPresent.length;
 		double[] xpoints = new double[npoints];
@@ -66,7 +70,7 @@ public class SpotMeasure {
 		int j = 0;
 		for (int i = xStart; i < xEnd; i++, j++) {
 			xpoints[j] = i;
-			ypoints[j] = isPresent[j]>0 ? 1d : 0d;
+			ypoints[j] = isPresent[j] > 0 ? 1d : 0d;
 		}
 		setLevel2D(new Level2D(xpoints, ypoints, npoints));
 	}
@@ -250,12 +254,12 @@ public class SpotMeasure {
 
 		int npoints = yvalues.length;
 		values = new double[npoints];
-		int t2 = npoints-1;
+		int t2 = npoints - 1;
 		for (int t1 = 0; t1 < nbspan; t1++, t2--) {
 			values[t1] = yvalues[t1];
 			values[t2] = yvalues[t2];
 		}
-		
+
 		for (int t = 0; t < sizeTempArray; t++) {
 			double value = yvalues[t];
 			tempArrayCircular[t] = value;

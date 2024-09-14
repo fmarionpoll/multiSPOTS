@@ -378,8 +378,11 @@ public class SpotsArray {
 		for (Spot spot : spotsList) {
 			if (spot.sum_in.values != null)
 				spot.sum_clean.buildRunningMedian(span, spot.sum_in.values);
-			else
-				spot.sum_clean.buildRunningMedian(span, spot.sum_in.getLevel2D().ypoints);
+			else {
+				Level2D level = spot.sum_in.getLevel2D();
+				if (level != null && level.npoints > 0)
+					spot.sum_clean.buildRunningMedian(span, level.ypoints);
+			}
 		}
 	}
 
