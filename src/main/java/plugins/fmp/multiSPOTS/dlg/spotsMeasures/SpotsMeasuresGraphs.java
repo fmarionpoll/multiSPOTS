@@ -13,6 +13,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
@@ -34,11 +36,14 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 	private MultiSPOTS parent0 = null;
 	private JButton displayResultsButton = new JButton("Display results");
 	private EnumXLSExportType[] measures = new EnumXLSExportType[] { EnumXLSExportType.AREA_SUM,
-			EnumXLSExportType.AREA_SUMCLEAN,
-//			EnumXLSExportType.AREA_DIFF 
+			EnumXLSExportType.AREA_SUMCLEAN // , EnumXLSExportType.AREA_DIFF
 	};
 	private JComboBox<EnumXLSExportType> exportTypeComboBox = new JComboBox<EnumXLSExportType>(measures);
-	private JCheckBox t0Checkbox = new JCheckBox("relative to t0", false);
+	private JCheckBox relativeToCheckbox = new JCheckBox("relative to", false);
+	private JRadioButton t0Button = new JRadioButton("t0", false);
+	private JRadioButton medianT0Button = new JRadioButton("relative to median of first", true);
+	private JSpinner medianT0FromNPointsSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 50, 1));
+	private JLabel medianT0Legend = new JLabel("points");
 
 	private JRadioButton displayAllButton = new JRadioButton("all cages");
 	private JRadioButton displaySelectedButton = new JRadioButton("cage selected");
@@ -61,17 +66,27 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		add(panel01);
 
 		JPanel panel02 = new JPanel(layout);
-		panel02.add(t0Checkbox);
+		panel02.add(relativeToCheckbox);
+		panel02.add(t0Button);
+		panel02.add(medianT0Button);
+		panel02.add(medianT0FromNPointsSpinner);
+		panel02.add(medianT0Legend);
 		add(panel02);
 
 		JPanel panel03 = new JPanel(layout);
 		panel03.add(displayResultsButton);
 		add(panel03);
 
-		ButtonGroup group = new ButtonGroup();
-		group.add(displayAllButton);
-		group.add(displaySelectedButton);
+		ButtonGroup group1 = new ButtonGroup();
+		group1.add(displayAllButton);
+		group1.add(displaySelectedButton);
 		displayAllButton.setSelected(true);
+		enableRelativeOptions(relativeToCheckbox.isSelected());
+
+		ButtonGroup group2 = new ButtonGroup();
+		group2.add(t0Button);
+		group2.add(medianT0Button);
+
 		exportTypeComboBox.setSelectedIndex(1);
 		defineActionListeners();
 	}
@@ -96,7 +111,7 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 			}
 		});
 
-		t0Checkbox.addActionListener(new ActionListener() {
+		t0Button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
@@ -104,6 +119,20 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 					displayGraphsPanels(exp);
 			}
 		});
+
+		relativeToCheckbox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				enableRelativeOptions(relativeToCheckbox.isSelected());
+			}
+		});
+	}
+
+	private void enableRelativeOptions(boolean bRelative) {
+		t0Button.setEnabled(bRelative);
+		medianT0Button.setEnabled(bRelative);
+		medianT0FromNPointsSpinner.setEnabled(bRelative);
+		medianT0Legend.setEnabled(bRelative);
 	}
 
 	private Rectangle getInitialUpperLeftPosition(Experiment exp) {
@@ -141,7 +170,12 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 
 		XLSExportOptions xlsExportOptions = new XLSExportOptions();
 		xlsExportOptions.buildExcelStepMs = 60000;
-		xlsExportOptions.relativeToT0 = t0Checkbox.isSelected();
+
+		boolean bRelative = relativeToCheckbox.isSelected();
+		xlsExportOptions.relativeToT0 = bRelative & t0Button.isSelected();
+		xlsExportOptions.relativeToMedianT0 = bRelative & medianT0Button.isSelected();
+		xlsExportOptions.medianT0FromNPoints = (int) medianT0FromNPointsSpinner.getValue();
+
 		xlsExportOptions.subtractEvaporation = false;
 		xlsExportOptions.exportType = exportType;
 

@@ -87,17 +87,6 @@ public class XLSResults {
 			valuesOut[i] = sourceRow.valuesOut[i];
 	}
 
-	public List<Double> subtractT0() {
-		if (dataValues == null || dataValues.size() < 1)
-			return null;
-		double item0 = dataValues.get(0);
-		for (int index = 0; index < dataValues.size(); index++) {
-			double value = dataValues.get(index);
-			dataValues.set(index, (value - item0));
-		}
-		return dataValues;
-	}
-
 	public List<Double> relativeToT(int t) {
 		if (dataValues == null || dataValues.size() < 1)
 			return null;
@@ -117,6 +106,43 @@ public class XLSResults {
 			dataValues.set(index, ((value0 - value) / value0));
 		}
 		return dataValues;
+	}
+
+	public List<Double> relativeToMedianT(int t, int npoints) {
+		if (dataValues == null || dataValues.size() < 1)
+			return null;
+
+		double value0 = median(t, npoints);
+		if (value0 == 0.) {
+			for (int index = 0; index < dataValues.size(); index++) {
+				if (dataValues.get(index) > 0) {
+					value0 = dataValues.get(index);
+					break;
+				}
+			}
+		}
+
+		for (int index = 0; index < dataValues.size(); index++) {
+			double value = dataValues.get(index);
+			dataValues.set(index, ((value0 - value) / value0));
+		}
+		return dataValues;
+	}
+
+	private double median(int t, int npoints) {
+		double[] numArray = new double[npoints];
+		for (int i = 0; i < npoints; i++) {
+			numArray[i] = dataValues.get(t + i);
+		}
+		Arrays.sort(numArray);
+		int middle = numArray.length / 2;
+		double medianValue = 0; // declare variable
+		if (numArray.length % 2 == 1)
+			medianValue = numArray[middle];
+		else
+			medianValue = (numArray[middle - 1] + numArray[middle]) / 2;
+
+		return medianValue;
 	}
 
 	boolean subtractDeltaT(int arrayStep, int binStep) {

@@ -171,6 +171,8 @@ public class XLSResultsArray {
 					xlsExportOptions.buildExcelStepMs);
 			if (xlsExportOptions.relativeToT0 && xlsExportOptions.exportType != EnumXLSExportType.AREA_FLYPRESENT)
 				results.relativeToT(0);
+			if (xlsExportOptions.relativeToMedianT0 && xlsExportOptions.exportType != EnumXLSExportType.AREA_FLYPRESENT)
+				results.relativeToMedianT(0, xlsExportOptions.medianT0FromNPoints);
 			results.transferMeasuresToValuesOut(scalingFactorToPhysicalUnits, xlsExportOptions.exportType);
 			resultsList.add(results);
 		}
@@ -215,7 +217,7 @@ public class XLSResultsArray {
 	private void buildAutocorrel(XLSExportOptions xlsExportOptions) {
 		for (int irow = 0; irow < resultsList.size(); irow++) {
 			XLSResults rowL = getRow(irow);
-			correl(rowL, rowL, rowL, xlsExportOptions.nbinscorrelation);
+			correl(rowL, rowL, rowL, xlsExportOptions.nBinsCorrelation);
 		}
 	}
 
@@ -227,10 +229,10 @@ public class XLSResultsArray {
 				irow++;
 				XLSResults rowLtoR = new XLSResults("LtoR", 0, 0, null);
 				rowLtoR.initValuesOutArray(rowL.dimension, 0.);
-				correl(rowL, rowR, rowLtoR, xlsExportOptions.nbinscorrelation);
+				correl(rowL, rowR, rowLtoR, xlsExportOptions.nBinsCorrelation);
 				XLSResults rowRtoL = new XLSResults("RtoL", 0, 0, null);
 				rowRtoL.initValuesOutArray(rowL.dimension, 0.);
-				correl(rowR, rowL, rowRtoL, xlsExportOptions.nbinscorrelation);
+				correl(rowR, rowL, rowRtoL, xlsExportOptions.nBinsCorrelation);
 				rowL.copyValuesOut(rowLtoR);
 				rowR.copyValuesOut(rowRtoL);
 			}
@@ -246,8 +248,8 @@ public class XLSResultsArray {
 				XLSResults rowLR = new XLSResults("LR", 0, 0, null);
 				rowLR.initValuesOutArray(rowL.dimension, 0.);
 				combineIntervals(rowL, rowR, rowLR);
-				correl(rowL, rowLR, rowL, xlsExportOptions.nbinscorrelation);
-				correl(rowR, rowLR, rowR, xlsExportOptions.nbinscorrelation);
+				correl(rowL, rowLR, rowL, xlsExportOptions.nBinsCorrelation);
+				correl(rowR, rowLR, rowR, xlsExportOptions.nBinsCorrelation);
 			}
 		}
 	}
@@ -289,8 +291,8 @@ public class XLSResultsArray {
 				XLSResults rowLR = new XLSResults("LR", 0, 0, null);
 				rowLR.initValuesOutArray(rowL.dimension, 0.);
 				combineIntervals(rowL, rowR, rowLR);
-				correl(rowLR, rowLR, rowL, xlsExportOptions.nbinscorrelation);
-				correl(rowLR, rowLR, rowR, xlsExportOptions.nbinscorrelation);
+				correl(rowLR, rowLR, rowL, xlsExportOptions.nBinsCorrelation);
+				correl(rowLR, rowLR, rowR, xlsExportOptions.nBinsCorrelation);
 			}
 		}
 	}

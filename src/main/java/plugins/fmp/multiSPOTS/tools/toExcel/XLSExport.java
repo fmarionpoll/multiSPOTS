@@ -211,8 +211,8 @@ public class XLSExport {
 	void writeTopRow_timeIntervals_Correl(XSSFSheet sheet, int row) {
 		boolean transpose = options.transpose;
 		Point pt = new Point(0, row);
-		long interval = -options.nbinscorrelation;
-		while (interval < options.nbinscorrelation) {
+		long interval = -options.nBinsCorrelation;
+		while (interval < options.nBinsCorrelation) {
 			int i = (int) interval;
 			XLSUtils.setValue(sheet, pt, transpose, "t" + i);
 			pt.y++;

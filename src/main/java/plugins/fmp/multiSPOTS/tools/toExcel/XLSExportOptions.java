@@ -28,11 +28,13 @@ public class XLSExportOptions {
 	public boolean autocorrelation = false;
 	public boolean crosscorrelation = false;
 	public boolean crosscorrelationLR = false;
-	public int nbinscorrelation = 40;
+	public int nBinsCorrelation = 40;
 
 	public boolean sumPerCage = true;
 	public boolean subtractT0 = true;
 	public boolean relativeToT0 = true;
+	public boolean relativeToMedianT0 = false;
+	public int medianT0FromNPoints = 5;
 	public boolean onlyalive = true;
 	public boolean subtractEvaporation = true;
 

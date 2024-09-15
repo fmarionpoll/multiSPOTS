@@ -36,12 +36,13 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 	 */
 	private static final long serialVersionUID = 8921207247623517524L;
 
-	private String detectString = "        Detect     ";
+	private String detectString = "Detect";
 	private JButton detectButton = new JButton(detectString);
 	private JCheckBox allSeriesCheckBox = new JCheckBox("ALL (current to last)", false);
-	private JCheckBox topSpotCheckBox = new JCheckBox("top (red)", true);
-	private JCheckBox bottomSpotCheckBox = new JCheckBox("bottom (blue)", true);
-	private JCheckBox concurrentDisplayCheckBox = new JCheckBox("concurrent display", false);
+
+	private JCheckBox topSpotCheckBox = new JCheckBox("red", true);
+	private JCheckBox bottomSpotCheckBox = new JCheckBox("blue spots", true);
+//	private JCheckBox concurrentDisplayCheckBox = new JCheckBox("concurrent display", false);
 
 	private JLabel spotsFilterLabel = new JLabel("Spots filter");
 	private String[] directions = new String[] { " threshold >", " threshold <" };
@@ -78,7 +79,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 		panel0.add(allSeriesCheckBox);
 		panel0.add(topSpotCheckBox);
 		panel0.add(bottomSpotCheckBox);
-		panel0.add(concurrentDisplayCheckBox);
+//		panel0.add(concurrentDisplayCheckBox);
 		add(panel0);
 
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -268,7 +269,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 
 	private BuildSeriesOptions initDetectOptions(Experiment exp) {
 		BuildSeriesOptions options = new BuildSeriesOptions();
-		// list of stack experiments
+
 		options.expList = parent0.expListCombo;
 		options.expList.index0 = parent0.expListCombo.getSelectedIndex();
 		if (allSeriesCheckBox.isSelected())
@@ -281,7 +282,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 		} else {
 			options.seriesFirst = 0;
 		}
-		options.concurrentDisplay = concurrentDisplayCheckBox.isSelected();
+		options.concurrentDisplay = false; // concurrentDisplayCheckBox.isSelected();
 
 		// other parameters
 		options.transform01 = (ImageTransformEnums) spotsTransformsComboBox.getSelectedItem();
