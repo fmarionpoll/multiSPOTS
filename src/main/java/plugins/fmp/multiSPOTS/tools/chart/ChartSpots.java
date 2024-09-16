@@ -96,6 +96,8 @@ public class ChartSpots extends IcyFrame {
 		NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
 		if (xlsExportOptions.relativeToT0) {
 			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
+		} else if (xlsExportOptions.relativeToMedianT0) {
+			yAxis.setLabel("ratio (t-t0m)/t0m of " + yAxis.getLabel());
 		}
 		yAxis.setAutoRangeIncludesZero(false);
 

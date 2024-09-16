@@ -141,6 +141,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 				final ResultsThreshold outerResult = measureSpotOverThreshold(cursorToMeasureArea, cursorToDetectFly,
 						outerRoiT);
 				background = outerResult.sumTot_no_fly_over_threshold / outerResult.nPoints_no_fly;
+//				System.out.println("i:" + ti + " - " + background);
 			}
 			final double final_background = background;
 			tasks.add(processor.submit(new Runnable() {
