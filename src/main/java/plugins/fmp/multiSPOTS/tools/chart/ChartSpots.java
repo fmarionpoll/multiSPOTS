@@ -104,6 +104,10 @@ public class ChartSpots extends IcyFrame {
 
 		int firstSeries = 0;
 		int lastSeries = xyDataSetList.size();
+		if (xlsExportOptions.seriesIndexFirst >= 0) {
+			firstSeries = xlsExportOptions.seriesIndexFirst;
+			lastSeries = xlsExportOptions.seriesIndexLast;
+		}
 
 		for (int iseries = firstSeries; iseries < lastSeries; iseries++) {
 			XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);

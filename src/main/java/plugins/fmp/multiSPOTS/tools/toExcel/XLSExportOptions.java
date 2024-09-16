@@ -36,7 +36,7 @@ public class XLSExportOptions {
 	public boolean relativeToMedianT0 = false;
 	public int medianT0FromNPoints = 5;
 	public boolean onlyalive = true;
-	public boolean subtractEvaporation = true;
+	public boolean subtractEvaporation = false;
 
 	public boolean transpose = false;
 	public boolean duplicateSeries = true;
@@ -52,6 +52,8 @@ public class XLSExportOptions {
 
 	public int expIndexFirst = -1;
 	public int expIndexLast = -1;
+	public int seriesIndexFirst = -1;
+	public int seriesIndexLast = -1;
 	public JComboBoxExperiment expList = null;
 
 	// internal parameters

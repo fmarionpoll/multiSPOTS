@@ -150,7 +150,6 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 
 	public void displayGraphsPanels(Experiment exp) {
 		Rectangle rectv = getInitialUpperLeftPosition(exp);
-
 		int dx = 5;
 		int dy = 10;
 		exp.seqCamData.seq.addListener(this);
@@ -178,6 +177,14 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 
 		xlsExportOptions.subtractEvaporation = false;
 		xlsExportOptions.exportType = exportType;
+
+		if (displayAllButton.isSelected()) {
+			xlsExportOptions.seriesIndexFirst = -1;
+		} else {
+			int ikymo = (parent0.dlgKymos.tabDisplay.kymographsCombo.getSelectedIndex() / 2);
+			xlsExportOptions.seriesIndexFirst = ikymo;
+			xlsExportOptions.seriesIndexLast = ikymo + 1;
+		}
 
 		iChart.displayData(exp, xlsExportOptions);
 		iChart.mainChartFrame.toFront();

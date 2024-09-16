@@ -1,6 +1,7 @@
 package plugins.fmp.multiSPOTS.series;
 
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageCursor;
+import icy.roi.BooleanMask2D;
 import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
@@ -21,6 +23,7 @@ import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
+import plugins.kernel.roi.roi2d.ROI2DRectangle;
 
 public class BuildSpotsMeasures extends BuildSeries {
 	public Sequence seqData = new Sequence();
@@ -125,18 +128,32 @@ public class BuildSpotsMeasures extends BuildSeries {
 			}
 
 			final int t = ti;
+			double background = 0.;
+			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+			final IcyBufferedImage transformToMeasureArea = transformFunctionSpot.getTransformedImage(sourceImage,
+					transformOptions01);
+			final IcyBufferedImage transformToDetectFly = transformFunctionFly.getTransformedImage(sourceImage,
+					transformOptions02);
+			IcyBufferedImageCursor cursorToDetectFly = new IcyBufferedImageCursor(transformToDetectFly);
+			IcyBufferedImageCursor cursorToMeasureArea = new IcyBufferedImageCursor(transformToMeasureArea);
+			if (options.compensateBackground) {
+				final ROI2DAlongT outerRoiT = getROI2DAlongTEnclosingAllSpots(exp, t);
+				final ResultsThreshold outerResult = measureSpotOverThreshold(cursorToMeasureArea, cursorToDetectFly,
+						outerRoiT);
+				background = outerResult.sumTot_no_fly_over_threshold / outerResult.nPoints_no_fly;
+			}
+			final double final_background = background;
 			tasks.add(processor.submit(new Runnable() {
 				@Override
 				public void run() {
 					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
-					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
-					final IcyBufferedImage transformToMeasureArea = transformFunctionSpot
-							.getTransformedImage(sourceImage, transformOptions01);
-					final IcyBufferedImage transformToDetectFly = transformFunctionFly.getTransformedImage(sourceImage,
-							transformOptions02);
-
-					IcyBufferedImageCursor cursorToDetectFly = new IcyBufferedImageCursor(transformToDetectFly);
-					IcyBufferedImageCursor cursorToMeasureArea = new IcyBufferedImageCursor(transformToMeasureArea);
+//					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
+//					final IcyBufferedImage transformToMeasureArea = transformFunctionSpot
+//							.getTransformedImage(sourceImage, transformOptions01);
+//					final IcyBufferedImage transformToDetectFly = transformFunctionFly.getTransformedImage(sourceImage,
+//							transformOptions02);
+//					IcyBufferedImageCursor cursorToDetectFly = new IcyBufferedImageCursor(transformToDetectFly);
+//					IcyBufferedImageCursor cursorToMeasureArea = new IcyBufferedImageCursor(transformToMeasureArea);
 
 					int ii = t - tFirst;
 					for (Spot spot : exp.spotsArray.spotsList) {
@@ -149,9 +166,10 @@ public class BuildSpotsMeasures extends BuildSeries {
 						ResultsThreshold results = measureSpotOverThreshold(cursorToMeasureArea, cursorToDetectFly,
 								roiT);
 						spot.flyPresent.isPresent[ii] = results.nPoints_fly_present;
-						spot.sum_in.values[ii] = results.sumOverThreshold / results.npoints_in;
+						spot.sum_in.values[ii] = results.sumOverThreshold / results.npoints_in - final_background;
 						if (results.nPoints_no_fly != results.npoints_in)
-							spot.sum_in.values[ii] = results.sumTot_no_fly_over_threshold / results.nPoints_no_fly;
+							spot.sum_in.values[ii] = results.sumTot_no_fly_over_threshold / results.nPoints_no_fly
+									- final_background;
 					}
 				}
 			}));
@@ -159,6 +177,38 @@ public class BuildSpotsMeasures extends BuildSeries {
 		waitFuturesCompletion(processor, tasks, null);
 		progressBar1.close();
 		return true;
+	}
+
+	ROI2DAlongT getROI2DAlongTEnclosingAllSpots(Experiment exp, int t) {
+
+		Rectangle2D rect = getRectangleEnclosingAllSpots(exp, t);
+		ROI2DRectangle roiRect = new ROI2DRectangle(rect);
+		try {
+			BooleanMask2D roiRectMask = roiRect.getBooleanMask(true);
+			for (Spot spot : exp.spotsArray.spotsList) {
+				BooleanMask2D mask = spot.getROIAtT(t).getMask2D_in();
+				roiRectMask.subtract(mask.bounds, mask.mask);
+			}
+			ROI2DAlongT roiT = new ROI2DAlongT(0, roiRect);
+			roiT.setMask2D_in(roiRectMask);
+			roiT.mask2DPoints_in = roiT.mask2D_in.getPoints();
+			return roiT;
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	Rectangle2D getRectangleEnclosingAllSpots(Experiment exp, int t) {
+
+		Rectangle2D outerRectangle = (Rectangle2D) exp.spotsArray.spotsList.get(0).getROIAtT(t).getRoi_in().getBounds();
+		for (Spot spot : exp.spotsArray.spotsList) {
+			Rectangle2D rect = (Rectangle2D) spot.getROIAtT(t).getRoi_in().getBounds();
+			Rectangle2D.union(outerRectangle, rect, outerRectangle);
+		}
+		return outerRectangle;
 	}
 
 	private ResultsThreshold measureSpotOverThreshold(IcyBufferedImageCursor cursorToMeasureArea,

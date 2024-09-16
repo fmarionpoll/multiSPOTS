@@ -45,12 +45,12 @@ public class Display extends JPanel implements ViewerListener {
 	private static final long serialVersionUID = -2103052112476748890L;
 
 	public int indexImagesCombo = -1;
-	private JComboBox<String> kymographsCombo = new JComboBox<String>(new String[] { "none" });
+	public JComboBox<String> kymographsCombo = new JComboBox<String>(new String[] { "none" });
 	private JComboBox<String> viewsCombo = new JComboBox<String>();
 	private JButton previousButton = new JButton("<");
 	private JButton nextButton = new JButton(">");
-	private JCheckBox sumCheckbox = new JCheckBox("sum (green)", true);
-	private JCheckBox sumCleanCheckbox = new JCheckBox("sumCLEAN (red)", true);
+	private JCheckBox sumCheckbox = new JCheckBox("sum (black)", true);
+	private JCheckBox sumCleanCheckbox = new JCheckBox("sumCLEAN (green)", true);
 	private JCheckBox flyPresentCheckbox = new JCheckBox("fly present (blue)", true);
 	private ImageTransformEnums[] transforms = new ImageTransformEnums[] { ImageTransformEnums.SORT_SUMDIFFCOLS,
 			ImageTransformEnums.SORT_CHAN0COLS };

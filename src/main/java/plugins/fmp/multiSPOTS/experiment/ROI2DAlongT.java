@@ -75,6 +75,10 @@ public class ROI2DAlongT implements XMLPersistent {
 		return mask2D_in;
 	}
 
+	public void setMask2D_in(BooleanMask2D mask2D) {
+		mask2D_in = mask2D;
+	}
+
 //	public ROI2D getRoi_out() {
 //		return roi_out;
 //	}

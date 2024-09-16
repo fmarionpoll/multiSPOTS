@@ -25,7 +25,7 @@ public class Options extends JPanel {
 	public JCheckBox collateSeriesCheckBox = new JCheckBox("collate series", false);
 	JCheckBox padIntervalsCheckBox = new JCheckBox("pad intervals", false);
 	JCheckBox onlyAliveCheckBox = new JCheckBox("dead=empty", false);
-	// JCheckBox absoluteTimeCheckBox = new JCheckBox("absolute time", false);
+
 	JSpinner binSize = new JSpinner(new SpinnerNumberModel(1., 1., 1000., 1.));
 	JComboBoxMs binUnit = new JComboBoxMs();
 

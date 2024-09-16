@@ -42,6 +42,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 
 	private JCheckBox topSpotCheckBox = new JCheckBox("red", true);
 	private JCheckBox bottomSpotCheckBox = new JCheckBox("blue spots", true);
+	private JCheckBox compensateBackgroundCheckBox = new JCheckBox("compensate bkg", false);
 //	private JCheckBox concurrentDisplayCheckBox = new JCheckBox("concurrent display", false);
 
 	private JLabel spotsFilterLabel = new JLabel("Spots filter");
@@ -79,7 +80,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 		panel0.add(allSeriesCheckBox);
 		panel0.add(topSpotCheckBox);
 		panel0.add(bottomSpotCheckBox);
-//		panel0.add(concurrentDisplayCheckBox);
+		panel0.add(compensateBackgroundCheckBox);
 		add(panel0);
 
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -301,6 +302,7 @@ public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChan
 
 		options.detectL = topSpotCheckBox.isSelected();
 		options.detectR = bottomSpotCheckBox.isSelected();
+		options.compensateBackground = compensateBackgroundCheckBox.isSelected();
 
 		return options;
 	}

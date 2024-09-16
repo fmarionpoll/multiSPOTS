@@ -48,6 +48,7 @@ public class BuildSeriesOptions implements XMLPersistent {
 	public int flyThreshold = 60;
 	public int backgroundThreshold = 40;
 	public int overlayThreshold = 0;
+	public boolean compensateBackground = false;
 
 	public ImageTransformEnums transform01 = ImageTransformEnums.R_RGB;
 	public ImageTransformEnums transform02 = ImageTransformEnums.L1DIST_TO_1RSTCOL;
