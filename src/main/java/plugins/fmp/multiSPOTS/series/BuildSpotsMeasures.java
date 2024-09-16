@@ -141,21 +141,13 @@ public class BuildSpotsMeasures extends BuildSeries {
 				final ResultsThreshold outerResult = measureSpotOverThreshold(cursorToMeasureArea, cursorToDetectFly,
 						outerRoiT);
 				background = outerResult.sumTot_no_fly_over_threshold / outerResult.nPoints_no_fly;
-//				System.out.println("i:" + ti + " - " + background);
+				// System.out.println("i:" + ti + " - " + background);
 			}
 			final double final_background = background;
 			tasks.add(processor.submit(new Runnable() {
 				@Override
 				public void run() {
 					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
-//					final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
-//					final IcyBufferedImage transformToMeasureArea = transformFunctionSpot
-//							.getTransformedImage(sourceImage, transformOptions01);
-//					final IcyBufferedImage transformToDetectFly = transformFunctionFly.getTransformedImage(sourceImage,
-//							transformOptions02);
-//					IcyBufferedImageCursor cursorToDetectFly = new IcyBufferedImageCursor(transformToDetectFly);
-//					IcyBufferedImageCursor cursorToMeasureArea = new IcyBufferedImageCursor(transformToMeasureArea);
-
 					int ii = t - tFirst;
 					for (Spot spot : exp.spotsArray.spotsList) {
 						int i = spot.spotIndex % 2;
