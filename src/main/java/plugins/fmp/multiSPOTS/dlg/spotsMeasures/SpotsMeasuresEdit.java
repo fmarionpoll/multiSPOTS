@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import icy.roi.ROI2D;
-import icy.type.geom.Polyline2D;
 import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
@@ -33,6 +32,7 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 	private JComboBox<String> roiTypeCombo = new JComboBox<String>(
 			new String[] { "sum", "clean", "fly present/absent" });
 	private JButton cutAndInterpolateButton = new JButton("Cut & interpolate");
+	private JButton compensateButton = new JButton("Compensate (poop deposit)");
 	private String buildMedianString = "Build median";
 	private JButton buildMedianButton = new JButton(buildMedianString);
 	private JCheckBox allSeriesCheckBox = new JCheckBox("ALL (current to last)", false);
@@ -47,6 +47,7 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 
 		JPanel panel1 = new JPanel(layoutLeft);
 		panel1.add(cutAndInterpolateButton);
+		panel1.add(compensateButton);
 		panel1.add(new JLabel("Apply to ", SwingConstants.LEFT));
 		panel1.add(roiTypeCombo);
 		add(panel1);
@@ -73,6 +74,16 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 			}
 		});
 
+		compensateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+					compensate(exp);
+			}
+		});
+
+		
 		buildMedianButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -132,74 +143,39 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 			removeAndUpdate(seqKymos, spot, spot.sum_in, roiRect);
 		else if (optionSelected.contains("clean"))
 			removeAndUpdate(seqKymos, spot, spot.sum_clean, roiRect);
-//		else if (optionSelected.contains("out"))
-//			removeAndUpdate(seqKymos, spot, spot.sum_out, roiRect);
-//		else if (optionSelected.contains("diff"))
-//			removeAndUpdate(seqKymos, spot, spot.sum_diff, roiRect);
 		else if (optionSelected.contains("fly"))
 			removeAndUpdate(seqKymos, spot, spot.flyPresent, roiRect);
 	}
+	
+	void compensate(Experiment exp) {
+		SequenceKymos seqKymos = exp.seqSpotKymos;
+		ROI2D roiRect = seqKymos.seq.getSelectedROI2D();
+		if (roiRect == null)
+			return;
+
+		int t = seqKymos.seq.getFirstViewer().getPositionT();
+		Spot spot = exp.spotsArray.spotsList.get(t);
+		String optionSelected = (String) roiTypeCombo.getSelectedItem();
+		if (optionSelected.contains("sum"))
+			compensateAndUpdate(seqKymos, spot, spot.sum_in, roiRect);
+		else if (optionSelected.contains("clean"))
+			compensateAndUpdate(seqKymos, spot, spot.sum_clean, roiRect);
+		else if (optionSelected.contains("fly"))
+			compensateAndUpdate(seqKymos, spot, spot.flyPresent, roiRect);
+	}
 
 	private void removeAndUpdate(SequenceKymos seqKymos, Spot spot, SpotMeasure spotMeasure, ROI2D roi) {
-		cutAndInterpolatePointsEnclosedInSelectedRoi(spotMeasure, roi);
+		spotMeasure.cutAndInterpolatePointsEnclosedInSelectedRoi(roi);
+		spotMeasure.transferROItoLevel2D();
+	}
+	
+	private void compensateAndUpdate(SequenceKymos seqKymos, Spot spot, SpotMeasure spotMeasure, ROI2D roi) {
+		spotMeasure.compensateOffetUsingSelectedRoi(roi);
 		spotMeasure.transferROItoLevel2D();
 	}
 
-	void cutAndInterpolatePointsEnclosedInSelectedRoi(SpotMeasure spotMeasure, ROI2D roi) {
-		Polyline2D polyline = spotMeasure.getRoi().getPolyline2D();
-		int first_pt_inside = -1;
-		int last_pt_inside = -1;
-		for (int i = 0; i < polyline.npoints; i++) {
-			boolean isInside = roi.contains(polyline.xpoints[i], polyline.ypoints[i]);
-			if (first_pt_inside < 0) {
-				if (isInside)
-					first_pt_inside = i;
-				continue;
-			}
 
-			if (isInside) {
-				last_pt_inside = i;
-				continue;
-			} else
-				last_pt_inside = i - 1;
-
-			if (first_pt_inside >= 0 && last_pt_inside >= 0) {
-				extrapolateBetweenLimits(polyline, first_pt_inside, last_pt_inside);
-				first_pt_inside = -1;
-				last_pt_inside = -1;
-			}
-		}
-
-		if (first_pt_inside >= 0 && last_pt_inside < 0) {
-			extrapolateBetweenLimits(polyline, first_pt_inside, last_pt_inside);
-		}
-		spotMeasure.getRoi().setPolyline2D(polyline);
-	}
-
-	void extrapolateBetweenLimits(Polyline2D polyline, int first_pt_inside, int last_pt_inside) {
-		int first = first_pt_inside - 1;
-		if (first <= 0)
-			first = 0;
-		int last = last_pt_inside + 1;
-		if (last >= polyline.npoints)
-			last = polyline.npoints - 1;
-		if (last == 0)
-			last = first;
-		double startY = polyline.ypoints[first];
-		if (first == 0)
-			startY = 512.;
-		double startX = polyline.xpoints[first];
-		int npoints = last_pt_inside - first_pt_inside + 1;
-		double deltaX = (polyline.xpoints[last] - polyline.xpoints[first]) / npoints;
-		double deltaY = (polyline.ypoints[last] - startY) / npoints;
-
-		int k = 0;
-		for (int j = first_pt_inside; j < last_pt_inside + 1; j++, k++) {
-			polyline.xpoints[j] = startX + deltaX * k;
-			polyline.ypoints[j] = startY + deltaY * k;
-		}
-	}
-
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (StringUtil.equals("thread_ended", evt.getPropertyName())) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import icy.roi.ROI2D;
 import icy.type.geom.Polyline2D;
 import icy.util.StringUtil;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
@@ -282,6 +283,73 @@ public class SpotMeasure {
 				iarraycircular = 0;
 		}
 	}
+	
+	public void compensateOffetUsingSelectedRoi( ROI2D roi) {
+		int offset = (int) roi.getBounds().getHeight();
+		int left = (int) roi.getBounds().getX();
+		
+		Polyline2D polyline = getRoi().getPolyline2D();
+		for (int i = left; i < polyline.npoints; i++) {
+			polyline.ypoints[i] -= offset;
+		}
+		getRoi().setPolyline2D(polyline);
+	}
+	
+	public void cutAndInterpolatePointsEnclosedInSelectedRoi( ROI2D roi) {
+		Polyline2D polyline = getRoi().getPolyline2D();
+		int first_pt_inside = -1;
+		int last_pt_inside = -1;
+		for (int i = 0; i < polyline.npoints; i++) {
+			boolean isInside = roi.contains(polyline.xpoints[i], polyline.ypoints[i]);
+			if (first_pt_inside < 0) {
+				if (isInside)
+					first_pt_inside = i;
+				continue;
+			}
+
+			if (isInside) {
+				last_pt_inside = i;
+				continue;
+			} else
+				last_pt_inside = i - 1;
+
+			if (first_pt_inside >= 0 && last_pt_inside >= 0) {
+				extrapolateBetweenLimits(polyline, first_pt_inside, last_pt_inside);
+				first_pt_inside = -1;
+				last_pt_inside = -1;
+			}
+		}
+
+		if (first_pt_inside >= 0 && last_pt_inside < 0) {
+			extrapolateBetweenLimits(polyline, first_pt_inside, last_pt_inside);
+		}
+		getRoi().setPolyline2D(polyline);
+	}
+	
+	void extrapolateBetweenLimits(Polyline2D polyline, int first_pt_inside, int last_pt_inside) {
+		int first = first_pt_inside - 1;
+		if (first <= 0)
+			first = 0;
+		int last = last_pt_inside + 1;
+		if (last >= polyline.npoints)
+			last = polyline.npoints - 1;
+		if (last == 0)
+			last = first;
+		double startY = polyline.ypoints[first];
+		if (first == 0)
+			startY = 512.;
+		double startX = polyline.xpoints[first];
+		int npoints = last_pt_inside - first_pt_inside + 1;
+		double deltaX = (polyline.xpoints[last] - polyline.xpoints[first]) / npoints;
+		double deltaY = (polyline.ypoints[last] - startY) / npoints;
+
+		int k = 0;
+		for (int j = first_pt_inside; j < last_pt_inside + 1; j++, k++) {
+			polyline.xpoints[j] = startX + deltaX * k;
+			polyline.ypoints[j] = startY + deltaY * k;
+		}
+	}
+
 
 	// ----------------------------------------------------------------------
 
