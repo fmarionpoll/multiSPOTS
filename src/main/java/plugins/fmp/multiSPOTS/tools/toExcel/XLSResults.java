@@ -87,47 +87,67 @@ public class XLSResults {
 			valuesOut[i] = sourceRow.valuesOut[i];
 	}
 
-	public List<Double> relativeToT(int t) {
+	public List<Double> relativeToT0() {
 		if (dataValues == null || dataValues.size() < 1)
 			return null;
-
-		double value0 = dataValues.get(t);
-		if (value0 == 0.) {
-			for (int index = 0; index < dataValues.size(); index++) {
-				if (dataValues.get(index) > 0) {
-					value0 = dataValues.get(index);
-					break;
-				}
-			}
+		
+		double value0 = dataValues.get(0);
+		if (value0 >0 && value0 > dataValues.get(1) && dataValues.get(1) > dataValues.get(2))
+			relativeToValue(value0);
+		else {
+			value0 = median(0, 3);
+			double value1 = median(0, 5);
+			if(value0 > 0 && value0 > value1)
+				relativeToValue(value0);
+			else if (value1 > 0)
+				relativeToValue(value1);
 		}
-
+		return dataValues;
+	}
+	
+	private void relativeToValue(double value0) {
 		for (int index = 0; index < dataValues.size(); index++) {
 			double value = dataValues.get(index);
 			dataValues.set(index, ((value0 - value) / value0));
 		}
-		return dataValues;
 	}
-
-	public List<Double> relativeToMedianT(int t, int npoints) {
-		if (dataValues == null || dataValues.size() < 1)
-			return null;
-
-		double value0 = median(t, npoints);
-		if (value0 == 0.) {
-			for (int index = 0; index < dataValues.size(); index++) {
-				if (dataValues.get(index) > 0) {
-					value0 = dataValues.get(index);
-					break;
-				}
-			}
-		}
-
-		for (int index = 0; index < dataValues.size(); index++) {
-			double value = dataValues.get(index);
-			dataValues.set(index, ((value0 - value) / value0));
-		}
-		return dataValues;
-	}
+	
+//	public List<Double> relativeToT(int t) {
+//		if (dataValues == null || dataValues.size() < 1)
+//			return null;
+//
+//		double value0 = dataValues.get(t);
+//		if (value0 == 0.) {
+//			for (int index = 0; index < dataValues.size(); index++) {
+//				if (dataValues.get(index) > 0) {
+//					value0 = dataValues.get(index);
+//					break;
+//				}
+//			}
+//		}
+//
+//		relativeToValue(value0);
+//		return dataValues;
+//	}
+//	
+//
+//	public List<Double> relativeToMedianT(int t, int npoints) {
+//		if (dataValues == null || dataValues.size() < 1)
+//			return null;
+//
+//		double value0 = median(t, npoints);
+//		if (value0 == 0.) {
+//			for (int index = 0; index < dataValues.size(); index++) {
+//				if (dataValues.get(index) > 0) {
+//					value0 = dataValues.get(index);
+//					break;
+//				}
+//			}
+//		}
+//
+//		relativeToValue(value0);
+//		return dataValues;
+//	}
 
 	private double median(int t, int npoints) {
 		double[] numArray = new double[npoints];

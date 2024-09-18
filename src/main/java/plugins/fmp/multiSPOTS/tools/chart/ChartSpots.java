@@ -94,12 +94,16 @@ public class ChartSpots extends IcyFrame {
 		}
 
 		NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
-		if (xlsExportOptions.relativeToT0) {
+		if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
 			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
-		} else if (xlsExportOptions.relativeToMedianT0) {
-			yAxis.setLabel("ratio (t-t0m)/t0m of " + yAxis.getLabel());
+			yAxis.setAutoRange(false);
+			yAxis.setRange(-0.2, 1.2);
 		}
-		yAxis.setAutoRangeIncludesZero(false);
+		else {
+			yAxis.setAutoRange(true);
+			yAxis.setAutoRangeIncludesZero(false);
+		}
+		
 
 		final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
 		Paint[] color = ChartColor.createDefaultPaintArray();
