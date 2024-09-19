@@ -13,8 +13,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
@@ -39,11 +37,11 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 			EnumXLSExportType.AREA_SUMCLEAN // , EnumXLSExportType.AREA_DIFF
 	};
 	private JComboBox<EnumXLSExportType> exportTypeComboBox = new JComboBox<EnumXLSExportType>(measures);
-	private JCheckBox relativeToCheckbox = new JCheckBox("relative to", false);
-	private JRadioButton t0Button = new JRadioButton("t0", false);
-	private JRadioButton medianT0Button = new JRadioButton("relative to median of first", true);
-	private JSpinner medianT0FromNPointsSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 50, 1));
-	private JLabel medianT0Legend = new JLabel("points");
+	private JCheckBox relativeToCheckbox = new JCheckBox("relative to t0", false);
+//	private JRadioButton t0Button = new JRadioButton("t0", false);
+//	private JRadioButton medianT0Button = new JRadioButton("relative to median of first", true);
+//	private JSpinner medianT0FromNPointsSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 50, 1));
+//	private JLabel medianT0Legend = new JLabel("points");
 
 	private JRadioButton displayAllButton = new JRadioButton("all cages");
 	private JRadioButton displaySelectedButton = new JRadioButton("cage selected");
@@ -67,10 +65,10 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 
 		JPanel panel02 = new JPanel(layout);
 		panel02.add(relativeToCheckbox);
-		panel02.add(t0Button);
-		panel02.add(medianT0Button);
-		panel02.add(medianT0FromNPointsSpinner);
-		panel02.add(medianT0Legend);
+//		panel02.add(t0Button);
+//		panel02.add(medianT0Button);
+//		panel02.add(medianT0FromNPointsSpinner);
+//		panel02.add(medianT0Legend);
 		add(panel02);
 
 		JPanel panel03 = new JPanel(layout);
@@ -81,11 +79,11 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		group1.add(displayAllButton);
 		group1.add(displaySelectedButton);
 		displayAllButton.setSelected(true);
-		enableRelativeOptions(relativeToCheckbox.isSelected());
 
-		ButtonGroup group2 = new ButtonGroup();
-		group2.add(t0Button);
-		group2.add(medianT0Button);
+//		enableRelativeOptions(relativeToCheckbox.isSelected());
+//		ButtonGroup group2 = new ButtonGroup();
+//		group2.add(t0Button);
+//		group2.add(medianT0Button);
 
 		exportTypeComboBox.setSelectedIndex(1);
 		defineActionListeners();
@@ -111,29 +109,32 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 			}
 		});
 
-		t0Button.addActionListener(new ActionListener() {
+//		t0Button.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(final ActionEvent e) {
+//				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+//				if (exp != null)
+//					displayGraphsPanels(exp);
+//			}
+//		});
+
+		relativeToCheckbox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
+//				enableRelativeOptions(relativeToCheckbox.isSelected());
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 					displayGraphsPanels(exp);
 			}
 		});
-
-		relativeToCheckbox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				enableRelativeOptions(relativeToCheckbox.isSelected());
-			}
-		});
 	}
 
-	private void enableRelativeOptions(boolean bRelative) {
-		t0Button.setEnabled(bRelative);
-		medianT0Button.setEnabled(bRelative);
-		medianT0FromNPointsSpinner.setEnabled(bRelative);
-		medianT0Legend.setEnabled(bRelative);
-	}
+//	private void enableRelativeOptions(boolean bRelative) {
+//		t0Button.setEnabled(bRelative);
+//		medianT0Button.setEnabled(bRelative);
+//		medianT0FromNPointsSpinner.setEnabled(bRelative);
+//		medianT0Legend.setEnabled(bRelative);
+//	}
 
 	private Rectangle getInitialUpperLeftPosition(Experiment exp) {
 		Rectangle rectv = new Rectangle(50, 500, 10, 10);
@@ -171,9 +172,9 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		xlsExportOptions.buildExcelStepMs = 60000;
 
 		boolean bRelative = relativeToCheckbox.isSelected();
-		xlsExportOptions.relativeToT0 = bRelative & t0Button.isSelected();
-		xlsExportOptions.relativeToMedianT0 = bRelative & medianT0Button.isSelected();
-		xlsExportOptions.medianT0FromNPoints = (int) medianT0FromNPointsSpinner.getValue();
+		xlsExportOptions.relativeToT0 = bRelative; // & t0Button.isSelected();
+//		xlsExportOptions.relativeToMedianT0 = false; // bRelative & medianT0Button.isSelected();
+//		xlsExportOptions.medianT0FromNPoints = 3; //(int) medianT0FromNPointsSpinner.getValue();
 
 		xlsExportOptions.subtractEvaporation = false;
 		xlsExportOptions.exportType = exportType;
