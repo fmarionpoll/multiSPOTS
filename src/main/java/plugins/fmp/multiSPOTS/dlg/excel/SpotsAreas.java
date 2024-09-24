@@ -23,7 +23,7 @@ public class SpotsAreas extends JPanel {
 
 	JCheckBox sumCheckBox = new JCheckBox("sum", true);
 	JCheckBox nPixelsCheckBox = new JCheckBox("n pixels", true);
-	JCheckBox t0CheckBox = new JCheckBox("(Value(t0)-Value(t))/Value(t0)", true);
+	JCheckBox t0CheckBox = new JCheckBox("(t0-t)/t0", true);
 
 	JCheckBox lrPICheckBox = new JCheckBox("top+bottom & pref index", false);
 	JLabel lrPILabel = new JLabel("compute PI only if top+bottom > ");
