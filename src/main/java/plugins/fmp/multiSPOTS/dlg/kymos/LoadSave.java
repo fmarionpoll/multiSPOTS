@@ -72,7 +72,8 @@ public class LoadSave extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					String path = exp.getResultsDirectory();
+					// String path = exp.getResultsDirectory();
+					String path = exp.getKymosBinFullDirectory();
 					saveKymographFiles(path);
 					firePropertyChange("KYMOS_SAVE", false, true);
 				}
