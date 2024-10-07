@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -54,6 +53,21 @@ public class SequenceCamData {
 
 	long timeFirstImageInMs = 0;
 	int indexTimePattern = -1;
+	// _________________________________________________
+
+	public long camImageFirst_ms = -1;
+	public long camImageLast_ms = -1;
+	public long camImageBin_ms = -1;
+	public long[] camImages_ms = null;
+
+	public long indexFrameFirst = 0;
+	public long indexFrameLast = 0;
+	public long frameDelta = 1;
+	public long binFirst_ms = 0;
+	public long binLast_ms = 0;
+	public long binDuration_ms = 60000;
+
+	// _________________________________________________
 
 	FileNameTimePattern[] timePatternArray = new FileNameTimePattern[] { new FileNameTimePattern(),
 			new FileNameTimePattern("yyyy-MM-dd_HH-mm-ss", "\\d{4}-\\d{2}-\\d{2}_\\d{2}\\-\\d{2}\\-\\d{2}"),

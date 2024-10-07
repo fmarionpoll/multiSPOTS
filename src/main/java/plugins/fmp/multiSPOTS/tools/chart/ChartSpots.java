@@ -98,12 +98,10 @@ public class ChartSpots extends IcyFrame {
 			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
 			yAxis.setAutoRange(false);
 			yAxis.setRange(-0.2, 1.2);
-		}
-		else {
+		} else {
 			yAxis.setAutoRange(true);
 			yAxis.setAutoRangeIncludesZero(false);
 		}
-		
 
 		final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
 		Paint[] color = ChartColor.createDefaultPaintArray();
@@ -253,7 +251,7 @@ public class ChartSpots extends IcyFrame {
 	private void selectT(Experiment exp, XLSExportOptions xlsExportOptions, Spot spot) {
 		Viewer v = exp.seqCamData.seq.getFirstViewer();
 		if (v != null && spot != null && spot.spot_CamData_T > 0) {
-			int ii = (int) (spot.spot_CamData_T * xlsExportOptions.buildExcelStepMs / exp.binDuration_ms);
+			int ii = (int) (spot.spot_CamData_T * xlsExportOptions.buildExcelStepMs / exp.seqCamData.binDuration_ms);
 			v.setPositionT(ii);
 		}
 	}

@@ -45,20 +45,6 @@ public class Experiment {
 
 	// __________________________________________________
 
-	public long camImageFirst_ms = -1;
-	public long camImageLast_ms = -1;
-	public long camImageBin_ms = -1;
-	public long[] camImages_ms = null;
-
-	public long frameFirst = 0;
-	public long frameLast = 0;
-	public long frameDelta = 1;
-	public long binFirst_ms = 0;
-	public long binLast_ms = 0;
-	public long binDuration_ms = 60000;
-
-	// _________________________________________________
-
 	private String field_boxID = new String("..");
 	private String field_experiment = new String("..");
 	private String field_comment1 = new String("..");
@@ -83,6 +69,7 @@ public class Experiment {
 	private final static String ID_FRAMEFIRST = "indexFrameFirst";
 	private final static String ID_FRAMELAST = "indexFrameLast";
 	private final static String ID_FRAMEDELTA = "indexFrameDelta";
+
 	private final static String ID_TIMEFIRSTIMAGEMS = "fileTimeImageFirstMs";
 	private final static String ID_TIMELASTIMAGEMS = "fileTimeImageLastMs";
 	private final static String ID_FIRSTKYMOCOLMS = "firstKymoColMs";
@@ -340,7 +327,8 @@ public class Experiment {
 	}
 
 	public void getFileIntervalsFromSeqCamData() {
-		if (seqCamData != null && (camImageFirst_ms < 0 || camImageLast_ms < 0 || camImageBin_ms < 0)) {
+		if (seqCamData != null && (seqCamData.camImageFirst_ms < 0 || seqCamData.camImageLast_ms < 0
+				|| seqCamData.camImageBin_ms < 0)) {
 			loadFileIntervalsFromSeqCamData();
 		}
 	}
@@ -351,11 +339,12 @@ public class Experiment {
 			firstImage_FileTime = seqCamData.getFileTimeFromStructuredName(0);
 			lastImage_FileTime = seqCamData.getFileTimeFromStructuredName(seqCamData.nTotalFrames - 1);
 			if (firstImage_FileTime != null && lastImage_FileTime != null) {
-				camImageFirst_ms = firstImage_FileTime.toMillis();
-				camImageLast_ms = lastImage_FileTime.toMillis();
+				seqCamData.camImageFirst_ms = firstImage_FileTime.toMillis();
+				seqCamData.camImageLast_ms = lastImage_FileTime.toMillis();
 				if (seqCamData.nTotalFrames > 1)
-					camImageBin_ms = (camImageLast_ms - camImageFirst_ms) / (seqCamData.nTotalFrames - 1);
-				if (camImageBin_ms == 0)
+					seqCamData.camImageBin_ms = (seqCamData.camImageLast_ms - seqCamData.camImageFirst_ms)
+							/ (seqCamData.nTotalFrames - 1);
+				if (seqCamData.camImageBin_ms == 0)
 					System.out.println("Experiment:loadFileIntervalsFromSeqCamData() error / file interval size");
 			} else {
 				System.out.println("Experiment:loadFileIntervalsFromSeqCamData() error / file intervals of "
@@ -365,16 +354,16 @@ public class Experiment {
 	}
 
 	public long[] build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList() {
-		camImages_ms = new long[seqCamData.nTotalFrames];
+		seqCamData.camImages_ms = new long[seqCamData.nTotalFrames];
 
 		FileTime firstImage_FileTime = seqCamData.getFileTimeFromStructuredName(0);
 		long firstImage_ms = firstImage_FileTime.toMillis();
 		for (int i = 0; i < seqCamData.nTotalFrames; i++) {
 			FileTime image_FileTime = seqCamData.getFileTimeFromStructuredName(i);
 			long image_ms = image_FileTime.toMillis() - firstImage_ms;
-			camImages_ms[i] = image_ms;
+			seqCamData.camImages_ms[i] = image_ms;
 		}
-		return camImages_ms;
+		return seqCamData.camImages_ms;
 	}
 
 	public int findNearestIntervalWithBinarySearch(long value, int low, int high) {
@@ -382,20 +371,22 @@ public class Experiment {
 		if (high - low > 1) {
 			int mid = (low + high) / 2;
 
-			if (camImages_ms[mid] > value)
+			if (seqCamData.camImages_ms[mid] > value)
 				result = findNearestIntervalWithBinarySearch(value, low, mid);
-			else if (camImages_ms[mid] < value)
+			else if (seqCamData.camImages_ms[mid] < value)
 				result = findNearestIntervalWithBinarySearch(value, mid, high);
 			else
 				result = mid;
 		} else
-			result = Math.abs(value - camImages_ms[low]) < Math.abs(value - camImages_ms[high]) ? low : high;
+			result = Math.abs(value - seqCamData.camImages_ms[low]) < Math.abs(value - seqCamData.camImages_ms[high])
+					? low
+					: high;
 
 		return result;
 	}
 
 	public int getClosestInterval(int icentral, long valueToCompare) {
-		long deltacentral = Math.abs(valueToCompare - camImages_ms[icentral]);
+		long deltacentral = Math.abs(valueToCompare - seqCamData.camImages_ms[icentral]);
 		if (deltacentral == 0)
 			return icentral;
 
@@ -405,12 +396,12 @@ public class Experiment {
 			ilow = 0;
 			ihigh = 2;
 		}
-		if (icentral >= camImages_ms.length - 1) {
-			ihigh = camImages_ms.length - 1;
+		if (icentral >= seqCamData.camImages_ms.length - 1) {
+			ihigh = seqCamData.camImages_ms.length - 1;
 			ilow = ihigh - 2;
 		}
-		long deltalow = Math.abs(valueToCompare - camImages_ms[ilow]);
-		long deltahigh = Math.abs(valueToCompare - camImages_ms[ihigh]);
+		long deltalow = Math.abs(valueToCompare - seqCamData.camImages_ms[ilow]);
+		long deltahigh = Math.abs(valueToCompare - seqCamData.camImages_ms[ihigh]);
 
 		int ismallest = icentral;
 		long deltasmallest = deltacentral;
@@ -429,7 +420,7 @@ public class Experiment {
 
 	public String getBinNameFromKymoFrameStep() {
 
-		return BIN + binDuration_ms / 1000;
+		return BIN + seqCamData.binDuration_ms / 1000;
 	}
 
 	public String getDirectoryToSaveResults() {
@@ -462,17 +453,17 @@ public class Experiment {
 				return false;
 
 			XMLUtil.setElementValue(node, ID_VERSION, ID_VERSIONNUM);
-			XMLUtil.setElementLongValue(node, ID_TIMEFIRSTIMAGEMS, camImageFirst_ms);
-			XMLUtil.setElementLongValue(node, ID_TIMELASTIMAGEMS, camImageLast_ms);
+			XMLUtil.setElementLongValue(node, ID_TIMEFIRSTIMAGEMS, seqCamData.camImageFirst_ms);
+			XMLUtil.setElementLongValue(node, ID_TIMELASTIMAGEMS, seqCamData.camImageLast_ms);
 
-			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, frameFirst);
-			XMLUtil.setElementLongValue(node, ID_BINT0, frameFirst);
-			XMLUtil.setElementLongValue(node, ID_FRAMELAST, frameLast);
-			XMLUtil.setElementLongValue(node, ID_FRAMEDELTA, frameDelta);
+			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, seqCamData.indexFrameFirst);
+			XMLUtil.setElementLongValue(node, ID_BINT0, seqCamData.indexFrameFirst);
+			XMLUtil.setElementLongValue(node, ID_FRAMELAST, seqCamData.indexFrameLast);
+			XMLUtil.setElementLongValue(node, ID_FRAMEDELTA, seqCamData.frameDelta);
 
-			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, binFirst_ms);
-			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, binLast_ms);
-			XMLUtil.setElementLongValue(node, ID_BINKYMOCOLMS, binDuration_ms);
+			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, seqCamData.binFirst_ms);
+			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, seqCamData.binLast_ms);
+			XMLUtil.setElementLongValue(node, ID_BINKYMOCOLMS, seqCamData.binDuration_ms);
 
 			XMLUtil.setElementValue(node, ID_BOXID, field_boxID);
 			XMLUtil.setElementValue(node, ID_EXPERIMENT, field_experiment);
@@ -921,7 +912,7 @@ public class Experiment {
 		int step = -1;
 		if (resultsPath.contains(BIN)) {
 			if (resultsPath.length() < (BIN.length() + 1))
-				step = (int) binDuration_ms;
+				step = (int) seqCamData.binDuration_ms;
 			else
 				step = Integer.valueOf(resultsPath.substring(BIN.length())) * 1000;
 		}
@@ -1042,23 +1033,23 @@ public class Experiment {
 		if (!version.equals(ID_VERSIONNUM))
 			return false;
 
-		camImageFirst_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGEMS, 0);
-		camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGEMS, 0);
-		if (camImageLast_ms <= 0) {
-			camImageFirst_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGE, 0) * 60000;
-			camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0) * 60000;
+		seqCamData.camImageFirst_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGEMS, 0);
+		seqCamData.camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGEMS, 0);
+		if (seqCamData.camImageLast_ms <= 0) {
+			seqCamData.camImageFirst_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGE, 0) * 60000;
+			seqCamData.camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0) * 60000;
 		}
 
-		frameFirst = XMLUtil.getElementLongValue(node, ID_FRAMEFIRST, -1);
-		if (frameFirst < 0)
-			frameFirst = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
-		if (frameFirst < 0)
-			frameFirst = 0;
-		frameLast = XMLUtil.getElementLongValue(node, ID_FRAMELAST, -1);
-		frameDelta = XMLUtil.getElementLongValue(node, ID_FRAMEDELTA, 1);
-		binFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1);
-		binLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);
-		binDuration_ms = XMLUtil.getElementLongValue(node, ID_BINKYMOCOLMS, -1);
+		seqCamData.indexFrameFirst = XMLUtil.getElementLongValue(node, ID_FRAMEFIRST, -1);
+		if (seqCamData.indexFrameFirst < 0)
+			seqCamData.indexFrameFirst = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
+		if (seqCamData.indexFrameFirst < 0)
+			seqCamData.indexFrameFirst = 0;
+		seqCamData.indexFrameLast = XMLUtil.getElementLongValue(node, ID_FRAMELAST, -1);
+		seqCamData.frameDelta = XMLUtil.getElementLongValue(node, ID_FRAMEDELTA, 1);
+		seqCamData.binFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1);
+		seqCamData.binLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);
+		seqCamData.binDuration_ms = XMLUtil.getElementLongValue(node, ID_BINKYMOCOLMS, -1);
 
 		ugly_checkOffsetValues();
 
@@ -1076,17 +1067,17 @@ public class Experiment {
 	}
 
 	private void ugly_checkOffsetValues() {
-		if (camImageFirst_ms < 0)
-			camImageFirst_ms = 0;
-		if (camImageLast_ms < 0)
-			camImageLast_ms = 0;
-		if (binFirst_ms < 0)
-			binFirst_ms = 0;
-		if (binLast_ms < 0)
-			binLast_ms = 0;
+		if (seqCamData.camImageFirst_ms < 0)
+			seqCamData.camImageFirst_ms = 0;
+		if (seqCamData.camImageLast_ms < 0)
+			seqCamData.camImageLast_ms = 0;
+		if (seqCamData.binFirst_ms < 0)
+			seqCamData.binFirst_ms = 0;
+		if (seqCamData.binLast_ms < 0)
+			seqCamData.binLast_ms = 0;
 
-		if (binDuration_ms < 0)
-			binDuration_ms = 60000;
+		if (seqCamData.binDuration_ms < 0)
+			seqCamData.binDuration_ms = 60000;
 	}
 
 	private void addSpotsValues(EnumXLSColumnHeader fieldEnumCode, List<String> textList) {

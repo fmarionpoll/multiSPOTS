@@ -15,7 +15,6 @@ import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.FlyPosition;
 import plugins.fmp.multiSPOTS.experiment.FlyPositions;
-
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
@@ -120,9 +119,10 @@ public class XLSExportMoveResults extends XLSExport {
 			expAll.lastImage_FileTime = expi.lastImage_FileTime;
 			expi = expi.chainToNextExperiment;
 		}
-		expAll.camImageFirst_ms = expAll.firstImage_FileTime.toMillis();
-		expAll.camImageLast_ms = expAll.lastImage_FileTime.toMillis();
-		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms) / options.buildExcelStepMs + 1);
+		expAll.seqCamData.camImageFirst_ms = expAll.firstImage_FileTime.toMillis();
+		expAll.seqCamData.camImageLast_ms = expAll.lastImage_FileTime.toMillis();
+		int nFrames = (int) ((expAll.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms)
+				/ options.buildExcelStepMs + 1);
 		int ncages = expAll.cages.cagesList.size();
 		rowsForOneExp = new ArrayList<FlyPositions>(ncages);
 		for (int i = 0; i < ncages; i++) {
@@ -139,7 +139,8 @@ public class XLSExportMoveResults extends XLSExport {
 		Experiment expi = exp.getFirstChainedExperiment(true);
 
 		while (expi != null) {
-			int len = 1 + (int) (expi.camImageLast_ms - expi.camImageFirst_ms) / options.buildExcelStepMs;
+			int len = 1 + (int) (expi.seqCamData.camImageLast_ms - expi.seqCamData.camImageFirst_ms)
+					/ options.buildExcelStepMs;
 			if (len == 0)
 				continue;
 			double pixelsize = 32. / expi.capillaries.capillariesList.get(0).pixels;
@@ -154,27 +155,27 @@ public class XLSExportMoveResults extends XLSExport {
 
 					switch (xlsOption) {
 					case DISTANCE:
-						results.excelComputeDistanceBetweenPoints(cage.flyPositions, (int) expi.camImageBin_ms,
-								options.buildExcelStepMs);
+						results.excelComputeDistanceBetweenPoints(cage.flyPositions,
+								(int) expi.seqCamData.camImageBin_ms, options.buildExcelStepMs);
 						break;
 					case ISALIVE:
-						results.excelComputeIsAlive(cage.flyPositions, (int) expi.camImageBin_ms,
+						results.excelComputeIsAlive(cage.flyPositions, (int) expi.seqCamData.camImageBin_ms,
 								options.buildExcelStepMs);
 						break;
 					case SLEEP:
-						results.excelComputeSleep(cage.flyPositions, (int) expi.camImageBin_ms,
+						results.excelComputeSleep(cage.flyPositions, (int) expi.seqCamData.camImageBin_ms,
 								options.buildExcelStepMs);
 						break;
 					case XYTOPCAGE:
 						results.excelComputeNewPointsOrigin(cage.getCenterTopCage(), cage.flyPositions,
-								(int) expi.camImageBin_ms, options.buildExcelStepMs);
+								(int) expi.seqCamData.camImageBin_ms, options.buildExcelStepMs);
 						break;
 					case XYTIPCAPS:
 						results.excelComputeNewPointsOrigin(cage.getCenterTipCapillaries(exp.capillaries),
-								cage.flyPositions, (int) expi.camImageBin_ms, options.buildExcelStepMs);
+								cage.flyPositions, (int) expi.seqCamData.camImageBin_ms, options.buildExcelStepMs);
 						break;
 					case ELLIPSEAXES:
-						results.excelComputeEllipse(cage.flyPositions, (int) expi.camImageBin_ms,
+						results.excelComputeEllipse(cage.flyPositions, (int) expi.seqCamData.camImageBin_ms,
 								options.buildExcelStepMs);
 						break;
 					case XYIMAGE:
@@ -206,23 +207,24 @@ public class XLSExportMoveResults extends XLSExport {
 	}
 
 	private void addMoveResultsTo_rowsForOneExp(Experiment expi, List<FlyPositions> resultsArrayList) {
-		long start_Ms = expi.camImageFirst_ms - expAll.camImageFirst_ms;
-		long end_Ms = expi.camImageLast_ms - expAll.camImageFirst_ms;
+		long start_Ms = expi.seqCamData.camImageFirst_ms - expAll.seqCamData.camImageFirst_ms;
+		long end_Ms = expi.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms;
 		if (options.fixedIntervals) {
 			if (start_Ms < options.startAll_Ms)
 				start_Ms = options.startAll_Ms;
-			if (start_Ms > expi.camImageLast_ms)
+			if (start_Ms > expi.seqCamData.camImageLast_ms)
 				return;
 
 			if (end_Ms > options.endAll_Ms)
 				end_Ms = options.endAll_Ms;
-			if (end_Ms > expi.camImageFirst_ms)
+			if (end_Ms > expi.seqCamData.camImageFirst_ms)
 				return;
 		}
 
-		final long from_first_Ms = start_Ms + expAll.camImageFirst_ms;
-		final long from_lastMs = end_Ms + expAll.camImageFirst_ms;
-		final int to_first_index = (int) (from_first_Ms - expAll.camImageFirst_ms) / options.buildExcelStepMs;
+		final long from_first_Ms = start_Ms + expAll.seqCamData.camImageFirst_ms;
+		final long from_lastMs = end_Ms + expAll.seqCamData.camImageFirst_ms;
+		final int to_first_index = (int) (from_first_Ms - expAll.seqCamData.camImageFirst_ms)
+				/ options.buildExcelStepMs;
 		final int to_nvalues = (int) ((from_lastMs - from_first_Ms) / options.buildExcelStepMs) + 1;
 
 		for (FlyPositions rowFlyPositions : rowsForOneExp) {
@@ -236,7 +238,7 @@ public class XLSExportMoveResults extends XLSExport {
 					if (from_i >= results.flyPositionList.size())
 						break;
 					FlyPosition aVal = results.flyPositionList.get(from_i);
-					int to_i = (int) ((fromTime - expAll.camImageFirst_ms) / options.buildExcelStepMs);
+					int to_i = (int) ((fromTime - expAll.seqCamData.camImageFirst_ms) / options.buildExcelStepMs);
 					if (to_i >= rowFlyPositions.flyPositionList.size())
 						break;
 					if (to_i < 0)
@@ -299,7 +301,8 @@ public class XLSExportMoveResults extends XLSExport {
 					expi = expi.chainToNextExperiment;
 				}
 				long lastIntervalFlyAlive_Ms = expi.cages.getLastIntervalFlyAlive(cagenumber) * expi.cages.detectBin_Ms;
-				long lastMinuteAlive = lastIntervalFlyAlive_Ms + expi.camImageFirst_ms - expAll.camImageFirst_ms;
+				long lastMinuteAlive = lastIntervalFlyAlive_Ms + expi.seqCamData.camImageFirst_ms
+						- expAll.seqCamData.camImageFirst_ms;
 				ilastalive = (int) (lastMinuteAlive / options.buildExcelStepMs);
 			}
 			for (FlyPositions row : rowsForOneExp) {
@@ -337,7 +340,7 @@ public class XLSExportMoveResults extends XLSExport {
 			if (row.nflies < 1)
 				continue;
 
-			long last = expAll.camImageLast_ms - expAll.camImageFirst_ms;
+			long last = expAll.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms;
 			if (options.fixedIntervals)
 				last = options.endAll_Ms - options.startAll_Ms;
 

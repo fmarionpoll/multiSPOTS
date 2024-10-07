@@ -19,14 +19,12 @@ import icy.sequence.Sequence;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import icy.type.DataType;
-
 import loci.formats.FormatException;
-
-import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
+import plugins.fmp.multiSPOTS.experiment.Spot;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
 
 public class BuildSpotsKymos extends BuildSeries {
@@ -56,15 +54,15 @@ public class BuildSpotsKymos extends BuildSeries {
 
 	private void getTimeLimitsOfSeqCamData(Experiment exp) {
 		exp.getFileIntervalsFromSeqCamData();
-		exp.binDuration_ms = options.t_Ms_BinDuration;
+		exp.seqCamData.binDuration_ms = options.t_Ms_BinDuration;
 		if (options.isFrameFixed) {
-			exp.binFirst_ms = options.t_Ms_First;
-			exp.binLast_ms = options.t_Ms_Last;
-			if (exp.binLast_ms + exp.camImageFirst_ms > exp.camImageLast_ms)
-				exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
+			exp.seqCamData.binFirst_ms = options.t_Ms_First;
+			exp.seqCamData.binLast_ms = options.t_Ms_Last;
+			if (exp.seqCamData.binLast_ms + exp.seqCamData.camImageFirst_ms > exp.seqCamData.camImageLast_ms)
+				exp.seqCamData.binLast_ms = exp.seqCamData.camImageLast_ms - exp.seqCamData.camImageFirst_ms;
 		} else {
-			exp.binFirst_ms = 0;
-			exp.binLast_ms = exp.camImageLast_ms - exp.camImageFirst_ms;
+			exp.seqCamData.binFirst_ms = 0;
+			exp.seqCamData.binLast_ms = exp.seqCamData.camImageLast_ms - exp.seqCamData.camImageFirst_ms;
 		}
 	}
 
@@ -120,9 +118,9 @@ public class BuildSpotsKymos extends BuildSeries {
 		threadRunning = true;
 		stopFlag = false;
 
-		final int tFirst = (int) exp.frameFirst;
+		final int tFirst = (int) exp.seqCamData.indexFrameFirst;
 		final int tLast = exp.seqCamData.nTotalFrames;
-		final int tDelta = (int) exp.frameDelta;
+		final int tDelta = (int) exp.seqCamData.frameDelta;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
@@ -151,7 +149,7 @@ public class BuildSpotsKymos extends BuildSeries {
 					int sizeC = sourceImage.getSizeC();
 					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 					for (Spot spot : exp.spotsArray.spotsList) {
-						analyzeImageWithSpot(cursorSource, spot, t-tFirst, sizeC);
+						analyzeImageWithSpot(cursorSource, spot, t - tFirst, sizeC);
 					}
 				}
 			}));
@@ -232,7 +230,7 @@ public class BuildSpotsKymos extends BuildSeries {
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 //		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.frameFirst);
+		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.seqCamData.indexFrameFirst);
 		int numC = seqCamData.seq.getSizeC();
 		if (numC <= 0)
 			numC = 3;
@@ -247,10 +245,10 @@ public class BuildSpotsKymos extends BuildSeries {
 			for (ROI2DAlongT roiT : spot.getROIAlongTList()) {
 //				roiT.buildRoi_outAndMask2D(scale);
 				roiT.buildMask2DFromRoi_in();
-				
+
 				// TODO transform into ROIT and add to outer
 				// subtract booleanmap from booleantmap of roiT
-				
+
 				int imageHeight_i = roiT.mask2DPoints_in.length;
 				if (imageHeight_i > imageHeight)
 					imageHeight = imageHeight_i;

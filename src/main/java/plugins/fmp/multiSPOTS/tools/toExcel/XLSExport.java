@@ -223,7 +223,7 @@ public class XLSExport {
 	void writeTopRow_timeIntervals_Default(XSSFSheet sheet, int row) {
 		boolean transpose = options.transpose;
 		Point pt = new Point(0, row);
-		long duration = expAll.camImageLast_ms - expAll.camImageFirst_ms;
+		long duration = expAll.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms;
 		long interval = 0;
 		while (interval < duration) {
 			int i = (int) (interval / options.buildExcelUnitMs);
@@ -333,7 +333,8 @@ public class XLSExport {
 			expi = expi.chainToNextExperiment;
 		}
 
-		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms) / options.buildExcelStepMs + 1);
+		int nFrames = (int) ((expAll.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms)
+				/ options.buildExcelStepMs + 1);
 		int nspots = expAll.spotsArray.spotsList.size();
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
 		for (int i = 0; i < nspots; i++) {
@@ -366,7 +367,8 @@ public class XLSExport {
 			expi = expi.chainToNextExperiment;
 		}
 
-		int nFrames = (int) ((expAll.camImageLast_ms - expAll.camImageFirst_ms) / options.buildExcelStepMs + 1);
+		int nFrames = (int) ((expAll.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms)
+				/ options.buildExcelStepMs + 1);
 		int nspots = expAll.spotsArray.spotsList.size();
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
 		for (int i = 0; i < nspots; i++) {
@@ -386,34 +388,38 @@ public class XLSExport {
 			XLSExportOptions options) {
 		this.options = options;
 		expAll = new Experiment();
-		expAll.camImageLast_ms = exp.camImageLast_ms;
-		expAll.camImageFirst_ms = exp.camImageFirst_ms;
+		expAll.seqCamData.camImageLast_ms = exp.seqCamData.camImageLast_ms;
+		expAll.seqCamData.camImageFirst_ms = exp.seqCamData.camImageFirst_ms;
 		return getSpotDataFromOneExperimentSeries(exp, exportType);
 	}
 
 	public XLSResultsArray getSpotsDataFromOneExperiment(Experiment exp, XLSExportOptions options) {
 		this.options = options;
 		expAll = new Experiment();
-		expAll.camImageLast_ms = exp.camImageLast_ms;
-		expAll.camImageFirst_ms = exp.camImageFirst_ms;
+		expAll.seqCamData.camImageLast_ms = exp.seqCamData.camImageLast_ms;
+		expAll.seqCamData.camImageFirst_ms = exp.seqCamData.camImageFirst_ms;
 		return getSpotsDataFromOneExperimentSeries(exp, options);
 	}
 
 	private void exportError(Experiment expi, int nOutputFrames) {
 		String error = "XLSExport:ExportError() ERROR in " + expi.getResultsDirectory() + "\n nOutputFrames="
-				+ nOutputFrames + " kymoFirstCol_Ms=" + expi.binFirst_ms + " kymoLastCol_Ms=" + expi.binLast_ms;
+				+ nOutputFrames + " kymoFirstCol_Ms=" + expi.seqCamData.binFirst_ms + " kymoLastCol_Ms="
+				+ expi.seqCamData.binLast_ms;
 		System.out.println(error);
 	}
 
 	private int getNOutputFrames(Experiment expi) {
-		int nOutputFrames = (int) ((expi.binLast_ms - expi.binFirst_ms) / options.buildExcelStepMs + 1);
+		int nOutputFrames = (int) ((expi.seqCamData.binLast_ms - expi.seqCamData.binFirst_ms) / options.buildExcelStepMs
+				+ 1);
 		if (nOutputFrames <= 1) {
 			if (expi.seqSpotKymos.imageWidthMax == 0)
 				expi.loadKymographs();
-			expi.binLast_ms = expi.binFirst_ms + expi.seqSpotKymos.imageWidthMax * expi.binDuration_ms;
-			if (expi.binLast_ms <= 0)
+			expi.seqCamData.binLast_ms = expi.seqCamData.binFirst_ms
+					+ expi.seqSpotKymos.imageWidthMax * expi.seqCamData.binDuration_ms;
+			if (expi.seqCamData.binLast_ms <= 0)
 				exportError(expi, -1);
-			nOutputFrames = (int) ((expi.binLast_ms - expi.binFirst_ms) / options.buildExcelStepMs + 1);
+			nOutputFrames = (int) ((expi.seqCamData.binLast_ms - expi.seqCamData.binFirst_ms) / options.buildExcelStepMs
+					+ 1);
 			if (nOutputFrames <= 1) {
 				nOutputFrames = expi.seqCamData.nTotalFrames;
 				exportError(expi, nOutputFrames);
@@ -431,7 +437,8 @@ public class XLSExport {
 			if (nOutputFrames > 1) {
 				XLSResultsArray resultsArrayList = new XLSResultsArray(expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
-				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
+				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.seqCamData.binDuration_ms,
+						options);
 				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);
 			}
 			expi = expi.chainToNextExperiment;
@@ -455,7 +462,8 @@ public class XLSExport {
 			if (nOutputFrames > 1) {
 				XLSResultsArray resultsArrayList = new XLSResultsArray(expi.spotsArray.spotsList.size());
 				options.compensateEvaporation = false;
-				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.binDuration_ms, options);
+				resultsArrayList.getSpotsArrayResults1(expi.spotsArray, nOutputFrames, exp.seqCamData.binDuration_ms,
+						options);
 				addResultsTo_rowsForOneExp(rowListForOneExp, expi, resultsArrayList);
 			}
 			expi = expi.chainToNextExperiment;
@@ -481,17 +489,17 @@ public class XLSExport {
 
 		EnumXLSExportType xlsoption = resultsArrayList.getRow(0).exportType;
 
-		long offsetChain = expi.camImageFirst_ms - expi.chainImageFirst_ms;
-		long start_Ms = expi.binFirst_ms + offsetChain; // TODO check when collate?
-		long end_Ms = expi.binLast_ms + offsetChain;
+		long offsetChain = expi.seqCamData.camImageFirst_ms - expi.chainImageFirst_ms;
+		long start_Ms = expi.seqCamData.binFirst_ms + offsetChain; // TODO check when collate?
+		long end_Ms = expi.seqCamData.binLast_ms + offsetChain;
 		if (options.fixedIntervals) {
 			if (start_Ms < options.startAll_Ms)
 				start_Ms = options.startAll_Ms;
-			if (start_Ms > expi.camImageLast_ms)
+			if (start_Ms > expi.seqCamData.camImageLast_ms)
 				return;
 			if (end_Ms > options.endAll_Ms)
 				end_Ms = options.endAll_Ms;
-			if (end_Ms > expi.camImageFirst_ms)
+			if (end_Ms > expi.seqCamData.camImageFirst_ms)
 				return;
 		}
 
@@ -592,9 +600,9 @@ public class XLSExport {
 					expi = expi.chainToNextExperiment;
 				}
 				int lastIntervalFlyAlive = expi.cages.getLastIntervalFlyAlive(cagenumber);
-				int lastMinuteAlive = (int) (lastIntervalFlyAlive * expi.camImageBin_ms
-						+ (expi.camImageFirst_ms - expAll.camImageFirst_ms));
-				ilastalive = (int) (lastMinuteAlive / expAll.binDuration_ms);
+				int lastMinuteAlive = (int) (lastIntervalFlyAlive * expi.seqCamData.camImageBin_ms
+						+ (expi.seqCamData.camImageFirst_ms - expAll.seqCamData.camImageFirst_ms));
+				ilastalive = (int) (lastMinuteAlive / expAll.seqCamData.binDuration_ms);
 			}
 			if (ilastalive > 0)
 				ilastalive += 1;
@@ -663,8 +671,8 @@ public class XLSExport {
 		if (row.valuesOut == null)
 			return;
 
-		for (long coltime = expAll.camImageFirst_ms; coltime < expAll.camImageLast_ms; coltime += options.buildExcelStepMs, pt.y++) {
-			int i_from = (int) ((coltime - expAll.camImageFirst_ms) / options.buildExcelStepMs);
+		for (long coltime = expAll.seqCamData.camImageFirst_ms; coltime < expAll.seqCamData.camImageLast_ms; coltime += options.buildExcelStepMs, pt.y++) {
+			int i_from = (int) ((coltime - expAll.seqCamData.camImageFirst_ms) / options.buildExcelStepMs);
 			if (i_from >= row.valuesOut.length)
 				break;
 			double value = row.valuesOut[i_from];

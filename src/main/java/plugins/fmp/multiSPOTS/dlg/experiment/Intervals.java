@@ -86,21 +86,21 @@ public class Intervals extends JPanel {
 	}
 
 	private void setExptParms(Experiment exp) {
-		exp.camImageBin_ms = (long) (((double) binSizeJSpinner.getValue()) * binUnit.getMsUnitValue());
-		long bin_ms = exp.camImageBin_ms;
-		exp.frameFirst = (long) frameFirstJSpinner.getValue();
-		exp.binFirst_ms = exp.frameFirst * bin_ms;
-		exp.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
+		exp.seqCamData.camImageBin_ms = (long) (((double) binSizeJSpinner.getValue()) * binUnit.getMsUnitValue());
+		long bin_ms = exp.seqCamData.camImageBin_ms;
+		exp.seqCamData.indexFrameFirst = (long) frameFirstJSpinner.getValue();
+		exp.seqCamData.binFirst_ms = exp.seqCamData.indexFrameFirst * bin_ms;
+		exp.seqCamData.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
 	}
 
 	public void getExptParms(Experiment exp) {
 		refreshBinSize(exp);
-		long bin_ms = exp.camImageBin_ms;
-		long dFirst = exp.frameFirst;
+		long bin_ms = exp.seqCamData.camImageBin_ms;
+		long dFirst = exp.seqCamData.indexFrameFirst;
 		frameFirstJSpinner.setValue(dFirst);
-		if (exp.binLast_ms <= 0)
-			exp.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
-		long dLast = (long) exp.binLast_ms / bin_ms;
+		if (exp.seqCamData.binLast_ms <= 0)
+			exp.seqCamData.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
+		long dLast = (long) exp.seqCamData.binLast_ms / bin_ms;
 		frameLastJSpinner.setValue(dLast);
 		exp.getFileIntervalsFromSeqCamData();
 	}
@@ -108,6 +108,6 @@ public class Intervals extends JPanel {
 	private void refreshBinSize(Experiment exp) {
 		exp.loadFileIntervalsFromSeqCamData();
 		binUnit.setSelectedIndex(1);
-		binSizeJSpinner.setValue(exp.camImageBin_ms / (double) binUnit.getMsUnitValue());
+		binSizeJSpinner.setValue(exp.seqCamData.camImageBin_ms / (double) binUnit.getMsUnitValue());
 	}
 }

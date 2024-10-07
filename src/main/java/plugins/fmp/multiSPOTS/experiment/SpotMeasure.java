@@ -283,19 +283,21 @@ public class SpotMeasure {
 				iarraycircular = 0;
 		}
 	}
-	
-	public void compensateOffetUsingSelectedRoi( ROI2D roi) {
+
+	public void compensateOffetUsingSelectedRoi(ROI2D roi, boolean bAdd) {
 		int offset = (int) roi.getBounds().getHeight();
+		if (!bAdd)
+			offset = -offset;
 		int left = (int) roi.getBounds().getX();
-		
+
 		Polyline2D polyline = getRoi().getPolyline2D();
 		for (int i = left; i < polyline.npoints; i++) {
 			polyline.ypoints[i] -= offset;
 		}
 		getRoi().setPolyline2D(polyline);
 	}
-	
-	public void cutAndInterpolatePointsEnclosedInSelectedRoi( ROI2D roi) {
+
+	public void cutAndInterpolatePointsEnclosedInSelectedRoi(ROI2D roi) {
 		Polyline2D polyline = getRoi().getPolyline2D();
 		int first_pt_inside = -1;
 		int last_pt_inside = -1;
@@ -325,7 +327,7 @@ public class SpotMeasure {
 		}
 		getRoi().setPolyline2D(polyline);
 	}
-	
+
 	void extrapolateBetweenLimits(Polyline2D polyline, int first_pt_inside, int last_pt_inside) {
 		int first = first_pt_inside - 1;
 		if (first <= 0)
@@ -349,7 +351,6 @@ public class SpotMeasure {
 			polyline.ypoints[j] = startY + deltaY * k;
 		}
 	}
-
 
 	// ----------------------------------------------------------------------
 

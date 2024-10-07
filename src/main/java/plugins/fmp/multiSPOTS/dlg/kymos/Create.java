@@ -102,21 +102,21 @@ public class Create extends JPanel implements PropertyChangeListener {
 	}
 
 	private void setExptParms(Experiment exp) {
-		long bin_ms = exp.camImageBin_ms;
-		exp.frameFirst = (long) frameFirstJSpinner.getValue();
-		exp.frameDelta = (long) frameDeltaJSpinner.getValue();
-		exp.binFirst_ms = exp.frameFirst * bin_ms;
-		exp.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
+		long bin_ms = exp.seqCamData.camImageBin_ms;
+		exp.seqCamData.indexFrameFirst = (long) frameFirstJSpinner.getValue();
+		exp.seqCamData.frameDelta = (long) frameDeltaJSpinner.getValue();
+		exp.seqCamData.binFirst_ms = exp.seqCamData.indexFrameFirst * bin_ms;
+		exp.seqCamData.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
 	}
 
 	public void getExptParms(Experiment exp) {
-		long bin_ms = exp.camImageBin_ms;
-		long dFirst = exp.frameFirst;
+		long bin_ms = exp.seqCamData.camImageBin_ms;
+		long dFirst = exp.seqCamData.indexFrameFirst;
 		frameFirstJSpinner.setValue(dFirst);
-		frameDeltaJSpinner.setValue(exp.frameDelta);
-		if (exp.binLast_ms <= 0)
-			exp.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
-		long dLast = (long) exp.binLast_ms / bin_ms;
+		frameDeltaJSpinner.setValue(exp.seqCamData.frameDelta);
+		if (exp.seqCamData.binLast_ms <= 0)
+			exp.seqCamData.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
+		long dLast = (long) exp.seqCamData.binLast_ms / bin_ms;
 		frameLastJSpinner.setValue(dLast);
 		exp.getFileIntervalsFromSeqCamData();
 	}
@@ -132,9 +132,9 @@ public class Create extends JPanel implements PropertyChangeListener {
 			options.expList.index1 = options.expList.index0;
 		options.isFrameFixed = false; // getIsFixedFrame();
 		exp.loadFileIntervalsFromSeqCamData();
-		options.t_Ms_First = exp.camImageFirst_ms; // getStartMs();
-		options.t_Ms_Last = exp.camImageLast_ms;// getEndMs();
-		options.t_Ms_BinDuration = exp.camImageBin_ms;
+		options.t_Ms_First = exp.seqCamData.camImageFirst_ms; // getStartMs();
+		options.t_Ms_Last = exp.seqCamData.camImageLast_ms;// getEndMs();
+		options.t_Ms_BinDuration = exp.seqCamData.camImageBin_ms;
 		options.doCreateBinDir = true;
 		options.parent0Rect = parent0.mainFrame.getBoundsInternal();
 		options.binSubDirectory = Experiment.BIN + options.t_Ms_BinDuration / 1000;

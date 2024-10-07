@@ -13,6 +13,7 @@ import java.util.concurrent.Future;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+
 import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
@@ -130,11 +131,11 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer> {
 		if (options.isFrameFixed) {
 			exp.cages.detectFirst_Ms = options.t_Ms_First;
 			exp.cages.detectLast_Ms = options.t_Ms_Last;
-			if (exp.cages.detectLast_Ms > exp.camImageLast_ms)
-				exp.cages.detectLast_Ms = exp.camImageLast_ms;
+			if (exp.cages.detectLast_Ms > exp.seqCamData.camImageLast_ms)
+				exp.cages.detectLast_Ms = exp.seqCamData.camImageLast_ms;
 		} else {
-			exp.cages.detectFirst_Ms = exp.camImageFirst_ms;
-			exp.cages.detectLast_Ms = exp.camImageLast_ms;
+			exp.cages.detectFirst_Ms = exp.seqCamData.camImageFirst_ms;
+			exp.cages.detectLast_Ms = exp.seqCamData.camImageLast_ms;
 		}
 		exp.cages.detect_threshold = options.threshold;
 

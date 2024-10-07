@@ -33,6 +33,7 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 			new String[] { "sum", "clean", "fly present/absent" });
 	private JButton cutAndInterpolateButton = new JButton("Cut & interpolate");
 	private JButton compensateButton = new JButton("Compensate (poop deposit)");
+	private JComboBox<String> directionCombo = new JComboBox<String>(new String[] { "up", "down" });
 	private String buildMedianString = "Build median";
 	private JButton buildMedianButton = new JButton(buildMedianString);
 	private JCheckBox allSeriesCheckBox = new JCheckBox("ALL (current to last)", false);
@@ -47,17 +48,18 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 
 		JPanel panel1 = new JPanel(layoutLeft);
 		panel1.add(cutAndInterpolateButton);
-		panel1.add(compensateButton);
 		panel1.add(new JLabel("Apply to ", SwingConstants.LEFT));
 		panel1.add(roiTypeCombo);
 		add(panel1);
 
 		JPanel panel2 = new JPanel(layoutLeft);
-		panel2.add(buildMedianButton);
-		panel2.add(allSeriesCheckBox);
+		panel2.add(compensateButton);
+		panel2.add(directionCombo);
 		add(panel2);
 
 		JPanel panel3 = new JPanel(layoutLeft);
+		panel3.add(buildMedianButton);
+		panel3.add(allSeriesCheckBox);
 		add(panel3);
 
 		roiTypeCombo.setSelectedIndex(1);
@@ -83,7 +85,6 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 			}
 		});
 
-		
 		buildMedianButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -146,7 +147,7 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 		else if (optionSelected.contains("fly"))
 			removeAndUpdate(seqKymos, spot, spot.flyPresent, roiRect);
 	}
-	
+
 	void compensate(Experiment exp) {
 		SequenceKymos seqKymos = exp.seqSpotKymos;
 		ROI2D roiRect = seqKymos.seq.getSelectedROI2D();
@@ -168,14 +169,13 @@ public class SpotsMeasuresEdit extends JPanel implements PropertyChangeListener 
 		spotMeasure.cutAndInterpolatePointsEnclosedInSelectedRoi(roi);
 		spotMeasure.transferROItoLevel2D();
 	}
-	
+
 	private void compensateAndUpdate(SequenceKymos seqKymos, Spot spot, SpotMeasure spotMeasure, ROI2D roi) {
-		spotMeasure.compensateOffetUsingSelectedRoi(roi);
+		boolean bAdd = (directionCombo.getSelectedIndex() == 0);
+		spotMeasure.compensateOffetUsingSelectedRoi(roi, bAdd);
 		spotMeasure.transferROItoLevel2D();
 	}
 
-
-	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (StringUtil.equals("thread_ended", evt.getPropertyName())) {
