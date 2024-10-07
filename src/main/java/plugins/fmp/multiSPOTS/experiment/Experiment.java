@@ -111,7 +111,6 @@ public class Experiment {
 		this.seqSpotKymos = new SequenceKymos();
 		resultsDirectory = this.seqCamData.getImagesDirectory() + File.separator + RESULTS;
 		getFileIntervalsFromSeqCamData();
-
 		xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML));
 	}
 
@@ -119,12 +118,17 @@ public class Experiment {
 		imagesDirectory = eADF.cameraImagesDirectory;
 		resultsDirectory = eADF.resultsDirectory;
 		binSubDirectory = eADF.binSubDirectory;
-		seqCamData = new SequenceCamData(eADF.cameraImagesList);
+		seqCamData = new SequenceCamData();
+		String fileName = concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML);
+		xmlLoadExperiment(fileName);
+		
+		seqCamData.camImagesDirectory = eADF.cameraImagesDirectory;
+		seqCamData.loadImageList();
 		if (eADF.cameraImagesList.size() > 1)
 			getFileIntervalsFromSeqCamData();
 		if (eADF.kymosImagesList != null && eADF.kymosImagesList.size() > 0)
 			seqSpotKymos = new SequenceKymos(eADF.kymosImagesList);
-		xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML));
+		//xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML));
 	}
 
 	// ----------------------------------

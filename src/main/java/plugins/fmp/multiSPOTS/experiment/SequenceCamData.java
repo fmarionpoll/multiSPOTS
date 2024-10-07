@@ -48,8 +48,8 @@ public class SequenceCamData {
 
 	public EnumStatus status = EnumStatus.REGULAR;
 	protected String csCamFileName = null;
-	public String imagesDirectory = null;
-	public List<String> imagesList = new ArrayList<String>();
+	public String camImagesDirectory = null;
+	public ArrayList<String> camImagesList = new ArrayList<String>();
 
 	long timeFirstImageInMs = 0;
 	int indexTimePattern = -1;
@@ -86,27 +86,28 @@ public class SequenceCamData {
 		status = EnumStatus.FILESTACK;
 	}
 
-	public SequenceCamData(List<String> listNames) {
-		setImagesList(listNames);
-		status = EnumStatus.FILESTACK;
-	}
+//	public SequenceCamData(List<String> listNames) {
+//		clipImagesList(listNames);
+//		setImagesList(listNames);
+//		status = EnumStatus.FILESTACK;
+//	}
 
 	// -----------------------
 
 	public String getImagesDirectory() {
-		Path strPath = Paths.get(imagesList.get(0));
-		imagesDirectory = strPath.getParent().toString();
-		return imagesDirectory;
+		Path strPath = Paths.get(camImagesList.get(0));
+		camImagesDirectory = strPath.getParent().toString();
+		return camImagesDirectory;
 	}
 
 	public void setImagesDirectory(String directoryString) {
-		imagesDirectory = directoryString;
+		camImagesDirectory = directoryString;
 	}
 
 	public List<String> getImagesList(boolean bsort) {
 		if (bsort)
-			Collections.sort(imagesList);
-		return imagesList;
+			Collections.sort(camImagesList);
+		return camImagesList;
 	}
 
 	public String getDecoratedImageName(int t) {
@@ -119,7 +120,7 @@ public class SequenceCamData {
 
 	public String getCSCamFileName() {
 		if (csCamFileName == null) {
-			Path path = Paths.get(imagesList.get(0));
+			Path path = Paths.get(camImagesList.get(0));
 			int rootlevel = path.getNameCount() - 4;
 			if (rootlevel < 0)
 				rootlevel = 0;
@@ -131,26 +132,35 @@ public class SequenceCamData {
 	public String getFileNameFromImageList(int t) {
 		String csName = null;
 		if (status == EnumStatus.FILESTACK || status == EnumStatus.KYMOGRAPH) {
-			if (imagesList.size() < 1)
+			if (camImagesList.size() < 1)
 				loadImageList();
-			csName = imagesList.get(t);
+			csName = camImagesList.get(t);
 		}
 //		else if (status == EnumStatus.AVIFILE)
 //			csName = csFileName;
 		return csName;
 	}
 
-	private void loadImageList() {
-		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(imagesDirectory, "jpg");
+	public void loadImageList() {
+		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(camImagesDirectory, "jpg");
 		if (imagesList.size() > 0) {
+			clipImagesList(imagesList);
 			setImagesList(imagesList);
 			attachSequence(loadSequenceFromImagesList(imagesList));
+		}
+	}
+	
+	private void clipImagesList(List<String> imagesList) {
+		Collections.sort(imagesList);
+		if (indexFrameFirst > 0) {
+			for (long i = indexFrameFirst; i > 0; i--)
+				imagesList.remove(0);
 		}
 	}
 
 	public String getFileNameNoPath(int t) {
 		String csName = null;
-		csName = imagesList.get(t);
+		csName = camImagesList.get(t);
 		if (csName != null) {
 			Path path = Paths.get(csName);
 			return path.getName(path.getNameCount() - 1).toString();
@@ -285,9 +295,9 @@ public class SequenceCamData {
 	}
 
 	public void setImagesList(List<String> extImagesList) {
-		imagesList.clear();
-		imagesList.addAll(extImagesList);
-		nTotalFrames = imagesList.size();
+		camImagesList.clear();
+		camImagesList.addAll(extImagesList);
+		nTotalFrames = camImagesList.size();
 		status = EnumStatus.FILESTACK;
 	}
 
@@ -318,17 +328,17 @@ public class SequenceCamData {
 	}
 
 	public boolean loadImages() {
-		if (imagesList.size() == 0)
+		if (camImagesList.size() == 0)
 			return false;
-		attachSequence(loadSequenceFromImagesList(imagesList));
+		attachSequence(loadSequenceFromImagesList(camImagesList));
 		return (seq != null);
 	}
 
 	public boolean loadFirstImage() {
-		if (imagesList.size() == 0)
+		if (camImagesList.size() == 0)
 			return false;
 		List<String> dummyList = new ArrayList<String>();
-		dummyList.add(imagesList.get(0));
+		dummyList.add(camImagesList.get(0));
 		attachSequence(loadSequenceFromImagesList(dummyList));
 		return (seq != null);
 	}

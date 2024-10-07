@@ -161,7 +161,7 @@ public class SequenceKymos extends SequenceCamData {
 
 			// threaded by default here
 			loadImages();
-			setParentDirectoryAsCSCamFileName(imagesList.get(0));
+			setParentDirectoryAsCSCamFileName(camImagesList.get(0));
 			status = EnumStatus.KYMOGRAPH;
 		}
 		isRunning_loadImages = false;
