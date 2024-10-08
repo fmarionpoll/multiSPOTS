@@ -98,7 +98,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 		ArrayList<Future<?>> tasks = new ArrayList<Future<?>>(ntasks);
 		tasks.clear();
 
-		final int tFirst = (int) exp.seqCamData.indexFrameFirst;
+		final int tFirst = (int) exp.seqSpotKymos.indexFrameFirst;
 		final int tLast = exp.seqCamData.nTotalFrames;
 		vData.setTitle(exp.seqCamData.getCSCamFileName() + ": " + tFirst + "-" + tLast);
 

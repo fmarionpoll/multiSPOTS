@@ -38,9 +38,10 @@ public class Create extends JPanel implements PropertyChangeListener {
 	Long max = 10000L;
 	Long step = 1L;
 	Long maxLast = 99999999L;
-	JSpinner frameFirstJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
-	JSpinner frameLastJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
-	JSpinner frameDeltaJSpinner = new JSpinner(new SpinnerNumberModel((Long) 1L, (Long) 1L, (Long) 100L, (Long) 1L));
+	JSpinner kymosFrameFirstJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
+	JSpinner kymosFrameLastJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
+	JSpinner kymosFrameDeltaJSpinner = new JSpinner(
+			new SpinnerNumberModel((Long) 1L, (Long) 1L, (Long) 100L, (Long) 1L));
 
 	EnumStatusComputation sComputation = EnumStatusComputation.START_COMPUTATION;
 	private MultiSPOTS parent0 = null;
@@ -63,14 +64,14 @@ public class Create extends JPanel implements PropertyChangeListener {
 
 		JPanel panel1 = new JPanel(layoutLeft);
 		panel1.add(new JLabel("Frame ", SwingConstants.RIGHT));
-		panel1.add(frameFirstJSpinner);
+		panel1.add(kymosFrameFirstJSpinner);
 		panel1.add(new JLabel(" to "));
-		panel1.add(frameLastJSpinner);
+		panel1.add(kymosFrameLastJSpinner);
 		add(panel1);
 
 		JPanel panel2 = new JPanel(layoutLeft);
 		panel2.add(new JLabel("Ratio: 1 to ", SwingConstants.RIGHT));
-		panel2.add(frameDeltaJSpinner);
+		panel2.add(kymosFrameDeltaJSpinner);
 		panel2.add(new JLabel(" image(s)"));
 		add(panel2);
 
@@ -103,21 +104,21 @@ public class Create extends JPanel implements PropertyChangeListener {
 
 	private void setExptParms(Experiment exp) {
 		long bin_ms = exp.seqCamData.camImageBin_ms;
-		exp.seqCamData.indexFrameFirst = (long) frameFirstJSpinner.getValue();
-		exp.seqCamData.frameDelta = (long) frameDeltaJSpinner.getValue();
-		exp.seqCamData.binFirst_ms = exp.seqCamData.indexFrameFirst * bin_ms;
-		exp.seqCamData.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
+		exp.seqSpotKymos.indexFrameFirst = (long) kymosFrameFirstJSpinner.getValue();
+		exp.seqSpotKymos.frameDelta = (long) kymosFrameDeltaJSpinner.getValue();
+		exp.seqSpotKymos.binFirst_ms = exp.seqCamData.indexFrameFirst * bin_ms;
+		exp.seqSpotKymos.binLast_ms = ((long) kymosFrameLastJSpinner.getValue()) * bin_ms;
 	}
 
 	public void getExptParms(Experiment exp) {
 		long bin_ms = exp.seqCamData.camImageBin_ms;
 		long dFirst = exp.seqCamData.indexFrameFirst;
-		frameFirstJSpinner.setValue(dFirst);
-		frameDeltaJSpinner.setValue(exp.seqCamData.frameDelta);
+		kymosFrameFirstJSpinner.setValue(dFirst);
+		kymosFrameDeltaJSpinner.setValue(exp.seqCamData.frameDelta);
 		if (exp.seqCamData.binLast_ms <= 0)
 			exp.seqCamData.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
 		long dLast = (long) exp.seqCamData.binLast_ms / bin_ms;
-		frameLastJSpinner.setValue(dLast);
+		kymosFrameLastJSpinner.setValue(dLast);
 		exp.getFileIntervalsFromSeqCamData();
 	}
 

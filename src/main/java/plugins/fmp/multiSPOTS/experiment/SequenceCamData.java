@@ -86,12 +86,6 @@ public class SequenceCamData {
 		status = EnumStatus.FILESTACK;
 	}
 
-//	public SequenceCamData(List<String> listNames) {
-//		clipImagesList(listNames);
-//		setImagesList(listNames);
-//		status = EnumStatus.FILESTACK;
-//	}
-
 	// -----------------------
 
 	public String getImagesDirectory() {
@@ -149,7 +143,7 @@ public class SequenceCamData {
 			attachSequence(loadSequenceFromImagesList(imagesList));
 		}
 	}
-	
+
 	private void clipImagesList(List<String> imagesList) {
 		Collections.sort(imagesList);
 		if (indexFrameFirst > 0) {

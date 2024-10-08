@@ -118,9 +118,9 @@ public class BuildSpotsKymos extends BuildSeries {
 		threadRunning = true;
 		stopFlag = false;
 
-		final int tFirst = (int) exp.seqCamData.indexFrameFirst;
+		final int tFirst = (int) exp.seqSpotKymos.indexFrameFirst;
 		final int tLast = exp.seqCamData.nTotalFrames;
-		final int tDelta = (int) exp.seqCamData.frameDelta;
+		final int tDelta = (int) exp.seqSpotKymos.frameDelta;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
@@ -230,7 +230,7 @@ public class BuildSpotsKymos extends BuildSeries {
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 //		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.seqCamData.indexFrameFirst);
+		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.seqSpotKymos.indexFrameFirst);
 		int numC = seqCamData.seq.getSizeC();
 		if (numC <= 0)
 			numC = 3;

@@ -46,7 +46,6 @@ public class Options extends JPanel {
 		panel0.add(transposeCheckBox);
 		panel0.add(collateSeriesCheckBox);
 		panel0.add(padIntervalsCheckBox);
-//		panel0.add(absoluteTimeCheckBox);
 		panel0.add(onlyAliveCheckBox);
 		add(panel0);
 		padIntervalsCheckBox.setEnabled(false);
