@@ -109,32 +109,15 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 			}
 		});
 
-//		t0Button.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(final ActionEvent e) {
-//				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-//				if (exp != null)
-//					displayGraphsPanels(exp);
-//			}
-//		});
-
 		relativeToCheckbox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-//				enableRelativeOptions(relativeToCheckbox.isSelected());
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null)
 					displayGraphsPanels(exp);
 			}
 		});
 	}
-
-//	private void enableRelativeOptions(boolean bRelative) {
-//		t0Button.setEnabled(bRelative);
-//		medianT0Button.setEnabled(bRelative);
-//		medianT0FromNPointsSpinner.setEnabled(bRelative);
-//		medianT0Legend.setEnabled(bRelative);
-//	}
 
 	private Rectangle getInitialUpperLeftPosition(Experiment exp) {
 		Rectangle rectv = new Rectangle(50, 500, 10, 10);
@@ -156,8 +139,8 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		exp.seqCamData.seq.addListener(this);
 		EnumXLSExportType exportType = (EnumXLSExportType) exportTypeComboBox.getSelectedItem();
 		if (isThereAnyDataToDisplay(exp, exportType)) {
-			plotAreaPixels = plotToChart(exp, exportType, plotAreaPixels, rectv);
 			rectv.translate(dx, dy);
+			plotAreaPixels = plotToChart(exp, exportType, plotAreaPixels, rectv);
 		}
 	}
 
@@ -172,10 +155,7 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		xlsExportOptions.buildExcelStepMs = 60000;
 
 		boolean bRelative = relativeToCheckbox.isSelected();
-		xlsExportOptions.relativeToT0 = bRelative; // & t0Button.isSelected();
-//		xlsExportOptions.relativeToMedianT0 = false; // bRelative & medianT0Button.isSelected();
-//		xlsExportOptions.medianT0FromNPoints = 3; //(int) medianT0FromNPointsSpinner.getValue();
-
+		xlsExportOptions.relativeToT0 = bRelative;
 		xlsExportOptions.subtractEvaporation = false;
 		xlsExportOptions.exportType = exportType;
 

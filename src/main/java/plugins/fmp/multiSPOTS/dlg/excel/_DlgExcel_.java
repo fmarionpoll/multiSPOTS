@@ -129,11 +129,9 @@ public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 
 	private XLSExportOptions getLevelsOptions() {
 		XLSExportOptions options = new XLSExportOptions();
-
 		options.spotAreas = true;
 		options.sum = tabAreas.sumCheckBox.isSelected();
 		options.nPixels = tabAreas.nPixelsCheckBox.isSelected();
-
 		options.lrPI = tabAreas.lrPICheckBox.isSelected();
 		options.lrPIThreshold = (double) tabAreas.lrPIThresholdJSpinner.getValue();
 		options.sumPerCage = tabAreas.sumPerCageCheckBox.isSelected();
@@ -150,7 +148,6 @@ public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 		options.fixedIntervals = tabCommonOptions.isFixedFrameButton.isSelected();
 		options.startAll_Ms = tabCommonOptions.getStartAllMs();
 		options.endAll_Ms = tabCommonOptions.getEndAllMs();
-
 		options.collateSeries = tabCommonOptions.collateSeriesCheckBox.isSelected();
 		options.padIntervals = tabCommonOptions.padIntervalsCheckBox.isSelected();
 		options.absoluteTime = false; // tabCommonOptions.absoluteTimeCheckBox.isSelected();
@@ -158,7 +155,6 @@ public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 		options.exportAllFiles = tabCommonOptions.exportAllFilesCheckBox.isSelected();
 
 		options.expList = parent0.expListCombo;
-//		options.expList.expListBinSubDirectory = parent0.paneKymos.tabDisplay.getBinSubdirectory() ;
 		if (tabCommonOptions.exportAllFilesCheckBox.isSelected()) {
 			options.expIndexFirst = 0;
 			options.expIndexLast = options.expList.getItemCount() - 1;

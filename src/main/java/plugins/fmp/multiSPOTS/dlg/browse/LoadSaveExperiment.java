@@ -213,9 +213,6 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 				if (exp.seqSpotKymos.seq != null && sequenceEvent.getSequence() == exp.seqSpotKymos.seq) {
 					Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
 					v.setTitle("dummy");
-//					int t = v.getPositionT(); 
-//					String title = parent0.paneKymos.tabDisplay.getKymographTitle();
-//					v.setTitle(title);	
 				}
 			}
 		}

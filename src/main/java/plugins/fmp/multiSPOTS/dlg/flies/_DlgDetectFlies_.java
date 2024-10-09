@@ -53,35 +53,6 @@ public class _DlgDetectFlies_ extends JPanel implements PropertyChangeListener {
 		capPanel.add(tabsPane);
 		tabsPane.setSelectedIndex(0);
 
-//		tabsPane.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent e) {
-//				int selectedIndex = tabsPane.getSelectedIndex();
-//				tabBuildCagesAsContours.overlayCheckBox.setSelected(selectedIndex == 0);
-//
-//				tabDetect1.overlayCheckBox.setSelected(selectedIndex == iTAB_DETECT1);
-//				if (selectedIndex == iTAB_DETECT1 || selectedIndex == iTAB_DETECT2) {
-////	            	parent0.dlgExperiment.capPopupPanel.expand();
-//					parent0.dlgExperiment.tabsPane.setSelectedIndex(0);
-//				}
-//
-//				if (selectedIndex == iTAB_EDIT) {
-//					bTrapROIsEdit = true;
-//					parent0.dlgExperiment.tabOptions.displayROIsCategory(false, "spot");
-//					parent0.dlgExperiment.tabOptions.displayROIsCategory(false, "cage");
-//				} else {
-//					if (bTrapROIsEdit) {
-//						parent0.dlgExperiment.tabOptions.displayROIsCategory(
-//								parent0.dlgExperiment.tabOptions.viewSpotsCheckBox.isSelected(), "spot");
-//						parent0.dlgExperiment.tabOptions.displayROIsCategory(
-//								parent0.dlgExperiment.tabOptions.viewCagesCheckbox.isSelected(), "cage");
-//					}
-//					bTrapROIsEdit = false;
-//				}
-//				previouslySelected = selectedIndex;
-//			}
-//		});
-
 		capPopupPanel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {

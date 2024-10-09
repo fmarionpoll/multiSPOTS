@@ -232,8 +232,6 @@ public class Display extends JPanel implements ViewerListener {
 				int isel = seqKymographs.currentFrame;
 				isel = selectKymographImage(isel);
 				selectKymographComboItem(isel);
-
-//				int index = spotsTransformsComboBox.getSelectedIndex();
 				canvas.selectImageTransformFunctionStep2(2);
 			}
 		}
