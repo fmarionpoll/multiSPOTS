@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.series.BuildSpotsKymos;
 
@@ -104,6 +105,8 @@ public class Create extends JPanel implements PropertyChangeListener {
 
 	private void setExptParms(Experiment exp) {
 		long bin_ms = exp.seqCamData.camImageBin_ms;
+		if (exp.seqSpotKymos == null)
+			exp.seqSpotKymos = new SequenceKymos();
 		exp.seqSpotKymos.indexFrameFirst = (long) kymosFrameFirstJSpinner.getValue();
 		exp.seqSpotKymos.frameDelta = (long) kymosFrameDeltaJSpinner.getValue();
 		exp.seqSpotKymos.binFirst_ms = exp.seqCamData.indexFrameFirst * bin_ms;

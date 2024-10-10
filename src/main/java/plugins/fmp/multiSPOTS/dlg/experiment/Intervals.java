@@ -27,8 +27,8 @@ public class Intervals extends JPanel {
 	Long max = 10000L;
 	Long step = 1L;
 	Long maxLast = 99999999L;
-	JSpinner frameFirstJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
-	JSpinner frameLastJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
+	JSpinner indexFrameFirstJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
+	JSpinner indexFrameLastJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
 	JSpinner binSizeJSpinner = new JSpinner(new SpinnerNumberModel(1., 0., 1000., 1.));
 	JComboBoxMs binUnit = new JComboBoxMs();
 	JButton applyButton = new JButton("Apply changes");
@@ -48,9 +48,9 @@ public class Intervals extends JPanel {
 
 		JPanel panel0 = new JPanel(layout1);
 		panel0.add(new JLabel("Frame ", SwingConstants.RIGHT));
-		panel0.add(frameFirstJSpinner);
+		panel0.add(indexFrameFirstJSpinner);
 		panel0.add(new JLabel(" to "));
-		panel0.add(frameLastJSpinner);
+		panel0.add(indexFrameLastJSpinner);
 		add(panel0);
 
 		JPanel panel1 = new JPanel(layout1);
@@ -88,20 +88,20 @@ public class Intervals extends JPanel {
 	private void setExptParms(Experiment exp) {
 		exp.seqCamData.camImageBin_ms = (long) (((double) binSizeJSpinner.getValue()) * binUnit.getMsUnitValue());
 		long bin_ms = exp.seqCamData.camImageBin_ms;
-		exp.seqCamData.indexFrameFirst = (long) frameFirstJSpinner.getValue();
+		exp.seqCamData.indexFrameFirst = (long) indexFrameFirstJSpinner.getValue();
 		exp.seqCamData.binFirst_ms = exp.seqCamData.indexFrameFirst * bin_ms;
-		exp.seqCamData.binLast_ms = ((long) frameLastJSpinner.getValue()) * bin_ms;
+		exp.seqCamData.binLast_ms = ((long) indexFrameLastJSpinner.getValue()) * bin_ms;
 	}
 
 	public void getExptParms(Experiment exp) {
 		refreshBinSize(exp);
 		long bin_ms = exp.seqCamData.camImageBin_ms;
 		long dFirst = exp.seqCamData.indexFrameFirst;
-		frameFirstJSpinner.setValue(dFirst);
+		indexFrameFirstJSpinner.setValue(dFirst);
 		if (exp.seqCamData.binLast_ms <= 0)
 			exp.seqCamData.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
 		long dLast = (long) exp.seqCamData.binLast_ms / bin_ms;
-		frameLastJSpinner.setValue(dLast);
+		indexFrameLastJSpinner.setValue(dLast);
 		exp.getFileIntervalsFromSeqCamData();
 	}
 

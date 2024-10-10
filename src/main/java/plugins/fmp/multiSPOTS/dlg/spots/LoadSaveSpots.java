@@ -78,7 +78,6 @@ public class LoadSaveSpots extends JPanel {
 	public boolean saveCapillaries_file(Experiment exp) {
 		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
 		exp.capillaries.transferDescriptionToCapillaries();
-
 		exp.saveXML_MCExperiment();
 		exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
 		return exp.xmlSave_MCCapillaries_Only();
@@ -94,7 +93,6 @@ public class LoadSaveSpots extends JPanel {
 	public boolean saveSpotsArray_file(Experiment exp) {
 		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
 		exp.spotsArray.transferDescriptionToSpots();
-
 		boolean flag = exp.saveXML_MCExperiment();
 		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
 		flag &= exp.save_MCSpots_Only();

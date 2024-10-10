@@ -79,7 +79,6 @@ public class SpotsMeasuresLoadSave extends JPanel {
 //		parent0.paneSpots.getDialogCapillariesInfos(exp);  // get data into desc
 		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
 		exp.capillaries.transferDescriptionToCapillaries();
-
 		exp.saveXML_MCExperiment();
 		exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
 		return exp.xmlSave_MCCapillaries_Only();
@@ -98,7 +97,6 @@ public class SpotsMeasuresLoadSave extends JPanel {
 	public boolean saveSpotsArray_file(Experiment exp) {
 		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
 		exp.spotsArray.transferDescriptionToSpots();
-
 		boolean flag = exp.saveXML_MCExperiment();
 		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
 		exp.spotsArray.updateSpotsMeasuresFromSequence();

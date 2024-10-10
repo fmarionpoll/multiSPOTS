@@ -106,6 +106,7 @@ public class Edit extends JPanel {
 			exp.replaceFieldValue(fieldEnumCode, oldValue, newValue);
 
 			exp.save_Spots();
+			parent0.dlgExperiment.tabIntervals.getExptParms(exp);
 			exp.saveXML_MCExperiment();
 
 		}

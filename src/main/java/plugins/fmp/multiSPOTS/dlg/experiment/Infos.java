@@ -139,6 +139,7 @@ public class Infos extends JPanel {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					getExperimentInfosFromDialog(exp);
+					parent0.dlgExperiment.tabIntervals.getExptParms(exp);
 					exp.saveXML_MCExperiment();
 				}
 			}
