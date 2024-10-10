@@ -85,7 +85,6 @@ public class ThresholdColors extends JPanel implements PropertyChangeListener {
 		rbL1.setSelected(true);
 		rbRGB.setSelected(true);
 
-//		distanceSpinner.addChangeListener(this);
 		declareActionListeners();
 	}
 

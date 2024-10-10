@@ -115,7 +115,7 @@ public class Create extends JPanel implements PropertyChangeListener {
 
 	public void getExptParms(Experiment exp) {
 		long bin_ms = exp.seqCamData.camImageBin_ms;
-		long dFirst = exp.seqCamData.indexFrameFirst;
+		long dFirst = exp.seqSpotKymos.indexFrameFirst;
 		kymosFrameFirstJSpinner.setValue(dFirst);
 		kymosFrameDeltaJSpinner.setValue(exp.seqCamData.frameDelta);
 		if (exp.seqCamData.binLast_ms <= 0)

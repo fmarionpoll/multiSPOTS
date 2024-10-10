@@ -97,7 +97,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 	public void closeViewsForCurrentExperiment(Experiment exp) {
 		if (exp != null) {
 			if (exp.seqCamData != null) {
-				parent0.dlgExperiment.tabIntervals.getExptParms(exp);
+				// parent0.dlgExperiment.tabIntervals.setExptParms(exp);
 				exp.saveXML_MCExperiment();
 				exp.save_SpotsMeasures();
 			}
