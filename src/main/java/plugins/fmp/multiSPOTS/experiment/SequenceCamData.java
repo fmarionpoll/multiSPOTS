@@ -55,14 +55,14 @@ public class SequenceCamData {
 	int indexTimePattern = -1;
 	// _________________________________________________
 
-	public long camImageFirst_ms = -1;
-	public long camImageLast_ms = -1;
-	public long camImageBin_ms = -1;
+	public long firstImage_ms = -1;
+	public long lastImage_ms = -1;
+	public long binImage_ms = -1;
 	public long[] camImages_ms = null;
 
-	public long indexFrameFirst = 0;
-	public long indexFrameLast = 0;
-	public long frameDelta = 1;
+	public long indexFirstImage = 0;
+	public long indexLastImage = 0;
+	public long deltaImage = 1;
 	public long binFirst_ms = 0;
 	public long binLast_ms = 0;
 	public long binDuration_ms = 60000;
@@ -146,8 +146,8 @@ public class SequenceCamData {
 
 	private void clipImagesList(List<String> imagesList) {
 		Collections.sort(imagesList);
-		if (indexFrameFirst > 0) {
-			for (long i = indexFrameFirst; i > 0; i--)
+		if (indexFirstImage > 0) {
+			for (long i = indexFirstImage; i > 0; i--)
 				imagesList.remove(0);
 		}
 	}

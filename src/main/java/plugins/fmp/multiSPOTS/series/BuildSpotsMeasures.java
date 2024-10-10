@@ -55,16 +55,16 @@ public class BuildSpotsMeasures extends BuildSeries {
 	private void getTimeLimitsOfSequence(Experiment exp) {
 		exp.getFileIntervalsFromSeqCamData();
 		exp.loadFileIntervalsFromSeqCamData();
-		exp.seqCamData.binDuration_ms = exp.seqCamData.camImageBin_ms;
+		exp.seqCamData.binDuration_ms = exp.seqCamData.binImage_ms;
 		System.out.println("sequence bin size = " + exp.seqCamData.binDuration_ms);
 		if (options.isFrameFixed) {
 			exp.seqCamData.binFirst_ms = options.t_Ms_First;
 			exp.seqCamData.binLast_ms = options.t_Ms_Last;
-			if (exp.seqCamData.binLast_ms + exp.seqCamData.camImageFirst_ms > exp.seqCamData.camImageLast_ms)
-				exp.seqCamData.binLast_ms = exp.seqCamData.camImageLast_ms - exp.seqCamData.camImageFirst_ms;
+			if (exp.seqCamData.binLast_ms + exp.seqCamData.firstImage_ms > exp.seqCamData.lastImage_ms)
+				exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
 		} else {
 			exp.seqCamData.binFirst_ms = 0;
-			exp.seqCamData.binLast_ms = exp.seqCamData.camImageLast_ms - exp.seqCamData.camImageFirst_ms;
+			exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
 		}
 	}
 
@@ -98,7 +98,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 		ArrayList<Future<?>> tasks = new ArrayList<Future<?>>(ntasks);
 		tasks.clear();
 
-		final int tFirst = (int) exp.seqSpotKymos.indexFrameFirst;
+		final int tFirst = (int) exp.seqSpotKymos.indexFirstImage;
 		final int tLast = exp.seqCamData.nTotalFrames;
 		vData.setTitle(exp.seqCamData.getCSCamFileName() + ": " + tFirst + "-" + tLast);
 
@@ -250,7 +250,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 	private void initSpotsDataArrays(Experiment exp) {
 		// int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) /
 		// exp.binDuration_ms + 1);
-		int nFrames = exp.seqCamData.nTotalFrames - (int) exp.seqCamData.indexFrameFirst;
+		int nFrames = exp.seqCamData.nTotalFrames - (int) exp.seqCamData.indexFirstImage;
 		for (Spot spot : exp.spotsArray.spotsList) {
 			int i = spot.spotIndex % 2;
 			if (0 == i && !options.detectL)

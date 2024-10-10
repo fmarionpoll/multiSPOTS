@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -57,7 +56,6 @@ public class SelectFilesPanel extends JPanel {
 
 	public void initialize(MultiSPOTS parent0, List<String> stringList) {
 		this.parent0 = parent0;
-//		this.parent1 = parent0.dlgExperiment.panelLoadSave;
 		addPropertyChangeListener(parent0.dlgBrowse.panelLoadSave);
 		selectedNames = stringList;
 

@@ -332,8 +332,8 @@ public class Experiment {
 	}
 
 	public void getFileIntervalsFromSeqCamData() {
-		if (seqCamData != null && (seqCamData.camImageFirst_ms < 0 || seqCamData.camImageLast_ms < 0
-				|| seqCamData.camImageBin_ms < 0)) {
+		if (seqCamData != null && (seqCamData.firstImage_ms < 0 || seqCamData.lastImage_ms < 0
+				|| seqCamData.binImage_ms < 0)) {
 			loadFileIntervalsFromSeqCamData();
 		}
 	}
@@ -341,15 +341,15 @@ public class Experiment {
 	public void loadFileIntervalsFromSeqCamData() {
 		if (seqCamData != null) {
 			seqCamData.setImagesDirectory(imagesDirectory);
-			firstImage_FileTime = seqCamData.getFileTimeFromStructuredName((int) seqCamData.indexFrameFirst);
+			firstImage_FileTime = seqCamData.getFileTimeFromStructuredName((int) seqCamData.indexFirstImage);
 			lastImage_FileTime = seqCamData.getFileTimeFromStructuredName(seqCamData.nTotalFrames - 1);
 			if (firstImage_FileTime != null && lastImage_FileTime != null) {
-				seqCamData.camImageFirst_ms = firstImage_FileTime.toMillis();
-				seqCamData.camImageLast_ms = lastImage_FileTime.toMillis();
+				seqCamData.firstImage_ms = firstImage_FileTime.toMillis();
+				seqCamData.lastImage_ms = lastImage_FileTime.toMillis();
 				if (seqCamData.nTotalFrames > 1)
-					seqCamData.camImageBin_ms = (seqCamData.camImageLast_ms - seqCamData.camImageFirst_ms)
+					seqCamData.binImage_ms = (seqCamData.lastImage_ms - seqCamData.firstImage_ms)
 							/ (seqCamData.nTotalFrames - 1);
-				if (seqCamData.camImageBin_ms == 0)
+				if (seqCamData.binImage_ms == 0)
 					System.out.println("Experiment:loadFileIntervalsFromSeqCamData() error / file interval size");
 			} else {
 				System.out.println("Experiment:loadFileIntervalsFromSeqCamData() error / file intervals of "
@@ -458,13 +458,13 @@ public class Experiment {
 				return false;
 
 			XMLUtil.setElementValue(node, ID_VERSION, ID_VERSIONNUM);
-			XMLUtil.setElementLongValue(node, ID_TIMEFIRSTIMAGEMS, seqCamData.camImageFirst_ms);
-			XMLUtil.setElementLongValue(node, ID_TIMELASTIMAGEMS, seqCamData.camImageLast_ms);
+			XMLUtil.setElementLongValue(node, ID_TIMEFIRSTIMAGEMS, seqCamData.firstImage_ms);
+			XMLUtil.setElementLongValue(node, ID_TIMELASTIMAGEMS, seqCamData.lastImage_ms);
 
-			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, seqCamData.indexFrameFirst);
-			XMLUtil.setElementLongValue(node, ID_BINT0, seqCamData.indexFrameFirst);
-			XMLUtil.setElementLongValue(node, ID_FRAMELAST, seqCamData.indexFrameLast);
-			XMLUtil.setElementLongValue(node, ID_FRAMEDELTA, seqCamData.frameDelta);
+			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, seqCamData.indexFirstImage);
+			XMLUtil.setElementLongValue(node, ID_BINT0, seqCamData.indexFirstImage);
+			XMLUtil.setElementLongValue(node, ID_FRAMELAST, seqCamData.indexLastImage);
+			XMLUtil.setElementLongValue(node, ID_FRAMEDELTA, seqCamData.deltaImage);
 
 			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, seqCamData.binFirst_ms);
 			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, seqCamData.binLast_ms);
@@ -1038,20 +1038,20 @@ public class Experiment {
 		if (!version.equals(ID_VERSIONNUM))
 			return false;
 
-		seqCamData.camImageFirst_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGEMS, 0);
-		seqCamData.camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGEMS, 0);
-		if (seqCamData.camImageLast_ms <= 0) {
-			seqCamData.camImageFirst_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGE, 0) * 60000;
-			seqCamData.camImageLast_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0) * 60000;
+		seqCamData.firstImage_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGEMS, 0);
+		seqCamData.lastImage_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGEMS, 0);
+		if (seqCamData.lastImage_ms <= 0) {
+			seqCamData.firstImage_ms = XMLUtil.getElementLongValue(node, ID_TIMEFIRSTIMAGE, 0) * 60000;
+			seqCamData.lastImage_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0) * 60000;
 		}
 
-		seqCamData.indexFrameFirst = XMLUtil.getElementLongValue(node, ID_FRAMEFIRST, -1);
-		if (seqCamData.indexFrameFirst < 0)
-			seqCamData.indexFrameFirst = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
-		if (seqCamData.indexFrameFirst < 0)
-			seqCamData.indexFrameFirst = 0;
-		seqCamData.indexFrameLast = XMLUtil.getElementLongValue(node, ID_FRAMELAST, -1);
-		seqCamData.frameDelta = XMLUtil.getElementLongValue(node, ID_FRAMEDELTA, 1);
+		seqCamData.indexFirstImage = XMLUtil.getElementLongValue(node, ID_FRAMEFIRST, -1);
+		if (seqCamData.indexFirstImage < 0)
+			seqCamData.indexFirstImage = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
+		if (seqCamData.indexFirstImage < 0)
+			seqCamData.indexFirstImage = 0;
+		seqCamData.indexLastImage = XMLUtil.getElementLongValue(node, ID_FRAMELAST, -1);
+		seqCamData.deltaImage = XMLUtil.getElementLongValue(node, ID_FRAMEDELTA, 1);
 		seqCamData.binFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1);
 		seqCamData.binLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);
 		seqCamData.binDuration_ms = XMLUtil.getElementLongValue(node, ID_BINKYMOCOLMS, -1);
@@ -1072,10 +1072,10 @@ public class Experiment {
 	}
 
 	private void ugly_checkOffsetValues() {
-		if (seqCamData.camImageFirst_ms < 0)
-			seqCamData.camImageFirst_ms = 0;
-		if (seqCamData.camImageLast_ms < 0)
-			seqCamData.camImageLast_ms = 0;
+		if (seqCamData.firstImage_ms < 0)
+			seqCamData.firstImage_ms = 0;
+		if (seqCamData.lastImage_ms < 0)
+			seqCamData.lastImage_ms = 0;
 		if (seqCamData.binFirst_ms < 0)
 			seqCamData.binFirst_ms = 0;
 		if (seqCamData.binLast_ms < 0)

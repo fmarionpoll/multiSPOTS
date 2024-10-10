@@ -223,7 +223,7 @@ public class XLSExport {
 	void writeTopRow_timeIntervals_Default(XSSFSheet sheet, int row) {
 		boolean transpose = options.transpose;
 		Point pt = new Point(0, row);
-		long duration = expAll.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms;
+		long duration = expAll.seqCamData.lastImage_ms - expAll.seqCamData.firstImage_ms;
 		long interval = 0;
 		while (interval < duration) {
 			int i = (int) (interval / options.buildExcelUnitMs);
@@ -333,7 +333,7 @@ public class XLSExport {
 			expi = expi.chainToNextExperiment;
 		}
 
-		int nFrames = (int) ((expAll.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms)
+		int nFrames = (int) ((expAll.seqCamData.lastImage_ms - expAll.seqCamData.firstImage_ms)
 				/ options.buildExcelStepMs + 1);
 		int nspots = expAll.spotsArray.spotsList.size();
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
@@ -367,7 +367,7 @@ public class XLSExport {
 			expi = expi.chainToNextExperiment;
 		}
 
-		int nFrames = (int) ((expAll.seqCamData.camImageLast_ms - expAll.seqCamData.camImageFirst_ms)
+		int nFrames = (int) ((expAll.seqCamData.lastImage_ms - expAll.seqCamData.firstImage_ms)
 				/ options.buildExcelStepMs + 1);
 		int nspots = expAll.spotsArray.spotsList.size();
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
@@ -388,16 +388,16 @@ public class XLSExport {
 			XLSExportOptions options) {
 		this.options = options;
 		expAll = new Experiment();
-		expAll.seqCamData.camImageLast_ms = exp.seqCamData.camImageLast_ms;
-		expAll.seqCamData.camImageFirst_ms = exp.seqCamData.camImageFirst_ms;
+		expAll.seqCamData.lastImage_ms = exp.seqCamData.lastImage_ms;
+		expAll.seqCamData.firstImage_ms = exp.seqCamData.firstImage_ms;
 		return getSpotDataFromOneExperimentSeries(exp, exportType);
 	}
 
 	public XLSResultsArray getSpotsDataFromOneExperiment(Experiment exp, XLSExportOptions options) {
 		this.options = options;
 		expAll = new Experiment();
-		expAll.seqCamData.camImageLast_ms = exp.seqCamData.camImageLast_ms;
-		expAll.seqCamData.camImageFirst_ms = exp.seqCamData.camImageFirst_ms;
+		expAll.seqCamData.lastImage_ms = exp.seqCamData.lastImage_ms;
+		expAll.seqCamData.firstImage_ms = exp.seqCamData.firstImage_ms;
 		return getSpotsDataFromOneExperimentSeries(exp, options);
 	}
 
@@ -489,17 +489,17 @@ public class XLSExport {
 
 		EnumXLSExportType xlsoption = resultsArrayList.getRow(0).exportType;
 
-		long offsetChain = expi.seqCamData.camImageFirst_ms - expi.chainImageFirst_ms;
+		long offsetChain = expi.seqCamData.firstImage_ms - expi.chainImageFirst_ms;
 		long start_Ms = expi.seqCamData.binFirst_ms + offsetChain; // TODO check when collate?
 		long end_Ms = expi.seqCamData.binLast_ms + offsetChain;
 		if (options.fixedIntervals) {
 			if (start_Ms < options.startAll_Ms)
 				start_Ms = options.startAll_Ms;
-			if (start_Ms > expi.seqCamData.camImageLast_ms)
+			if (start_Ms > expi.seqCamData.lastImage_ms)
 				return;
 			if (end_Ms > options.endAll_Ms)
 				end_Ms = options.endAll_Ms;
-			if (end_Ms > expi.seqCamData.camImageFirst_ms)
+			if (end_Ms > expi.seqCamData.firstImage_ms)
 				return;
 		}
 
@@ -600,8 +600,8 @@ public class XLSExport {
 					expi = expi.chainToNextExperiment;
 				}
 				int lastIntervalFlyAlive = expi.cages.getLastIntervalFlyAlive(cagenumber);
-				int lastMinuteAlive = (int) (lastIntervalFlyAlive * expi.seqCamData.camImageBin_ms
-						+ (expi.seqCamData.camImageFirst_ms - expAll.seqCamData.camImageFirst_ms));
+				int lastMinuteAlive = (int) (lastIntervalFlyAlive * expi.seqCamData.binImage_ms
+						+ (expi.seqCamData.firstImage_ms - expAll.seqCamData.firstImage_ms));
 				ilastalive = (int) (lastMinuteAlive / expAll.seqCamData.binDuration_ms);
 			}
 			if (ilastalive > 0)
@@ -671,8 +671,8 @@ public class XLSExport {
 		if (row.valuesOut == null)
 			return;
 
-		for (long coltime = expAll.seqCamData.camImageFirst_ms; coltime < expAll.seqCamData.camImageLast_ms; coltime += options.buildExcelStepMs, pt.y++) {
-			int i_from = (int) ((coltime - expAll.seqCamData.camImageFirst_ms) / options.buildExcelStepMs);
+		for (long coltime = expAll.seqCamData.firstImage_ms; coltime < expAll.seqCamData.lastImage_ms; coltime += options.buildExcelStepMs, pt.y++) {
+			int i_from = (int) ((coltime - expAll.seqCamData.firstImage_ms) / options.buildExcelStepMs);
 			if (i_from >= row.valuesOut.length)
 				break;
 			double value = row.valuesOut[i_from];

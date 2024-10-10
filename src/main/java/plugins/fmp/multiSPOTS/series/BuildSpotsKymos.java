@@ -58,11 +58,11 @@ public class BuildSpotsKymos extends BuildSeries {
 		if (options.isFrameFixed) {
 			exp.seqCamData.binFirst_ms = options.t_Ms_First;
 			exp.seqCamData.binLast_ms = options.t_Ms_Last;
-			if (exp.seqCamData.binLast_ms + exp.seqCamData.camImageFirst_ms > exp.seqCamData.camImageLast_ms)
-				exp.seqCamData.binLast_ms = exp.seqCamData.camImageLast_ms - exp.seqCamData.camImageFirst_ms;
+			if (exp.seqCamData.binLast_ms + exp.seqCamData.firstImage_ms > exp.seqCamData.lastImage_ms)
+				exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
 		} else {
 			exp.seqCamData.binFirst_ms = 0;
-			exp.seqCamData.binLast_ms = exp.seqCamData.camImageLast_ms - exp.seqCamData.camImageFirst_ms;
+			exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
 		}
 	}
 
@@ -118,9 +118,9 @@ public class BuildSpotsKymos extends BuildSeries {
 		threadRunning = true;
 		stopFlag = false;
 
-		final int tFirst = (int) exp.seqSpotKymos.indexFrameFirst;
-		final int tLast = exp.seqCamData.nTotalFrames;
-		final int tDelta = (int) exp.seqSpotKymos.frameDelta;
+		final int iiFirst = (int) exp.seqSpotKymos.indexFirstImage;
+		final int iiLast = (int) exp.seqSpotKymos.indexLastImage;
+		final int iiDelta = (int) exp.seqSpotKymos.deltaImage;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
@@ -132,24 +132,24 @@ public class BuildSpotsKymos extends BuildSeries {
 
 		vData.setTitle(exp.seqCamData.getCSCamFileName());
 
-		for (int ii = tFirst; ii < tLast; ii += tDelta) {
+		for (int ii = iiFirst; ii < iiLast; ii += iiDelta) {
 			final int t = ii;
 
 			if (options.concurrentDisplay) {
 				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
 				seqData.setImage(0, 0, sourceImage0);
-				vData.setTitle("Frame #" + ii + " /" + tLast);
+				vData.setTitle("Frame #" + ii + " /" + iiLast);
 			}
 
 			tasks.add(processor.submit(new Runnable() {
 				@Override
 				public void run() {
-					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
+					progressBar1.setMessage("Analyze frame: " + t + "//" + iiLast);
 					IcyBufferedImage sourceImage = loadImageFromIndex(exp, t);
 					int sizeC = sourceImage.getSizeC();
 					IcyBufferedImageCursor cursorSource = new IcyBufferedImageCursor(sourceImage);
 					for (Spot spot : exp.spotsArray.spotsList) {
-						analyzeImageWithSpot(cursorSource, spot, t - tFirst, sizeC);
+						analyzeImageWithSpot(cursorSource, spot, t - iiFirst, sizeC);
 					}
 				}
 			}));
@@ -230,7 +230,7 @@ public class BuildSpotsKymos extends BuildSeries {
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 //		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.seqSpotKymos.indexFrameFirst);
+		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.seqSpotKymos.indexFirstImage);
 		int numC = seqCamData.seq.getSizeC();
 		if (numC <= 0)
 			numC = 3;

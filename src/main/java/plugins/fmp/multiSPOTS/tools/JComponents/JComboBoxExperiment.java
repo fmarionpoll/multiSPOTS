@@ -40,8 +40,8 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 		Experiment expAll = new Experiment();
 		Experiment exp0 = getItemAt(0);
 		if (options.fixedIntervals) {
-			expAll.seqCamData.camImageFirst_ms = options.startAll_Ms;
-			expAll.seqCamData.camImageLast_ms = options.endAll_Ms;
+			expAll.seqCamData.firstImage_ms = options.startAll_Ms;
+			expAll.seqCamData.lastImage_ms = options.endAll_Ms;
 		} else {
 			if (options.absoluteTime) {
 				Experiment expFirst = exp0.getFirstChainedExperiment(options.collateSeries);
@@ -57,26 +57,26 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 					if (expAll.lastImage_FileTime.compareTo(expLast.lastImage_FileTime) < 0)
 						expAll.setFileTimeImageLast(expLast.lastImage_FileTime);
 				}
-				expAll.seqCamData.camImageFirst_ms = expAll.firstImage_FileTime.toMillis();
-				expAll.seqCamData.camImageLast_ms = expAll.lastImage_FileTime.toMillis();
+				expAll.seqCamData.firstImage_ms = expAll.firstImage_FileTime.toMillis();
+				expAll.seqCamData.lastImage_ms = expAll.lastImage_FileTime.toMillis();
 			} else {
-				expAll.seqCamData.camImageFirst_ms = 0;
-				expAll.seqCamData.camImageLast_ms = exp0.seqCamData.binLast_ms - exp0.seqCamData.binFirst_ms;
+				expAll.seqCamData.firstImage_ms = 0;
+				expAll.seqCamData.lastImage_ms = exp0.seqCamData.binLast_ms - exp0.seqCamData.binFirst_ms;
 				long firstOffset_Ms = 0;
 				long lastOffset_Ms = 0;
 
 				for (int i = 0; i < getItemCount(); i++) {
 					Experiment exp = getItemAt(i);
 					Experiment expFirst = exp.getFirstChainedExperiment(options.collateSeries);
-					firstOffset_Ms = expFirst.seqCamData.binFirst_ms + expFirst.seqCamData.camImageFirst_ms;
-					exp.chainImageFirst_ms = expFirst.seqCamData.camImageFirst_ms + expFirst.seqCamData.binFirst_ms;
+					firstOffset_Ms = expFirst.seqCamData.binFirst_ms + expFirst.seqCamData.firstImage_ms;
+					exp.chainImageFirst_ms = expFirst.seqCamData.firstImage_ms + expFirst.seqCamData.binFirst_ms;
 
 					Experiment expLast = exp.getLastChainedExperiment(options.collateSeries);
 					if (expLast.seqCamData.binLast_ms <= 0) {
-						expLast.seqCamData.binLast_ms = expLast.seqCamData.camImageLast_ms
-								- expLast.seqCamData.camImageFirst_ms;
+						expLast.seqCamData.binLast_ms = expLast.seqCamData.lastImage_ms
+								- expLast.seqCamData.firstImage_ms;
 					}
-					lastOffset_Ms = expLast.seqCamData.binLast_ms + expLast.seqCamData.camImageFirst_ms;
+					lastOffset_Ms = expLast.seqCamData.binLast_ms + expLast.seqCamData.firstImage_ms;
 
 					long diff = lastOffset_Ms - firstOffset_Ms;
 					if (diff < 1) {
@@ -84,8 +84,8 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 								+ ": FileTime difference between last and first image < 1; set dt between images = 1 ms");
 						diff = exp.seqCamData.seq.getSizeT();
 					}
-					if (expAll.seqCamData.camImageLast_ms < diff)
-						expAll.seqCamData.camImageLast_ms = diff;
+					if (expAll.seqCamData.lastImage_ms < diff)
+						expAll.seqCamData.lastImage_ms = diff;
 				}
 			}
 		}
@@ -161,7 +161,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 		for (int i = 0; i < getItemCount(); i++) {
 			Experiment expi = getItemAt(i);
 			Experiment expFirst = expi.getFirstChainedExperiment(collate);
-			expi.chainImageFirst_ms = expFirst.seqCamData.camImageFirst_ms + expFirst.seqCamData.binFirst_ms;
+			expi.chainImageFirst_ms = expFirst.seqCamData.firstImage_ms + expFirst.seqCamData.binFirst_ms;
 		}
 	}
 
@@ -186,10 +186,10 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 					continue;
 
 				// same exp series: if before, insert eventually
-				if (expj.seqCamData.camImageLast_ms < expi.seqCamData.camImageFirst_ms) {
+				if (expj.seqCamData.lastImage_ms < expi.seqCamData.firstImage_ms) {
 					if (expi.chainToPreviousExperiment == null)
 						expi.chainToPreviousExperiment = expj;
-					else if (expj.seqCamData.camImageLast_ms > expi.chainToPreviousExperiment.seqCamData.camImageLast_ms) {
+					else if (expj.seqCamData.lastImage_ms > expi.chainToPreviousExperiment.seqCamData.lastImage_ms) {
 						(expi.chainToPreviousExperiment).chainToNextExperiment = expj;
 						expj.chainToPreviousExperiment = expi.chainToPreviousExperiment;
 						expj.chainToNextExperiment = expi;
@@ -198,10 +198,10 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 					continue;
 				}
 				// same exp series: if after, insert eventually
-				if (expj.seqCamData.camImageFirst_ms >= expi.seqCamData.camImageLast_ms) {
+				if (expj.seqCamData.firstImage_ms >= expi.seqCamData.lastImage_ms) {
 					if (expi.chainToNextExperiment == null)
 						expi.chainToNextExperiment = expj;
-					else if (expj.seqCamData.camImageFirst_ms < expi.chainToNextExperiment.seqCamData.camImageFirst_ms) {
+					else if (expj.seqCamData.firstImage_ms < expi.chainToNextExperiment.seqCamData.firstImage_ms) {
 						(expi.chainToNextExperiment).chainToPreviousExperiment = expj;
 						expj.chainToNextExperiment = (expi.chainToNextExperiment);
 						expj.chainToPreviousExperiment = expi;
