@@ -272,7 +272,6 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 
 		boolean flag = true;
 		progressFrame.setMessage("Load image");
-
 		exp.loadCamDataImages();
 		parent0.dlgExperiment.updateViewerForSequenceCam(exp);
 
