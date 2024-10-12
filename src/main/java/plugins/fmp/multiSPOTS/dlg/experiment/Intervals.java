@@ -95,6 +95,8 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 					exp.seqCamData.indexFirstImage = (long) indexFrameFirstJSpinner.getValue();
 					long bin_ms = exp.seqCamData.binImage_ms;
 					exp.seqCamData.binFirst_ms = exp.seqCamData.indexFirstImage * bin_ms;
+					exp.saveXML_MCExperiment();
+					//exp.loadCamDataImages();
 				}
 			}
 		});
