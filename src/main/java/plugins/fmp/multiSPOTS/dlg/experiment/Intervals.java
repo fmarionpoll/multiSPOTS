@@ -31,8 +31,8 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 	Long max = 10000L;
 	Long step = 1L;
 	Long maxLast = 99999999L;
-	JSpinner indexFrameFirstJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
-	JSpinner indexFrameLastJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
+	JSpinner indexFirstImageJSpinner = new JSpinner(new SpinnerNumberModel(val, min, max, step));
+	JSpinner numberImagesJSpinner = new JSpinner(new SpinnerNumberModel(maxLast, step, maxLast, step));
 	JSpinner binSizeJSpinner = new JSpinner(new SpinnerNumberModel(1., 0., 1000., 1.));
 	JComboBoxMs binUnit = new JComboBoxMs();
 	JButton applyButton = new JButton("Apply changes");
@@ -52,9 +52,9 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 
 		JPanel panel0 = new JPanel(layout1);
 		panel0.add(new JLabel("Frame ", SwingConstants.RIGHT));
-		panel0.add(indexFrameFirstJSpinner);
-		panel0.add(new JLabel(" to "));
-		panel0.add(indexFrameLastJSpinner);
+		panel0.add(indexFirstImageJSpinner);
+		panel0.add(new JLabel(" N frames"));
+		panel0.add(numberImagesJSpinner);
 		add(panel0);
 
 		JPanel panel1 = new JPanel(layout1);
@@ -88,11 +88,11 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 			}
 		});
 
-		indexFrameFirstJSpinner.addChangeListener(new ChangeListener() {
+		indexFirstImageJSpinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					exp.seqCamData.indexFirstImage = (long) indexFrameFirstJSpinner.getValue();
+					exp.seqCamData.indexFirstImage = (long) indexFirstImageJSpinner.getValue();
 					long bin_ms = exp.seqCamData.binImage_ms;
 					exp.seqCamData.binFirst_ms = exp.seqCamData.indexFirstImage * bin_ms;
 					exp.saveXML_MCExperiment();
@@ -101,13 +101,13 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 			}
 		});
 
-		indexFrameLastJSpinner.addChangeListener(new ChangeListener() {
+		numberImagesJSpinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					exp.seqCamData.indexLastImage = (long) indexFrameLastJSpinner.getValue();
+					exp.seqCamData.numberImages = (long) numberImagesJSpinner.getValue();
 					long bin_ms = exp.seqCamData.binImage_ms;
-					exp.seqCamData.binLast_ms = (((long) indexFrameLastJSpinner.getValue())
+					exp.seqCamData.binLast_ms = (((long) numberImagesJSpinner.getValue())
 							- exp.seqCamData.indexFirstImage) * bin_ms;
 				}
 			}
@@ -120,8 +120,7 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 					long bin_ms = (long) (((double) binSizeJSpinner.getValue()) * binUnit.getMsUnitValue());
 					exp.seqCamData.binImage_ms = bin_ms;
 					exp.seqCamData.binFirst_ms = exp.seqCamData.indexFirstImage * bin_ms;
-					exp.seqCamData.binLast_ms = (exp.seqCamData.indexLastImage - exp.seqCamData.indexFirstImage)
-							* bin_ms;
+					exp.seqCamData.binLast_ms = (exp.seqCamData.numberImages-1) * bin_ms;
 				}
 			}
 		});
@@ -130,9 +129,9 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 	private void setExptParms(Experiment exp) {
 		exp.seqCamData.binImage_ms = (long) (((double) binSizeJSpinner.getValue()) * binUnit.getMsUnitValue());
 		long bin_ms = exp.seqCamData.binImage_ms;
-		exp.seqCamData.indexFirstImage = (long) indexFrameFirstJSpinner.getValue();
+		exp.seqCamData.indexFirstImage = (long) indexFirstImageJSpinner.getValue();
 		exp.seqCamData.binFirst_ms = exp.seqCamData.indexFirstImage * bin_ms;
-		exp.seqCamData.binLast_ms = (((long) indexFrameLastJSpinner.getValue()) - exp.seqCamData.indexFirstImage)
+		exp.seqCamData.binLast_ms = (exp.seqCamData.numberImages -1)
 				* bin_ms;
 	}
 
@@ -141,11 +140,11 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 		long bin_ms = exp.seqCamData.binImage_ms;
 		long dFirst = exp.seqCamData.indexFirstImage;
 
-		indexFrameFirstJSpinner.setValue(dFirst);
+		indexFirstImageJSpinner.setValue(dFirst);
 		if (exp.seqCamData.binLast_ms <= 0)
 			exp.seqCamData.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
-		long dLast = (long) exp.seqCamData.binLast_ms / bin_ms;
-		indexFrameLastJSpinner.setValue(dLast);
+
+		numberImagesJSpinner.setValue(exp.seqCamData.numberImages);
 		exp.getFileIntervalsFromSeqCamData();
 	}
 

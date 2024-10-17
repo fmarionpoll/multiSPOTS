@@ -118,8 +118,8 @@ public class BuildSpotsKymos extends BuildSeries {
 		threadRunning = true;
 		stopFlag = false;
 
-		final int iiFirst = 0; // (int) exp.seqCamData.indexFirstImage;
-		final int iiLast = (int) (exp.seqCamData.indexLastImage - exp.seqCamData.indexFirstImage);
+		final int iiFirst = 0; 
+		final int iiLast = (int) (exp.seqCamData.numberImages-1 + exp.seqCamData.indexFirstImage);
 		final int iiDelta = (int) exp.seqSpotKymos.deltaImage;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 

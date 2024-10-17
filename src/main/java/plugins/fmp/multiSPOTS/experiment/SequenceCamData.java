@@ -61,7 +61,7 @@ public class SequenceCamData {
 	public long[] camImages_ms = null;
 
 	public long indexFirstImage = 0;
-	public long indexLastImage = 0;
+	public long numberImages = 0;
 	public long deltaImage = 1;
 	public long binFirst_ms = 0;
 	public long binLast_ms = 0;
