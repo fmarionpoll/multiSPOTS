@@ -93,6 +93,7 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					exp.seqCamData.indexFirstImage = (long) indexFirstImageJSpinner.getValue();
+					exp.seqCamData.loadImageList();
 					long bin_ms = exp.seqCamData.binImage_ms;
 					exp.seqCamData.binFirst_ms = exp.seqCamData.indexFirstImage * bin_ms;
 					exp.saveXML_MCExperiment();
@@ -105,7 +106,8 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 			public void stateChanged(ChangeEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					exp.seqCamData.numberImages = (long) numberImagesJSpinner.getValue();
+					exp.seqCamData.numberOfImages = (long) numberImagesJSpinner.getValue();
+					exp.seqCamData.loadImageList();
 					long bin_ms = exp.seqCamData.binImage_ms;
 					exp.seqCamData.binLast_ms = (((long) numberImagesJSpinner.getValue())
 							- exp.seqCamData.indexFirstImage) * bin_ms;
@@ -120,7 +122,7 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 					long bin_ms = (long) (((double) binSizeJSpinner.getValue()) * binUnit.getMsUnitValue());
 					exp.seqCamData.binImage_ms = bin_ms;
 					exp.seqCamData.binFirst_ms = exp.seqCamData.indexFirstImage * bin_ms;
-					exp.seqCamData.binLast_ms = (exp.seqCamData.numberImages-1) * bin_ms;
+					exp.seqCamData.binLast_ms = (exp.seqCamData.numberOfImages-1) * bin_ms;
 				}
 			}
 		});
@@ -131,7 +133,7 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 		long bin_ms = exp.seqCamData.binImage_ms;
 		exp.seqCamData.indexFirstImage = (long) indexFirstImageJSpinner.getValue();
 		exp.seqCamData.binFirst_ms = exp.seqCamData.indexFirstImage * bin_ms;
-		exp.seqCamData.binLast_ms = (exp.seqCamData.numberImages -1)
+		exp.seqCamData.binLast_ms = (exp.seqCamData.numberOfImages -1)
 				* bin_ms;
 	}
 
@@ -144,7 +146,7 @@ public class Intervals extends JPanel implements PropertyChangeListener {
 		if (exp.seqCamData.binLast_ms <= 0)
 			exp.seqCamData.binLast_ms = (long) (exp.getSeqCamSizeT() * bin_ms);
 
-		numberImagesJSpinner.setValue(exp.seqCamData.numberImages);
+		numberImagesJSpinner.setValue(exp.seqCamData.numberOfImages);
 		exp.getFileIntervalsFromSeqCamData();
 	}
 

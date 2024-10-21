@@ -61,7 +61,7 @@ public class SequenceCamData {
 	public long[] camImages_ms = null;
 
 	public long indexFirstImage = 0;
-	public long numberImages = 0;
+	public long numberOfImagesClipped = -1;
 	public long deltaImage = 1;
 	public long binFirst_ms = 0;
 	public long binLast_ms = 0;
@@ -147,8 +147,16 @@ public class SequenceCamData {
 	private void clipImagesList(List<String> imagesList) {
 		Collections.sort(imagesList);
 		if (indexFirstImage > 0) {
-			for (long i = indexFirstImage; i > 0; i--)
+			for (int i = (int) indexFirstImage; i > 0; i--)
 				imagesList.remove(0);
+		}
+		if (numberOfImagesClipped > 0 && numberOfImagesClipped < imagesList.size()) {
+			for (int i = imagesList.size(); i > numberOfImagesClipped; i--)
+				imagesList.remove(i-1);
+		} 
+		else
+		{
+			numberOfImagesClipped = imagesList.size();
 		}
 	}
 
@@ -288,6 +296,10 @@ public class SequenceCamData {
 		seq.close();
 	}
 
+	public List<String> getImagesList() {
+		return camImagesList;
+	}
+	
 	public void setImagesList(List<String> extImagesList) {
 		camImagesList.clear();
 		camImagesList.addAll(extImagesList);

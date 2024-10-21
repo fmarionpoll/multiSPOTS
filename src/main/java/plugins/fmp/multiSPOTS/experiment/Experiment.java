@@ -463,7 +463,7 @@ public class Experiment {
 
 			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, seqCamData.indexFirstImage);
 			XMLUtil.setElementLongValue(node, ID_BINT0, seqCamData.indexFirstImage);
-			XMLUtil.setElementLongValue(node, ID_NFRAMES, seqCamData.numberImages);
+			XMLUtil.setElementLongValue(node, ID_NFRAMES, seqCamData.numberOfImages);
 			XMLUtil.setElementLongValue(node, ID_FRAMEDELTA, seqCamData.deltaImage);
 
 			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, seqCamData.binFirst_ms);
@@ -1050,7 +1050,7 @@ public class Experiment {
 			seqCamData.indexFirstImage = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
 		if (seqCamData.indexFirstImage < 0)
 			seqCamData.indexFirstImage = 0;
-		seqCamData.numberImages = XMLUtil.getElementLongValue(node, ID_NFRAMES, -1);
+		seqCamData.numberOfImages = XMLUtil.getElementLongValue(node, ID_NFRAMES, -1);
 		seqCamData.deltaImage = XMLUtil.getElementLongValue(node, ID_FRAMEDELTA, 1);
 		seqCamData.binFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1);
 		seqCamData.binLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);
