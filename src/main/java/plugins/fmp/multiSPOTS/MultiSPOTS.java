@@ -42,6 +42,7 @@ public class MultiSPOTS extends PluginActionable {
 	@Override
 	public void run() {
 		JPanel mainPanel = GuiUtil.generatePanelWithoutBorder();
+
 		dlgBrowse.init(mainPanel, "Browse", this);
 		dlgExperiment.init(mainPanel, "Experiment", this);
 		dlgSpots.init(mainPanel, "Spots", this);
@@ -53,6 +54,7 @@ public class MultiSPOTS extends PluginActionable {
 
 		mainFrame.setLayout(new BorderLayout());
 		mainFrame.add(mainPanel, BorderLayout.WEST);
+
 		mainFrame.pack();
 		mainFrame.center();
 		mainFrame.setVisible(true);
