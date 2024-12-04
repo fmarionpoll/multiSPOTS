@@ -37,11 +37,12 @@ public class CreateSpots extends JPanel {
 	private static final long serialVersionUID = -5257698990389571518L;
 
 	private JButton displayFrameDButton = new JButton("(1) Display frame");
-	private JButton createPolylinesButton = new JButton("(2) Generate polylines");
-	private JButton createCirclesButton = new JButton("(3) Create circles");
+//	private JButton createPolylinesButton = new JButton("(2) Generate polylines");
+	private JButton createCirclesButton = new JButton("(2) Create circles");
 
 //	private JComboBox<String> orientationJCombo = new JComboBox<String>(new String[] { "0°", "90°", "180°", "270°" });
-	private JSpinner spotsPerCageJSpinner = new JSpinner(new SpinnerNumberModel(2, 2, 500, 1));
+	private JSpinner spotsAlongColumnsPerCageJSpinner = new JSpinner(new SpinnerNumberModel(2, 1, 500, 1));
+	private JSpinner spotsAlongRowsPerCageJSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
 	private JSpinner nbFliesPerCageJSpinner = new JSpinner(new SpinnerNumberModel(1, 0, 500, 1));
 	private JSpinner pixelRadiusSpinner = new JSpinner(new SpinnerNumberModel(30, 1, 1000, 1));
 
@@ -49,10 +50,9 @@ public class CreateSpots extends JPanel {
 	private JSpinner nCagesPerColumnSpinner = new JSpinner(new SpinnerNumberModel(8, 1, 100, 1));
 
 	private Polygon2D spotsLocationPolygon = null;
-	private String[] flyString = new String[] { "fly", "flies" };
+	private String[] flyString = new String[] { "fly per cage", "flies per cage" };
 
 	private JLabel flyLabel = new JLabel(flyString[0]);
-	private JLabel pointsLabel = new JLabel("points at");
 
 	private MultiSPOTS parent0 = null;
 
@@ -63,33 +63,38 @@ public class CreateSpots extends JPanel {
 
 		JPanel panel0 = new JPanel(flowLayout);
 		panel0.add(displayFrameDButton);
-		panel0.add(createPolylinesButton);
+//		panel0.add(createPolylinesButton);
 		panel0.add(createCirclesButton);
+//		panel0.add(new JLabel("radius"));
+		panel0.add(pixelRadiusSpinner);
+		pixelRadiusSpinner.setPreferredSize(new Dimension(40, 20));
+		panel0.add(new JLabel("pixels"));
 
 		JPanel panel1 = new JPanel(flowLayout);
-		panel1.add(new JLabel("cages"));
+		panel1.add(new JLabel("Spots array:"));
 		panel1.add(nCagesPerRowSpinner);
 		nCagesPerRowSpinner.setPreferredSize(new Dimension(40, 20));
-		panel1.add(new JLabel("columns x "));
+		panel1.add(new JLabel("columns X"));
 		panel1.add(nCagesPerColumnSpinner);
 		nCagesPerColumnSpinner.setPreferredSize(new Dimension(40, 20));
 		panel1.add(new JLabel("rows"));
-		panel1.add(nbFliesPerCageJSpinner);
-		nbFliesPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
-		panel1.add(flyLabel);
 
 		JPanel panel2 = new JPanel(flowLayout);
-		panel2.add(new JLabel("Spots per cage"));
-		panel2.add(spotsPerCageJSpinner);
-		spotsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
-		panel2.add(pointsLabel);
+		panel2.add(new JLabel("Cage:"));
+
+		panel2.add(spotsAlongColumnsPerCageJSpinner);
+		spotsAlongColumnsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel2.add(new JLabel("columns X"));
+		panel2.add(spotsAlongRowsPerCageJSpinner);
+		spotsAlongRowsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel2.add(new JLabel("row"));
+
+		panel2.add(nbFliesPerCageJSpinner);
+		nbFliesPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel2.add(flyLabel);
 //		panel2.add(orientationJCombo);
 //		orientationJCombo.setPreferredSize(new Dimension(50, 20));
 //		panel2.add(new JLabel("angle;"));
-		panel2.add(new JLabel("circles"));
-		panel2.add(pixelRadiusSpinner);
-		pixelRadiusSpinner.setPreferredSize(new Dimension(40, 20));
-		panel2.add(new JLabel("pixel radius"));
 
 		add(panel0);
 		add(panel1);
@@ -122,18 +127,18 @@ public class CreateSpots extends JPanel {
 			}
 		});
 
-		createPolylinesButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				roisGenerateFromPolygon();
-				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) {
-					ExperimentUtils.transferCamDataROIStoCapillaries(exp);
-					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
-					exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage, false);
-				}
-			}
-		});
+//		createPolylinesButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(final ActionEvent e) {
+//				roisGenerateFromPolygon();
+//				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+//				if (exp != null) {
+//					ExperimentUtils.transferCamDataROIStoCapillaries(exp);
+//					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
+//					exp.capillaries.initCapillariesWith10Cages(nbFliesPerCage, false);
+//				}
+//			}
+//		});
 
 		createCirclesButton.addActionListener(new ActionListener() {
 			@Override
@@ -268,7 +273,7 @@ public class CreateSpots extends JPanel {
 			y0 = 0;
 		double x1 = roiPolygon.xpoints[1] + (roiPolygon.xpoints[2] - roiPolygon.xpoints[1]) * colspan0 / colspan;
 		double y1 = roiPolygon.ypoints[1] + (roiPolygon.ypoints[2] - roiPolygon.ypoints[1]) * colspan0 / colspan;
-		int npoints = (int) spotsPerCageJSpinner.getValue();
+		int npoints = (int) spotsAlongColumnsPerCageJSpinner.getValue();
 
 		ROI2DPolyLine roiL1 = new ROI2DPolyLine(createPolyline2D(x0, y0, x1, y1, npoints));
 		roiL1.setName(name);
