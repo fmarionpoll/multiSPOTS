@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -37,22 +38,24 @@ public class CreateSpots extends JPanel {
 	private static final long serialVersionUID = -5257698990389571518L;
 
 	private JButton displayFrameDButton = new JButton("(1) Display frame");
-//	private JButton createPolylinesButton = new JButton("(2) Generate polylines");
 	private JButton createCirclesButton = new JButton("(2) Create circles");
 
-//	private JComboBox<String> orientationJCombo = new JComboBox<String>(new String[] { "0°", "90°", "180°", "270°" });
-	private JSpinner spotsAlongColumnsPerCageJSpinner = new JSpinner(new SpinnerNumberModel(2, 1, 500, 1));
-	private JSpinner spotsAlongRowsPerCageJSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
-	private JSpinner nbFliesPerCageJSpinner = new JSpinner(new SpinnerNumberModel(1, 0, 500, 1));
+	private JSpinner cageNColumnsJSpinner = new JSpinner(new SpinnerNumberModel(2, 1, 500, 1));
+	private JSpinner cageNrowsJSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
+	private JSpinner nFliesPerCageJSpinner = new JSpinner(new SpinnerNumberModel(1, 0, 500, 1));
 	private JSpinner pixelRadiusSpinner = new JSpinner(new SpinnerNumberModel(30, 1, 1000, 1));
 
-	private JSpinner nCagesPerRowSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
-	private JSpinner nCagesPerColumnSpinner = new JSpinner(new SpinnerNumberModel(8, 1, 100, 1));
+	private JSpinner nRowsJSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
+	private JSpinner nColumnsJSpinner = new JSpinner(new SpinnerNumberModel(8, 1, 100, 1));
 
 	private Polygon2D spotsLocationPolygon = null;
-	private String[] flyString = new String[] { "fly per cage", "flies per cage" };
-
+	private String[] flyString = new String[] { "fly", "flies" };
 	private JLabel flyLabel = new JLabel(flyString[0]);
+
+	private String[] position = new String[] { "left", "right" };
+	private JComboBox<String> notchJComboBox = new JComboBox<String>(position);
+	private String[] viewFrom = new String[] { "bottom", "top" };
+	private JComboBox<String> viewFromJComboBox = new JComboBox<String>(viewFrom);
 
 	private MultiSPOTS parent0 = null;
 
@@ -63,38 +66,37 @@ public class CreateSpots extends JPanel {
 
 		JPanel panel0 = new JPanel(flowLayout);
 		panel0.add(displayFrameDButton);
-//		panel0.add(createPolylinesButton);
 		panel0.add(createCirclesButton);
-//		panel0.add(new JLabel("radius"));
 		panel0.add(pixelRadiusSpinner);
 		pixelRadiusSpinner.setPreferredSize(new Dimension(40, 20));
 		panel0.add(new JLabel("pixels"));
 
 		JPanel panel1 = new JPanel(flowLayout);
-		panel1.add(new JLabel("Spots array:"));
-		panel1.add(nCagesPerRowSpinner);
-		nCagesPerRowSpinner.setPreferredSize(new Dimension(40, 20));
-		panel1.add(new JLabel("columns X"));
-		panel1.add(nCagesPerColumnSpinner);
-		nCagesPerColumnSpinner.setPreferredSize(new Dimension(40, 20));
+		panel1.add(new JLabel("Spots:"));
+		panel1.add(nColumnsJSpinner);
+		nColumnsJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel1.add(new JLabel("cols"));
+		panel1.add(nRowsJSpinner);
+		nRowsJSpinner.setPreferredSize(new Dimension(40, 20));
 		panel1.add(new JLabel("rows"));
+		panel1.add(notchJComboBox);
+		panel1.add(new JLabel("notch"));
+		panel1.add(viewFromJComboBox);
+		panel1.add(new JLabel("view"));
 
 		JPanel panel2 = new JPanel(flowLayout);
 		panel2.add(new JLabel("Cage:"));
 
-		panel2.add(spotsAlongColumnsPerCageJSpinner);
-		spotsAlongColumnsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
-		panel2.add(new JLabel("columns X"));
-		panel2.add(spotsAlongRowsPerCageJSpinner);
-		spotsAlongRowsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
-		panel2.add(new JLabel("row"));
+		panel2.add(cageNColumnsJSpinner);
+		cageNColumnsJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel2.add(new JLabel("cols"));
+		panel2.add(cageNrowsJSpinner);
+		cageNrowsJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel2.add(new JLabel("rows with"));
 
-		panel2.add(nbFliesPerCageJSpinner);
-		nbFliesPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel2.add(nFliesPerCageJSpinner);
+		nFliesPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
 		panel2.add(flyLabel);
-//		panel2.add(orientationJCombo);
-//		orientationJCombo.setPreferredSize(new Dimension(50, 20));
-//		panel2.add(new JLabel("angle;"));
 
 		add(panel0);
 		add(panel1);
@@ -145,21 +147,22 @@ public class CreateSpots extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
+					roisGenerateFromPolygon();
 					int radius = (int) pixelRadiusSpinner.getValue();
 					ExperimentUtils.transformPolygon2DROISintoSpots(exp, radius);
 					ExperimentUtils.transferSpotsToCamData(exp);
-					int nbFliesPerCage = (int) nbFliesPerCageJSpinner.getValue();
+					int nbFliesPerCage = (int) nFliesPerCageJSpinner.getValue();
 					exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
 				}
 			}
 		});
 
-		nbFliesPerCageJSpinner.addChangeListener(new ChangeListener() {
+		nFliesPerCageJSpinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				int i = (int) nbFliesPerCageJSpinner.getValue() > 1 ? 1 : 0;
+				int i = (int) nFliesPerCageJSpinner.getValue() > 1 ? 1 : 0;
 				flyLabel.setText(flyString[i]);
-				nbFliesPerCageJSpinner.requestFocus();
+				nFliesPerCageJSpinner.requestFocus();
 			}
 		});
 	}
@@ -203,19 +206,6 @@ public class CreateSpots extends JPanel {
 		return spotsLocationPolygon;
 	}
 
-//	private void rotate(Polygon2D roiPolygon) {
-//		int isel = orientationJCombo.getSelectedIndex();
-//		if (isel == 0)
-//			return;
-//
-//		Polygon2D roiPolygon_orig = (Polygon2D) roiPolygon.clone();
-//		for (int i = 0; i < roiPolygon.npoints; i++) {
-//			int j = (i + isel) % 4;
-//			roiPolygon.xpoints[j] = roiPolygon_orig.xpoints[i];
-//			roiPolygon.ypoints[j] = roiPolygon_orig.ypoints[i];
-//		}
-//	}
-
 	private void roisGenerateFromPolygon() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null)
@@ -229,8 +219,8 @@ public class CreateSpots extends JPanel {
 		int n_columns = 10;
 		int n_rows = 1;
 		try {
-			n_columns = (int) nCagesPerRowSpinner.getValue();
-			n_rows = (int) nCagesPerColumnSpinner.getValue();
+			n_columns = (int) nColumnsJSpinner.getValue();
+			n_rows = (int) nRowsJSpinner.getValue();
 		} catch (Exception e) {
 			new AnnounceFrame("Can't interpret one of the ROI parameters value");
 		}
@@ -243,7 +233,7 @@ public class CreateSpots extends JPanel {
 		}
 
 		spotsLocationPolygon = PolygonUtilities.orderVerticesofPolygon(((ROI2DPolygon) roi).getPolygon());
-//		rotate(spotsLocationPolygon);
+
 		seqCamData.seq.removeROI(roi);
 
 		if (statusGroup2Mode) {
@@ -273,7 +263,7 @@ public class CreateSpots extends JPanel {
 			y0 = 0;
 		double x1 = roiPolygon.xpoints[1] + (roiPolygon.xpoints[2] - roiPolygon.xpoints[1]) * colspan0 / colspan;
 		double y1 = roiPolygon.ypoints[1] + (roiPolygon.ypoints[2] - roiPolygon.ypoints[1]) * colspan0 / colspan;
-		int npoints = (int) spotsAlongColumnsPerCageJSpinner.getValue();
+		int npoints = (int) cageNColumnsJSpinner.getValue();
 
 		ROI2DPolyLine roiL1 = new ROI2DPolyLine(createPolyline2D(x0, y0, x1, y1, npoints));
 		roiL1.setName(name);

@@ -51,7 +51,7 @@ public class DetectContours extends JPanel {
 
 	private JButton cutAndInterpolateButton = new JButton("Cut");
 
-	private JLabel spotsFilterLabel = new JLabel("Spots filter");
+	private JLabel spotsFilterLabel = new JLabel("Filter");
 	private String[] directions = new String[] { " threshold >", " threshold <" };
 	ImageTransformEnums[] transforms = new ImageTransformEnums[] { ImageTransformEnums.R_RGB, ImageTransformEnums.G_RGB,
 			ImageTransformEnums.B_RGB, ImageTransformEnums.R2MINUS_GB, ImageTransformEnums.G2MINUS_RB,
