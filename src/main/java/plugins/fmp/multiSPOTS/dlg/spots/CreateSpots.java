@@ -48,7 +48,7 @@ public class CreateSpots extends JPanel {
 	private JSpinner nRowsJSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 100, 1));
 	private JSpinner nColumnsJSpinner = new JSpinner(new SpinnerNumberModel(8, 1, 100, 1));
 
-	private Polygon2D spotsLocationPolygon = null;
+	private Polygon2D spotsPolygon = null;
 	private String[] flyString = new String[] { "fly", "flies" };
 	private JLabel flyLabel = new JLabel(flyString[0]);
 
@@ -194,16 +194,16 @@ public class CreateSpots extends JPanel {
 	}
 
 	private Polygon2D getCapillariesPolygon(SequenceCamData seqCamData) {
-		if (spotsLocationPolygon == null) {
+		if (spotsPolygon == null) {
 			Rectangle rect = seqCamData.seq.getBounds2D();
 			List<Point2D> points = new ArrayList<Point2D>();
 			points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height / 5));
 			points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height / 5));
 			points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height * 2 / 3));
 			points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height * 2 / 3));
-			spotsLocationPolygon = new Polygon2D(points);
+			spotsPolygon = new Polygon2D(points);
 		}
-		return spotsLocationPolygon;
+		return spotsPolygon;
 	}
 
 	private void roisGenerateFromPolygon() {
@@ -211,11 +211,14 @@ public class CreateSpots extends JPanel {
 		if (exp == null)
 			return;
 		SequenceCamData seqCamData = exp.seqCamData;
-		boolean statusGroup2Mode = false;
-
-		int nbcapillaries = 20;
-		int width_between_capillaries = 1;
-		int width_interval = 0;
+		
+		ROI2D roi = seqCamData.seq.getSelectedROI2D();
+		if (!(roi instanceof ROI2DPolygon)) {
+			new AnnounceFrame("The frame must be a ROI2D POLYGON");
+			return;
+		}
+		spotsPolygon = PolygonUtilities.orderVerticesofPolygon(((ROI2DPolygon) roi).getPolygon());
+		
 		int n_columns = 10;
 		int n_rows = 1;
 		try {
@@ -224,33 +227,32 @@ public class CreateSpots extends JPanel {
 		} catch (Exception e) {
 			new AnnounceFrame("Can't interpret one of the ROI parameters value");
 		}
-		nbcapillaries = n_rows * n_columns;
+		int nSpots = n_rows * n_columns;
+		Point2D.Double [][] arrayPoints = new Point2D.Double [n_columns][n_rows];
+		
 
-		ROI2D roi = seqCamData.seq.getSelectedROI2D();
-		if (!(roi instanceof ROI2DPolygon)) {
-			new AnnounceFrame("The frame must be a ROI2D POLYGON");
-			return;
-		}
 
-		spotsLocationPolygon = PolygonUtilities.orderVerticesofPolygon(((ROI2DPolygon) roi).getPolygon());
 
+		
 		seqCamData.seq.removeROI(roi);
 
-		if (statusGroup2Mode) {
-			double colspan = (nbcapillaries / 2) * (width_between_capillaries + width_interval) - width_interval;
-			for (int i = 0; i < nbcapillaries; i += 2) {
-				double colspan0 = (width_between_capillaries + width_interval) * i / 2;
-				addROILine(seqCamData, "line" + i / 2 + "L", spotsLocationPolygon, colspan0, colspan);
-				colspan0 += width_between_capillaries;
-				addROILine(seqCamData, "line" + i / 2 + "R", spotsLocationPolygon, colspan0, colspan);
-			}
-		} else {
-			double colspan = nbcapillaries - 1;
-			for (int i = 0; i < nbcapillaries; i++) {
-				double colspan0 = width_between_capillaries * i;
-				addROILine(seqCamData, "line" + String.format("%02d", i), spotsLocationPolygon, colspan0, colspan);
-			}
-		}
+		// -----------------------------------------------------------------------
+		
+//		if (statusGroup2Mode) {
+//			double colspan = (nbcapillaries / 2) * (width_between_capillaries + width_interval) - width_interval;
+//			for (int i = 0; i < nbcapillaries; i += 2) {
+//				double colspan0 = (width_between_capillaries + width_interval) * i / 2;
+//				addROILine(seqCamData, "line" + i / 2 + "L", spotsPolygon, colspan0, colspan);
+//				colspan0 += width_between_capillaries;
+//				addROILine(seqCamData, "line" + i / 2 + "R", spotsPolygon, colspan0, colspan);
+//			}
+//		} else {
+//			double colspan = nbcapillaries - 1;
+//			for (int i = 0; i < nbcapillaries; i++) {
+//				double colspan0 = width_between_capillaries * i;
+//				addROILine(seqCamData, "line" + String.format("%02d", i), spotsPolygon, colspan0, colspan);
+//			}
+//		}
 	}
 
 	private void addROILine(SequenceCamData seqCamData, String name, Polygon2D roiPolygon, double colspan0,
