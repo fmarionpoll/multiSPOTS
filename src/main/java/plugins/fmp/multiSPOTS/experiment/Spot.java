@@ -40,8 +40,8 @@ public class Spot implements Comparable<Spot> {
 	public double spotVolume = 1;
 	public int spotNPixels = 1;
 	public int spotRadius = 30;
-	public int spotXCoord = 0;
-	public int spotYCoord = 0;
+	public int spotXCoord = -1;
+	public int spotYCoord = -1;
 	public boolean descriptionOK = false;
 	public int versionInfos = 0;
 
@@ -330,8 +330,8 @@ public class Spot implements Comparable<Spot> {
 			spotVolume = XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
 			spotNPixels = XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
 			spotRadius = XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
-			spotXCoord = XMLUtil.getElementIntValue(nodeMeta, ID_XCOORD, 0);
-			spotYCoord = XMLUtil.getElementIntValue(nodeMeta, ID_YCOORD, 0);
+			spotXCoord = XMLUtil.getElementIntValue(nodeMeta, ID_XCOORD, -1);
+			spotYCoord = XMLUtil.getElementIntValue(nodeMeta, ID_YCOORD, -1);
 			spotStim = XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
 			spotConc = XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
 			spotCageSide = XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");

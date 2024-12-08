@@ -167,6 +167,8 @@ public class ExperimentUtils {
 				spot.spotIndex = spotIndex;
 				spot.cageIndex = cageIndex;
 				spot.spotRadius = radius;
+				spot.spotXCoord = (int) point.getX();
+				spot.spotYCoord = (int) point.getY();
 				spot.setSpotRoi_InColorAccordingToSpotIndex();
 				exp.spotsArray.spotsList.add(spot);
 				spotIndex++;
