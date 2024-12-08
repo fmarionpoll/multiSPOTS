@@ -39,7 +39,9 @@ public class Spot implements Comparable<Spot> {
 	public int spotIndex = 0;
 	public double spotVolume = 1;
 	public int spotNPixels = 1;
-	public int radius = 30;
+	public int spotRadius = 30;
+	public int spotXCoord = 0;
+	public int spotYCoord = 0;
 	public boolean descriptionOK = false;
 	public int versionInfos = 0;
 
@@ -61,6 +63,8 @@ public class Spot implements Comparable<Spot> {
 	private final String ID_SPOTVOLUME = "volume";
 	private final String ID_PIXELS = "pixels";
 	private final String ID_RADIUS = "radius";
+	private final String ID_XCOORD = "spotXCoord";
+	private final String ID_YCOORD = "spotYCoord";
 	private final String ID_STIML = "stimulus";
 	private final String ID_CONCL = "concentration";
 	private final String ID_SIDE = "side";
@@ -106,7 +110,7 @@ public class Spot implements Comparable<Spot> {
 		spotIndex = spotFrom.spotIndex;
 		spotVolume = spotFrom.spotVolume;
 		spotNPixels = spotFrom.spotNPixels;
-		radius = spotFrom.radius;
+		spotRadius = spotFrom.spotRadius;
 
 		limitsOptions = spotFrom.limitsOptions;
 
@@ -325,7 +329,9 @@ public class Spot implements Comparable<Spot> {
 			spotIndex = XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
 			spotVolume = XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
 			spotNPixels = XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
-			radius = XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
+			spotRadius = XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
+			spotXCoord = XMLUtil.getElementIntValue(nodeMeta, ID_XCOORD, 0);
+			spotYCoord = XMLUtil.getElementIntValue(nodeMeta, ID_YCOORD, 0);
 			spotStim = XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
 			spotConc = XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
 			spotCageSide = XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
@@ -380,7 +386,9 @@ public class Spot implements Comparable<Spot> {
 		XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
 		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, spotVolume);
 		XMLUtil.setElementIntValue(nodeMeta, ID_PIXELS, spotNPixels);
-		XMLUtil.setElementIntValue(nodeMeta, ID_RADIUS, radius);
+		XMLUtil.setElementIntValue(nodeMeta, ID_RADIUS, spotRadius);
+		XMLUtil.setElementIntValue(nodeMeta, ID_XCOORD, spotXCoord);
+		XMLUtil.setElementIntValue(nodeMeta, ID_YCOORD, spotYCoord);
 		XMLUtil.setElementValue(nodeMeta, ID_STIML, spotStim);
 		XMLUtil.setElementValue(nodeMeta, ID_SIDE, spotCageSide);
 		XMLUtil.setElementValue(nodeMeta, ID_CONCL, spotConc);
@@ -539,7 +547,7 @@ public class Spot implements Comparable<Spot> {
 		StringBuffer sbf = new StringBuffer();
 		List<String> row = Arrays.asList(Integer.toString(spotIndex), getRoi_in().getName(),
 				Integer.toString(cageIndex), Integer.toString(spotNFlies), Double.toString(spotVolume),
-				Integer.toString(spotNPixels), Integer.toString(radius), spotStim.replace(",", "."),
+				Integer.toString(spotNPixels), Integer.toString(spotRadius), spotStim.replace(",", "."),
 				spotConc.replace(",", "."), spotCageSide.replace(",", "."));
 		sbf.append(String.join(csvSep, row));
 		sbf.append("\n");
@@ -605,7 +613,7 @@ public class Spot implements Comparable<Spot> {
 		i++;
 		spotNPixels = Integer.valueOf(data[i]);
 		i++;
-		radius = Integer.valueOf(data[i]);
+		spotRadius = Integer.valueOf(data[i]);
 		i++;
 		spotStim = data[i];
 		i++;

@@ -166,7 +166,7 @@ public class ExperimentUtils {
 				Spot spot = new Spot(roiEllipse);
 				spot.spotIndex = spotIndex;
 				spot.cageIndex = cageIndex;
-				spot.radius = radius;
+				spot.spotRadius = radius;
 				spot.setSpotRoi_InColorAccordingToSpotIndex();
 				exp.spotsArray.spotsList.add(spot);
 				spotIndex++;
