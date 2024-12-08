@@ -49,7 +49,7 @@ public class LoadSaveSpots extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					loadCapillaries_File(exp);
+//					loadCapillaries_File(exp);
 					loadSpotsArray_File(exp);
 					firePropertyChange("CAP_ROIS_OPEN", false, true);
 				}
@@ -61,7 +61,7 @@ public class LoadSaveSpots extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					saveCapillaries_file(exp);
+//					saveCapillaries_file(exp);
 					saveSpotsArray_file(exp);
 					firePropertyChange("CAP_ROIS_SAVE", false, true);
 				}
@@ -69,19 +69,19 @@ public class LoadSaveSpots extends JPanel {
 		});
 	}
 
-	public boolean loadCapillaries_File(Experiment exp) {
-		boolean flag = exp.loadMCCapillaries_Only();
-		exp.capillaries.transferCapillaryRoiToSequence(exp.seqCamData.seq);
-		return flag;
-	}
-
-	public boolean saveCapillaries_file(Experiment exp) {
-		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
-		exp.capillaries.transferDescriptionToCapillaries();
-		exp.saveXML_MCExperiment();
-		exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
-		return exp.xmlSave_MCCapillaries_Only();
-	}
+//	public boolean loadCapillaries_File(Experiment exp) {
+//		boolean flag = exp.loadMCCapillaries_Only();
+//		exp.capillaries.transferCapillaryRoiToSequence(exp.seqCamData.seq);
+//		return flag;
+//	}
+//
+//	public boolean saveCapillaries_file(Experiment exp) {
+//		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
+//		exp.capillaries.transferDescriptionToCapillaries();
+//		exp.saveXML_MCExperiment();
+//		exp.capillaries.updateCapillariesFromSequence(exp.seqCamData.seq);
+//		return exp.xmlSave_MCCapillaries_Only();
+//	}
 
 	public boolean loadSpotsArray_File(Experiment exp) {
 		boolean flag = exp.loadMCSpots_Only();

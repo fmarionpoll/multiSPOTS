@@ -31,12 +31,14 @@ public class Spot implements Comparable<Spot> {
 	public BooleanMask2D mask2DSpot = null;
 
 	public int cageIndex = -1;
+	public int spotIndex = 0;
+	public int spotIndexInsideCage = 0;
+
 	public String version = null;
 	public String spotStim = new String("..");
 	public String spotConc = new String("..");
 	public String spotCageSide = ".";
 	public int spotNFlies = 1;
-	public int spotIndex = 0;
 	public double spotVolume = 1;
 	public int spotNPixels = 1;
 	public int spotRadius = 30;
@@ -59,14 +61,16 @@ public class Spot implements Comparable<Spot> {
 
 	private final String ID_META = "metaMC";
 	private final String ID_NFLIES = "nflies";
-	private final String ID_CAGENB = "cage_number";
+	private final String ID_CAGEINDEX = "cage_number";
+	private final String ID_SPOTINDEX = "spot_index";
+	private final String ID_SPOTINDEXINSIDECAGE = "spot_index_in_cage";
 	private final String ID_SPOTVOLUME = "volume";
 	private final String ID_PIXELS = "pixels";
 	private final String ID_RADIUS = "radius";
 	private final String ID_XCOORD = "spotXCoord";
 	private final String ID_YCOORD = "spotYCoord";
-	private final String ID_STIML = "stimulus";
-	private final String ID_CONCL = "concentration";
+	private final String ID_STIMULUS = "stimulus";
+	private final String ID_CONCENTRATION = "concentration";
 	private final String ID_SIDE = "side";
 	private final String ID_DESCOK = "descriptionOK";
 	private final String ID_VERSIONINFOS = "versionInfos";
@@ -76,6 +80,10 @@ public class Spot implements Comparable<Spot> {
 	private final String ID_INDEXIMAGE = "indexImageMC";
 	private final String ID_VERSION = "version";
 	private final String ID_VERSIONNUM = "1.0.0";
+
+	private Color[] spotColors = new Color[] { new Color(0xFF, 0x55, 0x55), new Color(0x55, 0x55, 0xFF),
+			new Color(0x55, 0xFF, 0x55), new Color(0xFF, 0xFF, 0x55), new Color(0xFF, 0x55, 0xFF),
+			new Color(0x55, 0xFF, 0xFF), Color.pink, Color.gray };
 
 	// ----------------------------------------------------
 
@@ -326,18 +334,20 @@ public class Spot implements Comparable<Spot> {
 			descriptionOK = XMLUtil.getElementBooleanValue(nodeMeta, ID_DESCOK, false);
 			versionInfos = XMLUtil.getElementIntValue(nodeMeta, ID_VERSIONINFOS, 0);
 			spotNFlies = XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
-			spotIndex = XMLUtil.getElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
+			cageIndex = XMLUtil.getElementIntValue(nodeMeta, ID_CAGEINDEX, cageIndex);
+			spotIndex = XMLUtil.getElementIntValue(nodeMeta, ID_SPOTINDEX, spotIndex);
+			spotIndexInsideCage = XMLUtil.getElementIntValue(nodeMeta, ID_SPOTINDEXINSIDECAGE, spotIndexInsideCage);
 			spotVolume = XMLUtil.getElementDoubleValue(nodeMeta, ID_SPOTVOLUME, Double.NaN);
 			spotNPixels = XMLUtil.getElementIntValue(nodeMeta, ID_PIXELS, 5);
 			spotRadius = XMLUtil.getElementIntValue(nodeMeta, ID_RADIUS, 30);
 			spotXCoord = XMLUtil.getElementIntValue(nodeMeta, ID_XCOORD, -1);
 			spotYCoord = XMLUtil.getElementIntValue(nodeMeta, ID_YCOORD, -1);
-			spotStim = XMLUtil.getElementValue(nodeMeta, ID_STIML, ID_STIML);
-			spotConc = XMLUtil.getElementValue(nodeMeta, ID_CONCL, ID_CONCL);
+			spotStim = XMLUtil.getElementValue(nodeMeta, ID_STIMULUS, ID_STIMULUS);
+			spotConc = XMLUtil.getElementValue(nodeMeta, ID_CONCENTRATION, ID_CONCENTRATION);
 			spotCageSide = XMLUtil.getElementValue(nodeMeta, ID_SIDE, ".");
 
 			spotRoi_in = (ROI2DShape) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
-			setSpotRoi_InColorAccordingToSpotIndex();
+			setSpotRoi_InColorAccordingToSpotIndex(spotIndexInsideCage);
 			limitsOptions.loadFromXML(nodeMeta);
 
 			loadFromXML_SpotAlongT(node);
@@ -345,8 +355,8 @@ public class Spot implements Comparable<Spot> {
 		return flag;
 	}
 
-	public void setSpotRoi_InColorAccordingToSpotIndex() {
-		Color value = ((spotIndex % 2) == 0) ? Color.red : Color.blue;
+	public void setSpotRoi_InColorAccordingToSpotIndex(int index) {
+		Color value = spotColors[index % 8];
 		spotRoi_in.setColor(value);
 	}
 
@@ -383,15 +393,18 @@ public class Spot implements Comparable<Spot> {
 		XMLUtil.setElementBooleanValue(nodeMeta, ID_DESCOK, descriptionOK);
 		XMLUtil.setElementIntValue(nodeMeta, ID_VERSIONINFOS, versionInfos);
 		XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
-		XMLUtil.setElementIntValue(nodeMeta, ID_CAGENB, spotIndex);
+
+		XMLUtil.setElementIntValue(nodeMeta, ID_CAGEINDEX, cageIndex);
+		XMLUtil.setElementIntValue(nodeMeta, ID_SPOTINDEX, spotIndex);
+		XMLUtil.setElementIntValue(nodeMeta, ID_SPOTINDEXINSIDECAGE, spotIndexInsideCage);
 		XMLUtil.setElementDoubleValue(nodeMeta, ID_SPOTVOLUME, spotVolume);
 		XMLUtil.setElementIntValue(nodeMeta, ID_PIXELS, spotNPixels);
 		XMLUtil.setElementIntValue(nodeMeta, ID_RADIUS, spotRadius);
 		XMLUtil.setElementIntValue(nodeMeta, ID_XCOORD, spotXCoord);
 		XMLUtil.setElementIntValue(nodeMeta, ID_YCOORD, spotYCoord);
-		XMLUtil.setElementValue(nodeMeta, ID_STIML, spotStim);
+		XMLUtil.setElementValue(nodeMeta, ID_STIMULUS, spotStim);
 		XMLUtil.setElementValue(nodeMeta, ID_SIDE, spotCageSide);
-		XMLUtil.setElementValue(nodeMeta, ID_CONCL, spotConc);
+		XMLUtil.setElementValue(nodeMeta, ID_CONCENTRATION, spotConc);
 
 		ROI2DUtilities.saveToXML_ROI(nodeMeta, spotRoi_in);
 

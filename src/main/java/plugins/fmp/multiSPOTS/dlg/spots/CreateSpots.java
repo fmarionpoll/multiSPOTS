@@ -22,12 +22,14 @@ import javax.swing.event.ChangeListener;
 
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI2D;
-import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
+import plugins.fmp.multiSPOTS.experiment.Spot;
+import plugins.fmp.multiSPOTS.experiment.SpotsArray;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.polyline.PolygonUtilities;
 import plugins.kernel.roi.roi2d.ROI2DEllipse;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
@@ -41,8 +43,8 @@ public class CreateSpots extends JPanel {
 	private JButton displayFrameDButton = new JButton("(1) Display frame");
 	private JButton createCirclesButton = new JButton("(2) Create circles");
 
-	private JSpinner cageNColumnsJSpinner = new JSpinner(new SpinnerNumberModel(2, 1, 500, 1));
-	private JSpinner cageNrowsJSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
+	private JSpinner nColsPerCageJSpinner = new JSpinner(new SpinnerNumberModel(2, 1, 500, 1));
+	private JSpinner nRowsPerCageJSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 500, 1));
 	private JSpinner nFliesPerCageJSpinner = new JSpinner(new SpinnerNumberModel(1, 0, 500, 1));
 	private JSpinner pixelRadiusSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 1000, 1));
 
@@ -89,11 +91,11 @@ public class CreateSpots extends JPanel {
 		panel2.add(new JLabel("Cage:"));
 
 		panel2.add(new JLabel("cols"));
-		panel2.add(cageNColumnsJSpinner);
-		cageNColumnsJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel2.add(nColsPerCageJSpinner);
+		nColsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
 		panel2.add(new JLabel("rows"));
-		panel2.add(cageNrowsJSpinner);
-		cageNrowsJSpinner.setPreferredSize(new Dimension(40, 20));
+		panel2.add(nRowsPerCageJSpinner);
+		nRowsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
 		panel2.add(new JLabel("with"));
 
 		panel2.add(nFliesPerCageJSpinner);
@@ -121,8 +123,8 @@ public class CreateSpots extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					roisGenerateFromPolygon();
-					ExperimentUtils.transferSpotsToCamData(exp);
+					createSpotsFromPolygon(exp);
+					ExperimentUtils.transferSpotsToCamDataSequence(exp);
 					int nbFliesPerCage = (int) nFliesPerCageJSpinner.getValue();
 					exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
 				}
@@ -178,10 +180,7 @@ public class CreateSpots extends JPanel {
 		return roiPolygon;
 	}
 
-	private void roisGenerateFromPolygon() {
-		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		if (exp == null)
-			return;
+	private void createSpotsFromPolygon(Experiment exp) {
 		SequenceCamData seqCamData = exp.seqCamData;
 
 		ROI2D roi = seqCamData.seq.getSelectedROI2D();
@@ -203,23 +202,57 @@ public class CreateSpots extends JPanel {
 
 		Point2D.Double[][] arrayPoints = PolygonUtilities.createArrayOfPointsFromPolygon(roiPolygon, n_columns, n_rows);
 		int radius = (int) pixelRadiusSpinner.getValue();
-		convertPoint2DArrayToCircles(seqCamData.seq, arrayPoints, n_columns, n_rows, radius);
+		int nColsPerCage = (int) nColsPerCageJSpinner.getValue();
+		int nRowsPerCage = (int) nRowsPerCageJSpinner.getValue();
+
+		// erase existing spots
+		ROI2DUtilities.removeRoisContainingString(-1, "spot", exp.seqCamData.seq);
+		exp.spotsArray.deleteAllSpots();
+		exp.spotsArray = new SpotsArray();
+		convertPoint2DArrayToSpots(exp, arrayPoints, n_columns, n_rows, radius, nColsPerCage, nRowsPerCage);
 
 	}
 
-	private void convertPoint2DArrayToCircles(Sequence seq, Point2D.Double[][] arrayPoints, int nbcols, int nbrows,
-			int radius) {
+	private void convertPoint2DArrayToSpots(Experiment exp, Point2D.Double[][] arrayPoints, int nbcols, int nbrows,
+			int radius, int nColsPerCage, int nRowsPerCage) {
+		int spotIndex = 0;
 		for (int column = 0; column < nbcols; column++) {
-			char colChar = (char) ('A' + column);
+
 			for (int row = 0; row < nbrows; row++) {
 				Point2D point = arrayPoints[column][row];
 				double x = point.getX() - radius;
 				double y = point.getY() - radius;
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2 * radius, 2 * radius);
 				ROI2DEllipse roiEllipse = new ROI2DEllipse(ellipse);
-				roiEllipse.setName("spot" + colChar + row);
-				seq.addROI(roiEllipse);
+				roiEllipse.setName("spot" + toAlphabetic(row) + column);
+
+				Spot spot = new Spot(roiEllipse);
+				spot.spotIndex = spotIndex;
+				spot.cageIndex = column % nColsPerCage + row % nRowsPerCage;
+				spot.spotIndexInsideCage = column % nColsPerCage + (row % nRowsPerCage) * nColsPerCage;
+				spot.spotRadius = radius;
+				spot.spotXCoord = (int) point.getX();
+				spot.spotYCoord = (int) point.getY();
+
+				spot.setSpotRoi_InColorAccordingToSpotIndex(spot.spotIndexInsideCage);
+				exp.spotsArray.spotsList.add(spot);
+				spotIndex++;
 			}
+		}
+	}
+
+	private String toAlphabetic(int i) {
+		if (i < 0) {
+			return "-" + toAlphabetic(-i - 1);
+		}
+
+		int quot = i / 26;
+		int rem = i % 26;
+		char letter = (char) ((int) 'A' + rem);
+		if (quot == 0) {
+			return "" + letter;
+		} else {
+			return toAlphabetic(quot - 1) + letter;
 		}
 	}
 
