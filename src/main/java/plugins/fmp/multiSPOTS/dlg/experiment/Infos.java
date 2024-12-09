@@ -227,7 +227,7 @@ public class Infos extends JPanel {
 		Experiment exp0 = (Experiment) parent0.expListCombo.getItemAt(iprevious);
 		Experiment exp = (Experiment) parent0.expListCombo.getItemAt(iprevious + 1);
 		transferPreviousExperimentInfosToDialog(exp0, exp);
-		parent0.dlgSpots.transferPreviousExperimentCapillariesInfos(exp0, exp);
+//		parent0.dlgSpots.transferPreviousExperimentCapillariesInfos(exp0, exp);
 	}
 
 }

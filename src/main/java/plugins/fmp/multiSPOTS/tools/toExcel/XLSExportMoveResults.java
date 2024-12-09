@@ -96,7 +96,7 @@ public class XLSExportMoveResults extends XLSExport {
 	private void getMoveDescriptorsForOneExperiment(Experiment exp, EnumXLSExportType xlsOption) {
 		// loop to get all capillaries into expAll and init rows for this experiment
 		expAll.cages.copy(exp.cages);
-		expAll.capillaries.copy(exp.capillaries);
+		expAll.spotsArray.copy(exp.spotsArray);
 		expAll.firstImage_FileTime = exp.firstImage_FileTime;
 		expAll.lastImage_FileTime = exp.lastImage_FileTime;
 		expAll.setResultsDirectory(exp.getResultsDirectory());
@@ -139,11 +139,11 @@ public class XLSExportMoveResults extends XLSExport {
 		Experiment expi = exp.getFirstChainedExperiment(true);
 
 		while (expi != null) {
-			int len = 1 + (int) (expi.seqCamData.lastImage_ms - expi.seqCamData.firstImage_ms)
-					/ options.buildExcelStepMs;
+			int len = 1
+					+ (int) (expi.seqCamData.lastImage_ms - expi.seqCamData.firstImage_ms) / options.buildExcelStepMs;
 			if (len == 0)
 				continue;
-			double pixelsize = 32. / expi.capillaries.capillariesList.get(0).pixels;
+			double pixelsize = 1.; // TODO 32. / expi.spotsArray.spotsList.get(0).pixels;
 
 			List<FlyPositions> resultsArrayList = new ArrayList<FlyPositions>(expi.cages.cagesList.size());
 			for (Cage cage : expi.cages.cagesList) {
@@ -155,8 +155,8 @@ public class XLSExportMoveResults extends XLSExport {
 
 					switch (xlsOption) {
 					case DISTANCE:
-						results.excelComputeDistanceBetweenPoints(cage.flyPositions,
-								(int) expi.seqCamData.binImage_ms, options.buildExcelStepMs);
+						results.excelComputeDistanceBetweenPoints(cage.flyPositions, (int) expi.seqCamData.binImage_ms,
+								options.buildExcelStepMs);
 						break;
 					case ISALIVE:
 						results.excelComputeIsAlive(cage.flyPositions, (int) expi.seqCamData.binImage_ms,
@@ -170,10 +170,10 @@ public class XLSExportMoveResults extends XLSExport {
 						results.excelComputeNewPointsOrigin(cage.getCenterTopCage(), cage.flyPositions,
 								(int) expi.seqCamData.binImage_ms, options.buildExcelStepMs);
 						break;
-					case XYTIPCAPS:
-						results.excelComputeNewPointsOrigin(cage.getCenterTipCapillaries(exp.capillaries),
-								cage.flyPositions, (int) expi.seqCamData.binImage_ms, options.buildExcelStepMs);
-						break;
+//					case XYTIPCAPS:
+//						results.excelComputeNewPointsOrigin(cage.getCenterTipCapillaries(exp.capillaries),
+//								cage.flyPositions, (int) expi.seqCamData.binImage_ms, options.buildExcelStepMs);
+//						break;
 					case ELLIPSEAXES:
 						results.excelComputeEllipse(cage.flyPositions, (int) expi.seqCamData.binImage_ms,
 								options.buildExcelStepMs);
@@ -223,8 +223,7 @@ public class XLSExportMoveResults extends XLSExport {
 
 		final long from_first_Ms = start_Ms + expAll.seqCamData.firstImage_ms;
 		final long from_lastMs = end_Ms + expAll.seqCamData.firstImage_ms;
-		final int to_first_index = (int) (from_first_Ms - expAll.seqCamData.firstImage_ms)
-				/ options.buildExcelStepMs;
+		final int to_first_index = (int) (from_first_Ms - expAll.seqCamData.firstImage_ms) / options.buildExcelStepMs;
 		final int to_nvalues = (int) ((from_lastMs - from_first_Ms) / options.buildExcelStepMs) + 1;
 
 		for (FlyPositions rowFlyPositions : rowsForOneExp) {

@@ -1,6 +1,7 @@
 package plugins.fmp.multiSPOTS.experiment;
 
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -336,8 +337,33 @@ public class SpotsArray {
 		}
 	}
 
-	// -------------------------------------------------
+	public Polygon2D getPolygon2DEnclosingAllSpots(Experiment exp) {
+		Rectangle rect = exp.seqCamData.seq.getBounds2D();
+		List<Point2D> points = new ArrayList<Point2D>();
+		int rectleft = rect.x + rect.width / 6;
+		int rectright = rect.x + rect.width * 5 / 6;
+		int recttop = rect.y + rect.height * 2 / 3;
+		if (exp.spotsArray.spotsList.size() > 0) {
+			Rectangle bound0 = exp.spotsArray.spotsList.get(0).getRoi_in().getBounds();
+			int last = exp.spotsArray.spotsList.size() - 1;
+			Rectangle bound1 = exp.spotsArray.spotsList.get(last).getRoi_in().getBounds();
+			rectleft = bound0.x;
+			rectright = bound1.x + bound1.width;
+			int diff = (rectright - rectleft) * 2 / 60;
+			rectleft -= diff;
+			rectright += diff;
+			recttop = bound0.y + bound0.height - (bound0.height / 8);
+		}
 
+		points.add(new Point2D.Double(rectleft, recttop));
+		points.add(new Point2D.Double(rectright, recttop));
+		points.add(new Point2D.Double(rectright, rect.y + rect.height - 4));
+		points.add(new Point2D.Double(rectleft, rect.y + rect.height - 4));
+		Polygon2D polygon = new Polygon2D(points);
+		return polygon;
+	}
+
+	// ------------------------------------------------
 	public double getScalingFactorToPhysicalUnits(EnumXLSExportType xlsoption) {
 		double scalingFactorToPhysicalUnits = 1.;
 //		switch (xlsoption) 

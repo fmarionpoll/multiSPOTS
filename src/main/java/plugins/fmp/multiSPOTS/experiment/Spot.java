@@ -27,6 +27,10 @@ public class Spot implements Comparable<Spot> {
 	private ROI2DShape spotRoi_out = null;
 	private ROI2DShape spotRoi_old = null;
 	private ArrayList<ROI2DAlongT> listRoiAlongT = new ArrayList<ROI2DAlongT>();
+	// useful?
+	// private String kymographName = null;
+	public int kymographIndex = -1;
+	// private String kymographPrefix = null;
 
 	public BooleanMask2D mask2DSpot = null;
 

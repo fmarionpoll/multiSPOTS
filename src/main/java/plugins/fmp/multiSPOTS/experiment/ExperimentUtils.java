@@ -6,46 +6,12 @@ import java.util.List;
 import icy.roi.ROI2D;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
-import plugins.kernel.roi.roi2d.ROI2DShape;
 
 public class ExperimentUtils {
-	public static void transferCamDataROIStoCapillaries(Experiment exp) {
-		if (exp.capillaries == null)
-			exp.capillaries = new CapillariesArray();
-
-		// rois not in cap? add
-		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString("line", exp.seqCamData.seq);
-		for (ROI2D roi : listROISCap) {
-			boolean found = false;
-			for (Capillary cap : exp.capillaries.capillariesList) {
-				if (cap.getRoi() != null && roi.getName().equals(cap.getRoiName())) {
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-				exp.capillaries.capillariesList.add(new Capillary((ROI2DShape) roi));
-		}
-
-		// cap with no corresponding roi? remove
-		Iterator<Capillary> iterator = exp.capillaries.capillariesList.iterator();
-		while (iterator.hasNext()) {
-			Capillary cap = iterator.next();
-			boolean found = false;
-			for (ROI2D roi : listROISCap) {
-				if (roi.getName().equals(cap.getRoiName())) {
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-				iterator.remove();
-		}
-	}
 
 	public static void transferCamDataROIStoSpots(Experiment exp) {
-		if (exp.capillaries == null)
-			exp.capillaries = new CapillariesArray();
+		if (exp.spotsArray == null)
+			exp.spotsArray = new SpotsArray();
 
 		List<ROI2D> listROISCap = ROI2DUtilities.getROIs2DContainingString("spot", exp.seqCamData.seq);
 		for (ROI2D roi : listROISCap) {

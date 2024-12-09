@@ -16,12 +16,11 @@ import org.w3c.dom.Node;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
-
+import plugins.fmp.multiSPOTS.tools.Comparators;
+import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
 import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
-import plugins.fmp.multiSPOTS.tools.Comparators;
-import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
 
 public class Cages {
 	public List<Cage> cagesList = new ArrayList<Cage>();
@@ -126,8 +125,7 @@ public class Cages {
 		}
 		return true;
 	}
-	
-	
+
 	private boolean csvSaveMeasuresSection(FileWriter csvWriter, EnumCageMeasures measuresType) {
 		try {
 //			csvWriter.append("#" + csvSep + "DESCRIPTION" + csvSep + "Cages data\n");
@@ -380,32 +378,10 @@ public class Cages {
 		return iRoot;
 	}
 
-	public void transferNFliesFromCapillariesToCages(ArrayList<Capillary> capillariesList) {
-		for (Cage cage : cagesList) {
-			int cagenb = cage.getCageNumberInteger();
-			for (Capillary cap : capillariesList) {
-				if (cap.cageID != cagenb)
-					continue;
-				cage.cageNFlies = cap.nFlies;
-			}
-		}
-	}
-
-	public void transferNFliesFromCagesToCapillaries(ArrayList<Capillary> capillariesList) {
-		for (Cage cage : cagesList) {
-			int cagenb = cage.getCageNumberInteger();
-			for (Capillary cap : capillariesList) {
-				if (cap.cageID != cagenb)
-					continue;
-				cap.nFlies = cage.cageNFlies;
-			}
-		}
-	}
-
-	public void transferNFliesFromCagesToSpots(ArrayList<Spot> spotsList) {
-		for (Cage cage : cagesList) {
-			int cagenb = cage.getCageNumberInteger();
-			for (Spot spot : spotsList) {
+	public void transferNFliesFromCagesToSpots(SpotsArray spotsArray) {
+		for (Spot spot : spotsArray.spotsList) {
+			for (Cage cage : cagesList) {
+				int cagenb = cage.getCageNumberInteger();
 				if (spot.cageIndex != cagenb)
 					continue;
 				spot.spotNFlies = cage.cageNFlies;
@@ -413,10 +389,10 @@ public class Cages {
 		}
 	}
 
-	public void transferNFliesFromSpotsToCages(ArrayList<Spot> spotsList) {
+	public void transferNFliesFromSpotsToCages(SpotsArray spotsArray) {
 		for (Cage cage : cagesList) {
 			int cagenb = cage.getCageNumberInteger();
-			for (Spot spot : spotsList) {
+			for (Spot spot : spotsArray.spotsList) {
 				if (spot.cageIndex != cagenb)
 					continue;
 				cage.cageNFlies = spot.spotNFlies;

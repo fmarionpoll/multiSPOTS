@@ -3,9 +3,9 @@ package plugins.fmp.multiSPOTS.dlg.cages;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,8 +94,8 @@ public class BuildCagesAsArray extends JPanel {
 					exp.cages.removeCages();
 					createROIsFromSelectedPolygon(exp);
 					exp.cages.cagesFromROIs(exp.seqCamData);
-					if (exp.capillaries.capillariesList.size() > 0)
-						exp.cages.transferNFliesFromCapillariesToCages(exp.capillaries.capillariesList);
+					if (exp.spotsArray.spotsList.size() > 0)
+						exp.cages.transferNFliesFromSpotsToCages(exp.spotsArray);
 				}
 			}
 		});
@@ -121,6 +121,7 @@ public class BuildCagesAsArray extends JPanel {
 		}
 	}
 
+	// TODO: same routine in BuildCagesFromContour
 	private void create2DPolygon(Experiment exp) {
 		final String dummyname = "perimeter_enclosing";
 		ArrayList<ROI2D> listRois = exp.seqCamData.seq.getROI2Ds();
@@ -129,28 +130,22 @@ public class BuildCagesAsArray extends JPanel {
 				return;
 		}
 
-		Rectangle rect = exp.seqCamData.seq.getBounds2D();
-		List<Point2D> points = new ArrayList<Point2D>();
-		int rectleft = rect.x + rect.width / 6;
-		int rectright = rect.x + rect.width * 5 / 6;
-		int recttop = rect.y + rect.height * 2 / 3;
-		if (exp.capillaries.capillariesList.size() > 0) {
-			Rectangle bound0 = exp.capillaries.capillariesList.get(0).getRoi().getBounds();
-			int last = exp.capillaries.capillariesList.size() - 1;
-			Rectangle bound1 = exp.capillaries.capillariesList.get(last).getRoi().getBounds();
-			rectleft = bound0.x;
-			rectright = bound1.x + bound1.width;
-			int diff = (rectright - rectleft) * 2 / 60;
-			rectleft -= diff;
-			rectright += diff;
-			recttop = bound0.y + bound0.height - (bound0.height / 8);
+		Polygon2D polygon = null;
+		if (exp.spotsArray.spotsList.size() > 0) {
+			polygon = exp.spotsArray.get2DPolygonEnclosingSpots();
+		} else {
+			Rectangle rect = exp.seqCamData.seq.getBounds2D();
+			List<Point2D> points = new ArrayList<Point2D>();
+			int rectleft = rect.x + rect.width / 6;
+			int rectright = rect.x + rect.width * 5 / 6;
+			int recttop = rect.y + rect.height * 2 / 3;
+			points.add(new Point2D.Double(rectleft, recttop));
+			points.add(new Point2D.Double(rectright, recttop));
+			points.add(new Point2D.Double(rectright, rect.y + rect.height - 4));
+			points.add(new Point2D.Double(rectleft, rect.y + rect.height - 4));
+			polygon = new Polygon2D(points);
 		}
-
-		points.add(new Point2D.Double(rectleft, recttop));
-		points.add(new Point2D.Double(rectright, recttop));
-		points.add(new Point2D.Double(rectright, rect.y + rect.height - 4));
-		points.add(new Point2D.Double(rectleft, rect.y + rect.height - 4));
-		ROI2DPolygon roi = new ROI2DPolygon(points);
+		ROI2DPolygon roi = new ROI2DPolygon(polygon);
 		roi.setName(dummyname);
 		exp.seqCamData.seq.addROI(roi);
 		exp.seqCamData.seq.setSelectedROI(roi);

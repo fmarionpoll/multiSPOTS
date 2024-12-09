@@ -179,7 +179,7 @@ public class SpotTable extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null && exp.cages.cagesList.size() > 0) {
-					exp.cages.transferNFliesFromCagesToSpots(exp.spotsArray.spotsList);
+					exp.cages.transferNFliesFromCagesToSpots(exp.spotsArray);
 					spotTableModel.fireTableDataChanged();
 				}
 			}

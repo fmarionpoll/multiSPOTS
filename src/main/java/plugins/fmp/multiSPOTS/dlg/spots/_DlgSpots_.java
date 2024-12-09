@@ -116,8 +116,6 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 
 	public void updateDialogs(Experiment exp) {
 		if (exp != null) {
-			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
-			exp.capillaries.desc_old.copy(exp.capillaries.capillariesDescription);
 			ExperimentUtils.transferCamDataROIStoSpots(exp);
 			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 		}
@@ -130,16 +128,9 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null) {
 			boolean displayCapillaries = (selectedIndex == id_create);
-			if (displayCapillaries && exp.capillaries.capillariesList.size() < 1)
-				exp.loadCamDataCapillaries();
 			exp.seqCamData.displayROIs(displayCapillaries, "line");
 			exp.seqCamData.displayROIs(true, "spots");
 		}
-	}
-
-	public void transferPreviousExperimentCapillariesInfos(Experiment exp0, Experiment exp) {
-		exp.capillaries.capillariesDescription.grouping = exp0.capillaries.capillariesDescription.grouping;
-		exp.capillaries.capillariesDescription.volume = exp0.capillaries.capillariesDescription.volume;
 	}
 
 }

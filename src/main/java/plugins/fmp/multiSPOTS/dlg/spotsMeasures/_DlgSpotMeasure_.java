@@ -14,7 +14,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import icy.gui.component.PopupPanel;
-
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
@@ -114,8 +113,8 @@ public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, 
 
 	public void updateDialogs(Experiment exp) {
 		if (exp != null) {
-			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
-			exp.capillaries.desc_old.copy(exp.capillaries.capillariesDescription);
+//			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
+			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 
 			ExperimentUtils.transferCamDataROIStoSpots(exp);
 			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
@@ -129,8 +128,8 @@ public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, 
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null) {
 			boolean displayCapillaries = (selectedIndex == id_threshold);
-			if (displayCapillaries && exp.capillaries.capillariesList.size() < 1)
-				exp.loadCamDataCapillaries();
+			if (displayCapillaries && exp.spotsArray.spotsList.size() < 1)
+				exp.loadCamDataSpots();
 			exp.seqCamData.displayROIs(displayCapillaries, "line");
 			exp.seqCamData.displayROIs(true, "spots");
 		}

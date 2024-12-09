@@ -25,7 +25,6 @@ import icy.image.IcyBufferedImageUtil;
 import icy.roi.ROI2D;
 import icy.type.DataType;
 import icy.type.geom.Polygon2D;
-
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
@@ -107,7 +106,7 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 					createROIsFromSelectedPolygonAndSpots(exp);
 					exp.cages.cagesFromROIs(exp.seqCamData);
 					if (exp.spotsArray.spotsList.size() > 0)
-						exp.cages.transferNFliesFromSpotsToCages(exp.spotsArray.spotsList);
+						exp.cages.transferNFliesFromSpotsToCages(exp.spotsArray);
 				}
 			}
 		});
@@ -250,41 +249,34 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 		}
 	}
 
+	// TODO: same routine in BuildCagesAsArray
 	private void create2DPolygon(Experiment exp) {
 		final String dummyname = "perimeter_enclosing";
-		if (userPolygon == null) {
-			ArrayList<ROI2D> listRois = exp.seqCamData.seq.getROI2Ds();
-			for (ROI2D roi : listRois) {
-				if (roi.getName().equals(dummyname))
-					return;
-			}
+		ArrayList<ROI2D> listRois = exp.seqCamData.seq.getROI2Ds();
+		for (ROI2D roi : listRois) {
+			if (roi.getName().equals(dummyname))
+				return;
+		}
 
+		Polygon2D polygon = null;
+		if (exp.spotsArray.spotsList.size() > 0) {
+			polygon = exp.spotsArray.get2DPolygonEnclosingSpots();
+		} else {
 			Rectangle rect = exp.seqCamData.seq.getBounds2D();
 			List<Point2D> points = new ArrayList<Point2D>();
 			int rectleft = rect.x + rect.width / 6;
 			int rectright = rect.x + rect.width * 5 / 6;
 			int recttop = rect.y + rect.height * 2 / 3;
-			if (exp.capillaries.capillariesList.size() > 0) {
-				Rectangle bound0 = exp.capillaries.capillariesList.get(0).getRoi().getBounds();
-				int last = exp.capillaries.capillariesList.size() - 1;
-				Rectangle bound1 = exp.capillaries.capillariesList.get(last).getRoi().getBounds();
-				rectleft = bound0.x;
-				rectright = bound1.x + bound1.width;
-				int diff = (rectright - rectleft) * 2 / 60;
-				rectleft -= diff;
-				rectright += diff;
-				recttop = bound0.y + bound0.height - (bound0.height / 8);
-			}
-
 			points.add(new Point2D.Double(rectleft, recttop));
 			points.add(new Point2D.Double(rectright, recttop));
 			points.add(new Point2D.Double(rectright, rect.y + rect.height - 4));
 			points.add(new Point2D.Double(rectleft, rect.y + rect.height - 4));
-			userPolygon = new ROI2DPolygon(points);
-			userPolygon.setName(dummyname);
+			polygon = new Polygon2D(points);
 		}
-		exp.seqCamData.seq.addROI(userPolygon);
-		exp.seqCamData.seq.setSelectedROI(userPolygon);
+		ROI2DPolygon roi = new ROI2DPolygon(polygon);
+		roi.setName(dummyname);
+		exp.seqCamData.seq.addROI(roi);
+		exp.seqCamData.seq.setSelectedROI(roi);
 	}
 
 }
