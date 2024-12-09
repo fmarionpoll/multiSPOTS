@@ -93,10 +93,10 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (event.getPropertyName().equals("CAP_ROIS_OPEN")) {
+		if (event.getPropertyName().equals("SPOTS_ROIS_OPEN")) {
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (exp != null) {
-				displayCapillariesInformation(exp);
+				displaySpotsInformation(exp);
 				tabbedPane.setSelectedIndex(id_infos);
 				parent0.dlgExperiment.tabIntervals.getExptParms(exp);
 			}
@@ -105,7 +105,7 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 		}
 	}
 
-	public void displayCapillariesInformation(Experiment exp) {
+	public void displaySpotsInformation(Experiment exp) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				updateDialogs(exp);
@@ -116,8 +116,10 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 
 	public void updateDialogs(Experiment exp) {
 		if (exp != null) {
-			ExperimentUtils.transferCamDataROIStoSpots(exp);
 			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
+			ExperimentUtils.transferSpotsToCamDataSequence(exp);
+			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
+			tabCreateSpots.updateDialog(exp);
 		}
 	}
 
