@@ -11,8 +11,8 @@ import icy.image.IcyBufferedImageCursor;
 import icy.image.IcyBufferedImageUtil;
 import icy.sequence.Sequence;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformOptions;
 
 public class BuildBackground extends BuildSeries {
 	public Sequence seqData = new Sequence();

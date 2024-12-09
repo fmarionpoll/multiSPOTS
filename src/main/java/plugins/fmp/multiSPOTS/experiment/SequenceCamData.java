@@ -33,7 +33,7 @@ import icy.image.IcyBufferedImage;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.sequence.Sequence;
-import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.cages.Cage;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 

@@ -7,9 +7,9 @@ import icy.gui.frame.progress.ProgressFrame;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageUtil;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformInterface;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformOptions;
 
 public class FlyDetect2 extends BuildSeries {
 	private FlyDetectTools find_flies = new FlyDetectTools();

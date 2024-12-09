@@ -25,9 +25,9 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.series.BuildSpotsMeasures;
-import plugins.fmp.multiSPOTS.tools.Canvas2D.Canvas2D_2Transforms;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
-import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
+import plugins.fmp.multiSPOTS.tools.canvas2D.Canvas2D_2Transforms;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
+import plugins.fmp.multiSPOTS.tools.overlay.OverlayThreshold;
 
 public class SpotsMeasuresThresholdSimple extends JPanel implements PropertyChangeListener {
 

@@ -9,8 +9,8 @@ import org.w3c.dom.Node;
 import icy.file.xml.XMLPersistent;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
 
 public class BuildSeriesOptions implements XMLPersistent {
 	public boolean isFrameFixed = false;

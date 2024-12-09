@@ -21,11 +21,11 @@ import icy.system.thread.Processor;
 import icy.type.DataType;
 import loci.formats.FormatException;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
 
 public class BuildSpotsKymos extends BuildSeries {
 	public Sequence seqData = new Sequence();

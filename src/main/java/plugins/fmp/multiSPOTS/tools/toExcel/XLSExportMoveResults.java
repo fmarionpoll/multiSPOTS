@@ -12,9 +12,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import icy.gui.frame.progress.ProgressFrame;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
-import plugins.fmp.multiSPOTS.experiment.Cages.FlyPosition;
-import plugins.fmp.multiSPOTS.experiment.Cages.FlyPositions;
+import plugins.fmp.multiSPOTS.experiment.cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.cages.FlyPosition;
+import plugins.fmp.multiSPOTS.experiment.cages.FlyPositions;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 

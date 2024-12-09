@@ -3,8 +3,8 @@ package plugins.fmp.multiSPOTS.tools.toExcel;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
-import plugins.fmp.multiSPOTS.experiment.Spots.SpotsArray;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 
 public class XLSResultsArray {
 	ArrayList<XLSResults> resultsList = null;

@@ -19,8 +19,8 @@ import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
-import plugins.fmp.multiSPOTS.experiment.Spots.SpotMeasure;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.SpotMeasure;
 import plugins.fmp.multiSPOTS.series.BuildMedianFromSpotMeasure;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 

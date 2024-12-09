@@ -1,7 +1,7 @@
 package plugins.fmp.multiSPOTS.series;
 
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 
 public class BuildMedianFromSpotMeasure extends BuildSeries {
 

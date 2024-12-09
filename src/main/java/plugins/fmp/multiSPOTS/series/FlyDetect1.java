@@ -6,8 +6,8 @@ import java.util.List;
 import icy.gui.frame.progress.ProgressFrame;
 import icy.image.IcyBufferedImage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformInterface;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformOptions;
 
 public class FlyDetect1 extends BuildSeries {
 	public boolean buildBackground = true;

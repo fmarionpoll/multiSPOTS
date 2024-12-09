@@ -19,13 +19,13 @@ import icy.image.ImageUtil;
 import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.util.XMLUtil;
-import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
-import plugins.fmp.multiSPOTS.experiment.Cages.Cages;
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
-import plugins.fmp.multiSPOTS.experiment.Spots.SpotsArray;
+import plugins.fmp.multiSPOTS.experiment.cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.cages.Cages;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Directories;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
-import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
+import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 
 public class Experiment {

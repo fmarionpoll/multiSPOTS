@@ -27,7 +27,7 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ImageFileDescriptor;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 
 public class LoadSave extends JPanel {
 	/**

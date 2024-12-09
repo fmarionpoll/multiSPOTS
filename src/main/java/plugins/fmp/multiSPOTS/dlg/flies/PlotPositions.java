@@ -19,8 +19,8 @@ import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
-import plugins.fmp.multiSPOTS.experiment.Cages.FlyPositions;
+import plugins.fmp.multiSPOTS.experiment.cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.cages.FlyPositions;
 import plugins.fmp.multiSPOTS.tools.chart.ChartPositions;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 

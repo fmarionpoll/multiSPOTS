@@ -38,7 +38,7 @@ import icy.gui.viewer.Viewer;
 import icy.roi.ROI2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExport;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;

@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import icy.roi.ROI2D;
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
-import plugins.fmp.multiSPOTS.experiment.Spots.SpotsArray;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 

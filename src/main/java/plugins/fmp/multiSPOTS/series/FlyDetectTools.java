@@ -14,8 +14,8 @@ import icy.roi.BooleanMask2D;
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
-import plugins.fmp.multiSPOTS.experiment.Cages.Cages;
+import plugins.fmp.multiSPOTS.experiment.cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.cages.Cages;
 import plugins.kernel.roi.roi2d.ROI2DArea;
 
 public class FlyDetectTools {

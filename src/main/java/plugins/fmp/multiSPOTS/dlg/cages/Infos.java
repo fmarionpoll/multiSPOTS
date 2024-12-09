@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.cages.Cage;
 
 public class Infos extends JPanel {
 	/**

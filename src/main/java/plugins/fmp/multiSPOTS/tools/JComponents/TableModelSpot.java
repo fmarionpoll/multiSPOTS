@@ -3,7 +3,7 @@ package plugins.fmp.multiSPOTS.tools.JComponents;
 import javax.swing.table.AbstractTableModel;
 
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 
 public class TableModelSpot extends AbstractTableModel {
 	/**
