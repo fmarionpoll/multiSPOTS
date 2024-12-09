@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.experiment;
+package plugins.fmp.multiSPOTS.experiment.Capillaries;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import icy.roi.ROI;
 import icy.type.geom.Polyline2D;
 import icy.util.StringUtil;
 import icy.util.XMLUtil;
+import plugins.fmp.multiSPOTS.experiment.Level2D;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 
 public class CapillaryLevel {

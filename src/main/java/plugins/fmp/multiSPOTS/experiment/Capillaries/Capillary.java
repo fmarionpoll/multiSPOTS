@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.experiment;
+package plugins.fmp.multiSPOTS.experiment.Capillaries;
 
 import java.awt.Color;
 import java.awt.geom.Line2D;
@@ -14,7 +14,8 @@ import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.type.geom.Polyline2D;
 import icy.util.XMLUtil;
-import plugins.fmp.multiSPOTS.experiment.Capillary;
+import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
+import plugins.fmp.multiSPOTS.experiment.Capillaries.Capillary;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;

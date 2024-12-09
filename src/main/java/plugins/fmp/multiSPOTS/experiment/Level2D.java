@@ -69,7 +69,7 @@ public class Level2D extends Polyline2D {
 		return pol;
 	}
 
-	Level2D expandPolylineToNewWidth(int imageWidth) {
+	public Level2D expandPolylineToNewWidth(int imageWidth) {
 		double[] nxpoints = new double[imageWidth];
 		double[] nypoints = new double[imageWidth];
 		for (int j = 0; j < npoints; j++) {
@@ -87,7 +87,7 @@ public class Level2D extends Polyline2D {
 		return new Level2D(nxpoints, nypoints, imageWidth);
 	}
 
-	Level2D contractPolylineToNewWidth(int imageWidth) {
+	public Level2D contractPolylineToNewWidth(int imageWidth) {
 		double[] nxpoints = new double[imageWidth];
 		double[] nypoints = new double[imageWidth];
 		for (int i = 0; i < imageWidth; i++) {
@@ -98,7 +98,7 @@ public class Level2D extends Polyline2D {
 		return new Level2D(nxpoints, nypoints, imageWidth);
 	}
 
-	Level2D cropPolylineToNewWidth(int imageWidth) {
+	public Level2D cropPolylineToNewWidth(int imageWidth) {
 		double[] nxpoints = new double[imageWidth];
 		double[] nypoints = new double[imageWidth];
 		for (int i = 0; i < imageWidth; i++) {

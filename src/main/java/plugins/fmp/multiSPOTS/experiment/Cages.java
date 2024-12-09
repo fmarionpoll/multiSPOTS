@@ -16,6 +16,7 @@ import org.w3c.dom.Node;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
+import plugins.fmp.multiSPOTS.experiment.Capillaries.Capillary;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
 import plugins.kernel.roi.roi2d.ROI2DArea;

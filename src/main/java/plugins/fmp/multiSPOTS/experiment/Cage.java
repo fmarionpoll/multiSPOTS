@@ -13,7 +13,8 @@ import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
-
+import plugins.fmp.multiSPOTS.experiment.Capillaries.CapillariesArray;
+import plugins.fmp.multiSPOTS.experiment.Capillaries.Capillary;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;
 
