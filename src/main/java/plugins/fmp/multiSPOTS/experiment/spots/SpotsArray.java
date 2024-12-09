@@ -35,10 +35,14 @@ public class SpotsArray {
 	public SpotsDescription spotsDescription = new SpotsDescription();
 	public SpotsDescription desc_old = new SpotsDescription();
 	public ArrayList<Spot> spotsList = new ArrayList<Spot>();
+	public int	n_columns = 12;
+	public int  n_rows = 8;
 	private KymoIntervals spotsListTimeIntervals = null;
 
 	private final static String ID_SPOTTRACK = "spotTrack";
 	private final static String ID_NSPOTS = "N_spots";
+	private final static String ID_NCOLUMNS = "N_columns";
+	private final static String ID_NROWS = "N_rows";
 	private final static String ID_LISTOFSPOTS = "List_of_spots";
 	private final static String ID_SPOT_ = "spot_";
 	private final static String ID_MCSPOTS_XML = "MCspots.xml";
@@ -100,6 +104,8 @@ public class SpotsArray {
 		XMLUtil.setElementIntValue(node, "version", 2);
 		Node nodeSpotsArray = XMLUtil.setElement(node, ID_LISTOFSPOTS);
 		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NSPOTS, spotsList.size());
+		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NCOLUMNS, n_columns);
+		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NROWS, n_rows);
 		int i = 0;
 		Collections.sort(spotsList);
 		for (Spot spot : spotsList) {
@@ -141,6 +147,8 @@ public class SpotsArray {
 			return false;
 		Node nodecaps = XMLUtil.getElement(node, ID_LISTOFSPOTS);
 		int nitems = XMLUtil.getElementIntValue(nodecaps, ID_NSPOTS, 0);
+		n_columns = XMLUtil.getElementIntValue(nodecaps, ID_NCOLUMNS, 12);
+		n_rows = XMLUtil.getElementIntValue(nodecaps, ID_NROWS, 8);
 		spotsList = new ArrayList<Spot>(nitems);
 		for (int i = 0; i < nitems; i++) {
 			Node nodecapillary = XMLUtil.getElement(node, ID_SPOT_ + i);

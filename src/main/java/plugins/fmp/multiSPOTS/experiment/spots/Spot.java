@@ -26,7 +26,6 @@ import plugins.kernel.roi.roi2d.ROI2DShape;
 public class Spot implements Comparable<Spot> {
 
 	private ROI2DShape spotRoi_in = null;
-	private ROI2DShape spotRoi_out = null;
 	private ROI2DShape spotRoi_old = null;
 	private ArrayList<ROI2DAlongT> listRoiAlongT = new ArrayList<ROI2DAlongT>();
 	// useful?
@@ -122,6 +121,8 @@ public class Spot implements Comparable<Spot> {
 		spotCageSide = spotFrom.spotCageSide;
 		spotNFlies = spotFrom.spotNFlies;
 		spotIndex = spotFrom.spotIndex;
+		cageIndex = spotFrom.cageIndex;
+		spotIndexInsideCage = spotFrom.spotIndexInsideCage ;
 		spotVolume = spotFrom.spotVolume;
 		spotNPixels = spotFrom.spotNPixels;
 		spotRadius = spotFrom.spotRadius;
@@ -143,10 +144,6 @@ public class Spot implements Comparable<Spot> {
 		return spotRoi_old;
 	}
 
-	public ROI2D getRoi_out() {
-		return spotRoi_out;
-	}
-
 	public void setRoi_in(ROI2DShape roi) {
 		this.spotRoi_in = roi;
 		listRoiAlongT.clear();
@@ -154,10 +151,6 @@ public class Spot implements Comparable<Spot> {
 
 	public void setRoi_old(ROI2DShape roi) {
 		this.spotRoi_old = roi;
-	}
-
-	public void setRoi_out(ROI2DShape roi) {
-		this.spotRoi_out = roi;
 	}
 
 	public void setRoiName(String name) {

@@ -139,6 +139,24 @@ public class CreateSpots extends JPanel {
 				nFliesPerCageJSpinner.requestFocus();
 			}
 		});
+		
+		nColsPerCageJSpinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+					updateCageDescriptorsOfSpots(exp);
+			}
+		});
+		
+		nRowsPerCageJSpinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+					updateCageDescriptorsOfSpots(exp);
+			}
+		});
 	}
 
 	// ---------------------------------
@@ -202,42 +220,50 @@ public class CreateSpots extends JPanel {
 
 		Point2D.Double[][] arrayPoints = PolygonUtilities.createArrayOfPointsFromPolygon(roiPolygon, n_columns, n_rows);
 		int radius = (int) pixelRadiusSpinner.getValue();
-		int nColsPerCage = (int) nColsPerCageJSpinner.getValue();
-		int nRowsPerCage = (int) nRowsPerCageJSpinner.getValue();
 
 		// erase existing spots
 		ROI2DUtilities.removeRoisContainingString(-1, "spot", exp.seqCamData.seq);
 		exp.spotsArray.deleteAllSpots();
 		exp.spotsArray = new SpotsArray();
-		convertPoint2DArrayToSpots(exp, arrayPoints, n_columns, n_rows, radius, nColsPerCage, nRowsPerCage);
-
+		convertPoint2DArrayToSpots(exp, arrayPoints, n_columns, n_rows, radius);
+		updateCageDescriptorsOfSpots(exp);
 	}
 
 	private void convertPoint2DArrayToSpots(Experiment exp, Point2D.Double[][] arrayPoints, int nbcols, int nbrows,
-			int radius, int nColsPerCage, int nRowsPerCage) {
+			int radius) {
+		exp.spotsArray.n_columns = nbcols;
+		exp.spotsArray.n_rows = nbrows;
 		int spotIndex = 0;
 		for (int column = 0; column < nbcols; column++) {
-
 			for (int row = 0; row < nbrows; row++) {
 				Point2D point = arrayPoints[column][row];
 				double x = point.getX() - radius;
 				double y = point.getY() - radius;
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2 * radius, 2 * radius);
 				ROI2DEllipse roiEllipse = new ROI2DEllipse(ellipse);
-				roiEllipse.setName("spot" + toAlphabetic(row) + column);
+				roiEllipse.setName("spot_" + toAlphabetic(row) + "_" + column);
 
 				Spot spot = new Spot(roiEllipse);
 				spot.spotIndex = spotIndex;
-				spot.cageIndex = column % nColsPerCage + row % nRowsPerCage;
-				spot.spotIndexInsideCage = column % nColsPerCage + (row % nRowsPerCage) * nColsPerCage;
 				spot.spotRadius = radius;
 				spot.spotXCoord = (int) point.getX();
 				spot.spotYCoord = (int) point.getY();
 
-				spot.setSpotRoi_InColorAccordingToSpotIndex(spot.spotIndexInsideCage);
 				exp.spotsArray.spotsList.add(spot);
 				spotIndex++;
 			}
+		}
+	}
+	
+	private void updateCageDescriptorsOfSpots(Experiment exp) {
+		int nColsPerCage = (int) nColsPerCageJSpinner.getValue();
+		int nRowsPerCage = (int) nRowsPerCageJSpinner.getValue();
+		for (Spot spot: exp.spotsArray.spotsList) {
+			int row = spot.spotIndex / exp.spotsArray.n_columns;
+			int column = spot.spotIndex - row * exp.spotsArray.n_columns;
+			spot.cageIndex = column % nColsPerCage + row % nRowsPerCage;
+			spot.spotIndexInsideCage = column % nColsPerCage + (row % nRowsPerCage) * nColsPerCage;
+			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.spotIndexInsideCage);
 		}
 	}
 
