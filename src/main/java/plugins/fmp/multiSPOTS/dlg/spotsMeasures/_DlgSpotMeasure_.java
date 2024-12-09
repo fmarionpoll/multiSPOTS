@@ -89,20 +89,19 @@ public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, 
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (event.getPropertyName().equals("CAP_ROIS_OPEN")) {
+		if (event.getPropertyName().equals("SPOTS_ROIS_OPEN")) {
 			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 			if (exp != null) {
-				displayCapillariesInformation(exp);
+				displaySpotsInformation(exp);
 				tabsPane.setSelectedIndex(id_threshold);
 				parent0.dlgExperiment.tabIntervals.getExptParms(exp);
 			}
-		} else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
+		} else if (event.getPropertyName().equals("SPOTS_ROIS_SAVE")) {
 			tabsPane.setSelectedIndex(id_threshold);
 		}
-
 	}
 
-	public void displayCapillariesInformation(Experiment exp) {
+	public void displaySpotsInformation(Experiment exp) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				updateDialogs(exp);
@@ -113,10 +112,8 @@ public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, 
 
 	public void updateDialogs(Experiment exp) {
 		if (exp != null) {
-//			ExperimentUtils.transferCamDataROIStoCapillaries(exp);
 			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
-
-			ExperimentUtils.transferCamDataROIStoSpots(exp);
+			ExperimentUtils.transferSpotsToCamDataSequence(exp);
 			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 		}
 	}
@@ -130,7 +127,6 @@ public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, 
 			boolean displayCapillaries = (selectedIndex == id_threshold);
 			if (displayCapillaries && exp.spotsArray.spotsList.size() < 1)
 				exp.loadCamDataSpots();
-			exp.seqCamData.displayROIs(displayCapillaries, "line");
 			exp.seqCamData.displayROIs(true, "spots");
 		}
 	}

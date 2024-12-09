@@ -61,6 +61,7 @@ public class CreateSpots extends JPanel {
 	private JComboBox<String> viewFromJComboBox = new JComboBox<String>(viewFrom);
 
 	private MultiSPOTS parent0 = null;
+	private boolean silent = false;
 
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
@@ -234,8 +235,8 @@ public class CreateSpots extends JPanel {
 		exp.spotsArray.n_columns = nbcols;
 		exp.spotsArray.n_rows = nbrows;
 		int spotIndex = 0;
-		for (int column = 0; column < nbcols; column++) {
-			for (int row = 0; row < nbrows; row++) {
+		for (int row = 0; row < nbrows; row++) {
+			for (int column = 0; column < nbcols; column++) {
 				Point2D point = arrayPoints[column][row];
 				double x = point.getX() - radius;
 				double y = point.getY() - radius;
@@ -256,11 +257,19 @@ public class CreateSpots extends JPanel {
 	}
 	
 	private void updateCageDescriptorsOfSpots(Experiment exp) {
+		if (silent)
+			return;
 		int nColsPerCage = (int) nColsPerCageJSpinner.getValue();
 		int nRowsPerCage = (int) nRowsPerCageJSpinner.getValue();
+		exp.spotsArray.nColsPerCage = nColsPerCage;
+		exp.spotsArray.nRowsPerCage = nRowsPerCage;
+		int i = 0;
 		for (Spot spot: exp.spotsArray.spotsList) {
 			int row = spot.spotIndex / exp.spotsArray.n_columns;
-			int column = spot.spotIndex - row * exp.spotsArray.n_columns;
+			int column = spot.spotIndex - (row * exp.spotsArray.n_columns);
+			System.out.println("i:"+ i+" index=" + spot.spotIndex + " col:"+ column + " row:"+ row);
+			i++;
+			
 			spot.cageIndex = column % nColsPerCage + row % nRowsPerCage;
 			spot.spotIndexInsideCage = column % nColsPerCage + (row % nRowsPerCage) * nColsPerCage;
 			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.spotIndexInsideCage);
@@ -281,5 +290,16 @@ public class CreateSpots extends JPanel {
 			return toAlphabetic(quot - 1) + letter;
 		}
 	}
+	
+	public void updateDialog(Experiment exp) {
+		if (exp != null) {
+			silent = true;
+			nColsPerCageJSpinner.setValue(exp.spotsArray.nColsPerCage);
+			nRowsPerCageJSpinner.setValue(exp.spotsArray.nRowsPerCage);
+			silent = false;
+		}
+	}
+	
+	
 
 }

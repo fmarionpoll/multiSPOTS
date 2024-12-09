@@ -49,9 +49,8 @@ public class LoadSaveSpots extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-//					loadCapillaries_File(exp);
 					loadSpotsArray_File(exp);
-					firePropertyChange("CAP_ROIS_OPEN", false, true);
+					firePropertyChange("SPOTS_ROIS_OPEN", false, true);
 				}
 			}
 		});
@@ -61,9 +60,8 @@ public class LoadSaveSpots extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-//					saveCapillaries_file(exp);
 					saveSpotsArray_file(exp);
-					firePropertyChange("CAP_ROIS_SAVE", false, true);
+					firePropertyChange("SPOTS_ROIS_SAVE", false, true);
 				}
 			}
 		});
