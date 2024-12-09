@@ -262,7 +262,7 @@ public class SpotTable extends JPanel {
 				if (!spotFrom.getRoiName().equals(spotTo.getRoiName()))
 					continue;
 				spotFrom.valid = true;
-				spotTo.cageIndex = spotFrom.cageIndex;
+				spotTo.cageID = spotFrom.cageID;
 				spotTo.spotNFlies = spotFrom.spotNFlies;
 				// do not copy spotNPixels
 				spotTo.spotStim = spotFrom.spotStim;
@@ -374,7 +374,7 @@ public class SpotTable extends JPanel {
 			return;
 
 		Spot spotFrom = exp.spotsArray.spotsList.get(rowIndex);
-		int cageFrom = spotFrom.cageIndex;
+		int cageFrom = spotFrom.cageID;
 		int cageTo = -1;
 
 		int nSpotsPerCage = getCageNSpots(exp, cageFrom);
@@ -383,15 +383,15 @@ public class SpotTable extends JPanel {
 
 		for (int i = 0; i < exp.spotsArray.spotsList.size(); i++) {
 			Spot spot = exp.spotsArray.spotsList.get(i);
-			if (spot.cageIndex == cageFrom)
+			if (spot.cageID == cageFrom)
 				continue;
 
-			if (spot.cageIndex != cageTo) {
-				cageTo = spot.cageIndex;
+			if (spot.cageID != cageTo) {
+				cageTo = spot.cageID;
 				indexFirstSpotOfCageTo = getIndexFirstSpotOfCage(exp, cageTo);
 			}
 
-			if (getCageNSpots(exp, spot.cageIndex) != nSpotsPerCage)
+			if (getCageNSpots(exp, spot.cageID) != nSpotsPerCage)
 				continue;
 
 			int indexFrom = i - indexFirstSpotOfCageTo + indexFirstSpotOfCageFrom;
@@ -423,7 +423,7 @@ public class SpotTable extends JPanel {
 	private int getCageNSpots(Experiment exp, int cageID) {
 		int nSpots = 0;
 		for (Spot spot : exp.spotsArray.spotsList) {
-			if (spot.cageIndex == cageID)
+			if (spot.cageID == cageID)
 				nSpots++;
 		}
 		return nSpots;
@@ -433,7 +433,7 @@ public class SpotTable extends JPanel {
 		int index = -1;
 		for (int i = 0; i < exp.spotsArray.spotsList.size(); i++) {
 			Spot spot = exp.spotsArray.spotsList.get(i);
-			if (spot.cageIndex == cageID) {
+			if (spot.cageID == cageID) {
 				index = i;
 				break;
 			}

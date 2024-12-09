@@ -272,7 +272,7 @@ public class DetectContours extends JPanel {
 		IcyBufferedImage sourceImage = seq.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions);
 		for (Spot spot : exp.spotsArray.spotsList) {
-			int i = spot.spotIndex % 2;
+			int i = spot.plateIndex % 2;
 			if (0 == i && !options.detectL)
 				continue;
 			if (1 == i && !options.detectR)

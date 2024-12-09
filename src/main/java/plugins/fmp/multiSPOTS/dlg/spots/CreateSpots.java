@@ -140,7 +140,7 @@ public class CreateSpots extends JPanel {
 				nFliesPerCageJSpinner.requestFocus();
 			}
 		});
-		
+
 		nColsPerCageJSpinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -149,7 +149,7 @@ public class CreateSpots extends JPanel {
 					updateCageDescriptorsOfSpots(exp);
 			}
 		});
-		
+
 		nRowsPerCageJSpinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -167,7 +167,7 @@ public class CreateSpots extends JPanel {
 		if (exp == null)
 			return;
 		SequenceCamData seqCamData = exp.seqCamData;
-		final String dummyname = "perimeter_enclosing_capillaries";
+		final String dummyname = "perimeter_enclosing_spots";
 		if (isRoiPresent(seqCamData, dummyname))
 			return;
 
@@ -245,7 +245,9 @@ public class CreateSpots extends JPanel {
 				roiEllipse.setName("spot_" + toAlphabetic(row) + "_" + column);
 
 				Spot spot = new Spot(roiEllipse);
-				spot.spotIndex = spotIndex;
+				spot.plateIndex = spotIndex;
+				spot.plateColumn = column;
+				spot.plateRow = row;
 				spot.spotRadius = radius;
 				spot.spotXCoord = (int) point.getX();
 				spot.spotYCoord = (int) point.getY();
@@ -255,7 +257,7 @@ public class CreateSpots extends JPanel {
 			}
 		}
 	}
-	
+
 	private void updateCageDescriptorsOfSpots(Experiment exp) {
 		if (silent)
 			return;
@@ -264,15 +266,16 @@ public class CreateSpots extends JPanel {
 		exp.spotsArray.nColsPerCage = nColsPerCage;
 		exp.spotsArray.nRowsPerCage = nRowsPerCage;
 		int i = 0;
-		for (Spot spot: exp.spotsArray.spotsList) {
-			int row = spot.spotIndex / exp.spotsArray.n_columns;
-			int column = spot.spotIndex - (row * exp.spotsArray.n_columns);
-			System.out.println("i:"+ i+" index=" + spot.spotIndex + " col:"+ column + " row:"+ row);
+		for (Spot spot : exp.spotsArray.spotsList) {
+			int row = spot.plateIndex / exp.spotsArray.n_columns;
+			int column = spot.plateIndex - (row * exp.spotsArray.n_columns);
+			System.out.println("i:" + i + " " + spot.getRoiName() + " index=" + spot.plateIndex + " col:"
+					+ spot.plateColumn + " vs " + column + " row:" + spot.plateRow + " vs " + row);
 			i++;
-			
-			spot.cageIndex = column % nColsPerCage + row % nRowsPerCage;
-			spot.spotIndexInsideCage = column % nColsPerCage + (row % nRowsPerCage) * nColsPerCage;
-			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.spotIndexInsideCage);
+
+			spot.cageID = column % nColsPerCage + row % nRowsPerCage;
+			spot.cageIndex = column % nColsPerCage + (row % nRowsPerCage) * nColsPerCage;
+			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.cageIndex);
 		}
 	}
 
@@ -290,7 +293,7 @@ public class CreateSpots extends JPanel {
 			return toAlphabetic(quot - 1) + letter;
 		}
 	}
-	
+
 	public void updateDialog(Experiment exp) {
 		if (exp != null) {
 			silent = true;
@@ -299,7 +302,5 @@ public class CreateSpots extends JPanel {
 			silent = false;
 		}
 	}
-	
-	
 
 }

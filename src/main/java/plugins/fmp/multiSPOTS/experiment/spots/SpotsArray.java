@@ -225,7 +225,7 @@ public class SpotsArray {
 			String nameL = name.substring(0, name.length() - 1) + "L";
 			Spot spot00 = getSpotFromName(nameL);
 			if (spot00 != null) {
-				spot.cageIndex = spot00.cageIndex;
+				spot.cageID = spot00.cageID;
 			}
 		}
 	}
@@ -328,7 +328,7 @@ public class SpotsArray {
 			spot.spotNFlies = nflies;
 			if (i <= 1 || i >= spotArraySize - 2)
 				spot.spotNFlies = 0;
-			spot.cageIndex = i / 2;
+			spot.cageID = i / 2;
 		}
 	}
 
@@ -339,13 +339,13 @@ public class SpotsArray {
 			spot.spotNFlies = 1;
 			if (i <= 1) {
 				spot.spotNFlies = 0;
-				spot.cageIndex = 0;
+				spot.cageID = 0;
 			} else if (i >= spotArraySize - 2) {
 				spot.spotNFlies = 0;
-				spot.cageIndex = 5;
+				spot.cageID = 5;
 			} else {
 				spot.spotNFlies = nflies;
-				spot.cageIndex = 1 + (i - 2) / 4;
+				spot.cageID = 1 + (i - 2) / 4;
 			}
 		}
 	}

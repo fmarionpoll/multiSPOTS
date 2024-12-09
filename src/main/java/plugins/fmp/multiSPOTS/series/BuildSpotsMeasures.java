@@ -149,7 +149,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
 					int ii = t - tFirst;
 					for (Spot spot : exp.spotsArray.spotsList) {
-						int i = spot.spotIndex % 2;
+						int i = spot.plateIndex % 2;
 						if (0 == i && !options.detectL)
 							continue;
 						if (1 == i && !options.detectR)
@@ -251,7 +251,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 		// exp.binDuration_ms + 1);
 		int nFrames = exp.seqCamData.nTotalFrames - (int) exp.seqCamData.indexFirstImage;
 		for (Spot spot : exp.spotsArray.spotsList) {
-			int i = spot.spotIndex % 2;
+			int i = spot.plateIndex % 2;
 			if (0 == i && !options.detectL)
 				continue;
 			if (1 == i && !options.detectR)
@@ -268,7 +268,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 		for (Spot spot : exp.spotsArray.spotsList) {
-			int i = spot.spotIndex % 2;
+			int i = spot.plateIndex % 2;
 			if (0 == i && !options.detectL)
 				continue;
 			if (1 == i && !options.detectR)

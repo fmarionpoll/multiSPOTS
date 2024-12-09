@@ -250,7 +250,7 @@ public class ChartSpots extends IcyFrame {
 		} catch (NumberFormatException e1) {
 			foo = 0;
 		}
-		spotFound.spot_Kymograph_T = 2 * spotFound.cageIndex + foo;
+		spotFound.spot_Kymograph_T = 2 * spotFound.cageID + foo;
 		return spotFound;
 	}
 
