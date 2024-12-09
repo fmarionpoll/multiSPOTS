@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.experiment;
+package plugins.fmp.multiSPOTS.experiment.Spots;
 
 import java.util.Arrays;
 import java.util.List;

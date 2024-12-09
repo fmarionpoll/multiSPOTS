@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.experiment;
+package plugins.fmp.multiSPOTS.experiment.Cages;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -16,7 +16,11 @@ import org.w3c.dom.Node;
 import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.util.XMLUtil;
+import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.Capillaries.Capillary;
+import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
+import plugins.fmp.multiSPOTS.experiment.Spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
 import plugins.kernel.roi.roi2d.ROI2DArea;

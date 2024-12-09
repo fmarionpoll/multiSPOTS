@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.experiment;
+package plugins.fmp.multiSPOTS.experiment.Cages;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;

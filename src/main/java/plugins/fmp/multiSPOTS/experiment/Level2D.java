@@ -112,13 +112,13 @@ public class Level2D extends Polyline2D {
 		return new Level2D(nxpoints, nypoints, imageWidth);
 	}
 
-	void multiply_Y(double mult) {
+	public void multiply_Y(double mult) {
 		for (int i = 0; i < npoints; i++) {
 			ypoints[i] = ypoints[i] * mult;
 		}
 	}
 
-	void threshold_Y(double value) {
+	public void threshold_Y(double value) {
 		for (int i = 0; i < npoints; i++) {
 			if (ypoints[i] > 0)
 				ypoints[i] = 1;

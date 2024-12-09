@@ -28,7 +28,7 @@ import icy.type.geom.Polygon2D;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
-import plugins.fmp.multiSPOTS.experiment.Spot;
+import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.Overlay.OverlayThreshold;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;

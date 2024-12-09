@@ -22,6 +22,7 @@ import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
 import loci.formats.FormatException;
 import ome.xml.meta.OMEXMLMetadata;
+import plugins.fmp.multiSPOTS.experiment.Spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;

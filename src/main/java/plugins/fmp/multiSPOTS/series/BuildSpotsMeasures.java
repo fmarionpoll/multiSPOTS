@@ -20,7 +20,7 @@ import icy.system.thread.Processor;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
-import plugins.fmp.multiSPOTS.experiment.Spot;
+import plugins.fmp.multiSPOTS.experiment.Spots.Spot;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformOptions;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;

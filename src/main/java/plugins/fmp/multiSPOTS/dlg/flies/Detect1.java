@@ -25,9 +25,9 @@ import javax.swing.event.PopupMenuListener;
 
 import icy.util.StringUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
+import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.series.FlyDetect1;
 import plugins.fmp.multiSPOTS.tools.ImageTransform.ImageTransformEnums;

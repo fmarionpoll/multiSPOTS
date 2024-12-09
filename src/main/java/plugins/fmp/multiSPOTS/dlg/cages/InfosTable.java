@@ -17,8 +17,8 @@ import javax.swing.table.TableColumnModel;
 
 import icy.gui.frame.IcyFrame;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
-import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
 import plugins.fmp.multiSPOTS.tools.JComponents.TableModelCage;
 
 public class InfosTable extends JPanel {

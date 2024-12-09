@@ -1,4 +1,4 @@
-package plugins.fmp.multiSPOTS.experiment;
+package plugins.fmp.multiSPOTS.experiment.Spots;
 
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -22,6 +22,10 @@ import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
+import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.KymoIntervals;
+import plugins.fmp.multiSPOTS.experiment.Level2D;
+import plugins.fmp.multiSPOTS.experiment.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;

@@ -20,8 +20,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import icy.gui.frame.IcyFrame;
 import icy.gui.util.GuiUtil;
-import plugins.fmp.multiSPOTS.experiment.Cage;
-import plugins.fmp.multiSPOTS.experiment.FlyPositions;
+import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.Cages.FlyPositions;
 import plugins.fmp.multiSPOTS.tools.MaxMinDouble;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 

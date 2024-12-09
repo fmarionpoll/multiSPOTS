@@ -11,10 +11,10 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import icy.gui.frame.progress.ProgressFrame;
-import plugins.fmp.multiSPOTS.experiment.Cage;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.FlyPosition;
-import plugins.fmp.multiSPOTS.experiment.FlyPositions;
+import plugins.fmp.multiSPOTS.experiment.Cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.Cages.FlyPosition;
+import plugins.fmp.multiSPOTS.experiment.Cages.FlyPositions;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
