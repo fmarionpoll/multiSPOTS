@@ -266,14 +266,10 @@ public class CreateSpots extends JPanel {
 		int nRowsPerCage = (int) nRowsPerCageJSpinner.getValue();
 		exp.spotsArray.nColsPerCage = nColsPerCage;
 		exp.spotsArray.nRowsPerCage = nRowsPerCage;
-//		int i = 0;
 
 		for (Spot spot : exp.spotsArray.spotsList) {
 			int row = spot.plateIndex / exp.spotsArray.n_columns;
 			int column = spot.plateIndex - (row * exp.spotsArray.n_columns);
-//			System.out.println("i:" + i + " " + spot.getRoiName() + " index=" + spot.plateIndex + " col:"
-//					+ spot.plateColumn + " vs " + column + " row:" + spot.plateRow + " vs " + row);
-//			i++;
 			spot.cageID = column % nColsPerCage + row % nRowsPerCage;
 			spot.cageIndex = column % nColsPerCage + (row % nRowsPerCage) * nColsPerCage;
 			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.cageIndex);
