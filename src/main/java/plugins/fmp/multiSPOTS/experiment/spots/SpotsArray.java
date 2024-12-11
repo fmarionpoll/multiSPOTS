@@ -360,33 +360,43 @@ public class SpotsArray {
 	public Polygon2D getPolygon2DEnclosingAllSpots() {
 		if (spotsList.size() < 1)
 			return null;
-
-		Rectangle rect = spotsList.get(0).getRoi_in().getBounds();
-		int rectleft = rect.x;
-		int rectright = rect.x + rect.width;
-		int recttop = rect.y + rect.height;
-
-		int last = spotsList.size() - 1;
-		if (last > 0) {
-			Rectangle bound1 = spotsList.get(last).getRoi_in().getBounds();
-			rectleft = rect.x;
-			rectright = bound1.x + bound1.width;
-			int diff = (rectright - rectleft) * 2 / 60;
-			rectleft -= diff;
-			rectright += diff;
-			recttop = rect.y + rect.height - (rect.height / 8);
-		}
-
+		
 		List<Point2D> points = new ArrayList<Point2D>();
-		points.add(new Point2D.Double(rectleft, recttop));
-		points.add(new Point2D.Double(rectright, recttop));
-		points.add(new Point2D.Double(rectright, rect.y + rect.height - 4));
-		points.add(new Point2D.Double(rectleft, rect.y + rect.height - 4));
+		int spotX = spotsList.get(0).spotXCoord;
+		int spotY = spotsList.get(0).spotYCoord;
+		points.add(new Point2D.Double(spotX, spotY));
+		points.add(new Point2D.Double(spotX+1, spotY));
+		points.add(new Point2D.Double(spotX+1, spotY+1));
+		points.add(new Point2D.Double(spotX, spotY+1));
 		Polygon2D polygon = new Polygon2D(points);
+		
+		for (Spot spot: spotsList) {
+			spotX = spot.spotXCoord;
+			spotY = spot.spotYCoord;
+			if (polygon.contains(spotX, spotY))
+				continue;
+			// top left
+			if (spotX <= polygon.xpoints[0] && spotY <= polygon.xpoints[0]) {
+				replaceItem (polygon, 0, spotX, spotY) ;
+			} else if (spotX >= polygon.xpoints[1] && spotY <= polygon.xpoints[1]) {
+				replaceItem (polygon, 1, spotX, spotY) ;
+			} else if (spotX >= polygon.xpoints[2] && spotY >= polygon.xpoints[2]) {
+				replaceItem (polygon, 2, spotX, spotY) ;
+			}  else if (spotX <= polygon.xpoints[3] && spotY >= polygon.xpoints[3]) {
+				replaceItem (polygon, 3, spotX, spotY) ;
+			}
+		}
 		return polygon;
+	}
+	
+	private void replaceItem (Polygon2D polygon, int index, int xpoint, int ypoint) 
+	{
+		polygon.xpoints[index] = xpoint;
+		polygon.ypoints[index] = ypoint;
 	}
 
 	// ------------------------------------------------
+
 	public double getScalingFactorToPhysicalUnits(EnumXLSExportType xlsoption) {
 		double scalingFactorToPhysicalUnits = 1.;
 //		switch (xlsoption) 

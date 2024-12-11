@@ -30,8 +30,8 @@ public class Spot implements Comparable<Spot> {
 	private ArrayList<ROI2DAlongT> listRoiAlongT = new ArrayList<ROI2DAlongT>();
 	// useful?
 	// private String kymographName = null;
-	public int kymographIndex = -1;
 	// private String kymographPrefix = null;
+	public int kymographIndex = -1;
 
 	public BooleanMask2D mask2DSpot = null;
 
@@ -135,7 +135,8 @@ public class Spot implements Comparable<Spot> {
 		spotVolume = spotFrom.spotVolume;
 		spotNPixels = spotFrom.spotNPixels;
 		spotRadius = spotFrom.spotRadius;
-
+		spotXCoord = spotFrom.spotXCoord;
+		spotYCoord = spotFrom.spotYCoord;
 		limitsOptions = spotFrom.limitsOptions;
 
 		sum_in.copyLevel2D(spotFrom.sum_in);
