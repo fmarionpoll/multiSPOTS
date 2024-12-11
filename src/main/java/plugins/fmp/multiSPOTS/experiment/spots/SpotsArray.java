@@ -22,7 +22,6 @@ import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
-import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.KymoIntervals;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
@@ -35,8 +34,8 @@ public class SpotsArray {
 	public SpotsDescription spotsDescription = new SpotsDescription();
 	public SpotsDescription desc_old = new SpotsDescription();
 	public ArrayList<Spot> spotsList = new ArrayList<Spot>();
-	public int	n_columns = 12;
-	public int  n_rows = 8;
+	public int n_columns = 12;
+	public int n_rows = 8;
 	public int nColsPerCage = 2;
 	public int nRowsPerCage = 1;
 	private KymoIntervals spotsListTimeIntervals = null;
@@ -157,7 +156,7 @@ public class SpotsArray {
 		n_rows = XMLUtil.getElementIntValue(nodecaps, ID_NROWS, 8);
 		nColsPerCage = XMLUtil.getElementIntValue(nodecaps, ID_NCOLUMNSPERCAGE, 2);
 		nRowsPerCage = XMLUtil.getElementIntValue(nodecaps, ID_NROWSPERCAGE, 1);
-		
+
 		spotsList = new ArrayList<Spot>(nitems);
 		for (int i = 0; i < nitems; i++) {
 			Node nodecapillary = XMLUtil.getElement(node, ID_SPOT_ + i);
@@ -358,24 +357,27 @@ public class SpotsArray {
 		}
 	}
 
-	public Polygon2D getPolygon2DEnclosingAllSpots(Experiment exp) {
-		Rectangle rect = exp.seqCamData.seq.getBounds2D();
-		List<Point2D> points = new ArrayList<Point2D>();
-		int rectleft = rect.x + rect.width / 6;
-		int rectright = rect.x + rect.width * 5 / 6;
-		int recttop = rect.y + rect.height * 2 / 3;
-		if (exp.spotsArray.spotsList.size() > 0) {
-			Rectangle bound0 = exp.spotsArray.spotsList.get(0).getRoi_in().getBounds();
-			int last = exp.spotsArray.spotsList.size() - 1;
-			Rectangle bound1 = exp.spotsArray.spotsList.get(last).getRoi_in().getBounds();
-			rectleft = bound0.x;
+	public Polygon2D getPolygon2DEnclosingAllSpots() {
+		if (spotsList.size() < 1)
+			return null;
+
+		Rectangle rect = spotsList.get(0).getRoi_in().getBounds();
+		int rectleft = rect.x;
+		int rectright = rect.x + rect.width;
+		int recttop = rect.y + rect.height;
+
+		int last = spotsList.size() - 1;
+		if (last > 0) {
+			Rectangle bound1 = spotsList.get(last).getRoi_in().getBounds();
+			rectleft = rect.x;
 			rectright = bound1.x + bound1.width;
 			int diff = (rectright - rectleft) * 2 / 60;
 			rectleft -= diff;
 			rectright += diff;
-			recttop = bound0.y + bound0.height - (bound0.height / 8);
+			recttop = rect.y + rect.height - (rect.height / 8);
 		}
 
+		List<Point2D> points = new ArrayList<Point2D>();
 		points.add(new Point2D.Double(rectleft, recttop));
 		points.add(new Point2D.Double(rectright, recttop));
 		points.add(new Point2D.Double(rectright, rect.y + rect.height - 4));

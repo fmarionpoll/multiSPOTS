@@ -171,7 +171,7 @@ public class CreateSpots extends JPanel {
 		if (isRoiPresent(seqCamData, dummyname))
 			return;
 
-		ROI2DPolygon roi = new ROI2DPolygon(getCapillariesPolygon(seqCamData));
+		ROI2DPolygon roi = new ROI2DPolygon(getSpotsPolygon(exp));
 		roi.setName(dummyname);
 		seqCamData.seq.addROI(roi);
 		seqCamData.seq.setSelectedROI(roi);
@@ -186,15 +186,19 @@ public class CreateSpots extends JPanel {
 		return false;
 	}
 
-	private Polygon2D getCapillariesPolygon(SequenceCamData seqCamData) {
+	private Polygon2D getSpotsPolygon(Experiment exp) {
 		if (roiPolygon == null) {
-			Rectangle rect = seqCamData.seq.getBounds2D();
-			List<Point2D> points = new ArrayList<Point2D>();
-			points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height / 5));
-			points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height / 5));
-			points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height * 2 / 3));
-			points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height * 2 / 3));
-			roiPolygon = new Polygon2D(points);
+			if (exp.spotsArray.spotsList.size() > 0) {
+				roiPolygon = exp.spotsArray.getPolygon2DEnclosingAllSpots();
+			} else {
+				Rectangle rect = exp.seqCamData.seq.getBounds2D();
+				List<Point2D> points = new ArrayList<Point2D>();
+				points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height / 5));
+				points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height / 5));
+				points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height * 2 / 3));
+				points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height * 2 / 3));
+				roiPolygon = new Polygon2D(points);
+			}
 		}
 		return roiPolygon;
 	}
@@ -242,7 +246,7 @@ public class CreateSpots extends JPanel {
 				double y = point.getY() - radius;
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2 * radius, 2 * radius);
 				ROI2DEllipse roiEllipse = new ROI2DEllipse(ellipse);
-				roiEllipse.setName("spot_" + toAlphabetic(row) + "_" + column);
+				roiEllipse.setName("spot_" + toAlphabetic(row) + "_" + String.format("%02d", column));
 
 				Spot spot = new Spot(roiEllipse);
 				spot.plateIndex = spotIndex;
