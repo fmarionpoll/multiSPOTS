@@ -360,39 +360,36 @@ public class SpotsArray {
 	public Polygon2D getPolygon2DEnclosingAllSpots() {
 		if (spotsList.size() < 1)
 			return null;
-		
+
 		List<Point2D> points = new ArrayList<Point2D>();
 		int spotX = spotsList.get(0).spotXCoord;
 		int spotY = spotsList.get(0).spotYCoord;
 		points.add(new Point2D.Double(spotX, spotY));
-		points.add(new Point2D.Double(spotX+1, spotY));
-		points.add(new Point2D.Double(spotX+1, spotY+1));
-		points.add(new Point2D.Double(spotX, spotY+1));
+		points.add(new Point2D.Double(spotX + 1, spotY));
+		points.add(new Point2D.Double(spotX + 1, spotY + 1));
+		points.add(new Point2D.Double(spotX, spotY + 1));
 		Polygon2D polygon = new Polygon2D(points);
-		
-		for (Spot spot: spotsList) {
-			spotX = spot.spotXCoord;
-			spotY = spot.spotYCoord;
-			if (polygon.contains(spotX, spotY))
-				continue;
-			// top left
-			if (spotX <= polygon.xpoints[0] && spotY <= polygon.xpoints[0]) {
-				replaceItem (polygon, 0, spotX, spotY) ;
-			} else if (spotX >= polygon.xpoints[1] && spotY <= polygon.xpoints[1]) {
-				replaceItem (polygon, 1, spotX, spotY) ;
-			} else if (spotX >= polygon.xpoints[2] && spotY >= polygon.xpoints[2]) {
-				replaceItem (polygon, 2, spotX, spotY) ;
-			}  else if (spotX <= polygon.xpoints[3] && spotY >= polygon.xpoints[3]) {
-				replaceItem (polygon, 3, spotX, spotY) ;
+
+		for (Spot spot : spotsList) {
+			int col = spot.plateColumn;
+			int row = spot.plateRow;
+
+			if (col == 0 && row == 0) {
+				replaceItem(polygon, 0, spot);
+			} else if (col == (n_columns - 1) && row == 0) {
+				replaceItem(polygon, 1, spot);
+			} else if (col == (n_columns - 1) && row == (n_rows - 1)) {
+				replaceItem(polygon, 2, spot);
+			} else if (col == 0 && row == (n_rows - 1)) {
+				replaceItem(polygon, 3, spot);
 			}
 		}
 		return polygon;
 	}
-	
-	private void replaceItem (Polygon2D polygon, int index, int xpoint, int ypoint) 
-	{
-		polygon.xpoints[index] = xpoint;
-		polygon.ypoints[index] = ypoint;
+
+	private void replaceItem(Polygon2D polygon, int index, Spot spot) {
+		polygon.xpoints[index] = spot.spotXCoord;
+		polygon.ypoints[index] = spot.spotYCoord;
 	}
 
 	// ------------------------------------------------

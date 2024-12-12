@@ -49,8 +49,10 @@ public class Spot implements Comparable<Spot> {
 	public double spotVolume = 1;
 	public int spotNPixels = 1;
 	public int spotRadius = 30;
+
 	public int spotXCoord = -1;
 	public int spotYCoord = -1;
+
 	public boolean descriptionOK = false;
 	public int versionInfos = 0;
 
