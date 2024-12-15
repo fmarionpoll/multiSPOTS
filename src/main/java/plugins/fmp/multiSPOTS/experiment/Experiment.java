@@ -39,7 +39,7 @@ public class Experiment {
 	public SequenceCamData seqCamData = null;
 	public SequenceKymos seqSpotKymos = null;
 	public Sequence seqReference = null;
-//	public CapillariesArray capillaries = new CapillariesArray();
+
 	public SpotsArray spotsArray = new SpotsArray();
 	public Cages cages = new Cages();
 
@@ -332,16 +332,16 @@ public class Experiment {
 	}
 
 	public long[] build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList() {
-		seqCamData.camImages_ms = new long[seqCamData.nTotalFrames];
+		seqCamData.camImages_array_ms = new long[seqCamData.nTotalFrames];
 
 		FileTime firstImage_FileTime = seqCamData.getFileTimeFromStructuredName(0);
 		long firstImage_ms = firstImage_FileTime.toMillis();
 		for (int i = 0; i < seqCamData.nTotalFrames; i++) {
 			FileTime image_FileTime = seqCamData.getFileTimeFromStructuredName(i);
 			long image_ms = image_FileTime.toMillis() - firstImage_ms;
-			seqCamData.camImages_ms[i] = image_ms;
+			seqCamData.camImages_array_ms[i] = image_ms;
 		}
-		return seqCamData.camImages_ms;
+		return seqCamData.camImages_array_ms;
 	}
 
 	public int findNearestIntervalWithBinarySearch(long value, int low, int high) {
@@ -349,22 +349,21 @@ public class Experiment {
 		if (high - low > 1) {
 			int mid = (low + high) / 2;
 
-			if (seqCamData.camImages_ms[mid] > value)
+			if (seqCamData.camImages_array_ms[mid] > value)
 				result = findNearestIntervalWithBinarySearch(value, low, mid);
-			else if (seqCamData.camImages_ms[mid] < value)
+			else if (seqCamData.camImages_array_ms[mid] < value)
 				result = findNearestIntervalWithBinarySearch(value, mid, high);
 			else
 				result = mid;
 		} else
-			result = Math.abs(value - seqCamData.camImages_ms[low]) < Math.abs(value - seqCamData.camImages_ms[high])
-					? low
-					: high;
+			result = Math.abs(value - seqCamData.camImages_array_ms[low]) < Math
+					.abs(value - seqCamData.camImages_array_ms[high]) ? low : high;
 
 		return result;
 	}
 
 	public int getClosestInterval(int icentral, long valueToCompare) {
-		long deltacentral = Math.abs(valueToCompare - seqCamData.camImages_ms[icentral]);
+		long deltacentral = Math.abs(valueToCompare - seqCamData.camImages_array_ms[icentral]);
 		if (deltacentral == 0)
 			return icentral;
 
@@ -374,12 +373,12 @@ public class Experiment {
 			ilow = 0;
 			ihigh = 2;
 		}
-		if (icentral >= seqCamData.camImages_ms.length - 1) {
-			ihigh = seqCamData.camImages_ms.length - 1;
+		if (icentral >= seqCamData.camImages_array_ms.length - 1) {
+			ihigh = seqCamData.camImages_array_ms.length - 1;
 			ilow = ihigh - 2;
 		}
-		long deltalow = Math.abs(valueToCompare - seqCamData.camImages_ms[ilow]);
-		long deltahigh = Math.abs(valueToCompare - seqCamData.camImages_ms[ihigh]);
+		long deltalow = Math.abs(valueToCompare - seqCamData.camImages_array_ms[ilow]);
+		long deltahigh = Math.abs(valueToCompare - seqCamData.camImages_array_ms[ihigh]);
 
 		int ismallest = icentral;
 		long deltasmallest = deltacentral;

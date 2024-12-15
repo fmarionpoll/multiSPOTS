@@ -18,7 +18,6 @@ import icy.roi.ROI2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
-import plugins.fmp.multiSPOTS.experiment.capillaries.Capillary;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Comparators;
@@ -402,13 +401,6 @@ public class Cages {
 					continue;
 				cage.cageNFlies = spot.spotNFlies;
 			}
-		}
-	}
-
-	public void setCageNbFromCapillaryName(ArrayList<Capillary> capillariesList) {
-		for (Capillary cap : capillariesList) {
-			int cagenb = cap.getCageIndexFromRoiName();
-			cap.cageID = cagenb;
 		}
 	}
 

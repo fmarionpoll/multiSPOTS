@@ -13,8 +13,6 @@ import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
-import plugins.fmp.multiSPOTS.experiment.capillaries.CapillariesArray;
-import plugins.fmp.multiSPOTS.experiment.capillaries.Capillary;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;
 
@@ -170,24 +168,6 @@ public class Cage {
 	public Point2D getCenterTopCage() {
 		Rectangle2D rect = cageRoi2D.getBounds2D();
 		Point2D pt = new Point2D.Double(rect.getX() + rect.getWidth() / 2, rect.getY());
-		return pt;
-	}
-
-	public Point2D getCenterTipCapillaries(CapillariesArray capillaries) {
-		List<Point2D> listpts = new ArrayList<Point2D>();
-		for (Capillary cap : capillaries.capillariesList) {
-			Point2D pt = cap.getCapillaryTipWithinROI2D(cageRoi2D);
-			if (pt != null)
-				listpts.add(pt);
-		}
-		double x = 0;
-		double y = 0;
-		int n = listpts.size();
-		for (Point2D pt : listpts) {
-			x += pt.getX();
-			y += pt.getY();
-		}
-		Point2D pt = new Point2D.Double(x / n, y / n);
 		return pt;
 	}
 

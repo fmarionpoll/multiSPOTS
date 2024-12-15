@@ -59,7 +59,7 @@ public class SequenceCamData {
 	public long firstImage_ms = -1;
 	public long lastImage_ms = -1;
 	public long binImage_ms = -1;
-	public long[] camImages_ms = null;
+	public long[] camImages_array_ms = null;
 
 	public long indexFirstImage = 0;
 	public long numberOfImagesClipped = -1;

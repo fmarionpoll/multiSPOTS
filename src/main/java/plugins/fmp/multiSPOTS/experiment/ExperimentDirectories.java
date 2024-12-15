@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 
 import icy.file.FileUtil;
 import icy.gui.dialog.LoaderDialog;
-
 import plugins.fmp.multiSPOTS.tools.Directories;
 
 public class ExperimentDirectories {
@@ -154,7 +153,7 @@ public class ExperimentDirectories {
 
 	private String getBinSubDirectoryFromTIFFLocation(String expListBinSubDirectory, String resultsDirectory) {
 		List<String> expList = Directories.getSortedListOfSubDirectoriesWithTIFF(resultsDirectory);
-		move_TIFFandLINEfiles_From_Results_to_BinDirectory(resultsDirectory, expList);
+//		move_TIFFandLINEfiles_From_Results_to_BinDirectory(resultsDirectory, expList);
 		String binDirectory = expListBinSubDirectory;
 		if (binDirectory == null) {
 			if (expList.size() > 1) {
@@ -205,18 +204,18 @@ public class ExperimentDirectories {
 		return parentDirectory + File.separator + name;
 	}
 
-	private void move_TIFFandLINEfiles_From_Results_to_BinDirectory(String parentDirectory, List<String> expList) {
-		if (expList == null)
-			return;
-		for (String subDirectory : expList) {
-			if (subDirectory.contains(Experiment.RESULTS)) { // TODO estimate bin size for ex by comparing x size and n
-																// jpg files?
-				subDirectory = Experiment.BIN + "60";
-				Directories.move_TIFFfiles_To_Subdirectory(parentDirectory, subDirectory);
-				Directories.move_xmlLINEfiles_To_Subdirectory(parentDirectory, subDirectory, true);
-			}
-		}
-	}
+//	private void move_TIFFandLINEfiles_From_Results_to_BinDirectory(String parentDirectory, List<String> expList) {
+//		if (expList == null)
+//			return;
+//		for (String subDirectory : expList) {
+//			if (subDirectory.contains(Experiment.RESULTS)) { // TODO estimate bin size for ex by comparing x size and n
+//																// jpg files?
+//				subDirectory = Experiment.BIN + "60";
+//				Directories.move_TIFFfiles_To_Subdirectory(parentDirectory, subDirectory);
+//				Directories.move_xmlLINEfiles_To_Subdirectory(parentDirectory, subDirectory, true);
+//			}
+//		}
+//	}
 
 	private void move_XML_From_Bin_to_Results(String binSubDirectory, String resultsDirectory) {
 		String binDirectory = resultsDirectory + File.separator + binSubDirectory;
