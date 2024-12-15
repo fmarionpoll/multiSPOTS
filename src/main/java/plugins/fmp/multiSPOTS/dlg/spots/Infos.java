@@ -21,7 +21,7 @@ public class Infos extends JPanel {
 	private static final long serialVersionUID = 4950182090521600937L;
 
 	private JButton editSpotsButton = new JButton("Edit spots infos...");
-	private SpotTable infosSpotTable = null;
+	private SpotTablePanel infosSpotTable = null;
 	private List<Spot> spotsArrayCopy = new ArrayList<Spot>();
 
 	private MultiSPOTS parent0 = null;
@@ -50,7 +50,7 @@ public class Infos extends JPanel {
 					if (infosSpotTable != null) {
 						infosSpotTable.close();
 					}
-					infosSpotTable = new SpotTable();
+					infosSpotTable = new SpotTablePanel();
 					infosSpotTable.initialize(parent0, spotsArrayCopy);
 					infosSpotTable.requestFocus();
 				}

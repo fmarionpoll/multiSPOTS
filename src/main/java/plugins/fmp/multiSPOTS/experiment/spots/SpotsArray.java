@@ -209,26 +209,6 @@ public class SpotsArray {
 			spot.cropLevel2DMeasuresToImageWidth(imageWidth);
 	}
 
-//	public void transferDescriptionToSpots() {
-//		for (Spot spot : spotsList)
-//			transferCapGroupCageIDToSpot(spot);
-//	}
-//
-//	private void transferCapGroupCageIDToSpot(Spot spot) {
-//		if (spotsDescription.grouping != 2)
-//			return;
-//		String name = spot.getRoiName();
-//		String letter = name.substring(name.length() - 1);
-//		spot.spotCageSide = letter;
-//		if (letter.equals("R")) {
-//			String nameL = name.substring(0, name.length() - 1) + "L";
-//			Spot spot00 = getSpotFromName(nameL);
-//			if (spot00 != null) {
-//				spot.cageID = spot00.cageID;
-//			}
-//		}
-//	}
-
 	public Spot getSpotFromName(String name) {
 		Spot spotFound = null;
 		for (Spot spot : spotsList) {
@@ -271,6 +251,7 @@ public class SpotsArray {
 				}
 			}
 		}
+
 		Iterator<Spot> iterator = spotsList.iterator();
 		while (iterator.hasNext()) {
 			Spot spot = iterator.next();
@@ -318,35 +299,6 @@ public class SpotsArray {
 		ROI2DUtilities.mergeROIsListNoDuplicate(seqRoisList, newRoisList, seq);
 		seq.removeAllROI();
 		seq.addROIs(seqRoisList, false);
-	}
-
-	public void initSpotsWith10Cages(int nflies) {
-		int spotArraySize = spotsList.size();
-		for (int i = 0; i < spotArraySize; i++) {
-			Spot spot = spotsList.get(i);
-			spot.spotNFlies = nflies;
-			if (i <= 1 || i >= spotArraySize - 2)
-				spot.spotNFlies = 0;
-			spot.cageID = i / 2;
-		}
-	}
-
-	public void initSpotsWith6Cages(int nflies) {
-		int spotArraySize = spotsList.size();
-		for (int i = 0; i < spotArraySize; i++) {
-			Spot spot = spotsList.get(i);
-			spot.spotNFlies = 1;
-			if (i <= 1) {
-				spot.spotNFlies = 0;
-				spot.cageID = 0;
-			} else if (i >= spotArraySize - 2) {
-				spot.spotNFlies = 0;
-				spot.cageID = 5;
-			} else {
-				spot.spotNFlies = nflies;
-				spot.cageID = 1 + (i - 2) / 4;
-			}
-		}
 	}
 
 	public void initSpotsWithNFlies(int nflies) {

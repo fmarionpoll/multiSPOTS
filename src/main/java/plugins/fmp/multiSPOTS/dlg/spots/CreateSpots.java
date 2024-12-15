@@ -270,13 +270,12 @@ public class CreateSpots extends JPanel {
 		int nRowsPerCage = (int) nRowsPerCageJSpinner.getValue();
 		exp.spotsArray.nColsPerCage = nColsPerCage;
 		exp.spotsArray.nRowsPerCage = nRowsPerCage;
+		int nSpotsPerCage = nColsPerCage * nRowsPerCage;
 
 		for (Spot spot : exp.spotsArray.spotsList) {
-			int row = spot.plateIndex / exp.spotsArray.n_columns;
-			int column = spot.plateIndex - (row * exp.spotsArray.n_columns);
-			spot.cageID = column % nColsPerCage + row % nRowsPerCage;
-			spot.cageIndex = column % nColsPerCage + (row % nRowsPerCage) * nColsPerCage;
-			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.cageIndex);
+			spot.cagePosition = spot.plateIndex % nSpotsPerCage;
+			spot.cageID = spot.plateIndex / nSpotsPerCage;
+			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.cagePosition);
 		}
 	}
 

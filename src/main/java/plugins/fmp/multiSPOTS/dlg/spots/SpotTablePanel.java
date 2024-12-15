@@ -24,7 +24,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.tools.JComponents.TableModelSpot;
 
-public class SpotTable extends JPanel {
+public class SpotTablePanel extends JPanel {
 	/**
 	 * 
 	 */
@@ -34,7 +34,7 @@ public class SpotTable extends JPanel {
 	private TableModelSpot spotTableModel = null;
 	private JButton copyButton = new JButton("Copy table");
 	private JButton pasteButton = new JButton("Paste");
-	private JButton duplicateLRButton = new JButton("Duplicate cell to L/R");
+	private JButton duplicateLRButton = new JButton("Duplicate cell to pos");
 	private JButton duplicateCageButton = new JButton("Duplicate cage stim");
 
 	private JButton exchangeLRButton = new JButton("Exchg L/R");
@@ -66,8 +66,9 @@ public class SpotTable extends JPanel {
 		columnModel.getColumn(0).setPreferredWidth(25);
 		columnModel.getColumn(1).setPreferredWidth(15);
 		columnModel.getColumn(2).setPreferredWidth(15);
-		columnModel.getColumn(3).setPreferredWidth(25);
-		columnModel.getColumn(4).setPreferredWidth(15);
+		columnModel.getColumn(3).setPreferredWidth(15);
+		columnModel.getColumn(4).setPreferredWidth(25);
+		columnModel.getColumn(5).setPreferredWidth(15);
 
 		JScrollPane scrollPane = new JScrollPane(jTable);
 
@@ -190,7 +191,7 @@ public class SpotTable extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					exp.cages.setCageNbFromSpotName(exp.spotsArray.spotsList);
+					exp.cages.setCageNbFromSpotsArray(exp.spotsArray);
 					spotTableModel.fireTableDataChanged();
 				}
 			}
@@ -205,7 +206,7 @@ public class SpotTable extends JPanel {
 		int columnIndex = jTable.getSelectedColumn();
 		if (columnIndex < 0)
 			columnIndex = 5;
-		int side0 = exp.spotsArray.spotsList.get(0).cageIndex;
+		int side0 = exp.spotsArray.spotsList.get(0).cagePosition;
 		Spot spot0 = new Spot();
 		spot0.copySpot(exp.spotsArray.spotsList.get(0));
 
@@ -213,7 +214,7 @@ public class SpotTable extends JPanel {
 		spot1.copySpot(exp.spotsArray.spotsList.get(1));
 
 		for (Spot spot : exp.spotsArray.spotsList) {
-			if ((spot.cageIndex == side0))
+			if ((spot.cagePosition == side0))
 				copySingleSpotValue(spot1, spot, columnIndex);
 			else
 				copySingleSpotValue(spot0, spot, columnIndex);
@@ -222,16 +223,19 @@ public class SpotTable extends JPanel {
 
 	private void copySingleSpotValue(Spot spotFrom, Spot spotTo, int columnIndex) {
 		switch (columnIndex) {
-		case 2:
+		case 3:
 			spotTo.spotNFlies = spotFrom.spotNFlies;
 			break;
-		case 3:
+		case 4:
 			spotTo.spotNPixels = spotFrom.spotNPixels;
 			break;
-		case 4:
+		case 5:
+			spotTo.spotVolume = spotFrom.spotVolume;
+			break;
+		case 6:
 			spotTo.spotStim = spotFrom.spotStim;
 			break;
-		case 5:
+		case 7:
 			spotTo.spotConc = spotFrom.spotConc;
 			break;
 		default:
@@ -255,6 +259,7 @@ public class SpotTable extends JPanel {
 					continue;
 				spotFrom.valid = true;
 				spotTo.cageID = spotFrom.cageID;
+				spotTo.cagePosition = spotFrom.cagePosition;
 				spotTo.spotNFlies = spotFrom.spotNFlies;
 				// do not copy spotNPixels
 				spotTo.spotStim = spotFrom.spotStim;
@@ -281,29 +286,29 @@ public class SpotTable extends JPanel {
 			return;
 
 		Spot spot0 = exp.spotsArray.spotsList.get(rowIndex);
-		int cageIndex = spot0.cageIndex;
+		int cageIndex = spot0.cagePosition;
 
 		for (Spot spot : exp.spotsArray.spotsList) {
 			if (spot.getRoiName().equals(spot0.getRoiName()))
 				continue;
 
-			if (spot.cageIndex != cageIndex)
+			if (spot.cagePosition != cageIndex)
 				continue;
 
 			switch (columnIndex) {
-			case 2:
+			case 3:
 				spot.spotNFlies = spot0.spotNFlies;
 				break;
-			case 3:
+			case 4:
 				spot.spotNPixels = spot0.spotNPixels;
 				break;
-			case 4:
+			case 5:
 				spot.spotVolume = spot0.spotVolume;
 				break;
-			case 5:
+			case 6:
 				spot.spotStim = spot0.spotStim;
 				break;
-			case 6:
+			case 7:
 				spot.spotConc = spot0.spotConc;
 				break;
 			default:
@@ -323,19 +328,19 @@ public class SpotTable extends JPanel {
 			if (spot.getRoiName().equals(spotFrom.getRoiName()))
 				continue;
 			switch (columnIndex) {
-			case 2:
+			case 3:
 				spot.spotNFlies = spotFrom.spotNFlies;
 				break;
-			case 3:
+			case 4:
 				spot.spotNPixels = spotFrom.spotNPixels;
 				break;
-			case 4:
+			case 5:
 				spot.spotVolume = spotFrom.spotVolume;
 				break;
-			case 5:
+			case 6:
 				spot.spotStim = spotFrom.spotStim;
 				break;
-			case 6:
+			case 7:
 				spot.spotConc = spotFrom.spotConc;
 				break;
 			default:
@@ -375,19 +380,19 @@ public class SpotTable extends JPanel {
 			Spot spot0 = exp.spotsArray.spotsList.get(indexFrom);
 
 			switch (columnIndex) {
-			case 2:
+			case 3:
 				spot.spotNFlies = spot0.spotNFlies;
 				break;
-			case 3:
+			case 4:
 				spot.spotNPixels = spot0.spotNPixels;
 				break;
-			case 4:
+			case 5:
 				spot.spotVolume = spot0.spotVolume;
 				break;
-			case 5:
+			case 6:
 				spot.spotStim = spot0.spotStim;
 				break;
-			case 6:
+			case 7:
 				spot.spotConc = spot0.spotConc;
 				break;
 			default:

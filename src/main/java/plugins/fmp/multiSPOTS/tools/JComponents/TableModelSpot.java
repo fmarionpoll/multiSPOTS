@@ -11,8 +11,12 @@ public class TableModelSpot extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = 6325792669154093747L;
 	private JComboBoxExperiment expList = null;
-	String columnNames[] = { "Name", "Cage", "N flies", "N pixels", "Volume", "Stimulus", "Concentration" };
+	String columnNames[] = { "Name", "CageID", "Position", "N flies", "N pixels", "Volume", "Stimulus",
+			"Concentration" };
 
+	// "O-Name", "1-CageID", "2-CageIndex", "3-N flies", "4-N pixels", "5-Volume",
+	// "6-Stimulus",
+//	"7-Concentration"
 	public TableModelSpot(JComboBoxExperiment expList) {
 		super();
 		this.expList = expList;
@@ -35,10 +39,12 @@ public class TableModelSpot extends AbstractTableModel {
 		case 3:
 			return Integer.class;
 		case 4:
-			return Double.class;
+			return Integer.class;
 		case 5:
-			return String.class;
+			return Double.class;
 		case 6:
+			return String.class;
+		case 7:
 			return String.class;
 		}
 		return String.class;
@@ -68,14 +74,16 @@ public class TableModelSpot extends AbstractTableModel {
 			case 1:
 				return spot.cageID;
 			case 2:
-				return spot.spotNFlies;
+				return spot.cagePosition;
 			case 3:
-				return spot.spotNPixels;
+				return spot.spotNFlies;
 			case 4:
-				return spot.spotVolume;
+				return spot.spotNPixels;
 			case 5:
-				return spot.spotStim;
+				return spot.spotVolume;
 			case 6:
+				return spot.spotStim;
+			case 7:
 				return spot.spotConc;
 			}
 		}
@@ -104,18 +112,21 @@ public class TableModelSpot extends AbstractTableModel {
 				spot.cageID = (int) aValue;
 				break;
 			case 2:
-				spot.spotNFlies = (int) aValue;
+				spot.cagePosition = (int) aValue;
 				break;
 			case 3:
-				spot.spotNPixels = (int) aValue;
+				spot.spotNFlies = (int) aValue;
 				break;
 			case 4:
-				spot.spotVolume = (double) aValue;
+				spot.spotNPixels = (int) aValue;
 				break;
 			case 5:
-				spot.spotStim = aValue.toString();
+				spot.spotVolume = (double) aValue;
 				break;
 			case 6:
+				spot.spotStim = aValue.toString();
+				break;
+			case 7:
 				spot.spotConc = aValue.toString();
 				break;
 			}

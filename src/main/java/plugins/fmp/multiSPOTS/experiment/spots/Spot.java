@@ -36,7 +36,7 @@ public class Spot implements Comparable<Spot> {
 	public BooleanMask2D mask2DSpot = null;
 
 	public int cageID = -1;
-	public int cageIndex = 0;
+	public int cagePosition = 0;
 	public int plateIndex = 0;
 	public int plateColumn = 0;
 	public int plateRow = 0;
@@ -44,7 +44,6 @@ public class Spot implements Comparable<Spot> {
 	public String version = null;
 	public String spotStim = new String("..");
 	public String spotConc = new String("..");
-//	public String spotCageSide = ".";
 	public int spotNFlies = 1;
 	public double spotVolume = 1;
 	public int spotNPixels = 1;
@@ -127,7 +126,7 @@ public class Spot implements Comparable<Spot> {
 		plateRow = spotFrom.plateRow;
 
 		cageID = spotFrom.cageID;
-		cageIndex = spotFrom.cageIndex;
+		cagePosition = spotFrom.cagePosition;
 
 		spotNFlies = spotFrom.spotNFlies;
 		spotVolume = spotFrom.spotVolume;
@@ -172,25 +171,6 @@ public class Spot implements Comparable<Spot> {
 		return spotRoi_in.getName();
 	}
 
-	public String getLast2ofSpotName() {
-		if (spotRoi_in == null)
-			return "missing";
-		return spotRoi_in.getName().substring(spotRoi_in.getName().length() - 2);
-	}
-
-//	public String getSpotSide() {
-//		return spotRoi_in.getName().substring(spotRoi_in.getName().length() - 2);
-//	}
-
-	public static String xreplace_LR_with_12(String name) {
-		String newname = name;
-		if (name.contains("R"))
-			newname = name.replace("R", "2");
-		else if (name.contains("L"))
-			newname = name.replace("L", "1");
-		return newname;
-	}
-
 	public int getCageIndexFromRoiName() {
 		String name = spotRoi_in.getName();
 		if (!name.contains("spot"))
@@ -203,25 +183,25 @@ public class Spot implements Comparable<Spot> {
 		switch (xlsExportOption) {
 		case DISTANCE:
 		case ISALIVE:
-			value = String.valueOf(cageIndex) + "(T=B)";
+			value = String.valueOf(cagePosition) + "(T=B)";
 			break;
 		case TOPLEVELDELTA_LR:
 		case TOPLEVEL_LR:
-			if (cageIndex == 0)
+			if (cagePosition == 0)
 				value = "sum";
-			else if (cageIndex == 1)
+			else if (cagePosition == 1)
 				value = "PI";
 			break;
 		case XYIMAGE:
 		case XYTOPCAGE:
 		case XYTIPCAPS:
-			if (cageIndex == 0)
+			if (cagePosition == 0)
 				value = "x";
 			else
 				value = "y";
 			break;
 		default:
-			value = String.valueOf(cageIndex);
+			value = String.valueOf(cagePosition);
 			break;
 		}
 		return value;
@@ -345,7 +325,7 @@ public class Spot implements Comparable<Spot> {
 			spotNFlies = XMLUtil.getElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
 
 			cageID = XMLUtil.getElementIntValue(nodeMeta, ID_CAGE, cageID);
-			cageIndex = XMLUtil.getElementIntValue(nodeMeta, ID_CAGEINDEX, cageIndex);
+			cagePosition = XMLUtil.getElementIntValue(nodeMeta, ID_CAGEINDEX, cagePosition);
 
 			plateIndex = XMLUtil.getElementIntValue(nodeMeta, ID_PLATEINDEX, plateIndex);
 			plateColumn = XMLUtil.getElementIntValue(nodeMeta, ID_PLATECOL, plateColumn);
@@ -360,7 +340,7 @@ public class Spot implements Comparable<Spot> {
 			spotConc = XMLUtil.getElementValue(nodeMeta, ID_CONCENTRATION, ID_CONCENTRATION);
 
 			spotRoi_in = (ROI2DShape) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
-			setSpotRoi_InColorAccordingToSpotIndex(cageIndex);
+			setSpotRoi_InColorAccordingToSpotIndex(cagePosition);
 			limitsOptions.loadFromXML(nodeMeta);
 
 			loadFromXML_SpotAlongT(node);
@@ -408,7 +388,7 @@ public class Spot implements Comparable<Spot> {
 		XMLUtil.setElementIntValue(nodeMeta, ID_NFLIES, spotNFlies);
 
 		XMLUtil.setElementIntValue(nodeMeta, ID_CAGE, cageID);
-		XMLUtil.setElementIntValue(nodeMeta, ID_CAGEINDEX, cageIndex);
+		XMLUtil.setElementIntValue(nodeMeta, ID_CAGEINDEX, cagePosition);
 
 		XMLUtil.setElementIntValue(nodeMeta, ID_PLATEINDEX, plateIndex);
 		XMLUtil.setElementIntValue(nodeMeta, ID_PLATECOL, plateColumn);
@@ -577,7 +557,7 @@ public class Spot implements Comparable<Spot> {
 		List<String> row = Arrays.asList(String.valueOf(plateIndex), getRoi_in().getName(), String.valueOf(cageID),
 				String.valueOf(spotNFlies), String.valueOf(spotVolume), String.valueOf(spotNPixels),
 				String.valueOf(spotRadius), spotStim.replace(",", "."), spotConc.replace(",", "."),
-				String.valueOf(cageIndex));
+				String.valueOf(cagePosition));
 		sbf.append(String.join(csvSep, row));
 		sbf.append("\n");
 		return sbf.toString();
@@ -648,7 +628,7 @@ public class Spot implements Comparable<Spot> {
 		i++;
 		spotConc = data[i];
 		i++;
-		cageIndex = Integer.valueOf(data[i]);
+		cagePosition = Integer.valueOf(data[i]);
 	}
 
 	public void csvImportMeasures_OneType(EnumSpotMeasures measureType, String[] data, boolean x, boolean y) {
