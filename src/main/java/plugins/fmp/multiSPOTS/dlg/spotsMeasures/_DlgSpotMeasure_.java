@@ -112,9 +112,9 @@ public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, 
 
 	public void updateDialogs(Experiment exp) {
 		if (exp != null) {
-			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
+//			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 			ExperimentUtils.transferSpotsToCamDataSequence(exp);
-			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
+//			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 		}
 	}
 

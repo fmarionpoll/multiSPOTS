@@ -32,7 +32,7 @@ import plugins.kernel.roi.roi2d.ROI2DShape;
 
 public class SpotsArray {
 	public SpotsDescription spotsDescription = new SpotsDescription();
-	public SpotsDescription desc_old = new SpotsDescription();
+//	public SpotsDescription desc_old = new SpotsDescription();
 	public ArrayList<Spot> spotsList = new ArrayList<Spot>();
 	public int nColumnsPerPlate = 12;
 	public int nRowsPerPlate = 8;

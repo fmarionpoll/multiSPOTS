@@ -41,6 +41,7 @@ public class Experiment {
 	public Sequence seqReference = null;
 
 	public SpotsArray spotsArray = new SpotsArray();
+
 	public Cages cages = new Cages();
 
 	public FileTime firstImage_FileTime;
@@ -48,15 +49,7 @@ public class Experiment {
 
 	// __________________________________________________
 
-	private String field_boxID = new String("..");
-	private String field_experiment = new String("..");
-	private String field_comment1 = new String("..");
-	private String field_comment2 = new String("..");
-	private String field_strain = new String("..");
-	private String field_sex = new String("..");
-	private String field_cond1 = new String("..");
-	private String field_cond2 = new String("..");
-
+	public ExperimentDescriptors expDesc = new ExperimentDescriptors();
 	public int col = -1;
 	public Experiment chainToPreviousExperiment = null;
 	public Experiment chainToNextExperiment = null;
@@ -83,15 +76,6 @@ public class Experiment {
 	private final static String ID_MCEXPERIMENT = "MCexperiment";
 	private final static String ID_MCEXPERIMENT_XML = "MCexperiment.xml";
 	private final static String ID_MCDROSOTRACK_XML = "MCdrosotrack.xml";
-
-	private final static String ID_BOXID = "boxID";
-	private final static String ID_EXPERIMENT = "experiment";
-	private final static String ID_COMMENT1 = "comment";
-	private final static String ID_COMMENT2 = "comment2";
-	private final static String ID_STRAIN = "strain";
-	private final static String ID_SEX = "sex";
-	private final static String ID_COND1 = "cond1";
-	private final static String ID_COND2 = "cond2";
 
 	private final static int EXPT_DIRECTORY = 1;
 	private final static int IMG_DIRECTORY = 2;
@@ -446,14 +430,7 @@ public class Experiment {
 			XMLUtil.setElementLongValue(node, ID_LASTKYMOCOLMS, seqCamData.binLast_ms);
 			XMLUtil.setElementLongValue(node, ID_BINKYMOCOLMS, seqCamData.binDuration_ms);
 
-			XMLUtil.setElementValue(node, ID_BOXID, field_boxID);
-			XMLUtil.setElementValue(node, ID_EXPERIMENT, field_experiment);
-			XMLUtil.setElementValue(node, ID_COMMENT1, field_comment1);
-			XMLUtil.setElementValue(node, ID_COMMENT2, field_comment2);
-			XMLUtil.setElementValue(node, ID_STRAIN, field_strain);
-			XMLUtil.setElementValue(node, ID_SEX, field_sex);
-			XMLUtil.setElementValue(node, ID_COND1, field_cond1);
-			XMLUtil.setElementValue(node, ID_COND2, field_cond2);
+			expDesc.saveXML_Descriptors(node);
 
 			if (imagesDirectory == null)
 				imagesDirectory = seqCamData.getImagesDirectory();
@@ -485,24 +462,17 @@ public class Experiment {
 		boolean flag = spotsArray.xmlLoad_MCSpots_Descriptors(mcSpotsFileName);
 
 		// load description of experiment
-		if (field_boxID.contentEquals("..") && field_experiment.contentEquals("..")
-				&& field_comment1.contentEquals("..") && field_comment2.contentEquals("..")
-				&& field_sex.contentEquals("..") && field_strain.contentEquals("..")) {
-			field_boxID = spotsArray.spotsDescription.old_boxID;
-			field_experiment = spotsArray.spotsDescription.old_experiment;
-			field_comment1 = spotsArray.spotsDescription.old_comment1;
-			field_comment2 = spotsArray.spotsDescription.old_comment2;
-			field_sex = spotsArray.spotsDescription.old_sex;
-			field_strain = spotsArray.spotsDescription.old_strain;
-			field_cond1 = spotsArray.spotsDescription.old_cond1;
-			field_cond2 = spotsArray.spotsDescription.old_cond2;
+		if (expDesc.field_boxID.contentEquals("..") && expDesc.field_experiment.contentEquals("..")
+				&& expDesc.field_comment1.contentEquals("..") && expDesc.field_comment2.contentEquals("..")
+				&& expDesc.field_sex.contentEquals("..") && expDesc.field_strain.contentEquals("..")) {
+			spotsArray.spotsDescription.expDesc.copyExperimentFields(expDesc);
 		}
 		return flag;
 	}
 
 	public boolean save_MCSpots_Only() {
 		String mcSpotsFileName = resultsDirectory + File.separator + spotsArray.getXMLSpotsName();
-		transferExpDescriptorsToSpotsDescriptors();
+		expDesc.copyExperimentFields(spotsArray.spotsDescription.expDesc);
 		boolean flag = spotsArray.xmlSave_MCSpots_Descriptors(mcSpotsFileName);
 		return flag;
 	}
@@ -558,39 +528,6 @@ public class Experiment {
 		this.lastImage_FileTime = fileTimeImageLast;
 	}
 
-	public String getExperimentField(EnumXLSColumnHeader fieldEnumCode) {
-		String strField = null;
-		switch (fieldEnumCode) {
-		case EXP_STIM:
-			strField = field_comment1;
-			break;
-		case EXP_CONC:
-			strField = field_comment2;
-			break;
-		case EXP_EXPT:
-			strField = field_experiment;
-			break;
-		case EXP_BOXID:
-			strField = field_boxID;
-			break;
-		case EXP_STRAIN:
-			strField = field_strain;
-			break;
-		case EXP_SEX:
-			strField = field_sex;
-			break;
-		case EXP_COND1:
-			strField = field_cond1;
-			break;
-		case EXP_COND2:
-			strField = field_cond2;
-			break;
-		default:
-			break;
-		}
-		return strField;
-	}
-
 	public void getFieldValues(EnumXLSColumnHeader fieldEnumCode, List<String> textList) {
 		switch (fieldEnumCode) {
 		case EXP_STIM:
@@ -601,7 +538,7 @@ public class Experiment {
 		case EXP_SEX:
 		case EXP_COND1:
 		case EXP_COND2:
-			addValue(getExperimentField(fieldEnumCode), textList);
+			addValue(expDesc.getExperimentField(fieldEnumCode), textList);
 			break;
 		case CAP_STIM:
 		case CAP_CONC:
@@ -614,61 +551,11 @@ public class Experiment {
 
 	public boolean replaceExperimentFieldIfEqualOld(EnumXLSColumnHeader fieldEnumCode, String oldValue,
 			String newValue) {
-		boolean flag = getExperimentField(fieldEnumCode).equals(oldValue);
+		boolean flag = expDesc.getExperimentField(fieldEnumCode).equals(oldValue);
 		if (flag) {
-			setExperimentFieldNoTest(fieldEnumCode, newValue);
+			expDesc.setExperimentFieldNoTest(fieldEnumCode, newValue);
 		}
 		return flag;
-	}
-
-	public void copyExperimentFields(Experiment expSource) {
-		setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_BOXID,
-				expSource.getExperimentField(EnumXLSColumnHeader.EXP_BOXID));
-		setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_EXPT,
-				expSource.getExperimentField(EnumXLSColumnHeader.EXP_EXPT));
-		setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_STIM,
-				expSource.getExperimentField(EnumXLSColumnHeader.EXP_STIM));
-		setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_CONC,
-				expSource.getExperimentField(EnumXLSColumnHeader.EXP_CONC));
-		setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_STRAIN,
-				expSource.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN));
-		setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_SEX,
-				expSource.getExperimentField(EnumXLSColumnHeader.EXP_SEX));
-		setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_COND1,
-				expSource.getExperimentField(EnumXLSColumnHeader.EXP_COND1));
-		setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_COND2,
-				expSource.getExperimentField(EnumXLSColumnHeader.EXP_COND2));
-	}
-
-	public void setExperimentFieldNoTest(EnumXLSColumnHeader fieldEnumCode, String newValue) {
-		switch (fieldEnumCode) {
-		case EXP_STIM:
-			field_comment1 = newValue;
-			break;
-		case EXP_CONC:
-			field_comment2 = newValue;
-			break;
-		case EXP_EXPT:
-			field_experiment = newValue;
-			break;
-		case EXP_BOXID:
-			field_boxID = newValue;
-			break;
-		case EXP_STRAIN:
-			field_strain = newValue;
-			break;
-		case EXP_SEX:
-			field_sex = newValue;
-			break;
-		case EXP_COND1:
-			field_cond1 = newValue;
-			break;
-		case EXP_COND2:
-			field_cond2 = newValue;
-			break;
-		default:
-			break;
-		}
 	}
 
 	public void replaceFieldValue(EnumXLSColumnHeader fieldEnumCode, String oldValue, String newValue) {
@@ -905,17 +792,8 @@ public class Experiment {
 		seqCamData.binDuration_ms = XMLUtil.getElementLongValue(node, ID_BINKYMOCOLMS, -1);
 
 		ugly_checkOffsetValues();
+		expDesc.loadXML_Descriptors(node);
 
-		if (field_boxID != null && field_boxID.contentEquals("..")) {
-			field_boxID = XMLUtil.getElementValue(node, ID_BOXID, "..");
-			field_experiment = XMLUtil.getElementValue(node, ID_EXPERIMENT, "..");
-			field_comment1 = XMLUtil.getElementValue(node, ID_COMMENT1, "..");
-			field_comment2 = XMLUtil.getElementValue(node, ID_COMMENT2, "..");
-			field_strain = XMLUtil.getElementValue(node, ID_STRAIN, "..");
-			field_sex = XMLUtil.getElementValue(node, ID_SEX, "..");
-			field_cond1 = XMLUtil.getElementValue(node, ID_COND1, "..");
-			field_cond2 = XMLUtil.getElementValue(node, ID_COND2, "..");
-		}
 		return true;
 	}
 
@@ -955,17 +833,6 @@ public class Experiment {
 			}
 		}
 		return found;
-	}
-
-	private void transferExpDescriptorsToSpotsDescriptors() {
-		spotsArray.spotsDescription.old_boxID = field_boxID;
-		spotsArray.spotsDescription.old_experiment = field_experiment;
-		spotsArray.spotsDescription.old_comment1 = field_comment1;
-		spotsArray.spotsDescription.old_comment2 = field_comment2;
-		spotsArray.spotsDescription.old_strain = field_strain;
-		spotsArray.spotsDescription.old_sex = field_sex;
-		spotsArray.spotsDescription.old_cond1 = field_cond1;
-		spotsArray.spotsDescription.old_cond2 = field_cond2;
 	}
 
 	private String getReferenceImageFullName() {

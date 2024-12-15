@@ -159,7 +159,7 @@ public class SpotTablePanel extends JPanel {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp == null || exp.spotsArray.spotsDescription.grouping != 2)
+				if (exp == null || (exp.spotsArray.nColumnsPerCage * exp.spotsArray.nRowsPerCage) != 2)
 					return;
 				exchangeLR(exp);
 			}

@@ -91,34 +91,32 @@ public class XLSExport {
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAM.getValue(), transpose, cam);
 
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.EXP_BOXID.getValue(), transpose,
-					exp.getExperimentField(EnumXLSColumnHeader.EXP_BOXID));
+					exp.expDesc.getExperimentField(EnumXLSColumnHeader.EXP_BOXID));
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.EXP_EXPT.getValue(), transpose,
-					exp.getExperimentField(EnumXLSColumnHeader.EXP_EXPT));
+					exp.expDesc.getExperimentField(EnumXLSColumnHeader.EXP_EXPT));
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.EXP_STIM.getValue(), transpose,
-					exp.getExperimentField(EnumXLSColumnHeader.EXP_STIM));
+					exp.expDesc.getExperimentField(EnumXLSColumnHeader.EXP_STIM));
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.EXP_CONC.getValue(), transpose,
-					exp.getExperimentField(EnumXLSColumnHeader.EXP_CONC));
+					exp.expDesc.getExperimentField(EnumXLSColumnHeader.EXP_CONC));
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.EXP_STRAIN.getValue(), transpose,
-					exp.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN));
+					exp.expDesc.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN));
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.EXP_SEX.getValue(), transpose,
-					exp.getExperimentField(EnumXLSColumnHeader.EXP_SEX));
+					exp.expDesc.getExperimentField(EnumXLSColumnHeader.EXP_SEX));
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.EXP_COND1.getValue(), transpose,
-					exp.getExperimentField(EnumXLSColumnHeader.EXP_COND1));
+					exp.expDesc.getExperimentField(EnumXLSColumnHeader.EXP_COND1));
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.EXP_COND2.getValue(), transpose,
-					exp.getExperimentField(EnumXLSColumnHeader.EXP_COND2));
+					exp.expDesc.getExperimentField(EnumXLSColumnHeader.EXP_COND2));
 
-			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_VOLUME.getValue(), transpose,
-					exp.spotsArray.spotsDescription.volume);
-			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_PIXELS.getValue(), transpose,
-					exp.spotsArray.spotsDescription.pixels);
+			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_VOLUME.getValue(), transpose, spot.spotVolume); // exp.spotsArray.spotsDescription.volume);
+			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_PIXELS.getValue(), transpose, spot.spotNPixels); // exp.spotsArray.spotsDescription.pixels);
 
-			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP.getValue(), transpose,
-					spot.getSideDescriptor(xlsExportOption));
+			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAGEPOS.getValue(), transpose,
+					spot.getCagePosition(xlsExportOption));
 			outputStimAndConc_according_to_DataOption(sheet, xlsExportOption, spot, transpose, x, y);
 
-			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_CAGEINDEX.getValue(), transpose, spot.cageID);
+			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.SPOT_CAGEID.getValue(), transpose, spot.cageID);
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAGEID.getValue(), transpose, charSeries + spot.cageID);
-			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAP_NFLIES.getValue(), transpose, spot.spotNFlies);
+			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.SPOT_NFLIES.getValue(), transpose, spot.spotNFlies);
 
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.DUM4.getValue(), transpose, sheetName);
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CHOICE_NOCHOICE.getValue(), transpose,
@@ -323,7 +321,7 @@ public class XLSExport {
 		expAll.cages.copy(exp.cages);
 		expAll.spotsArray.copy(exp.spotsArray);
 		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
-		expAll.copyExperimentFields(exp);
+		expAll.expDesc.copyExperimentFields(exp.expDesc);
 		expAll.setResultsDirectory(exp.getResultsDirectory());
 
 		Experiment expi = exp.chainToNextExperiment;
@@ -357,7 +355,7 @@ public class XLSExport {
 		expAll.cages.copy(exp.cages);
 		expAll.spotsArray.copy(exp.spotsArray);
 		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
-		expAll.copyExperimentFields(exp);
+		expAll.expDesc.copyExperimentFields(exp.expDesc);
 		expAll.setResultsDirectory(exp.getResultsDirectory());
 
 		Experiment expi = exp.chainToNextExperiment;

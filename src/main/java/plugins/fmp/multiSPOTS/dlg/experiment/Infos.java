@@ -168,24 +168,25 @@ public class Infos extends JPanel {
 
 	private void setInfoCombo(Experiment exp_dest, Experiment exp_source, JComboBox<String> combo,
 			EnumXLSColumnHeader field) {
-		String altText = exp_source.getExperimentField(field);
-		String text = exp_dest.getExperimentField(field);
+		String altText = exp_source.expDesc.getExperimentField(field);
+		String text = exp_dest.expDesc.getExperimentField(field);
 		if (text.equals(".."))
-			exp_dest.setExperimentFieldNoTest(field, altText);
-		text = exp_dest.getExperimentField(field);
+			exp_dest.expDesc.setExperimentFieldNoTest(field, altText);
+		text = exp_dest.expDesc.getExperimentField(field);
 		addItemToComboIfNew(text, combo);
 		combo.setSelectedItem(text);
 	}
 
 	public void getExperimentInfosFromDialog(Experiment exp) {
-		exp.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_BOXID, (String) boxIDCombo.getSelectedItem());
-		exp.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_EXPT, (String) exptCombo.getSelectedItem());
-		exp.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_STIM, (String) cmt1Combo.getSelectedItem());
-		exp.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_CONC, (String) comt2Combo.getSelectedItem());
-		exp.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_STRAIN, (String) strainCombo.getSelectedItem());
-		exp.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_SEX, (String) sexCombo.getSelectedItem());
-		exp.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_COND1, (String) cond1Combo.getSelectedItem());
-		exp.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_COND2, (String) cond2Combo.getSelectedItem());
+
+		exp.expDesc.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_BOXID, (String) boxIDCombo.getSelectedItem());
+		exp.expDesc.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_EXPT, (String) exptCombo.getSelectedItem());
+		exp.expDesc.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_STIM, (String) cmt1Combo.getSelectedItem());
+		exp.expDesc.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_CONC, (String) comt2Combo.getSelectedItem());
+		exp.expDesc.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_STRAIN, (String) strainCombo.getSelectedItem());
+		exp.expDesc.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_SEX, (String) sexCombo.getSelectedItem());
+		exp.expDesc.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_COND1, (String) cond1Combo.getSelectedItem());
+		exp.expDesc.setExperimentFieldNoTest(EnumXLSColumnHeader.EXP_COND2, (String) cond2Combo.getSelectedItem());
 	}
 
 	private void addItemToComboIfNew(String toAdd, JComboBox<String> combo) {

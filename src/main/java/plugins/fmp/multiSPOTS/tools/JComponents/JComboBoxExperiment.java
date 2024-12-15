@@ -182,7 +182,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 				if (i == j)
 					continue;
 				Experiment expj = getItemAt(j);
-				if (!isSameDescriptors(expi, expj))
+				if (!expi.expDesc.isSameDescriptors(expj.expDesc))
 					continue;
 
 				// same exp series: if before, insert eventually
@@ -233,7 +233,7 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 				if (i == j)
 					continue;
 				Experiment expj = getItemAt(j);
-				if (!isSameDescriptors(expi, expj))
+				if (!expi.expDesc.isSameDescriptors(expj.expDesc))
 					continue;
 				if (expj.chainToNextExperiment != null || expj.chainToPreviousExperiment != null)
 					continue;
@@ -252,27 +252,6 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 					expk.chainToNextExperiment = list.get(k + 1);
 			}
 		}
-	}
-
-	private boolean isSameDescriptors(Experiment exp, Experiment expi) {
-		boolean flag = true;
-		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_EXPT)
-				.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_EXPT));
-		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_BOXID)
-				.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_BOXID));
-		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_STIM)
-				.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_STIM));
-		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_CONC)
-				.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_CONC));
-		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN)
-				.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_STRAIN));
-		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_SEX)
-				.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_SEX));
-		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_COND1)
-				.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_COND1));
-		flag &= expi.getExperimentField(EnumXLSColumnHeader.EXP_COND2)
-				.equals(exp.getExperimentField(EnumXLSColumnHeader.EXP_COND2));
-		return flag;
 	}
 
 	public int getExperimentIndexFromExptName(String filename) {

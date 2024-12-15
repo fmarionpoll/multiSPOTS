@@ -116,9 +116,9 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 
 	public void updateDialogs(Experiment exp) {
 		if (exp != null) {
-			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
+//			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 			ExperimentUtils.transferSpotsToCamDataSequence(exp);
-			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
+//			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 			tabCreateSpots.updateDialog(exp);
 		}
 	}

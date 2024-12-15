@@ -178,7 +178,7 @@ public class Spot implements Comparable<Spot> {
 		return Integer.valueOf(name.substring(4, 6));
 	}
 
-	public String getSideDescriptor(EnumXLSExportType xlsExportOption) {
+	public String getCagePosition(EnumXLSExportType xlsExportOption) {
 		String value = null;
 		switch (xlsExportOption) {
 		case DISTANCE:

@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import icy.util.XMLUtil;
+import plugins.fmp.multiSPOTS.experiment.ExperimentDescriptors;
 
 public class SpotsDescription {
 	public int version = 1;
@@ -16,14 +17,16 @@ public class SpotsDescription {
 	public int pixels = 5;
 	public String sourceName = null;
 
-	public String old_boxID = new String("..");
-	public String old_experiment = new String("..");
-	public String old_comment1 = new String("..");
-	public String old_comment2 = new String("..");
-	public String old_strain = new String("..");
-	public String old_sex = new String("..");
-	public String old_cond1 = new String("..");
-	public String old_cond2 = new String("..");
+//	public String old_boxID = new String("..");
+//	public String old_experiment = new String("..");
+//	public String old_comment1 = new String("..");
+//	public String old_comment2 = new String("..");
+//	public String old_strain = new String("..");
+//	public String old_sex = new String("..");
+//	public String old_cond1 = new String("..");
+//	public String old_cond2 = new String("..");
+
+	public ExperimentDescriptors expDesc = new ExperimentDescriptors();
 
 	public int grouping = 2;
 	public String stimulusR = new String("..");
@@ -57,7 +60,7 @@ public class SpotsDescription {
 	private final static String ID_COND1 = "cond1";
 	private final static String ID_COND2 = "cond2";
 
-	private final static String ID_NOPE = "..";
+//	private final static String ID_NOPE = "..";
 
 	public void copy(SpotsDescription desc) {
 		volume = desc.volume;
@@ -68,6 +71,28 @@ public class SpotsDescription {
 		concentrationR = desc.concentrationR;
 		concentrationL = desc.concentrationL;
 	}
+
+//	public void transferSpotsDescriptorsToExperimentDescriptors(Experiment exp) {
+//		exp.field_boxID = old_boxID;
+//		exp.field_experiment = old_experiment;
+//		exp.field_comment1 = old_comment1;
+//		exp.field_comment2 = old_comment2;
+//		exp.field_sex = old_sex;
+//		exp.field_strain = old_strain;
+//		exp.field_cond1 = old_cond1;
+//		exp.field_cond2 = old_cond2;
+//	}
+//
+//	public void transferExperimentDescriptorsToSpotsDescriptors(Experiment exp) {
+//		old_boxID = exp.field_boxID;
+//		old_experiment = exp.field_experiment;
+//		old_comment1 = exp.field_comment1;
+//		old_comment2 = exp.field_comment2;
+//		old_strain = exp.field_strain;
+//		old_sex = exp.field_sex;
+//		old_cond1 = exp.field_cond1;
+//		old_cond2 = exp.field_cond2;
+//	}
 
 	public boolean isChanged(SpotsDescription desc) {
 		boolean flag = false;
@@ -96,15 +121,7 @@ public class SpotsDescription {
 		XMLUtil.setElementIntValue(xmlVal, ID_DESCNPIXELS, pixels);
 
 		xmlVal = XMLUtil.addElement(xmlElement, ID_EXPERIMENT);
-		XMLUtil.setElementValue(xmlVal, ID_BOXID, old_boxID);
-		XMLUtil.setElementValue(xmlVal, ID_EXPT, old_experiment);
-		XMLUtil.setElementValue(xmlVal, ID_COMMENT1, old_comment1);
-		XMLUtil.setElementValue(xmlVal, ID_COMMENT2, old_comment2);
-		XMLUtil.setElementValue(xmlVal, ID_STRAIN, old_strain);
-		XMLUtil.setElementValue(xmlVal, ID_SEX, old_sex);
-		XMLUtil.setElementValue(xmlVal, ID_COND1, old_cond1);
-		XMLUtil.setElementValue(xmlVal, ID_COND2, old_cond2);
-
+		expDesc.saveXML_Descriptors(xmlVal);
 		return true;
 	}
 
@@ -151,17 +168,18 @@ public class SpotsDescription {
 			concentrationL = XMLUtil.getAttributeValue(xmlVal, ID_CONCL, ID_CONCL);
 		}
 
-		xmlVal = XMLUtil.getElement(xmlElement, ID_EXPERIMENT);
-		if (xmlVal != null) {
-			old_boxID = XMLUtil.getAttributeValue(xmlVal, ID_BOXID, ID_NOPE);
-			old_experiment = XMLUtil.getAttributeValue(xmlVal, ID_EXPT, ID_NOPE);
-			old_comment1 = XMLUtil.getAttributeValue(xmlVal, ID_COMMENT1, ID_NOPE);
-			old_comment2 = XMLUtil.getAttributeValue(xmlVal, ID_COMMENT2, ID_NOPE);
-			old_strain = XMLUtil.getAttributeValue(xmlVal, ID_STRAIN, ID_NOPE);
-			old_sex = XMLUtil.getAttributeValue(xmlVal, ID_SEX, ID_NOPE);
-			old_cond1 = XMLUtil.getAttributeValue(xmlVal, ID_COND1, ID_NOPE);
-			old_cond2 = XMLUtil.getAttributeValue(xmlVal, ID_COND2, ID_NOPE);
-		}
+		expDesc.loadXML_Descriptors(node);
+//		xmlVal = XMLUtil.getElement(xmlElement, ID_EXPERIMENT);
+//		if (xmlVal != null) {
+//			expDesc.boxID = XMLUtil.getAttributeValue(xmlVal, ID_BOXID, ID_NOPE);
+//			expDesc.old_experiment = XMLUtil.getAttributeValue(xmlVal, ID_EXPT, ID_NOPE);
+//			expDesc.old_comment1 = XMLUtil.getAttributeValue(xmlVal, ID_COMMENT1, ID_NOPE);
+//			expDesc.old_comment2 = XMLUtil.getAttributeValue(xmlVal, ID_COMMENT2, ID_NOPE);
+//			expDesc.old_strain = XMLUtil.getAttributeValue(xmlVal, ID_STRAIN, ID_NOPE);
+//			expDesc.old_sex = XMLUtil.getAttributeValue(xmlVal, ID_SEX, ID_NOPE);
+//			expDesc.old_cond1 = XMLUtil.getAttributeValue(xmlVal, ID_COND1, ID_NOPE);
+//			expDesc.old_cond2 = XMLUtil.getAttributeValue(xmlVal, ID_COND2, ID_NOPE);
+//		}
 		return true;
 	}
 
@@ -186,13 +204,15 @@ public class SpotsDescription {
 			concentrationL = XMLUtil.getElementValue(xmlVal, ID_CONCL, ID_CONCL);
 		}
 
-		xmlVal = XMLUtil.getElement(xmlElement, ID_EXPERIMENT);
-		if (xmlVal != null) {
-			old_boxID = XMLUtil.getElementValue(xmlVal, ID_BOXID, ID_NOPE);
-			old_experiment = XMLUtil.getElementValue(xmlVal, ID_EXPT, ID_NOPE);
-			old_comment1 = XMLUtil.getElementValue(xmlVal, ID_COMMENT1, ID_NOPE);
-			old_comment2 = XMLUtil.getElementValue(xmlVal, ID_COMMENT2, ID_NOPE);
-		}
+//		xmlVal = XMLUtil.getElement(xmlElement, ID_EXPERIMENT);
+//		if (xmlVal != null) {
+//			old_boxID = XMLUtil.getElementValue(xmlVal, ID_BOXID, ID_NOPE);
+//			old_experiment = XMLUtil.getElementValue(xmlVal, ID_EXPT, ID_NOPE);
+//			old_comment1 = XMLUtil.getElementValue(xmlVal, ID_COMMENT1, ID_NOPE);
+//			old_comment2 = XMLUtil.getElementValue(xmlVal, ID_COMMENT2, ID_NOPE);
+//		}
+
+		expDesc.saveXML_Descriptors(node);
 
 		return true;
 	}
@@ -212,8 +232,9 @@ public class SpotsDescription {
 	public String csvExportExperimentDescriptors(String csvSep) {
 		StringBuffer sbf = new StringBuffer();
 		List<String> row3 = Arrays.asList(Integer.toString(grouping), Double.toString(volume), Integer.toString(pixels),
-				stimulusR, concentrationR.replace(",", "."), stimulusL, concentrationL.replace(",", "."), old_boxID,
-				old_experiment, old_comment1, old_comment2, old_strain, old_sex, old_cond1, old_cond2);
+				stimulusR, concentrationR.replace(",", "."), stimulusL, concentrationL.replace(",", "."),
+				expDesc.field_boxID, expDesc.field_experiment, expDesc.field_comment1, expDesc.field_comment2,
+				expDesc.field_strain, expDesc.field_sex, expDesc.field_cond1, expDesc.field_cond2);
 		sbf.append(String.join(csvSep, row3));
 		sbf.append("\n");
 		return sbf.toString();
@@ -235,23 +256,23 @@ public class SpotsDescription {
 		i++;
 		concentrationL = data[i];
 		i++;
-		old_boxID = data[i];
+		expDesc.field_boxID = data[i];
 		i++;
-		old_experiment = data[i];
+		expDesc.field_experiment = data[i];
 		i++;
-		old_comment1 = data[i];
+		expDesc.field_comment1 = data[i];
 		i++;
-		old_comment2 = data[i];
+		expDesc.field_comment2 = data[i];
 		i++;
-		old_strain = data[i];
+		expDesc.field_strain = data[i];
 		i++;
-		old_sex = data[i];
+		expDesc.field_sex = data[i];
 		int nitems = data.length;
 		if (i < nitems)
-			old_cond1 = data[i];
+			expDesc.field_cond1 = data[i];
 		i++;
 		if (i < nitems)
-			old_cond2 = data[i];
+			expDesc.field_cond2 = data[i];
 	}
 
 }
