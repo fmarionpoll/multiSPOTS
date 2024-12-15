@@ -123,6 +123,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer> {
 				System.out.println("BuildSeries:waitFuturesCompletion - Interrupted exception: " + e);
 			}
 			futuresArray.remove(f);
+			frame++;
 		}
 	}
 

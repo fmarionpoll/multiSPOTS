@@ -74,7 +74,7 @@ public class Edit extends JPanel {
 	public void openDialog() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null) {
-			exp.spotsArray.transferDescriptionToSpots();
+//			exp.spotsArray.transferDescriptionToSpots();
 			if (editSpotsTable == null)
 				editSpotsTable = new EditPositionWithTime();
 			editSpotsTable.initialize(parent0, getFramePosition());

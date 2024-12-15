@@ -205,27 +205,19 @@ public class SpotTable extends JPanel {
 		int columnIndex = jTable.getSelectedColumn();
 		if (columnIndex < 0)
 			columnIndex = 5;
-		String side0 = exp.spotsArray.spotsList.get(0).getSpotSide();
+		int side0 = exp.spotsArray.spotsList.get(0).cageIndex;
 		Spot spot0 = new Spot();
-		copyAllSpotValues(exp.spotsArray.spotsList.get(0), spot0);
+		spot0.copySpot(exp.spotsArray.spotsList.get(0));
+
 		Spot spot1 = new Spot();
-		copyAllSpotValues(exp.spotsArray.spotsList.get(1), spot1);
+		spot1.copySpot(exp.spotsArray.spotsList.get(1));
 
 		for (Spot spot : exp.spotsArray.spotsList) {
-			if ((spot.getSpotSide().equals(side0)))
+			if ((spot.cageIndex == side0))
 				copySingleSpotValue(spot1, spot, columnIndex);
 			else
 				copySingleSpotValue(spot0, spot, columnIndex);
 		}
-	}
-
-	private void copyAllSpotValues(Spot spotFrom, Spot spotTo) {
-		spotTo.spotNFlies = spotFrom.spotNFlies;
-		spotTo.spotVolume = spotFrom.spotVolume;
-		spotTo.spotNPixels = spotFrom.spotNPixels;
-		spotTo.spotStim = spotFrom.spotStim;
-		spotTo.spotConc = spotFrom.spotConc;
-		spotTo.spotCageSide = spotFrom.spotCageSide;
 	}
 
 	private void copySingleSpotValue(Spot spotFrom, Spot spotTo, int columnIndex) {
@@ -289,30 +281,15 @@ public class SpotTable extends JPanel {
 			return;
 
 		Spot spot0 = exp.spotsArray.spotsList.get(rowIndex);
-		String side = spot0.getSpotSide();
-		int modulo2 = 0;
-		if (side.equals("L"))
-			modulo2 = 0;
-		else if (side.equals("R"))
-			modulo2 = 1;
-		else
-			modulo2 = Integer.valueOf(spot0.getSpotSide()) % 2;
+		int cageIndex = spot0.cageIndex;
 
 		for (Spot spot : exp.spotsArray.spotsList) {
 			if (spot.getRoiName().equals(spot0.getRoiName()))
 				continue;
-			if ((exp.spotsArray.spotsDescription.grouping == 2) && (!spot.getSpotSide().equals(side)))
+
+			if (spot.cageIndex != cageIndex)
 				continue;
-			else {
-				try {
-					int mod = Integer.valueOf(spot.getSpotSide()) % 2;
-					if (mod != modulo2)
-						continue;
-				} catch (NumberFormatException nfe) {
-					if (!spot.getSpotSide().equals(side))
-						continue;
-				}
-			}
+
 			switch (columnIndex) {
 			case 2:
 				spot.spotNFlies = spot0.spotNFlies;

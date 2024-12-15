@@ -119,7 +119,7 @@ public class BuildSpotsKymos extends BuildSeries {
 		stopFlag = false;
 
 		final int iiFirst = 0; 
-		final int iiLast = (int) (exp.seqCamData.getImagesList().size()-1 + exp.seqCamData.indexFirstImage);
+		final int iiLast = (int) (exp.seqCamData.getImagesList().size()-1 + exp.seqCamData.absoluteIndexFirstImage);
 		final int iiDelta = (int) exp.seqSpotKymos.deltaImage;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
@@ -230,7 +230,7 @@ public class BuildSpotsKymos extends BuildSeries {
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 //		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.seqSpotKymos.indexFirstImage);
+		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.seqSpotKymos.absoluteIndexFirstImage);
 		int numC = seqCamData.seq.getSizeC();
 		if (numC <= 0)
 			numC = 3;

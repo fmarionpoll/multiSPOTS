@@ -314,7 +314,7 @@ public class Experiment {
 	public void loadFileIntervalsFromSeqCamData() {
 		if (seqCamData != null) {
 			seqCamData.setImagesDirectory(imagesDirectory);
-			firstImage_FileTime = seqCamData.getFileTimeFromStructuredName((int) seqCamData.indexFirstImage);
+			firstImage_FileTime = seqCamData.getFileTimeFromStructuredName((int) seqCamData.absoluteIndexFirstImage);
 			lastImage_FileTime = seqCamData.getFileTimeFromStructuredName(seqCamData.nTotalFrames - 1);
 			if (firstImage_FileTime != null && lastImage_FileTime != null) {
 				seqCamData.firstImage_ms = firstImage_FileTime.toMillis();
@@ -332,6 +332,10 @@ public class Experiment {
 	}
 
 	public long[] build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList() {
+		int nFrames = seqCamData.camImagesList.size();
+		if (nFrames != seqCamData.nTotalFrames)
+			System.out.println("error: nFrames (seqCamData.camImagesList.size()):" + nFrames
+					+ " is different from seqCamData.nTotalFrames:" + seqCamData.nTotalFrames);
 		seqCamData.camImages_array_ms = new long[seqCamData.nTotalFrames];
 
 		FileTime firstImage_FileTime = seqCamData.getFileTimeFromStructuredName(0);
@@ -433,9 +437,9 @@ public class Experiment {
 			XMLUtil.setElementLongValue(node, ID_TIMEFIRSTIMAGEMS, seqCamData.firstImage_ms);
 			XMLUtil.setElementLongValue(node, ID_TIMELASTIMAGEMS, seqCamData.lastImage_ms);
 
-			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, seqCamData.indexFirstImage);
-			XMLUtil.setElementLongValue(node, ID_BINT0, seqCamData.indexFirstImage);
-			XMLUtil.setElementLongValue(node, ID_NFRAMES, seqCamData.numberOfImagesClipped);
+			XMLUtil.setElementLongValue(node, ID_FRAMEFIRST, seqCamData.absoluteIndexFirstImage);
+			XMLUtil.setElementLongValue(node, ID_BINT0, seqCamData.absoluteIndexFirstImage);
+			XMLUtil.setElementLongValue(node, ID_NFRAMES, seqCamData.fixedNumberOfImages);
 			XMLUtil.setElementLongValue(node, ID_FRAMEDELTA, seqCamData.deltaImage);
 
 			XMLUtil.setElementLongValue(node, ID_FIRSTKYMOCOLMS, seqCamData.binFirst_ms);
@@ -552,13 +556,6 @@ public class Experiment {
 
 	public void setFileTimeImageLast(FileTime fileTimeImageLast) {
 		this.lastImage_FileTime = fileTimeImageLast;
-	}
-
-	public int getSeqCamSizeT() {
-		int lastFrame = 0;
-		if (seqCamData != null)
-			lastFrame = seqCamData.nTotalFrames - 1;
-		return lastFrame;
 	}
 
 	public String getExperimentField(EnumXLSColumnHeader fieldEnumCode) {
@@ -896,12 +893,12 @@ public class Experiment {
 			seqCamData.lastImage_ms = XMLUtil.getElementLongValue(node, ID_TIMELASTIMAGE, 0) * 60000;
 		}
 
-		seqCamData.indexFirstImage = XMLUtil.getElementLongValue(node, ID_FRAMEFIRST, -1);
-		if (seqCamData.indexFirstImage < 0)
-			seqCamData.indexFirstImage = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
-		if (seqCamData.indexFirstImage < 0)
-			seqCamData.indexFirstImage = 0;
-		seqCamData.numberOfImagesClipped = XMLUtil.getElementLongValue(node, ID_NFRAMES, -1);
+		seqCamData.absoluteIndexFirstImage = XMLUtil.getElementLongValue(node, ID_FRAMEFIRST, -1);
+		if (seqCamData.absoluteIndexFirstImage < 0)
+			seqCamData.absoluteIndexFirstImage = XMLUtil.getElementLongValue(node, ID_BINT0, -1);
+		if (seqCamData.absoluteIndexFirstImage < 0)
+			seqCamData.absoluteIndexFirstImage = 0;
+		seqCamData.fixedNumberOfImages = XMLUtil.getElementLongValue(node, ID_NFRAMES, -1);
 		seqCamData.deltaImage = XMLUtil.getElementLongValue(node, ID_FRAMEDELTA, 1);
 		seqCamData.binFirst_ms = XMLUtil.getElementLongValue(node, ID_FIRSTKYMOCOLMS, -1);
 		seqCamData.binLast_ms = XMLUtil.getElementLongValue(node, ID_LASTKYMOCOLMS, -1);

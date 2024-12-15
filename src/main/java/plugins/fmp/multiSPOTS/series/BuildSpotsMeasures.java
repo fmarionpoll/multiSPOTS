@@ -90,19 +90,18 @@ public class BuildSpotsMeasures extends BuildSeries {
 		threadRunning = true;
 		stopFlag = false;
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
+		int tFirst = 0;
+		int tLast = exp.seqCamData.fixedNumberOfImages > 0 ? (int) exp.seqCamData.fixedNumberOfImages
+				: exp.seqCamData.nTotalFrames;
+		vData.setTitle(exp.seqCamData.getCSCamFileName() + ": " + tFirst + "-" + tLast);
+		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
-		processor.setThreadName("buildSpots");
+		processor.setThreadName("measureSpots");
 		processor.setPriority(Processor.NORM_PRIORITY);
-		int ntasks = exp.spotsArray.spotsList.size(); //
+		int ntasks = tLast - tFirst; // exp.spotsArray.spotsList.size(); //
 		ArrayList<Future<?>> tasks = new ArrayList<Future<?>>(ntasks);
 		tasks.clear();
-
-		final int tFirst = (int) exp.seqSpotKymos.indexFirstImage;
-		final int tLast = exp.seqCamData.nTotalFrames;
-		vData.setTitle(exp.seqCamData.getCSCamFileName() + ": " + tFirst + "-" + tLast);
-
-		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack");
 
 		initMasks2D(exp);
 		initSpotsDataArrays(exp);
@@ -120,6 +119,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 			transformFunctionFly = options.transform02.getFunction();
 		}
 
+		int total = 0;
 		for (int ti = tFirst; ti < tLast; ti++) {
 			if (options.concurrentDisplay) {
 				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(ti));
@@ -165,7 +165,9 @@ public class BuildSpotsMeasures extends BuildSeries {
 					}
 				}
 			}));
+			total++;
 		}
+		System.out.println("end images loop total=" + total);
 		waitFuturesCompletion(processor, tasks, null);
 		progressBar1.close();
 		return true;
@@ -249,7 +251,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 	private void initSpotsDataArrays(Experiment exp) {
 		// int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) /
 		// exp.binDuration_ms + 1);
-		int nFrames = exp.seqCamData.nTotalFrames - (int) exp.seqCamData.indexFirstImage;
+		int nFrames = exp.seqCamData.nTotalFrames - (int) exp.seqCamData.absoluteIndexFirstImage;
 		for (Spot spot : exp.spotsArray.spotsList) {
 			int i = spot.plateIndex % 2;
 			if (0 == i && !options.detectL)
@@ -268,11 +270,11 @@ public class BuildSpotsMeasures extends BuildSeries {
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 		for (Spot spot : exp.spotsArray.spotsList) {
-			int i = spot.plateIndex % 2;
-			if (0 == i && !options.detectL)
-				continue;
-			if (1 == i && !options.detectR)
-				continue;
+//			int i = spot.plateIndex % 2;
+//			if (0 == i && !options.detectL)
+//				continue;
+//			if (1 == i && !options.detectR)
+//				continue;
 			List<ROI2DAlongT> listRoiT = spot.getROIAlongTList();
 			for (ROI2DAlongT roiT : listRoiT) {
 				if (roiT.getMask2D_in() == null)

@@ -209,25 +209,25 @@ public class SpotsArray {
 			spot.cropLevel2DMeasuresToImageWidth(imageWidth);
 	}
 
-	public void transferDescriptionToSpots() {
-		for (Spot spot : spotsList)
-			transferCapGroupCageIDToSpot(spot);
-	}
-
-	private void transferCapGroupCageIDToSpot(Spot spot) {
-		if (spotsDescription.grouping != 2)
-			return;
-		String name = spot.getRoiName();
-		String letter = name.substring(name.length() - 1);
-		spot.spotCageSide = letter;
-		if (letter.equals("R")) {
-			String nameL = name.substring(0, name.length() - 1) + "L";
-			Spot spot00 = getSpotFromName(nameL);
-			if (spot00 != null) {
-				spot.cageID = spot00.cageID;
-			}
-		}
-	}
+//	public void transferDescriptionToSpots() {
+//		for (Spot spot : spotsList)
+//			transferCapGroupCageIDToSpot(spot);
+//	}
+//
+//	private void transferCapGroupCageIDToSpot(Spot spot) {
+//		if (spotsDescription.grouping != 2)
+//			return;
+//		String name = spot.getRoiName();
+//		String letter = name.substring(name.length() - 1);
+//		spot.spotCageSide = letter;
+//		if (letter.equals("R")) {
+//			String nameL = name.substring(0, name.length() - 1) + "L";
+//			Spot spot00 = getSpotFromName(nameL);
+//			if (spot00 != null) {
+//				spot.cageID = spot00.cageID;
+//			}
+//		}
+//	}
 
 	public Spot getSpotFromName(String name) {
 		Spot spotFound = null;
