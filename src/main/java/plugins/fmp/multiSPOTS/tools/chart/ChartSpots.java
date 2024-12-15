@@ -167,7 +167,7 @@ public class ChartSpots extends IcyFrame {
 			combinedXYPlot.add(subplot);
 		}
 
-		JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, true);
+		JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, false); // true);
 		Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
 		chart.getTitle().setFont(font);
 

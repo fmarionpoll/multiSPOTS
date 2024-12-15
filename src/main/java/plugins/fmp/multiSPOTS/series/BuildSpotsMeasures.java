@@ -249,9 +249,8 @@ public class BuildSpotsMeasures extends BuildSeries {
 	}
 
 	private void initSpotsDataArrays(Experiment exp) {
-		// int n_measures = (int) ((exp.binLast_ms - exp.binFirst_ms) /
-		// exp.binDuration_ms + 1);
-		int nFrames = exp.seqCamData.nTotalFrames - (int) exp.seqCamData.absoluteIndexFirstImage;
+
+		int nFrames = exp.seqCamData.nTotalFrames;
 		for (Spot spot : exp.spotsArray.spotsList) {
 			int i = spot.plateIndex % 2;
 			if (0 == i && !options.detectL)

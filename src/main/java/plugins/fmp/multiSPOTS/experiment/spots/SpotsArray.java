@@ -34,16 +34,16 @@ public class SpotsArray {
 	public SpotsDescription spotsDescription = new SpotsDescription();
 	public SpotsDescription desc_old = new SpotsDescription();
 	public ArrayList<Spot> spotsList = new ArrayList<Spot>();
-	public int n_columns = 12;
-	public int n_rows = 8;
-	public int nColsPerCage = 2;
+	public int nColumnsPerPlate = 12;
+	public int nRowsPerPlate = 8;
+	public int nColumnsPerCage = 2;
 	public int nRowsPerCage = 1;
 	private KymoIntervals spotsListTimeIntervals = null;
 
 	private final static String ID_SPOTTRACK = "spotTrack";
 	private final static String ID_NSPOTS = "N_spots";
-	private final static String ID_NCOLUMNS = "N_columns";
-	private final static String ID_NROWS = "N_rows";
+	private final static String ID_NCOLUMNSPERPLATE = "N_columns";
+	private final static String ID_NROWSPERPLATE = "N_rows";
 	private final static String ID_NCOLUMNSPERCAGE = "N_columns_per_cage";
 	private final static String ID_NROWSPERCAGE = "N_rows_per_cage";
 	private final static String ID_LISTOFSPOTS = "List_of_spots";
@@ -107,9 +107,9 @@ public class SpotsArray {
 		XMLUtil.setElementIntValue(node, "version", 2);
 		Node nodeSpotsArray = XMLUtil.setElement(node, ID_LISTOFSPOTS);
 		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NSPOTS, spotsList.size());
-		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NCOLUMNS, n_columns);
-		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NROWS, n_rows);
-		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NCOLUMNSPERCAGE, nColsPerCage);
+		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NCOLUMNSPERPLATE, nColumnsPerPlate);
+		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NROWSPERPLATE, nRowsPerPlate);
+		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NCOLUMNSPERCAGE, nColumnsPerCage);
 		XMLUtil.setElementIntValue(nodeSpotsArray, ID_NROWSPERCAGE, nRowsPerCage);
 		int i = 0;
 		Collections.sort(spotsList);
@@ -152,9 +152,9 @@ public class SpotsArray {
 			return false;
 		Node nodecaps = XMLUtil.getElement(node, ID_LISTOFSPOTS);
 		int nitems = XMLUtil.getElementIntValue(nodecaps, ID_NSPOTS, 0);
-		n_columns = XMLUtil.getElementIntValue(nodecaps, ID_NCOLUMNS, 12);
-		n_rows = XMLUtil.getElementIntValue(nodecaps, ID_NROWS, 8);
-		nColsPerCage = XMLUtil.getElementIntValue(nodecaps, ID_NCOLUMNSPERCAGE, 2);
+		nColumnsPerPlate = XMLUtil.getElementIntValue(nodecaps, ID_NCOLUMNSPERPLATE, 12);
+		nRowsPerPlate = XMLUtil.getElementIntValue(nodecaps, ID_NROWSPERPLATE, 8);
+		nColumnsPerCage = XMLUtil.getElementIntValue(nodecaps, ID_NCOLUMNSPERCAGE, 2);
 		nRowsPerCage = XMLUtil.getElementIntValue(nodecaps, ID_NROWSPERCAGE, 1);
 
 		spotsList = new ArrayList<Spot>(nitems);
@@ -229,6 +229,27 @@ public class SpotsArray {
 			}
 		}
 		return spotFound;
+	}
+
+	public void updatePlateIndexToCageIndexes(int nColsPerCage, int nRowsPerCage) {
+
+		this.nColumnsPerCage = nColsPerCage;
+		this.nRowsPerCage = nRowsPerCage;
+
+		int nCagesAlongX = nColumnsPerPlate / nColsPerCage;
+//		int nCagesAlongY = nRowsPerPlate / nRowsPerCage;
+
+		for (Spot spot : spotsList) {
+			int cageColumn = spot.plateColumn / nColsPerCage;
+			int cageRow = spot.plateRow / nRowsPerCage;
+			spot.cageID = cageRow * nCagesAlongX + cageColumn;
+
+			int spotCageColumn = spot.plateColumn % nColsPerCage;
+			int spotCageRow = spot.plateRow % nRowsPerCage;
+			spot.cagePosition = spotCageRow * nColsPerCage + spotCageColumn;
+
+			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.cagePosition);
+		}
 	}
 
 	public void updateSpotsFromSequence(Sequence seq) {
@@ -328,11 +349,11 @@ public class SpotsArray {
 
 			if (col == 0 && row == 0) {
 				replaceItem(polygon, 0, spot);
-			} else if (col == (n_columns - 1) && row == 0) {
+			} else if (col == (nColumnsPerPlate - 1) && row == 0) {
 				replaceItem(polygon, 1, spot);
-			} else if (col == (n_columns - 1) && row == (n_rows - 1)) {
+			} else if (col == (nColumnsPerPlate - 1) && row == (nRowsPerPlate - 1)) {
 				replaceItem(polygon, 2, spot);
-			} else if (col == 0 && row == (n_rows - 1)) {
+			} else if (col == 0 && row == (nRowsPerPlate - 1)) {
 				replaceItem(polygon, 3, spot);
 			}
 		}

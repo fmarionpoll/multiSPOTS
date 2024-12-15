@@ -236,8 +236,8 @@ public class CreateSpots extends JPanel {
 
 	private void convertPoint2DArrayToSpots(Experiment exp, Point2D.Double[][] arrayPoints, int nbcols, int nbrows,
 			int radius) {
-		exp.spotsArray.n_columns = nbcols;
-		exp.spotsArray.n_rows = nbrows;
+		exp.spotsArray.nColumnsPerPlate = nbcols;
+		exp.spotsArray.nRowsPerPlate = nbrows;
 		int spotIndex = 0;
 		for (int row = 0; row < nbrows; row++) {
 			for (int column = 0; column < nbcols; column++) {
@@ -255,6 +255,12 @@ public class CreateSpots extends JPanel {
 				spot.spotRadius = radius;
 				spot.spotXCoord = (int) point.getX();
 				spot.spotYCoord = (int) point.getY();
+				try {
+					spot.spotNPixels = (int) roiEllipse.getNumberOfPoints();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				exp.spotsArray.spotsList.add(spot);
 				spotIndex++;
@@ -268,15 +274,7 @@ public class CreateSpots extends JPanel {
 
 		int nColsPerCage = (int) nColsPerCageJSpinner.getValue();
 		int nRowsPerCage = (int) nRowsPerCageJSpinner.getValue();
-		exp.spotsArray.nColsPerCage = nColsPerCage;
-		exp.spotsArray.nRowsPerCage = nRowsPerCage;
-		int nSpotsPerCage = nColsPerCage * nRowsPerCage;
-
-		for (Spot spot : exp.spotsArray.spotsList) {
-			spot.cagePosition = spot.plateIndex % nSpotsPerCage;
-			spot.cageID = spot.plateIndex / nSpotsPerCage;
-			spot.setSpotRoi_InColorAccordingToSpotIndex(spot.cagePosition);
-		}
+		exp.spotsArray.updatePlateIndexToCageIndexes(nColsPerCage, nRowsPerCage);
 	}
 
 	private String toAlphabetic(int i) {
@@ -297,7 +295,7 @@ public class CreateSpots extends JPanel {
 	public void updateDialog(Experiment exp) {
 		if (exp != null) {
 			silent = true;
-			nColsPerCageJSpinner.setValue(exp.spotsArray.nColsPerCage);
+			nColsPerCageJSpinner.setValue(exp.spotsArray.nColumnsPerCage);
 			nRowsPerCageJSpinner.setValue(exp.spotsArray.nRowsPerCage);
 			silent = false;
 		}

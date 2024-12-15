@@ -405,10 +405,7 @@ public class Cages {
 	}
 
 	public void setCageNbFromSpotsArray(SpotsArray spotsArray) {
-		int nSpotsPerCage = spotsArray.nColsPerCage * spotsArray.nRowsPerCage;
-		for (Spot spot : spotsArray.spotsList) {
-			spot.cageID = spot.plateIndex / nSpotsPerCage;
-		}
+		spotsArray.updatePlateIndexToCageIndexes(spotsArray.nColumnsPerCage, spotsArray.nRowsPerCage);
 	}
 
 	public Cage getCageFromNumber(int number) {
