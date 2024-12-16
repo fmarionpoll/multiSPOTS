@@ -60,8 +60,6 @@ public class SpotsDescription {
 	private final static String ID_COND1 = "cond1";
 	private final static String ID_COND2 = "cond2";
 
-//	private final static String ID_NOPE = "..";
-
 	public void copy(SpotsDescription desc) {
 		volume = desc.volume;
 		pixels = desc.pixels;
@@ -71,28 +69,6 @@ public class SpotsDescription {
 		concentrationR = desc.concentrationR;
 		concentrationL = desc.concentrationL;
 	}
-
-//	public void transferSpotsDescriptorsToExperimentDescriptors(Experiment exp) {
-//		exp.field_boxID = old_boxID;
-//		exp.field_experiment = old_experiment;
-//		exp.field_comment1 = old_comment1;
-//		exp.field_comment2 = old_comment2;
-//		exp.field_sex = old_sex;
-//		exp.field_strain = old_strain;
-//		exp.field_cond1 = old_cond1;
-//		exp.field_cond2 = old_cond2;
-//	}
-//
-//	public void transferExperimentDescriptorsToSpotsDescriptors(Experiment exp) {
-//		old_boxID = exp.field_boxID;
-//		old_experiment = exp.field_experiment;
-//		old_comment1 = exp.field_comment1;
-//		old_comment2 = exp.field_comment2;
-//		old_strain = exp.field_strain;
-//		old_sex = exp.field_sex;
-//		old_cond1 = exp.field_cond1;
-//		old_cond2 = exp.field_cond2;
-//	}
 
 	public boolean isChanged(SpotsDescription desc) {
 		boolean flag = false;
@@ -169,17 +145,6 @@ public class SpotsDescription {
 		}
 
 		expDesc.loadXML_Descriptors(node);
-//		xmlVal = XMLUtil.getElement(xmlElement, ID_EXPERIMENT);
-//		if (xmlVal != null) {
-//			expDesc.boxID = XMLUtil.getAttributeValue(xmlVal, ID_BOXID, ID_NOPE);
-//			expDesc.old_experiment = XMLUtil.getAttributeValue(xmlVal, ID_EXPT, ID_NOPE);
-//			expDesc.old_comment1 = XMLUtil.getAttributeValue(xmlVal, ID_COMMENT1, ID_NOPE);
-//			expDesc.old_comment2 = XMLUtil.getAttributeValue(xmlVal, ID_COMMENT2, ID_NOPE);
-//			expDesc.old_strain = XMLUtil.getAttributeValue(xmlVal, ID_STRAIN, ID_NOPE);
-//			expDesc.old_sex = XMLUtil.getAttributeValue(xmlVal, ID_SEX, ID_NOPE);
-//			expDesc.old_cond1 = XMLUtil.getAttributeValue(xmlVal, ID_COND1, ID_NOPE);
-//			expDesc.old_cond2 = XMLUtil.getAttributeValue(xmlVal, ID_COND2, ID_NOPE);
-//		}
 		return true;
 	}
 
@@ -203,14 +168,6 @@ public class SpotsDescription {
 			stimulusL = XMLUtil.getElementValue(xmlVal, ID_STIML, ID_STIML);
 			concentrationL = XMLUtil.getElementValue(xmlVal, ID_CONCL, ID_CONCL);
 		}
-
-//		xmlVal = XMLUtil.getElement(xmlElement, ID_EXPERIMENT);
-//		if (xmlVal != null) {
-//			old_boxID = XMLUtil.getElementValue(xmlVal, ID_BOXID, ID_NOPE);
-//			old_experiment = XMLUtil.getElementValue(xmlVal, ID_EXPT, ID_NOPE);
-//			old_comment1 = XMLUtil.getElementValue(xmlVal, ID_COMMENT1, ID_NOPE);
-//			old_comment2 = XMLUtil.getElementValue(xmlVal, ID_COMMENT2, ID_NOPE);
-//		}
 
 		expDesc.saveXML_Descriptors(node);
 

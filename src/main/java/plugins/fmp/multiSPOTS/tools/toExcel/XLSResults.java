@@ -14,21 +14,24 @@ public class XLSResults {
 	public int dimension = 0;
 	public int nflies = 1;
 	public int cageID = 0;
+	public int cagePosition = 0;
 	public EnumXLSExportType exportType = null;
 	public ArrayList<Double> dataValues = null;
 	public double[] valuesOut = null;
 
-	public XLSResults(String name, int nflies, int cageID, EnumXLSExportType exportType) {
+	public XLSResults(String name, int nflies, int cageID, int cagePos, EnumXLSExportType exportType) {
 		this.name = name;
 		this.nflies = nflies;
 		this.cageID = cageID;
+		this.cagePosition = cagePos;
 		this.exportType = exportType;
 	}
 
-	public XLSResults(String name, int nflies, int cageID, EnumXLSExportType exportType, int nFrames) {
+	public XLSResults(String name, int nflies, int cageID, int cagePos, EnumXLSExportType exportType, int nFrames) {
 		this.name = name;
 		this.nflies = nflies;
 		this.cageID = cageID;
+		this.cagePosition = cagePos;
 		this.exportType = exportType;
 		initValuesArray(nFrames);
 	}
@@ -90,28 +93,28 @@ public class XLSResults {
 	public List<Double> relativeToT0() {
 		if (dataValues == null || dataValues.size() < 1)
 			return null;
-		
+
 		double value0 = dataValues.get(0);
-		if (value0 >0 && value0 > dataValues.get(1) && dataValues.get(1) > dataValues.get(2))
+		if (value0 > 0 && value0 > dataValues.get(1) && dataValues.get(1) > dataValues.get(2))
 			relativeToValue(value0);
 		else {
 			value0 = median(0, 3);
 			double value1 = median(0, 5);
-			if(value0 > 0 && value0 > value1)
+			if (value0 > 0 && value0 > value1)
 				relativeToValue(value0);
 			else if (value1 > 0)
 				relativeToValue(value1);
 		}
 		return dataValues;
 	}
-	
+
 	private void relativeToValue(double value0) {
 		for (int index = 0; index < dataValues.size(); index++) {
 			double value = dataValues.get(index);
 			dataValues.set(index, ((value0 - value) / value0));
 		}
 	}
-	
+
 //	public List<Double> relativeToT(int t) {
 //		if (dataValues == null || dataValues.size() < 1)
 //			return null;

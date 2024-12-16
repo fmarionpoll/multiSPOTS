@@ -80,8 +80,8 @@ public class XLSResultsArray {
 	}
 
 	private void computeEvaporationFromResultsWithZeroFlies(int dimension) {
-		evapL = new XLSResults("L", 0, 0, null);
-		evapR = new XLSResults("R", 0, 0, null);
+		evapL = new XLSResults("L", 0, 0, 0, null);
+		evapR = new XLSResults("R", 0, 0, 0, null);
 		evapL.initValuesOutArray(dimension, 0.);
 		evapR.initValuesOutArray(dimension, 0.);
 
@@ -164,7 +164,7 @@ public class XLSResultsArray {
 		double scalingFactorToPhysicalUnits = spotsArray.getScalingFactorToPhysicalUnits(xlsExportOptions.exportType);
 		for (Spot spot : spotsArray.spotsList) {
 			checkIfSameStimulusAndConcentration(spot);
-			XLSResults results = new XLSResults(spot.getRoiName(), spot.spotNFlies, spot.plateIndex,
+			XLSResults results = new XLSResults(spot.getRoiName(), spot.spotNFlies, spot.cageID, spot.cagePosition,
 					xlsExportOptions.exportType, nOutputFrames);
 
 			results.dataValues = spot.getSpotMeasuresForXLSPass1(xlsExportOptions.exportType, kymoBinCol_Ms,
@@ -227,10 +227,10 @@ public class XLSResultsArray {
 			XLSResults rowR = getNextRow(irow);
 			if (rowR != null) {
 				irow++;
-				XLSResults rowLtoR = new XLSResults("LtoR", 0, 0, null);
+				XLSResults rowLtoR = new XLSResults("LtoR", 0, 0, 0, null);
 				rowLtoR.initValuesOutArray(rowL.dimension, 0.);
 				correl(rowL, rowR, rowLtoR, xlsExportOptions.nBinsCorrelation);
-				XLSResults rowRtoL = new XLSResults("RtoL", 0, 0, null);
+				XLSResults rowRtoL = new XLSResults("RtoL", 0, 0, 0, null);
 				rowRtoL.initValuesOutArray(rowL.dimension, 0.);
 				correl(rowR, rowL, rowRtoL, xlsExportOptions.nBinsCorrelation);
 				rowL.copyValuesOut(rowLtoR);
@@ -245,7 +245,7 @@ public class XLSResultsArray {
 			XLSResults rowR = getNextRow(irow);
 			if (rowR != null) {
 				irow++;
-				XLSResults rowLR = new XLSResults("LR", 0, 0, null);
+				XLSResults rowLR = new XLSResults("LR", 0, 0, 0, null);
 				rowLR.initValuesOutArray(rowL.dimension, 0.);
 				combineIntervals(rowL, rowR, rowLR);
 				correl(rowL, rowLR, rowL, xlsExportOptions.nBinsCorrelation);
@@ -288,7 +288,7 @@ public class XLSResultsArray {
 			XLSResults rowR = getNextRow(irow);
 			if (rowR != null) {
 				irow++;
-				XLSResults rowLR = new XLSResults("LR", 0, 0, null);
+				XLSResults rowLR = new XLSResults("LR", 0, 0, 0, null);
 				rowLR.initValuesOutArray(rowL.dimension, 0.);
 				combineIntervals(rowL, rowR, rowLR);
 				correl(rowLR, rowLR, rowL, xlsExportOptions.nBinsCorrelation);

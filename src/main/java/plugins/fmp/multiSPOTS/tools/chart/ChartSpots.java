@@ -14,12 +14,10 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -60,35 +58,22 @@ public class ChartSpots extends IcyFrame {
 	private double ymax = 0;
 	private double ymin = 0;
 	private double xmax = 0;
-	private List<JFreeChart> xyChartList = new ArrayList<JFreeChart>();
+
+	int nCagesAlongX = 1;
+	int nCagesAlongY = 1;
+
+	JPanel[][] panelHolder = null;
 
 	// ----------------------------------------
 
-	public void createChartPanel(MultiSPOTS parent, String cstitle) {
-		parent0 = parent;
-		mainChartPanel = new JPanel();
-		mainChartPanel.setLayout(new BoxLayout(mainChartPanel, BoxLayout.LINE_AXIS));
-		mainChartFrame = GuiUtil.generateTitleFrame(cstitle, new JPanel(), new Dimension(300, 70), true, true, true,
-				true);
-		mainChartFrame.add(mainChartPanel);
-		// TODO
-		int i = 3;
-		int j = 4;
-		JPanel[][] panelHolder = new JPanel[i][j];    
-		setLayout(new GridLayout(i,j));
-
-		for(int m = 0; m < i; m++) {
-		   for(int n = 0; n < j; n++) {
-		      panelHolder[m][n] = new JPanel();
-		      add(panelHolder[m][n]);
-		   }
-		}
-
-//		Then later, you can add directly to one of the JPanel objects:
-//
-//		panelHolder[2][3].add(new JButton("Foo"));
-
-	}
+//	public void createSpotsChartPanel(MultiSPOTS parent, String title) {
+//		parent0 = parent;
+//		mainChartPanel = new JPanel();
+//		mainChartPanel.setLayout(new BoxLayout(mainChartPanel, BoxLayout.LINE_AXIS));
+//		mainChartFrame = GuiUtil.generateTitleFrame(title, new JPanel(), new Dimension(300, 70), true, true, true,
+//				true);
+//		mainChartFrame.add(mainChartPanel);
+//	}
 
 	public void setLocationRelativeToRectangle(Rectangle rectv, Point deltapt) {
 		pt = new Point(rectv.x + deltapt.x, rectv.y + deltapt.y);
@@ -101,7 +86,7 @@ public class ChartSpots extends IcyFrame {
 	private XYLineAndShapeRenderer getSubPlotRenderer(XYSeriesCollection xySeriesCollection, Paint[] chartColor) {
 		XYLineAndShapeRenderer subPlotRenderer = new XYLineAndShapeRenderer(true, false);
 		int icolor = 0;
-		int maxcolor = 1; //chartColor.length;
+		int maxcolor = 1; // chartColor.length;
 		Stroke stroke = new BasicStroke(0.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f,
 				new float[] { 2.0f, 4.0f }, 0.0f);
 		for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++) {
@@ -135,10 +120,12 @@ public class ChartSpots extends IcyFrame {
 	private XYSeriesCollection createXYSeries(int iseries, List<XYSeriesCollection> xyDataSetList,
 			List<XYSeriesCollection> xyDataSetList2) {
 		XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);
+
 		if (xyDataSetList2 != null) {
 			XYSeriesCollection xySeriesCollection2 = xyDataSetList2.get(iseries);
 			for (int j = 0; j < xySeriesCollection2.getSeriesCount(); j++) {
 				XYSeries xySeries = xySeriesCollection2.getSeries(j);
+				System.out.println("j=" + j + "key=" + xySeries.getKey());
 				xySeries.setKey(xySeries.getKey() + "*");
 				xySeriesCollection.addSeries(xySeries);
 			}
@@ -146,82 +133,82 @@ public class ChartSpots extends IcyFrame {
 		return xySeriesCollection;
 	}
 
-	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) {
-		xyChartList.clear();
-		
-		ymax = 0;
-		ymin = 0;
-		flagMaxMinSet = false;
-		List<XYSeriesCollection> xyDataSetList2 = null;
-		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
-		if (xlsExportOptions.exportType == EnumXLSExportType.AREA_SUMCLEAN) {
-			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUM;
-			xyDataSetList2 = getDataArrays(exp, xlsExportOptions);
-			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
-		}
-
-		NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
-		if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
-			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
-			yAxis.setAutoRange(false);
-			yAxis.setRange(-0.2, 1.2);
-		} else {
-			yAxis.setAutoRange(true);
-			yAxis.setAutoRangeIncludesZero(false);
-		}
-
-		final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
-		Paint[] chartColor = ChartColor.createDefaultPaintArray();
-
-		int firstSeries = 0;
-		int lastSeries = xyDataSetList.size();
-		if (xlsExportOptions.seriesIndexFirst >= 0) {
-			firstSeries = xlsExportOptions.seriesIndexFirst;
-			lastSeries = xlsExportOptions.seriesIndexLast;
-		}
-
-		for (int iseries = firstSeries; iseries < lastSeries; iseries++) {
-			XYSeriesCollection xySeriesCollection = createXYSeries(iseries, xyDataSetList, xyDataSetList2);
-			final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
-			combinedXYPlot.add(subplot);
-		}
-
-		JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, false); // true);
-		Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
-		chart.getTitle().setFont(font);
-
-		int width = 800;
-		int height = 300;
-		int minimumDrawWidth = width;
-		int minimumDrawHeight = 300;
-		int maximumDrawWidth = 800;
-		int maximumDrawHeight = 500;
-		boolean useBuffer = true;
-
-		final ChartPanel panel = new ChartPanel(chart, width, height, minimumDrawWidth, minimumDrawHeight,
-				maximumDrawWidth, maximumDrawHeight, useBuffer, true, true, true, false, true); // boolean properties,
-																								// boolean save, boolean
-																								// print, boolean zoom,
-																								// boolean tooltips)
-
-		panel.addChartMouseListener(new ChartMouseListener() {
-			public void chartMouseClicked(ChartMouseEvent e) {
-				Spot clikedSpot = getClickedSpot(e);
-				selectSpot(exp, clikedSpot);
-				selectT(exp, xlsExportOptions, clikedSpot);
-				selectKymograph(exp, clikedSpot);
-			}
-
-			public void chartMouseMoved(ChartMouseEvent e) {
-			}
-		});
-
-		mainChartPanel.add(panel);
-		mainChartFrame.pack();
-		mainChartFrame.setLocation(pt);
-		mainChartFrame.addToDesktopPane();
-		mainChartFrame.setVisible(true);
-	}
+//	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) {
+//		xyChartList.clear();
+//
+//		ymax = 0;
+//		ymin = 0;
+//		flagMaxMinSet = false;
+//		List<XYSeriesCollection> xyDataSetList2 = null;
+//		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
+//		if (xlsExportOptions.exportType == EnumXLSExportType.AREA_SUMCLEAN) {
+//			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUM;
+//			xyDataSetList2 = getDataArrays(exp, xlsExportOptions);
+//			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
+//		}
+//
+//		NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
+//		if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
+//			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
+//			yAxis.setAutoRange(false);
+//			yAxis.setRange(-0.2, 1.2);
+//		} else {
+//			yAxis.setAutoRange(true);
+//			yAxis.setAutoRangeIncludesZero(false);
+//		}
+//
+//		final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
+//		Paint[] chartColor = ChartColor.createDefaultPaintArray();
+//
+//		int firstSeries = 0;
+//		int lastSeries = xyDataSetList.size();
+//		if (xlsExportOptions.seriesIndexFirst >= 0) {
+//			firstSeries = xlsExportOptions.seriesIndexFirst;
+//			lastSeries = xlsExportOptions.seriesIndexLast;
+//		}
+//
+//		for (int iseries = firstSeries; iseries < lastSeries; iseries++) {
+//			XYSeriesCollection xySeriesCollection = createXYSeries(iseries, xyDataSetList, xyDataSetList2);
+//			final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
+//			combinedXYPlot.add(subplot);
+//		}
+//
+//		JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, false); // true);
+//		Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
+//		chart.getTitle().setFont(font);
+//
+//		int width = 800;
+//		int height = 300;
+//		int minimumDrawWidth = width;
+//		int minimumDrawHeight = 300;
+//		int maximumDrawWidth = 800;
+//		int maximumDrawHeight = 500;
+//		boolean useBuffer = true;
+//
+//		final ChartPanel panel = new ChartPanel(chart, width, height, minimumDrawWidth, minimumDrawHeight,
+//				maximumDrawWidth, maximumDrawHeight, useBuffer, true, true, true, false, true); // boolean properties,
+//																								// boolean save, boolean
+//																								// print, boolean zoom,
+//																								// boolean tooltips)
+//
+//		panel.addChartMouseListener(new ChartMouseListener() {
+//			public void chartMouseClicked(ChartMouseEvent e) {
+//				Spot clikedSpot = getClickedSpot(e);
+//				selectSpot(exp, clikedSpot);
+//				selectT(exp, xlsExportOptions, clikedSpot);
+//				selectKymograph(exp, clikedSpot);
+//			}
+//
+//			public void chartMouseMoved(ChartMouseEvent e) {
+//			}
+//		});
+//
+//		mainChartPanel.add(panel);
+//		mainChartFrame.pack();
+//		mainChartFrame.setLocation(pt);
+//		mainChartFrame.addToDesktopPane();
+//		mainChartFrame.setVisible(true);
+//	}
 
 	private Spot getClickedSpot(ChartMouseEvent e) {
 		final MouseEvent trigger = e.getTrigger();
@@ -363,6 +350,119 @@ public class ChartSpots extends IcyFrame {
 				ymin = y;
 			x++;
 		}
+	}
+
+	public void createSpotsChartPanel2(MultiSPOTS parent, String title, Experiment exp) {
+		parent0 = parent;
+		mainChartPanel = new JPanel();
+		mainChartFrame = GuiUtil.generateTitleFrame(title, new JPanel(), new Dimension(300, 70), true, true, true,
+				true);
+		mainChartFrame.add(mainChartPanel);
+
+		nCagesAlongX = exp.spotsArray.nColumnsPerPlate / exp.spotsArray.nColumnsPerCage;
+		nCagesAlongY = exp.spotsArray.nRowsPerPlate / exp.spotsArray.nRowsPerCage;
+		panelHolder = new JPanel[nCagesAlongX][nCagesAlongY];
+		mainChartPanel.setLayout(new GridLayout(nCagesAlongX, nCagesAlongY));
+
+		for (int m = 0; m < nCagesAlongX; m++) {
+			for (int n = 0; n < nCagesAlongY; n++) {
+				panelHolder[m][n] = new JPanel();
+				add(panelHolder[m][n]);
+			}
+		}
+
+//		Then later, you can add directly to one of the JPanel objects:
+//
+//		panelHolder[2][3].add(new JButton("Foo"));
+
+	}
+
+	public void displayData2(Experiment exp, XLSExportOptions xlsExportOptions) {
+
+		ymax = 0;
+		ymin = 0;
+		flagMaxMinSet = false;
+
+		List<XYSeriesCollection> xyDataSetList2 = null;
+		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
+		if (xlsExportOptions.exportType == EnumXLSExportType.AREA_SUMCLEAN) {
+			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUM;
+			xyDataSetList2 = getDataArrays(exp, xlsExportOptions);
+			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
+		}
+
+		NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
+		if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
+			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
+			yAxis.setAutoRange(false);
+			yAxis.setRange(-0.2, 1.2);
+		} else {
+			yAxis.setAutoRange(true);
+			yAxis.setAutoRangeIncludesZero(false);
+		}
+
+		Paint[] chartColor = ChartColor.createDefaultPaintArray();
+
+		// ---------------------------
+		int cageID = 0;
+		for (int row = 0; row < nCagesAlongY; row++) {
+			for (int col = 0; col < nCagesAlongX; col++) {
+				CombinedRangeXYPlot combinedXYPlot = getCombinedRangeXYPlotOfOneCage(cageID, xyDataSetList,
+						xyDataSetList2, yAxis, chartColor);
+				JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, false); // true);
+				Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
+				chart.getTitle().setFont(font);
+
+				int width = 800;
+				int height = 300;
+				int minimumDrawWidth = width;
+				int minimumDrawHeight = 300;
+				int maximumDrawWidth = 800;
+				int maximumDrawHeight = 500;
+				boolean useBuffer = true;
+
+				final ChartPanel panel = new ChartPanel(chart, width, height, minimumDrawWidth, minimumDrawHeight,
+						maximumDrawWidth, maximumDrawHeight, useBuffer, true, true, true, false, true);
+				// boolean properties, boolean save, boolean print, boolean zoom, boolean
+				// tooltips)
+
+				// panel.addChartMouseListener(new ChartMouseListener() {
+				// public void chartMouseClicked(ChartMouseEvent e) {
+				// Spot clikedSpot = getClickedSpot(e);
+				// selectSpot(exp, clikedSpot);
+				// selectT(exp, xlsExportOptions, clikedSpot);
+				// selectKymograph(exp, clikedSpot);
+				// }
+				//
+				// public void chartMouseMoved(ChartMouseEvent e) {
+				// }
+				// });
+
+				panelHolder[col][row].add(panel);
+				cageID++;
+			}
+		}
+
+		// -----------------------------------
+		mainChartFrame.pack();
+		mainChartFrame.setLocation(pt);
+		mainChartFrame.addToDesktopPane();
+		mainChartFrame.setVisible(true);
+	}
+
+	private CombinedRangeXYPlot getCombinedRangeXYPlotOfOneCage(int cageID, List<XYSeriesCollection> xyDataSetList,
+			List<XYSeriesCollection> xyDataSetList2, NumberAxis yAxis, Paint[] chartColor) {
+		CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
+		for (int iseries = 0; iseries < xyDataSetList.size(); iseries++) {
+
+			boolean flag = false;
+			if (flag) {
+				XYSeriesCollection xySeriesCollection = createXYSeries(iseries, xyDataSetList, xyDataSetList2);
+				final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
+				combinedXYPlot.add(subplot);
+			}
+		}
+		return combinedXYPlot;
 	}
 
 }

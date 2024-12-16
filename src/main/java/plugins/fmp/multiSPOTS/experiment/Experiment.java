@@ -41,7 +41,6 @@ public class Experiment {
 	public Sequence seqReference = null;
 
 	public SpotsArray spotsArray = new SpotsArray();
-
 	public Cages cages = new Cages();
 
 	public FileTime firstImage_FileTime;

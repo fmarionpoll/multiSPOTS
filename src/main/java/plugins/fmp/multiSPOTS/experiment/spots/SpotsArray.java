@@ -36,6 +36,7 @@ public class SpotsArray {
 	public ArrayList<Spot> spotsList = new ArrayList<Spot>();
 	public int nColumnsPerPlate = 12;
 	public int nRowsPerPlate = 8;
+
 	public int nColumnsPerCage = 2;
 	public int nRowsPerCage = 1;
 	private KymoIntervals spotsListTimeIntervals = null;

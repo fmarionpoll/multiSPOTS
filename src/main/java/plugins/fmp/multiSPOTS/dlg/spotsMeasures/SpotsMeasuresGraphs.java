@@ -148,7 +148,8 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		if (iChart != null)
 			iChart.mainChartFrame.dispose();
 		iChart = new ChartSpots();
-		iChart.createChartPanel(parent0, "Spots measures");
+//		iChart.createSpotsChartPanel(parent0, "Spots measures");
+		iChart.createSpotsChartPanel2(parent0, "Spots measures", exp);
 		iChart.setUpperLeftLocation(rectv);
 
 		XLSExportOptions xlsExportOptions = new XLSExportOptions();
@@ -167,7 +168,8 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 			xlsExportOptions.seriesIndexLast = ikymo + 1;
 		}
 
-		iChart.displayData(exp, xlsExportOptions);
+//		iChart.displayData(exp, xlsExportOptions);
+		iChart.displayData2(exp, xlsExportOptions);
 		iChart.mainChartFrame.toFront();
 		iChart.mainChartFrame.requestFocus();
 		return iChart;
