@@ -117,22 +117,6 @@ public class ChartSpots extends IcyFrame {
 		return subplot;
 	}
 
-	private XYSeriesCollection createXYSeries(int iseries, List<XYSeriesCollection> xyDataSetList,
-			List<XYSeriesCollection> xyDataSetList2) {
-		XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);
-
-		if (xyDataSetList2 != null) {
-			XYSeriesCollection xySeriesCollection2 = xyDataSetList2.get(iseries);
-			for (int j = 0; j < xySeriesCollection2.getSeriesCount(); j++) {
-				XYSeries xySeries = xySeriesCollection2.getSeries(j);
-				System.out.println("j=" + j + "key=" + xySeries.getKey());
-				xySeries.setKey(xySeries.getKey() + "*");
-				xySeriesCollection.addSeries(xySeries);
-			}
-		}
-		return xySeriesCollection;
-	}
-
 //	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) {
 //		xyChartList.clear();
 //
@@ -285,27 +269,6 @@ public class ChartSpots extends IcyFrame {
 		}
 	}
 
-	private List<XYSeriesCollection> getDataArrays(Experiment exp, XLSExportOptions xlsExportOptions) {
-		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, xlsExportOptions);
-		XYSeriesCollection xySeriesCollection = null;
-		int oldcage = -1;
-
-		List<XYSeriesCollection> xyList = new ArrayList<XYSeriesCollection>();
-		for (int iRow = 0; iRow < xlsResultsArray.size(); iRow++) {
-			XLSResults xlsResults = xlsResultsArray.getRow(iRow);
-			if (oldcage != xlsResults.cageID) {
-				xySeriesCollection = new XYSeriesCollection();
-				oldcage = xlsResults.cageID;
-				xyList.add(xySeriesCollection);
-			}
-			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name.substring(4));
-			seriesXY.setDescription("cage " + xlsResults.cageID + "_" + xlsResults.nflies);
-			xySeriesCollection.addSeries(seriesXY);
-			updateGlobalMaxMin();
-		}
-		return xyList;
-	}
-
 	private XLSResultsArray getDataAsResultsArray(Experiment exp, XLSExportOptions xlsExportOptions) {
 		XLSExport xlsExport = new XLSExport();
 		return xlsExport.getSpotsDataFromOneExperiment(exp, xlsExportOptions);
@@ -372,7 +335,6 @@ public class ChartSpots extends IcyFrame {
 		}
 
 //		Then later, you can add directly to one of the JPanel objects:
-//
 //		panelHolder[2][3].add(new JButton("Foo"));
 
 	}
@@ -454,15 +416,53 @@ public class ChartSpots extends IcyFrame {
 			List<XYSeriesCollection> xyDataSetList2, NumberAxis yAxis, Paint[] chartColor) {
 		CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
 		for (int iseries = 0; iseries < xyDataSetList.size(); iseries++) {
-
-			boolean flag = false;
+			boolean flag = true;
 			if (flag) {
 				XYSeriesCollection xySeriesCollection = createXYSeries(iseries, xyDataSetList, xyDataSetList2);
-				final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
-				combinedXYPlot.add(subplot);
+//				final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
+//				combinedXYPlot.add(subplot);
 			}
 		}
 		return combinedXYPlot;
+	}
+
+	private List<XYSeriesCollection> getDataArrays(Experiment exp, XLSExportOptions xlsExportOptions) {
+		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, xlsExportOptions);
+		XYSeriesCollection xySeriesCollection = null;
+		int oldcage = -1;
+
+		List<XYSeriesCollection> xyList = new ArrayList<XYSeriesCollection>();
+		for (int iRow = 0; iRow < xlsResultsArray.size(); iRow++) {
+			XLSResults xlsResults = xlsResultsArray.getRow(iRow);
+			if (oldcage != xlsResults.cageID) {
+				xySeriesCollection = new XYSeriesCollection();
+				oldcage = xlsResults.cageID;
+				xyList.add(xySeriesCollection);
+			}
+			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name.substring(4));
+			seriesXY.setDescription("cage ID:" + xlsResults.cageID + " Pos:" + xlsResults.cagePosition + " nflies:"
+					+ xlsResults.nflies);
+			xySeriesCollection.addSeries(seriesXY);
+			updateGlobalMaxMin();
+		}
+		return xyList;
+	}
+
+	private XYSeriesCollection createXYSeries(int iseries, List<XYSeriesCollection> xyDataSetList,
+			List<XYSeriesCollection> xyDataSetList2) {
+		XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);
+
+		if (xyDataSetList2 != null) {
+			XYSeriesCollection xySeriesCollection2 = xyDataSetList2.get(iseries);
+			for (int j = 0; j < xySeriesCollection2.getSeriesCount(); j++) {
+				XYSeries xySeries = xySeriesCollection2.getSeries(j);
+				System.out.println("iseries=" + iseries + " j=" + j + " key=" + xySeries.getKey() + " description:"
+						+ xySeries.getDescription());
+				xySeries.setKey(xySeries.getKey() + "*");
+				xySeriesCollection.addSeries(xySeries);
+			}
+		}
+		return xySeriesCollection;
 	}
 
 }
