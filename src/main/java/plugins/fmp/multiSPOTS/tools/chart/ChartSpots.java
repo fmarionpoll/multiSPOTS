@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -70,6 +71,23 @@ public class ChartSpots extends IcyFrame {
 		mainChartFrame = GuiUtil.generateTitleFrame(cstitle, new JPanel(), new Dimension(300, 70), true, true, true,
 				true);
 		mainChartFrame.add(mainChartPanel);
+		// TODO
+		int i = 3;
+		int j = 4;
+		JPanel[][] panelHolder = new JPanel[i][j];    
+		setLayout(new GridLayout(i,j));
+
+		for(int m = 0; m < i; m++) {
+		   for(int n = 0; n < j; n++) {
+		      panelHolder[m][n] = new JPanel();
+		      add(panelHolder[m][n]);
+		   }
+		}
+
+//		Then later, you can add directly to one of the JPanel objects:
+//
+//		panelHolder[2][3].add(new JButton("Foo"));
+
 	}
 
 	public void setLocationRelativeToRectangle(Rectangle rectv, Point deltapt) {
@@ -83,7 +101,7 @@ public class ChartSpots extends IcyFrame {
 	private XYLineAndShapeRenderer getSubPlotRenderer(XYSeriesCollection xySeriesCollection, Paint[] chartColor) {
 		XYLineAndShapeRenderer subPlotRenderer = new XYLineAndShapeRenderer(true, false);
 		int icolor = 0;
-		int maxcolor = 1; // color.length
+		int maxcolor = 1; //chartColor.length;
 		Stroke stroke = new BasicStroke(0.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f,
 				new float[] { 2.0f, 4.0f }, 0.0f);
 		for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++) {
@@ -130,6 +148,7 @@ public class ChartSpots extends IcyFrame {
 
 	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) {
 		xyChartList.clear();
+		
 		ymax = 0;
 		ymin = 0;
 		flagMaxMinSet = false;
