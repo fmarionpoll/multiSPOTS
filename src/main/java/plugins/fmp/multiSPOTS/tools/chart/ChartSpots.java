@@ -194,80 +194,80 @@ public class ChartSpots extends IcyFrame {
 //		mainChartFrame.setVisible(true);
 //	}
 
-	private Spot getClickedSpot(ChartMouseEvent e) {
-		final MouseEvent trigger = e.getTrigger();
-		if (trigger.getButton() != MouseEvent.BUTTON1)
-			return null;
+//	private Spot getClickedSpot(ChartMouseEvent e) {
+//		final MouseEvent trigger = e.getTrigger();
+//		if (trigger.getButton() != MouseEvent.BUTTON1)
+//			return null;
+//
+//		JFreeChart chart = e.getChart();
+//		MouseEvent mouseEvent = e.getTrigger();
+//		ChartPanel panel = (ChartPanel) mainChartPanel.getComponent(0);
+//		PlotRenderingInfo plotInfo = panel.getChartRenderingInfo().getPlotInfo();
+//		Point2D pointClicked = panel.translateScreenToJava2D(mouseEvent.getPoint());
+//		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+//
+//		// get chart
+//		int subplotindex = plotInfo.getSubplotIndex(pointClicked);
+//		CombinedRangeXYPlot combinedXYPlot = (CombinedRangeXYPlot) chart.getPlot();
+//		@SuppressWarnings("unchecked")
+//		List<XYPlot> subplots = combinedXYPlot.getSubplots();
+//
+//		// get item in the chart
+//		Spot spotFound = null;
+//		String description = null;
+//		ChartEntity chartEntity = e.getEntity();
+//		if (chartEntity != null && chartEntity instanceof XYItemEntity) {
+//			XYItemEntity xyItemEntity = (XYItemEntity) chartEntity;
+//			int isel = xyItemEntity.getSeriesIndex();
+//			XYDataset xyDataset = xyItemEntity.getDataset();
+//			description = (String) xyDataset.getSeriesKey(isel);
+//
+//			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
+//			spotFound.spot_CamData_T = xyItemEntity.getItem();
+//		} else if (subplotindex >= 0) {
+//			XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
+//			description = (String) xyDataset.getSeriesKey(0);
+//
+//			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
+//		} else {
+//			System.out.println("Graph clicked but source not found");
+//			return null;
+//		}
+//		String lastN = description.substring(4, 5);
+//		int foo;
+//		try {
+//			foo = Integer.parseInt(lastN);
+//		} catch (NumberFormatException e1) {
+//			foo = 0;
+//		}
+//		spotFound.spot_Kymograph_T = 2 * spotFound.cageID + foo;
+//		return spotFound;
+//	}
 
-		JFreeChart chart = e.getChart();
-		MouseEvent mouseEvent = e.getTrigger();
-		ChartPanel panel = (ChartPanel) mainChartPanel.getComponent(0);
-		PlotRenderingInfo plotInfo = panel.getChartRenderingInfo().getPlotInfo();
-		Point2D pointClicked = panel.translateScreenToJava2D(mouseEvent.getPoint());
-		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+//	private void selectSpot(Experiment exp, Spot spot) {
+//		Viewer v = exp.seqCamData.seq.getFirstViewer();
+//		if (v != null && spot != null) {
+//			ROI2D roi = spot.getRoi_in();
+//			exp.seqCamData.seq.setFocusedROI(roi);
+//		}
+//	}
 
-		// get chart
-		int subplotindex = plotInfo.getSubplotIndex(pointClicked);
-		CombinedRangeXYPlot combinedXYPlot = (CombinedRangeXYPlot) chart.getPlot();
-		@SuppressWarnings("unchecked")
-		List<XYPlot> subplots = combinedXYPlot.getSubplots();
+//	private void selectT(Experiment exp, XLSExportOptions xlsExportOptions, Spot spot) {
+//		Viewer v = exp.seqCamData.seq.getFirstViewer();
+//		if (v != null && spot != null && spot.spot_CamData_T > 0) {
+//			int ii = (int) (spot.spot_CamData_T * xlsExportOptions.buildExcelStepMs / exp.seqCamData.binDuration_ms);
+//			v.setPositionT(ii);
+//		}
+//	}
 
-		// get item in the chart
-		Spot spotFound = null;
-		String description = null;
-		ChartEntity chartEntity = e.getEntity();
-		if (chartEntity != null && chartEntity instanceof XYItemEntity) {
-			XYItemEntity xyItemEntity = (XYItemEntity) chartEntity;
-			int isel = xyItemEntity.getSeriesIndex();
-			XYDataset xyDataset = xyItemEntity.getDataset();
-			description = (String) xyDataset.getSeriesKey(isel);
-
-			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
-			spotFound.spot_CamData_T = xyItemEntity.getItem();
-		} else if (subplotindex >= 0) {
-			XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
-			description = (String) xyDataset.getSeriesKey(0);
-
-			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
-		} else {
-			System.out.println("Graph clicked but source not found");
-			return null;
-		}
-		String lastN = description.substring(4, 5);
-		int foo;
-		try {
-			foo = Integer.parseInt(lastN);
-		} catch (NumberFormatException e1) {
-			foo = 0;
-		}
-		spotFound.spot_Kymograph_T = 2 * spotFound.cageID + foo;
-		return spotFound;
-	}
-
-	private void selectSpot(Experiment exp, Spot spot) {
-		Viewer v = exp.seqCamData.seq.getFirstViewer();
-		if (v != null && spot != null) {
-			ROI2D roi = spot.getRoi_in();
-			exp.seqCamData.seq.setFocusedROI(roi);
-		}
-	}
-
-	private void selectT(Experiment exp, XLSExportOptions xlsExportOptions, Spot spot) {
-		Viewer v = exp.seqCamData.seq.getFirstViewer();
-		if (v != null && spot != null && spot.spot_CamData_T > 0) {
-			int ii = (int) (spot.spot_CamData_T * xlsExportOptions.buildExcelStepMs / exp.seqCamData.binDuration_ms);
-			v.setPositionT(ii);
-		}
-	}
-
-	private void selectKymograph(Experiment exp, Spot spot) {
-		if (exp.seqSpotKymos != null) {
-			Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
-			if (v != null && spot != null) {
-				v.setPositionT(spot.spot_Kymograph_T);
-			}
-		}
-	}
+//	private void selectKymograph(Experiment exp, Spot spot) {
+//		if (exp.seqSpotKymos != null) {
+//			Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
+//			if (v != null && spot != null) {
+//				v.setPositionT(spot.spot_Kymograph_T);
+//			}
+//		}
+//	}
 
 	private XLSResultsArray getDataAsResultsArray(Experiment exp, XLSExportOptions xlsExportOptions) {
 		XLSExport xlsExport = new XLSExport();
@@ -345,14 +345,6 @@ public class ChartSpots extends IcyFrame {
 		ymin = 0;
 		flagMaxMinSet = false;
 
-		List<XYSeriesCollection> xyDataSetList2 = null;
-		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
-		if (xlsExportOptions.exportType == EnumXLSExportType.AREA_SUMCLEAN) {
-			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUM;
-			xyDataSetList2 = getDataArrays(exp, xlsExportOptions);
-			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
-		}
-
 		NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
 		if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
 			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
@@ -369,8 +361,7 @@ public class ChartSpots extends IcyFrame {
 		int cageID = 0;
 		for (int row = 0; row < nCagesAlongY; row++) {
 			for (int col = 0; col < nCagesAlongX; col++) {
-				CombinedRangeXYPlot combinedXYPlot = getCombinedRangeXYPlotOfOneCage(cageID, xyDataSetList,
-						xyDataSetList2, yAxis, chartColor);
+				CombinedRangeXYPlot combinedXYPlot = getCombinedRangeXYPlotOfOneCage(cageID, yAxis, chartColor);
 				JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, false); // true);
 				Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
 				chart.getTitle().setFont(font);
@@ -412,13 +403,21 @@ public class ChartSpots extends IcyFrame {
 		mainChartFrame.setVisible(true);
 	}
 
-	private CombinedRangeXYPlot getCombinedRangeXYPlotOfOneCage(int cageID, List<XYSeriesCollection> xyDataSetList,
-			List<XYSeriesCollection> xyDataSetList2, NumberAxis yAxis, Paint[] chartColor) {
+	private CombinedRangeXYPlot getCombinedRangeXYPlotOfOneCage(int cageID, NumberAxis yAxis, Paint[] chartColor) {
 		CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
+		
+//		List<XYSeriesCollection> xyDataSetList2 = null;
+//		List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
+//		if (xlsExportOptions.exportType == EnumXLSExportType.AREA_SUMCLEAN) {
+//			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUM;
+//			xyDataSetList2 = getDataArrays(exp, xlsExportOptions);
+//			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
+//		}
+		
 		for (int iseries = 0; iseries < xyDataSetList.size(); iseries++) {
 			boolean flag = true;
 			if (flag) {
-				XYSeriesCollection xySeriesCollection = createXYSeries(iseries, xyDataSetList, xyDataSetList2);
+				XYSeriesCollection xySeriesCollection = createXYSeriesCollection(iseries, xyDataSetList, xyDataSetList2);
 //				final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
 //				combinedXYPlot.add(subplot);
 			}
@@ -426,7 +425,7 @@ public class ChartSpots extends IcyFrame {
 		return combinedXYPlot;
 	}
 
-	private List<XYSeriesCollection> getDataArrays(Experiment exp, XLSExportOptions xlsExportOptions) {
+	private List<XYSeriesCollection> getDataArrays_v0(Experiment exp, XLSExportOptions xlsExportOptions) {
 		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, xlsExportOptions);
 		XYSeriesCollection xySeriesCollection = null;
 		int oldcage = -1;
@@ -439,8 +438,8 @@ public class ChartSpots extends IcyFrame {
 				oldcage = xlsResults.cageID;
 				xyList.add(xySeriesCollection);
 			}
-			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name.substring(4));
-			seriesXY.setDescription("cage ID:" + xlsResults.cageID + " Pos:" + xlsResults.cagePosition + " nflies:"
+			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name); //.substring(4));
+			seriesXY.setDescription("ID:" + xlsResults.cageID + ":Pos:" + xlsResults.cagePosition + ":nflies:"
 					+ xlsResults.nflies);
 			xySeriesCollection.addSeries(seriesXY);
 			updateGlobalMaxMin();
@@ -448,7 +447,7 @@ public class ChartSpots extends IcyFrame {
 		return xyList;
 	}
 
-	private XYSeriesCollection createXYSeries(int iseries, List<XYSeriesCollection> xyDataSetList,
+	private XYSeriesCollection createXYSeriesCollection(int iseries, List<XYSeriesCollection> xyDataSetList,
 			List<XYSeriesCollection> xyDataSetList2) {
 		XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);
 
