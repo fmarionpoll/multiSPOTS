@@ -9,40 +9,27 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartColor;
-import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.entity.ChartEntity;
-import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.CombinedRangeXYPlot;
-import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import icy.gui.frame.IcyFrame;
 import icy.gui.util.GuiUtil;
-import icy.gui.viewer.Viewer;
-import icy.roi.ROI2D;
-import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExport;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
-import plugins.fmp.multiSPOTS.tools.toExcel.XLSResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSResultsArray;
+import plugins.fmp.multiSPOTS.tools.toExcel.XLSResults;
 
 public class ChartSpots extends IcyFrame {
 	public JPanel mainChartPanel = null;
@@ -90,9 +77,10 @@ public class ChartSpots extends IcyFrame {
 				new float[] { 2.0f, 4.0f }, 0.0f);
 		for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++) {
 			if (icolor > maxcolor) {
-				icolor = icolor + 13; // 0;
+				// icolor = icolor + 13; // 0;
 				subPlotRenderer.setSeriesStroke(i, stroke);
 			}
+			icolor = icolor % maxcolor;
 			subPlotRenderer.setSeriesPaint(i, chartColor[icolor]);
 		}
 		return subPlotRenderer;
@@ -100,7 +88,7 @@ public class ChartSpots extends IcyFrame {
 
 	private XYPlot buildSubPlot(XYSeriesCollection xySeriesCollection, Paint[] chartColor) {
 		XYLineAndShapeRenderer subPlotRenderer = getSubPlotRenderer(xySeriesCollection, chartColor);
-		String[] description = xySeriesCollection.getSeries(0).getDescription().split("_");
+		String[] description = xySeriesCollection.getSeries(0).getDescription().split(":");
 		NumberAxis xAxis = new NumberAxis(description[0]);
 		final XYPlot subplot = new XYPlot(xySeriesCollection, xAxis, null, subPlotRenderer);
 		int nflies = Integer.valueOf(description[1]);
@@ -354,7 +342,7 @@ public class ChartSpots extends IcyFrame {
 		}
 
 		Paint[] chartColor = ChartColor.createDefaultPaintArray();
-		
+
 		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, xlsExportOptions);
 		XLSResultsArray xlsResultsArray2 = null;
 		if (xlsExportOptions.exportType == EnumXLSExportType.AREA_SUMCLEAN) {
@@ -362,13 +350,13 @@ public class ChartSpots extends IcyFrame {
 			xlsResultsArray2 = getDataAsResultsArray(exp, xlsExportOptions);
 			xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
 		}
-		
 
 		// ---------------------------
 		int cageID = 0;
 		for (int row = 0; row < nCagesAlongY; row++) {
 			for (int col = 0; col < nCagesAlongX; col++) {
-				CombinedRangeXYPlot combinedXYPlot = getCombinedRangeXYPlotOfOneCage(cageID, yAxis, chartColor, xlsResultsArray, xlsResultsArray2 );
+				CombinedRangeXYPlot combinedXYPlot = getCombinedRangeXYPlotOfOneCage(cageID, yAxis, chartColor,
+						xlsResultsArray, xlsResultsArray2);
 				JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, false); // true);
 				Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
 				chart.getTitle().setFont(font);
@@ -410,47 +398,42 @@ public class ChartSpots extends IcyFrame {
 		mainChartFrame.setVisible(true);
 	}
 
-	private CombinedRangeXYPlot getCombinedRangeXYPlotOfOneCage(int cageID, NumberAxis yAxis, Paint[] chartColor, XLSResultsArray xlsResultsArray, XLSResultsArray xlsResultsArray2) {
+	private CombinedRangeXYPlot getCombinedRangeXYPlotOfOneCage(int cageID, NumberAxis yAxis, Paint[] chartColor,
+			XLSResultsArray xlsResultsArray, XLSResultsArray xlsResultsArray2) {
 		CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
-		List<XYSeriesCollection> xyDataSetList = getDataArraysOfOneCage(xlsResultsArray, cageID);
-		List<XYSeriesCollection> xyDataSetList2 = null;
-		if (xlsResultsArray2 != null) 
-			xyDataSetList2 = getDataArraysOfOneCage(xlsResultsArray2, cageID);	
-		
-		for (int iseries = 0; iseries < xyDataSetList.size(); iseries++) {
-			boolean flag = true;
-			if (flag) {
-				XYSeriesCollection xySeriesCollection = createXYSeriesCollection(iseries, xyDataSetList, xyDataSetList2);
-				final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
-				combinedXYPlot.add(subplot);
-			}
-		}
+		XYSeriesCollection xyDataSetList = getDataArraysOfOneCage(xlsResultsArray, cageID);
+		XYSeriesCollection xyDataSetList2 = null;
+		if (xlsResultsArray2 != null)
+			xyDataSetList2 = getDataArraysOfOneCage(xlsResultsArray2, cageID);
+
+		XYSeriesCollection xySeriesCollection = createXYSeriesCollection(0, xyDataSetList, xyDataSetList2);
+		final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
+		combinedXYPlot.add(subplot);
+
 		return combinedXYPlot;
 	}
-	
-	private List<XYSeriesCollection> getDataArraysOfOneCage(XLSResultsArray xlsResultsArray, int cageID) {		
+
+	private XYSeriesCollection getDataArraysOfOneCage(XLSResultsArray xlsResultsArray, int cageID) {
 		XYSeriesCollection xySeriesCollection = null;
-
-
-		List<XYSeriesCollection> xyList = new ArrayList<XYSeriesCollection>();
 		for (int i = 0; i < xlsResultsArray.size(); i++) {
 			XLSResults xlsResults = xlsResultsArray.getRow(i);
-			if (cageID != xlsResults.cageID) {
+			if (cageID != xlsResults.cageID)
+				continue;
+			if (xySeriesCollection == null) {
 				xySeriesCollection = new XYSeriesCollection();
-				xyList.add(xySeriesCollection);
 			}
-			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name); //.substring(4));
-			seriesXY.setDescription("ID:" + xlsResults.cageID + ":Pos:" + xlsResults.cagePosition + ":nflies:"
-					+ xlsResults.nflies);
+			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name); // .substring(4));
+			seriesXY.setDescription(
+					"ID:" + xlsResults.cageID + ":Pos:" + xlsResults.cagePosition + ":nflies:" + xlsResults.nflies);
 			xySeriesCollection.addSeries(seriesXY);
 			updateGlobalMaxMin();
 		}
-		return xyList;
+		return xySeriesCollection;
 	}
 
 //	private List<XYSeriesCollection> getDataArrays(Experiment exp, XLSExportOptions xlsExportOptions) {
 //		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, xlsExportOptions);
-	
+
 //		XYSeriesCollection xySeriesCollection = null;
 //		int oldcage = -1;
 //
@@ -471,16 +454,16 @@ public class ChartSpots extends IcyFrame {
 //		return xyList;
 //	}
 
-	private XYSeriesCollection createXYSeriesCollection(int iseries, List<XYSeriesCollection> xyDataSetList,
-			List<XYSeriesCollection> xyDataSetList2) {
-		XYSeriesCollection xySeriesCollection = xyDataSetList.get(iseries);
+	private XYSeriesCollection createXYSeriesCollection(int iseries, XYSeriesCollection xyDataSetList,
+			XYSeriesCollection xyDataSetList2) {
+		XYSeriesCollection xySeriesCollection = xyDataSetList;
 
 		if (xyDataSetList2 != null) {
-			XYSeriesCollection xySeriesCollection2 = xyDataSetList2.get(iseries);
+			XYSeriesCollection xySeriesCollection2 = xyDataSetList2;
 			for (int j = 0; j < xySeriesCollection2.getSeriesCount(); j++) {
 				XYSeries xySeries = xySeriesCollection2.getSeries(j);
-				System.out.println("iseries=" + iseries + " j=" + j + " key=" + xySeries.getKey() + " description:"
-						+ xySeries.getDescription());
+//				System.out.println("iseries=" + iseries + " j=" + j + " key=" + xySeries.getKey() + " description:"
+//						+ xySeries.getDescription());
 				xySeries.setKey(xySeries.getKey() + "*");
 				xySeriesCollection.addSeries(xySeries);
 			}

@@ -98,10 +98,10 @@
 </section>
 <section name="online"/>
 </section>
-<key name="id" value="151046633"/>
+<key name="id" value="219074667"/>
 <key name="os" value="win64"/>
-<key name="clientCpuNumber" value="20"/>
-<key name="clientTotalMemory" value="34078789632"/>
+<key name="clientCpuNumber" value="16"/>
+<key name="clientTotalMemory" value="67880230912"/>
 <key name="appFolder" value="C:/Users/fred/.m2/repository/org/bioimageanalysis/icy/icy-kernel/2.5.1"/>
 <section name="loader">
 <section name="entry0">
@@ -136,7 +136,7 @@
 </section>
 </section>
 <key name="version" value="2.5.1.0"/>
-<key name="lastUploadDate" value="1734354430615"/>
+<key name="lastUploadDate" value="1734472716328"/>
 <section name="frame">
 <section name="imageLoader">
 <key name="loadtype" value="0"/>
@@ -169,20 +169,20 @@
 </section>
 <section name="frame">
 <section name="main">
-<key name="XE" value="3050"/>
-<key name="YE" value="69"/>
+<key name="XE" value="3546"/>
+<key name="YE" value="18"/>
 <key name="WidthE" value="1683"/>
 <key name="HeightE" value="1099"/>
 <key name="MaximizedE" value="false"/>
 </section>
 <section name="inspector">
-<key name="XC" value="1375"/>
+<key name="XC" value="1675"/>
 <key name="YC" value="0"/>
 <key name="XE" value="600"/>
 <key name="YE" value="140"/>
 <key name="XI" value="600"/>
 <key name="YI" value="140"/>
-<key name="WidthC" value="300"/>
+<key name="WidthC" value="0"/>
 <key name="HeightC" value="937"/>
 <key name="WidthE" value="300"/>
 <key name="HeightE" value="600"/>
@@ -200,7 +200,7 @@
 <key name="YE" value="100"/>
 <key name="XI" value="100"/>
 <key name="YI" value="100"/>
-<key name="WidthC" value="292"/>
+<key name="WidthC" value="-8"/>
 <key name="HeightC" value="847"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="600"/>
@@ -218,7 +218,7 @@
 <key name="YE" value="200"/>
 <key name="XI" value="200"/>
 <key name="YI" value="200"/>
-<key name="WidthC" value="292"/>
+<key name="WidthC" value="-8"/>
 <key name="HeightC" value="847"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="300"/>
