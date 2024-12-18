@@ -3,7 +3,6 @@ package plugins.fmp.multiSPOTS.tools.chart;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Paint;
 import java.awt.Point;
@@ -64,11 +63,15 @@ public class ChartSpots extends IcyFrame {
 		XYLineAndShapeRenderer subPlotRenderer = new XYLineAndShapeRenderer(true, false);
 		int icolor = 0;
 		int maxcolor = 1; // chartColor.length;
-		Stroke stroke = new BasicStroke(0.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f,
-				new float[] { 2.0f, 4.0f }, 0.0f);
+		Stroke stroke = new BasicStroke(0.5f, // width = width of the stroke
+				BasicStroke.CAP_ROUND, // cap = decoration of the ends of the stroke
+				BasicStroke.JOIN_ROUND, // join = decoration applied where paths segments meet
+				1.0f, // miterlimit = limit to trim the miter join (>= 1)
+				new float[] { 2.0f, 4.0f }, // dash = array representing dashing pattern
+				0.0f); // dash phase = offset to start dashing pattern
 		for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++) {
 			if (icolor > maxcolor) {
-				// icolor = icolor + 13; // 0;
+				icolor = icolor + 13; // 0;
 				subPlotRenderer.setSeriesStroke(i, stroke);
 			}
 			icolor = icolor % maxcolor;
@@ -82,6 +85,7 @@ public class ChartSpots extends IcyFrame {
 		String[] description = xySeriesCollection.getSeries(0).getDescription().split(":");
 		NumberAxis xAxis = new NumberAxis(description[0]);
 		final XYPlot subplot = new XYPlot(xySeriesCollection, xAxis, null, subPlotRenderer);
+//		final XYPlot subplot = new XYPlot(xySeriesCollection, null, null, subPlotRenderer);
 		int nflies = Integer.valueOf(description[1]);
 		if (nflies < 1) {
 			subplot.setBackgroundPaint(Color.LIGHT_GRAY);
@@ -152,10 +156,10 @@ public class ChartSpots extends IcyFrame {
 		panelHolder = new JPanel[nCagesAlongX][nCagesAlongY];
 		mainChartPanel.setLayout(new GridLayout(nCagesAlongX, nCagesAlongY));
 
-		for (int m = 0; m < nCagesAlongX; m++) {
-			for (int n = 0; n < nCagesAlongY; n++) {
-				panelHolder[m][n] = new JPanel();
-				mainChartPanel.add(panelHolder[m][n]);
+		for (int n = 0; n < nCagesAlongY; n++) {
+			for (int m = 0; m < nCagesAlongX; m++) {
+				panelHolder[n][m] = new JPanel();
+				mainChartPanel.add(panelHolder[n][m]);
 			}
 		}
 
@@ -195,28 +199,23 @@ public class ChartSpots extends IcyFrame {
 			for (int col = 0; col < nCagesAlongX; col++) {
 				CombinedRangeXYPlot combinedXYPlot = getCombinedRangeXYPlotOfOneCage(cageID, yAxis, chartColor,
 						xlsResultsArray, xlsResultsArray2);
-				JFreeChart chart = new JFreeChart(
-						null, //xlsExportOptions.exportType.toTitle(),  // title
-						null, 									// titleFont
-						combinedXYPlot, 						// plot
-						false); // true);						// create legend
-				
+				JFreeChart chart = new JFreeChart(null, // xlsExportOptions.exportType.toTitle(), // title
+						null, // titleFont
+						combinedXYPlot, // plot
+						false); // true); // create legend
 //				Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
 //				chart.getTitle().setFont(font);
 
-//				JFreeChart chart = new JFreeChart(combinedXYPlot);
-				int width = 200; //800;
-				int height = 100; //300;
-				int minimumDrawWidth = width;
-				int minimumDrawHeight = 100; //300;
-				int maximumDrawWidth = 1200; //800;
-				int maximumDrawHeight = 500;
-				boolean useBuffer = true;
-
-				final ChartPanel panel = new ChartPanel(chart, width, height, minimumDrawWidth, minimumDrawHeight,
-						maximumDrawWidth, maximumDrawHeight, useBuffer, true, true, true, false, true);
-				// boolean properties, boolean save, boolean print, boolean zoom, boolean
-				// tooltips)
+				ChartPanel panel = new ChartPanel(chart, // chart
+						200, 100, // preferred width and height of panel
+						50, 25, // min width and height of panel
+						1200, 600, // max width and height of panel
+						true, // use memory buffer to improve performance
+						true, // chart property editor available via popup menu
+						true, // copy option available via popup menu
+						true, // print option available via popup menu
+						false, // zoom options added to the popup menu
+						true); // tooltips enabled for the chart
 
 				// panel.addChartMouseListener(new ChartMouseListener() {
 				// public void chartMouseClicked(ChartMouseEvent e) {
@@ -231,14 +230,11 @@ public class ChartSpots extends IcyFrame {
 				// });
 
 				panelHolder[col][row].add(panel);
-//				mainChartPanel.add(panel);
 				cageID++;
 			}
 		}
 
 		// -----------------------------------
-//		mainChartPanel.add(panelHolder);
-
 		mainChartFrame.pack();
 		mainChartFrame.setLocation(pt);
 		mainChartFrame.addToDesktopPane();
@@ -301,7 +297,7 @@ public class ChartSpots extends IcyFrame {
 //			true);
 //	mainChartFrame.add(mainChartPanel);
 //}
-	
+
 //	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) {
 //	xyChartList.clear();
 //
@@ -378,7 +374,7 @@ public class ChartSpots extends IcyFrame {
 //	mainChartFrame.addToDesktopPane();
 //	mainChartFrame.setVisible(true);
 //}
-	
+
 //private Spot getClickedSpot(ChartMouseEvent e) {
 //	final MouseEvent trigger = e.getTrigger();
 //	if (trigger.getButton() != MouseEvent.BUTTON1)
@@ -428,7 +424,7 @@ public class ChartSpots extends IcyFrame {
 //	spotFound.spot_Kymograph_T = 2 * spotFound.cageID + foo;
 //	return spotFound;
 //}
-	
+
 //private void selectSpot(Experiment exp, Spot spot) {
 //	Viewer v = exp.seqCamData.seq.getFirstViewer();
 //	if (v != null && spot != null) {
@@ -436,7 +432,7 @@ public class ChartSpots extends IcyFrame {
 //		exp.seqCamData.seq.setFocusedROI(roi);
 //	}
 //}
-	
+
 //private void selectT(Experiment exp, XLSExportOptions xlsExportOptions, Spot spot) {
 //	Viewer v = exp.seqCamData.seq.getFirstViewer();
 //	if (v != null && spot != null && spot.spot_CamData_T > 0) {
@@ -444,7 +440,7 @@ public class ChartSpots extends IcyFrame {
 //		v.setPositionT(ii);
 //	}
 //}
-	
+
 //private void selectKymograph(Experiment exp, Spot spot) {
 //	if (exp.seqSpotKymos != null) {
 //		Viewer v = exp.seqSpotKymos.seq.getFirstViewer();

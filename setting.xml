@@ -78,7 +78,7 @@
 <key name="lastUpdateCheckTime" value="1734508120707"/>
 <key name="sequencePersistence" value="false"/>
 <key name="virtualMode" value="true"/>
-<key name="loaderFolder" value="\\comportement-egce.ideev.universite-paris-saclay.fr\MultiCAFE\2024 Beatrice\essai plaque sandwich choix avec lame\plaque_2024-12-13\sucrose vs caf 10mM"/>
+<key name="loaderFolder" value="C:\Users\fred\Desktop\essai_sandwich\plaque_2024-12-12"/>
 </section>
 <section name="canvas">
 <section name="Canvas2D">
@@ -98,10 +98,10 @@
 </section>
 <section name="online"/>
 </section>
-<key name="id" value="144433065"/>
+<key name="id" value="43084673"/>
 <key name="os" value="win64"/>
-<key name="clientCpuNumber" value="20"/>
-<key name="clientTotalMemory" value="34078789632"/>
+<key name="clientCpuNumber" value="16"/>
+<key name="clientTotalMemory" value="67880230912"/>
 <key name="appFolder" value="C:/Users/fred/.m2/repository/org/bioimageanalysis/icy/icy-kernel/2.5.1"/>
 <section name="loader">
 <section name="entry0">
@@ -169,14 +169,14 @@
 </section>
 <section name="frame">
 <section name="main">
-<key name="XE" value="414"/>
-<key name="YE" value="207"/>
-<key name="WidthE" value="2146"/>
+<key name="XE" value="3580"/>
+<key name="YE" value="45"/>
+<key name="WidthE" value="1766"/>
 <key name="HeightE" value="1088"/>
 <key name="MaximizedE" value="false"/>
 </section>
 <section name="inspector">
-<key name="XC" value="1838"/>
+<key name="XC" value="1458"/>
 <key name="YC" value="0"/>
 <key name="XE" value="600"/>
 <key name="YE" value="140"/>
