@@ -52,15 +52,6 @@ public class ChartSpots extends IcyFrame {
 
 	// ----------------------------------------
 
-//	public void createSpotsChartPanel(MultiSPOTS parent, String title) {
-//		parent0 = parent;
-//		mainChartPanel = new JPanel();
-//		mainChartPanel.setLayout(new BoxLayout(mainChartPanel, BoxLayout.LINE_AXIS));
-//		mainChartFrame = GuiUtil.generateTitleFrame(title, new JPanel(), new Dimension(300, 70), true, true, true,
-//				true);
-//		mainChartFrame.add(mainChartPanel);
-//	}
-
 	public void setLocationRelativeToRectangle(Rectangle rectv, Point deltapt) {
 		pt = new Point(rectv.x + deltapt.x, rectv.y + deltapt.y);
 	}
@@ -164,13 +155,12 @@ public class ChartSpots extends IcyFrame {
 		for (int m = 0; m < nCagesAlongX; m++) {
 			for (int n = 0; n < nCagesAlongY; n++) {
 				panelHolder[m][n] = new JPanel();
-				add(panelHolder[m][n]);
+				mainChartPanel.add(panelHolder[m][n]);
 			}
 		}
 
 //		Then later, you can add directly to one of the JPanel objects:
 //		panelHolder[2][3].add(new JButton("Foo"));
-
 	}
 
 	public void displayData2(Experiment exp, XLSExportOptions xlsExportOptions) {
@@ -205,15 +195,21 @@ public class ChartSpots extends IcyFrame {
 			for (int col = 0; col < nCagesAlongX; col++) {
 				CombinedRangeXYPlot combinedXYPlot = getCombinedRangeXYPlotOfOneCage(cageID, yAxis, chartColor,
 						xlsResultsArray, xlsResultsArray2);
-				JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, false); // true);
-				Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
-				chart.getTitle().setFont(font);
+				JFreeChart chart = new JFreeChart(
+						null, //xlsExportOptions.exportType.toTitle(),  // title
+						null, 									// titleFont
+						combinedXYPlot, 						// plot
+						false); // true);						// create legend
+				
+//				Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
+//				chart.getTitle().setFont(font);
 
-				int width = 800;
-				int height = 300;
+//				JFreeChart chart = new JFreeChart(combinedXYPlot);
+				int width = 200; //800;
+				int height = 100; //300;
 				int minimumDrawWidth = width;
-				int minimumDrawHeight = 300;
-				int maximumDrawWidth = 800;
+				int minimumDrawHeight = 100; //300;
+				int maximumDrawWidth = 1200; //800;
 				int maximumDrawHeight = 500;
 				boolean useBuffer = true;
 
@@ -235,7 +231,7 @@ public class ChartSpots extends IcyFrame {
 				// });
 
 				panelHolder[col][row].add(panel);
-				mainChartPanel.add(panel);
+//				mainChartPanel.add(panel);
 				cageID++;
 			}
 		}
@@ -290,8 +286,6 @@ public class ChartSpots extends IcyFrame {
 			XYSeriesCollection xySeriesCollection2 = xyDataSetList2;
 			for (int j = 0; j < xySeriesCollection2.getSeriesCount(); j++) {
 				XYSeries xySeries = xySeriesCollection2.getSeries(j);
-//				System.out.println("iseries=" + iseries + " j=" + j + " key=" + xySeries.getKey() + " description:"
-//						+ xySeries.getDescription());
 				xySeries.setKey(xySeries.getKey() + "*");
 				xySeriesCollection.addSeries(xySeries);
 			}
@@ -299,108 +293,187 @@ public class ChartSpots extends IcyFrame {
 		return xySeriesCollection;
 	}
 
-	/*
-	 * // private List<XYSeriesCollection> getDataArrays(Experiment exp,
-	 * XLSExportOptions xlsExportOptions) { // XLSResultsArray xlsResultsArray =
-	 * getDataAsResultsArray(exp, xlsExportOptions);
-	 * 
-	 * // XYSeriesCollection xySeriesCollection = null; // int oldcage = -1; // //
-	 * List<XYSeriesCollection> xyList = new ArrayList<XYSeriesCollection>(); // for
-	 * (int iRow = 0; iRow < xlsResultsArray.size(); iRow++) { // XLSResults
-	 * xlsResults = xlsResultsArray.getRow(iRow); // if (oldcage !=
-	 * xlsResults.cageID) { // xySeriesCollection = new XYSeriesCollection(); //
-	 * oldcage = xlsResults.cageID; // xyList.add(xySeriesCollection); // } //
-	 * XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name);
-	 * //.substring(4)); // seriesXY.setDescription("ID:" + xlsResults.cageID +
-	 * ":Pos:" + xlsResults.cagePosition + ":nflies:" // + xlsResults.nflies); //
-	 * xySeriesCollection.addSeries(seriesXY); // updateGlobalMaxMin(); // } //
-	 * return xyList; // } /// // public void displayData(Experiment exp,
-	 * XLSExportOptions xlsExportOptions) { // xyChartList.clear(); // // ymax = 0;
-	 * // ymin = 0; // flagMaxMinSet = false; // List<XYSeriesCollection>
-	 * xyDataSetList2 = null; // List<XYSeriesCollection> xyDataSetList =
-	 * getDataArrays(exp, xlsExportOptions); // if (xlsExportOptions.exportType ==
-	 * EnumXLSExportType.AREA_SUMCLEAN) { // xlsExportOptions.exportType =
-	 * EnumXLSExportType.AREA_SUM; // xyDataSetList2 = getDataArrays(exp,
-	 * xlsExportOptions); // xlsExportOptions.exportType =
-	 * EnumXLSExportType.AREA_SUMCLEAN; // } // // NumberAxis yAxis = new
-	 * NumberAxis(xlsExportOptions.exportType.toUnit()); // if
-	 * (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) { //
-	 * yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel()); //
-	 * yAxis.setAutoRange(false); // yAxis.setRange(-0.2, 1.2); // } else { //
-	 * yAxis.setAutoRange(true); // yAxis.setAutoRangeIncludesZero(false); // } //
-	 * // final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
-	 * // Paint[] chartColor = ChartColor.createDefaultPaintArray(); // // int
-	 * firstSeries = 0; // int lastSeries = xyDataSetList.size(); // if
-	 * (xlsExportOptions.seriesIndexFirst >= 0) { // firstSeries =
-	 * xlsExportOptions.seriesIndexFirst; // lastSeries =
-	 * xlsExportOptions.seriesIndexLast; // } // // for (int iseries = firstSeries;
-	 * iseries < lastSeries; iseries++) { // XYSeriesCollection xySeriesCollection =
-	 * createXYSeries(iseries, xyDataSetList, xyDataSetList2); // final XYPlot
-	 * subplot = buildSubPlot(xySeriesCollection, chartColor); //
-	 * combinedXYPlot.add(subplot); // } // // JFreeChart chart = new
-	 * JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot,
-	 * false); // true); // Font font =
-	 * chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.); //
-	 * chart.getTitle().setFont(font); // // int width = 800; // int height = 300;
-	 * // int minimumDrawWidth = width; // int minimumDrawHeight = 300; // int
-	 * maximumDrawWidth = 800; // int maximumDrawHeight = 500; // boolean useBuffer
-	 * = true; // // final ChartPanel panel = new ChartPanel(chart, width, height,
-	 * minimumDrawWidth, minimumDrawHeight, // maximumDrawWidth, maximumDrawHeight,
-	 * useBuffer, true, true, true, false, true); // boolean properties, // //
-	 * boolean save, boolean // // print, boolean zoom, // // boolean tooltips) //
-	 * // panel.addChartMouseListener(new ChartMouseListener() { // public void
-	 * chartMouseClicked(ChartMouseEvent e) { // Spot clikedSpot =
-	 * getClickedSpot(e); // selectSpot(exp, clikedSpot); // selectT(exp,
-	 * xlsExportOptions, clikedSpot); // selectKymograph(exp, clikedSpot); // } //
-	 * // public void chartMouseMoved(ChartMouseEvent e) { // } // }); // //
-	 * mainChartPanel.add(panel); // mainChartFrame.pack(); //
-	 * mainChartFrame.setLocation(pt); // mainChartFrame.addToDesktopPane(); //
-	 * mainChartFrame.setVisible(true); // }
-	 * 
-	 * // private Spot getClickedSpot(ChartMouseEvent e) { // final MouseEvent
-	 * trigger = e.getTrigger(); // if (trigger.getButton() != MouseEvent.BUTTON1)
-	 * // return null; // // JFreeChart chart = e.getChart(); // MouseEvent
-	 * mouseEvent = e.getTrigger(); // ChartPanel panel = (ChartPanel)
-	 * mainChartPanel.getComponent(0); // PlotRenderingInfo plotInfo =
-	 * panel.getChartRenderingInfo().getPlotInfo(); // Point2D pointClicked =
-	 * panel.translateScreenToJava2D(mouseEvent.getPoint()); // Experiment exp =
-	 * (Experiment) parent0.expListCombo.getSelectedItem(); // // // get chart //
-	 * int subplotindex = plotInfo.getSubplotIndex(pointClicked); //
-	 * CombinedRangeXYPlot combinedXYPlot = (CombinedRangeXYPlot) chart.getPlot();
-	 * // @SuppressWarnings("unchecked") // List<XYPlot> subplots =
-	 * combinedXYPlot.getSubplots(); // // // get item in the chart // Spot
-	 * spotFound = null; // String description = null; // ChartEntity chartEntity =
-	 * e.getEntity(); // if (chartEntity != null && chartEntity instanceof
-	 * XYItemEntity) { // XYItemEntity xyItemEntity = (XYItemEntity) chartEntity; //
-	 * int isel = xyItemEntity.getSeriesIndex(); // XYDataset xyDataset =
-	 * xyItemEntity.getDataset(); // description = (String)
-	 * xyDataset.getSeriesKey(isel); // // spotFound =
-	 * exp.spotsArray.getSpotContainingName(description.substring(0, 5)); //
-	 * spotFound.spot_CamData_T = xyItemEntity.getItem(); // } else if (subplotindex
-	 * >= 0) { // XYDataset xyDataset = subplots.get(subplotindex).getDataset(0); //
-	 * description = (String) xyDataset.getSeriesKey(0); // // spotFound =
-	 * exp.spotsArray.getSpotContainingName(description.substring(0, 5)); // } else
-	 * { // System.out.println("Graph clicked but source not found"); // return
-	 * null; // } // String lastN = description.substring(4, 5); // int foo; // try
-	 * { // foo = Integer.parseInt(lastN); // } catch (NumberFormatException e1) {
-	 * // foo = 0; // } // spotFound.spot_Kymograph_T = 2 * spotFound.cageID + foo;
-	 * // return spotFound; // }
-	 * 
-	 * // private void selectSpot(Experiment exp, Spot spot) { // Viewer v =
-	 * exp.seqCamData.seq.getFirstViewer(); // if (v != null && spot != null) { //
-	 * ROI2D roi = spot.getRoi_in(); // exp.seqCamData.seq.setFocusedROI(roi); // }
-	 * // }
-	 * 
-	 * // private void selectT(Experiment exp, XLSExportOptions xlsExportOptions,
-	 * Spot spot) { // Viewer v = exp.seqCamData.seq.getFirstViewer(); // if (v !=
-	 * null && spot != null && spot.spot_CamData_T > 0) { // int ii = (int)
-	 * (spot.spot_CamData_T * xlsExportOptions.buildExcelStepMs /
-	 * exp.seqCamData.binDuration_ms); // v.setPositionT(ii); // } // }
-	 * 
-	 * // private void selectKymograph(Experiment exp, Spot spot) { // if
-	 * (exp.seqSpotKymos != null) { // Viewer v =
-	 * exp.seqSpotKymos.seq.getFirstViewer(); // if (v != null && spot != null) { //
-	 * v.setPositionT(spot.spot_Kymograph_T); // } // } // }
-	 */
+//	public void createSpotsChartPanel(MultiSPOTS parent, String title) {
+//	parent0 = parent;
+//	mainChartPanel = new JPanel();
+//	mainChartPanel.setLayout(new BoxLayout(mainChartPanel, BoxLayout.LINE_AXIS));
+//	mainChartFrame = GuiUtil.generateTitleFrame(title, new JPanel(), new Dimension(300, 70), true, true, true,
+//			true);
+//	mainChartFrame.add(mainChartPanel);
+//}
+	
+//	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) {
+//	xyChartList.clear();
+//
+//	ymax = 0;
+//	ymin = 0;
+//	flagMaxMinSet = false;
+//	List<XYSeriesCollection> xyDataSetList2 = null;
+//	List<XYSeriesCollection> xyDataSetList = getDataArrays(exp, xlsExportOptions);
+//	if (xlsExportOptions.exportType == EnumXLSExportType.AREA_SUMCLEAN) {
+//		xlsExportOptions.exportType = EnumXLSExportType.AREA_SUM;
+//		xyDataSetList2 = getDataArrays(exp, xlsExportOptions);
+//		xlsExportOptions.exportType = EnumXLSExportType.AREA_SUMCLEAN;
+//	}
+//
+//	NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
+//	if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
+//		yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
+//		yAxis.setAutoRange(false);
+//		yAxis.setRange(-0.2, 1.2);
+//	} else {
+//		yAxis.setAutoRange(true);
+//		yAxis.setAutoRangeIncludesZero(false);
+//	}
+//
+//	final CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
+//	Paint[] chartColor = ChartColor.createDefaultPaintArray();
+//
+//	int firstSeries = 0;
+//	int lastSeries = xyDataSetList.size();
+//	if (xlsExportOptions.seriesIndexFirst >= 0) {
+//		firstSeries = xlsExportOptions.seriesIndexFirst;
+//		lastSeries = xlsExportOptions.seriesIndexLast;
+//	}
+//
+//	for (int iseries = firstSeries; iseries < lastSeries; iseries++) {
+//		XYSeriesCollection xySeriesCollection = createXYSeries(iseries, xyDataSetList, xyDataSetList2);
+//		final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
+//		combinedXYPlot.add(subplot);
+//	}
+//
+//	JFreeChart chart = new JFreeChart(xlsExportOptions.exportType.toTitle(), null, combinedXYPlot, false); // true);
+//	Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
+//	chart.getTitle().setFont(font);
+//
+//	int width = 800;
+//	int height = 300;
+//	int minimumDrawWidth = width;
+//	int minimumDrawHeight = 300;
+//	int maximumDrawWidth = 800;
+//	int maximumDrawHeight = 500;
+//	boolean useBuffer = true;
+//
+//	final ChartPanel panel = new ChartPanel(chart, width, height, minimumDrawWidth, minimumDrawHeight,
+//			maximumDrawWidth, maximumDrawHeight, useBuffer, true, true, true, false, true); // boolean properties,
+//																							// boolean save, boolean
+//																							// print, boolean zoom,
+//																							// boolean tooltips)
+//
+//	panel.addChartMouseListener(new ChartMouseListener() {
+//		public void chartMouseClicked(ChartMouseEvent e) {
+//			Spot clikedSpot = getClickedSpot(e);
+//			selectSpot(exp, clikedSpot);
+//			selectT(exp, xlsExportOptions, clikedSpot);
+//			selectKymograph(exp, clikedSpot);
+//		}
+//
+//		public void chartMouseMoved(ChartMouseEvent e) {
+//		}
+//	});
+//
+//	mainChartPanel.add(panel);
+//	mainChartFrame.pack();
+//	mainChartFrame.setLocation(pt);
+//	mainChartFrame.addToDesktopPane();
+//	mainChartFrame.setVisible(true);
+//}
+	
+//private Spot getClickedSpot(ChartMouseEvent e) {
+//	final MouseEvent trigger = e.getTrigger();
+//	if (trigger.getButton() != MouseEvent.BUTTON1)
+//		return null;
+//
+//	JFreeChart chart = e.getChart();
+//	MouseEvent mouseEvent = e.getTrigger();
+//	ChartPanel panel = (ChartPanel) mainChartPanel.getComponent(0);
+//	PlotRenderingInfo plotInfo = panel.getChartRenderingInfo().getPlotInfo();
+//	Point2D pointClicked = panel.translateScreenToJava2D(mouseEvent.getPoint());
+//	Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+//
+//	// get chart
+//	int subplotindex = plotInfo.getSubplotIndex(pointClicked);
+//	CombinedRangeXYPlot combinedXYPlot = (CombinedRangeXYPlot) chart.getPlot();
+//	@SuppressWarnings("unchecked")
+//	List<XYPlot> subplots = combinedXYPlot.getSubplots();
+//
+//	// get item in the chart
+//	Spot spotFound = null;
+//	String description = null;
+//	ChartEntity chartEntity = e.getEntity();
+//	if (chartEntity != null && chartEntity instanceof XYItemEntity) {
+//		XYItemEntity xyItemEntity = (XYItemEntity) chartEntity;
+//		int isel = xyItemEntity.getSeriesIndex();
+//		XYDataset xyDataset = xyItemEntity.getDataset();
+//		description = (String) xyDataset.getSeriesKey(isel);
+//
+//		spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
+//		spotFound.spot_CamData_T = xyItemEntity.getItem();
+//	} else if (subplotindex >= 0) {
+//		XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
+//		description = (String) xyDataset.getSeriesKey(0);
+//
+//		spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
+//	} else {
+//		System.out.println("Graph clicked but source not found");
+//		return null;
+//	}
+//	String lastN = description.substring(4, 5);
+//	int foo;
+//	try {
+//		foo = Integer.parseInt(lastN);
+//	} catch (NumberFormatException e1) {
+//		foo = 0;
+//	}
+//	spotFound.spot_Kymograph_T = 2 * spotFound.cageID + foo;
+//	return spotFound;
+//}
+	
+//private void selectSpot(Experiment exp, Spot spot) {
+//	Viewer v = exp.seqCamData.seq.getFirstViewer();
+//	if (v != null && spot != null) {
+//		ROI2D roi = spot.getRoi_in();
+//		exp.seqCamData.seq.setFocusedROI(roi);
+//	}
+//}
+	
+//private void selectT(Experiment exp, XLSExportOptions xlsExportOptions, Spot spot) {
+//	Viewer v = exp.seqCamData.seq.getFirstViewer();
+//	if (v != null && spot != null && spot.spot_CamData_T > 0) {
+//		int ii = (int) (spot.spot_CamData_T * xlsExportOptions.buildExcelStepMs / exp.seqCamData.binDuration_ms);
+//		v.setPositionT(ii);
+//	}
+//}
+	
+//private void selectKymograph(Experiment exp, Spot spot) {
+//	if (exp.seqSpotKymos != null) {
+//		Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
+//		if (v != null && spot != null) {
+//			v.setPositionT(spot.spot_Kymograph_T);
+//		}
+//	}
+//}
+
+//	private List<XYSeriesCollection> getDataArrays(Experiment exp, XLSExportOptions xlsExportOptions) {
+//	XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, xlsExportOptions);
+//	XYSeriesCollection xySeriesCollection = null;
+//	int oldcage = -1;
+//
+//	List<XYSeriesCollection> xyList = new ArrayList<XYSeriesCollection>();
+//	for (int iRow = 0; iRow < xlsResultsArray.size(); iRow++) {
+//		XLSResults xlsResults = xlsResultsArray.getRow(iRow);
+//		if (oldcage != xlsResults.cageID) {
+//			xySeriesCollection = new XYSeriesCollection();
+//			oldcage = xlsResults.cageID;
+//			xyList.add(xySeriesCollection);
+//		}
+//		XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name); //.substring(4));
+//		seriesXY.setDescription("ID:" + xlsResults.cageID + ":Pos:" + xlsResults.cagePosition + ":nflies:"
+//				+ xlsResults.nflies);
+//		xySeriesCollection.addSeries(seriesXY);
+//		updateGlobalMaxMin();
+//	}
+//	return xyList;
+//}
 
 }
