@@ -153,13 +153,13 @@ public class ChartSpots extends IcyFrame {
 
 		nCagesAlongX = exp.spotsArray.nColumnsPerPlate / exp.spotsArray.nColumnsPerCage;
 		nCagesAlongY = exp.spotsArray.nRowsPerPlate / exp.spotsArray.nRowsPerCage;
-		panelHolder = new JPanel[nCagesAlongX][nCagesAlongY];
-		mainChartPanel.setLayout(new GridLayout(nCagesAlongX, nCagesAlongY));
+		panelHolder = new JPanel[nCagesAlongY][nCagesAlongX];
+		mainChartPanel.setLayout(new GridLayout(nCagesAlongY, nCagesAlongX));
 
-		for (int n = 0; n < nCagesAlongY; n++) {
-			for (int m = 0; m < nCagesAlongX; m++) {
-				panelHolder[n][m] = new JPanel();
-				mainChartPanel.add(panelHolder[n][m]);
+		for (int iy = 0; iy < nCagesAlongY; iy++) {
+			for (int ix = 0; ix < nCagesAlongX; ix++) {
+				panelHolder[iy][ix] = new JPanel();
+				mainChartPanel.add(panelHolder[iy][ix]);
 			}
 		}
 
@@ -229,7 +229,7 @@ public class ChartSpots extends IcyFrame {
 				// }
 				// });
 
-				panelHolder[col][row].add(panel);
+				panelHolder[row][col].add(panel);
 				cageID++;
 			}
 		}
