@@ -235,12 +235,13 @@ public class ChartSpots extends IcyFrame {
 				// });
 
 				panelHolder[col][row].add(panel);
+				mainChartPanel.add(panel);
 				cageID++;
 			}
 		}
 
 		// -----------------------------------
-		mainChartPanel.add(panelHolder);
+//		mainChartPanel.add(panelHolder);
 
 		mainChartFrame.pack();
 		mainChartFrame.setLocation(pt);
