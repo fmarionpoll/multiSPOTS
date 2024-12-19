@@ -126,8 +126,8 @@ public class ChartSpots extends IcyFrame {
 				// create legend
 //				Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
 //				chart.getTitle().setFont(font);
-				chart.setID("row:"+row+":col:"+col+":cageID:"+cageID);
-				
+				chart.setID("row:" + row + ":col:" + col + ":cageID:" + cageID);
+
 				ChartPanel panel = new ChartPanel(chart, // chart
 						200, 100, // preferred width and height of panel
 						50, 25, // min width and height of panel
@@ -188,7 +188,7 @@ public class ChartSpots extends IcyFrame {
 			int icolor = Integer.valueOf(description[3]);
 			String key = (String) xySeriesCollection.getSeriesKey(i);
 			// get description to get
-			if (key.contains("*")) 
+			if (key.contains("*"))
 				subPlotRenderer.setSeriesStroke(i, stroke);
 			icolor = icolor % maxcolor;
 			subPlotRenderer.setSeriesPaint(i, chartColor[icolor]);
@@ -306,13 +306,11 @@ public class ChartSpots extends IcyFrame {
 
 		JFreeChart chart = e.getChart();
 		MouseEvent mouseEvent = e.getTrigger();
-		int mouseX = mouseEvent.getX();
-		int mouseY = mouseEvent.getY();
 		String[] chartID = chart.getID().split(":");
 		int row = Integer.valueOf(chartID[1]);
 		int col = Integer.valueOf(chartID[3]);
-		
-		ChartPanel panel = panelHolder[row][col] ;
+
+		ChartPanel panel = panelHolder[row][col];
 		PlotRenderingInfo plotInfo = panel.getChartRenderingInfo().getPlotInfo();
 		Point2D pointClicked = panel.translateScreenToJava2D(mouseEvent.getPoint());
 
@@ -326,24 +324,27 @@ public class ChartSpots extends IcyFrame {
 		Spot spotFound = null;
 		String description = null;
 		ChartEntity chartEntity = e.getEntity();
+
 		if (chartEntity != null && chartEntity instanceof XYItemEntity) {
 			XYItemEntity xyItemEntity = (XYItemEntity) chartEntity;
 			int isel = xyItemEntity.getSeriesIndex();
 			XYDataset xyDataset = xyItemEntity.getDataset();
-			description = (String) xyDataset.getSeriesKey(isel);
+			description = (String) xyDataset.getSeriesKey(isel); // TODO check
 
 			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 			spotFound.spot_CamData_T = xyItemEntity.getItem();
+
 		} else if (subplotindex >= 0) {
 			XYDataset xyDataset = subplots.get(subplotindex).getDataset(0);
-			description = (String) xyDataset.getSeriesKey(0);
-
+			description = (String) xyDataset.getSeriesKey(0); // TODO check
 			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
+
 		} else {
 			System.out.println("Graph clicked but source not found");
 			return null;
 		}
-		String lastN = description.substring(4, 5);
+
+		String lastN = description.substring(4, 5); // TODO check??
 		int foo;
 		try {
 			foo = Integer.parseInt(lastN);
