@@ -59,7 +59,7 @@ public class ChartSpots extends IcyFrame {
 	int nCagesAlongX = 1;
 	int nCagesAlongY = 1;
 
-	JPanel[][] panelHolder = null;
+	ChartPanel[][] panelHolder = null;
 	Experiment exp = null;
 
 	// ----------------------------------------
@@ -72,15 +72,15 @@ public class ChartSpots extends IcyFrame {
 
 		nCagesAlongX = exp.spotsArray.nColumnsPerPlate / exp.spotsArray.nColumnsPerCage;
 		nCagesAlongY = exp.spotsArray.nRowsPerPlate / exp.spotsArray.nRowsPerCage;
-		panelHolder = new JPanel[nCagesAlongY][nCagesAlongX];
+		panelHolder = new ChartPanel[nCagesAlongY][nCagesAlongX];
 		mainChartPanel.setLayout(new GridLayout(nCagesAlongY, nCagesAlongX));
 
-		for (int iy = 0; iy < nCagesAlongY; iy++) {
-			for (int ix = 0; ix < nCagesAlongX; ix++) {
-				panelHolder[iy][ix] = new JPanel();
-				mainChartPanel.add(panelHolder[iy][ix]);
-			}
-		}
+//		for (int iy = 0; iy < nCagesAlongY; iy++) {
+//			for (int ix = 0; ix < nCagesAlongX; ix++) {
+//				panelHolder[iy][ix] = new ChartPanel();
+//				mainChartPanel.add(panelHolder[iy][ix]);
+//			}
+//		}
 	}
 
 	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) {
@@ -126,7 +126,8 @@ public class ChartSpots extends IcyFrame {
 				// create legend
 //				Font font = chart.getTitle().getFont().deriveFont(Font.BOLD, (float) 14.);
 //				chart.getTitle().setFont(font);
-
+				chart.setID("row:"+row+":col:"+col+":cageID:"+cageID);
+				
 				ChartPanel panel = new ChartPanel(chart, // chart
 						200, 100, // preferred width and height of panel
 						50, 25, // min width and height of panel
@@ -150,7 +151,8 @@ public class ChartSpots extends IcyFrame {
 					}
 				});
 
-				panelHolder[row][col].add(panel);
+				panelHolder[row][col] = panel;
+				mainChartPanel.add(panel);
 				cageID++;
 			}
 		}
@@ -186,10 +188,8 @@ public class ChartSpots extends IcyFrame {
 			int icolor = Integer.valueOf(description[3]);
 			String key = (String) xySeriesCollection.getSeriesKey(i);
 			// get description to get
-			if (key.contains("*")) {
-				// icolor = icolor + 13; // 0;
+			if (key.contains("*")) 
 				subPlotRenderer.setSeriesStroke(i, stroke);
-			}
 			icolor = icolor % maxcolor;
 			subPlotRenderer.setSeriesPaint(i, chartColor[icolor]);
 		}
@@ -308,8 +308,11 @@ public class ChartSpots extends IcyFrame {
 		MouseEvent mouseEvent = e.getTrigger();
 		int mouseX = mouseEvent.getX();
 		int mouseY = mouseEvent.getY();
-
-//		ChartPanel panel = (ChartPanel) mainChartPanel.getComponent(0); // TODO this is wrong
+		String[] chartID = chart.getID().split(":");
+		int row = Integer.valueOf(chartID[1]);
+		int col = Integer.valueOf(chartID[3]);
+		
+		ChartPanel panel = panelHolder[row][col] ;
 		PlotRenderingInfo plotInfo = panel.getChartRenderingInfo().getPlotInfo();
 		Point2D pointClicked = panel.translateScreenToJava2D(mouseEvent.getPoint());
 
