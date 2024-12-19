@@ -61,17 +61,22 @@ public class ChartSpots extends IcyFrame {
 
 	private XYLineAndShapeRenderer getSubPlotRenderer(XYSeriesCollection xySeriesCollection, Paint[] chartColor) {
 		XYLineAndShapeRenderer subPlotRenderer = new XYLineAndShapeRenderer(true, false);
-		int icolor = 0;
-		int maxcolor = 1; // chartColor.length;
+
+		int maxcolor = chartColor.length;
 		Stroke stroke = new BasicStroke(0.5f, // width = width of the stroke
 				BasicStroke.CAP_ROUND, // cap = decoration of the ends of the stroke
 				BasicStroke.JOIN_ROUND, // join = decoration applied where paths segments meet
 				1.0f, // miterlimit = limit to trim the miter join (>= 1)
 				new float[] { 2.0f, 4.0f }, // dash = array representing dashing pattern
 				0.0f); // dash phase = offset to start dashing pattern
-		for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++, icolor++) {
-			if (icolor > maxcolor) {
-				icolor = icolor + 13; // 0;
+
+		for (int i = 0; i < xySeriesCollection.getSeriesCount(); i++) {
+			String[] description = xySeriesCollection.getSeries(i).getDescription().split(":");
+			int icolor = Integer.valueOf(description[3]);
+			String key = (String) xySeriesCollection.getSeriesKey(i);
+			// get description to get
+			if (key.contains("*")) {
+				// icolor = icolor + 13; // 0;
 				subPlotRenderer.setSeriesStroke(i, stroke);
 			}
 			icolor = icolor % maxcolor;
@@ -81,20 +86,21 @@ public class ChartSpots extends IcyFrame {
 	}
 
 	private XYPlot buildSubPlot(XYSeriesCollection xySeriesCollection, Paint[] chartColor) {
-		XYLineAndShapeRenderer subPlotRenderer = getSubPlotRenderer(xySeriesCollection, chartColor);
 		String[] description = xySeriesCollection.getSeries(0).getDescription().split(":");
-		NumberAxis xAxis = new NumberAxis(description[0]);
+		XYLineAndShapeRenderer subPlotRenderer = getSubPlotRenderer(xySeriesCollection, chartColor);
+
+		NumberAxis xAxis = new NumberAxis(); // description[1]);
+
 		final XYPlot subplot = new XYPlot(xySeriesCollection, xAxis, null, subPlotRenderer);
-//		final XYPlot subplot = new XYPlot(xySeriesCollection, null, null, subPlotRenderer);
-		int nflies = Integer.valueOf(description[1]);
-		if (nflies < 1) {
-			subplot.setBackgroundPaint(Color.LIGHT_GRAY);
-			subplot.setDomainGridlinePaint(Color.WHITE);
-			subplot.setRangeGridlinePaint(Color.WHITE);
-		} else {
+		int nflies = Integer.valueOf(description[5]);
+		if (nflies > 0) {
 			subplot.setBackgroundPaint(Color.WHITE);
 			subplot.setDomainGridlinePaint(Color.GRAY);
 			subplot.setRangeGridlinePaint(Color.GRAY);
+		} else {
+			subplot.setBackgroundPaint(Color.LIGHT_GRAY);
+			subplot.setDomainGridlinePaint(Color.WHITE);
+			subplot.setRangeGridlinePaint(Color.WHITE);
 		}
 		return subplot;
 	}
@@ -162,9 +168,6 @@ public class ChartSpots extends IcyFrame {
 				mainChartPanel.add(panelHolder[iy][ix]);
 			}
 		}
-
-//		Then later, you can add directly to one of the JPanel objects:
-//		panelHolder[2][3].add(new JButton("Foo"));
 	}
 
 	public void displayData2(Experiment exp, XLSExportOptions xlsExportOptions) {
@@ -173,12 +176,13 @@ public class ChartSpots extends IcyFrame {
 		ymin = 0;
 		flagMaxMinSet = false;
 
-		NumberAxis yAxis = new NumberAxis(xlsExportOptions.exportType.toUnit());
+		NumberAxis yAxis = new NumberAxis(); // xlsExportOptions.exportType.toUnit());
 		if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
-			yAxis.setLabel("ratio (t-t0)/t0 of " + yAxis.getLabel());
+			yAxis.setLabel("ratio"); // (t-t0)/t0 of " + yAxis.getLabel());
 			yAxis.setAutoRange(false);
 			yAxis.setRange(-0.2, 1.2);
 		} else {
+			yAxis.setLabel("grey");
 			yAxis.setAutoRange(true);
 			yAxis.setAutoRangeIncludesZero(false);
 		}
@@ -197,8 +201,11 @@ public class ChartSpots extends IcyFrame {
 		int cageID = 0;
 		for (int row = 0; row < nCagesAlongY; row++) {
 			for (int col = 0; col < nCagesAlongX; col++) {
-				CombinedRangeXYPlot combinedXYPlot = getCombinedRangeXYPlotOfOneCage(cageID, yAxis, chartColor,
-						xlsResultsArray, xlsResultsArray2);
+				XYPlot subplot = getXYPlotOfOneCage(cageID, yAxis, chartColor, xlsResultsArray, xlsResultsArray2);
+
+				CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
+				combinedXYPlot.add(subplot);
+
 				JFreeChart chart = new JFreeChart(null, // xlsExportOptions.exportType.toTitle(), // title
 						null, // titleFont
 						combinedXYPlot, // plot
@@ -241,22 +248,18 @@ public class ChartSpots extends IcyFrame {
 		mainChartFrame.setVisible(true);
 	}
 
-	private CombinedRangeXYPlot getCombinedRangeXYPlotOfOneCage(int cageID, NumberAxis yAxis, Paint[] chartColor,
-			XLSResultsArray xlsResultsArray, XLSResultsArray xlsResultsArray2) {
-		CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
-		XYSeriesCollection xyDataSetList = getDataArraysOfOneCage(xlsResultsArray, cageID);
-		XYSeriesCollection xyDataSetList2 = null;
+	private XYPlot getXYPlotOfOneCage(int cageID, NumberAxis yAxis, Paint[] chartColor, XLSResultsArray xlsResultsArray,
+			XLSResultsArray xlsResultsArray2) {
+
+		XYSeriesCollection xyDataSetList = getDataArraysOfOneCage(xlsResultsArray, cageID, "");
 		if (xlsResultsArray2 != null)
-			xyDataSetList2 = getDataArraysOfOneCage(xlsResultsArray2, cageID);
+			addXYSeriesCollection(xyDataSetList, getDataArraysOfOneCage(xlsResultsArray2, cageID, "*"));
 
-		XYSeriesCollection xySeriesCollection = createXYSeriesCollection(0, xyDataSetList, xyDataSetList2);
-		final XYPlot subplot = buildSubPlot(xySeriesCollection, chartColor);
-		combinedXYPlot.add(subplot);
-
-		return combinedXYPlot;
+		final XYPlot subplot = buildSubPlot(xyDataSetList, chartColor);
+		return subplot;
 	}
 
-	private XYSeriesCollection getDataArraysOfOneCage(XLSResultsArray xlsResultsArray, int cageID) {
+	private XYSeriesCollection getDataArraysOfOneCage(XLSResultsArray xlsResultsArray, int cageID, String token) {
 		XYSeriesCollection xySeriesCollection = null;
 		for (int i = 0; i < xlsResultsArray.size(); i++) {
 			XLSResults xlsResults = xlsResultsArray.getRow(i);
@@ -265,7 +268,7 @@ public class ChartSpots extends IcyFrame {
 			if (xySeriesCollection == null) {
 				xySeriesCollection = new XYSeriesCollection();
 			}
-			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name); // .substring(4));
+			XYSeries seriesXY = getXYSeries(xlsResults, xlsResults.name + token);
 			seriesXY.setDescription(
 					"ID:" + xlsResults.cageID + ":Pos:" + xlsResults.cagePosition + ":nflies:" + xlsResults.nflies);
 			xySeriesCollection.addSeries(seriesXY);
@@ -274,19 +277,13 @@ public class ChartSpots extends IcyFrame {
 		return xySeriesCollection;
 	}
 
-	private XYSeriesCollection createXYSeriesCollection(int iseries, XYSeriesCollection xyDataSetList,
-			XYSeriesCollection xyDataSetList2) {
-		XYSeriesCollection xySeriesCollection = xyDataSetList;
+	private void addXYSeriesCollection(XYSeriesCollection destination, XYSeriesCollection source) {
 
-		if (xyDataSetList2 != null) {
-			XYSeriesCollection xySeriesCollection2 = xyDataSetList2;
-			for (int j = 0; j < xySeriesCollection2.getSeriesCount(); j++) {
-				XYSeries xySeries = xySeriesCollection2.getSeries(j);
-				xySeries.setKey(xySeries.getKey() + "*");
-				xySeriesCollection.addSeries(xySeries);
-			}
+		for (int j = 0; j < source.getSeriesCount(); j++) {
+			XYSeries xySeries = source.getSeries(j);
+			destination.addSeries(xySeries);
 		}
-		return xySeriesCollection;
+
 	}
 
 //	public void createSpotsChartPanel(MultiSPOTS parent, String title) {
