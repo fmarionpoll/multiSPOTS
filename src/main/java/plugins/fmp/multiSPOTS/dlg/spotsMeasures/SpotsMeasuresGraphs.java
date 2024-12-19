@@ -169,7 +169,7 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		}
 
 //		iChart.displayData(exp, xlsExportOptions);
-		iChart.displayData2(exp, xlsExportOptions);
+		iChart.displayData(exp, xlsExportOptions);
 		iChart.mainChartFrame.toFront();
 		iChart.mainChartFrame.requestFocus();
 		return iChart;
