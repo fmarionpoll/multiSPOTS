@@ -149,6 +149,20 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer> {
 		return flag;
 	}
 
+	protected void getTimeLimitsOfSequence(Experiment exp) {
+		exp.getFileIntervalsFromSeqCamData();
+		exp.seqCamData.binDuration_ms = exp.seqCamData.binImage_ms;
+		if (options.isFrameFixed) {
+			exp.seqCamData.binFirst_ms = options.t_Ms_First;
+			exp.seqCamData.binLast_ms = options.t_Ms_Last;
+			if (exp.seqCamData.binLast_ms + exp.seqCamData.firstImage_ms > exp.seqCamData.lastImage_ms)
+				exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
+		} else {
+			exp.seqCamData.binFirst_ms = 0;
+			exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
+		}
+	}
+
 	public IcyBufferedImage imageIORead(String name) {
 		BufferedImage image = null;
 		try {

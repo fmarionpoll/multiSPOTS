@@ -52,22 +52,6 @@ public class BuildSpotsMeasures extends BuildSeries {
 		return flag;
 	}
 
-	private void getTimeLimitsOfSequence(Experiment exp) {
-		exp.getFileIntervalsFromSeqCamData();
-		exp.loadFileIntervalsFromSeqCamData();
-		exp.seqCamData.binDuration_ms = exp.seqCamData.binImage_ms;
-		System.out.println("sequence bin size = " + exp.seqCamData.binDuration_ms);
-		if (options.isFrameFixed) {
-			exp.seqCamData.binFirst_ms = options.t_Ms_First;
-			exp.seqCamData.binLast_ms = options.t_Ms_Last;
-			if (exp.seqCamData.binLast_ms + exp.seqCamData.firstImage_ms > exp.seqCamData.lastImage_ms)
-				exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
-		} else {
-			exp.seqCamData.binFirst_ms = 0;
-			exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
-		}
-	}
-
 	private void saveComputation(Experiment exp) {
 		if (options.doCreateBinDir)
 			exp.setBinSubDirectory(exp.getBinNameFromKymoFrameStep());
@@ -90,16 +74,16 @@ public class BuildSpotsMeasures extends BuildSeries {
 		threadRunning = true;
 		stopFlag = false;
 		exp.build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList();
-		int tFirst = 0;
-		int tLast = exp.seqCamData.fixedNumberOfImages > 0 ? (int) exp.seqCamData.fixedNumberOfImages
+		int iiFirst = 0;
+		int iiLast = exp.seqCamData.fixedNumberOfImages > 0 ? (int) exp.seqCamData.fixedNumberOfImages
 				: exp.seqCamData.nTotalFrames;
-		vData.setTitle(exp.seqCamData.getCSCamFileName() + ": " + tFirst + "-" + tLast);
+		vData.setTitle(exp.seqCamData.getCSCamFileName() + ": " + iiFirst + "-" + iiLast);
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 		processor.setThreadName("measureSpots");
 		processor.setPriority(Processor.NORM_PRIORITY);
-		int ntasks = tLast - tFirst; // exp.spotsArray.spotsList.size(); //
+		int ntasks = iiLast - iiFirst; // exp.spotsArray.spotsList.size(); //
 		ArrayList<Future<?>> tasks = new ArrayList<Future<?>>(ntasks);
 		tasks.clear();
 
@@ -119,15 +103,14 @@ public class BuildSpotsMeasures extends BuildSeries {
 			transformFunctionFly = options.transform02.getFunction();
 		}
 
-		int total = 0;
-		for (int ti = tFirst; ti < tLast; ti++) {
+		for (int ii = iiFirst; ii < iiLast; ii++) {
 			if (options.concurrentDisplay) {
-				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(ti));
+				IcyBufferedImage sourceImage0 = imageIORead(exp.seqCamData.getFileNameFromImageList(ii));
 				seqData.setImage(0, 0, sourceImage0);
-				vData.setTitle("Frame #" + ti + " /" + tLast);
+				vData.setTitle("Frame #" + ii + " /" + iiLast);
 			}
 
-			final int t = ti;
+			final int t = ii;
 			double background = 0.;
 			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
 			final IcyBufferedImage transformToMeasureArea = transformFunctionSpot.getTransformedImage(sourceImage,
@@ -146,8 +129,8 @@ public class BuildSpotsMeasures extends BuildSeries {
 			tasks.add(processor.submit(new Runnable() {
 				@Override
 				public void run() {
-					progressBar1.setMessage("Analyze frame: " + t + "//" + tLast);
-					int ii = t - tFirst;
+					progressBar1.setMessage("Analyze frame: " + t + "//" + iiLast);
+					int ii = t - iiFirst;
 					for (Spot spot : exp.spotsArray.spotsList) {
 						int i = spot.plateIndex % 2;
 						if (0 == i && !options.detectL)
@@ -165,9 +148,8 @@ public class BuildSpotsMeasures extends BuildSeries {
 					}
 				}
 			}));
-			total++;
 		}
-		System.out.println("end images loop total=" + total);
+
 		waitFuturesCompletion(processor, tasks, null);
 		progressBar1.close();
 		return true;

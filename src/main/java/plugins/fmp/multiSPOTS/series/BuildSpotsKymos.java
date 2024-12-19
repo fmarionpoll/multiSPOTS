@@ -38,32 +38,18 @@ public class BuildSpotsKymos extends BuildSeries {
 		if (!loadExperimentDataToBuildKymos(exp) || exp.spotsArray.spotsList.size() < 1)
 			return;
 		openKymoViewers(exp);
-		getTimeLimitsOfSeqCamData(exp);
+		getTimeLimitsOfSequence(exp);
 		if (buildKymo(exp))
 			saveComputation(exp);
 
-		closeKymoViewers();
-		exp.seqSpotKymos.closeSequence();
+		closeKymoViewers(exp);
+
 	}
 
 	private boolean loadExperimentDataToBuildKymos(Experiment exp) {
 		boolean flag = exp.loadMCSpots_Only();
 		exp.seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 		return flag;
-	}
-
-	private void getTimeLimitsOfSeqCamData(Experiment exp) {
-		exp.getFileIntervalsFromSeqCamData();
-		exp.seqCamData.binDuration_ms = options.t_Ms_BinDuration;
-		if (options.isFrameFixed) {
-			exp.seqCamData.binFirst_ms = options.t_Ms_First;
-			exp.seqCamData.binLast_ms = options.t_Ms_Last;
-			if (exp.seqCamData.binLast_ms + exp.seqCamData.firstImage_ms > exp.seqCamData.lastImage_ms)
-				exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
-		} else {
-			exp.seqCamData.binFirst_ms = 0;
-			exp.seqCamData.binLast_ms = exp.seqCamData.lastImage_ms - exp.seqCamData.firstImage_ms;
-		}
 	}
 
 	private void saveComputation(Experiment exp) {
@@ -118,15 +104,16 @@ public class BuildSpotsKymos extends BuildSeries {
 		threadRunning = true;
 		stopFlag = false;
 
-		final int iiFirst = 0; 
-		final int iiLast = (int) (exp.seqCamData.getImagesList().size()-1 + exp.seqCamData.absoluteIndexFirstImage);
+		final int iiFirst = 0;
+		int iiLast = exp.seqCamData.fixedNumberOfImages > 0 ? (int) exp.seqCamData.fixedNumberOfImages
+				: exp.seqCamData.nTotalFrames;
 		final int iiDelta = (int) exp.seqSpotKymos.deltaImage;
 		ProgressFrame progressBar1 = new ProgressFrame("Analyze stack frame ");
 
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 		processor.setThreadName("buildKymograph");
 		processor.setPriority(Processor.NORM_PRIORITY);
-		int ntasks = exp.spotsArray.spotsList.size(); //
+		int ntasks = iiLast - iiFirst; // exp.spotsArray.spotsList.size(); //
 		ArrayList<Future<?>> tasks = new ArrayList<Future<?>>(ntasks);
 		tasks.clear();
 
@@ -154,6 +141,7 @@ public class BuildSpotsKymos extends BuildSeries {
 				}
 			}));
 		}
+
 		waitFuturesCompletion(processor, tasks, null);
 		progressBar1.close();
 
@@ -230,7 +218,7 @@ public class BuildSpotsKymos extends BuildSeries {
 			seqCamData.seq = exp.seqCamData.initSequenceFromFirstImage(exp.seqCamData.getImagesList(true));
 
 //		kymoImageWidth = (int) ((exp.binLast_ms - exp.binFirst_ms) / exp.binDuration_ms +1);
-		kymoImageWidth = (int) (exp.seqCamData.nTotalFrames - exp.seqSpotKymos.absoluteIndexFirstImage);
+		kymoImageWidth = exp.seqCamData.nTotalFrames;
 		int numC = seqCamData.seq.getSizeC();
 		if (numC <= 0)
 			numC = 3;
@@ -241,9 +229,7 @@ public class BuildSpotsKymos extends BuildSeries {
 
 		for (Spot spot : exp.spotsArray.spotsList) {
 			int imageHeight = 0;
-//			double scale = 2.;
 			for (ROI2DAlongT roiT : spot.getROIAlongTList()) {
-//				roiT.buildRoi_outAndMask2D(scale);
 				roiT.buildMask2DFromRoi_in();
 
 				// TODO transform into ROIT and add to outer
@@ -265,9 +251,10 @@ public class BuildSpotsKymos extends BuildSeries {
 			GaspardRigidRegistration.correctTranslation2D(workImage, referenceImage, referenceChannel);
 	}
 
-	private void closeKymoViewers() {
+	private void closeKymoViewers(Experiment exp) {
 		closeViewer(vData);
 		closeSequence(seqData);
+		exp.seqSpotKymos.closeSequence();
 	}
 
 	private void openKymoViewers(Experiment exp) {
