@@ -28,9 +28,6 @@ public class Spot implements Comparable<Spot> {
 	private ROI2DShape spotRoi_in = null;
 	private ROI2DShape spotRoi_old = null;
 	private ArrayList<ROI2DAlongT> listRoiAlongT = new ArrayList<ROI2DAlongT>();
-	// useful?
-	// private String kymographName = null;
-	// private String kymographPrefix = null;
 	public int kymographIndex = -1;
 
 	public BooleanMask2D mask2DSpot = null;
@@ -66,6 +63,7 @@ public class Spot implements Comparable<Spot> {
 	public SpotMeasure sum_clean = new SpotMeasure("clean");
 	public SpotMeasure flyPresent = new SpotMeasure("flyPresent");
 	public boolean valid = true;
+	public boolean okToAnalyze = true;
 
 	private final String ID_META = "metaMC";
 	private final String ID_NFLIES = "nflies";

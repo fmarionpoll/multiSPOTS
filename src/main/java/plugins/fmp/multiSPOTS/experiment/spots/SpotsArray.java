@@ -23,6 +23,7 @@ import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.experiment.KymoIntervals;
+import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
@@ -645,6 +646,23 @@ public class SpotsArray {
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	public void setFilterOfSpotsToAnalyze(boolean setFilter, BuildSeriesOptions options)
+	{
+		for (Spot spot : spotsList) {
+			spot.okToAnalyze = true;
+			if (!setFilter) 
+				continue;
+			
+			if (!options.detectL && spot.isL())
+				spot.okToAnalyze = false;
+			if (!options.detectR && spot.isR())
+				spot.okToAnalyze = false;
+			if (!options.detectSelectedROIs && spot.isIndexSelected(options.selectedIndexes))
+				spot.okToAnalyze = false;
+			
+		}
 	}
 
 }

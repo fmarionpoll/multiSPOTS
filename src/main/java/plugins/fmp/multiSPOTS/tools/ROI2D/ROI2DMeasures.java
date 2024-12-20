@@ -305,12 +305,13 @@ public class ROI2DMeasures {
 			BuildSeriesOptions options) {
 		BooleanMask2D mask2d = getMaskOfThresholdedImage(workImage, spot, options);
 		List<Point> points = getLargestContourFromThresholdedImage(mask2d);
-
-		List<Point2D> points2s = points.stream().map(point -> new Point2D.Double(point.getX(), point.getY()))
-				.collect(Collectors.toList());
-
-		ROI2DPolygon roi = new ROI2DPolygon(points2s);
-		return roi;
+		if (points != null) {
+			List<Point2D> points2s = points.stream().map(point -> new Point2D.Double(point.getX(), point.getY()))
+					.collect(Collectors.toList());
+			ROI2DPolygon roi = new ROI2DPolygon(points2s);
+			return roi;
+		} 
+		return null;
 	}
 
 	private static BooleanMask2D getMaskOfThresholdedImage(IcyBufferedImage workImage, Spot spot,
@@ -340,11 +341,12 @@ public class ROI2DMeasures {
 	private static List<Point> getLargestContourFromThresholdedImage(BooleanMask2D mask2d) {
 		List<Point> points = null;
 		BooleanMask2D[] components = null;
+		int maxPoints = 0;
+		
 		try {
 			components = mask2d.getComponents();
 			int itemMax = 0;
-			if (components.length > 1) {
-				int maxPoints = 0;
+			if (components.length > 0) {
 				for (int i = 0; i < components.length; i++) {
 					BooleanMask2D comp = components[i];
 					if (comp.getNumberOfPoints() > maxPoints) {
@@ -353,7 +355,10 @@ public class ROI2DMeasures {
 					}
 				}
 			}
-			points = components[itemMax].getConnectedContourPoints();
+			if (maxPoints > 0)
+				points = components[itemMax].getConnectedContourPoints();
+			else
+				System.out.println("unsuccessful detection of spot limits");
 		} catch (InterruptedException e) {
 //				 TODO Auto-generated catch block
 			e.printStackTrace();

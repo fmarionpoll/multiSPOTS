@@ -37,12 +37,14 @@ public class BuildSpotsMeasures extends BuildSeries {
 
 	void analyzeExperiment(Experiment exp) {
 		loadExperimentDataToMeasureSpots(exp);
-
+		exp.spotsArray.setFilterOfSpotsToAnalyze(true, options);
+		
 		openViewers(exp);
 		getTimeLimitsOfSequence(exp);
 		if (measureSpots(exp))
 			saveComputation(exp);
 
+		exp.spotsArray.setFilterOfSpotsToAnalyze(false, options);
 		closeViewers();
 	}
 
@@ -132,11 +134,13 @@ public class BuildSpotsMeasures extends BuildSeries {
 					progressBar1.setMessage("Analyze frame: " + t + "//" + iiLast);
 					int ii = t - iiFirst;
 					for (Spot spot : exp.spotsArray.spotsList) {
-						int i = spot.plateIndex % 2;
-						if (0 == i && !options.detectL)
+						if (!spot.okToAnalyze)
 							continue;
-						if (1 == i && !options.detectR)
-							continue;
+//						int i = spot.plateIndex % 2;
+//						if (0 == i && !options.detectL)
+//							continue;
+//						if (1 == i && !options.detectR)
+//							continue;
 						ROI2DAlongT roiT = spot.getROIAtT(t);
 						ResultsThreshold results = measureSpotOverThreshold(cursorToMeasureArea, cursorToDetectFly,
 								roiT);

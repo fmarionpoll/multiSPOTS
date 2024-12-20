@@ -46,8 +46,9 @@ public class DetectContours extends JPanel {
 	private static final long serialVersionUID = 4950182090521600937L;
 
 	private JButton detectContoursButton = new JButton("Detect spots contours");
-	private JCheckBox topSpotCheckBox = new JCheckBox("top (red)", true);
-	private JCheckBox bottomSpotCheckBox = new JCheckBox("bottom (blue)", true);
+//	private JCheckBox topSpotCheckBox = new JCheckBox("top (red)", true);
+//	private JCheckBox bottomSpotCheckBox = new JCheckBox("bottom (blue)", true);
+	private JCheckBox selectedSpotCheckBox = new JCheckBox("selected spots", false);
 
 	private JButton cutAndInterpolateButton = new JButton("Cut");
 
@@ -76,8 +77,9 @@ public class DetectContours extends JPanel {
 
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(detectContoursButton);
-		panel0.add(topSpotCheckBox);
-		panel0.add(bottomSpotCheckBox);
+//		panel0.add(topSpotCheckBox);
+//		panel0.add(bottomSpotCheckBox);
+		panel0.add(selectedSpotCheckBox);
 		add(panel0);
 
 		JPanel panel1 = new JPanel(layoutLeft);
@@ -230,8 +232,9 @@ public class DetectContours extends JPanel {
 		options.overlayIfGreater = (spotsDirectionComboBox.getSelectedIndex() == 0);
 		options.overlayThreshold = (int) spotsThresholdSpinner.getValue();
 
-		options.detectL = topSpotCheckBox.isSelected();
-		options.detectR = bottomSpotCheckBox.isSelected();
+//		options.detectL = topSpotCheckBox.isSelected();
+//		options.detectR = bottomSpotCheckBox.isSelected();
+		options.detectSelectedROIs = selectedSpotCheckBox.isSelected();
 
 		return options;
 	}
@@ -286,13 +289,15 @@ public class DetectContours extends JPanel {
 				e.printStackTrace();
 			}
 			ROI2DPolygon roi0 = ROI2DMeasures.getContourOfDetectedSpot(workImage, spot, options);
-			List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());
-			ROI2DPolygon roi_new = new ROI2DPolygon(listPoints);
-
-			roi_new.setName(spot.getRoi_in().getName());
-			roi_new.setColor(spot.getRoi_in().getColor());
-			spot.setRoi_old((ROI2DShape) spot.getRoi_in().getCopy());
-			spot.setRoi_in(roi_new);
+			if (roi0 != null) {
+				List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());
+				ROI2DPolygon roi_new = new ROI2DPolygon(listPoints);
+	
+				roi_new.setName(spot.getRoi_in().getName());
+				roi_new.setColor(spot.getRoi_in().getColor());
+				spot.setRoi_old((ROI2DShape) spot.getRoi_in().getCopy());
+				spot.setRoi_in(roi_new);
+			}
 			exp.seqCamData.seq.addROI(spot.getRoi_in());
 		}
 	}
