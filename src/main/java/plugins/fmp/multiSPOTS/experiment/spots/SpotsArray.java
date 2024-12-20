@@ -194,10 +194,10 @@ public class SpotsArray {
 		return flag;
 	}
 
-	public void mergeLists(SpotsArray caplist) {
-		for (Spot capm : caplist.spotsList) {
-			if (!isPresent(capm))
-				spotsList.add(capm);
+	public void mergeLists(SpotsArray sourceSpotList) {
+		for (Spot spot : sourceSpotList.spotsList) {
+			if (!isPresent(spot))
+				spotsList.add(spot);
 		}
 	}
 
@@ -420,6 +420,33 @@ public class SpotsArray {
 	public void initLevel2DMeasures() {
 		for (Spot spot : spotsList)
 			spot.initLevel2DMeasures();
+	}
+
+	public int getSpotIndexFromNameItems(String rowLetter, String columnNumber) {
+		int index = 0;
+		int col = 0;
+		try {
+			col = Integer.parseInt(columnNumber);
+		} catch (NumberFormatException e1) {
+			col = 0;
+		}
+
+		int row = getNumericReferenceNumber(rowLetter);
+		index = row * nColumnsPerPlate + col;
+		return index;
+	}
+
+	private int getNumericReferenceNumber(String str) {
+		String result = "";
+		for (int i = 0; i < str.length(); i++) {
+			char ch = str.charAt(i);
+			if (Character.isLetter(ch)) {
+				char initialCharacter = Character.isUpperCase(ch) ? 'A' : 'a';
+				result = result.concat(String.valueOf((ch - initialCharacter)));
+			} else
+				result = result + ch;
+		}
+		return Integer.parseInt(result);
 	}
 
 	public KymoIntervals getKymoIntervalsFromSpots() {
@@ -647,21 +674,20 @@ public class SpotsArray {
 		}
 		return true;
 	}
-	
-	public void setFilterOfSpotsToAnalyze(boolean setFilter, BuildSeriesOptions options)
-	{
+
+	public void setFilterOfSpotsToAnalyze(boolean setFilter, BuildSeriesOptions options) {
 		for (Spot spot : spotsList) {
 			spot.okToAnalyze = true;
-			if (!setFilter) 
+			if (!setFilter)
 				continue;
-			
+
 			if (!options.detectL && spot.isL())
 				spot.okToAnalyze = false;
 			if (!options.detectR && spot.isR())
 				spot.okToAnalyze = false;
 			if (!options.detectSelectedROIs && spot.isIndexSelected(options.selectedIndexes))
 				spot.okToAnalyze = false;
-			
+
 		}
 	}
 

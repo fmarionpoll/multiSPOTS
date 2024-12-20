@@ -74,13 +74,25 @@ public class ChartSpots extends IcyFrame {
 		nCagesAlongY = exp.spotsArray.nRowsPerPlate / exp.spotsArray.nRowsPerCage;
 		panelHolder = new ChartPanel[nCagesAlongY][nCagesAlongX];
 		mainChartPanel.setLayout(new GridLayout(nCagesAlongY, nCagesAlongX));
+	}
 
-//		for (int iy = 0; iy < nCagesAlongY; iy++) {
-//			for (int ix = 0; ix < nCagesAlongX; ix++) {
-//				panelHolder[iy][ix] = new ChartPanel();
-//				mainChartPanel.add(panelHolder[iy][ix]);
-//			}
-//		}
+	private NumberAxis setYaxis(int row, int col, XLSExportOptions xlsExportOptions) {
+		NumberAxis yAxis = new NumberAxis();
+		row = row * exp.spotsArray.nRowsPerCage;
+		col = col * exp.spotsArray.nColumnsPerCage;
+		String yLegend = String.valueOf((char) (row + 'A')) + "_" + Integer.toString(col);
+		yAxis.setLabel(yLegend);
+
+		if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
+//			yAxis.setLabel("ratio"); // (t-t0)/t0 of " + yAxis.getLabel());
+			yAxis.setAutoRange(false);
+			yAxis.setRange(-0.2, 1.2);
+		} else {
+//			yAxis.setLabel("grey lvl");
+			yAxis.setAutoRange(true);
+			yAxis.setAutoRangeIncludesZero(false);
+		}
+		return yAxis;
 	}
 
 	public void displayData(Experiment exp, XLSExportOptions xlsExportOptions) {
@@ -88,18 +100,6 @@ public class ChartSpots extends IcyFrame {
 		ymax = 0;
 		ymin = 0;
 		flagMaxMinSet = false;
-
-		NumberAxis yAxis = new NumberAxis(); // xlsExportOptions.exportType.toUnit());
-		if (xlsExportOptions.relativeToT0 || xlsExportOptions.relativeToMedianT0) {
-			yAxis.setLabel("ratio"); // (t-t0)/t0 of " + yAxis.getLabel());
-			yAxis.setAutoRange(false);
-			yAxis.setRange(-0.2, 1.2);
-		} else {
-			yAxis.setLabel("grey lvl");
-			yAxis.setAutoRange(true);
-			yAxis.setAutoRangeIncludesZero(false);
-		}
-
 		Paint[] chartColor = ChartColor.createDefaultPaintArray();
 
 		XLSResultsArray xlsResultsArray = getDataAsResultsArray(exp, xlsExportOptions);
@@ -114,8 +114,8 @@ public class ChartSpots extends IcyFrame {
 		int cageID = 0;
 		for (int row = 0; row < nCagesAlongY; row++) {
 			for (int col = 0; col < nCagesAlongX; col++) {
+				NumberAxis yAxis = setYaxis(row, col, xlsExportOptions);
 				XYPlot subplot = getXYPlotOfOneCage(cageID, yAxis, chartColor, xlsResultsArray, xlsResultsArray2);
-
 				CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
 				combinedXYPlot.add(subplot);
 
@@ -344,14 +344,9 @@ public class ChartSpots extends IcyFrame {
 			return null;
 		}
 
-		String lastN = description.substring(4, 5); // TODO check??
-		int foo;
-		try {
-			foo = Integer.parseInt(lastN);
-		} catch (NumberFormatException e1) {
-			foo = 0;
-		}
-		spotFound.spot_Kymograph_T = 2 * spotFound.cageID + foo;
+		String[] roiDescription = description.split("_");
+		int index = exp.spotsArray.getSpotIndexFromNameItems(roiDescription[1], roiDescription[2]);
+		spotFound.spot_Kymograph_T = index;
 		return spotFound;
 	}
 
