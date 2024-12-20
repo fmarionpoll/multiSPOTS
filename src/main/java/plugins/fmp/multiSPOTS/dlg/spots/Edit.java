@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
@@ -20,7 +20,10 @@ public class Edit extends JPanel {
 	 */
 	private static final long serialVersionUID = -7582410775062671523L;
 
-	private JButton editSpotsButton = new JButton("Edit spots position with time");
+	private JButton editSpotsButton = new JButton("Change spots position with time");
+	private JCheckBox showFrameButton = new JCheckBox("Show frame");
+	private JButton selectSpotsWithinFrameButton = new JButton("Select spots within frame");
+	private JButton moveSpotsWithFrameButton = new JButton("Change spots position with time");
 	private MultiSPOTS parent0 = null;
 	private EditPositionWithTime editSpotsTable = null;
 
@@ -30,7 +33,9 @@ public class Edit extends JPanel {
 		flowLayout.setVgap(0);
 
 		JPanel panel0 = new JPanel(flowLayout);
-		panel0.add(new JLabel("* this dialog is experimental"));
+		panel0.add(showFrameButton);
+		panel0.add(selectSpotsWithinFrameButton);
+		panel0.add(moveSpotsWithFrameButton);
 		add(panel0);
 
 		JPanel panel1 = new JPanel(flowLayout);
