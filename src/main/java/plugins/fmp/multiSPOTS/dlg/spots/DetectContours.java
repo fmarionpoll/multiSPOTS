@@ -275,12 +275,11 @@ public class DetectContours extends JPanel {
 		IcyBufferedImage sourceImage = seq.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions);
 		for (Spot spot : exp.spotsArray.spotsList) {
-			int i = spot.plateIndex % 2;
-			if (0 == i && !options.detectL)
-				continue;
-			if (1 == i && !options.detectR)
-				continue;
+			
 			ROI2D roi_in = spot.getRoi_in();
+			if (!roi_in.isSelected() && options.detectSelectedROIs)
+				continue;
+			
 			exp.seqCamData.seq.removeROI(roi_in);
 			try {
 				spot.mask2DSpot = spot.getRoi_in().getBooleanMask2D(0, 0, 1, true);
