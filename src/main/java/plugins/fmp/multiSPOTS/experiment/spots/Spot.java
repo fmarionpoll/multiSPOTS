@@ -263,24 +263,27 @@ public class Spot implements Comparable<Spot> {
 		int i = plateIndex % 2;
 		return (0 == i);
 	}
-	
+
 	public boolean isR() {
 		int i = plateIndex % 2;
 		return (1 == i);
 	}
-	
+
 	public boolean isIndexSelected(List<Integer> selectedIndexes) {
-		for (int i: selectedIndexes) {
+		if (selectedIndexes == null || selectedIndexes.size() < 1)
+			return true;
+
+		for (int i : selectedIndexes) {
 			if (i == plateIndex) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	// -----------------------------------------
 
- 	public boolean isThereAnyMeasuresDone(EnumXLSExportType option) {
+	public boolean isThereAnyMeasuresDone(EnumXLSExportType option) {
 		SpotMeasure spotArea = getSpotArea(option);
 		if (spotArea != null)
 			return spotArea.isThereAnyMeasuresDone();

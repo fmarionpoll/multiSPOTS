@@ -9,7 +9,7 @@ import icy.type.geom.Polygon2D;
 
 public class PolygonUtilities {
 
-	public static Polygon2D orderVerticesofPolygon(Polygon roiPolygon) {
+	public static Polygon2D orderVerticesOf4CornersPolygon(Polygon roiPolygon) {
 		if (roiPolygon.npoints > 4)
 			new AnnounceFrame("Only the first 4 points of the polygon will be used...");
 		Polygon2D extFrame = new Polygon2D();

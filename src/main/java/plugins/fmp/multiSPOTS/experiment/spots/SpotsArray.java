@@ -29,6 +29,7 @@ import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.polyline.Level2D;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
 public class SpotsArray {
@@ -365,6 +366,22 @@ public class SpotsArray {
 	private void replaceItem(Polygon2D polygon, int index, Spot spot) {
 		polygon.xpoints[index] = spot.spotXCoord;
 		polygon.ypoints[index] = spot.spotYCoord;
+	}
+
+	public ArrayList<Spot> getSpotsEnclosed(ROI2DPolygon envelopeRoi) {
+		ArrayList<Spot> enclosedSpots = new ArrayList<Spot>();
+		for (Spot spot : spotsList) {
+			try {
+				if (envelopeRoi.contains(spot.getRoi_in())) {
+					spot.getRoi_in().setSelected(true);
+					enclosedSpots.add(spot);
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return enclosedSpots;
 	}
 
 	// ------------------------------------------------

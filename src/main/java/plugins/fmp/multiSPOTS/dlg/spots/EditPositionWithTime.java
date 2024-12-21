@@ -167,7 +167,6 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 
 	private void shiftPositionOfSpots(double deltaX, double deltaY) {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-		;
 		if (exp == null)
 			return;
 		Sequence seq = exp.seqCamData.seq;

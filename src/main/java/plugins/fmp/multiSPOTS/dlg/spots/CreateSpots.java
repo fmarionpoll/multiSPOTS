@@ -211,7 +211,7 @@ public class CreateSpots extends JPanel {
 			new AnnounceFrame("The frame must be a ROI2D Polygon");
 			return;
 		}
-		roiPolygon = PolygonUtilities.orderVerticesofPolygon(((ROI2DPolygon) roi).getPolygon());
+		roiPolygon = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
 		seqCamData.seq.removeROI(roi);
 
 		int n_columns = 10;

@@ -173,7 +173,7 @@ public class BuildCagesAsArray extends JPanel {
 			return;
 		}
 
-		Polygon2D roiPolygonMin = PolygonUtilities.orderVerticesofPolygon(((ROI2DPolygon) roi).getPolygon());
+		Polygon2D roiPolygonMin = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
 		seqCamData.seq.removeROI(roi);
 
 		// generate cage frames
