@@ -357,7 +357,7 @@ public class SequenceCamData {
 				false, // add to recent
 				false // show progress
 		).get(0);
-		return seq;
+		return seq; // TODO: here, kymos loads only 12 volumetric images???
 	}
 
 	public Sequence initSequenceFromFirstImage(List<String> imagesList) {

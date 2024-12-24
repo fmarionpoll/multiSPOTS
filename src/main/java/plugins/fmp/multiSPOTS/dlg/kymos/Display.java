@@ -338,8 +338,8 @@ public class Display extends JPanel implements ViewerListener {
 
 		if (isel < 0)
 			isel = 0;
-		if (isel >= seqKymos.seq.getSizeT())
-			isel = seqKymos.seq.getSizeT() - 1;
+		if (isel >= seqKymos.getImagesList().size())
+			isel = seqKymos.getImagesList().size() - 1;
 
 		seqKymos.seq.beginUpdate();
 		Viewer v = seqKymos.seq.getFirstViewer();

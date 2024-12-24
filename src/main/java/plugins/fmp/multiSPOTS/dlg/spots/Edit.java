@@ -44,7 +44,7 @@ public class Edit extends JPanel {
 	private ROI2DPolyLine snakeRoi = null;
 
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
-		this.setParent0(parent0);
+		this.parent0 = parent0;
 		setLayout(capLayout);
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);
 		flowLayout.setVgap(0);
@@ -108,25 +108,18 @@ public class Edit extends JPanel {
 		});
 	}
 
-	public MultiSPOTS getParent0() {
-		return parent0;
-	}
-
-	public void setParent0(MultiSPOTS parent0) {
-		this.parent0 = parent0;
-	}
-
 	private Point getFramePosition() {
-		Point spot = new Point();
+		Point point = new Point();
 		Component currComponent = (Component) editSpotsButton;
 		int index = 0;
-		while (currComponent != null && index < 12) {
+		int indexMax = 12; // TODO : why 12??
+		while (currComponent != null && index < indexMax) {
 			Point relativeLocation = currComponent.getLocation();
-			spot.translate(relativeLocation.x, relativeLocation.y);
+			point.translate(relativeLocation.x, relativeLocation.y);
 			currComponent = currComponent.getParent();
 			index++;
 		}
-		return spot;
+		return point;
 	}
 
 	public void openDialog() {

@@ -272,12 +272,6 @@ public class Experiment {
 		return (seqCamData != null && seqCamData.seq != null);
 	}
 
-	public boolean loadKymosImages() {
-		if (seqSpotKymos != null)
-			seqSpotKymos.loadImages();
-		return (seqSpotKymos != null && seqSpotKymos.seq != null);
-	}
-
 	public SequenceCamData openSequenceCamData() {
 		loadImagesForSequenceCamData(imagesDirectory);
 		if (seqCamData != null) {

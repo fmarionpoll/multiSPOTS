@@ -38,7 +38,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 	void analyzeExperiment(Experiment exp) {
 		loadExperimentDataToMeasureSpots(exp);
 		exp.spotsArray.setFilterOfSpotsToAnalyze(true, options);
-		
+
 		openViewers(exp);
 		getTimeLimitsOfSequence(exp);
 		if (measureSpots(exp))
@@ -67,6 +67,24 @@ public class BuildSpotsMeasures extends BuildSeries {
 		exp.save_SpotsMeasures();
 	}
 
+	private void initMeasureSpots(Experiment exp) {
+		initMasks2D(exp);
+		initSpotsDataArrays(exp);
+
+		if (transformFunctionSpot == null) {
+			transformOptions01 = new ImageTransformOptions();
+			transformOptions01.transformOption = options.transform01;
+			transformOptions01.copyResultsToThe3planes = false;
+			transformOptions01.setSingleThreshold(options.spotThreshold, options.spotThresholdUp);
+			transformFunctionSpot = options.transform01.getFunction();
+
+			transformOptions02 = new ImageTransformOptions();
+			transformOptions02.transformOption = options.transform02;
+			transformOptions02.copyResultsToThe3planes = false;
+			transformFunctionFly = options.transform02.getFunction();
+		}
+	}
+
 	private boolean measureSpots(Experiment exp) {
 		if (exp.spotsArray.spotsList.size() < 1) {
 			System.out.println("DetectAreas:measureAreas Abort (1): nbspots = 0");
@@ -85,25 +103,11 @@ public class BuildSpotsMeasures extends BuildSeries {
 		final Processor processor = new Processor(SystemUtil.getNumberOfCPUs());
 		processor.setThreadName("measureSpots");
 		processor.setPriority(Processor.NORM_PRIORITY);
-		int ntasks = iiLast - iiFirst; // exp.spotsArray.spotsList.size(); //
+		int ntasks = iiLast - iiFirst;
 		ArrayList<Future<?>> tasks = new ArrayList<Future<?>>(ntasks);
 		tasks.clear();
 
-		initMasks2D(exp);
-		initSpotsDataArrays(exp);
-
-		if (transformFunctionSpot == null) {
-			transformOptions01 = new ImageTransformOptions();
-			transformOptions01.transformOption = options.transform01;
-			transformOptions01.copyResultsToThe3planes = false;
-			transformOptions01.setSingleThreshold(options.spotThreshold, options.spotThresholdUp);
-			transformFunctionSpot = options.transform01.getFunction();
-
-			transformOptions02 = new ImageTransformOptions();
-			transformOptions02.transformOption = options.transform02;
-			transformOptions02.copyResultsToThe3planes = false;
-			transformFunctionFly = options.transform02.getFunction();
-		}
+		initMeasureSpots(exp);
 
 		for (int ii = iiFirst; ii < iiLast; ii++) {
 			if (options.concurrentDisplay) {
@@ -113,25 +117,41 @@ public class BuildSpotsMeasures extends BuildSeries {
 			}
 
 			final int t = ii;
-			double background = 0.;
 			final IcyBufferedImage sourceImage = imageIORead(exp.seqCamData.getFileNameFromImageList(t));
-			final IcyBufferedImage transformToMeasureArea = transformFunctionSpot.getTransformedImage(sourceImage,
-					transformOptions01);
-			final IcyBufferedImage transformToDetectFly = transformFunctionFly.getTransformedImage(sourceImage,
-					transformOptions02);
-			IcyBufferedImageCursor cursorToDetectFly = new IcyBufferedImageCursor(transformToDetectFly);
-			IcyBufferedImageCursor cursorToMeasureArea = new IcyBufferedImageCursor(transformToMeasureArea);
-			if (options.compensateBackground) {
-				final ROI2DAlongT outerRoiT = getROI2DAlongTEnclosingAllSpots(exp, t);
-				final ResultsThreshold outerResult = measureSpotOverThreshold(cursorToMeasureArea, cursorToDetectFly,
-						outerRoiT);
-				background = outerResult.sumTot_no_fly_over_threshold / outerResult.nPoints_no_fly;
-			}
-			final double final_background = background;
+//			double background = 0.;		
+//			final IcyBufferedImage transformToMeasureArea = transformFunctionSpot.getTransformedImage(sourceImage,
+//					transformOptions01);
+//			final IcyBufferedImage transformToDetectFly = transformFunctionFly.getTransformedImage(sourceImage,
+//					transformOptions02);
+//			final IcyBufferedImageCursor cursorToDetectFly = new IcyBufferedImageCursor(transformToDetectFly);
+//			final IcyBufferedImageCursor cursorToMeasureArea = new IcyBufferedImageCursor(transformToMeasureArea);
+//			if (options.compensateBackground) {
+//				final ROI2DAlongT outerRoiT = getROI2DAlongTEnclosingAllSpots(exp, t);
+//				final ResultsThreshold outerResult = measureSpotOverThreshold(cursorToMeasureArea, cursorToDetectFly,
+//						outerRoiT);
+//				background = outerResult.sumTot_no_fly_over_threshold / outerResult.nPoints_no_fly;
+//			}
+//			final double final_background = background;
 			tasks.add(processor.submit(new Runnable() {
 				@Override
 				public void run() {
 					progressBar1.setMessage("Analyze frame: " + t + "//" + iiLast);
+					double background = 0.;
+					final IcyBufferedImage transformToMeasureArea = transformFunctionSpot
+							.getTransformedImage(sourceImage, transformOptions01);
+					final IcyBufferedImage transformToDetectFly = transformFunctionFly.getTransformedImage(sourceImage,
+							transformOptions02);
+					final IcyBufferedImageCursor cursorToDetectFly = new IcyBufferedImageCursor(transformToDetectFly);
+					final IcyBufferedImageCursor cursorToMeasureArea = new IcyBufferedImageCursor(
+							transformToMeasureArea);
+					if (options.compensateBackground) {
+						final ROI2DAlongT outerRoiT = getROI2DAlongTEnclosingAllSpots(exp, t);
+						final ResultsThreshold outerResult = measureSpotOverThreshold(cursorToMeasureArea,
+								cursorToDetectFly, outerRoiT);
+						background = outerResult.sumTot_no_fly_over_threshold / outerResult.nPoints_no_fly;
+					}
+					final double final_background = background;
+
 					int ii = t - iiFirst;
 					for (Spot spot : exp.spotsArray.spotsList) {
 						if (!spot.okToAnalyze)

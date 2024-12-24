@@ -69,47 +69,6 @@ public class SequenceKymos extends SequenceCamData {
 		Collections.sort(listRois, new Comparators.ROI2D_Name_Comparator());
 	}
 
-//	public boolean transferKymosRoisToCapillaries_Measures(CapillariesArray capillaries) {
-//		List<ROI> allRois = seq.getROIs();
-//		if (allRois.size() < 1)
-//			return false;
-//		for (int kymo = 0; kymo < seq.getSizeT(); kymo++) {
-//			List<ROI> roisAtT = new ArrayList<ROI>();
-//			for (ROI roi : allRois) {
-//				if (roi instanceof ROI2D && ((ROI2D) roi).getT() == kymo)
-//					roisAtT.add(roi);
-//			}
-//			if (capillaries.capillariesList.size() <= kymo)
-//				capillaries.capillariesList.add(new Capillary());
-//			Capillary cap = capillaries.capillariesList.get(kymo);
-//			cap.filenameTIFF = getFileNameFromImageList(kymo);
-//			cap.kymographIndex = kymo;
-//			cap.transferROIsToMeasures(roisAtT);
-//		}
-//		return true;
-//	}
-//
-//	public void transferCapillariesMeasuresToKymos(CapillariesArray capillaries) {
-//		List<ROI2D> seqRoisList = seq.getROI2Ds(false);
-//		ROI2DUtilities.removeROIsMissingChar(seqRoisList, '_');
-//
-//		List<ROI2D> newRoisList = new ArrayList<ROI2D>();
-//		int ncapillaries = capillaries.capillariesList.size();
-//		for (int i = 0; i < ncapillaries; i++) {
-//			List<ROI2D> listOfRois = capillaries.capillariesList.get(i).transferMeasuresToROIs();
-//			newRoisList.addAll(listOfRois);
-//		}
-//		ROI2DUtilities.mergeROIsListNoDuplicate(seqRoisList, newRoisList, seq);
-//		seq.removeAllROI();
-//		seq.addROIs(seqRoisList, false);
-//	}
-//
-//	public void saveKymosCurvesToCapillariesMeasures(Experiment exp) {
-//		exp.seqSpotKymos.validateRois();
-//		exp.seqSpotKymos.transferKymosRoisToCapillaries_Measures(exp.capillaries);
-//		exp.save_CapillariesMeasures();
-//	}
-
 	// ----------------------------
 
 	public List<ImageFileDescriptor> loadListOfPotentialKymographsFromSpots(String dir, SpotsArray spotsArray) {

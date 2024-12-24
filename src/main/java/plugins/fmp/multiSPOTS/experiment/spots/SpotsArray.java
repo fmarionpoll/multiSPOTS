@@ -702,9 +702,8 @@ public class SpotsArray {
 				spot.okToAnalyze = false;
 			if (!options.detectR && spot.isR())
 				spot.okToAnalyze = false;
-			if (!options.detectSelectedROIs && spot.isIndexSelected(options.selectedIndexes))
+			if (options.detectSelectedROIs && !spot.isIndexSelected(options.selectedIndexes))
 				spot.okToAnalyze = false;
-
 		}
 	}
 
