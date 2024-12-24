@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformOptions;
 import plugins.fmp.multiSPOTS.tools.overlay.OverlayThreshold;
+import plugins.kernel.roi.roi2d.ROI2DEllipse;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
@@ -46,8 +48,7 @@ public class DetectContours extends JPanel {
 	private static final long serialVersionUID = 4950182090521600937L;
 
 	private JButton detectContoursButton = new JButton("Detect spots contours");
-//	private JCheckBox topSpotCheckBox = new JCheckBox("top (red)", true);
-//	private JCheckBox bottomSpotCheckBox = new JCheckBox("bottom (blue)", true);
+	private JButton restoreContoursButton = new JButton("Restore contours");
 	private JCheckBox selectedSpotCheckBox = new JCheckBox("selected spots", false);
 
 	private JButton cutAndInterpolateButton = new JButton("Cut");
@@ -77,8 +78,7 @@ public class DetectContours extends JPanel {
 
 		JPanel panel0 = new JPanel(layoutLeft);
 		panel0.add(detectContoursButton);
-//		panel0.add(topSpotCheckBox);
-//		panel0.add(bottomSpotCheckBox);
+		panel0.add(restoreContoursButton);
 		panel0.add(selectedSpotCheckBox);
 		add(panel0);
 
@@ -168,6 +168,16 @@ public class DetectContours extends JPanel {
 			}
 		});
 
+		restoreContoursButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null) {
+					restoreContours(exp);
+				}
+			}
+		});
+
 		cutAndInterpolateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -232,8 +242,6 @@ public class DetectContours extends JPanel {
 		options.overlayIfGreater = (spotsDirectionComboBox.getSelectedIndex() == 0);
 		options.overlayThreshold = (int) spotsThresholdSpinner.getValue();
 
-//		options.detectL = topSpotCheckBox.isSelected();
-//		options.detectR = bottomSpotCheckBox.isSelected();
 		options.detectSelectedROIs = selectedSpotCheckBox.isSelected();
 
 		return options;
@@ -274,12 +282,13 @@ public class DetectContours extends JPanel {
 
 		IcyBufferedImage sourceImage = seq.getImage(t, 0);
 		IcyBufferedImage workImage = transformFunction.getTransformedImage(sourceImage, transformOptions);
+		boolean detectSelectedROIs = selectedSpotCheckBox.isSelected();
 		for (Spot spot : exp.spotsArray.spotsList) {
-			
+
 			ROI2D roi_in = spot.getRoi_in();
-			if (!roi_in.isSelected() && options.detectSelectedROIs)
+			if (detectSelectedROIs && !roi_in.isSelected())
 				continue;
-			
+
 			exp.seqCamData.seq.removeROI(roi_in);
 			try {
 				spot.mask2DSpot = spot.getRoi_in().getBooleanMask2D(0, 0, 1, true);
@@ -291,12 +300,33 @@ public class DetectContours extends JPanel {
 			if (roi0 != null) {
 				List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());
 				ROI2DPolygon roi_new = new ROI2DPolygon(listPoints);
-	
+
 				roi_new.setName(spot.getRoi_in().getName());
 				roi_new.setColor(spot.getRoi_in().getColor());
 				spot.setRoi_old((ROI2DShape) spot.getRoi_in().getCopy());
 				spot.setRoi_in(roi_new);
 			}
+			exp.seqCamData.seq.addROI(spot.getRoi_in());
+		}
+	}
+
+	private void restoreContours(Experiment exp) {
+		boolean detectSelectedROIs = selectedSpotCheckBox.isSelected();
+		for (Spot spot : exp.spotsArray.spotsList) {
+
+			ROI2D roi_in = spot.getRoi_in();
+			if (detectSelectedROIs && !roi_in.isSelected())
+				continue;
+
+			String roiName = roi_in.getName();
+			exp.seqCamData.seq.removeROI(roi_in);
+			Point2D point = new Point2D.Double(spot.spotXCoord, spot.spotYCoord);
+			double x = point.getX() - spot.spotRadius;
+			double y = point.getY() - spot.spotRadius;
+			Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2 * spot.spotRadius, 2 * spot.spotRadius);
+			ROI2DEllipse roiEllipse = new ROI2DEllipse(ellipse);
+			roiEllipse.setName(roiName);
+			spot.setRoi_in(roiEllipse);
 			exp.seqCamData.seq.addROI(spot.getRoi_in());
 		}
 	}
