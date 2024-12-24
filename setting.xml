@@ -75,7 +75,7 @@
 </section>
 <section name="export"/>
 </section>
-<key name="lastUpdateCheckTime" value="1734771271813"/>
+<key name="lastUpdateCheckTime" value="1735024516196"/>
 <key name="sequencePersistence" value="false"/>
 <key name="virtualMode" value="true"/>
 <key name="loaderFolder" value="C:\Users\fred\Desktop\essai_sandwich\plaque_2024-12-12"/>
@@ -137,10 +137,10 @@
 </section>
 </section>
 <key name="version" value="2.5.1.0"/>
-<key name="lastUploadDate" value="1734776520272"/>
+<key name="lastUploadDate" value="1735024514100"/>
 <section name="frame">
 <section name="imageLoader">
-<key name="loadtype" value="0"/>
+<key name="loadtype" value="1"/>
 <key name="extension" value="All image files / Bio-Formats"/>
 <key name="width" value="600"/>
 <key name="heigth" value="400"/>
@@ -170,22 +170,22 @@
 </section>
 <section name="frame">
 <section name="main">
-<key name="XE" value="3565"/>
-<key name="YE" value="12"/>
-<key name="WidthE" value="1769"/>
+<key name="XE" value="-958"/>
+<key name="YE" value="58"/>
+<key name="WidthE" value="2870"/>
 <key name="HeightE" value="1093"/>
-<key name="MaximizedE" value="false"/>
+<key name="MaximizedE" value="true"/>
 <key name="previousState" value="true"/>
 </section>
 <section name="inspector">
-<key name="XC" value="1461"/>
+<key name="XC" value="1576"/>
 <key name="YC" value="0"/>
 <key name="XE" value="600"/>
 <key name="YE" value="140"/>
 <key name="XI" value="600"/>
 <key name="YI" value="140"/>
-<key name="WidthC" value="300"/>
-<key name="HeightC" value="931"/>
+<key name="WidthC" value="336"/>
+<key name="HeightC" value="870"/>
 <key name="WidthE" value="300"/>
 <key name="HeightE" value="600"/>
 <key name="WidthI" value="300"/>
@@ -202,8 +202,8 @@
 <key name="YE" value="100"/>
 <key name="XI" value="100"/>
 <key name="YI" value="100"/>
-<key name="WidthC" value="292"/>
-<key name="HeightC" value="841"/>
+<key name="WidthC" value="328"/>
+<key name="HeightC" value="780"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="600"/>
 <key name="WidthI" value="400"/>
@@ -220,8 +220,8 @@
 <key name="YE" value="200"/>
 <key name="XI" value="200"/>
 <key name="YI" value="200"/>
-<key name="WidthC" value="292"/>
-<key name="HeightC" value="841"/>
+<key name="WidthC" value="328"/>
+<key name="HeightC" value="780"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="300"/>
 <key name="WidthI" value="400"/>

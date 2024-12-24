@@ -128,7 +128,7 @@ public class LoadSave extends JPanel {
 		boolean flag = false;
 		SequenceKymos seqKymos = exp.seqSpotKymos;
 		if (seqKymos == null || exp.spotsArray == null) {
-			System.out.println("LoadSaveKymos:loadDefaultKymos() no parent sequence or no capillaries found");
+			System.out.println("LoadSaveKymos:loadDefaultKymos() no parent sequence or no spots found");
 			return flag;
 		}
 
@@ -143,7 +143,7 @@ public class LoadSave extends JPanel {
 				.loadListOfPotentialKymographsFromSpots(exp.getKymosBinFullDirectory(), exp.spotsArray);
 		int nItems = ImageFileDescriptor.getExistingFileNames(myList);
 		if (nItems > 0) {
-			flag = seqKymos.loadImagesFromList(myList, true);
+			flag = seqKymos.loadKymoImagesFromList(myList, true);
 			exp.spotsArray.transferSpotsMeasuresToSequence(exp.seqSpotKymos.seq);
 			parent0.dlgKymos.tabDisplay.transferSpotNamesToComboBox(exp);
 		} else

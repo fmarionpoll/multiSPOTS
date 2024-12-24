@@ -246,7 +246,7 @@ public class CreateSpots extends JPanel {
 				double y = point.getY() - radius;
 				Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2 * radius, 2 * radius);
 				ROI2DEllipse roiEllipse = new ROI2DEllipse(ellipse);
-				roiEllipse.setName("spot_" + toAlphabetic(row) + "_" + String.format("%02d", column));
+				roiEllipse.setName("spot_" + String.format("%03d", row) + String.format("%03d", column));
 
 				Spot spot = new Spot(roiEllipse);
 				spot.plateIndex = spotIndex;
@@ -275,21 +275,6 @@ public class CreateSpots extends JPanel {
 		int nColsPerCage = (int) nColsPerCageJSpinner.getValue();
 		int nRowsPerCage = (int) nRowsPerCageJSpinner.getValue();
 		exp.spotsArray.updatePlateIndexToCageIndexes(nColsPerCage, nRowsPerCage);
-	}
-
-	private String toAlphabetic(int i) {
-		if (i < 0) {
-			return "-" + toAlphabetic(-i - 1);
-		}
-
-		int quot = i / 26;
-		int rem = i % 26;
-		char letter = (char) ((int) 'A' + rem);
-		if (quot == 0) {
-			return "" + letter;
-		} else {
-			return toAlphabetic(quot - 1) + letter;
-		}
 	}
 
 	public void updateDialog(Experiment exp) {

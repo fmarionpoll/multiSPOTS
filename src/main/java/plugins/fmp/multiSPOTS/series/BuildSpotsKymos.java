@@ -76,6 +76,7 @@ public class BuildSpotsKymos extends BuildSeries {
 				public void run() {
 					Spot spot = exp.spotsArray.spotsList.get(t_index);
 					String filename = directory + File.separator + spot.getRoiName() + ".tiff";
+
 					File file = new File(filename);
 					IcyBufferedImage image = exp.seqSpotKymos.getSeqImage(t_index, 0);
 					try {

@@ -39,7 +39,7 @@ public class ExperimentDirectories {
 		return outList;
 	}
 
-	public static List<String> getImagesListFromPath(String strDirectory) {
+	private List<String> getImagesListFromPath(String strDirectory) {
 		List<String> list = new ArrayList<String>();
 		Path pathDir = Paths.get(strDirectory);
 		if (Files.exists(pathDir)) {
@@ -77,8 +77,7 @@ public class ExperimentDirectories {
 		if (selectedFiles.length == 0)
 			return null;
 
-		// TODO check strPath and provide a way to skip the dialog part (or different
-		// routine)
+		// TODO check strPath and provide a way to skip the dialog part
 		String strDirectory = Directories.getDirectoryFromName(selectedFiles[0].toString());
 		if (strDirectory != null) {
 			if (selectedFiles.length == 1)
@@ -203,19 +202,6 @@ public class ExperimentDirectories {
 			name = filter;
 		return parentDirectory + File.separator + name;
 	}
-
-//	private void move_TIFFandLINEfiles_From_Results_to_BinDirectory(String parentDirectory, List<String> expList) {
-//		if (expList == null)
-//			return;
-//		for (String subDirectory : expList) {
-//			if (subDirectory.contains(Experiment.RESULTS)) { // TODO estimate bin size for ex by comparing x size and n
-//																// jpg files?
-//				subDirectory = Experiment.BIN + "60";
-//				Directories.move_TIFFfiles_To_Subdirectory(parentDirectory, subDirectory);
-//				Directories.move_xmlLINEfiles_To_Subdirectory(parentDirectory, subDirectory, true);
-//			}
-//		}
-//	}
 
 	private void move_XML_From_Bin_to_Results(String binSubDirectory, String resultsDirectory) {
 		String binDirectory = resultsDirectory + File.separator + binSubDirectory;

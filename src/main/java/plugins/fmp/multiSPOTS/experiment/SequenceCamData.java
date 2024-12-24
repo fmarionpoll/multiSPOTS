@@ -48,9 +48,9 @@ public class SequenceCamData {
 	public int nTotalFrames = 0;
 
 	public EnumStatus status = EnumStatus.REGULAR;
-	protected String csCamFileName = null;
-	public String camImagesDirectory = null;
-	public ArrayList<String> camImagesList = new ArrayList<String>();
+	protected String csFileName = null;
+	public String imagesDirectory = null;
+	public ArrayList<String> imagesList = new ArrayList<String>();
 
 	long timeFirstImageInMs = 0;
 	int indexTimePattern = -1;
@@ -90,19 +90,19 @@ public class SequenceCamData {
 	// -----------------------
 
 	public String getImagesDirectory() {
-		Path strPath = Paths.get(camImagesList.get(0));
-		camImagesDirectory = strPath.getParent().toString();
-		return camImagesDirectory;
+		Path strPath = Paths.get(imagesList.get(0));
+		imagesDirectory = strPath.getParent().toString();
+		return imagesDirectory;
 	}
 
 	public void setImagesDirectory(String directoryString) {
-		camImagesDirectory = directoryString;
+		imagesDirectory = directoryString;
 	}
 
 	public List<String> getImagesList(boolean bsort) {
 		if (bsort)
-			Collections.sort(camImagesList);
-		return camImagesList;
+			Collections.sort(imagesList);
+		return imagesList;
 	}
 
 	public String getDecoratedImageName(int t) {
@@ -114,34 +114,49 @@ public class SequenceCamData {
 	}
 
 	public String getCSCamFileName() {
-		if (csCamFileName == null) {
-			Path path = Paths.get(camImagesList.get(0));
+		if (csFileName == null) {
+			Path path = Paths.get(imagesList.get(0));
 			int rootlevel = path.getNameCount() - 4;
 			if (rootlevel < 0)
 				rootlevel = 0;
-			csCamFileName = path.subpath(rootlevel, path.getNameCount() - 1).toString();
+			csFileName = path.subpath(rootlevel, path.getNameCount() - 1).toString();
 		}
-		return csCamFileName;
+		return csFileName;
 	}
 
 	public String getFileNameFromImageList(int t) {
 		String csName = null;
 		if (status == EnumStatus.FILESTACK || status == EnumStatus.KYMOGRAPH) {
-			if (camImagesList.size() < 1)
-				loadImageList();
-			csName = camImagesList.get(t);
+			if (imagesList.size() < 1)
+				loadImageList(imagesList);
+			csName = imagesList.get(t);
 		}
 //		else if (status == EnumStatus.AVIFILE)
 //			csName = csFileName;
 		return csName;
 	}
 
-	public void loadImageList() {
-		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(camImagesDirectory, "jpg");
+	public boolean loadXImages() {
+		if (imagesList.size() == 0)
+			return false;
+		attachSequence(loadSequenceXFromImagesList(imagesList));
+		return (seq != null);
+	}
+
+	public boolean loadFirstImage() {
+		if (imagesList.size() == 0)
+			return false;
+		List<String> dummyList = new ArrayList<String>();
+		dummyList.add(imagesList.get(0));
+		attachSequence(loadSequenceXFromImagesList(dummyList));
+		return (seq != null);
+	}
+
+	public void loadImageList(List<String> imagesList) {
 		if (imagesList.size() > 0) {
 			clipImagesList(imagesList);
 			setImagesList(imagesList);
-			attachSequence(loadSequenceFromImagesList(imagesList));
+			attachSequence(loadSequenceXFromImagesList(imagesList));
 		}
 	}
 
@@ -160,7 +175,7 @@ public class SequenceCamData {
 
 	public String getFileNameNoPath(int t) {
 		String csName = null;
-		csName = camImagesList.get(t);
+		csName = imagesList.get(t);
 		if (csName != null) {
 			Path path = Paths.get(csName);
 			return path.getName(path.getNameCount() - 1).toString();
@@ -295,28 +310,17 @@ public class SequenceCamData {
 	}
 
 	public List<String> getImagesList() {
-		return camImagesList;
+		return imagesList;
 	}
 
 	public void setImagesList(List<String> extImagesList) {
-		camImagesList.clear();
-		camImagesList = new ArrayList<String>(extImagesList);
-		nTotalFrames = camImagesList.size();
-		status = EnumStatus.FILESTACK;
+		imagesList.clear();
+		imagesList = new ArrayList<String>(extImagesList);
+		nTotalFrames = imagesList.size();
 	}
 
 	public void attachSequence(Sequence seq) {
 		this.seq = seq;
-		status = EnumStatus.FILESTACK;
-		seqAnalysisStart = 0;
-	}
-
-	public void completeSequence(Sequence seq2) {
-		if (seq != null) {
-			ArrayList<ROI> listROIS = seq.getROIs();
-			seq2.addROIs(listROIS, false);
-		}
-		seq = seq2;
 		status = EnumStatus.FILESTACK;
 		seqAnalysisStart = 0;
 	}
@@ -331,38 +335,30 @@ public class SequenceCamData {
 		return IcyBufferedImage.createFrom(image);
 	}
 
-	public boolean loadImages() {
-		if (camImagesList.size() == 0)
-			return false;
-		attachSequence(loadSequenceFromImagesList(camImagesList));
-		return (seq != null);
-	}
-
-	public boolean loadFirstImage() {
-		if (camImagesList.size() == 0)
-			return false;
-		List<String> dummyList = new ArrayList<String>();
-		dummyList.add(camImagesList.get(0));
-		attachSequence(loadSequenceFromImagesList(dummyList));
-		return (seq != null);
-	}
-
-	public Sequence loadSequenceFromImagesList(List<String> imagesList) {
+	public Sequence loadSequenceXFromImagesList(List<String> imagesList) {
 		SequenceFileImporter seqFileImporter = Loader.getSequenceFileImporter(imagesList.get(0), true);
-		Sequence seq = Loader.loadSequences(seqFileImporter, imagesList, 0, // series index to load
+
+		List<Sequence> sequenceList = Loader.loadSequences(seqFileImporter, imagesList, 0, // series index to load
 				true, // force volatile
 				false, // separate
 				false, // auto-order
-				false, // directory
+				true, // directory
 				false, // add to recent
-				false // show progress
-		).get(0);
-		return seq; // TODO: here, kymos loads only 12 volumetric images???
+				true // show progress
+		);
+		if (sequenceList.size() == 1)
+			seq = sequenceList.get(0);
+		else {
+			System.out.println("list of sequences size=" + sequenceList.size());
+			seq = sequenceList.get(0);
+		}
+
+		return seq;
 	}
 
 	public Sequence initSequenceFromFirstImage(List<String> imagesList) {
 		SequenceFileImporter seqFileImporter = Loader.getSequenceFileImporter(imagesList.get(0), true);
-		Sequence seq = Loader.loadSequence(seqFileImporter, imagesList.get(0), 0, false);
+		Sequence seq = Loader.loadSequence(seqFileImporter, imagesList.get(0), 0, false); // show progress
 		return seq;
 	}
 

@@ -32,7 +32,7 @@ public class Experiment {
 	public final static String RESULTS = "results";
 	public final static String BIN = "bin_";
 
-	private String imagesDirectory = null;
+	private String camDataImagesDirectory = null;
 	private String resultsDirectory = null;
 	private String binSubDirectory = null;
 
@@ -101,21 +101,22 @@ public class Experiment {
 	}
 
 	public Experiment(ExperimentDirectories eADF) {
-		imagesDirectory = eADF.cameraImagesDirectory;
+		camDataImagesDirectory = eADF.cameraImagesDirectory;
 		resultsDirectory = eADF.resultsDirectory;
 		binSubDirectory = eADF.binSubDirectory;
 		seqCamData = new SequenceCamData();
 		String fileName = concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML);
 		xmlLoadExperiment(fileName);
 
-		seqCamData.camImagesDirectory = eADF.cameraImagesDirectory;
-		seqCamData.loadImageList();
+		seqCamData.imagesDirectory = eADF.cameraImagesDirectory;
+		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(seqCamData.imagesDirectory, "jpg");
+		seqCamData.loadImageList(imagesList);
 		if (eADF.cameraImagesList.size() > 1)
 			getFileIntervalsFromSeqCamData();
-		if (eADF.kymosImagesList != null && eADF.kymosImagesList.size() > 0)
+
+		if (eADF.kymosImagesList != null && eADF.kymosImagesList.size() > 0) {
 			seqSpotKymos = new SequenceKymos(eADF.kymosImagesList);
-		// xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null,
-		// ID_MCEXPERIMENT_XML));
+		}
 	}
 
 	// ----------------------------------
@@ -195,11 +196,11 @@ public class Experiment {
 	}
 
 	public void setCameraImagesDirectory(String name) {
-		imagesDirectory = name;
+		camDataImagesDirectory = name;
 	}
 
 	public String getCameraImagesDirectory() {
-		return imagesDirectory;
+		return camDataImagesDirectory;
 	}
 
 	public void closeSequences() {
@@ -246,22 +247,15 @@ public class Experiment {
 	}
 
 	private SequenceCamData loadImagesForSequenceCamData(String filename) {
-		imagesDirectory = ExperimentDirectories.getImagesDirectoryAsParentFromFileName(filename);
-		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(imagesDirectory, "jpg");
+		camDataImagesDirectory = ExperimentDirectories.getImagesDirectoryAsParentFromFileName(filename);
+		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(camDataImagesDirectory, "jpg");
 		seqCamData = null;
 		if (imagesList.size() > 0) {
 			seqCamData = new SequenceCamData();
 			seqCamData.setImagesList(imagesList);
-			seqCamData.attachSequence(seqCamData.loadSequenceFromImagesList(imagesList));
+			seqCamData.attachSequence(seqCamData.loadSequenceXFromImagesList(imagesList));
 		}
 		return seqCamData;
-	}
-
-	public boolean loadCamDataImages() {
-		if (seqCamData != null)
-			seqCamData.loadImages();
-
-		return (seqCamData != null && seqCamData.seq != null);
 	}
 
 	public boolean loadCamDataSpots() {
@@ -273,7 +267,7 @@ public class Experiment {
 	}
 
 	public SequenceCamData openSequenceCamData() {
-		loadImagesForSequenceCamData(imagesDirectory);
+		loadImagesForSequenceCamData(camDataImagesDirectory);
 		if (seqCamData != null) {
 			loadXML_MCExperiment();
 			getFileIntervalsFromSeqCamData();
@@ -290,7 +284,7 @@ public class Experiment {
 
 	public void loadFileIntervalsFromSeqCamData() {
 		if (seqCamData != null) {
-			seqCamData.setImagesDirectory(imagesDirectory);
+			seqCamData.setImagesDirectory(camDataImagesDirectory);
 			firstImage_FileTime = seqCamData.getFileTimeFromStructuredName((int) seqCamData.absoluteIndexFirstImage);
 			lastImage_FileTime = seqCamData.getFileTimeFromStructuredName(seqCamData.nTotalFrames - 1);
 			if (firstImage_FileTime != null && lastImage_FileTime != null) {
@@ -309,7 +303,7 @@ public class Experiment {
 	}
 
 	public long[] build_MsTimeIntervalsArray_From_SeqCamData_FileNamesList() {
-		int nFrames = seqCamData.camImagesList.size();
+		int nFrames = seqCamData.imagesList.size();
 		if (nFrames != seqCamData.nTotalFrames)
 			System.out.println("error: nFrames (seqCamData.camImagesList.size()):" + nFrames
 					+ " is different from seqCamData.nTotalFrames:" + seqCamData.nTotalFrames);
@@ -395,8 +389,8 @@ public class Experiment {
 
 	public boolean loadXML_MCExperiment() {
 		if (resultsDirectory == null && seqCamData != null) {
-			imagesDirectory = seqCamData.getImagesDirectory();
-			resultsDirectory = imagesDirectory + File.separator + RESULTS;
+			camDataImagesDirectory = seqCamData.getImagesDirectory();
+			resultsDirectory = camDataImagesDirectory + File.separator + RESULTS;
 		}
 		boolean found = xmlLoadExperiment(concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML));
 		return found;
@@ -425,9 +419,9 @@ public class Experiment {
 
 			expDesc.saveXML_Descriptors(node);
 
-			if (imagesDirectory == null)
-				imagesDirectory = seqCamData.getImagesDirectory();
-			XMLUtil.setElementValue(node, ID_IMAGESDIRECTORY, imagesDirectory);
+			if (camDataImagesDirectory == null)
+				camDataImagesDirectory = seqCamData.getImagesDirectory();
+			XMLUtil.setElementValue(node, ID_IMAGESDIRECTORY, camDataImagesDirectory);
 
 			String tempname = concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML);
 			return XMLUtil.saveDocument(doc, tempname);
@@ -441,7 +435,7 @@ public class Experiment {
 		List<ImageFileDescriptor> myList = seqSpotKymos
 				.loadListOfPotentialKymographsFromSpots(getKymosBinFullDirectory(), spotsArray);
 		ImageFileDescriptor.getExistingFileNames(myList);
-		return seqSpotKymos.loadImagesFromList(myList, true);
+		return seqSpotKymos.loadKymoImagesFromList(myList, true);
 	}
 
 	// ------------------------------------------------
@@ -689,8 +683,8 @@ public class Experiment {
 		String xmlFullFileName = File.separator + xmlFileName;
 		switch (item) {
 		case IMG_DIRECTORY:
-			imagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
-			xmlFullFileName = imagesDirectory + File.separator + xmlFileName;
+			camDataImagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
+			xmlFullFileName = camDataImagesDirectory + File.separator + xmlFileName;
 			break;
 
 		case BIN_DIRECTORY:
@@ -720,8 +714,8 @@ public class Experiment {
 		// current directory
 		if (xmlFullFileName != null && fileExists(xmlFullFileName)) {
 			if (item == IMG_DIRECTORY) {
-				imagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
-				ExperimentDirectories.moveAndRename(xmlFileName, imagesDirectory, xmlFileName, resultsDirectory);
+				camDataImagesDirectory = getRootWithNoResultNorBinString(resultsDirectory);
+				ExperimentDirectories.moveAndRename(xmlFileName, camDataImagesDirectory, xmlFileName, resultsDirectory);
 				xmlFullFileName = resultsDirectory + xmlFullFileName;
 			}
 			return xmlFullFileName;

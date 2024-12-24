@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,6 +22,7 @@ import javax.swing.event.ChangeListener;
 
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.experiment.ExperimentDirectories;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxMs;
 
 public class Intervals extends JPanel implements ItemListener {
@@ -101,7 +104,9 @@ public class Intervals extends JPanel implements ItemListener {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					exp.seqCamData.absoluteIndexFirstImage = (long) indexFirstImageJSpinner.getValue();
-					exp.seqCamData.loadImageList();
+					List<String> imagesList = ExperimentDirectories
+							.getImagesListFromPathV2(exp.seqCamData.imagesDirectory, "jpg");
+					exp.seqCamData.loadImageList(imagesList);
 					long bin_ms = exp.seqCamData.binImage_ms;
 					exp.seqCamData.binFirst_ms = exp.seqCamData.absoluteIndexFirstImage * bin_ms;
 					exp.saveXML_MCExperiment();
@@ -114,7 +119,9 @@ public class Intervals extends JPanel implements ItemListener {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					exp.seqCamData.fixedNumberOfImages = (long) fixedNumberOfImagesJSpinner.getValue();
-					exp.seqCamData.loadImageList();
+					List<String> imagesList = (ArrayList<String>) ExperimentDirectories
+							.getImagesListFromPathV2(exp.seqCamData.imagesDirectory, "jpg");
+					exp.seqCamData.loadImageList(imagesList);
 					long bin_ms = exp.seqCamData.binImage_ms;
 					exp.seqCamData.binLast_ms = ((long) (fixedNumberOfImagesJSpinner.getValue())
 							- exp.seqCamData.absoluteIndexFirstImage) * bin_ms;

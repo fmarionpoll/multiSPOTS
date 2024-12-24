@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-
 import icy.common.exception.UnsupportedFormatException;
 import icy.file.Loader;
 import icy.file.Saver;
@@ -46,7 +44,8 @@ public class SequenceKymos extends SequenceCamData {
 
 	public SequenceKymos(List<String> listNames) {
 		super();
-		setImagesList(convertLinexLRFileNames(listNames));
+		status = EnumStatus.KYMOGRAPH;
+		setImagesList(listNames);
 		status = EnumStatus.KYMOGRAPH;
 	}
 
@@ -85,7 +84,7 @@ public class SequenceKymos extends SequenceCamData {
 
 	// -------------------------
 
-	public boolean loadImagesFromList(List<ImageFileDescriptor> kymoImagesDesc, boolean adjustImagesSize) {
+	public boolean loadKymoImagesFromList(List<ImageFileDescriptor> kymoImagesDesc, boolean adjustImagesSize) {
 		isRunning_loadImages = true;
 		boolean flag = (kymoImagesDesc.size() > 0);
 		if (!flag)
@@ -101,12 +100,13 @@ public class SequenceKymos extends SequenceCamData {
 		}
 
 		if (myList.size() > 0) {
+			status = EnumStatus.KYMOGRAPH;
 			myList = ExperimentDirectories.keepOnlyAcceptedNames_List(myList, "tiff");
-			setImagesList(convertLinexLRFileNames(myList));
+//			setImagesList(convertLinexLRFileNames(myList));
 
 			// threaded by default here
-			loadImages();
-			setParentDirectoryAsCSCamFileName(camImagesList.get(0));
+			loadImageList(myList);
+			setParentDirectoryAsCSCamFileName(myList.get(0));
 			status = EnumStatus.KYMOGRAPH;
 		}
 		isRunning_loadImages = false;
@@ -116,8 +116,8 @@ public class SequenceKymos extends SequenceCamData {
 	protected void setParentDirectoryAsCSCamFileName(String filename) {
 		if (filename != null) {
 			Path path = Paths.get(filename);
-			csCamFileName = path.getName(path.getNameCount() - 2).toString();
-			seq.setName(csCamFileName);
+			csFileName = path.getName(path.getNameCount() - 2).toString();
+			seq.setName(csFileName);
 		}
 	}
 
@@ -210,40 +210,6 @@ public class SequenceKymos extends SequenceCamData {
 			result.releaseRaster(true);
 		}
 		result.dataChanged();
-	}
-
-	// ----------------------------
-
-	private List<String> convertLinexLRFileNames(List<String> myListOfFilesNames) {
-		List<String> newList = new ArrayList<String>();
-		for (String oldName : myListOfFilesNames)
-			newList.add(convertLinexLRFileName(oldName));
-		return newList;
-	}
-
-	private String convertLinexLRFileName(String oldName) {
-		Path path = Paths.get(oldName);
-		String test = path.getFileName().toString();
-		String newName = oldName;
-		if (test.contains("R.")) {
-			newName = path.getParent() + File.separator + test.replace("R.", "2.");
-			renameOldFile(oldName, newName);
-		} else if (test.contains("L")) {
-			newName = path.getParent() + File.separator + test.replace("L.", "1.");
-			renameOldFile(oldName, newName);
-		}
-		return newName;
-	}
-
-	private void renameOldFile(String oldName, String newName) {
-		File oldfile = new File(oldName);
-		if (newName != null && oldfile.exists()) {
-			try {
-				FileUtils.moveFile(FileUtils.getFile(oldName), FileUtils.getFile(newName));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 }
