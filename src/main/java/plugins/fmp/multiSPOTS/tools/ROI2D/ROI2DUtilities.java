@@ -19,15 +19,12 @@ import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 import icy.type.geom.Polyline2D;
 import icy.util.XMLUtil;
-
+import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.kernel.roi.roi2d.ROI2DLine;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DRectShape;
 import plugins.kernel.roi.roi2d.ROI2DShape;
-
-import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
-import plugins.fmp.multiSPOTS.tools.Comparators;
 
 public class ROI2DUtilities {
 	private static final String ID_ROIMC = "roiMC";
@@ -46,9 +43,9 @@ public class ROI2DUtilities {
 		}
 		return out;
 	}
-	
+
 	private static ROI2D rescaleRectROI(ROI2D out, double scale) {
-		
+
 		Rectangle2D b2 = ((ROI2D) out).getBounds2D();
 		// translate to origin
 		double oldX = b2.getCenterX();
@@ -62,7 +59,7 @@ public class ROI2DUtilities {
 		((ROI2D) out).setBounds2D(b2);
 		return out;
 	}
-	
+
 	private static ROI2D rescaleShape2DROI(ROI2D out, double scale) {
 		ROI2DShape shape = (ROI2DShape) out;
 
@@ -145,14 +142,6 @@ public class ROI2DUtilities {
 		roiLine.setPoints(pts);
 	}
 
-	private static List<Integer> transferROIYpointsToIntList(ROI2DPolyLine roiLine) {
-		Polyline2D line = roiLine.getPolyline2D();
-		List<Integer> intArray = new ArrayList<Integer>(line.npoints);
-		for (int i = 0; i < line.npoints; i++)
-			intArray.add((int) line.ypoints[i]);
-		return intArray;
-	}
-
 	public static void mergeROIsListNoDuplicate(List<ROI2D> seqList, List<ROI2D> listRois, Sequence seq) {
 		if (seqList.isEmpty()) {
 			for (ROI2D roi : listRois)
@@ -181,27 +170,6 @@ public class ROI2DUtilities {
 			if (roi.getName().indexOf(character) < 0)
 				iterator.remove();
 		}
-	}
-
-	public static ROI2DPolyLine transfertDataArrayToROI(List<Integer> intArray) {
-		Polyline2D line = new Polyline2D();
-		for (int i = 0; i < intArray.size(); i++) {
-			Point2D pt = new Point2D.Double(i, intArray.get(i));
-			line.addPoint(pt);
-		}
-		return new ROI2DPolyLine(line);
-	}
-
-	public static List<Integer> copyFirstROIMatchingFilterToDataArray(SequenceKymos seqKymos, String filter) {
-		List<ROI2D> listRois = seqKymos.seq.getROI2Ds();
-		int width = seqKymos.seq.getWidth();
-		for (ROI2D roi : listRois) {
-			if (roi.getName().contains(filter)) {
-				interpolateMissingPointsAlongXAxis((ROI2DPolyLine) roi, width);
-				return transferROIYpointsToIntList((ROI2DPolyLine) roi);
-			}
-		}
-		return null;
 	}
 
 	public static List<ROI2D> loadROIsFromXML(Document doc) {
@@ -298,6 +266,82 @@ public class ROI2DUtilities {
 			return roi;
 		}
 		return null;
+	}
+
+	public static ROI2D resizeROI(ROI2D roi, int delta_pixel) {
+		ROI2D out = (ROI2D) roi.getCopy();
+
+		if (out instanceof ROI2DRectShape || out instanceof ROI2DLine) {
+			out = resizeRectROI(roi, delta_pixel);
+		} else if (out instanceof ROI2DShape) {
+			out = resizeShape2DROI(roi, delta_pixel);
+		} else {
+			out.setName(roi.getName());
+			new FailedAnnounceFrame("Cannot rescale a " + roi.getSimpleClassName());
+		}
+		return out;
+	}
+
+	private static ROI2D resizeRectROI(ROI2D out, int delta_pixel) {
+
+		Rectangle2D b2 = ((ROI2D) out).getBounds2D();
+		// translate to origin
+		double oldX = b2.getCenterX();
+		double oldY = b2.getCenterY();
+		b2.setFrame(b2.getX() - oldX, b2.getY() - oldY, b2.getWidth(), b2.getHeight());
+		// scale
+		b2.setFrame(b2.getX() + delta_pixel, b2.getY() + delta_pixel, b2.getWidth() + delta_pixel * 2,
+				b2.getHeight() + delta_pixel * 2);
+		// translate back to initial position
+		b2.setFrame(b2.getX() + oldX, b2.getY() + oldY, b2.getWidth(), b2.getHeight());
+
+		((ROI2D) out).setBounds2D(b2);
+		return out;
+	}
+
+	private static ROI2D resizeShape2DROI(ROI2D out, int delta_pixel) {
+		ROI2DShape shape = (ROI2DShape) out;
+		List<Point2D> pts = shape.getPoints();
+
+		// determine the mass center
+		Point2D.Double oldCenter = new Point2D.Double();
+		for (Point2D pt : pts) {
+			oldCenter.x += pt.getX();
+			oldCenter.y += pt.getY();
+		}
+		oldCenter.x /= pts.size();
+		oldCenter.y /= pts.size();
+
+		// scale the ROI via its anchor points
+		for (Point2D pt : pts) {
+			double x = pt.getX(), y = pt.getY();
+			// translate to the origin
+			x -= oldCenter.x;
+			y -= oldCenter.y;
+			x = x >= 0 ? x + delta_pixel : x - delta_pixel;
+			y = y >= 0 ? y + delta_pixel : y - delta_pixel;
+			x += oldCenter.x;
+			y += oldCenter.y;
+			// set the final point location
+			pt.setLocation(x, y);
+		}
+
+		if (out instanceof ROI2DPolygon) {
+			ROI2DPolygon poly = (ROI2DPolygon) out;
+			poly.setPoints(pts);
+		} else if (out instanceof ROI2DPolyLine) {
+			ROI2DPolyLine poly = (ROI2DPolyLine) out;
+			poly.setPoints(pts);
+		} else
+			try {
+				shape.getClass().getMethod("removeAllPoint").invoke(shape);
+				for (Point2D pt : pts)
+					shape.addNewPoint(pt, true);
+			} catch (Exception e) {
+				shape.setName(out.getName());
+				new FailedAnnounceFrame("Cannot resize a " + out.getSimpleClassName());
+			}
+		return shape;
 	}
 
 }
