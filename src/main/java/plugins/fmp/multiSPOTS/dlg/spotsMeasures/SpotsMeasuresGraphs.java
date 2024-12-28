@@ -162,7 +162,7 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		if (displayAllButton.isSelected()) {
 			xlsExportOptions.cageIndexFirst = -1;
 		} else {
-			int ikymo = (parent0.dlgKymos.tabDisplay.kymographsCombo.getSelectedIndex() / 2);
+			int ikymo = (parent0.dlgKymos.tabDisplay.kymographsCombo.getSelectedIndex());
 			xlsExportOptions.cageIndexFirst = exp.spotsArray.getCageIndexFromPlateIndex(ikymo);
 			xlsExportOptions.cageIndexLast = xlsExportOptions.cageIndexFirst;
 		}

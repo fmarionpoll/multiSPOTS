@@ -178,13 +178,13 @@
 <key name="previousState" value="true"/>
 </section>
 <section name="inspector">
-<key name="XC" value="1576"/>
+<key name="XC" value="1569"/>
 <key name="YC" value="0"/>
 <key name="XE" value="600"/>
 <key name="YE" value="140"/>
 <key name="XI" value="600"/>
 <key name="YI" value="140"/>
-<key name="WidthC" value="336"/>
+<key name="WidthC" value="343"/>
 <key name="HeightC" value="870"/>
 <key name="WidthE" value="300"/>
 <key name="HeightE" value="600"/>
@@ -202,7 +202,7 @@
 <key name="YE" value="100"/>
 <key name="XI" value="100"/>
 <key name="YI" value="100"/>
-<key name="WidthC" value="328"/>
+<key name="WidthC" value="335"/>
 <key name="HeightC" value="780"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="600"/>
@@ -220,7 +220,7 @@
 <key name="YE" value="200"/>
 <key name="XI" value="200"/>
 <key name="YI" value="200"/>
-<key name="WidthC" value="328"/>
+<key name="WidthC" value="335"/>
 <key name="HeightC" value="780"/>
 <key name="WidthE" value="400"/>
 <key name="HeightE" value="300"/>
