@@ -156,11 +156,11 @@ public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 
 		options.expList = parent0.expListCombo;
 		if (tabCommonOptions.exportAllFilesCheckBox.isSelected()) {
-			options.expIndexFirst = 0;
-			options.expIndexLast = options.expList.getItemCount() - 1;
+			options.experimentIndexFirst = 0;
+			options.experimentIndexLast = options.expList.getItemCount() - 1;
 		} else {
-			options.expIndexFirst = parent0.expListCombo.getSelectedIndex();
-			options.expIndexLast = parent0.expListCombo.getSelectedIndex();
+			options.experimentIndexFirst = parent0.expListCombo.getSelectedIndex();
+			options.experimentIndexLast = parent0.expListCombo.getSelectedIndex();
 		}
 	}
 }

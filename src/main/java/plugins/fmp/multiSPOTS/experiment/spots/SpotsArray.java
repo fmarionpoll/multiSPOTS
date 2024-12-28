@@ -234,18 +234,38 @@ public class SpotsArray {
 		return spotFound;
 	}
 
+	public int getCageIndexFromPlateIndex(int plateIndex) {
+//		int plateColumn = plateIndex % nColumnsPerPlate;
+//		int cageColumn = plateColumn / nColumnsPerCage;
+//		
+//		int plateRow = plateIndex / nColumnsPerPlate;
+//		int cageRow = plateRow / nRowsPerCage;
+//		
+//		int nCagesAlongX = nColumnsPerPlate / nColumnsPerCage;
+//		int nCagesAlongY = nRowsPerPlate / nRowsPerCage;		
+//		int cageID = cageRow * nCagesAlongX + cageColumn;
+
+		int nSpotsPerCage = nRowsPerCage * nColumnsPerCage;
+		int cageID = plateIndex / nSpotsPerCage;
+		return cageID;
+	}
+
 	public void updatePlateIndexToCageIndexes(int nColsPerCage, int nRowsPerCage) {
 
 		this.nColumnsPerCage = nColsPerCage;
 		this.nRowsPerCage = nRowsPerCage;
 
 		int nCagesAlongX = nColumnsPerPlate / nColsPerCage;
-//		int nCagesAlongY = nRowsPerPlate / nRowsPerCage;
 
 		for (Spot spot : spotsList) {
 			int cageColumn = spot.plateColumn / nColsPerCage;
 			int cageRow = spot.plateRow / nRowsPerCage;
 			spot.cageID = cageRow * nCagesAlongX + cageColumn;
+			int cageID = getCageIndexFromPlateIndex(spot.plateIndex);
+			if (cageID != spot.cageID) {
+				System.out.println("plateIndex=" + spot.plateIndex + " spot.cageID=" + spot.cageID
+						+ " calculated cageID=" + cageID);
+			}
 
 			int spotCageColumn = spot.plateColumn % nColsPerCage;
 			int spotCageRow = spot.plateRow % nRowsPerCage;

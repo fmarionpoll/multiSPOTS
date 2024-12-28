@@ -50,8 +50,10 @@ public class XLSExportOptions {
 	public boolean collateSeries = false;
 	public boolean padIntervals = true;
 
-	public int expIndexFirst = -1;
-	public int expIndexLast = -1;
+	public int experimentIndexFirst = -1;
+	public int experimentIndexLast = -1;
+	public int cageIndexFirst = -1;
+	public int cageIndexLast = -1;
 	public int seriesIndexFirst = -1;
 	public int seriesIndexLast = -1;
 	public JComboBoxExperiment expList = null;

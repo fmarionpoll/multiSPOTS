@@ -160,11 +160,11 @@ public class SpotsMeasuresGraphs extends JPanel implements SequenceListener {
 		xlsExportOptions.exportType = exportType;
 
 		if (displayAllButton.isSelected()) {
-			xlsExportOptions.seriesIndexFirst = -1;
+			xlsExportOptions.cageIndexFirst = -1;
 		} else {
 			int ikymo = (parent0.dlgKymos.tabDisplay.kymographsCombo.getSelectedIndex() / 2);
-			xlsExportOptions.seriesIndexFirst = ikymo;
-			xlsExportOptions.seriesIndexLast = ikymo + 1;
+			xlsExportOptions.cageIndexFirst = exp.spotsArray.getCageIndexFromPlateIndex(ikymo);
+			xlsExportOptions.cageIndexLast = xlsExportOptions.cageIndexFirst;
 		}
 
 		iChart.displayData(exp, xlsExportOptions);

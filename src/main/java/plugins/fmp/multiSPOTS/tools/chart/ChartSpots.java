@@ -114,6 +114,11 @@ public class ChartSpots extends IcyFrame {
 		int cageID = 0;
 		for (int row = 0; row < nCagesAlongY; row++) {
 			for (int col = 0; col < nCagesAlongX; col++) {
+				if (xlsExportOptions.cageIndexFirst >= 0
+						&& (cageID < xlsExportOptions.cageIndexFirst || cageID > xlsExportOptions.cageIndexLast)) {
+					cageID++;
+					continue;
+				}
 				NumberAxis yAxis = setYaxis(row, col, xlsExportOptions);
 				XYPlot subplot = getXYPlotOfOneCage(cageID, yAxis, chartColor, xlsResultsArray, xlsResultsArray2);
 				CombinedRangeXYPlot combinedXYPlot = new CombinedRangeXYPlot(yAxis);
