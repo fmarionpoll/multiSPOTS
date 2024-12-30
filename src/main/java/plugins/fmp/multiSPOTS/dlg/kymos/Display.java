@@ -36,6 +36,7 @@ import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Directories;
+import plugins.fmp.multiSPOTS.tools.ViewerFMP;
 import plugins.fmp.multiSPOTS.tools.canvas2D.Canvas2D_2Transforms;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
 
@@ -217,16 +218,16 @@ public class Display extends JPanel implements ViewerListener {
 
 			ArrayList<Viewer> vList = seqKymographs.seq.getViewers();
 			if (vList.size() == 0) {
-				Viewer viewerKymographs = new Viewer(seqKymographs.seq, true);
+				ViewerFMP v = new ViewerFMP(seqKymographs.seq, true, true);
 				List<String> list = IcyCanvas.getCanvasPluginNames();
 				String pluginName = list.stream().filter(s -> s.contains("Canvas2D_2Transforms")).findFirst()
 						.orElse(null);
-				viewerKymographs.setCanvas(pluginName);
-				viewerKymographs.setRepeat(false);
-				viewerKymographs.addListener(this);
+				v.setCanvas(pluginName);
+				v.setRepeat(false);
+				v.addListener(this);
 
-				JToolBar toolBar = viewerKymographs.getToolBar();
-				Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) viewerKymographs.getCanvas();
+				JToolBar toolBar = v.getToolBar();
+				Canvas2D_2Transforms canvas = (Canvas2D_2Transforms) v.getCanvas();
 				canvas.customizeToolbarStep2(toolBar);
 
 				placeKymoViewerNextToCamViewer(exp);
@@ -235,6 +236,9 @@ public class Display extends JPanel implements ViewerListener {
 				isel = selectKymographImage(isel);
 				selectKymographComboItem(isel);
 				canvas.selectImageTransformFunctionStep2(2);
+
+				String title = kymographsCombo.getItemAt(0);
+				v.setTitle(title);
 			}
 		}
 	}
@@ -375,17 +379,12 @@ public class Display extends JPanel implements ViewerListener {
 	public void viewerChanged(ViewerEvent event) {
 		if ((event.getType() == ViewerEvent.ViewerEventType.POSITION_CHANGED) && (event.getDim() == DimensionId.T)) {
 			Viewer v = event.getSource();
-
 			int t = v.getPositionT();
-//			t = selectKymographImage(t);
-//			System.out.println("ViewerChanged -> _Display_ t=" + t);
 			if (t >= 0)
 				selectKymographComboItem(t);
-			// TODO find where title is set as bin_20 - spot_000000
-//			String currentTitle = v.getTitle();
+
 			String title = kymographsCombo.getItemAt(t);
 			v.setTitle(title);
-
 		}
 	}
 

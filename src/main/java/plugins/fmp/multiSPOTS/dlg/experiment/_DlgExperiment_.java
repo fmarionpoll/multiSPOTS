@@ -25,6 +25,7 @@ import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.tools.ViewerFMP;
 
 public class _DlgExperiment_ extends JPanel implements ViewerListener, ChangeListener {
 	/**
@@ -100,9 +101,9 @@ public class _DlgExperiment_ extends JPanel implements ViewerListener, ChangeLis
 		final ViewerListener parent = this;
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Viewer v = seq.getFirstViewer();
+				ViewerFMP v = (ViewerFMP) seq.getFirstViewer();
 				if (v == null) {
-					v = new Viewer(exp.seqCamData.seq, true);
+					v = new ViewerFMP(exp.seqCamData.seq, true, true);
 					List<String> list = IcyCanvas.getCanvasPluginNames();
 					String pluginName = list.stream().filter(s -> s.contains("Canvas2D_2Transforms")).findFirst()
 							.orElse(null);
