@@ -30,8 +30,6 @@ public class SequenceKymos extends SequenceCamData {
 	public int imageWidthMax = 0;
 	public int imageHeightMax = 0;
 
-	// -----------------------------------------------------
-
 	public SequenceKymos() {
 		super();
 		status = EnumStatus.KYMOGRAPH;
@@ -44,12 +42,9 @@ public class SequenceKymos extends SequenceCamData {
 
 	public SequenceKymos(List<String> listNames) {
 		super();
-		status = EnumStatus.KYMOGRAPH;
 		setImagesList(listNames);
 		status = EnumStatus.KYMOGRAPH;
 	}
-
-	// ----------------------------
 
 	public void validateRois() {
 		List<ROI2D> listRois = seq.getROI2Ds();
@@ -68,8 +63,6 @@ public class SequenceKymos extends SequenceCamData {
 		Collections.sort(listRois, new Comparators.ROI2D_Name_Comparator());
 	}
 
-	// ----------------------------
-
 	public List<ImageFileDescriptor> loadListOfPotentialKymographsFromSpots(String dir, SpotsArray spotsArray) {
 		String directoryFull = dir + File.separator;
 		int nspots = spotsArray.spotsList.size();
@@ -82,9 +75,7 @@ public class SequenceKymos extends SequenceCamData {
 		return myListOfFiles;
 	}
 
-	// -------------------------
-
-	public boolean loadKymoImagesFromList(List<ImageFileDescriptor> kymoImagesDesc, boolean adjustImagesSize) {
+	public boolean loadKymographImagesFromList(List<ImageFileDescriptor> kymoImagesDesc, boolean adjustImagesSize) {
 		isRunning_loadImages = true;
 		boolean flag = (kymoImagesDesc.size() > 0);
 		if (!flag)
@@ -102,7 +93,6 @@ public class SequenceKymos extends SequenceCamData {
 		if (myList.size() > 0) {
 			status = EnumStatus.KYMOGRAPH;
 			myList = ExperimentDirectories.keepOnlyAcceptedNames_List(myList, "tiff");
-//			setImagesList(convertLinexLRFileNames(myList));
 
 			// threaded by default here
 			loadImageList(myList);
@@ -185,31 +175,31 @@ public class SequenceKymos extends SequenceCamData {
 		progress.close();
 	}
 
-	private static void transferImage1To2(IcyBufferedImage source, IcyBufferedImage result) {
+	private void transferImage1To2(IcyBufferedImage source, IcyBufferedImage destination) {
 		final int sizeY = source.getSizeY();
 		final int endC = source.getSizeC();
 		final int sourceSizeX = source.getSizeX();
-		final int destSizeX = result.getSizeX();
+		final int destSizeX = destination.getSizeX();
 		final DataType dataType = source.getDataType_();
 		final boolean signed = dataType.isSigned();
-		result.lockRaster();
+		destination.lockRaster();
 		try {
 			for (int ch = 0; ch < endC; ch++) {
 				final Object src = source.getDataXY(ch);
-				final Object dst = result.getDataXY(ch);
+				final Object dst = destination.getDataXY(ch);
 				int srcOffset = 0;
 				int dstOffset = 0;
 				for (int curY = 0; curY < sizeY; curY++) {
 					Array1DUtil.arrayToArray(src, srcOffset, dst, dstOffset, sourceSizeX, signed);
-					result.setDataXY(ch, dst);
+					destination.setDataXY(ch, dst);
 					srcOffset += sourceSizeX;
 					dstOffset += destSizeX;
 				}
 			}
 		} finally {
-			result.releaseRaster(true);
+			destination.releaseRaster(true);
 		}
-		result.dataChanged();
+		destination.dataChanged();
 	}
 
 }

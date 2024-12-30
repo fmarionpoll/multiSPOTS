@@ -145,37 +145,4 @@ public class Directories {
 		}
 	}
 
-//	public static void move_TIFFfiles_To_Subdirectory(String directoryStr, String subname) {
-//		File directoryFile = new File(directoryStr);
-//		String subdirectoryStr = directoryStr + File.separator + subname;
-//		File subDirectoryFile = new File(subdirectoryStr);
-//		if (!subDirectoryFile.exists())
-//			subDirectoryFile.mkdir();
-//		for (File file : directoryFile.listFiles()) {
-//			String name = file.getName();
-//			if (name.toLowerCase().endsWith(".tiff") && name.toLowerCase().startsWith("line")) {
-//				String destinationName = Kapillary.replace_LR_with_12(name);
-//				file.renameTo(new File(subDirectoryFile + File.separator + destinationName));
-//				file.delete();
-//			}
-//		}
-//	}
-
-//	public static void move_xmlLINEfiles_To_Subdirectory(String directoryStr, String subname, boolean clipName) {
-//		File directoryFile = new File(directoryStr);
-//		String subdirectoryStr = directoryStr + File.separator + subname;
-//		File subDirectoryFile = new File(subdirectoryStr);
-//		if (!subDirectoryFile.exists())
-//			subDirectoryFile.mkdir();
-//		for (File file : directoryFile.listFiles()) {
-//			String name = file.getName();
-//			if (name.toLowerCase().endsWith(".xml") || name.toLowerCase().startsWith("line")) {
-//				String destinationName = Kapillary.replace_LR_with_12(name);
-//				if (clipName)
-//					destinationName = destinationName.substring(0, 6) + ".xml";
-//				file.renameTo(new File(subDirectoryFile + File.separator + destinationName));
-//				file.delete();
-//			}
-//		}
-//	}
 }

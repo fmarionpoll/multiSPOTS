@@ -35,7 +35,7 @@ public class ExperimentDirectories {
 	}
 
 	public String getCameraImagesDirectory() {
-		return resultsDirectory;
+		return cameraImagesDirectory;
 	}
 
 	public static List<String> keepOnlyAcceptedNames_List(List<String> namesList, String strExtension) {
@@ -126,11 +126,11 @@ public class ExperimentDirectories {
 
 	public boolean getDirectoriesFromDialog(String expListBinSubDirectory, String rootDirectory,
 			boolean createResults) {
-		cameraImagesList = getImagesListFromDialog(rootDirectory); // *
+		cameraImagesList = getImagesListFromDialog(rootDirectory);
 		if (!checkCameraImagesList())
 			return false;
-		cameraImagesDirectory = Directories.getDirectoryFromName(cameraImagesList.get(0)); // *
-		resultsDirectory = getResultsDirectoryDialog(cameraImagesDirectory, Experiment.RESULTS, createResults); // *
+		cameraImagesDirectory = Directories.getDirectoryFromName(cameraImagesList.get(0));
+		resultsDirectory = getResultsDirectoryDialog(cameraImagesDirectory, Experiment.RESULTS, createResults);
 
 		binSubDirectory = getBinSubDirectoryFromTIFFLocation(expListBinSubDirectory, resultsDirectory);
 		String kymosDir = resultsDirectory + File.separator + this.binSubDirectory;
@@ -139,9 +139,9 @@ public class ExperimentDirectories {
 	}
 
 	public boolean getDirectoriesFromExptPath(String expListBinSubDirectory, String exptDirectory) {
-		cameraImagesDirectory = getImagesDirectoryAsParentFromFileName(exptDirectory); // *
-		cameraImagesList = ExperimentDirectories.getImagesListFromPathV2(cameraImagesDirectory, "jpg"); // *
-		resultsDirectory = getResultsDirectory(cameraImagesDirectory, exptDirectory); // *
+		cameraImagesDirectory = getImagesDirectoryAsParentFromFileName(exptDirectory);
+		cameraImagesList = ExperimentDirectories.getImagesListFromPathV2(cameraImagesDirectory, "jpg");
+		resultsDirectory = getResultsDirectory(cameraImagesDirectory, exptDirectory);
 
 		binSubDirectory = getBinSubDirectoryFromTIFFLocation(expListBinSubDirectory, resultsDirectory);
 		String kymosDir = resultsDirectory + File.separator + this.binSubDirectory;
@@ -164,7 +164,6 @@ public class ExperimentDirectories {
 
 	private String getBinSubDirectoryFromTIFFLocation(String expListBinSubDirectory, String resultsDirectory) {
 		List<String> expList = Directories.getSortedListOfSubDirectoriesWithTIFF(resultsDirectory);
-//		move_TIFFandLINEfiles_From_Results_to_BinDirectory(resultsDirectory, expList);
 		String binDirectory = expListBinSubDirectory;
 		if (binDirectory == null) {
 			if (expList.size() > 1) {

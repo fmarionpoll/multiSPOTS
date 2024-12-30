@@ -143,7 +143,7 @@ public class LoadSave extends JPanel {
 				.loadListOfPotentialKymographsFromSpots(exp.getKymosBinFullDirectory(), exp.spotsArray);
 		int nItems = ImageFileDescriptor.getExistingFileNames(myList);
 		if (nItems > 0) {
-			flag = seqKymos.loadKymoImagesFromList(myList, true);
+			flag = seqKymos.loadKymographImagesFromList(myList, true);
 			exp.spotsArray.transferSpotsMeasuresToSequence(exp.seqSpotKymos.seq);
 			parent0.dlgKymos.tabDisplay.transferSpotNamesToComboBox(exp);
 		} else

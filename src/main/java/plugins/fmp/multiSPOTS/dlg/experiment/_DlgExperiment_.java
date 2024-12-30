@@ -18,9 +18,9 @@ import icy.gui.component.PopupPanel;
 import icy.gui.frame.IcyFrame;
 import icy.gui.viewer.Viewer;
 import icy.gui.viewer.ViewerEvent;
+import icy.gui.viewer.ViewerEvent.ViewerEventType;
 import icy.gui.viewer.ViewerListener;
 import icy.main.Icy;
-import icy.gui.viewer.ViewerEvent.ViewerEventType;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
@@ -114,6 +114,7 @@ public class _DlgExperiment_ extends JPanel implements ViewerListener, ChangeLis
 					v.toFront();
 					v.requestFocus();
 					v.addListener(parent);
+					System.out.println("set viewer listener: _DlgExperiment_");
 					v.setTitle(exp.seqCamData.getDecoratedImageName(0));
 					v.setRepeat(false);
 				}
@@ -132,20 +133,21 @@ public class _DlgExperiment_ extends JPanel implements ViewerListener, ChangeLis
 
 	@Override
 	public void viewerChanged(ViewerEvent event) {
-		if ((event.getType() == ViewerEventType.POSITION_CHANGED)) {
-			if (event.getDim() == DimensionId.T) {
-				Viewer v = event.getSource();
-				int idViewer = v.getSequence().getId();
-				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) {
-					int idCurrentExp = exp.seqCamData.seq.getId();
-					if (idViewer == idCurrentExp) {
-						int t = v.getPositionT();
-						v.setTitle(exp.seqCamData.getDecoratedImageName(t));
-						if (parent0.dlgCages.bTrapROIsEdit)
-							exp.saveDetRoisToPositions();
-						exp.updateROIsAt(t);
-					}
+		if ((event.getType() == ViewerEventType.POSITION_CHANGED) && (event.getDim() == DimensionId.T)) {
+			Viewer v = event.getSource();
+			int idViewer = v.getSequence().getId();
+
+			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+			if (exp != null) {
+				int idCurrentSeqCamData = exp.seqCamData.seq.getId();
+				if (idViewer == idCurrentSeqCamData) {
+					int t = v.getPositionT();
+					System.out.println("ViewerChanged -> _DlgExperiment_ t=" + t);
+
+					v.setTitle(exp.seqCamData.getDecoratedImageName(t));
+					if (parent0.dlgCages.bTrapROIsEdit)
+						exp.saveDetRoisToPositions();
+					exp.updateROIsAt(t);
 				}
 			}
 		}

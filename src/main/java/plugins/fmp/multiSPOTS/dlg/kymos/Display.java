@@ -28,6 +28,7 @@ import icy.gui.viewer.ViewerEvent;
 import icy.gui.viewer.ViewerListener;
 import icy.main.Icy;
 import icy.roi.ROI;
+import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
@@ -372,21 +373,19 @@ public class Display extends JPanel implements ViewerListener {
 
 	@Override
 	public void viewerChanged(ViewerEvent event) {
-		if (event.getType() == ViewerEvent.ViewerEventType.POSITION_CHANGED) {
-			Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-			if (exp != null) {
-				Viewer v = exp.seqSpotKymos.seq.getFirstViewer();
-				if (v != null) {
-					int t = v.getPositionT();
-					t = selectKymographImage(t);
-					if (t >= 0)
-						selectKymographComboItem(t);
-					// TODO find where title is set as bin_20 - spot_000000
-//					String currentTitle = v.getTitle(); 
-//					String title = kymographsCombo.getItemAt(t);
-//					v.setTitle(title);
-				}
-			}
+		if ((event.getType() == ViewerEvent.ViewerEventType.POSITION_CHANGED) && (event.getDim() == DimensionId.T)) {
+			Viewer v = event.getSource();
+
+			int t = v.getPositionT();
+//			t = selectKymographImage(t);
+			System.out.println("ViewerChanged -> _Display_ t=" + t);
+			if (t >= 0)
+				selectKymographComboItem(t);
+			// TODO find where title is set as bin_20 - spot_000000
+//			String currentTitle = v.getTitle();
+			String title = kymographsCombo.getItemAt(t);
+			v.setTitle(title);
+
 		}
 	}
 

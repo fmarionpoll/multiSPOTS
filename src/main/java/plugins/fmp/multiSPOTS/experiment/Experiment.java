@@ -434,7 +434,7 @@ public class Experiment {
 		List<ImageFileDescriptor> myList = seqSpotKymos
 				.loadListOfPotentialKymographsFromSpots(getKymosBinFullDirectory(), spotsArray);
 		ImageFileDescriptor.getExistingFileNames(myList);
-		return seqSpotKymos.loadKymoImagesFromList(myList, true);
+		return seqSpotKymos.loadKymographImagesFromList(myList, true);
 	}
 
 	// ------------------------------------------------
