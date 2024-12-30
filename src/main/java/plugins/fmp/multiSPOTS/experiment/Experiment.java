@@ -101,14 +101,14 @@ public class Experiment {
 	}
 
 	public Experiment(ExperimentDirectories eADF) {
-		camDataImagesDirectory = eADF.cameraImagesDirectory;
-		resultsDirectory = eADF.resultsDirectory;
-		binSubDirectory = eADF.binSubDirectory;
+		camDataImagesDirectory = eADF.getCameraImagesDirectory();
+		resultsDirectory = eADF.getResultsDirectory();
+		binSubDirectory = eADF.getBinSubDirectory();
 		seqCamData = new SequenceCamData();
 		String fileName = concatenateExptDirectoryWithSubpathAndName(null, ID_MCEXPERIMENT_XML);
 		xmlLoadExperiment(fileName);
 
-		seqCamData.imagesDirectory = eADF.cameraImagesDirectory;
+		seqCamData.imagesDirectory = eADF.getCameraImagesDirectory();
 		List<String> imagesList = ExperimentDirectories.getImagesListFromPathV2(seqCamData.imagesDirectory, "jpg");
 		seqCamData.loadImageList(imagesList);
 		if (eADF.cameraImagesList.size() > 1)

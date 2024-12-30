@@ -20,11 +20,23 @@ import icy.gui.dialog.LoaderDialog;
 import plugins.fmp.multiSPOTS.tools.Directories;
 
 public class ExperimentDirectories {
-	public String cameraImagesDirectory = null;
-	public String resultsDirectory = null;
-	public String binSubDirectory = null;
+	private String cameraImagesDirectory = null;
+	private String resultsDirectory = null;
+	private String binSubDirectory = null;
 	public List<String> cameraImagesList = null;
 	public List<String> kymosImagesList = null;
+
+	public String getBinSubDirectory() {
+		return binSubDirectory;
+	}
+
+	public String getResultsDirectory() {
+		return resultsDirectory;
+	}
+
+	public String getCameraImagesDirectory() {
+		return resultsDirectory;
+	}
 
 	public static List<String> keepOnlyAcceptedNames_List(List<String> namesList, String strExtension) {
 		int count = namesList.size();
