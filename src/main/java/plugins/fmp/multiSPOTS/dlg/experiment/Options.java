@@ -87,7 +87,7 @@ public class Options extends JPanel {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null)
 			return;
-		exp.seqCamData.displayROIs(isVisible, pattern);
+		exp.seqCamData.displaySpecificROIs(isVisible, pattern);
 	}
 
 }

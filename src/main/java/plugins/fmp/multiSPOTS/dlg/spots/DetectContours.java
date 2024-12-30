@@ -285,13 +285,13 @@ public class DetectContours extends JPanel {
 		boolean detectSelectedROIs = selectedSpotCheckBox.isSelected();
 		for (Spot spot : exp.spotsArray.spotsList) {
 
-			ROI2D roi_in = spot.getRoi_in();
+			ROI2D roi_in = spot.getRoi();
 			if (detectSelectedROIs && !roi_in.isSelected())
 				continue;
 
 			exp.seqCamData.seq.removeROI(roi_in);
 			try {
-				spot.mask2DSpot = spot.getRoi_in().getBooleanMask2D(0, 0, 1, true);
+				spot.mask2DSpot = spot.getRoi().getBooleanMask2D(0, 0, 1, true);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -301,12 +301,12 @@ public class DetectContours extends JPanel {
 				List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());
 				ROI2DPolygon roi_new = new ROI2DPolygon(listPoints);
 
-				roi_new.setName(spot.getRoi_in().getName());
-				roi_new.setColor(spot.getRoi_in().getColor());
-				spot.setRoi_old((ROI2DShape) spot.getRoi_in().getCopy());
-				spot.setRoi_in(roi_new);
+				roi_new.setName(spot.getRoi().getName());
+				roi_new.setColor(spot.getRoi().getColor());
+				spot.setRoi_old((ROI2DShape) spot.getRoi().getCopy());
+				spot.setRoi(roi_new);
 			}
-			exp.seqCamData.seq.addROI(spot.getRoi_in());
+			exp.seqCamData.seq.addROI(spot.getRoi());
 		}
 	}
 
@@ -314,7 +314,7 @@ public class DetectContours extends JPanel {
 		boolean detectSelectedROIs = selectedSpotCheckBox.isSelected();
 		for (Spot spot : exp.spotsArray.spotsList) {
 
-			ROI2D roi_in = spot.getRoi_in();
+			ROI2D roi_in = spot.getRoi();
 			if (detectSelectedROIs && !roi_in.isSelected())
 				continue;
 
@@ -326,8 +326,8 @@ public class DetectContours extends JPanel {
 			Ellipse2D ellipse = new Ellipse2D.Double(x, y, 2 * spot.spotRadius, 2 * spot.spotRadius);
 			ROI2DEllipse roiEllipse = new ROI2DEllipse(ellipse);
 			roiEllipse.setName(roiName);
-			spot.setRoi_in(roiEllipse);
-			exp.seqCamData.seq.addROI(spot.getRoi_in());
+			spot.setRoi(roiEllipse);
+			exp.seqCamData.seq.addROI(spot.getRoi());
 		}
 	}
 
@@ -337,7 +337,7 @@ public class DetectContours extends JPanel {
 		exp.seqCamData.seq.removeROI(roi_old);
 		roi_new.setName(roi_old.getName());
 		roi_new.setColor(roi_old.getColor());
-		spot.setRoi_in((ROI2DShape) roi_new);
+		spot.setRoi((ROI2DShape) roi_new);
 		try {
 			spot.spotNPixels = (int) roi_new.getNumberOfPoints();
 		} catch (InterruptedException e) {
@@ -352,7 +352,7 @@ public class DetectContours extends JPanel {
 			return;
 
 		for (Spot spot : exp.spotsArray.spotsList) {
-			ROI2D spotRoi = spot.getRoi_in();
+			ROI2D spotRoi = spot.getRoi();
 			try {
 				if (!spotRoi.intersects(roi))
 					continue;

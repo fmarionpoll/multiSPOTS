@@ -31,11 +31,7 @@ import icy.file.SequenceFileImporter;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.roi.ROI;
-import icy.roi.ROI2D;
 import icy.sequence.Sequence;
-import plugins.fmp.multiSPOTS.experiment.cages.Cage;
-import plugins.fmp.multiSPOTS.tools.Comparators;
-import plugins.kernel.roi.roi2d.ROI2DPolygon;
 
 public class SequenceCamData {
 	public Sequence seq = null;
@@ -136,10 +132,10 @@ public class SequenceCamData {
 		return csName;
 	}
 
-	public boolean loadXImages() {
+	public boolean loadImages() {
 		if (imagesList.size() == 0)
 			return false;
-		attachSequence(loadSequenceXFromImagesList(imagesList));
+		attachSequence(loadSequenceFromImagesList(imagesList));
 		return (seq != null);
 	}
 
@@ -148,7 +144,7 @@ public class SequenceCamData {
 			return false;
 		List<String> dummyList = new ArrayList<String>();
 		dummyList.add(imagesList.get(0));
-		attachSequence(loadSequenceXFromImagesList(dummyList));
+		attachSequence(loadSequenceFromImagesList(dummyList));
 		return (seq != null);
 	}
 
@@ -156,7 +152,7 @@ public class SequenceCamData {
 		if (imagesList.size() > 0) {
 			clipImagesList(imagesList);
 			setImagesList(imagesList);
-			attachSequence(loadSequenceXFromImagesList(imagesList));
+			attachSequence(loadSequenceFromImagesList(imagesList));
 		}
 	}
 
@@ -265,23 +261,6 @@ public class SequenceCamData {
 		return filetime;
 	}
 
-	public List<Cage> getCagesFromROIs() {
-		List<ROI2D> roiList = seq.getROI2Ds();
-		Collections.sort(roiList, new Comparators.ROI2D_Name_Comparator());
-		List<Cage> cageList = new ArrayList<Cage>();
-		for (ROI2D roi : roiList) {
-			String csName = roi.getName();
-			if (!(roi instanceof ROI2DPolygon))
-				continue;
-			if ((csName.length() > 4 && csName.substring(0, 4).contains("cage") || csName.contains("Polygon2D"))) {
-				Cage cage = new Cage();
-				cage.cageRoi2D = roi;
-				cageList.add(cage);
-			}
-		}
-		return cageList;
-	}
-
 	public void displayViewerAtRectangle(Rectangle parent0Rect) {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -335,7 +314,7 @@ public class SequenceCamData {
 		return IcyBufferedImage.createFrom(image);
 	}
 
-	public Sequence loadSequenceXFromImagesList(List<String> imagesList) {
+	public Sequence loadSequenceFromImagesList(List<String> imagesList) {
 		SequenceFileImporter seqFileImporter = Loader.getSequenceFileImporter(imagesList.get(0), true);
 
 		List<Sequence> sequenceList = Loader.loadSequences(seqFileImporter, imagesList, 0, // series index to load
@@ -364,7 +343,7 @@ public class SequenceCamData {
 
 	// -------------------------
 
-	public void displayROIs(boolean isVisible, String pattern) {
+	public void displaySpecificROIs(boolean isVisible, String pattern) {
 		Viewer v = seq.getFirstViewer();
 		IcyCanvas canvas = v.getCanvas();
 		List<Layer> layers = canvas.getLayers(false);
@@ -379,4 +358,5 @@ public class SequenceCamData {
 				layer.setVisible(isVisible);
 		}
 	}
+
 }

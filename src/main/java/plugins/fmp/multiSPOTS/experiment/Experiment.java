@@ -253,7 +253,7 @@ public class Experiment {
 		if (imagesList.size() > 0) {
 			seqCamData = new SequenceCamData();
 			seqCamData.setImagesList(imagesList);
-			seqCamData.attachSequence(seqCamData.loadSequenceXFromImagesList(imagesList));
+			seqCamData.attachSequence(seqCamData.loadSequenceFromImagesList(imagesList));
 		}
 		return seqCamData;
 	}
@@ -371,7 +371,6 @@ public class Experiment {
 	}
 
 	public String getBinNameFromKymoFrameStep() {
-
 		return BIN + seqCamData.binDuration_ms / 1000;
 	}
 

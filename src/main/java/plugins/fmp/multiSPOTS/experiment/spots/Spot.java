@@ -144,7 +144,7 @@ public class Spot implements Comparable<Spot> {
 		flyPresent.copyLevel2D(spotFrom.flyPresent);
 	}
 
-	public ROI2D getRoi_in() {
+	public ROI2D getRoi() {
 		return spotRoi_in;
 	}
 
@@ -152,7 +152,7 @@ public class Spot implements Comparable<Spot> {
 		return spotRoi_old;
 	}
 
-	public void setRoi_in(ROI2DShape roi) {
+	public void setRoi(ROI2DShape roi) {
 		this.spotRoi_in = roi;
 		listRoiAlongT.clear();
 	}
@@ -169,11 +169,18 @@ public class Spot implements Comparable<Spot> {
 		return spotRoi_in.getName();
 	}
 
-	public int getCageIndexFromRoiName() {
-		String name = spotRoi_in.getName();
-		if (!name.contains("spot"))
-			return -1;
-		return Integer.valueOf(name.substring(4, 6));
+	public String getPlateCoordinatesAsString() {
+		String plateCoords = getCharForNumber(plateRow) + "_" + Integer.toString(plateColumn);
+		return plateCoords;
+	}
+
+	private String getCharForNumber(int i) {
+		return i > -1 && i < 26 ? String.valueOf((char) (i + 'A')) : null;
+	}
+
+	public void setSpotRoi_InColorAccordingToSpotIndex(int index) {
+		Color value = spotColors[index % 8];
+		spotRoi_in.setColor(value);
 	}
 
 	public String getCagePosition(EnumXLSExportType xlsExportOption) {
@@ -368,11 +375,6 @@ public class Spot implements Comparable<Spot> {
 		return flag;
 	}
 
-	public void setSpotRoi_InColorAccordingToSpotIndex(int index) {
-		Color value = spotColors[index % 8];
-		spotRoi_in.setColor(value);
-	}
-
 	private boolean loadFromXML_SpotAlongT(Node node) {
 		listRoiAlongT.clear();
 		final Node nodeMeta2 = XMLUtil.getElement(node, ID_INTERVALS);
@@ -498,11 +500,11 @@ public class Spot implements Comparable<Spot> {
 	}
 
 	public void initLevel2DMeasures() {
-		sum_in.initLevel2D_fromMeasureValues(getRoi_in().getName());
-		sum_clean.initLevel2D_fromMeasureValues(getRoi_in().getName());
+		sum_in.initLevel2D_fromMeasureValues(getRoi().getName());
+		sum_clean.initLevel2D_fromMeasureValues(getRoi().getName());
 //		sum_out.initLevel2D_fromMeasureValues(getRoi_in().getName());
 //		sum_diff.initLevel2D_fromMeasureValues(getRoi_in().getName());
-		flyPresent.initLevel2D_fromBooleans(getRoi_in().getName());
+		flyPresent.initLevel2D_fromBooleans(getRoi().getName());
 	}
 
 	public void buildRunningMedianFromSumLevel2D(int imageHeight) {
@@ -574,7 +576,7 @@ public class Spot implements Comparable<Spot> {
 
 	public String csvExportDescription(String csvSep) {
 		StringBuffer sbf = new StringBuffer();
-		List<String> row = Arrays.asList(String.valueOf(plateIndex), getRoi_in().getName(), String.valueOf(cageID),
+		List<String> row = Arrays.asList(String.valueOf(plateIndex), getRoi().getName(), String.valueOf(cageID),
 				String.valueOf(spotNFlies), String.valueOf(spotVolume), String.valueOf(spotNPixels),
 				String.valueOf(spotRadius), spotStim.replace(",", "."), spotConc.replace(",", "."),
 				String.valueOf(cagePosition));

@@ -175,7 +175,8 @@ public class Display extends JPanel implements ViewerListener {
 				int nspotsArray = exp.spotsArray.spotsList.size();
 				for (int i = 0; i < nspotsArray; i++) {
 					Spot spot = exp.spotsArray.spotsList.get(i);
-					kymographsCombo.addItem(spot.getRoiName());
+					String name = spot.getPlateCoordinatesAsString();
+					kymographsCombo.addItem(name);
 				}
 			}
 		});
@@ -360,12 +361,12 @@ public class Display extends JPanel implements ViewerListener {
 	private void selectSpot(Experiment exp, int isel) {
 		SpotsArray spotsArray = exp.spotsArray;
 		for (Spot spot : spotsArray.spotsList) {
-			spot.getRoi_in().setSelected(false);
-			spot.getRoi_in().setFocused(false);
+			spot.getRoi().setSelected(false);
+			spot.getRoi().setFocused(false);
 		}
 		if (isel >= 0) {
 			Spot selectedSpot = spotsArray.spotsList.get(isel);
-			selectedSpot.getRoi_in().setFocused(true);
+			selectedSpot.getRoi().setFocused(true);
 		}
 	}
 
@@ -380,6 +381,10 @@ public class Display extends JPanel implements ViewerListener {
 					t = selectKymographImage(t);
 					if (t >= 0)
 						selectKymographComboItem(t);
+					// TODO find where title is set as bin_20 - spot_000000
+//					String currentTitle = v.getTitle(); 
+//					String title = kymographsCombo.getItemAt(t);
+//					v.setTitle(title);
 				}
 			}
 		}

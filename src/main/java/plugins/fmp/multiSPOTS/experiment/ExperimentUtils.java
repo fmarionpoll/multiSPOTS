@@ -19,7 +19,7 @@ public class ExperimentUtils {
 		for (ROI2D roi : listROISCap) {
 			boolean found = false;
 			for (Spot spot : exp.spotsArray.spotsList) {
-				if (spot.getRoi_in() != null && roi.getName().equals(spot.getRoiName())) {
+				if (spot.getRoi() != null && roi.getName().equals(spot.getRoiName())) {
 					found = true;
 					break;
 				}
@@ -61,7 +61,7 @@ public class ExperimentUtils {
 				}
 			}
 			if (!found)
-				exp.seqCamData.seq.addROI(spot.getRoi_in());
+				exp.seqCamData.seq.addROI(spot.getRoi());
 		}
 	}
 

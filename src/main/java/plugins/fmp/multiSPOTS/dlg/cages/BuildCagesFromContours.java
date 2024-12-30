@@ -217,7 +217,7 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 					blobsfound.add(blobi);
 					ROI2DPolygon roiP = new ROI2DPolygon(blobs.getBlobPolygon2D(blobi));
 					roiP.translate(rectGrid.x, rectGrid.y);
-					int cagenb = spot.getCageIndexFromRoiName();
+					int cagenb = spot.cageID;
 					roiP.setName("cage" + String.format("%03d", cagenb));
 					spot.cageID = cagenb;
 					exp.seqCamData.seq.addROI(roiP);

@@ -271,7 +271,7 @@ public class SpotTablePanel extends JPanel {
 	private void setSpotsNPixels(Experiment exp) {
 		for (Spot spot : exp.spotsArray.spotsList) {
 			try {
-				spot.spotNPixels = (int) spot.getRoi_in().getNumberOfPoints();
+				spot.spotNPixels = (int) spot.getRoi().getNumberOfPoints();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

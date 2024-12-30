@@ -350,7 +350,7 @@ public class ChartSpots extends IcyFrame {
 		}
 
 		String[] roiDescription = description.split("_");
-		int index = exp.spotsArray.getSpotIndexFromNameItems(roiDescription[1], roiDescription[2]);
+		int index = exp.spotsArray.getSpotIndexFromPlateCoordinates(roiDescription[1], roiDescription[2]);
 		spotFound.spot_Kymograph_T = index;
 		return spotFound;
 	}
@@ -358,7 +358,7 @@ public class ChartSpots extends IcyFrame {
 	private void selectSpot(Experiment exp, Spot spot) {
 		Viewer v = exp.seqCamData.seq.getFirstViewer();
 		if (v != null && spot != null) {
-			ROI2D roi = spot.getRoi_in();
+			ROI2D roi = spot.getRoi();
 			exp.seqCamData.seq.setFocusedROI(roi);
 		}
 	}

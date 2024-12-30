@@ -245,7 +245,7 @@ public class Edit extends JPanel {
 				double deltay = snake.ypoints[i] - spot.spotYCoord;
 				spot.spotXCoord = (int) snake.xpoints[i];
 				spot.spotYCoord = (int) snake.ypoints[i];
-				spot.getRoi_in().translate(deltax, deltay);
+				spot.getRoi().translate(deltax, deltay);
 				i++;
 			}
 		}
@@ -255,10 +255,10 @@ public class Edit extends JPanel {
 		enclosedSpots = exp.spotsArray.getSpotsEnclosed(spotsFrame);
 		if (enclosedSpots.size() > 0) {
 			for (Spot spot : enclosedSpots) {
-				ROI2DShape roi = (ROI2DShape) spot.getRoi_in();
+				ROI2DShape roi = (ROI2DShape) spot.getRoi();
 				exp.seqCamData.seq.removeROI(roi);
 				roi = (ROI2DShape) ROI2DUtilities.resizeROI(roi, delta);
-				spot.setRoi_in(roi);
+				spot.setRoi(roi);
 				exp.seqCamData.seq.addROI(roi);
 			}
 		}

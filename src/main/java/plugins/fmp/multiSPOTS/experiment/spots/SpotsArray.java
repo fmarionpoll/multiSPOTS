@@ -272,7 +272,7 @@ public class SpotsArray {
 				ROI2D roi = iterator.next();
 				String roiName = roi.getName();
 				if (roiName.equals(spotName) && (roi instanceof ROI2DShape)) {
-					spot.setRoi_in((ROI2DShape) roi);
+					spot.setRoi((ROI2DShape) roi);
 					spot.valid = true;
 				}
 				if (spot.valid) {
@@ -308,7 +308,7 @@ public class SpotsArray {
 	public void transferSpotRoiToSequence(Sequence seq) {
 		ROI2DUtilities.removeRoisContainingString(-1, "spot", seq);
 		for (Spot spot : spotsList)
-			seq.addROI(spot.getRoi_in());
+			seq.addROI(spot.getRoi());
 	}
 
 	public void transferSpotsMeasuresToSequence(Sequence seq) {
@@ -378,8 +378,8 @@ public class SpotsArray {
 		ArrayList<Spot> enclosedSpots = new ArrayList<Spot>();
 		for (Spot spot : spotsList) {
 			try {
-				if (envelopeRoi.contains(spot.getRoi_in())) {
-					spot.getRoi_in().setSelected(true);
+				if (envelopeRoi.contains(spot.getRoi())) {
+					spot.getRoi().setSelected(true);
 					enclosedSpots.add(spot);
 				}
 			} catch (InterruptedException e) {
@@ -411,7 +411,7 @@ public class SpotsArray {
 	public Polygon2D get2DPolygonEnclosingSpots() {
 		Rectangle outerRectangle = null;
 		for (Spot spot : spotsList) {
-			Rectangle rect = spot.getRoi_in().getBounds();
+			Rectangle rect = spot.getRoi().getBounds();
 			if (outerRectangle == null) {
 				outerRectangle = rect;
 			} else
@@ -445,7 +445,7 @@ public class SpotsArray {
 			spot.initLevel2DMeasures();
 	}
 
-	public int getSpotIndexFromNameItems(String rowLetter, String columnNumber) {
+	public int getSpotIndexFromPlateCoordinates(String rowLetter, String columnNumber) {
 		int index = 0;
 		int col = 0;
 		try {
@@ -499,7 +499,7 @@ public class SpotsArray {
 
 		for (Spot spot : spotsList) {
 			List<ROI2DAlongT> listROI2DForKymo = spot.getROIAlongTList();
-			ROI2D roi = spot.getRoi_in();
+			ROI2D roi = spot.getRoi();
 			if (item > 0)
 				roi = (ROI2D) listROI2DForKymo.get(item - 1).getRoi_in().getCopy();
 			listROI2DForKymo.add(item, new ROI2DAlongT(start, roi));
