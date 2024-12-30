@@ -378,7 +378,7 @@ public class Display extends JPanel implements ViewerListener {
 
 			int t = v.getPositionT();
 //			t = selectKymographImage(t);
-			System.out.println("ViewerChanged -> _Display_ t=" + t);
+//			System.out.println("ViewerChanged -> _Display_ t=" + t);
 			if (t >= 0)
 				selectKymographComboItem(t);
 			// TODO find where title is set as bin_20 - spot_000000
