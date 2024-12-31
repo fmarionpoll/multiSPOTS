@@ -376,15 +376,22 @@ public class SpotsArray {
 
 	public ArrayList<Spot> getSpotsEnclosed(ROI2DPolygon envelopeRoi) {
 		ArrayList<Spot> enclosedSpots = new ArrayList<Spot>();
-		for (Spot spot : spotsList) {
-			try {
-				if (envelopeRoi.contains(spot.getRoi())) {
-					spot.getRoi().setSelected(true);
-					enclosedSpots.add(spot);
+		if (envelopeRoi != null) {
+			for (Spot spot : spotsList) {
+				try {
+					if (envelopeRoi.contains(spot.getRoi())) {
+						spot.getRoi().setSelected(true);
+						enclosedSpots.add(spot);
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			}
+		} else {
+			for (Spot spot : spotsList) {
+				if (spot.getRoi().isSelected())
+					enclosedSpots.add(spot);
 			}
 		}
 		return enclosedSpots;

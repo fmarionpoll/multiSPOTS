@@ -34,7 +34,7 @@ public class Edit extends JPanel {
 	private static final long serialVersionUID = -7582410775062671523L;
 
 	private JButton editSpotsButton = new JButton("Change spots position with time");
-	private JCheckBox showFrameButton = new JCheckBox("Show frame");
+	private JCheckBox showFrameButton = new JCheckBox("Select spots within frame");
 	private JToggleButton displaySnakeButton = new JToggleButton("Display snake over spots");
 	private JButton updateSpotsFromSnakeButton = new JButton("Center spots to snake");
 	private MultiSPOTS parent0 = null;
@@ -76,8 +76,8 @@ public class Edit extends JPanel {
 	private void updateButtonsState(boolean isFrameSelected) {
 		displaySnakeButton.setEnabled(isFrameSelected);
 		updateSpotsFromSnakeButton.setEnabled((displaySnakeButton.isSelected()) ? isFrameSelected : false);
-		dilateButton.setEnabled((displaySnakeButton.isSelected()) ? false : isFrameSelected);
-		erodeButton.setEnabled((displaySnakeButton.isSelected()) ? false : isFrameSelected);
+//		dilateButton.setEnabled((displaySnakeButton.isSelected()) ? false : isFrameSelected);
+//		erodeButton.setEnabled((displaySnakeButton.isSelected()) ? false : isFrameSelected);
 	}
 
 	private void defineActionListeners() {
