@@ -15,6 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
+import icy.gui.dialog.ConfirmDialog;
 import icy.roi.ROI2D;
 import icy.type.geom.Polygon2D;
 import icy.type.geom.Polyline2D;
@@ -61,8 +62,8 @@ public class Edit extends JPanel {
 		add(panel0);
 
 		JPanel panel1 = new JPanel(flowLayout);
-		panel1.add(erodeButton);
 		panel1.add(dilateButton);
+		panel1.add(erodeButton);
 		add(panel1);
 
 		JPanel panel2 = new JPanel(flowLayout);
@@ -76,8 +77,6 @@ public class Edit extends JPanel {
 	private void updateButtonsState(boolean isFrameSelected) {
 		displaySnakeButton.setEnabled(isFrameSelected);
 		updateSpotsFromSnakeButton.setEnabled((displaySnakeButton.isSelected()) ? isFrameSelected : false);
-//		dilateButton.setEnabled((displaySnakeButton.isSelected()) ? false : isFrameSelected);
-//		erodeButton.setEnabled((displaySnakeButton.isSelected()) ? false : isFrameSelected);
 	}
 
 	private void defineActionListeners() {
@@ -261,6 +260,8 @@ public class Edit extends JPanel {
 				spot.setRoi(roi);
 				exp.seqCamData.seq.addROI(roi);
 			}
+		} else {
+			ConfirmDialog.confirm("At least one spot must be selected");
 		}
 	}
 
