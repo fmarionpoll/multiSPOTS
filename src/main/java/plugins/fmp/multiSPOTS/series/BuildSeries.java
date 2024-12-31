@@ -20,6 +20,7 @@ import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.system.thread.Processor;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
+import plugins.fmp.multiSPOTS.tools.ViewerFMP;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;
 
@@ -33,7 +34,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer> {
 
 	int selectedExperimentIndex = -1;
 	Sequence seqNegative = null;
-	Viewer vNegative = null;
+	ViewerFMP vNegative = null;
 	public final String THREAD_ENDED = "thread_ended";
 	public final String THREAD_DONE = "thread_done";
 
@@ -215,7 +216,7 @@ public abstract class BuildSeries extends SwingWorker<Integer, Integer> {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					seqNegative = newSequence("detectionImage", exp.seqCamData.refImage);
-					vNegative = new Viewer(seqNegative, false);
+					vNegative = new ViewerFMP(seqNegative, false, true);
 					vNegative.setVisible(true);
 				}
 			});

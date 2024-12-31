@@ -10,7 +10,6 @@ import java.util.concurrent.Future;
 import javax.swing.SwingUtilities;
 
 import icy.gui.frame.progress.ProgressFrame;
-import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageCursor;
 import icy.roi.BooleanMask2D;
@@ -20,6 +19,7 @@ import icy.system.thread.Processor;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
+import plugins.fmp.multiSPOTS.tools.ViewerFMP;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformInterface;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformOptions;
@@ -27,7 +27,7 @@ import plugins.kernel.roi.roi2d.ROI2DRectangle;
 
 public class BuildSpotsMeasures extends BuildSeries {
 	public Sequence seqData = new Sequence();
-	private Viewer vData = null;
+	private ViewerFMP vData = null;
 	private ImageTransformOptions transformOptions01 = null;
 	ImageTransformInterface transformFunctionSpot = null;
 	ImageTransformOptions transformOptions02 = null;
@@ -298,7 +298,7 @@ public class BuildSpotsMeasures extends BuildSeries {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					seqData = newSequence(exp.seqCamData.getCSCamFileName(), exp.seqCamData.getSeqImage(0, 0));
-					vData = new Viewer(seqData, true);
+					vData = new ViewerFMP(seqData, true, true);
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {

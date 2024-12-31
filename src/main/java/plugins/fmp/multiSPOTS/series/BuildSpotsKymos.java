@@ -11,7 +11,6 @@ import javax.swing.SwingUtilities;
 
 import icy.file.Saver;
 import icy.gui.frame.progress.ProgressFrame;
-import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageCursor;
 import icy.image.IcyBufferedImageUtil;
@@ -25,11 +24,12 @@ import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.SequenceKymos;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.tools.GaspardRigidRegistration;
+import plugins.fmp.multiSPOTS.tools.ViewerFMP;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
 
 public class BuildSpotsKymos extends BuildSeries {
 	public Sequence seqData = new Sequence();
-	private Viewer vData = null;
+	private ViewerFMP vData = null;
 	private int kymoImageWidth = 0;
 
 	// -----------------------------------
@@ -264,7 +264,7 @@ public class BuildSpotsKymos extends BuildSeries {
 				public void run() {
 					seqData = newSequence("analyze stack starting with file " + exp.seqCamData.seq.getName(),
 							exp.seqCamData.getSeqImage(0, 0));
-					vData = new Viewer(seqData, true);
+					vData = new ViewerFMP(seqData, true, true);
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
