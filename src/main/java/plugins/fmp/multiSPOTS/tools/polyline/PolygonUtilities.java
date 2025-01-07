@@ -77,8 +77,11 @@ public class PolygonUtilities {
 		return result;
 	}
 
-	public static Point2D lineIntersect(double x1, double y1, double x2, double y2, double x3, double y3, double x4,
-			double y4) {
+	public static Point2D lineIntersect(
+			double x1, double y1, 
+			double x2, double y2, 
+			double x3, double y3, 
+			double x4, double y4) {
 		double denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
 		if (denom == 0.0) // Lines are parallel.
 			return null;

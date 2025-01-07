@@ -27,6 +27,7 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 	JTabbedPane tabbedPane = new JTabbedPane();
 
 //			ThresholdColors colorsThreshold = new ThresholdColors();
+	CreateCages tabCreateCages = new CreateCages();
 	CreateSpots tabCreateSpots = new CreateSpots();
 	Infos tabInfos = new Infos();
 	DetectContours tabShape = new DetectContours();
@@ -49,9 +50,15 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 		GridLayout gridLayout = new GridLayout(3, 1);
 		int order = 0;
 
+		tabCreateCages.init(gridLayout, parent0);
+		tabCreateCages.addPropertyChangeListener(this);
+		tabbedPane.addTab("Cages", null, tabCreateCages, "Create cages");
+		id_create = order;
+		order++;
+		
 		tabCreateSpots.init(gridLayout, parent0);
 		tabCreateSpots.addPropertyChangeListener(this);
-		tabbedPane.addTab("Create", null, tabCreateSpots, "Create spots defining liquid drops");
+		tabbedPane.addTab("(spots)", null, tabCreateSpots, "Create spots defining liquid drops");
 		id_create = order;
 		order++;
 

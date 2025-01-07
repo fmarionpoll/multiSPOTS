@@ -26,8 +26,10 @@ import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
 
-public class Cages {
-	public List<Cage> cagesList = new ArrayList<Cage>();
+public class CagesArray {
+	public ArrayList<Cage> cagesList = new ArrayList<Cage>();
+	public int nCagesPerPlateAlongX = 6;
+	public int nCagesPerPlateAlongY = 8;
 
 	// ---------- not saved to xml:
 	public long detectFirst_Ms = 0;
@@ -59,7 +61,7 @@ public class Cages {
 		cagesList.clear();
 	}
 
-	public void mergeLists(Cages cagesm) {
+	public void mergeLists(CagesArray cagesm) {
 		for (Cage cagem : cagesm.cagesList) {
 			if (!isPresent(cagem))
 				cagesList.add(cagem);
@@ -207,7 +209,7 @@ public class Cages {
 
 	// --------------
 
-	public void copy(Cages cag) {
+	public void copy(CagesArray cag) {
 //		detect.copyParameters(cag.detect);	
 		cagesList.clear();
 		for (Cage ccag : cag.cagesList) {

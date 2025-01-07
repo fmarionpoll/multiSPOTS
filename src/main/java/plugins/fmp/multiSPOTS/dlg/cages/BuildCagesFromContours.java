@@ -102,11 +102,11 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
-					exp.cages.removeCages();
+					exp.cagesArray.removeCages();
 					createROIsFromSelectedPolygonAndSpots(exp);
-					exp.cages.cagesFromROIs(exp.seqCamData);
+					exp.cagesArray.cagesFromROIs(exp.seqCamData);
 					if (exp.spotsArray.spotsList.size() > 0)
-						exp.cages.transferNFliesFromSpotsToCages(exp.spotsArray);
+						exp.cagesArray.transferNFliesFromSpotsToCages(exp.spotsArray);
 				}
 			}
 		});
@@ -147,8 +147,8 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 			overlayThreshold.setSequence(seqCamData.seq);
 			seqCamData.seq.addOverlay(overlayThreshold);
 		}
-		exp.cages.detect_threshold = (int) thresholdSpinner.getValue();
-		overlayThreshold.setThresholdTransform(exp.cages.detect_threshold,
+		exp.cagesArray.detect_threshold = (int) thresholdSpinner.getValue();
+		overlayThreshold.setThresholdTransform(exp.cagesArray.detect_threshold,
 				(ImageTransformEnums) transformForLevelsComboBox.getSelectedItem(), false);
 		seqCamData.seq.overlayChanged(overlayThreshold);
 		seqCamData.seq.dataChanged();
@@ -181,7 +181,7 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 
 	private void createROIsFromSelectedPolygonAndSpots(Experiment exp) {
 		ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
-		exp.cages.removeCages();
+		exp.cagesArray.removeCages();
 
 		int t = exp.seqCamData.currentFrame;
 		IcyBufferedImage img0 = IcyBufferedImageUtil.convertToType(overlayThreshold.getTransformedImage(t),

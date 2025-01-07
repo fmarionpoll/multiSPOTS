@@ -20,7 +20,7 @@ import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.experiment.cages.Cage;
-import plugins.fmp.multiSPOTS.experiment.cages.Cages;
+import plugins.fmp.multiSPOTS.experiment.cages.CagesArray;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Directories;
@@ -41,7 +41,7 @@ public class Experiment {
 	public Sequence seqReference = null;
 
 	public SpotsArray spotsArray = new SpotsArray();
-	public Cages cages = new Cages();
+	public CagesArray cagesArray = new CagesArray();
 
 	public FileTime firstImage_FileTime;
 	public FileTime lastImage_FileTime;
@@ -487,7 +487,7 @@ public class Experiment {
 	}
 
 	public boolean save_CagesMeasures() {
-		return cages.saveCagesMeasures(getResultsDirectory());
+		return cagesArray.saveCagesMeasures(getResultsDirectory());
 	}
 
 	// ----------------------------------
@@ -635,13 +635,13 @@ public class Experiment {
 			if (roi.getName().contains("det"))
 				seqCamData.seq.removeROI(roi);
 		}
-		seqCamData.seq.addROIs(cages.getPositionsAsListOfROI2DRectanglesAtT(t), false);
+		seqCamData.seq.addROIs(cagesArray.getPositionsAsListOfROI2DRectanglesAtT(t), false);
 		seqCamData.seq.endUpdate();
 	}
 
 	public void saveDetRoisToPositions() {
 		List<ROI2D> detectedROIsList = seqCamData.seq.getROI2Ds();
-		for (Cage cage : cages.cagesList) {
+		for (Cage cage : cagesArray.cagesList) {
 			cage.transferRoisToPositions(detectedROIsList);
 		}
 	}
@@ -665,7 +665,7 @@ public class Experiment {
 			if (filename == null)
 				return false;
 		}
-		return cages.xmlReadCagesFromFileNoQuestion(filename, this);
+		return cagesArray.xmlReadCagesFromFileNoQuestion(filename, this);
 	}
 
 	private String findFile_3Locations(String xmlFileName, int first, int second, int third) {

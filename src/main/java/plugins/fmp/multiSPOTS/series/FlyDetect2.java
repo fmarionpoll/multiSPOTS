@@ -24,7 +24,7 @@ public class FlyDetect2 extends BuildSeries {
 			return;
 
 		runFlyDetect2(exp);
-		exp.cages.orderFlyPositions();
+		exp.cagesArray.orderFlyPositions();
 		if (!stopFlag)
 			exp.save_CagesMeasures();
 		exp.seqCamData.closeSequence();
@@ -34,7 +34,7 @@ public class FlyDetect2 extends BuildSeries {
 	private void runFlyDetect2(Experiment exp) {
 		exp.cleanPreviousDetectedFliesROIs();
 		find_flies.initParametersForDetection(exp, options);
-		exp.cages.initFlyPositions(options.detectCage);
+		exp.cagesArray.initFlyPositions(options.detectCage);
 		options.threshold = options.thresholdDiff;
 
 		if (exp.loadReferenceImage()) {

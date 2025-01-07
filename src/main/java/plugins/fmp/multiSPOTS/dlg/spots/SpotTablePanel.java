@@ -179,8 +179,8 @@ public class SpotTablePanel extends JPanel {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null && exp.cages.cagesList.size() > 0) {
-					exp.cages.transferNFliesFromCagesToSpots(exp.spotsArray);
+				if (exp != null && exp.cagesArray.cagesList.size() > 0) {
+					exp.cagesArray.transferNFliesFromCagesToSpots(exp.spotsArray);
 					spotTableModel.fireTableDataChanged();
 				}
 			}
@@ -191,7 +191,7 @@ public class SpotTablePanel extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					exp.cages.setCageNbFromSpotsArray(exp.spotsArray);
+					exp.cagesArray.setCageNbFromSpotsArray(exp.spotsArray);
 					spotTableModel.fireTableDataChanged();
 				}
 			}

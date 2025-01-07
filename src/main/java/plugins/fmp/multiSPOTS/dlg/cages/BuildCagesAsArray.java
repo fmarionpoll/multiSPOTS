@@ -91,11 +91,11 @@ public class BuildCagesAsArray extends JPanel {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
-					exp.cages.removeCages();
+					exp.cagesArray.removeCages();
 					createROIsFromSelectedPolygon(exp);
-					exp.cages.cagesFromROIs(exp.seqCamData);
+					exp.cagesArray.cagesFromROIs(exp.seqCamData);
 					if (exp.spotsArray.spotsList.size() > 0)
-						exp.cages.transferNFliesFromSpotsToCages(exp.spotsArray);
+						exp.cagesArray.transferNFliesFromSpotsToCages(exp.spotsArray);
 				}
 			}
 		});
@@ -113,7 +113,7 @@ public class BuildCagesAsArray extends JPanel {
 	void updateNColumnsFieldFromSequence() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null) {
-			int nrois = exp.cages.cagesList.size();
+			int nrois = exp.cagesArray.cagesList.size();
 			if (nrois > 0) {
 				nColumnsTextField.setValue(nrois);
 				ncolumns = nrois;
@@ -177,7 +177,7 @@ public class BuildCagesAsArray extends JPanel {
 		seqCamData.seq.removeROI(roi);
 
 		// generate cage frames
-		int iRoot = exp.cages.removeAllRoiCagesFromSequence(exp.seqCamData);
+		int iRoot = exp.cagesArray.removeAllRoiCagesFromSequence(exp.seqCamData);
 		String cageRoot = "cage";
 
 		Polygon2D roiPolygon = PolygonUtilities.inflate(roiPolygonMin, ncolumns, nrows, width_cage, width_interval);

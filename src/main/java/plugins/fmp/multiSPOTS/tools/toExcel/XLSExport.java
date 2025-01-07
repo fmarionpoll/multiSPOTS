@@ -121,8 +121,8 @@ public class XLSExport {
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.DUM4.getValue(), transpose, sheetName);
 			XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CHOICE_NOCHOICE.getValue(), transpose,
 					desc_getChoiceTestType(spotsList, t));
-			if (exp.cages.cagesList.size() > t / 2) {
-				Cage cage = exp.cages.cagesList.get(t / 2); // cap.capCageID);
+			if (exp.cagesArray.cagesList.size() > t / 2) {
+				Cage cage = exp.cagesArray.cagesList.get(t / 2); // cap.capCageID);
 				XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAGE_STRAIN.getValue(), transpose,
 						cage.strCageStrain);
 				XLSUtils.setValue(sheet, x, y + EnumXLSColumnHeader.CAGE_SEX.getValue(), transpose, cage.strCageSex);
@@ -318,7 +318,7 @@ public class XLSExport {
 			return null;
 
 		// loop to get all spots into expAll and init rows for this experiment
-		expAll.cages.copy(exp.cages);
+		expAll.cagesArray.copy(exp.cagesArray);
 		expAll.spotsArray.copy(exp.spotsArray);
 		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
 		expAll.expDesc.copyExperimentFields(exp.expDesc);
@@ -352,7 +352,7 @@ public class XLSExport {
 			return null;
 
 		// loop to get all spots into expAll and init rows for this experiment
-		expAll.cages.copy(exp.cages);
+		expAll.cagesArray.copy(exp.cagesArray);
 		expAll.spotsArray.copy(exp.spotsArray);
 		expAll.chainImageFirst_ms = exp.chainImageFirst_ms;
 		expAll.expDesc.copyExperimentFields(exp.expDesc);
@@ -583,7 +583,7 @@ public class XLSExport {
 	}
 
 	private void trimDeadsFromArrayList(XLSResultsArray rowListForOneExp, Experiment exp) {
-		for (Cage cage : exp.cages.cagesList) {
+		for (Cage cage : exp.cagesArray.cagesList) {
 			String roiname = cage.cageRoi2D.getName();
 			if (roiname.length() < 4 || !roiname.substring(0, 4).contains("cage"))
 				continue;
@@ -593,10 +593,10 @@ public class XLSExport {
 			int ilastalive = 0;
 			if (cage.cageNFlies > 0) {
 				Experiment expi = exp;
-				while (expi.chainToNextExperiment != null && expi.chainToNextExperiment.cages.isFlyAlive(cagenumber)) {
+				while (expi.chainToNextExperiment != null && expi.chainToNextExperiment.cagesArray.isFlyAlive(cagenumber)) {
 					expi = expi.chainToNextExperiment;
 				}
-				int lastIntervalFlyAlive = expi.cages.getLastIntervalFlyAlive(cagenumber);
+				int lastIntervalFlyAlive = expi.cagesArray.getLastIntervalFlyAlive(cagenumber);
 				int lastMinuteAlive = (int) (lastIntervalFlyAlive * expi.seqCamData.binImage_ms
 						+ (expi.seqCamData.firstImage_ms - expAll.seqCamData.firstImage_ms));
 				ilastalive = (int) (lastMinuteAlive / expAll.seqCamData.binDuration_ms);
