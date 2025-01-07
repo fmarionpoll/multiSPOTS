@@ -33,7 +33,7 @@ public class CreateCages extends JPanel {
 	 */
 	private static final long serialVersionUID = -5257698990389571518L;
 	private JButton displayFrameDButton = new JButton("(1) Display frame");
-	private JButton createCirclesButton = new JButton("Create/add (from Polygon 2D)");
+	private JButton createCagesButton = new JButton("Create/add (from Polygon 2D)");
 	
 	private JSpinner nCagesPerPlateAlongXJSpinner = new JSpinner(new SpinnerNumberModel(6, 0, 10000, 1));
 	private JSpinner nCagesPerPlateAlongYJSpinner = new JSpinner(new SpinnerNumberModel(8, 0, 10000, 1));
@@ -41,16 +41,15 @@ public class CreateCages extends JPanel {
 	private JSpinner width_cageTextField = new JSpinner(new SpinnerNumberModel(20, 0, 10000, 1));
 	private JSpinner width_intervalTextField = new JSpinner(new SpinnerNumberModel(3, 0, 10000, 1));
 	
-//	private int ncolumns = 12;
-//	private int nrows = 0;
 	private int width_cage = 10;
 	private int width_interval = 1;
 
 	
-	private Polygon2D roiPolygon = null;
+	private Polygon2D polygon2D = null;
 	
 	private MultiSPOTS parent0;
 
+	
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
 		this.parent0 = parent0;
@@ -60,43 +59,29 @@ public class CreateCages extends JPanel {
 
 		JPanel panel0 = new JPanel(flowLayout);
 		panel0.add(displayFrameDButton);
-		panel0.add(createCirclesButton);
+		panel0.add(createCagesButton);
 		add(panel0);
 		
 		JPanel panel1 = new JPanel(flowLayout);
-
-
+		panel1.add(new JLabel("N columns "));
+		panel1.add(nCagesPerPlateAlongXJSpinner);
+		panel1.add(new JLabel("N rows "));
+		panel1.add(nCagesPerPlateAlongYJSpinner);
 		add(panel1);
 
-		JLabel nColumnsLabel = new JLabel("N columns ");
-		JLabel nRowsLabel = new JLabel("N rows ");
-		JLabel cagewidthLabel = new JLabel("cage width ");
-		JLabel btwcagesLabel = new JLabel("between cages ");
-		nColumnsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		cagewidthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		btwcagesLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		nRowsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-
 		JPanel panel2 = new JPanel(flowLayout);
-		panel2.add(cagewidthLabel);
+		panel2.add(new JLabel("cage width "));
 		panel2.add(width_cageTextField);
-		panel2.add(nColumnsLabel);
-		panel2.add(nCagesPerPlateAlongXJSpinner);
+		panel2.add(new JLabel("space between cages"));
+		panel2.add(width_intervalTextField);
 		add(panel2);
-
-		JPanel panel3 = new JPanel(flowLayout);
-		panel3.add(btwcagesLabel);
-		panel3.add(width_intervalTextField);
-		panel3.add(nRowsLabel);
-		panel3.add(nCagesPerPlateAlongYJSpinner);
-		add(panel3);
 
 		defineActionListeners();
 	}
 
 	private void defineActionListeners() {
 
-		createCirclesButton.addActionListener(new ActionListener() {
+		createCagesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
@@ -130,7 +115,6 @@ public class CreateCages extends JPanel {
 		}
 	}
 
-
 	private void create2DPolygon() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp == null)
@@ -156,9 +140,9 @@ public class CreateCages extends JPanel {
 	}
 	
 	private Polygon2D getSpotsPolygon(Experiment exp) {
-		if (roiPolygon == null) {
+		if (polygon2D == null) {
 			if (exp.spotsArray.spotsList.size() > 0) {
-				roiPolygon = exp.spotsArray.getPolygon2DEnclosingAllSpots();
+				polygon2D = exp.spotsArray.getPolygon2DEnclosingAllSpots();
 			} else {
 				Rectangle rect = exp.seqCamData.seq.getBounds2D();
 				List<Point2D> points = new ArrayList<Point2D>();
@@ -166,22 +150,20 @@ public class CreateCages extends JPanel {
 				points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height / 5));
 				points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height * 2 / 3));
 				points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height * 2 / 3));
-				roiPolygon = new Polygon2D(points);
+				polygon2D = new Polygon2D(points);
 			}
 		}
-		return roiPolygon;
+		return polygon2D;
 	}
 	
-
 	private void createCagessFromSelectedPolygon(Experiment exp) {
 		SequenceCamData seqCamData = exp.seqCamData;
-
 		ROI2D roi = seqCamData.seq.getSelectedROI2D();
 		if (!(roi instanceof ROI2DPolygon)) {
-			new AnnounceFrame("The frame must be a ROI2D Polygon");
+			new AnnounceFrame("The frame must be a ROI2D Polygon"); // TODO
 			return;
 		}
-		roiPolygon = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
+		polygon2D = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
 		seqCamData.seq.removeROI(roi);
 		
 		int n_columns = 10;
@@ -196,7 +178,7 @@ public class CreateCages extends JPanel {
 			new AnnounceFrame("Can't interpret one of the ROI parameters value");
 		}
 		
-		createCagesArray(exp, roiPolygon, n_columns, n_rows, width_cage, width_interval);
+		createCagesArray(exp, polygon2D, n_columns, n_rows, width_cage, width_interval);
 
 	}
 
@@ -221,9 +203,7 @@ public class CreateCages extends JPanel {
 
 				double [][] xyij = initRow_j(roiPolygon, xyi, nrows, j);
 
-				
-				ROI2DPolygon roiP = createRoiPolygon(xyij);
-				
+				ROI2DPolygon roiP = createRoiPolygon(xyij);				
 				roiP.setName(cageRoot + String.format("%03d", iRoot));
 				roiP.setColor(Color.YELLOW);
 				iRoot++;

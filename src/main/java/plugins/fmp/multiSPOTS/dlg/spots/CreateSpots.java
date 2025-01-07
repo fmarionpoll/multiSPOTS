@@ -51,7 +51,7 @@ public class CreateSpots extends JPanel {
 	private JSpinner nRowsJSpinner = new JSpinner(new SpinnerNumberModel(8, 2, 100, 1));
 	private JSpinner nColumnsJSpinner = new JSpinner(new SpinnerNumberModel(12, 2, 100, 1));
 
-	private Polygon2D roiPolygon = null;
+	private Polygon2D polygon2D = null;
 	private String[] flyString = new String[] { "fly", "flies" };
 	private JLabel flyLabel = new JLabel(flyString[0]);
 
@@ -187,9 +187,9 @@ public class CreateSpots extends JPanel {
 	}
 
 	private Polygon2D getSpotsPolygon(Experiment exp) {
-		if (roiPolygon == null) {
+		if (polygon2D == null) {
 			if (exp.spotsArray.spotsList.size() > 0) {
-				roiPolygon = exp.spotsArray.getPolygon2DEnclosingAllSpots();
+				polygon2D = exp.spotsArray.getPolygon2DEnclosingAllSpots();
 			} else {
 				Rectangle rect = exp.seqCamData.seq.getBounds2D();
 				List<Point2D> points = new ArrayList<Point2D>();
@@ -197,21 +197,20 @@ public class CreateSpots extends JPanel {
 				points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height / 5));
 				points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height * 2 / 3));
 				points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height * 2 / 3));
-				roiPolygon = new Polygon2D(points);
+				polygon2D = new Polygon2D(points);
 			}
 		}
-		return roiPolygon;
+		return polygon2D;
 	}
 
 	private void createSpotsFromPolygon(Experiment exp) {
 		SequenceCamData seqCamData = exp.seqCamData;
-
 		ROI2D roi = seqCamData.seq.getSelectedROI2D();
 		if (!(roi instanceof ROI2DPolygon)) {
 			new AnnounceFrame("The frame must be a ROI2D Polygon");
 			return;
 		}
-		roiPolygon = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
+		polygon2D = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
 		seqCamData.seq.removeROI(roi);
 
 		int n_columns = 10;
@@ -223,7 +222,7 @@ public class CreateSpots extends JPanel {
 			new AnnounceFrame("Can't interpret one of the ROI parameters value");
 		}
 
-		Point2D.Double[][] arrayPoints = PolygonUtilities.createArrayOfPointsFromPolygon(roiPolygon, n_columns, n_rows);
+		Point2D.Double[][] arrayPoints = PolygonUtilities.createArrayOfPointsFromPolygon(polygon2D, n_columns, n_rows);
 		int radius = (int) pixelRadiusSpinner.getValue();
 
 		// erase existing spots
