@@ -23,6 +23,7 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
+import plugins.fmp.multiSPOTS.experiment.cages.Cage;
 import plugins.fmp.multiSPOTS.tools.polyline.PolygonUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 
@@ -37,8 +38,8 @@ public class CreateCages extends JPanel {
 	private JSpinner nCagesPerPlateAlongXJSpinner = new JSpinner(new SpinnerNumberModel(6, 0, 10000, 1));
 	private JSpinner nCagesPerPlateAlongYJSpinner = new JSpinner(new SpinnerNumberModel(8, 0, 10000, 1));
 
-	private JSpinner width_cageTextField = new JSpinner(new SpinnerNumberModel(20, 0, 10000, 1));
-	private JSpinner width_intervalTextField = new JSpinner(new SpinnerNumberModel(3, 0, 10000, 1));
+	private JSpinner width_cageTextField = new JSpinner(new SpinnerNumberModel(40, 0, 10000, 1));
+	private JSpinner width_intervalTextField = new JSpinner(new SpinnerNumberModel(1, 0, 10000, 1));
 
 	private int width_cage = 10;
 	private int width_interval = 1;
@@ -92,7 +93,7 @@ public class CreateCages extends JPanel {
 //					ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
 //					exp.cagesArray.removeCages();
 					createCagessFromSelectedPolygon(exp);
-					ExperimentUtils.transferCagesToCamDataSequence(exp);
+					ExperimentUtils.transferCagesToCamDataSequence(exp); // TODO
 
 //					int nbFliesPerCage = (int) nFliesPerCageJSpinner.getValue();
 //					exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
@@ -162,7 +163,7 @@ public class CreateCages extends JPanel {
 		SequenceCamData seqCamData = exp.seqCamData;
 		ROI2D roi = seqCamData.seq.getSelectedROI2D();
 		if (!(roi instanceof ROI2DPolygon)) {
-			new AnnounceFrame("The frame must be a ROI2D Polygon"); // TODO
+			new AnnounceFrame("The frame must be a ROI2D Polygon");
 			return;
 		}
 		polygon2D = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
@@ -170,7 +171,6 @@ public class CreateCages extends JPanel {
 
 		int n_columns = 10;
 		int n_rows = 1;
-		// read values from text boxes
 		try {
 			n_columns = (int) nCagesPerPlateAlongXJSpinner.getValue();
 			n_rows = (int) nCagesPerPlateAlongYJSpinner.getValue();
@@ -198,16 +198,22 @@ public class CreateCages extends JPanel {
 		double deltay_top = (roiPolygon.ypoints[3] - roiPolygon.ypoints[0]) / ncolumns;
 		double deltay_bottom = (roiPolygon.ypoints[2] - roiPolygon.ypoints[1]) / ncolumns;
 
-		for (int i = 0; i < ncolumns; i++) {
-			double[][] xyi = initColumn_i(roiPolygon, deltax_top, deltax_bottom, deltay_top, deltay_bottom, i);
+		for (int column = 0; column < ncolumns; column++) {
+			double[][] xyi = initColumn_i(roiPolygon, deltax_top, deltax_bottom, deltay_top, deltay_bottom, column);
 
-			for (int j = 0; j < nrows; j++) {
+			for (int row = 0; row < nrows; row++) {
 
-				double[][] xyij = initRow_j(roiPolygon, xyi, nrows, j);
+				double[][] xyij = initRow_j(roiPolygon, xyi, nrows, row);
 
 				ROI2DPolygon roiP = createRoiPolygon(xyij);
 				roiP.setName(cageRoot + String.format("%03d", iRoot));
 				roiP.setColor(Color.YELLOW);
+
+				Cage cage = new Cage(roiP);
+				cage.arrayIndex = iRoot;
+				cage.arrayColumn = column;
+				cage.arrayRow = row;
+
 				iRoot++;
 				exp.seqCamData.seq.addROI(roiP);
 			}

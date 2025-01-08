@@ -19,14 +19,24 @@ import plugins.kernel.roi.roi2d.ROI2DShape;
 
 public class Cage {
 	private ROI2D cageRoi2D = null;
+
 	public BooleanMask2D cageMask2D = null;
 	public FlyPositions flyPositions = new FlyPositions();
+
+	public int cageID = -1;
+	public int cagePosition = 0;
+
+	public int arrayIndex = 0;
+	public int arrayColumn = 0;
+	public int arrayRow = 0;
+
 	public int cageNFlies = 0;
 	public int cageAge = 5;
 	public String strCageComment = "..";
 	public String strCageSex = "..";
 	public String strCageStrain = "..";
 	private String strCageNumber = null;
+
 	public boolean valid = false;
 	public boolean bDetect = true;
 	public boolean initialflyRemoved = false;
@@ -39,106 +49,13 @@ public class Cage {
 	private final String ID_SEX = "sex";
 	private final String ID_STRAIN = "strain";
 
-	public boolean xmlSaveCage(Node node, int index) {
-		if (node == null)
-			return false;
-		Element xmlVal = XMLUtil.addElement(node, "Cage" + index);
-		xmlSaveCageLimits(xmlVal);
-		xmlSaveCageParameters(xmlVal);
-		if (cageNFlies > 0)
-			xmlSaveFlyPositions(xmlVal);
-		return true;
-	}
-
-	public boolean xmlSaveCageParameters(Element xmlVal) {
-		XMLUtil.setElementIntValue(xmlVal, ID_NFLIES, cageNFlies);
-		XMLUtil.setElementIntValue(xmlVal, ID_AGE, cageAge);
-		XMLUtil.setElementValue(xmlVal, ID_COMMENT, strCageComment);
-		XMLUtil.setElementValue(xmlVal, ID_SEX, strCageSex);
-		XMLUtil.setElementValue(xmlVal, ID_STRAIN, strCageStrain);
-		return true;
-	}
-
-	public boolean xmlSaveCageLimits(Element xmlVal) {
-		Element xmlVal2 = XMLUtil.addElement(xmlVal, ID_CAGELIMITS);
-		if (cageRoi2D != null) {
-			cageRoi2D.setSelected(false);
-			cageRoi2D.saveToXML(xmlVal2);
-		}
-		return true;
-	}
-
 	// --------------------------------------
 
-	public String csvExportCageDescription(String sep) {
-		StringBuffer sbf = new StringBuffer();
-		List<String> row = new ArrayList<String>();
-		row.add(strCageNumber);
-		row.add(cageRoi2D.getName());
-		row.add(Integer.toString(cageNFlies));
-		row.add(Integer.toString(cageAge));
-		row.add(strCageComment);
-		row.add(strCageStrain);
-		row.add(strCageSex);
-
-		int npoints = 0;
-		if (cageRoi2D != null) {
-			Polygon2D polygon = ((ROI2DPolygon) cageRoi2D).getPolygon2D();
-			row.add(Integer.toString(polygon.npoints));
-			for (int i = 0; i < npoints; i++) {
-				row.add(Integer.toString((int) polygon.xpoints[i]));
-				row.add(Integer.toString((int) polygon.ypoints[i]));
-			}
-		} else
-			row.add("0");
-		sbf.append(String.join(sep, row));
-		sbf.append("\n");
-		return sbf.toString();
+	public Cage(ROI2DShape roi) {
+		this.cageRoi2D = roi;
 	}
 
-	public boolean xmlSaveFlyPositions(Element xmlVal) {
-		Element xmlVal2 = XMLUtil.addElement(xmlVal, ID_FLYPOSITIONS);
-		flyPositions.saveXYTseriesToXML(xmlVal2);
-		return true;
-	}
-
-	public boolean xmlLoadCage(Node node, int index) {
-		if (node == null)
-			return false;
-		Element xmlVal = XMLUtil.getElement(node, "Cage" + index);
-		if (xmlVal == null)
-			return false;
-		xmlLoadCageLimits(xmlVal);
-		xmlLoadCageParameters(xmlVal);
-		xmlLoadFlyPositions(xmlVal);
-		return true;
-	}
-
-	public boolean xmlLoadCageLimits(Element xmlVal) {
-		Element xmlVal2 = XMLUtil.getElement(xmlVal, ID_CAGELIMITS);
-		if (xmlVal2 != null) {
-			cageRoi2D = (ROI2D) ROI.createFromXML(xmlVal2);
-			cageRoi2D.setSelected(false);
-		}
-		return true;
-	}
-
-	public boolean xmlLoadCageParameters(Element xmlVal) {
-		cageNFlies = XMLUtil.getElementIntValue(xmlVal, ID_NFLIES, cageNFlies);
-		cageAge = XMLUtil.getElementIntValue(xmlVal, ID_AGE, cageAge);
-		strCageComment = XMLUtil.getElementValue(xmlVal, ID_COMMENT, strCageComment);
-		strCageSex = XMLUtil.getElementValue(xmlVal, ID_SEX, strCageSex);
-		strCageStrain = XMLUtil.getElementValue(xmlVal, ID_STRAIN, strCageStrain);
-		return true;
-	}
-
-	public boolean xmlLoadFlyPositions(Element xmlVal) {
-		Element xmlVal2 = XMLUtil.getElement(xmlVal, ID_FLYPOSITIONS);
-		if (xmlVal2 != null) {
-			flyPositions.loadXYTseriesFromXML(xmlVal2);
-			return true;
-		}
-		return false;
+	public Cage() {
 	}
 
 	// ------------------------------------
@@ -215,6 +132,108 @@ public class Cage {
 
 	public void computeCageBooleanMask2D() throws InterruptedException {
 		cageMask2D = cageRoi2D.getBooleanMask2D(0, 0, 1, true);
+	}
+
+	// -------------------------------------
+
+	public boolean xmlSaveCage(Node node, int index) {
+		if (node == null)
+			return false;
+		Element xmlVal = XMLUtil.addElement(node, "Cage" + index);
+		xmlSaveCageLimits(xmlVal);
+		xmlSaveCageParameters(xmlVal);
+		if (cageNFlies > 0)
+			xmlSaveFlyPositions(xmlVal);
+		return true;
+	}
+
+	public boolean xmlSaveCageParameters(Element xmlVal) {
+		XMLUtil.setElementIntValue(xmlVal, ID_NFLIES, cageNFlies);
+		XMLUtil.setElementIntValue(xmlVal, ID_AGE, cageAge);
+		XMLUtil.setElementValue(xmlVal, ID_COMMENT, strCageComment);
+		XMLUtil.setElementValue(xmlVal, ID_SEX, strCageSex);
+		XMLUtil.setElementValue(xmlVal, ID_STRAIN, strCageStrain);
+		return true;
+	}
+
+	public boolean xmlSaveCageLimits(Element xmlVal) {
+		Element xmlVal2 = XMLUtil.addElement(xmlVal, ID_CAGELIMITS);
+		if (cageRoi2D != null) {
+			cageRoi2D.setSelected(false);
+			cageRoi2D.saveToXML(xmlVal2);
+		}
+		return true;
+	}
+
+	public boolean xmlSaveFlyPositions(Element xmlVal) {
+		Element xmlVal2 = XMLUtil.addElement(xmlVal, ID_FLYPOSITIONS);
+		flyPositions.saveXYTseriesToXML(xmlVal2);
+		return true;
+	}
+
+	public boolean xmlLoadCage(Node node, int index) {
+		if (node == null)
+			return false;
+		Element xmlVal = XMLUtil.getElement(node, "Cage" + index);
+		if (xmlVal == null)
+			return false;
+		xmlLoadCageLimits(xmlVal);
+		xmlLoadCageParameters(xmlVal);
+		xmlLoadFlyPositions(xmlVal);
+		return true;
+	}
+
+	public boolean xmlLoadCageLimits(Element xmlVal) {
+		Element xmlVal2 = XMLUtil.getElement(xmlVal, ID_CAGELIMITS);
+		if (xmlVal2 != null) {
+			cageRoi2D = (ROI2D) ROI.createFromXML(xmlVal2);
+			cageRoi2D.setSelected(false);
+		}
+		return true;
+	}
+
+	public boolean xmlLoadCageParameters(Element xmlVal) {
+		cageNFlies = XMLUtil.getElementIntValue(xmlVal, ID_NFLIES, cageNFlies);
+		cageAge = XMLUtil.getElementIntValue(xmlVal, ID_AGE, cageAge);
+		strCageComment = XMLUtil.getElementValue(xmlVal, ID_COMMENT, strCageComment);
+		strCageSex = XMLUtil.getElementValue(xmlVal, ID_SEX, strCageSex);
+		strCageStrain = XMLUtil.getElementValue(xmlVal, ID_STRAIN, strCageStrain);
+		return true;
+	}
+
+	public boolean xmlLoadFlyPositions(Element xmlVal) {
+		Element xmlVal2 = XMLUtil.getElement(xmlVal, ID_FLYPOSITIONS);
+		if (xmlVal2 != null) {
+			flyPositions.loadXYTseriesFromXML(xmlVal2);
+			return true;
+		}
+		return false;
+	}
+
+	public String csvExportCageDescription(String sep) {
+		StringBuffer sbf = new StringBuffer();
+		List<String> row = new ArrayList<String>();
+		row.add(strCageNumber);
+		row.add(cageRoi2D.getName());
+		row.add(Integer.toString(cageNFlies));
+		row.add(Integer.toString(cageAge));
+		row.add(strCageComment);
+		row.add(strCageStrain);
+		row.add(strCageSex);
+
+		int npoints = 0;
+		if (cageRoi2D != null) {
+			Polygon2D polygon = ((ROI2DPolygon) cageRoi2D).getPolygon2D();
+			row.add(Integer.toString(polygon.npoints));
+			for (int i = 0; i < npoints; i++) {
+				row.add(Integer.toString((int) polygon.xpoints[i]));
+				row.add(Integer.toString((int) polygon.ypoints[i]));
+			}
+		} else
+			row.add("0");
+		sbf.append(String.join(sep, row));
+		sbf.append("\n");
+		return sbf.toString();
 	}
 
 }

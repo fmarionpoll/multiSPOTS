@@ -100,9 +100,6 @@ public class Spot implements Comparable<Spot> {
 		this.spotRoi2D = roi;
 	}
 
-	Spot(String name) {
-	}
-
 	public Spot() {
 	}
 
