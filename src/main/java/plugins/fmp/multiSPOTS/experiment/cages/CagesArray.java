@@ -227,7 +227,7 @@ public class CagesArray {
 		int ncages = cageLimitROIList.size();
 		for (int index = 0; index < ncages; index++) {
 			Cage cage = new Cage();
-			cage.cageRoi2D = cageLimitROIList.get(index);
+			cage.setRoi((ROI2DShape) cageLimitROIList.get(index));
 			cage.flyPositions = flyPositionsList.get(index);
 			cagesList.add(cage);
 		}
@@ -272,7 +272,7 @@ public class CagesArray {
 	private boolean isPresent(Cage cagenew) {
 		boolean flag = false;
 		for (Cage cage : cagesList) {
-			if (cage.cageRoi2D.getName().contentEquals(cagenew.cageRoi2D.getName())) {
+			if (cage.getRoi().getName().contentEquals(cagenew.getRoi().getName())) {
 				flag = true;
 				break;
 			}
@@ -286,16 +286,16 @@ public class CagesArray {
 			if (roi.getName() == null)
 				break;
 			for (Cage cage : cagesList) {
-				if (cage.cageRoi2D == null)
+				if (cage.getRoi() == null)
 					break;
-				if (roi.getName().equals(cage.cageRoi2D.getName())) {
+				if (roi.getName().equals(cage.getRoi().getName())) {
 					found = true;
 					break;
 				}
 			}
 			if (!found) {
 				Cage cage = new Cage();
-				cage.cageRoi2D = roi;
+				cage.setRoi((ROI2DShape) roi);
 				cagesList.add(cage);
 			}
 		}
@@ -307,8 +307,8 @@ public class CagesArray {
 		while (iterator.hasNext()) {
 			Cage cage = iterator.next();
 			boolean found = false;
-			if (cage.cageRoi2D != null) {
-				String cageRoiName = cage.cageRoi2D.getName();
+			if (cage.getRoi() != null) {
+				String cageRoiName = cage.getRoi().getName();
 				for (ROI2D roi : roiList) {
 					if (roi.getName().equals(cageRoiName)) {
 						found = true;
@@ -340,7 +340,7 @@ public class CagesArray {
 		List<ROI2D> cageLimitROIList = getRoisWithCageName(seqCamData);
 		seqCamData.seq.removeROIs(cageLimitROIList, false);
 		for (Cage cage : cagesList)
-			cageLimitROIList.add(cage.cageRoi2D);
+			cageLimitROIList.add(cage.getRoi());
 		seqCamData.seq.addROIs(cageLimitROIList, true);
 	}
 
@@ -354,7 +354,7 @@ public class CagesArray {
 
 	public void setFirstAndLastCageToZeroFly() {
 		for (Cage cage : cagesList) {
-			if (cage.cageRoi2D.getName().contains("000") || cage.cageRoi2D.getName().contains("009"))
+			if (cage.getRoi().getName().contains("000") || cage.getRoi().getName().contains("009"))
 				cage.cageNFlies = 0;
 		}
 	}
@@ -465,7 +465,7 @@ public class CagesArray {
 	public int getLastIntervalFlyAlive(int cagenumber) {
 		int flypos = -1;
 		for (Cage cage : cagesList) {
-			String cagenumberString = cage.cageRoi2D.getName().substring(4);
+			String cagenumberString = cage.getRoi().getName().substring(4);
 			if (Integer.valueOf(cagenumberString) == cagenumber) {
 				flypos = cage.flyPositions.getLastIntervalAlive();
 				break;
@@ -477,7 +477,7 @@ public class CagesArray {
 	public boolean isFlyAlive(int cagenumber) {
 		boolean isalive = false;
 		for (Cage cage : cagesList) {
-			String cagenumberString = cage.cageRoi2D.getName().substring(4);
+			String cagenumberString = cage.getRoi().getName().substring(4);
 			if (Integer.valueOf(cagenumberString) == cagenumber) {
 				isalive = (cage.flyPositions.getLastIntervalAlive() > 0);
 				break;
@@ -489,7 +489,7 @@ public class CagesArray {
 	public boolean isDataAvailable(int cagenumber) {
 		boolean isavailable = false;
 		for (Cage cage : cagesList) {
-			String cagenumberString = cage.cageRoi2D.getName().substring(4);
+			String cagenumberString = cage.getRoi().getName().substring(4);
 			if (Integer.valueOf(cagenumberString) == cagenumber) {
 				isavailable = true;
 				break;
@@ -503,7 +503,7 @@ public class CagesArray {
 		int rightPixel = -1;
 
 		for (Cage cage : cagesList) {
-			ROI2D roiCage = cage.cageRoi2D;
+			ROI2D roiCage = cage.getRoi();
 			Rectangle2D rect = roiCage.getBounds2D();
 			int left = (int) rect.getX();
 			int right = left + (int) rect.getWidth();

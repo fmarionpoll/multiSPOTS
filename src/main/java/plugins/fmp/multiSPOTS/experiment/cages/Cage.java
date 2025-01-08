@@ -15,9 +15,10 @@ import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DRectangle;
+import plugins.kernel.roi.roi2d.ROI2DShape;
 
 public class Cage {
-	public ROI2D cageRoi2D = null;
+	private ROI2D cageRoi2D = null;
 	public BooleanMask2D cageMask2D = null;
 	public FlyPositions flyPositions = new FlyPositions();
 	public int cageNFlies = 0;
@@ -141,6 +142,14 @@ public class Cage {
 	}
 
 	// ------------------------------------
+
+	public ROI2D getRoi() {
+		return cageRoi2D;
+	}
+
+	public void setRoi(ROI2DShape roi) {
+		cageRoi2D = roi;
+	}
 
 	public String getCageNumber() {
 		if (strCageNumber == null)

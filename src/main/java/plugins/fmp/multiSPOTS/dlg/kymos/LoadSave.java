@@ -103,8 +103,8 @@ public class LoadSave extends JPanel {
 			outputpath = f.getSelectedFile().getAbsolutePath();
 			for (int t = 0; t < seqKymos.seq.getSizeT(); t++) {
 				Spot spot = exp.spotsArray.spotsList.get(t);
-				progress.setMessage("Save kymograph file : " + spot.getRoiName());
-				spot.spot_filenameTIFF = outputpath + File.separator + spot.getRoiName() + ".tiff";
+				progress.setMessage("Save kymograph file : " + spot.getRoi().getName());
+				spot.spot_filenameTIFF = outputpath + File.separator + spot.getRoi().getName() + ".tiff";
 				final File file = new File(spot.spot_filenameTIFF);
 				IcyBufferedImage image = seqKymos.getSeqImage(t, 0);
 				ThreadUtil.bgRun(new Runnable() {

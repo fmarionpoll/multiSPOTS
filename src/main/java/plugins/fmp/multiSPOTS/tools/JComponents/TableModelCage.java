@@ -79,7 +79,7 @@ public class TableModelCage extends AbstractTableModel {
 		if (cage != null) {
 			switch (columnIndex) {
 			case 0:
-				return cage.cageRoi2D.getName();
+				return cage.getRoi().getName();
 			case 1:
 				return cage.cageNFlies;
 			case 2:
@@ -115,7 +115,7 @@ public class TableModelCage extends AbstractTableModel {
 		if (cage != null) {
 			switch (columnIndex) {
 			case 0:
-				cage.cageRoi2D.setName(aValue.toString());
+				cage.getRoi().setName(aValue.toString());
 				break;
 			case 1:
 				cage.cageNFlies = (int) aValue;

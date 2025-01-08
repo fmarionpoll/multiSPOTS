@@ -187,7 +187,7 @@ public class SpotsArray {
 	public boolean isPresent(Spot capNew) {
 		boolean flag = false;
 		for (Spot spot : spotsList) {
-			if (spot.getRoiName().contentEquals(capNew.getRoiName())) {
+			if (spot.getRoi().getName().contentEquals(capNew.getRoi().getName())) {
 				flag = true;
 				break;
 			}
@@ -215,7 +215,7 @@ public class SpotsArray {
 	public Spot getSpotFromName(String name) {
 		Spot spotFound = null;
 		for (Spot spot : spotsList) {
-			if (spot.getRoiName().equals(name)) {
+			if (spot.getRoi().getName().equals(name)) {
 				spotFound = spot;
 				break;
 			}
@@ -226,7 +226,7 @@ public class SpotsArray {
 	public Spot getSpotContainingName(String name) {
 		Spot spotFound = null;
 		for (Spot spot : spotsList) {
-			if (spot.getRoiName().contains(name)) {
+			if (spot.getRoi().getName().contains(name)) {
 				spotFound = spot;
 				break;
 			}
@@ -266,7 +266,7 @@ public class SpotsArray {
 		Collections.sort(listROISSpot, new Comparators.ROI2D_Name_Comparator());
 		for (Spot spot : spotsList) {
 			spot.valid = false;
-			String spotName = spot.getRoiName();
+			String spotName = spot.getRoi().getName();
 			Iterator<ROI2DShape> iterator = listROISSpot.iterator();
 			while (iterator.hasNext()) {
 				ROI2D roi = iterator.next();

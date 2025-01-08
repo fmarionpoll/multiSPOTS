@@ -80,7 +80,7 @@ public class XLSExport {
 		List<Spot> spotsList = exp.spotsArray.spotsList;
 		for (int t = 0; t < spotsList.size(); t++) {
 			Spot spot = spotsList.get(t);
-			String name = spot.getRoiName();
+			String name = spot.getRoi().getName();
 			int col = getRowIndexFromSpotName(name);
 			if (col >= 0)
 				pt.x = colseries + col;
@@ -336,8 +336,8 @@ public class XLSExport {
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
 		for (int i = 0; i < nspots; i++) {
 			Spot spot = expAll.spotsArray.spotsList.get(i);
-			XLSResults rowResults = new XLSResults(spot.getRoiName(), spot.spotNFlies, spot.cageID, spot.cagePosition,
-					xlsOption, nFrames);
+			XLSResults rowResults = new XLSResults(spot.getRoi().getName(), spot.spotNFlies, spot.cageID,
+					spot.cagePosition, xlsOption, nFrames);
 			rowResults.stimulus = spot.spotStim;
 			rowResults.concentration = spot.spotConc;
 			rowResults.cageID = spot.cageID;
@@ -370,8 +370,8 @@ public class XLSExport {
 		XLSResultsArray rowListForOneExp = new XLSResultsArray(nspots);
 		for (int i = 0; i < nspots; i++) {
 			Spot spot = expAll.spotsArray.spotsList.get(i);
-			XLSResults rowResults = new XLSResults(spot.getRoiName(), spot.spotNFlies, spot.cageID, spot.cagePosition,
-					xlsOption, nFrames);
+			XLSResults rowResults = new XLSResults(spot.getRoi().getName(), spot.spotNFlies, spot.cageID,
+					spot.cagePosition, xlsOption, nFrames);
 			rowResults.stimulus = spot.spotStim;
 			rowResults.concentration = spot.spotConc;
 			rowResults.cageID = spot.cageID;
@@ -584,7 +584,7 @@ public class XLSExport {
 
 	private void trimDeadsFromArrayList(XLSResultsArray rowListForOneExp, Experiment exp) {
 		for (Cage cage : exp.cagesArray.cagesList) {
-			String roiname = cage.cageRoi2D.getName();
+			String roiname = cage.getRoi().getName();
 			if (roiname.length() < 4 || !roiname.substring(0, 4).contains("cage"))
 				continue;
 
@@ -593,7 +593,8 @@ public class XLSExport {
 			int ilastalive = 0;
 			if (cage.cageNFlies > 0) {
 				Experiment expi = exp;
-				while (expi.chainToNextExperiment != null && expi.chainToNextExperiment.cagesArray.isFlyAlive(cagenumber)) {
+				while (expi.chainToNextExperiment != null
+						&& expi.chainToNextExperiment.cagesArray.isFlyAlive(cagenumber)) {
 					expi = expi.chainToNextExperiment;
 				}
 				int lastIntervalFlyAlive = expi.cagesArray.getLastIntervalFlyAlive(cagenumber);

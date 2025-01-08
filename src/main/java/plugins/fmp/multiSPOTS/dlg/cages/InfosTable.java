@@ -100,7 +100,7 @@ public class InfosTable extends JPanel {
 					for (Cage cageFrom : cageArrayCopy) {
 						cageFrom.valid = false;
 						for (Cage cageTo : exp.cagesArray.cagesList) {
-							if (!cageFrom.cageRoi2D.getName().equals(cageTo.cageRoi2D.getName()))
+							if (!cageFrom.getRoi().getName().equals(cageTo.getRoi().getName()))
 								continue;
 							cageFrom.valid = true;
 							cageTo.cageNFlies = cageFrom.cageNFlies;
@@ -125,7 +125,7 @@ public class InfosTable extends JPanel {
 					if (rowIndex >= 0) {
 						Cage cage0 = exp.cagesArray.cagesList.get(rowIndex);
 						for (Cage cage : exp.cagesArray.cagesList) {
-							if (cage.cageRoi2D.getName().equals(cage0.cageRoi2D.getName()))
+							if (cage.getRoi().getName().equals(cage0.getRoi().getName()))
 								continue;
 							switch (columnIndex) {
 							case 1:

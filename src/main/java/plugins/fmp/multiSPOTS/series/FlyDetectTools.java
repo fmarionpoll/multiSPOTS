@@ -10,7 +10,6 @@ import java.util.concurrent.Future;
 import icy.gui.frame.progress.ProgressFrame;
 import icy.image.IcyBufferedImage;
 import icy.roi.BooleanMask2D;
-
 import icy.system.SystemUtil;
 import icy.system.thread.Processor;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
@@ -170,7 +169,7 @@ public class FlyDetectTools {
 		for (Cage cage : cages.cagesList) {
 			if (cage.cageNFlies < 1)
 				continue;
-			Rectangle rect = cage.cageRoi2D.getBounds();
+			Rectangle rect = cage.getRoi().getBounds();
 			if (rectangleAllCages == null)
 				rectangleAllCages = new Rectangle(rect);
 			else

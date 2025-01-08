@@ -69,7 +69,7 @@ public class SequenceKymos extends SequenceCamData {
 		List<ImageFileDescriptor> myListOfFiles = new ArrayList<ImageFileDescriptor>(nspots);
 		for (int i = 0; i < nspots; i++) {
 			ImageFileDescriptor temp = new ImageFileDescriptor();
-			temp.fileName = directoryFull + spotsArray.spotsList.get(i).getRoiName() + ".tiff";
+			temp.fileName = directoryFull + spotsArray.spotsList.get(i).getRoi().getName() + ".tiff";
 			myListOfFiles.add(temp);
 		}
 		return myListOfFiles;

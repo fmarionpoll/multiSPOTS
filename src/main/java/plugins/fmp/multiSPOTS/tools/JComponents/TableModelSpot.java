@@ -70,7 +70,7 @@ public class TableModelSpot extends AbstractTableModel {
 		if (spot != null) {
 			switch (columnIndex) {
 			case 0:
-				return spot.getRoiName();
+				return spot.getRoi().getName();
 			case 1:
 				return spot.cageID;
 			case 2:
@@ -106,7 +106,7 @@ public class TableModelSpot extends AbstractTableModel {
 		if (spot != null) {
 			switch (columnIndex) {
 			case 0:
-				spot.setRoiName(aValue.toString());
+				spot.getRoi().setName(aValue.toString());
 				break;
 			case 1:
 				spot.cageID = (int) aValue;

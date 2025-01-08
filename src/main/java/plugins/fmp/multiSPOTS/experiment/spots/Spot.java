@@ -161,14 +161,6 @@ public class Spot implements Comparable<Spot> {
 		this.spotRoi_old = roi;
 	}
 
-	public void setRoiName(String name) {
-		spotRoi2D.setName(name);
-	}
-
-	public String getRoiName() {
-		return spotRoi2D.getName();
-	}
-
 	public String getPlateCoordinatesAsString() {
 		String plateCoords = getCharForNumber(plateRow) + "_" + Integer.toString(plateColumn);
 		return plateCoords;

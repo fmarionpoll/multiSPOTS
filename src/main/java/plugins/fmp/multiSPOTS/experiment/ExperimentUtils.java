@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import icy.roi.ROI2D;
+import plugins.fmp.multiSPOTS.experiment.cages.Cage;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
@@ -19,7 +20,7 @@ public class ExperimentUtils {
 		for (ROI2D roi : listROISCap) {
 			boolean found = false;
 			for (Spot spot : exp.spotsArray.spotsList) {
-				if (spot.getRoi() != null && roi.getName().equals(spot.getRoiName())) {
+				if (spot.getRoi() != null && roi.getName().equals(spot.getRoi().getName())) {
 					found = true;
 					break;
 				}
@@ -33,10 +34,10 @@ public class ExperimentUtils {
 		// cap with no corresponding roi? remove
 		Iterator<Spot> iterator = exp.spotsArray.spotsList.iterator();
 		while (iterator.hasNext()) {
-			Spot cap = iterator.next();
+			Spot spot = iterator.next();
 			boolean found = false;
 			for (ROI2D roi : listROISCap) {
-				if (roi.getName().equals(cap.getRoiName())) {
+				if (roi.getName().equals(spot.getRoi().getName())) {
 					found = true;
 					break;
 				}
@@ -55,7 +56,7 @@ public class ExperimentUtils {
 		for (Spot spot : exp.spotsArray.spotsList) {
 			boolean found = false;
 			for (ROI2D roi : listROISSpots) {
-				if (roi.getName().equals(spot.getRoiName())) {
+				if (roi.getName().equals(spot.getRoi().getName())) {
 					found = true;
 					break;
 				}
@@ -65,4 +66,22 @@ public class ExperimentUtils {
 		}
 	}
 
+	public static void transferCagesToCamDataSequence(Experiment exp) {
+		if (exp.spotsArray == null)
+			return;
+
+		List<ROI2D> listROISSpots = ROI2DUtilities.getROIs2DContainingString("cage", exp.seqCamData.seq);
+		// roi with no corresponding cap? add ROI
+		for (Cage cage : exp.cagesArray.cagesList) {
+			boolean found = false;
+			for (ROI2D roi : listROISSpots) {
+				if (roi.getName().equals(cage.getRoi().getName())) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				exp.seqCamData.seq.addROI(cage.getRoi());
+		}
+	}
 }

@@ -255,7 +255,7 @@ public class SpotTablePanel extends JPanel {
 		for (Spot spotFrom : spotsArrayCopy) {
 			spotFrom.valid = false;
 			for (Spot spotTo : exp.spotsArray.spotsList) {
-				if (!spotFrom.getRoiName().equals(spotTo.getRoiName()))
+				if (!spotFrom.getRoi().getName().equals(spotTo.getRoi().getName()))
 					continue;
 				spotFrom.valid = true;
 				spotTo.cageID = spotFrom.cageID;
@@ -289,7 +289,7 @@ public class SpotTablePanel extends JPanel {
 		int cageIndex = spot0.cagePosition;
 
 		for (Spot spot : exp.spotsArray.spotsList) {
-			if (spot.getRoiName().equals(spot0.getRoiName()))
+			if (spot.getRoi().getName().equals(spot0.getRoi().getName()))
 				continue;
 
 			if (spot.cagePosition != cageIndex)
@@ -325,7 +325,7 @@ public class SpotTablePanel extends JPanel {
 
 		Spot spotFrom = exp.spotsArray.spotsList.get(rowIndex);
 		for (Spot spot : exp.spotsArray.spotsList) {
-			if (spot.getRoiName().equals(spotFrom.getRoiName()))
+			if (spot.getRoi().getName().equals(spotFrom.getRoi().getName()))
 				continue;
 			switch (columnIndex) {
 			case 3:
