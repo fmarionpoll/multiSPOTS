@@ -430,10 +430,6 @@ public class SpotsArray {
 		return new Polygon2D(outerRectangle);
 	}
 
-	public void deleteAllSpots() {
-		spotsList.clear();
-	}
-
 	public void transferSumToSumClean() {
 		int span = 10;
 		for (Spot spot : spotsList) {

@@ -104,19 +104,12 @@ public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, 
 	public void displaySpotsInformation(Experiment exp) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				updateDialogs(exp);
+				//ExperimentUtils.transferSpotsToCamDataSequence(exp); //TODO ??
 				parent0.dlgExperiment.tabOptions.viewSpotsCheckBox.setSelected(true);
 			}
 		});
 	}
 
-	public void updateDialogs(Experiment exp) {
-		if (exp != null) {
-//			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
-			ExperimentUtils.transferSpotsToCamDataSequence(exp);
-//			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
-		}
-	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {

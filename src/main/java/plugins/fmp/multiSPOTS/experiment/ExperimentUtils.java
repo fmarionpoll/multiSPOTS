@@ -70,11 +70,11 @@ public class ExperimentUtils {
 		if (exp.spotsArray == null)
 			return;
 
-		List<ROI2D> listROISSpots = ROI2DUtilities.getROIs2DContainingString("cage", exp.seqCamData.seq);
+		List<ROI2D> roisAlreadyTransferred = ROI2DUtilities.getROIs2DContainingString("cage", exp.seqCamData.seq);
 		// roi with no corresponding cap? add ROI
 		for (Cage cage : exp.cagesArray.cagesList) {
 			boolean found = false;
-			for (ROI2D roi : listROISSpots) {
+			for (ROI2D roi : roisAlreadyTransferred) {
 				if (roi.getName().equals(cage.getRoi().getName())) {
 					found = true;
 					break;

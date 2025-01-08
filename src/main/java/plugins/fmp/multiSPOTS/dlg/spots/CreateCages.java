@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI2D;
@@ -24,6 +26,8 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.cages.Cage;
+import plugins.fmp.multiSPOTS.experiment.cages.CagesArray;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.fmp.multiSPOTS.tools.polyline.PolygonUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 
@@ -48,6 +52,8 @@ public class CreateCages extends JPanel {
 
 	private MultiSPOTS parent0;
 
+	// -------------------------------------------------
+	
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
 		this.parent0 = parent0;
@@ -90,23 +96,40 @@ public class CreateCages extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-//					ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
-//					exp.cagesArray.removeCages();
-					createCagessFromSelectedPolygon(exp);
-					ExperimentUtils.transferCagesToCamDataSequence(exp); // TODO
-
-//					int nbFliesPerCage = (int) nFliesPerCageJSpinner.getValue();
-//					exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
-
-//					exp.cagesArray.cagesFromROIs(exp.seqCamData);
-//					if (exp.spotsArray.spotsList.size() > 0)
-//						exp.cagesArray.transferNFliesFromSpotsToCages(exp.spotsArray);
+					polygon2D = getPolygonEnclosingCagesFromSelectedRoi(exp); 
+					if (polygon2D != null) {
+						createCagessFromPolygon(exp, polygon2D);
+						ExperimentUtils.transferCagesToCamDataSequence(exp); 
+					}
 				}
 			}
 		});
 
+			
+		nCagesPerPlateAlongXJSpinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
+				if (exp != null)
+					updateCageDescriptorsOfSpots(exp);
+			}
+		});
+	
+
 	}
 
+	private Polygon2D getPolygonEnclosingCagesFromSelectedRoi(Experiment exp) {
+		SequenceCamData seqCamData = exp.seqCamData;
+		ROI2D roi = seqCamData.seq.getSelectedROI2D();
+		if (!(roi instanceof ROI2DPolygon)) {
+			new AnnounceFrame("The frame must be a ROI2D Polygon");
+			return null;
+		}
+		polygon2D = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
+		seqCamData.seq.removeROI(roi);
+		return polygon2D;
+	}
+	
 	void updateNColumnsFieldFromSequence() {
 		Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 		if (exp != null) {
@@ -159,16 +182,7 @@ public class CreateCages extends JPanel {
 		return polygon2D;
 	}
 
-	private void createCagessFromSelectedPolygon(Experiment exp) {
-		SequenceCamData seqCamData = exp.seqCamData;
-		ROI2D roi = seqCamData.seq.getSelectedROI2D();
-		if (!(roi instanceof ROI2DPolygon)) {
-			new AnnounceFrame("The frame must be a ROI2D Polygon");
-			return;
-		}
-		polygon2D = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
-		seqCamData.seq.removeROI(roi);
-
+	private void createCagessFromPolygon(Experiment exp, Polygon2D polygon2D) {
 		int n_columns = 10;
 		int n_rows = 1;
 		try {
@@ -179,9 +193,13 @@ public class CreateCages extends JPanel {
 		} catch (Exception e) {
 			new AnnounceFrame("Can't interpret one of the ROI parameters value");
 		}
-
+		
+		// erase existing spots
+		ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
+		exp.cagesArray.cagesList.clear();
+		exp.cagesArray = new CagesArray();
+		
 		createCagesArray(exp, polygon2D, n_columns, n_rows, width_cage, width_interval);
-
 	}
 
 	private void createCagesArray(Experiment exp, Polygon2D roiPolygonMin, int ncolumns, int nrows, int width_cage,

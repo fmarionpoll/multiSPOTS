@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -55,14 +54,11 @@ public class CreateSpots extends JPanel {
 	private String[] flyString = new String[] { "fly", "flies" };
 	private JLabel flyLabel = new JLabel(flyString[0]);
 
-	private String[] position = new String[] { "left", "right" };
-	private JComboBox<String> notchJComboBox = new JComboBox<String>(position);
-	private String[] viewFrom = new String[] { "bottom", "top" };
-	private JComboBox<String> viewFromJComboBox = new JComboBox<String>(viewFrom);
-
 	private MultiSPOTS parent0 = null;
 	private boolean silent = false;
 
+	// ----------------------------------------------------------
+	
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);
@@ -83,18 +79,12 @@ public class CreateSpots extends JPanel {
 		panel1.add(new JLabel("rows"));
 		panel1.add(nRowsJSpinner);
 		nRowsJSpinner.setPreferredSize(new Dimension(40, 20));
-		panel1.add(new JLabel("notch"));
-		panel1.add(notchJComboBox);
-		panel1.add(new JLabel("view"));
-		panel1.add(viewFromJComboBox);
 
 		JPanel panel2 = new JPanel(flowLayout);
-		panel2.add(new JLabel("Cage:"));
-
-		panel2.add(new JLabel("cols"));
+		panel2.add(new JLabel("Grouped within n cols"));
 		panel2.add(nColsPerCageJSpinner);
 		nColsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
-		panel2.add(new JLabel("rows"));
+		panel2.add(new JLabel("& n rows"));
 		panel2.add(nRowsPerCageJSpinner);
 		nRowsPerCageJSpinner.setPreferredSize(new Dimension(40, 20));
 		panel2.add(new JLabel("with"));
@@ -124,10 +114,13 @@ public class CreateSpots extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					createSpotsFromPolygon(exp);
-					ExperimentUtils.transferSpotsToCamDataSequence(exp);
-					int nbFliesPerCage = (int) nFliesPerCageJSpinner.getValue();
-					exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
+					polygon2D = getPolygonEnclosingSpotsFromSelectedRoi(exp); 
+					if (polygon2D != null) {
+						createSpotsFromPolygon(exp, polygon2D);
+						ExperimentUtils.transferSpotsToCamDataSequence(exp);
+						int nbFliesPerCage = (int) nFliesPerCageJSpinner.getValue();
+						exp.spotsArray.initSpotsWithNFlies(nbFliesPerCage);
+					}
 				}
 			}
 		});
@@ -202,33 +195,35 @@ public class CreateSpots extends JPanel {
 		}
 		return polygon2D;
 	}
-
-	private void createSpotsFromPolygon(Experiment exp) {
+	
+	private Polygon2D getPolygonEnclosingSpotsFromSelectedRoi(Experiment exp) {
 		SequenceCamData seqCamData = exp.seqCamData;
 		ROI2D roi = seqCamData.seq.getSelectedROI2D();
 		if (!(roi instanceof ROI2DPolygon)) {
 			new AnnounceFrame("The frame must be a ROI2D Polygon");
-			return;
+			return null;
 		}
 		polygon2D = PolygonUtilities.orderVerticesOf4CornersPolygon(((ROI2DPolygon) roi).getPolygon());
 		seqCamData.seq.removeROI(roi);
+		return polygon2D;
+	}
 
+	private void createSpotsFromPolygon(Experiment exp, Polygon2D polygon2D) {
 		int n_columns = 10;
 		int n_rows = 1;
+		int radius = 3;
 		try {
 			n_columns = (int) nColumnsJSpinner.getValue();
 			n_rows = (int) nRowsJSpinner.getValue();
+			radius = (int) pixelRadiusSpinner.getValue();
 		} catch (Exception e) {
 			new AnnounceFrame("Can't interpret one of the ROI parameters value");
 		}
-
-		Point2D.Double[][] arrayPoints = PolygonUtilities.createArrayOfPointsFromPolygon(polygon2D, n_columns, n_rows);
-		int radius = (int) pixelRadiusSpinner.getValue();
-
 		// erase existing spots
 		ROI2DUtilities.removeRoisContainingString(-1, "spot", exp.seqCamData.seq);
-		exp.spotsArray.deleteAllSpots();
+		exp.spotsArray.spotsList.clear();
 		exp.spotsArray = new SpotsArray();
+		Point2D.Double[][] arrayPoints = PolygonUtilities.createArrayOfPointsFromPolygon(polygon2D, n_columns, n_rows);
 		convertPoint2DArrayToSpots(exp, arrayPoints, n_columns, n_rows, radius);
 		updateCageDescriptorsOfSpots(exp);
 	}
