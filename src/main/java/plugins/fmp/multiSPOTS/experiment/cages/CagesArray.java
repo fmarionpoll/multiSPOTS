@@ -1,5 +1,7 @@
 package plugins.fmp.multiSPOTS.experiment.cages;
 
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileWriter;
@@ -15,6 +17,7 @@ import org.w3c.dom.Node;
 
 import icy.roi.ROI;
 import icy.roi.ROI2D;
+import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
@@ -515,4 +518,46 @@ public class CagesArray {
 
 		return rightPixel - leftPixel;
 	}
+
+	public Polygon2D getPolygon2DEnclosingAllCages() {
+		if (cagesList.size() < 1 || cagesList.get(0).getRoi() == null)
+			return null;
+
+		List<Point2D> points = new ArrayList<Point2D>();
+		Rectangle rect = cagesList.get(0).getRoi().getBounds();
+		int spotX = (int) rect.getX();
+		int spotY = (int) rect.getY();
+		points.add(new Point2D.Double(spotX, spotY));
+		points.add(new Point2D.Double(spotX + rect.getWidth(), spotY));
+		points.add(new Point2D.Double(spotX + rect.getHeight(), spotY + 1));
+		points.add(new Point2D.Double(spotX, spotY + 1));
+		Polygon2D polygon = new Polygon2D(points);
+
+		for (Cage cage : cagesList) {
+			int col = cage.arrayColumn;
+			int row = cage.arrayRow;
+
+			rect = cage.getRoi().getBounds();
+			spotX = (int) rect.getX();
+			spotY = (int) rect.getY();
+
+			if (col == 0 && row == 0) {
+				replaceItem(polygon, 0, (int) rect.getX(), (int) rect.getY());
+			} else if (col == (nCagesPerPlateAlongX - 1) && row == 0) {
+				replaceItem(polygon, 1, (int) (rect.getX() + rect.getWidth()), (int) rect.getY());
+			} else if (col == (nCagesPerPlateAlongX - 1) && row == (nCagesPerPlateAlongY - 1)) {
+				replaceItem(polygon, 2, (int) (rect.getX() + rect.getWidth()), (int) (rect.getY() + rect.getHeight()));
+			} else if (col == 0 && row == (nCagesPerPlateAlongY - 1)) {
+				replaceItem(polygon, 3, (int) rect.getX(), (int) (rect.getY() + rect.getHeight()));
+			}
+		}
+
+		return polygon;
+	}
+
+	private void replaceItem(Polygon2D polygon, int index, int x, int y) {
+		polygon.xpoints[index] = x;
+		polygon.ypoints[index] = y;
+	}
+
 }
