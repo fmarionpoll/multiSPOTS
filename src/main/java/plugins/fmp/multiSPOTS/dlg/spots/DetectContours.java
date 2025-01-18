@@ -161,7 +161,8 @@ public class DetectContours extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					ROI2DUtilities.removeRoisContainingString(-1, "_mask", exp.seqCamData.seq);
+					exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("_mask", exp.seqCamData.seq),
+							false);
 					detectContours(exp);
 					parent0.dlgSpots.tabFile.saveSpotsArray_file(exp);
 				}

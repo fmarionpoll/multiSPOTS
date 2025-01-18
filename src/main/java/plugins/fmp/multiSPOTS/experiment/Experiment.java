@@ -261,7 +261,7 @@ public class Experiment {
 	public boolean loadCamDataSpots() {
 		loadMCSpots_Only();
 		if (seqCamData != null && seqCamData.seq != null)
-			spotsArray.transferSpotRoiToSequence(seqCamData.seq);
+			spotsArray.transferSpotsToSequenceAsROIs(seqCamData.seq);
 
 		return (seqCamData != null && seqCamData.seq != null);
 	}
@@ -472,6 +472,14 @@ public class Experiment {
 		return spotsArray.save_Spots(resultsDirectory);
 	}
 
+	public boolean load_Cages() {
+
+		String filename = getXMLDrosoTrackLocation();
+		if (filename == null)
+			return false;
+		return cagesArray.xmlReadCagesFromFileNoQuestion(filename, this);
+
+	}
 	// ---------------------------------------------
 
 	public boolean load_SpotsMeasures() {
@@ -483,7 +491,7 @@ public class Experiment {
 	}
 
 	public boolean load_CagesMeasures() {
-		return xmlReadDrosoTrack(null);
+		return cagesArray.loadCagesMeasures(getResultsDirectory());
 	}
 
 	public boolean save_CagesMeasures() {

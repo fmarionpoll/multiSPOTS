@@ -58,7 +58,7 @@ public class CreateSpots extends JPanel {
 	private boolean silent = false;
 
 	// ----------------------------------------------------------
-	
+
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
 		setLayout(capLayout);
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT);
@@ -114,7 +114,7 @@ public class CreateSpots extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					polygon2D = getPolygonEnclosingSpotsFromSelectedRoi(exp); 
+					polygon2D = getPolygonEnclosingSpotsFromSelectedRoi(exp);
 					if (polygon2D != null) {
 						createSpotsFromPolygon(exp, polygon2D);
 						ExperimentUtils.transferSpotsToCamDataSequence(exp);
@@ -195,7 +195,7 @@ public class CreateSpots extends JPanel {
 		}
 		return polygon2D;
 	}
-	
+
 	private Polygon2D getPolygonEnclosingSpotsFromSelectedRoi(Experiment exp) {
 		SequenceCamData seqCamData = exp.seqCamData;
 		ROI2D roi = seqCamData.seq.getSelectedROI2D();
@@ -220,7 +220,7 @@ public class CreateSpots extends JPanel {
 			new AnnounceFrame("Can't interpret one of the ROI parameters value");
 		}
 		// erase existing spots
-		ROI2DUtilities.removeRoisContainingString(-1, "spot", exp.seqCamData.seq);
+		exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("spot", exp.seqCamData.seq), false);
 		exp.spotsArray.spotsList.clear();
 		exp.spotsArray = new SpotsArray();
 		Point2D.Double[][] arrayPoints = PolygonUtilities.createArrayOfPointsFromPolygon(polygon2D, n_columns, n_rows);

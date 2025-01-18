@@ -261,7 +261,7 @@ public class SpotsArray {
 		}
 	}
 
-	public void updateSpotsFromSequence(Sequence seq) {
+	public void transferROIsFromSequenceToSpots(Sequence seq) {
 		List<ROI2DShape> listROISSpot = ROI2DUtilities.getROIs2DAreaContainingString("spot", seq);
 		Collections.sort(listROISSpot, new Comparators.ROI2D_Name_Comparator());
 		for (Spot spot : spotsList) {
@@ -299,19 +299,21 @@ public class SpotsArray {
 		return;
 	}
 
-	public void updateSpotsMeasuresFromSequence() {
+	public void transferROIsMeasuresFromSequenceToSpots() {
 		for (Spot spot : spotsList) {
 			spot.transferROIsMeasuresToLevel2D();
 		}
 	}
 
-	public void transferSpotRoiToSequence(Sequence seq) {
-		ROI2DUtilities.removeRoisContainingString(-1, "spot", seq);
+	public void transferSpotsToSequenceAsROIs(Sequence seq) {
+		seq.removeROIs(ROI2DUtilities.getROIsContainingString("spot", seq), false);
+		List<ROI2D> spotROIList = new ArrayList<ROI2D>(spotsList.size());
 		for (Spot spot : spotsList)
-			seq.addROI(spot.getRoi());
+			spotROIList.add(spot.getRoi());
+		seq.addROIs(spotROIList, true);
 	}
 
-	public void transferSpotsMeasuresToSequence(Sequence seq) {
+	public void transferSpotsMeasuresToSequenceAsROIs(Sequence seq) {
 		List<ROI2D> seqRoisList = seq.getROI2Ds(false);
 		ROI2DUtilities.removeROIsMissingChar(seqRoisList, '_');
 

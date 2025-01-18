@@ -55,7 +55,7 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 		tabbedPane.addTab("Cages", null, tabCreateCages, "Create cages");
 		id_create = order;
 		order++;
-		
+
 		tabCreateSpots.init(gridLayout, parent0);
 		tabCreateSpots.addPropertyChangeListener(this);
 		tabbedPane.addTab("(spots)", null, tabCreateSpots, "Create spots defining liquid drops");
@@ -123,9 +123,7 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 
 	public void updateDialogs(Experiment exp) {
 		if (exp != null) {
-//			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 			ExperimentUtils.transferSpotsToCamDataSequence(exp);
-//			exp.spotsArray.desc_old.copy(exp.spotsArray.spotsDescription);
 			tabCreateSpots.updateDialog(exp);
 		}
 	}

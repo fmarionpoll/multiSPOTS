@@ -1,6 +1,7 @@
 package plugins.fmp.multiSPOTS.dlg.spots;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
@@ -74,10 +75,12 @@ public class CreateCages extends JPanel {
 		add(panel1);
 
 		JPanel panel2 = new JPanel(flowLayout);
-		panel2.add(new JLabel("cage width "));
+		panel2.add(new JLabel("Ratio cage width"));
 		panel2.add(width_cageTextField);
-		panel2.add(new JLabel("space between cages"));
+		width_cageTextField.setPreferredSize(new Dimension(40, 20));
+		panel2.add(new JLabel("to space"));
 		panel2.add(width_intervalTextField);
+		width_intervalTextField.setPreferredSize(new Dimension(40, 20));
 		add(panel2);
 
 		defineActionListeners();
@@ -209,7 +212,7 @@ public class CreateCages extends JPanel {
 		}
 
 		// erase existing cages
-		ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
+		exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("cage", exp.seqCamData.seq), false);
 		exp.cagesArray.cagesList.clear();
 		exp.cagesArray = new CagesArray();
 

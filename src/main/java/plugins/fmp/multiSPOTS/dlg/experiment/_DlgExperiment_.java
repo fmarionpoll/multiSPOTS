@@ -115,7 +115,6 @@ public class _DlgExperiment_ extends JPanel implements ViewerListener, ChangeLis
 					v.toFront();
 					v.requestFocus();
 					v.addListener(parent);
-//					System.out.println("set viewer listener: _DlgExperiment_");
 					v.setTitle(exp.seqCamData.getDecoratedImageName(0));
 					v.setRepeat(false);
 				}

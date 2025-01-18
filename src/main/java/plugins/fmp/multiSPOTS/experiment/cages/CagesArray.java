@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 
 import icy.roi.ROI;
 import icy.roi.ROI2D;
+import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
@@ -25,6 +26,7 @@ import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
 import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
@@ -77,6 +79,13 @@ public class CagesArray {
 		csvSaveCagesMeasures(directory);
 		String tempName = directory + File.separator + ID_MCDROSOTRACK_XML;
 		xmlWriteCagesToFileNoQuestion(tempName);
+		return true;
+	}
+
+	public boolean loadCagesMeasures(String directory) {
+		// csvLoadCagesMeasures(directory);
+		String tempName = directory + File.separator + ID_MCDROSOTRACK_XML;
+		xmlReadCagesFromFileNoQuestion(tempName);
 		return true;
 	}
 
@@ -168,6 +177,21 @@ public class CagesArray {
 		return wasOk;
 	}
 
+	public boolean xmlReadCagesFromFileNoQuestion(String tempname) {
+		if (tempname == null)
+			return false;
+		final Document doc = XMLUtil.loadDocument(tempname);
+		if (doc == null)
+			return false;
+
+		if (xmlLoadCages(doc)) {
+			return true;
+		} else {
+			System.out.println("Cages:xmlReadCagesFromFileNoQuestion() failed to load cages from file");
+			return false;
+		}
+	}
+
 	public boolean xmlReadCagesFromFileNoQuestion(String tempname, Experiment exp) {
 		if (tempname == null)
 			return false;
@@ -176,7 +200,7 @@ public class CagesArray {
 			return false;
 
 		if (xmlLoadCages(doc)) {
-			cagesToROIs(exp.seqCamData);
+			transferCagesToSequenceAsROIs(exp.seqCamData.seq);
 			return true;
 		} else {
 			System.out.println("Cages:xmlReadCagesFromFileNoQuestion() failed to load cages from file");
@@ -324,8 +348,8 @@ public class CagesArray {
 		}
 	}
 
-	private List<ROI2D> getRoisWithCageName(SequenceCamData seqCamData) {
-		List<ROI2D> roiList = seqCamData.seq.getROI2Ds();
+	public List<ROI2D> getRoisWithCageName(Sequence seq) {
+		List<ROI2D> roiList = seq.getROI2Ds();
 		List<ROI2D> cageList = new ArrayList<ROI2D>();
 		for (ROI2D roi : roiList) {
 			String csName = roi.getName();
@@ -339,27 +363,20 @@ public class CagesArray {
 
 	// --------------
 
-	public void cagesToROIs(SequenceCamData seqCamData) {
-		List<ROI2D> cageLimitROIList = getRoisWithCageName(seqCamData);
-		seqCamData.seq.removeROIs(cageLimitROIList, false);
+	public void transferCagesToSequenceAsROIs(Sequence seq) {
+		seq.removeROIs(ROI2DUtilities.getROIsContainingString("cage", seq), false);
+		List<ROI2D> cageROIList = new ArrayList<ROI2D>(cagesList.size());
 		for (Cage cage : cagesList)
-			cageLimitROIList.add(cage.getRoi());
-		seqCamData.seq.addROIs(cageLimitROIList, true);
+			cageROIList.add(cage.getRoi());
+		seq.addROIs(cageROIList, true);
 	}
 
-	public void cagesFromROIs(SequenceCamData seqCamData) {
-		List<ROI2D> roiList = getRoisWithCageName(seqCamData);
+	public void transferROIsFromSequenceToCages(Sequence seq) {
+		List<ROI2D> roiList = getRoisWithCageName(seq);
 		Collections.sort(roiList, new Comparators.ROI2D_Name_Comparator());
 		addMissingCages(roiList);
 		removeOrphanCages(roiList);
 		Collections.sort(cagesList, new Comparators.Cage_Name_Comparator());
-	}
-
-	public void setFirstAndLastCageToZeroFly() {
-		for (Cage cage : cagesList) {
-			if (cage.getRoi().getName().contains("000") || cage.getRoi().getName().contains("009"))
-				cage.cageNFlies = 0;
-		}
 	}
 
 	public void removeAllRoiDetFromSequence(SequenceCamData seqCamData) {

@@ -90,10 +90,11 @@ public class BuildCagesAsArray extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					ROI2DUtilities.removeRoisContainingString(-1, "cage", exp.seqCamData.seq);
+					exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("cage", exp.seqCamData.seq),
+							false);
 					exp.cagesArray.removeCages();
 					createROIsFromSelectedPolygon(exp);
-					exp.cagesArray.cagesFromROIs(exp.seqCamData);
+					exp.cagesArray.transferROIsFromSequenceToCages(exp.seqCamData.seq);
 					if (exp.spotsArray.spotsList.size() > 0)
 						exp.cagesArray.transferNFliesFromSpotsToCages(exp.spotsArray);
 				}

@@ -191,6 +191,17 @@ public class ROI2DUtilities {
 		return listROIsMatchingString;
 	}
 
+	public static List<ROI> getROIsContainingString(String string, Sequence seq) {
+		List<ROI> roiList = seq.getROIs();
+		Collections.sort(roiList, new Comparators.ROI_Name_Comparator());
+		List<ROI> listROIsMatchingString = new ArrayList<ROI>();
+		for (ROI roi : roiList) {
+			if (roi.getName().contains(string))
+				listROIsMatchingString.add(roi);
+		}
+		return listROIsMatchingString;
+	}
+
 	public static List<ROI2DShape> getROIs2DAreaContainingString(String string, Sequence seq) {
 		List<ROI2D> roiList = seq.getROI2Ds();
 		Collections.sort(roiList, new Comparators.ROI2D_Name_Comparator());
@@ -202,12 +213,13 @@ public class ROI2DUtilities {
 		return listROIsMatchingString;
 	}
 
-	public static void removeRoisContainingString(int t, String string, Sequence seq) {
-		for (ROI roi : seq.getROIs()) {
-			if (roi instanceof ROI2D && roi.getName().contains(string) && (t < 0 || ((ROI2D) roi).getT() == t))
-				seq.removeROI(roi);
-		}
-	}
+//	public static void removeRoisContainingString(int t, String string, Sequence seq) {
+//		List<ROI> roiList = seq.getROIs();
+//		for (ROI roi : roiList) {
+//			if (roi instanceof ROI2D && roi.getName().contains(string) && (t < 0 || ((ROI2D) roi).getT() == t))
+//				seq.removeROI(roi);
+//		}
+//	}
 
 	public static Polygon2D getPolygonEnclosingSpots(ArrayList<ROI2D> listRois) {
 		ROI2D roi1 = listRois.get(0);

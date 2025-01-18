@@ -50,6 +50,7 @@ public class LoadSaveSpots extends JPanel {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					loadSpotsArray_File(exp);
+					loadCagesArray_File(exp);
 					firePropertyChange("SPOTS_ROIS_OPEN", false, true);
 				}
 			}
@@ -61,6 +62,7 @@ public class LoadSaveSpots extends JPanel {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					saveSpotsArray_file(exp);
+					saveCagesArray_File(exp);
 					firePropertyChange("SPOTS_ROIS_SAVE", false, true);
 				}
 			}
@@ -68,19 +70,34 @@ public class LoadSaveSpots extends JPanel {
 	}
 
 	public boolean loadSpotsArray_File(Experiment exp) {
-		boolean flag = exp.loadMCSpots_Only();
-		exp.load_SpotsMeasures();
-		exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
+		boolean flag = exp.load_Spots();
+		exp.spotsArray.transferSpotsToSequenceAsROIs(exp.seqCamData.seq);
 		return flag;
 	}
 
 	public boolean saveSpotsArray_file(Experiment exp) {
 		parent0.dlgExperiment.getExperimentInfosFromDialog(exp);
-//		exp.spotsArray.transferDescriptionToSpots();
 		boolean flag = exp.saveXML_MCExperiment();
-		exp.spotsArray.updateSpotsFromSequence(exp.seqCamData.seq);
+		exp.spotsArray.transferROIsFromSequenceToSpots(exp.seqCamData.seq);
 		flag &= exp.save_MCSpots_Only();
 		flag &= exp.save_SpotsMeasures();
+		return flag;
+	}
+
+	public boolean loadCagesArray_File(Experiment exp) {
+		boolean flag = exp.load_Cages();
+		if (flag) {
+			exp.cagesArray.transferCagesToSequenceAsROIs(exp.seqCamData.seq);
+		}
+		return flag;
+	}
+
+	public boolean saveCagesArray_File(Experiment exp) {
+		boolean flag = false;
+		if (exp != null) {
+			exp.cagesArray.transferROIsFromSequenceToCages(exp.seqCamData.seq);
+			flag = exp.save_CagesMeasures();
+		}
 		return flag;
 	}
 

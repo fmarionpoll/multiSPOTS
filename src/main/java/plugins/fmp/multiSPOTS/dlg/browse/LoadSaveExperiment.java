@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 
 import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
+import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceEvent.SequenceEventSourceType;
@@ -272,7 +273,6 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 
 		boolean flag = true;
 		progressFrame.setMessage("Load image");
-//		exp.loadCamDataImages();
 		List<String> imagesList = (ArrayList<String>) ExperimentDirectories
 				.getImagesListFromPathV2(exp.seqCamData.imagesDirectory, "jpg");
 		exp.seqCamData.loadImageList(imagesList);
@@ -282,7 +282,10 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 		if (exp.seqCamData != null) {
 			exp.load_Spots();
 			exp.load_SpotsMeasures();
-			exp.spotsArray.transferSpotRoiToSequence(exp.seqCamData.seq);
+			exp.spotsArray.transferSpotsToSequenceAsROIs(exp.seqCamData.seq);
+
+			exp.load_Cages();
+			exp.cagesArray.transferCagesToSequenceAsROIs(exp.seqCamData.seq);
 
 			if (parent0.dlgExperiment.tabOptions.graphsCheckBox.isSelected())
 				parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
@@ -291,11 +294,27 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 				parent0.dlgKymos.tabLoadSave.loadDefaultKymos(exp);
 			}
 
-			exp.load_CagesMeasures();
 			progressFrame.setMessage("Load data: update dialogs");
 
+			// ------------------------------------
+			List<ROI2D> roiList = exp.cagesArray.getRoisWithCageName(exp.seqCamData.seq);
+			System.out.println("1 - n cages ROIS=" + roiList.size() + " n cages=" + exp.cagesArray.cagesList.size());
+			// ------------------------------------
+
 			parent0.dlgExperiment.updateDialogs(exp);
+
+			// ------------------------------------
+			roiList = exp.cagesArray.getRoisWithCageName(exp.seqCamData.seq);
+			System.out.println("2 - n cages ROIS=" + roiList.size() + " n cages=" + exp.cagesArray.cagesList.size());
+			// ------------------------------------
+
 			parent0.dlgSpots.updateDialogs(exp);
+
+			// ------------------------------------
+			roiList = exp.cagesArray.getRoisWithCageName(exp.seqCamData.seq);
+			System.out.println("3 - n cages ROIS=" + roiList.size() + " n cages=" + exp.cagesArray.cagesList.size());
+			// ------------------------------------
+
 		} else {
 			flag = false;
 			System.out.println(
