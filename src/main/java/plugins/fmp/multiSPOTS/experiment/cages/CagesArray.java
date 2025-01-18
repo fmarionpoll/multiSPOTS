@@ -26,7 +26,7 @@ import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROIUtilities;
 import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
@@ -364,7 +364,7 @@ public class CagesArray {
 	// --------------
 
 	public void transferCagesToSequenceAsROIs(Sequence seq) {
-		seq.removeROIs(ROI2DUtilities.getROIsContainingString("cage", seq), false);
+		seq.removeROIs(ROIUtilities.getROIsContainingString("cage", seq), false);
 		List<ROI2D> cageROIList = new ArrayList<ROI2D>(cagesList.size());
 		for (Cage cage : cagesList)
 			cageROIList.add(cage.getRoi());

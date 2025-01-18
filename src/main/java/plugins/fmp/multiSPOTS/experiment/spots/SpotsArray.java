@@ -18,6 +18,7 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.type.geom.Polygon2D;
@@ -26,7 +27,7 @@ import plugins.fmp.multiSPOTS.experiment.KymoIntervals;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.Comparators;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROIUtilities;
 import plugins.fmp.multiSPOTS.tools.polyline.Level2D;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
@@ -262,14 +263,14 @@ public class SpotsArray {
 	}
 
 	public void transferROIsFromSequenceToSpots(Sequence seq) {
-		List<ROI2DShape> listROISSpot = ROI2DUtilities.getROIs2DAreaContainingString("spot", seq);
-		Collections.sort(listROISSpot, new Comparators.ROI2D_Name_Comparator());
+		List<ROI> listROISSpot = ROIUtilities.getROIsContainingString("spot", seq);
+		Collections.sort(listROISSpot, new Comparators.ROI_Name_Comparator());
 		for (Spot spot : spotsList) {
 			spot.valid = false;
 			String spotName = spot.getRoi().getName();
-			Iterator<ROI2DShape> iterator = listROISSpot.iterator();
+			Iterator<ROI> iterator = listROISSpot.iterator();
 			while (iterator.hasNext()) {
-				ROI2D roi = iterator.next();
+				ROI roi = iterator.next();
 				String roiName = roi.getName();
 				if (roiName.equals(spotName) && (roi instanceof ROI2DShape)) {
 					spot.setRoi((ROI2DShape) roi);
@@ -289,7 +290,7 @@ public class SpotsArray {
 				iterator.remove();
 		}
 		if (listROISSpot.size() > 0) {
-			for (ROI2D roi : listROISSpot) {
+			for (ROI roi : listROISSpot) {
 				Spot spot = new Spot((ROI2DShape) roi);
 				if (!isPresent(spot))
 					spotsList.add(spot);
@@ -306,7 +307,7 @@ public class SpotsArray {
 	}
 
 	public void transferSpotsToSequenceAsROIs(Sequence seq) {
-		seq.removeROIs(ROI2DUtilities.getROIsContainingString("spot", seq), false);
+		seq.removeROIs(ROIUtilities.getROIsContainingString("spot", seq), false);
 		List<ROI2D> spotROIList = new ArrayList<ROI2D>(spotsList.size());
 		for (Spot spot : spotsList)
 			spotROIList.add(spot.getRoi());
@@ -315,7 +316,7 @@ public class SpotsArray {
 
 	public void transferSpotsMeasuresToSequenceAsROIs(Sequence seq) {
 		List<ROI2D> seqRoisList = seq.getROI2Ds(false);
-		ROI2DUtilities.removeROIsMissingChar(seqRoisList, '_');
+		ROIUtilities.removeROIsMissingChar(seqRoisList, '_');
 
 		List<ROI2D> newRoisList = new ArrayList<ROI2D>();
 		int nspots = spotsList.size();
@@ -328,7 +329,7 @@ public class SpotsArray {
 			}
 			newRoisList.addAll(listOfRois);
 		}
-		ROI2DUtilities.mergeROIsListNoDuplicate(seqRoisList, newRoisList, seq);
+		ROIUtilities.mergeROIsListNoDuplicate(seqRoisList, newRoisList, seq);
 		seq.removeAllROI();
 		seq.addROIs(seqRoisList, false);
 	}

@@ -28,7 +28,7 @@ import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROIUtilities;
 import plugins.fmp.multiSPOTS.tools.polyline.PolygonUtilities;
 import plugins.kernel.roi.roi2d.ROI2DEllipse;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
@@ -220,7 +220,7 @@ public class CreateSpots extends JPanel {
 			new AnnounceFrame("Can't interpret one of the ROI parameters value");
 		}
 		// erase existing spots
-		exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("spot", exp.seqCamData.seq), false);
+		exp.seqCamData.seq.removeROIs(ROIUtilities.getROIsContainingString("spot", exp.seqCamData.seq), false);
 		exp.spotsArray.spotsList.clear();
 		exp.spotsArray = new SpotsArray();
 		Point2D.Double[][] arrayPoints = PolygonUtilities.createArrayOfPointsFromPolygon(polygon2D, n_columns, n_rows);

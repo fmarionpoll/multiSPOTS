@@ -31,7 +31,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DMeasures;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROIUtilities;
 import plugins.fmp.multiSPOTS.tools.canvas2D.Canvas2D_2Transforms;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformInterface;
@@ -161,7 +161,7 @@ public class DetectContours extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("_mask", exp.seqCamData.seq),
+					exp.seqCamData.seq.removeROIs(ROIUtilities.getROIsContainingString("_mask", exp.seqCamData.seq),
 							false);
 					detectContours(exp);
 					parent0.dlgSpots.tabFile.saveSpotsArray_file(exp);

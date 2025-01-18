@@ -28,7 +28,7 @@ import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.cages.Cage;
 import plugins.fmp.multiSPOTS.experiment.cages.CagesArray;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROIUtilities;
 import plugins.fmp.multiSPOTS.tools.polyline.PolygonUtilities;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 
@@ -212,7 +212,7 @@ public class CreateCages extends JPanel {
 		}
 
 		// erase existing cages
-		exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("cage", exp.seqCamData.seq), false);
+		exp.seqCamData.seq.removeROIs(ROIUtilities.getROIsContainingString("cage", exp.seqCamData.seq), false);
 		exp.cagesArray.cagesList.clear();
 		exp.cagesArray = new CagesArray();
 

@@ -78,7 +78,6 @@ public class ROI2DAlongT implements XMLPersistent {
 		mask2D_in = mask2D;
 	}
 
-
 	@Override
 	public boolean loadFromXML(Node node) {
 		final Node nodeMeta = XMLUtil.getElement(node, ID_META);

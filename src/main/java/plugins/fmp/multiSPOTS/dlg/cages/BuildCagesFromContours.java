@@ -22,6 +22,7 @@ import javax.swing.event.ChangeListener;
 
 import icy.image.IcyBufferedImage;
 import icy.image.IcyBufferedImageUtil;
+import icy.roi.ROI;
 import icy.roi.ROI2D;
 import icy.type.DataType;
 import icy.type.geom.Polygon2D;
@@ -29,7 +30,7 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.SequenceCamData;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.ROIUtilities;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
 import plugins.fmp.multiSPOTS.tools.overlay.OverlayThreshold;
 import plugins.fmp.multiSPOTS.tools.polyline.Blobs;
@@ -101,7 +102,7 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 			public void actionPerformed(final ActionEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
-					exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("cage", exp.seqCamData.seq),
+					exp.seqCamData.seq.removeROIs(ROIUtilities.getROIsContainingString("cage", exp.seqCamData.seq),
 							false);
 					exp.cagesArray.removeCages();
 					createROIsFromSelectedPolygonAndSpots(exp);
@@ -181,7 +182,7 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 	}
 
 	private void createROIsFromSelectedPolygonAndSpots(Experiment exp) {
-		exp.seqCamData.seq.removeROIs(ROI2DUtilities.getROIsContainingString("cage", exp.seqCamData.seq), false);
+		exp.seqCamData.seq.removeROIs(ROIUtilities.getROIsContainingString("cage", exp.seqCamData.seq), false);
 		exp.cagesArray.removeCages();
 
 		int t = exp.seqCamData.currentFrame;
@@ -233,8 +234,8 @@ public class BuildCagesFromContours extends JPanel implements ChangeListener {
 		if (roiSnip == null)
 			return;
 
-		List<ROI2D> roiList = ROI2DUtilities.getROIs2DContainingString("cage", seqCamData.seq);
-		for (ROI2D cageRoi : roiList) {
+		List<ROI> roiList = ROIUtilities.getROIsContainingString("cage", seqCamData.seq);
+		for (ROI cageRoi : roiList) {
 			if (roiSnip.intersects(cageRoi) && cageRoi instanceof ROI2DPolygon) {
 				Polygon2D oldPolygon = ((ROI2DPolygon) cageRoi).getPolygon2D();
 				if (oldPolygon == null)

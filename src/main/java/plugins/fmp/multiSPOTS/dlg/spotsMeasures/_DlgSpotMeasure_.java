@@ -16,7 +16,6 @@ import javax.swing.event.ChangeListener;
 import icy.gui.component.PopupPanel;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
-import plugins.fmp.multiSPOTS.experiment.ExperimentUtils;
 
 public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, ChangeListener {
 	/**
@@ -104,12 +103,11 @@ public class _DlgSpotMeasure_ extends JPanel implements PropertyChangeListener, 
 	public void displaySpotsInformation(Experiment exp) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				//ExperimentUtils.transferSpotsToCamDataSequence(exp); //TODO ??
+				// ExperimentUtils.transferSpotsToCamDataSequence(exp); //TODO ??
 				parent0.dlgExperiment.tabOptions.viewSpotsCheckBox.setSelected(true);
 			}
 		});
 	}
-
 
 	@Override
 	public void stateChanged(ChangeEvent e) {

@@ -197,7 +197,7 @@ public class Edit extends JPanel {
 				ROI2DAlongT kymoROI2D = spot.getROIAtT(t);
 				listRoisAtT.add(kymoROI2D.getRoi_in());
 			}
-			Polygon2D polygon = ROI2DUtilities.getPolygonEnclosingSpots(listRoisAtT);
+			Polygon2D polygon = ROI2DUtilities.getPolygonEnclosingROI2Ds(listRoisAtT);
 
 			spotsFrame = new ROI2DPolygon(polygon);
 			spotsFrame.setName(dummyname);
