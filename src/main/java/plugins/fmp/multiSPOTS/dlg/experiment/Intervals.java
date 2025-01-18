@@ -101,9 +101,10 @@ public class Intervals extends JPanel implements ItemListener {
 
 		indexFirstImageJSpinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				long newValue = (long) indexFirstImageJSpinner.getValue();
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) {
-					exp.seqCamData.absoluteIndexFirstImage = (long) indexFirstImageJSpinner.getValue();
+				if (exp != null && exp.seqCamData.absoluteIndexFirstImage != newValue) {
+					exp.seqCamData.absoluteIndexFirstImage = newValue;
 					List<String> imagesList = ExperimentDirectories
 							.getImagesListFromPathV2(exp.seqCamData.imagesDirectory, "jpg");
 					exp.seqCamData.loadImageList(imagesList);
@@ -117,8 +118,9 @@ public class Intervals extends JPanel implements ItemListener {
 		fixedNumberOfImagesJSpinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
-				if (exp != null) {
-					exp.seqCamData.fixedNumberOfImages = (long) fixedNumberOfImagesJSpinner.getValue();
+				long newValue = (long) fixedNumberOfImagesJSpinner.getValue();
+				if (exp != null && exp.seqCamData.fixedNumberOfImages != newValue) {
+					exp.seqCamData.fixedNumberOfImages = newValue;
 					List<String> imagesList = (ArrayList<String>) ExperimentDirectories
 							.getImagesListFromPathV2(exp.seqCamData.imagesDirectory, "jpg");
 					exp.seqCamData.loadImageList(imagesList);
@@ -155,16 +157,16 @@ public class Intervals extends JPanel implements ItemListener {
 	}
 
 	public void getExptParms(Experiment exp) {
+
 		refreshBinSize(exp);
+
 		long bin_ms = exp.seqCamData.binImage_ms;
 		long dFirst = exp.seqCamData.absoluteIndexFirstImage;
-
 		indexFirstImageJSpinner.setValue(dFirst);
 		if (exp.seqCamData.binLast_ms <= 0)
 			exp.seqCamData.binLast_ms = (long) (exp.seqCamData.nTotalFrames - 1) * bin_ms;
-
 		fixedNumberOfImagesJSpinner.setValue(exp.seqCamData.fixedNumberOfImages);
-		exp.getFileIntervalsFromSeqCamData();
+		// exp.getFileIntervalsFromSeqCamData();
 	}
 
 	private void refreshBinSize(Experiment exp) {

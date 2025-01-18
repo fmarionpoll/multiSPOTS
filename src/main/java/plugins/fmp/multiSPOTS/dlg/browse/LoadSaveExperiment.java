@@ -20,7 +20,6 @@ import javax.swing.SwingUtilities;
 
 import icy.gui.frame.progress.ProgressFrame;
 import icy.gui.viewer.Viewer;
-import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceEvent.SequenceEventSourceType;
@@ -295,26 +294,8 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			}
 
 			progressFrame.setMessage("Load data: update dialogs");
-
-			// ------------------------------------
-			List<ROI2D> roiList = exp.cagesArray.getRoisWithCageName(exp.seqCamData.seq);
-			System.out.println("1 - n cages ROIS=" + roiList.size() + " n cages=" + exp.cagesArray.cagesList.size());
-			// ------------------------------------
-
 			parent0.dlgExperiment.updateDialogs(exp);
-
-			// ------------------------------------
-			roiList = exp.cagesArray.getRoisWithCageName(exp.seqCamData.seq);
-			System.out.println("2 - n cages ROIS=" + roiList.size() + " n cages=" + exp.cagesArray.cagesList.size());
-			// ------------------------------------
-
 			parent0.dlgSpots.updateDialogs(exp);
-
-			// ------------------------------------
-			roiList = exp.cagesArray.getRoisWithCageName(exp.seqCamData.seq);
-			System.out.println("3 - n cages ROIS=" + roiList.size() + " n cages=" + exp.cagesArray.cagesList.size());
-			// ------------------------------------
-
 		} else {
 			flag = false;
 			System.out.println(
