@@ -51,7 +51,7 @@ public class LoadSavePositions extends JPanel {
 				if (exp != null) {
 					loadCages(exp);
 					firePropertyChange("LOAD_DATA", false, true);
-					parent0.dlgDetectFlies.tabsPane.setSelectedIndex(3);
+					// TODO _CAGES parent0.dlgDetectFlies.tabsPane.setSelectedIndex(3);
 				}
 			}
 		});
@@ -62,7 +62,7 @@ public class LoadSavePositions extends JPanel {
 				Experiment exp = (Experiment) parent0.expListCombo.getSelectedItem();
 				if (exp != null) {
 					saveMeasures(exp);
-					parent0.dlgDetectFlies.tabsPane.setSelectedIndex(3);
+					// TODO _CAGES parent0.dlgDetectFlies.tabsPane.setSelectedIndex(3);
 				}
 			}
 		});

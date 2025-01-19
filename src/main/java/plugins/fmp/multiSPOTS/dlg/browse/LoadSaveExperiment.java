@@ -286,8 +286,7 @@ public class LoadSaveExperiment extends JPanel implements PropertyChangeListener
 			exp.load_Cages();
 			exp.cagesArray.transferCagesToSequenceAsROIs(exp.seqCamData.seq);
 
-			if (parent0.dlgExperiment.tabOptions.graphsCheckBox.isSelected())
-				parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
+			parent0.dlgMeasure.tabGraphs.displayGraphsPanels(exp);
 
 			if (exp.seqSpotKymos != null) {
 				parent0.dlgKymos.tabLoadSave.loadDefaultKymos(exp);

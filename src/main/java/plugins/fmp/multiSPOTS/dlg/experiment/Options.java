@@ -1,6 +1,5 @@
 package plugins.fmp.multiSPOTS.dlg.experiment;
 
-import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,14 +15,11 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 public class Options extends JPanel {
 	private static final long serialVersionUID = 6565346204580890307L;
 
-	JCheckBox cagesCheckBox = new JCheckBox("cages", true);
-	JCheckBox measuresCheckBox = new JCheckBox("measures", true);
-	public JCheckBox graphsCheckBox = new JCheckBox("graphs", true);
-
 	public JCheckBox viewSpotsCheckBox = new JCheckBox("spots", true);
 	public JCheckBox viewCagesCheckbox = new JCheckBox("cages", true);
-	JCheckBox viewFlyCheckbox = new JCheckBox("flies center", false);
-	JCheckBox viewFlyRectCheckbox = new JCheckBox("flies rect", false);
+	// TODO _CAGES JCheckBox viewFlyCheckbox = new JCheckBox("flies center", false);
+	// TODO _CAGES JCheckBox viewFlyRectCheckbox = new JCheckBox("flies rect",
+	// false);
 	private MultiSPOTS parent0 = null;
 
 	void init(GridLayout capLayout, MultiSPOTS parent0) {
@@ -33,20 +29,12 @@ public class Options extends JPanel {
 		FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
 		layout.setVgap(1);
 
-		JPanel panel2 = new JPanel(layout);
-		panel2.add(new JLabel("Load: "));
-		panel2.add(cagesCheckBox);
-		panel2.add(measuresCheckBox);
-		panel2.add(graphsCheckBox);
-		panel2.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		add(panel2);
-
 		JPanel panel1 = new JPanel(layout);
 		panel1.add(new JLabel("View : "));
 		panel1.add(viewSpotsCheckBox);
 		panel1.add(viewCagesCheckbox);
-		panel1.add(viewFlyCheckbox);
-		panel1.add(viewFlyRectCheckbox);
+		// TODO _CAGES panel1.add(viewFlyCheckbox);
+		// TODO _CAGES panel1.add(viewFlyRectCheckbox);
 		add(panel1);
 
 		defineActionListeners();
@@ -68,19 +56,19 @@ public class Options extends JPanel {
 			}
 		});
 
-		viewFlyCheckbox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				displayROIsCategory(viewFlyCheckbox.isSelected(), "det");
-			}
-		});
+		// TODO _CAGES viewFlyCheckbox.addActionListener(new ActionListener() {
+		// TODO _CAGES @Override
+		// TODO _CAGES public void actionPerformed(final ActionEvent e) {
+		// TODO _CAGES displayROIsCategory(viewFlyCheckbox.isSelected(), "det");
+		// TODO _CAGES }
+		// TODO _CAGES });
 
-		viewFlyRectCheckbox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				displayROIsCategory(viewFlyRectCheckbox.isSelected(), "det");
-			}
-		});
+		// TODO _CAGES viewFlyRectCheckbox.addActionListener(new ActionListener() {
+		// TODO _CAGES @Override
+		// TODO _CAGES public void actionPerformed(final ActionEvent e) {
+		// TODO _CAGES displayROIsCategory(viewFlyRectCheckbox.isSelected(), "det");
+		// TODO _CAGES }
+		// TODO _CAGES });
 	}
 
 	public void displayROIsCategory(boolean isVisible, String pattern) {
