@@ -70,8 +70,10 @@ public class CreateCages extends JPanel {
 		JPanel panel1 = new JPanel(flowLayout);
 		panel1.add(new JLabel("N columns "));
 		panel1.add(nCagesPerPlateAlongXJSpinner);
+		nCagesPerPlateAlongXJSpinner.setPreferredSize(new Dimension(40, 20));
 		panel1.add(new JLabel("N rows "));
 		panel1.add(nCagesPerPlateAlongYJSpinner);
+		nCagesPerPlateAlongYJSpinner.setPreferredSize(new Dimension(40, 20));
 		add(panel1);
 
 		JPanel panel2 = new JPanel(flowLayout);

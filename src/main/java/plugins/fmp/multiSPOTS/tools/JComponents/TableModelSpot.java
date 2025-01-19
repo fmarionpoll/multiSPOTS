@@ -11,7 +11,7 @@ public class TableModelSpot extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = 6325792669154093747L;
 	private JComboBoxExperiment expList = null;
-	String columnNames[] = { "Name", "CageID", "Position", "N flies", "N pixels", "Volume", "Stimulus",
+	String columnNames[] = { "Name", "IDCage", "PosCage", "N flies", "N pixels", "Volume", "Stimulus",
 			"Concentration" };
 
 	// "O-Name", "1-CageID", "2-CageIndex", "3-N flies", "4-N pixels", "5-Volume",
