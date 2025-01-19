@@ -58,7 +58,8 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 
 		tabCreateSpots.init(gridLayout, parent0);
 		tabCreateSpots.addPropertyChangeListener(this);
-		tabbedPane.addTab("(spots)", null, tabCreateSpots, "Create spots defining liquid drops");
+		tabbedPane.addTab("(old spots)", null, tabCreateSpots,
+				"Create spots defining liquid drops without reference to cages");
 		id_create = order;
 		order++;
 
@@ -81,7 +82,7 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 
 		tabFile.init(gridLayout, parent0);
 		tabFile.addPropertyChangeListener(this);
-		tabbedPane.addTab("Load/Save", null, tabFile, "Load/Save xml file with spots descriptors");
+		tabbedPane.addTab("Load/Save", null, tabFile, "Load/Save cage & spots descriptors (xml file)");
 		order++;
 
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -106,6 +107,7 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 				displaySpotsInformation(exp);
 				tabbedPane.setSelectedIndex(id_infos);
 				parent0.dlgExperiment.tabIntervals.getExptParms(exp);
+				tabCreateCages.updateNColumnsFieldFromSequence();
 			}
 		} else if (event.getPropertyName().equals("CAP_ROIS_SAVE")) {
 			tabbedPane.setSelectedIndex(id_shape);
@@ -125,6 +127,7 @@ public class _DlgSpots_ extends JPanel implements PropertyChangeListener, Change
 		if (exp != null) {
 			ExperimentUtils.transferSpotsToCamDataSequence(exp);
 			tabCreateSpots.updateDialog(exp);
+			tabCreateCages.updateNColumnsFieldFromSequence();
 		}
 	}
 

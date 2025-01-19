@@ -27,8 +27,8 @@ public class Cage {
 	public int cagePosition = 0;
 
 	public int arrayIndex = 0;
-	public int arrayColumn = 0;
-	public int arrayRow = 0;
+	public int arrayColumn = -1;
+	public int arrayRow = -1;
 
 	public int cageNFlies = 0;
 	public int cageAge = 5;
@@ -48,6 +48,11 @@ public class Cage {
 	private final String ID_COMMENT = "comment";
 	private final String ID_SEX = "sex";
 	private final String ID_STRAIN = "strain";
+	private final String ID_CAGEID = "ID";
+	private final String ID_CAGEPOSITION = "Pos";
+	private final String ID_ARRAYINDEX = "aIndex";
+	private final String ID_ARRAYCOLUMN = "aCol";
+	private final String ID_ARRAYROW = "aRow";
 
 	// --------------------------------------
 
@@ -98,9 +103,18 @@ public class Cage {
 	}
 
 	public void copyCage(Cage cage) {
+		arrayIndex = cage.arrayIndex;
+		arrayColumn = cage.arrayColumn;
+		arrayRow = cage.arrayRow;
+		cageID = cage.cageID;
+		cagePosition = cage.cagePosition;
 		cageRoi2D = cage.cageRoi2D;
 		cageNFlies = cage.cageNFlies;
+		cageAge = cage.cageAge;
 		strCageComment = cage.strCageComment;
+		strCageSex = cage.strCageSex;
+		strCageNumber = cage.strCageNumber;
+		strCageStrain = cage.strCageStrain;
 		strCageNumber = cage.strCageNumber;
 		valid = false;
 		flyPositions.copyXYTaSeries(cage.flyPositions);
@@ -148,8 +162,14 @@ public class Cage {
 	}
 
 	public boolean xmlSaveCageParameters(Element xmlVal) {
+		XMLUtil.setElementIntValue(xmlVal, ID_CAGEID, cageID);
+		XMLUtil.setElementIntValue(xmlVal, ID_CAGEPOSITION, cagePosition);
+		XMLUtil.setElementIntValue(xmlVal, ID_ARRAYINDEX, arrayIndex);
+		XMLUtil.setElementIntValue(xmlVal, ID_ARRAYCOLUMN, arrayColumn);
+		XMLUtil.setElementIntValue(xmlVal, ID_ARRAYROW, arrayRow);
 		XMLUtil.setElementIntValue(xmlVal, ID_NFLIES, cageNFlies);
 		XMLUtil.setElementIntValue(xmlVal, ID_AGE, cageAge);
+
 		XMLUtil.setElementValue(xmlVal, ID_COMMENT, strCageComment);
 		XMLUtil.setElementValue(xmlVal, ID_SEX, strCageSex);
 		XMLUtil.setElementValue(xmlVal, ID_STRAIN, strCageStrain);
@@ -193,8 +213,14 @@ public class Cage {
 	}
 
 	public boolean xmlLoadCageParameters(Element xmlVal) {
+		cageID = XMLUtil.getElementIntValue(xmlVal, ID_CAGEID, cageID);
+		cagePosition = XMLUtil.getElementIntValue(xmlVal, ID_CAGEPOSITION, cagePosition);
+		arrayIndex = XMLUtil.getElementIntValue(xmlVal, ID_ARRAYINDEX, arrayIndex);
+		arrayColumn = XMLUtil.getElementIntValue(xmlVal, ID_ARRAYCOLUMN, arrayColumn);
+		arrayRow = XMLUtil.getElementIntValue(xmlVal, ID_ARRAYROW, arrayRow);
 		cageNFlies = XMLUtil.getElementIntValue(xmlVal, ID_NFLIES, cageNFlies);
 		cageAge = XMLUtil.getElementIntValue(xmlVal, ID_AGE, cageAge);
+
 		strCageComment = XMLUtil.getElementValue(xmlVal, ID_COMMENT, strCageComment);
 		strCageSex = XMLUtil.getElementValue(xmlVal, ID_SEX, strCageSex);
 		strCageStrain = XMLUtil.getElementValue(xmlVal, ID_STRAIN, strCageStrain);

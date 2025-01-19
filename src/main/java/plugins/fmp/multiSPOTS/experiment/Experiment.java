@@ -480,6 +480,28 @@ public class Experiment {
 		return cagesArray.xmlReadCagesFromFileNoQuestion(filename, this);
 
 	}
+
+	public void fit_Spots_to_Cages() {
+		for (Spot spot : spotsArray.spotsList) {
+			ROI2D spotRoi = spot.getRoi();
+			spot.cageID = -1;
+			for (Cage cage : cagesArray.cagesList) {
+				ROI2D cageRoi = cage.getRoi();
+				boolean flag = false;
+				try {
+					flag = cageRoi.contains(spotRoi);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (flag) {
+					spot.cageID = cage.cageID;
+					break;
+				}
+			}
+		}
+	}
+
 	// ---------------------------------------------
 
 	public boolean load_SpotsMeasures() {

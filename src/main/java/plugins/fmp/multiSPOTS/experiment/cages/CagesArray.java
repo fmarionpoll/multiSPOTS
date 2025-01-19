@@ -1,7 +1,6 @@
 package plugins.fmp.multiSPOTS.experiment.cages;
 
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileWriter;
@@ -33,8 +32,8 @@ import plugins.kernel.roi.roi2d.ROI2DShape;
 
 public class CagesArray {
 	public ArrayList<Cage> cagesList = new ArrayList<Cage>();
-	public int nCagesPerPlateAlongX = 6;
-	public int nCagesPerPlateAlongY = 8;
+	public int nCagesAlongX = 6;
+	public int nCagesAlongY = 8;
 
 	// ---------- not saved to xml:
 	public long detectFirst_Ms = 0;
@@ -390,20 +389,6 @@ public class CagesArray {
 		}
 	}
 
-	public int removeAllRoiCagesFromSequence(SequenceCamData seqCamData) {
-		String cageRoot = "cage";
-		int iRoot = -1;
-		for (ROI roi : seqCamData.seq.getROIs()) {
-			if (roi.getName().contains(cageRoot)) {
-				String left = roi.getName().substring(4);
-				int item = Integer.valueOf(left);
-				iRoot = Math.max(iRoot, item);
-			}
-		}
-		iRoot++;
-		return iRoot;
-	}
-
 	public void transferNFliesFromCagesToSpots(SpotsArray spotsArray) {
 		for (Spot spot : spotsArray.spotsList) {
 			for (Cage cage : cagesList) {
@@ -539,42 +524,64 @@ public class CagesArray {
 	public Polygon2D getPolygon2DEnclosingAllCages() {
 		if (cagesList.size() < 1 || cagesList.get(0).getRoi() == null)
 			return null;
-
-		List<Point2D> points = new ArrayList<Point2D>();
-		Rectangle rect = cagesList.get(0).getRoi().getBounds();
-		int spotX = (int) rect.getX();
-		int spotY = (int) rect.getY();
-		points.add(new Point2D.Double(spotX, spotY));
-		points.add(new Point2D.Double(spotX + rect.getWidth(), spotY));
-		points.add(new Point2D.Double(spotX + rect.getHeight(), spotY + 1));
-		points.add(new Point2D.Double(spotX, spotY + 1));
-		Polygon2D polygon = new Polygon2D(points);
-
+		updateArrayIndexes();
+		Polygon2D polygon = getCoordinatesOfROI(cagesList.get(0).getRoi());
 		for (Cage cage : cagesList) {
 			int col = cage.arrayColumn;
 			int row = cage.arrayRow;
-
-			rect = cage.getRoi().getBounds();
-			spotX = (int) rect.getX();
-			spotY = (int) rect.getY();
-
+			Polygon2D n = getCoordinatesOfROI(cage.getRoi());
 			if (col == 0 && row == 0) {
-				replaceItem(polygon, 0, (int) rect.getX(), (int) rect.getY());
-			} else if (col == (nCagesPerPlateAlongX - 1) && row == 0) {
-				replaceItem(polygon, 1, (int) (rect.getX() + rect.getWidth()), (int) rect.getY());
-			} else if (col == (nCagesPerPlateAlongX - 1) && row == (nCagesPerPlateAlongY - 1)) {
-				replaceItem(polygon, 2, (int) (rect.getX() + rect.getWidth()), (int) (rect.getY() + rect.getHeight()));
-			} else if (col == 0 && row == (nCagesPerPlateAlongY - 1)) {
-				replaceItem(polygon, 3, (int) rect.getX(), (int) (rect.getY() + rect.getHeight()));
+				transferPointToPolygon(0, polygon, n);
+			} else if (col == (nCagesAlongX - 1) && row == 0) {
+				transferPointToPolygon(3, polygon, n);
+			} else if (col == (nCagesAlongX - 1) && row == (nCagesAlongY - 1)) {
+				transferPointToPolygon(2, polygon, n);
+			} else if (col == 0 && row == (nCagesAlongY - 1)) {
+				transferPointToPolygon(1, polygon, n);
 			}
 		}
-
 		return polygon;
 	}
 
-	private void replaceItem(Polygon2D polygon, int index, int x, int y) {
-		polygon.xpoints[index] = x;
-		polygon.ypoints[index] = y;
+	public void updateArrayIndexes() {
+		int upleft = 0;
+		int downleft = 1;
+		int upright = 3;
+		Polygon2D polygon = getCoordinatesOfROI(cagesList.get(0).getRoi());
+		double width0 = polygon.xpoints[upright] - polygon.xpoints[upleft];
+		double height0 = polygon.ypoints[downleft] - polygon.ypoints[upleft];
+
+		nCagesAlongX = 1;
+		nCagesAlongY = 1;
+		for (Cage cage : cagesList) {
+			Polygon2D n = getCoordinatesOfROI(cage.getRoi());
+
+			int arrayColumn = (int) Math.round((n.xpoints[upright] - polygon.xpoints[upleft]) / width0);
+			cage.arrayColumn = arrayColumn - 1;
+			if (nCagesAlongX < arrayColumn)
+				nCagesAlongX = arrayColumn;
+
+			int arrayRow = (int) Math.round((n.ypoints[downleft] - polygon.ypoints[upleft]) / height0);
+			cage.arrayRow = arrayRow - 1;
+			if (nCagesAlongY < arrayRow)
+				nCagesAlongY = arrayRow;
+		}
+	}
+
+	private void transferPointToPolygon(int i, Polygon2D dest, Polygon2D source) {
+		dest.xpoints[i] = source.xpoints[i];
+		dest.ypoints[i] = source.ypoints[i];
+	}
+
+	private Polygon2D getCoordinatesOfROI(ROI2D roi) {
+		Polygon2D polygon = null;
+		if (roi instanceof ROI2DPolygon) {
+			polygon = ((ROI2DPolygon) roi).getPolygon2D();
+		} else {
+			Rectangle rect = roi.getBounds();
+			polygon = new Polygon2D(rect);
+		}
+		return polygon;
 	}
 
 }

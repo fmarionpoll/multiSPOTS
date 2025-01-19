@@ -38,7 +38,7 @@ public class CreateCages extends JPanel {
 	 */
 	private static final long serialVersionUID = -5257698990389571518L;
 	private JButton displayFrameDButton = new JButton("(1) Display frame");
-	private JButton createCagesButton = new JButton("Create/add (from Polygon 2D)");
+	private JButton createCagesButton = new JButton("(2) Create (from frame)");
 
 	private JSpinner nCagesPerPlateAlongXJSpinner = new JSpinner(new SpinnerNumberModel(6, 0, 10000, 1));
 	private JSpinner nCagesPerPlateAlongYJSpinner = new JSpinner(new SpinnerNumberModel(8, 0, 10000, 1));
@@ -135,6 +135,7 @@ public class CreateCages extends JPanel {
 		if (polygon2D != null) {
 			createCagesFromPolygon(exp, polygon2D);
 			ExperimentUtils.transferCagesToCamDataSequence(exp);
+			exp.fit_Spots_to_Cages();
 		}
 	}
 
@@ -155,8 +156,9 @@ public class CreateCages extends JPanel {
 		if (exp != null) {
 			int nrois = exp.cagesArray.cagesList.size();
 			if (nrois > 0) {
-				nCagesPerPlateAlongXJSpinner.setValue(exp.cagesArray.nCagesPerPlateAlongX);
-				nCagesPerPlateAlongYJSpinner.setValue(exp.cagesArray.nCagesPerPlateAlongY);
+				exp.cagesArray.updateArrayIndexes();
+				nCagesPerPlateAlongXJSpinner.setValue(exp.cagesArray.nCagesAlongX);
+				nCagesPerPlateAlongYJSpinner.setValue(exp.cagesArray.nCagesAlongY);
 			}
 		}
 	}
@@ -170,6 +172,8 @@ public class CreateCages extends JPanel {
 			roi.setName(dummyname);
 			seqCamData.seq.addROI(roi);
 		}
+		roi.setColor(Color.orange);
+		roi.setStroke(.2f);
 		seqCamData.seq.setSelectedROI(roi);
 	}
 
@@ -183,19 +187,19 @@ public class CreateCages extends JPanel {
 	}
 
 	private Polygon2D getCagesPolygon(Experiment exp) {
-		if (polygon2D == null) {
-			if (exp.cagesArray.cagesList.size() > 0) {
-				polygon2D = exp.cagesArray.getPolygon2DEnclosingAllCages();
-			} else {
-				Rectangle rect = exp.seqCamData.seq.getBounds2D();
-				List<Point2D> points = new ArrayList<Point2D>();
-				points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height / 5));
-				points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height / 5));
-				points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height * 2 / 3));
-				points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height * 2 / 3));
-				polygon2D = new Polygon2D(points);
-			}
+
+		if (exp.cagesArray.cagesList.size() > 0) {
+			polygon2D = exp.cagesArray.getPolygon2DEnclosingAllCages();
+		} else {
+			Rectangle rect = exp.seqCamData.seq.getBounds2D();
+			List<Point2D> points = new ArrayList<Point2D>();
+			points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height / 5));
+			points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height / 5));
+			points.add(new Point2D.Double(rect.x + rect.width * 4 / 5, rect.y + rect.height * 2 / 3));
+			points.add(new Point2D.Double(rect.x + rect.width / 5, rect.y + rect.height * 2 / 3));
+			polygon2D = new Polygon2D(points);
 		}
+
 		return polygon2D;
 	}
 
@@ -215,18 +219,15 @@ public class CreateCages extends JPanel {
 		exp.seqCamData.seq.removeROIs(ROIUtilities.getROIsContainingString("cage", exp.seqCamData.seq), false);
 		exp.cagesArray.cagesList.clear();
 		exp.cagesArray = new CagesArray();
-
 		createCagesArray(exp, polygon2D, n_columns, n_rows, width_cage, width_interval);
 	}
 
 	private void createCagesArray(Experiment exp, Polygon2D roiPolygonMin, int ncolumns, int nrows, int width_cage,
 			int width_interval) {
 		// generate cage frames
-
-		int iRoot = exp.cagesArray.removeAllRoiCagesFromSequence(exp.seqCamData);
 		String cageRoot = "cage";
-
 		Polygon2D roiPolygon = PolygonUtilities.inflate(roiPolygonMin, ncolumns, nrows, width_cage, width_interval);
+		int index = 0;
 
 		double deltax_top = (roiPolygon.xpoints[3] - roiPolygon.xpoints[0]) / ncolumns;
 		double deltax_bottom = (roiPolygon.xpoints[2] - roiPolygon.xpoints[1]) / ncolumns;
@@ -234,23 +235,25 @@ public class CreateCages extends JPanel {
 		double deltay_bottom = (roiPolygon.ypoints[2] - roiPolygon.ypoints[1]) / ncolumns;
 
 		for (int column = 0; column < ncolumns; column++) {
-			double[][] xyi = initColumn_i(roiPolygon, deltax_top, deltax_bottom, deltay_top, deltay_bottom, column);
+			double[][] xyi = initColumn(roiPolygon, deltax_top, deltax_bottom, deltay_top, deltay_bottom, column);
 
 			for (int row = 0; row < nrows; row++) {
 
-				double[][] xyij = initRow_j(roiPolygon, xyi, nrows, row);
+				double[][] xyij = initRow(roiPolygon, xyi, nrows, row);
 
 				ROI2DPolygon roiP = createRoiPolygon(xyij);
-				roiP.setName(cageRoot + String.format("%03d", iRoot));
-				roiP.setColor(Color.YELLOW);
+				roiP.setName(cageRoot + String.format("%03d", index));
+				roiP.setColor(Color.yellow);
 
 				Cage cage = new Cage(roiP);
-				cage.arrayIndex = iRoot;
+				cage.cageID = index;
+				cage.arrayIndex = index;
 				cage.arrayColumn = column;
 				cage.arrayRow = row;
 
-				iRoot++;
+				index++;
 				exp.seqCamData.seq.addROI(roiP);
+				exp.cagesArray.cagesList.add(cage);
 			}
 		}
 	}
@@ -291,7 +294,7 @@ public class CreateCages extends JPanel {
 		return roiP;
 	}
 
-	private double[][] initColumn_i(Polygon2D roiPolygon, double deltax_top, double deltax_bottom, double deltay_top,
+	private double[][] initColumn(Polygon2D roiPolygon, double deltax_top, double deltax_bottom, double deltay_top,
 			double deltay_bottom, int i) {
 
 		double[][] xyi = new double[4][2];
@@ -310,7 +313,7 @@ public class CreateCages extends JPanel {
 		return xyi;
 	}
 
-	private double[][] initRow_j(Polygon2D roiPolygon, double[][] xyi, int nrows, int j) {
+	private double[][] initRow(Polygon2D roiPolygon, double[][] xyi, int nrows, int j) {
 
 		double[][] xyij = new double[4][2];
 

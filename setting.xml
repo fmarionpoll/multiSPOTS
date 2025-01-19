@@ -137,7 +137,7 @@
 </section>
 </section>
 <key name="version" value="2.5.1.0"/>
-<key name="lastUploadDate" value="1737183993942"/>
+<key name="lastUploadDate" value="1737270511957"/>
 <section name="frame">
 <section name="imageLoader">
 <key name="loadtype" value="1"/>
@@ -172,13 +172,13 @@
 <section name="main">
 <key name="XE" value="3527"/>
 <key name="YE" value="4"/>
-<key name="WidthE" value="1656"/>
+<key name="WidthE" value="1817"/>
 <key name="HeightE" value="1093"/>
 <key name="MaximizedE" value="false"/>
 <key name="previousState" value="true"/>
 </section>
 <section name="inspector">
-<key name="XC" value="1348"/>
+<key name="XC" value="1509"/>
 <key name="YC" value="0"/>
 <key name="XE" value="600"/>
 <key name="YE" value="140"/>

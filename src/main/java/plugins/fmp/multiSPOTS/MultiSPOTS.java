@@ -44,7 +44,7 @@ public class MultiSPOTS extends PluginActionable {
 		dlgBrowse.init(mainPanel, "Browse", this);
 		dlgExperiment.init(mainPanel, "Experiment", this);
 		dlgSpots.init(mainPanel, "Spots", this);
-		dlgKymos.init(mainPanel, "KymoSpots", this);
+		dlgKymos.init(mainPanel, "Kymographs", this);
 		dlgMeasure.init(mainPanel, "Measure spots", this);
 		// dlgCages.init(mainPanel, "Cages", this); //TODO _CAGES
 		// TODO _CAGES dlgDetectFlies.init(mainPanel, "Detect flies", this);

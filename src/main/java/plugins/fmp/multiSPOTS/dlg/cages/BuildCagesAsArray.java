@@ -178,7 +178,8 @@ public class BuildCagesAsArray extends JPanel {
 		seqCamData.seq.removeROI(roi);
 
 		// generate cage frames
-		int iRoot = exp.cagesArray.removeAllRoiCagesFromSequence(exp.seqCamData);
+		exp.seqCamData.seq.removeROIs(ROIUtilities.getROIsContainingString("cage", exp.seqCamData.seq), false);
+		int iRoot = 0;
 		String cageRoot = "cage";
 
 		Polygon2D roiPolygon = PolygonUtilities.inflate(roiPolygonMin, ncolumns, nrows, width_cage, width_interval);
