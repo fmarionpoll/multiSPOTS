@@ -144,8 +144,8 @@ public class _DlgExperiment_ extends JPanel implements ViewerListener, ChangeLis
 					int t = v.getPositionT();
 //					System.out.println("ViewerChanged -> _DlgExperiment_ t=" + t);
 					v.setTitle(exp.seqCamData.getDecoratedImageName(t));
-					if (parent0.dlgCages.bTrapROIsEdit)
-						exp.saveDetRoisToPositions();
+					// TODO _CAGES if (parent0.dlgCages.bTrapROIsEdit)
+					// TODO _CAGES exp.saveDetRoisToPositions();
 					exp.updateROIsAt(t);
 				}
 			}

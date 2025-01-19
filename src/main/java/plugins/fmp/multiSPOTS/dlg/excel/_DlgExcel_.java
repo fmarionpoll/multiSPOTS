@@ -17,7 +17,6 @@ import icy.system.thread.ThreadUtil;
 import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.tools.JComponents.Dialog;
-import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportMoveResults;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportOptions;
 import plugins.fmp.multiSPOTS.tools.toExcel.XLSExportSpotMeasures;
 
@@ -30,7 +29,7 @@ public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 	private JTabbedPane tabsPane = new JTabbedPane();
 	public Options tabCommonOptions = new Options();
 	private SpotsAreas tabAreas = new SpotsAreas();
-	private Move tabMove = new Move();
+	// TODO _CAGES private Move tabMove = new Move();
 	private MultiSPOTS parent0 = null;
 
 	public void init(JPanel mainPanel, String string, MultiSPOTS parent0) {
@@ -51,9 +50,10 @@ public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 		tabsPane.addTab("Spots", null, tabAreas, "Export measures made on spots to file");
 		tabAreas.addPropertyChangeListener(this);
 
-		tabMove.init(capLayout);
-		tabsPane.addTab("Move", null, tabMove, "Export fly positions to file");
-		tabMove.addPropertyChangeListener(this);
+		// TODO _CAGES tabMove.init(capLayout);
+		// TODO _CAGES tabsPane.addTab("Move", null, tabMove, "Export fly positions to
+		// file");
+		// TODO _CAGES tabMove.addPropertyChangeListener(this);
 
 		capPanel.add(tabsPane);
 		tabsPane.setSelectedIndex(0);
@@ -74,19 +74,21 @@ public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 		if (exp == null)
 			return;
 
-		if (evt.getPropertyName().equals("EXPORT_MOVEDATA")) {
-			String file = defineXlsFileName(exp, "_move.xlsx");
-			if (file == null)
-				return;
-			updateParametersCurrentExperiment(exp);
-			ThreadUtil.bgRun(new Runnable() {
-				@Override
-				public void run() {
-					XLSExportMoveResults xlsExport = new XLSExportMoveResults();
-					xlsExport.exportToFile(file, getMoveOptions());
-				}
-			});
-		} else if (evt.getPropertyName().equals("EXPORT_SPOTSMEASURES")) {
+		// TODO _CAGES if (evt.getPropertyName().equals("EXPORT_MOVEDATA")) {
+		// TODO _CAGES String file = defineXlsFileName(exp, "_move.xlsx");
+		// TODO _CAGES if (file == null)
+		// TODO _CAGES return;
+		// TODO _CAGES updateParametersCurrentExperiment(exp);
+		// TODO _CAGES ThreadUtil.bgRun(new Runnable() {
+		// TODO _CAGES @Override
+		// TODO _CAGES public void run() {
+		// TODO _CAGES XLSExportMoveResults xlsExport = new XLSExportMoveResults();
+		// TODO _CAGES xlsExport.exportToFile(file, getMoveOptions());
+		// TODO _CAGES }
+		// TODO _CAGES });
+		// TODO _CAGES } else
+
+		if (evt.getPropertyName().equals("EXPORT_SPOTSMEASURES")) {
 			String file = defineXlsFileName(exp, "_spotsareas.xlsx");
 			if (file == null)
 				return;
@@ -113,19 +115,19 @@ public class _DlgExcel_ extends JPanel implements PropertyChangeListener {
 		parent0.dlgExperiment.tabInfos.getExperimentInfosFromDialog(exp);
 	}
 
-	private XLSExportOptions getMoveOptions() {
-		XLSExportOptions options = new XLSExportOptions();
-		options.xyImage = tabMove.xyCenterCheckBox.isSelected();
-		options.xyCage = tabMove.xyCageCheckBox.isSelected();
-		options.xyCapillaries = tabMove.xyTipCapsCheckBox.isSelected();
-		options.distance = tabMove.distanceCheckBox.isSelected();
-		options.alive = tabMove.aliveCheckBox.isSelected();
-		options.onlyalive = tabMove.deadEmptyCheckBox.isSelected();
-		options.sleep = tabMove.sleepCheckBox.isSelected();
-		options.ellipseAxes = tabMove.rectSizeCheckBox.isSelected();
-		getCommonOptions(options);
-		return options;
-	}
+	// TODO _CAGES private XLSExportOptions getMoveOptions() {
+	// TODO _CAGES XLSExportOptions options = new XLSExportOptions();
+	// TODO _CAGES options.xyImage = tabMove.xyCenterCheckBox.isSelected();
+	// TODO _CAGES options.xyCage = tabMove.xyCageCheckBox.isSelected();
+	// TODO _CAGES options.xyCapillaries = tabMove.xyTipCapsCheckBox.isSelected();
+	// TODO _CAGES options.distance = tabMove.distanceCheckBox.isSelected();
+	// TODO _CAGES options.alive = tabMove.aliveCheckBox.isSelected();
+	// TODO _CAGES options.onlyalive = tabMove.deadEmptyCheckBox.isSelected();
+	// TODO _CAGES options.sleep = tabMove.sleepCheckBox.isSelected();
+	// TODO _CAGES options.ellipseAxes = tabMove.rectSizeCheckBox.isSelected();
+	// TODO _CAGES getCommonOptions(options);
+	// TODO _CAGES return options;
+	// TODO _CAGES }
 
 	private XLSExportOptions getLevelsOptions() {
 		XLSExportOptions options = new XLSExportOptions();
