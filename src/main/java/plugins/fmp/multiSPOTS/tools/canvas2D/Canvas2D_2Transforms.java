@@ -106,7 +106,6 @@ public class Canvas2D_2Transforms extends Canvas2D {
 
 		int offsetX = (int) (rectCanvas.width / getScaleX() / 2);
 		double scaleY = rectCanvas.getHeight() / rectImage.getHeight();
-		;
 		double scaleX = scaleY;
 		setMouseImagePos(offsetX, rectImage.height / 2);
 		setScale(scaleX, scaleY, true, true);
