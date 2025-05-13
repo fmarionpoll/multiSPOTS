@@ -262,7 +262,6 @@ public class Experiment {
 		loadMCSpots_Only();
 		if (seqCamData != null && seqCamData.seq != null)
 			spotsArray.transferSpotsToSequenceAsROIs(seqCamData.seq);
-
 		return (seqCamData != null && seqCamData.seq != null);
 	}
 
