@@ -33,7 +33,6 @@ import org.jfree.data.xy.XYSeriesCollection;
 import icy.gui.frame.IcyFrame;
 import icy.gui.util.GuiUtil;
 import icy.gui.viewer.Viewer;
-import icy.roi.ROI2D;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
@@ -147,7 +146,6 @@ public class ChartSpots extends IcyFrame {
 				panel.addChartMouseListener(new ChartMouseListener() {
 					public void chartMouseClicked(ChartMouseEvent e) {
 						Spot clikedSpot = getClickedSpot(e);
-						selectSpot(exp, clikedSpot);
 						selectT(exp, xlsExportOptions, clikedSpot);
 						selectKymograph(exp, clikedSpot);
 					}
@@ -335,7 +333,6 @@ public class ChartSpots extends IcyFrame {
 			int isel = xyItemEntity.getSeriesIndex();
 			XYDataset xyDataset = xyItemEntity.getDataset();
 			description = (String) xyDataset.getSeriesKey(isel); // TODO check
-
 			spotFound = exp.spotsArray.getSpotContainingName(description.substring(0, 5));
 			spotFound.spot_CamData_T = xyItemEntity.getItem();
 
@@ -353,14 +350,6 @@ public class ChartSpots extends IcyFrame {
 		int index = exp.spotsArray.getSpotIndexFromPlateCoordinates(roiDescription[1], roiDescription[2]);
 		spotFound.spot_Kymograph_T = index;
 		return spotFound;
-	}
-
-	private void selectSpot(Experiment exp, Spot spot) {
-		Viewer v = exp.seqCamData.seq.getFirstViewer();
-		if (v != null && spot != null) {
-			ROI2D roi = spot.getRoi();
-			exp.seqCamData.seq.setFocusedROI(roi);
-		}
 	}
 
 	private void selectT(Experiment exp, XLSExportOptions xlsExportOptions, Spot spot) {
