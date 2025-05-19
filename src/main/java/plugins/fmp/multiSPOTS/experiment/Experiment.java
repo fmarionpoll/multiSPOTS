@@ -262,7 +262,6 @@ public class Experiment {
 		loadMCSpots_Only();
 		if (seqCamData != null && seqCamData.seq != null)
 			spotsArray.transferSpotsToSequenceAsROIs(seqCamData.seq);
-
 		return (seqCamData != null && seqCamData.seq != null);
 	}
 
@@ -335,39 +334,6 @@ public class Experiment {
 					.abs(value - seqCamData.camImages_array_ms[high]) ? low : high;
 
 		return result;
-	}
-
-	public int getClosestInterval(int icentral, long valueToCompare) {
-		long deltacentral = Math.abs(valueToCompare - seqCamData.camImages_array_ms[icentral]);
-		if (deltacentral == 0)
-			return icentral;
-
-		int ilow = icentral - 1;
-		int ihigh = icentral + 1;
-		if (icentral <= 0) {
-			ilow = 0;
-			ihigh = 2;
-		}
-		if (icentral >= seqCamData.camImages_array_ms.length - 1) {
-			ihigh = seqCamData.camImages_array_ms.length - 1;
-			ilow = ihigh - 2;
-		}
-		long deltalow = Math.abs(valueToCompare - seqCamData.camImages_array_ms[ilow]);
-		long deltahigh = Math.abs(valueToCompare - seqCamData.camImages_array_ms[ihigh]);
-
-		int ismallest = icentral;
-		long deltasmallest = deltacentral;
-
-		if (deltalow <= deltasmallest) {
-			ismallest = ilow;
-			deltasmallest = deltalow;
-		}
-
-		if (deltahigh <= deltasmallest) {
-			ismallest = ihigh;
-		}
-
-		return ismallest;
 	}
 
 	public String getBinNameFromKymoFrameStep() {
