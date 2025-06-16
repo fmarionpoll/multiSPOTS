@@ -170,52 +170,6 @@ public class JComboBoxExperiment extends JComboBox<Experiment> {
 		expi.chainToNextExperiment = null;
 	}
 
-	public void chainExperimentsUsingCamIndexes(boolean collate) {
-		for (int i = 0; i < getItemCount(); i++) {
-			Experiment expi = getItemAt(i);
-			if (!collate) {
-				resetChaining(expi);
-				continue;
-			}
-
-			for (int j = 0; j < getItemCount(); j++) {
-				if (i == j)
-					continue;
-				Experiment expj = getItemAt(j);
-				if (!expi.expDesc.isSameDescriptors(expj.expDesc))
-					continue;
-
-				// same exp series: if before, insert eventually
-				if (expj.seqCamData.lastImage_ms < expi.seqCamData.firstImage_ms) {
-					if (expi.chainToPreviousExperiment == null)
-						expi.chainToPreviousExperiment = expj;
-					else if (expj.seqCamData.lastImage_ms > expi.chainToPreviousExperiment.seqCamData.lastImage_ms) {
-						(expi.chainToPreviousExperiment).chainToNextExperiment = expj;
-						expj.chainToPreviousExperiment = expi.chainToPreviousExperiment;
-						expj.chainToNextExperiment = expi;
-						expi.chainToPreviousExperiment = expj;
-					}
-					continue;
-				}
-				// same exp series: if after, insert eventually
-				if (expj.seqCamData.firstImage_ms >= expi.seqCamData.lastImage_ms) {
-					if (expi.chainToNextExperiment == null)
-						expi.chainToNextExperiment = expj;
-					else if (expj.seqCamData.firstImage_ms < expi.chainToNextExperiment.seqCamData.firstImage_ms) {
-						(expi.chainToNextExperiment).chainToPreviousExperiment = expj;
-						expj.chainToNextExperiment = (expi.chainToNextExperiment);
-						expj.chainToPreviousExperiment = expi;
-						expi.chainToNextExperiment = expj;
-					}
-					continue;
-				}
-				// it should never arrive here
-				System.out.println("ExperimentCombo:chainExperimentsUsingCamIndexes() error in chaining "
-						+ expi.getResultsDirectory() + " with ->" + expj.getResultsDirectory());
-			}
-		}
-	}
-
 	public void chainExperimentsUsingKymoIndexes(boolean collate) {
 		for (int i = 0; i < getItemCount(); i++) {
 			Experiment expi = getItemAt(i);
