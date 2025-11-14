@@ -21,7 +21,7 @@ import plugins.fmp.multiSPOTS.dlg.spotsMeasures._DlgSpotMeasure_;
 import plugins.fmp.multiSPOTS.tools.JComponents.JComboBoxExperiment;
 
 public class MultiSPOTS extends PluginActionable {
-	public IcyFrame mainFrame = new IcyFrame("multiSPOTS Jan 25, 2025", true, true, true, true);
+	public IcyFrame mainFrame = new IcyFrame("multiSPOTS ov 14, 2025", true, true, true, true);
 	public JComboBoxExperiment expListCombo = new JComboBoxExperiment();
 
 	public _DlgBrowse_ dlgBrowse = new _DlgBrowse_();
