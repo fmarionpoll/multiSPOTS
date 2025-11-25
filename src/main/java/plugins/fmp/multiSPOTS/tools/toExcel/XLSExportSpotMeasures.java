@@ -10,7 +10,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 
 public class XLSExportSpotMeasures extends XLSExport {
 	public void exportToFile(String filename, XLSExportOptions opt) {
-		System.out.println("XLSExpoportSpotAreas:exportToFile() - start output");
+		System.out.println("XLSExportSpotAreas:exportToFile() - start output");
 		options = opt;
 		expList = options.expList;
 
@@ -60,6 +60,6 @@ public class XLSExportSpotMeasures extends XLSExport {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("XLSExpoportSpotAreas:exportToFile() XLS output finished");
+		System.out.println("XLSExportSpotAreas:exportToFile() XLS output finished");
 	}
 }

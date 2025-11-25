@@ -23,7 +23,7 @@ public class XLSExportMoveResults extends XLSExport {
 	List<FlyPositions> rowsForOneExp = new ArrayList<FlyPositions>();
 
 	public void exportToFile(String filename, XLSExportOptions opt) {
-		System.out.println("XLSExpoportMove:exportToFile() start output");
+		System.out.println("XLSExportMove:exportToFile() start output");
 		options = opt;
 		expList = options.expList;
 
@@ -78,7 +78,7 @@ public class XLSExportMoveResults extends XLSExport {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("XLSExpoportMove:exportToFile() - output finished");
+		System.out.println("XLSExportMove:exportToFile() - output finished");
 	}
 
 	private int getMoveDataAndExport(Experiment exp, int col0, String charSeries, EnumXLSExportType xlsExport) {
