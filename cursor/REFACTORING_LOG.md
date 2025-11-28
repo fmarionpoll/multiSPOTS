@@ -14,3 +14,5 @@ Identified as a source project for the extraction of common routines to the new 
 *   Remove extracted classes from `plugins.fmp.multiSPOTS.tools`.
 *   Refactor `Experiment` and `SequenceCamData` to use the new shared managers (`ImageLoader`, `TimeManager`) from `fmpTools`.
 
+
+
