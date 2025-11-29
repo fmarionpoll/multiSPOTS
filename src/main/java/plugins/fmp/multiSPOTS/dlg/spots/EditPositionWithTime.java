@@ -32,7 +32,7 @@ import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.tools.JComponents.TableModelSpotWithTime;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.Utilities;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 
 public class EditPositionWithTime extends JPanel implements ListSelectionListener {
@@ -198,7 +198,7 @@ public class EditPositionWithTime extends JPanel implements ListSelectionListene
 			ROI2DAlongT kymoROI2D = spot.getROIAtT(t);
 			listRoisAtT.add(kymoROI2D.getRoi_in());
 		}
-		Polygon2D polygon = ROI2DUtilities.getPolygonEnclosingROI2Ds(listRoisAtT);
+		Polygon2D polygon = Utilities.getPolygonEnclosingROI2Ds(listRoisAtT);
 
 		removeFrameAroundSpots(exp.seqCamData.seq);
 		envelopeRoi_initial = new ROI2DPolygon(polygon);

@@ -16,7 +16,7 @@ import icy.roi.ROI2D;
 import icy.util.XMLUtil;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.Utilities;
 import plugins.fmp.multiSPOTS.tools.polyline.Level2D;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSColumnHeader;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
@@ -355,7 +355,7 @@ public class Spot implements Comparable<Spot> {
 			spotStim = XMLUtil.getElementValue(nodeMeta, ID_STIMULUS, ID_STIMULUS);
 			spotConc = XMLUtil.getElementValue(nodeMeta, ID_CONCENTRATION, ID_CONCENTRATION);
 
-			spotRoi2D = (ROI2DShape) ROI2DUtilities.loadFromXML_ROI(nodeMeta);
+			spotRoi2D = (ROI2DShape) Utilities.loadFromXML_ROI(nodeMeta);
 			setSpotRoi_InColorAccordingToSpotIndex(cagePosition);
 			limitsOptions.loadFromXML(nodeMeta);
 
@@ -413,7 +413,7 @@ public class Spot implements Comparable<Spot> {
 		XMLUtil.setElementValue(nodeMeta, ID_STIMULUS, spotStim);
 		XMLUtil.setElementValue(nodeMeta, ID_CONCENTRATION, spotConc);
 
-		ROI2DUtilities.saveToXML_ROI(nodeMeta, spotRoi2D);
+		Utilities.saveToXML_ROI(nodeMeta, spotRoi2D);
 
 		boolean flag = saveToXML_SpotAlongT(node);
 		return flag;

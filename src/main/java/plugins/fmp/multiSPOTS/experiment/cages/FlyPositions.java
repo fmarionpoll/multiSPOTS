@@ -12,7 +12,7 @@ import org.w3c.dom.Node;
 import icy.util.XMLUtil;
 import plugins.kernel.roi.roi2d.ROI2DArea;
 import plugins.fmp.multiSPOTS.tools.Comparators;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DMeasures;
+import plugins.fmp.multiSPOTS.tools.ROI2D.Measures;
 import plugins.fmp.multiSPOTS.tools.toExcel.EnumXLSExportType;
 
 public class FlyPositions {
@@ -450,7 +450,7 @@ public class FlyPositions {
 			if (pos.flyRoi != null) {
 				double[] ellipsoidValues = null;
 				try {
-					ellipsoidValues = ROI2DMeasures.computeOrientation(pos.flyRoi, null);
+					ellipsoidValues = Measures.computeOrientation(pos.flyRoi, null);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

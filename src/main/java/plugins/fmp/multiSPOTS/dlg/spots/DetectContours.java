@@ -30,7 +30,7 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.series.BuildSeriesOptions;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DMeasures;
+import plugins.fmp.multiSPOTS.tools.ROI2D.Measures;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROIUtilities;
 import plugins.fmp.multiSPOTS.tools.canvas2D.Canvas2D_2Transforms;
 import plugins.fmp.multiSPOTS.tools.imageTransform.ImageTransformEnums;
@@ -297,7 +297,7 @@ public class DetectContours extends JPanel {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ROI2DPolygon roi0 = ROI2DMeasures.getContourOfDetectedSpot(workImage, spot, options);
+			ROI2DPolygon roi0 = Measures.getContourOfDetectedSpot(workImage, spot, options);
 			if (roi0 != null) {
 				List<Point2D> listPoints = QuickHull2D.computeConvexEnvelope(((ROI2DShape) roi0).getPoints());
 				ROI2DPolygon roi_new = new ROI2DPolygon(listPoints);

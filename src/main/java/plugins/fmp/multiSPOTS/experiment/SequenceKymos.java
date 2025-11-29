@@ -22,7 +22,7 @@ import loci.formats.FormatException;
 import ome.xml.meta.OMEXMLMetadata;
 import plugins.fmp.multiSPOTS.experiment.spots.SpotsArray;
 import plugins.fmp.multiSPOTS.tools.Comparators;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.Utilities;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 
 public class SequenceKymos extends SequenceCamData {
@@ -54,7 +54,7 @@ public class SequenceKymos extends SequenceCamData {
 				continue;
 			// interpolate missing points if necessary
 			if (roi.getName().contains("level")) {
-				ROI2DUtilities.interpolateMissingPointsAlongXAxis((ROI2DPolyLine) roi, width);
+				Utilities.interpolateMissingPointsAlongXAxis((ROI2DPolyLine) roi, width);
 				continue;
 			}
 			if (roi.getName().contains("derivative"))

@@ -86,7 +86,7 @@ public class ROI2DAlongT implements XMLPersistent {
 
 		index = XMLUtil.getElementIntValue(nodeMeta, ID_INDEX, 0);
 		t = XMLUtil.getElementLongValue(nodeMeta, ID_START, 0);
-		roi_in = ROI2DUtilities.loadFromXML_ROI(nodeMeta);
+		roi_in = Utilities.loadFromXML_ROI(nodeMeta);
 		return true;
 	}
 
@@ -97,7 +97,7 @@ public class ROI2DAlongT implements XMLPersistent {
 			return false;
 		XMLUtil.setElementIntValue(nodeMeta, ID_INDEX, index);
 		XMLUtil.setElementLongValue(nodeMeta, ID_START, t);
-		ROI2DUtilities.saveToXML_ROI(nodeMeta, roi_in);
+		Utilities.saveToXML_ROI(nodeMeta, roi_in);
 		return true;
 	}
 

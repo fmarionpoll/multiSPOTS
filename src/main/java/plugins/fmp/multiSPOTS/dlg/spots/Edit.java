@@ -23,7 +23,7 @@ import plugins.fmp.multiSPOTS.MultiSPOTS;
 import plugins.fmp.multiSPOTS.experiment.Experiment;
 import plugins.fmp.multiSPOTS.experiment.spots.Spot;
 import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DAlongT;
-import plugins.fmp.multiSPOTS.tools.ROI2D.ROI2DUtilities;
+import plugins.fmp.multiSPOTS.tools.ROI2D.Utilities;
 import plugins.kernel.roi.roi2d.ROI2DPolyLine;
 import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.kernel.roi.roi2d.ROI2DShape;
@@ -197,7 +197,7 @@ public class Edit extends JPanel {
 				ROI2DAlongT kymoROI2D = spot.getROIAtT(t);
 				listRoisAtT.add(kymoROI2D.getRoi_in());
 			}
-			Polygon2D polygon = ROI2DUtilities.getPolygonEnclosingROI2Ds(listRoisAtT);
+			Polygon2D polygon = Utilities.getPolygonEnclosingROI2Ds(listRoisAtT);
 
 			spotsFrame = new ROI2DPolygon(polygon);
 			spotsFrame.setName(dummyname);
@@ -256,7 +256,7 @@ public class Edit extends JPanel {
 			for (Spot spot : enclosedSpots) {
 				ROI2DShape roi = (ROI2DShape) spot.getRoi();
 				exp.seqCamData.seq.removeROI(roi);
-				roi = (ROI2DShape) ROI2DUtilities.resizeROI(roi, delta);
+				roi = (ROI2DShape) Utilities.resizeROI(roi, delta);
 				spot.setRoi(roi);
 				exp.seqCamData.seq.addROI(roi);
 			}
